@@ -1,0 +1,84 @@
+export const getConfig = (options, defaultOptions, defaultType, name) => {
+  const config = {
+    ...defaultOptions,
+    ...options,
+  };
+  typeCheckConfig(name, config, defaultType);
+  return config;
+};
+
+const stripNameRegex = /\..*/;
+const stripUidRegex = /::\d+$/;
+const eventRegistry = {}; // Events storage
+let uidEvent = 1;
+const customEvents = {
+  mouseenter: 'mouseover',
+  mouseleave: 'mouseout',
+};
+
+export const toType = (obj) => {
+  if (obj === null || obj === undefined) {
+    return `${obj}`;
+  }
+
+  return {}.toString
+    .call(obj)
+    .match(/\s([a-z]+)/i)[1]
+    .toLowerCase();
+};
+
+export const isElement = (obj) => (obj[0] || obj).nodeType;
+
+export const typeCheckConfig = (componentName, config, configTypes) => {
+  Object.keys(configTypes).forEach((property) => {
+    const expectedTypes = configTypes[property];
+    const value = config[property];
+    const valueType = value && isElement(value) ? 'element' : toType(value);
+
+    if (!new RegExp(expectedTypes).test(valueType)) {
+      throw new Error(
+        `${componentName.toUpperCase()}: ` +
+          `Option "${property}" provided type "${valueType}" ` +
+          `but expected type "${expectedTypes}".`
+      );
+    }
+  });
+};
+
+export const getScrollbarWidth = () => {
+  const scrollDiv = document.createElement('div');
+  scrollDiv.className = 'timepicker-ui-measure';
+  document.body.appendChild(scrollDiv);
+  const scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
+
+  document.body.removeChild(scrollDiv);
+  return scrollbarWidth;
+};
+
+export const getRadians = (el) => el * (Math.PI / 180);
+
+export const clickOrTouchPosition = ({ clientX, clientY, touches }, object, isMobile = false) => {
+  const { left, top } = object.getBoundingClientRect();
+  let obj = {};
+  if (!isMobile) {
+    obj = {
+      x: clientX - left,
+      y: clientY - top,
+    };
+  } else if (isMobile && Object.keys(touches).length > 0) {
+    obj = {
+      x: touches[0].clientX - left,
+      y: touches[0].clientY - top,
+    };
+  }
+
+  return obj;
+};
+
+export const mathDegreesIncrement = (degrees, num) => {
+  return Math.round(degrees / num) * num;
+};
+
+export const hasClass = (element, selector) => {
+  return element.classList.contains(selector);
+};
