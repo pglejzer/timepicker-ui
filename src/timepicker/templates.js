@@ -41,8 +41,8 @@ export const getModalTemplate = () => {
           <div class="timepicker-ui-minutes" role="button">00</div>   
         </div>
       <div class="timepicker-ui-wrapper-type-time">
-        <div class="timepicker-ui-am" role="button">AM</div>    
-        <div class="timepicker-ui-pm" role="button">PM</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-am" role="button" data-type="AM">AM</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-pm" role="button" data-type="PM">PM</div>    
       </div>
       </div>
       <div class="timepicker-ui-wrapper-landspace">
@@ -83,8 +83,8 @@ export const getMobileModalTemplate = () => {
           <div class="timepicker-ui-minutes-mobile">00</div>   
         </div>
       <div class="timepicker-ui-wrapper-type-time-mobile">
-        <div class="timepicker-ui-am-mobile">AM</div>    
-        <div class="timepicker-ui-pm-mobile">PM</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-am-mobile">AM</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-pm-mobile">PM</div>    
       </div>
       </div>
       <div class="timepicker-ui-footer-mobile">

@@ -2,8 +2,8 @@
   "name": "timepicker-ui",
   "version": "1.0.0",
   "description": "Pure VanillaJS TimePicker with Material Design",
-  "main": "dist/ui-timepicker.js",
-  "module": "dist/ui-timepicker.esm.js",
+  "main": "dist/timepicker-ui.js",
+  "module": "dist/timepicker-ui.esm.js",
   "files": [
     "dist/*"
   ],
@@ -18,6 +18,8 @@
   },
   "keywords": [
     "material-design",
+    "material",
+    "design",
     "timepicker",
     "ui",
     "css",

@@ -82,3 +82,35 @@ export const mathDegreesIncrement = (degrees, num) => {
 export const hasClass = (element, selector) => {
   return element.classList.contains(selector);
 };
+
+export const getInputValue = ({ value }) => {
+  if (value === '') return;
+
+  const [hour, type] = value.split(' ');
+  const [hourSplit, minutesSplit] = hour.split(':');
+
+  let min = Number(minutesSplit);
+  let hor = Number(hourSplit);
+
+  if (hor > 12 || min > 59 || hor === 0) return;
+
+  if (type !== 'AM' && type !== 'PM') return;
+
+  if (min < 10) {
+    min = `0${min}`;
+  } else if (min === 0) {
+    min = '00';
+  }
+
+  return {
+    hour: hor < 10 ? `0${hor}` : hor.toString(),
+    minutes: min.toString(),
+    type,
+  };
+};
+
+export const createNewEvent = (element, eventName, value) => {
+  const ev = new CustomEvent(eventName, { detail: value });
+
+  element.dispatchEvent(ev);
+};

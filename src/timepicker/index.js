@@ -7,8 +7,8 @@ import {
   clickOrTouchPosition,
   mathDegreesIncrement,
   hasClass,
-  removeListenerMulti,
-  offMulti,
+  getInputValue,
+  createNewEvent,
 } from './utils';
 import {
   getModalTemplate,
@@ -52,10 +52,8 @@ class Timepicker {
     this._isMouseMove = false;
 
     this.init();
-    this.mutliEventsMove = (event) => {
-      this._handleEventToMoveHand(event);
-    };
 
+    this.mutliEventsMove = (event) => this._handleEventToMoveHand(event);
     this.mutliEventsMoveHandler = this.mutliEventsMove.bind(this);
   }
 
@@ -149,6 +147,10 @@ class Timepicker {
     return document.querySelector('.timepicker-ui-ok-btn');
   }
 
+  get activeTypeMode() {
+    return document.querySelector('.timepicker-ui-type-mode.active');
+  }
+
   // public
 
   init = () => {
@@ -161,7 +163,7 @@ class Timepicker {
     this.init();
   };
 
-  _close = () => {
+  close = () => {
     this._isMouseMove = false;
 
     ALL_EVENTS.split(' ').map((event) =>
@@ -174,13 +176,14 @@ class Timepicker {
   // private
 
   _handleOpenOnClick = () => {
-    this.openElement.addEventListener('click', () => {
+    this.openElement.addEventListener('click', (event) => {
       if (this._options.backdrop) this._setModalTemplate();
       this._setClassActiveToHourOnOpen();
       this._setBgColorToCirleWithHourTips();
 
       if (!this._options.mobile) this._setNumbersToClockFace();
 
+      this._getInputValueOnOpenAndSet();
       this._toggleClassActiveToValueTips(this.hour.textContent);
       this._setTransformToCircleWithSwitchesHour(this.hour.textContent);
       this._handleAnimationClock();
@@ -190,12 +193,65 @@ class Timepicker {
       this._handlePmClick();
       this._handleMoveHand();
       this._handleCancelButton();
+      this._handleOkButton();
+      this._handleBackdropClick();
     });
   };
 
+  _getInputValueOnOpenAndSet() {
+    const value = getInputValue(this.input);
+
+    if (value === undefined) {
+      this.hour.innerText = '12';
+      this.minutes.innerText = '00';
+      this.AM.classList.add('active');
+
+      createNewEvent(this._element, 'openOnclickEvent', {
+        hour: this.hour.textContent,
+        minutes: this.minutes.textContent,
+        type: this.AM.textContent,
+      });
+
+      return;
+    }
+
+    const { hour, minutes, type } = value;
+    const typeMode = document.querySelector(`[data-type="${type}"]`);
+
+    this.hour.innerText = hour;
+    this.minutes.innerText = minutes;
+    typeMode.classList.add('active');
+
+    createNewEvent(this._element, 'openOnclickEvent', value);
+  }
+
   _handleCancelButton = () => {
     this.cancelButton.addEventListener('click', (event) => {
-      this._close();
+      const value = getInputValue(this.input);
+
+      createNewEvent(this._element, 'cancelOnClickEvent', value);
+
+      this.close();
+    });
+  };
+
+  _handleOkButton = () => {
+    this.okButton.addEventListener('click', (event) => {
+      this.input.value = `${this.hour.textContent}:${this.minutes.textContent} ${this.activeTypeMode.textContent}`;
+
+      this.close();
+    });
+  };
+
+  _handleBackdropClick = (ev) => {
+    this.modalElement.addEventListener('click', (event) => {
+      if (!hasClass(event.target, 'timepicker-ui-modal')) return;
+
+      const value = getInputValue(this.input);
+
+      createNewEvent(this._element, 'cancelOnClickEvent', value);
+
+      this.close();
     });
   };
 
@@ -276,6 +332,8 @@ class Timepicker {
       this.clockFace.classList.add('timepicker-ui-clock-animation');
 
       setTimeout(() => {
+        if (this.clockFace === null) return;
+
         this.clockFace.classList.remove('timepicker-ui-clock-animation');
       }, 600);
     }, 150);
@@ -303,6 +361,13 @@ class Timepicker {
   };
 
   _handleEventToMoveHand = (event) => {
+    // const eventTypes = [];
+
+    // TOUCH_EVENTS.split(' ').forEach((touch) => {
+    //   if (event.type === touch) eventTypes.push(touch);
+    // });
+
+    // if (eventTypes.length < 0) event.preventDefault();
     event.preventDefault();
 
     const { type, target } = event;
@@ -366,6 +431,8 @@ class Timepicker {
       this.minutes.innerText = minute >= 10 ? minute : `0${minute}`;
       this.clockHand.style.transform = `rotateZ(${degrees}deg)`;
 
+      this._degreesMinutes = degrees;
+
       this._toggleClassActiveToValueTips(this.minutes.textContent);
       this._removeBgColorToCirleWithMinutesTips();
       this._setBgColorToCircleWithMinutesTips();
@@ -383,6 +450,7 @@ class Timepicker {
       }
 
       this.clockHand.style.transform = `rotateZ(${degrees}deg)`;
+      this._degreesHours = degrees;
 
       let hour;
       if (degrees < 0) {
@@ -399,6 +467,13 @@ class Timepicker {
 
       this._toggleClassActiveToValueTips(hour);
     }
+
+    createNewEvent(this._element, 'updateEvent', {
+      ...getInputValue(this.input),
+      degreesHours: this._degreesHours,
+      degreesMinutes: this._degreesMinutes,
+      eventType: type,
+    });
   };
 
   _toggleClassActiveToValueTips = (value) => {
@@ -468,3 +543,9 @@ const test = document.querySelector('.test');
 const btn = document.querySelector('.test-btn');
 
 const xd = new Timepicker(test);
+
+test.addEventListener('updateEvent', (e) => {
+  if (e.detail.eventType === 'mousedown') {
+    console.log(e.detail.eventType);
+  }
+});
