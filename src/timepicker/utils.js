@@ -1,3 +1,4 @@
+//Thanks for Bootstrap 5 - alpha version
 export const getConfig = (options, defaultOptions, defaultType, name) => {
   const config = {
     ...defaultOptions,
@@ -16,6 +17,7 @@ const customEvents = {
   mouseleave: 'mouseout',
 };
 
+//Thanks for Bootstrap 5 - alpha version
 export const toType = (obj) => {
   if (obj === null || obj === undefined) {
     return `${obj}`;
@@ -27,8 +29,10 @@ export const toType = (obj) => {
     .toLowerCase();
 };
 
+//Thanks for Bootstrap 5 - alpha version
 export const isElement = (obj) => (obj[0] || obj).nodeType;
 
+//Thanks for Bootstrap 5 - alpha version
 export const typeCheckConfig = (componentName, config, configTypes) => {
   Object.keys(configTypes).forEach((property) => {
     const expectedTypes = configTypes[property];
@@ -45,6 +49,7 @@ export const typeCheckConfig = (componentName, config, configTypes) => {
   });
 };
 
+//Thanks for Bootstrap 5 - alpha version
 export const getScrollbarWidth = () => {
   const scrollDiv = document.createElement('div');
   scrollDiv.className = 'timepicker-ui-measure';
@@ -114,3 +119,6 @@ export const createNewEvent = (element, eventName, value) => {
 
   element.dispatchEvent(ev);
 };
+
+export const whichBrowser = () =>
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);

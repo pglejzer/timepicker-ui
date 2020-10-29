@@ -76,15 +76,15 @@ export const getMobileModalTemplate = () => {
       <div class="timepicker-ui-header-mobile">
         <div class="timepicker-ui-select-time-mobile">enter time</div>
         <div class="timepicker-ui-wrapper-time-mobile">
-          <div class="timepicker-ui-hour-mobile">12</div>  
+          <div class="timepicker-ui-hour-mobile" contenteditable="false">12</div>  
           <div class="timepicker-ui-hour-text">Hour</div>
           <div class="timepicker-ui-dots-mobile">:</div>  
           <div class="timepicker-ui-minute-text">Minute</div>
-          <div class="timepicker-ui-minutes-mobile">00</div>   
+          <div class="timepicker-ui-minutes-mobile" contenteditable="false">00</div>   
         </div>
       <div class="timepicker-ui-wrapper-type-time-mobile">
-        <div class="timepicker-ui-type-mode timepicker-ui-am-mobile">AM</div>    
-        <div class="timepicker-ui-type-mode timepicker-ui-pm-mobile">PM</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-am-mobile" data-type="AM">AM</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-pm-mobile" data-type="PM">PM</div>    
       </div>
       </div>
       <div class="timepicker-ui-footer-mobile">

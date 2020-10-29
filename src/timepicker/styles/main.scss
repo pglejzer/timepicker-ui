@@ -214,16 +214,19 @@ body {
   &-minutes,
   &-hour-mobile,
   &-minutes-mobile {
-    width: 96px;
-    height: 80px;
+    width: calc(96px - 24px);
+    height: calc(80px - 24px);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3.6rem;
+    font-size: 3.2rem;
     background-color: #E4E4E4;
     border-radius: 7px;
     cursor: pointer;
     transition: all .3s ease;
+    outline: none;
+    border: 2px solid transparent;
+    padding: 10px;
 
     &:hover,
     &.active {
@@ -234,7 +237,15 @@ body {
 
   &-hour-mobile,
   &-minutes-mobile {
-    height: 70px;
+    height: calc(70px - 24px);
+
+    &[contenteditable="true"]:focus,
+    &[contenteditable="true"]:active {
+      border: 2px solid #6200EE;
+      outline-color: #6200EE;
+      user-select: all;
+    }
+
   }
 
   &-dots,
@@ -337,6 +348,7 @@ body {
       border-left-width: calc(0.75px / 2);
     }
   }
+
 
   &-cancel-btn,
   &-ok-btn,
@@ -471,6 +483,12 @@ body {
     }
   }
 
+  &-circle-hand {
+    @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
+      top: -17.8px;
+    }
+  }
+
   &-value-tips {
     &.active {
       color: #fff;
@@ -478,12 +496,12 @@ body {
   }
 
   &-clock-animation {
-    animation: show-up-clock 350ms linear;
+    animation: showClock 350ms linear;
   }
 
 }
 
-@keyframes show-up-clock {
+@keyframes showClock {
   0% {
     opacity: 0;
     transform: scale(0.7);
