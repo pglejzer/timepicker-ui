@@ -14,7 +14,6 @@ import {
   getModalTemplate,
   getMobileModalTemplate,
   numberOfHours12,
-  numberOfHours24,
   numberOfMinutes,
 } from './templates';
 
@@ -44,7 +43,7 @@ const TOUCH_EVENTS = 'touchstart touchmove touchend';
 const ALL_EVENTS = MOUSE_EVENTS.concat(` ${TOUCH_EVENTS}`);
 const SELECTOR_ACTIVE = 'active';
 
-class Timepicker {
+class TimepickerUI {
   constructor(element, options) {
     this._element = element;
     this._options = getConfig(options, DEFAULT_OPTIONS, DEFAULT_TYPE, NAME);
@@ -80,7 +79,7 @@ class Timepicker {
   }
 
   get input() {
-    return document.querySelector('input.timepicker-ui-input');
+    return this._element.querySelector('input');
   }
 
   get clockHand() {
@@ -132,7 +131,13 @@ class Timepicker {
   }
 
   get openElementData() {
-    return Object.values(this._element.querySelector('[data-open]').dataset)[0];
+    const data = this._element.querySelector('[data-open]');
+
+    if (data) {
+      return Object.values(data.dataset)[0];
+    } else {
+      return null;
+    }
   }
 
   get openElement() {
@@ -155,6 +160,8 @@ class Timepicker {
 
   init = () => {
     this._setTimepickerClassToElement();
+    this._setInputClassToInputElement();
+    this._setDataOpenToInputIfDosentExistInWrapper();
     this._setScrollbarOrNot();
     this._handleOpenOnClick();
   };
@@ -174,6 +181,21 @@ class Timepicker {
   };
 
   // private
+
+  _setInputClassToInputElement() {
+    const input = this._element.querySelector('input');
+    if (!hasClass(input, 'timepicker-ui-input')) {
+      input.classList.add('timepicker-ui-input');
+    }
+  }
+
+  _setDataOpenToInputIfDosentExistInWrapper() {
+    const input = this._element.querySelector('input');
+
+    if (this.openElementData === null) {
+      input.setAttribute('data-open', 'timepicker-ui-input');
+    }
+  }
 
   _handleOpenOnClick = () => {
     this.openElement.addEventListener('click', (event) => {
@@ -537,12 +559,12 @@ class Timepicker {
     });
   };
 }
-export default Timepicker;
+export default TimepickerUI;
 
 const test = document.querySelector('.test');
 const btn = document.querySelector('.test-btn');
 
-const xd = new Timepicker(test);
+const xd = new TimepickerUI(test);
 
 test.addEventListener('updateEvent', (e) => {
   if (e.detail.eventType === 'mousedown') {
