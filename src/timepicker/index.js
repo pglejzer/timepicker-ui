@@ -648,4 +648,4 @@ export default TimepickerUI;
 
 const test = document.querySelector('.test');
 
-const xd = new TimepickerUI(test, { mobile: true });
+const xd = new TimepickerUI(test);

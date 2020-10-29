@@ -10,6 +10,23 @@ timepicker-ui is an easy library with timepicker. Fully wrote with pure JavaScri
   - Easy to use
   - Easy to customize
 
+---
+### Desktop version
+
+  <img src="https://i.ibb.co/VgR1Kn0/image.png" alt="desktop-version">
+
+---
+
+### Landspace version
+
+<img src="https://i.ibb.co/vYfmrc0/image.png" alt="desktop-version">
+
+---
+
+### Mobile version
+
+  <img src="https://i.ibb.co/BZ0Vnyb/image.png" alt="mobile-version">
+
 ___
 
   ### Installation
@@ -99,6 +116,7 @@ ___
 
 ### Future Plans
 
+- validation
 - keyboard accesibilty 
 - max/min time options
 - 24h time mode clock face
