@@ -29,20 +29,27 @@ export const numberOfMinutes = [
   '55',
 ];
 
-export const getModalTemplate = () => {
+export const getModalTemplate = ({
+  iconClass,
+  selectTimeLabel,
+  amLabel,
+  pmLabel,
+  cancelLabel,
+  okLabel,
+}) => {
   return `
   <div class="timepicker-ui-modal" role="dialog">
     <div class="timepicker-ui-wrapper">
       <div class="timepicker-ui-header">
-        <div class="timepicker-ui-select-time">select time</div>
+        <div class="timepicker-ui-select-time">${selectTimeLabel}</div>
         <div class="timepicker-ui-wrapper-time">
           <div class="timepicker-ui-hour" role="button">05</div>  
           <div class="timepicker-ui-dots">:</div>    
           <div class="timepicker-ui-minutes" role="button">00</div>   
         </div>
       <div class="timepicker-ui-wrapper-type-time">
-        <div class="timepicker-ui-type-mode timepicker-ui-am" role="button" data-type="AM">AM</div>    
-        <div class="timepicker-ui-type-mode timepicker-ui-pm" role="button" data-type="PM">PM</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-am" role="button" data-type="AM">${amLabel}</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-pm" role="button" data-type="PM">${pmLabel}</div>    
       </div>
       </div>
       <div class="timepicker-ui-wrapper-landspace">
@@ -57,11 +64,11 @@ export const getModalTemplate = () => {
         </div>
         <div class="timepicker-ui-footer">
         <div class="timepicker-ui-keyboard-icon-wrapper" role="button" aria-pressed="false">
-          <i class="far fa-keyboard timepicker-ui-keyboard-icon"></i>
+          <i class="${iconClass} timepicker-ui-keyboard-icon"></i>
         </div>
         <div class="timepicker-ui-wrapper-btn">
-          <div class="timepicker-ui-cancel-btn" role="button" aria-pressed="false">cancel</div>
-          <div class="timepicker-ui-ok-btn" role="button" aria-pressed="false">ok</div>
+          <div class="timepicker-ui-cancel-btn" role="button" aria-pressed="false">${cancelLabel}</div>
+          <div class="timepicker-ui-ok-btn" role="button" aria-pressed="false">${okLabel}</div>
         </div>
         </div>
       </div>
@@ -69,31 +76,40 @@ export const getModalTemplate = () => {
   </div>`;
 };
 
-export const getMobileModalTemplate = () => {
+export const getMobileModalTemplate = ({
+  enterTimeLabel,
+  amLabel,
+  pmLabel,
+  cancelLabel,
+  okLabel,
+  iconClassMobile,
+  minuteMobileLabel,
+  hourMobileLabel,
+}) => {
   return `
   <div class="timepicker-ui-modal" role="dialog">
     <div class="timepicker-ui-wrapper-mobile">
       <div class="timepicker-ui-header-mobile">
-        <div class="timepicker-ui-select-time-mobile">enter time</div>
+        <div class="timepicker-ui-select-time-mobile">${enterTimeLabel}</div>
         <div class="timepicker-ui-wrapper-time-mobile">
           <div class="timepicker-ui-hour-mobile" contenteditable="false">12</div>  
-          <div class="timepicker-ui-hour-text">Hour</div>
+          <div class="timepicker-ui-hour-text">${hourMobileLabel}</div>
           <div class="timepicker-ui-dots-mobile">:</div>  
-          <div class="timepicker-ui-minute-text">Minute</div>
+          <div class="timepicker-ui-minute-text">${minuteMobileLabel}</div>
           <div class="timepicker-ui-minutes-mobile" contenteditable="false">00</div>   
         </div>
       <div class="timepicker-ui-wrapper-type-time-mobile">
-        <div class="timepicker-ui-type-mode timepicker-ui-am-mobile" data-type="AM">AM</div>    
-        <div class="timepicker-ui-type-mode timepicker-ui-pm-mobile" data-type="PM">PM</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-am-mobile" data-type="AM">${amLabel}</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-pm-mobile" data-type="PM">${pmLabel}</div>    
       </div>
       </div>
       <div class="timepicker-ui-footer-mobile">
       <div class="timepicker-ui-keyboard-icon-wrapper-mobile" role="button" aria-pressed="false">
-        <i class="far fa-keyboard timepicker-ui-keyboard-icon-mobile"></i>
+        <i class="${iconClassMobile} timepicker-ui-keyboard-icon-mobile"></i>
       </div>
       <div class="timepicker-ui-wrapper-btn-mobile">
-        <div class="timepicker-ui-cancel-btn-mobile" role="button" aria-pressed="false">cancel</div>
-        <div class="timepicker-ui-ok-btn-mobile" role="button" aria-pressed="false">ok</div>
+        <div class="timepicker-ui-cancel-btn-mobile" role="button" aria-pressed="false">${cancelLabel}</div>
+        <div class="timepicker-ui-ok-btn-mobile" role="button" aria-pressed="false">${okLabel}</div>
       </div>
       </div>
     </div>  

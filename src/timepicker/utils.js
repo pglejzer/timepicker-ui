@@ -8,15 +8,6 @@ export const getConfig = (options, defaultOptions, defaultType, name) => {
   return config;
 };
 
-const stripNameRegex = /\..*/;
-const stripUidRegex = /::\d+$/;
-const eventRegistry = {}; // Events storage
-let uidEvent = 1;
-const customEvents = {
-  mouseenter: 'mouseover',
-  mouseleave: 'mouseout',
-};
-
 //Thanks for Bootstrap 5 - alpha version
 export const toType = (obj) => {
   if (obj === null || obj === undefined) {

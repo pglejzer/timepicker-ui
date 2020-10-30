@@ -31,7 +31,7 @@ ___
 
   ### Installation
 
-Install timepicer-ui in your project.
+Install timepicker-ui in your project.
 
 #### Yarn
 
@@ -42,7 +42,7 @@ $ yarn add timepicker-ui
 #### NPM
 
 ```bash
-$ npm installl timepicker-ui
+$ npm install timepicker-ui
 ```
 
 ___
@@ -103,7 +103,7 @@ By default initialization of timepicker is started when you click on input. If y
 
 ```javascript
 const wrapper = document.querySelector('.default-class');
-const initTimepicker = new TimepickerUI(test);
+const initTimepicker = new TimepickerUI(wrapper);
 ```
 
 ___
@@ -121,6 +121,7 @@ ___
 - max/min time options
 - 24h time mode clock face
 - keyboard icon functionality
+- theme concept
 
 If you have more good ideas please let me know in [issue](https://github.com/q448x/timepicker-ui/issues). I will try to add more useful features.
 

@@ -15,12 +15,22 @@ body {
 
   &-modal {
     position: fixed;
+    opacity: 0;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     background-color: rgba(156, 155, 155, 0.6);
     z-index: 5000;
+
+
+    &.removed {
+      top: auto;
+      bottom: auto;
+      left: auto;
+      right: auto;
+      background-color: transparent;
+    }
   }
 
 
@@ -245,7 +255,6 @@ body {
       outline-color: #6200EE;
       user-select: all;
     }
-
   }
 
   &-dots,
@@ -496,15 +505,35 @@ body {
   }
 
   &-clock-animation {
-    animation: showClock 350ms linear;
+    animation: clockanimation 350ms linear;
   }
 
+  &-open-element {
+    &.disabled {
+      pointer-events: none;
+      touch-action: none;
+      user-select: none;
+    }
+  }
+
+  &-tips-animation {
+    transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+      height 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
 }
 
-@keyframes showClock {
+.opacity {
+  transition: opacity .15s linear;
+
+  &.show {
+    opacity: 1;
+  }
+}
+
+@keyframes clockanimation {
   0% {
     opacity: 0;
-    transform: scale(0.7);
+    transform: scale(0.8);
   }
 
   to {

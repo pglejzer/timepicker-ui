@@ -1,0 +1,167 @@
+@import './variables.scss';
+
+.timepicker-ui {
+
+  &-wrapper,
+  &-wrapper-mobile {
+
+    &.crane-straight {
+      border-radius: 0;
+      background-color: $cranepurple900;
+    }
+  }
+
+  &-select-time,
+  &-select-time-mobile {
+
+    &.crane-straight {
+      color: #E5E5E5;
+    }
+  }
+
+  &-clock-face,
+  &-clock-face-mobile {
+
+    &.crane-straight {
+      background-color: $cranepurple700;
+    }
+  }
+
+  &-dot,
+  &-dot-mobile {
+
+    &.crane-straight {
+      background-color: $cranered400;
+    }
+  }
+
+  &-hour,
+  &-minutes,
+  &-hour-mobile,
+  &-minutes-mobile {
+    &.crane-straight {
+      background-color: $cranepurple700;
+      border-radius: 0;
+      color: $white;
+
+      &:hover,
+      &.active {
+
+        background-color: $cranered400;
+      }
+    }
+  }
+
+  &-hour-mobile,
+  &-minutes-mobile {
+    &.crane-straight {
+
+      &[contenteditable="true"]:focus,
+      &[contenteditable="true"]:active {
+        border-color: $white;
+        outline-color: $white;
+      }
+    }
+  }
+
+  &-dots,
+  &-dots-mobile {
+
+    &.crane-straight {
+      color: $white
+    }
+  }
+
+  &-wrapper-type-time,
+  &-wrapper-type-time-mobile {
+    &.crane-straight {
+      color: $white
+    }
+  }
+
+  &-am,
+  &-pm,
+  &-am-mobile,
+  &-pm-mobile {
+
+
+    &.crane-straight {
+      border: 2px solid transparent;
+      border-radius: 0;
+      background-color: $cranepurple700;
+
+    }
+
+    &:hover,
+    &.active {
+
+      &.crane-straight {
+        color: $white;
+        background-color: $cranered400;
+      }
+    }
+  }
+
+  &-cancel-btn,
+  &-ok-btn,
+  &-cancel-btn-mobile,
+  &-ok-btn-mobile {
+
+    &.crane-straight {
+      color: $white;
+      border-radius: 0px;
+    }
+
+    &:hover {
+
+      &.crane-straight {
+        background-color: $cranered400;
+
+      }
+    }
+  }
+
+  &-keyboard-icon-wrapper,
+  &-keyboard-icon-wrapper-mobile {
+    &.crane-straight {
+      color: $white;
+    }
+
+    &.crane-straight {
+
+      &:hover .timepicker-ui-keyboard-icon,
+      &:hover .timepicker-ui-keyboard-icon-mobile {
+        background-color: $cranered400;
+        color: $white;
+        border-radius: 0;
+      }
+    }
+  }
+
+  &-keyboard-icon,
+  &-keyboard-icon-mobile {
+    &.crane-straight {
+      &:hover {
+        color: $white;
+      }
+    }
+  }
+
+  &-clock-hand {
+    &.crane-straight {
+      background-color: $cranered400;
+    }
+  }
+
+  &-circle-hand {
+    &.crane-straight {
+      border-color: $cranered400;
+    }
+  }
+
+  &-value-tips {
+    &.crane-straight {
+      color: #fff;
+    }
+  }
+}

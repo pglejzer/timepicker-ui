@@ -1,4 +1,5 @@
 const path = require('path');
+const loader = require('sass-loader');
 const ni = require('os').networkInterfaces();
 const ip = Object.keys(ni)
   .map((interf) => ni[interf].map((o) => !o.internal && o.family === 'IPv4' && o.address))
@@ -22,7 +23,20 @@ module.exports = {
     rules: [
       {
         test: /\.s[ac]ss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        exclude: /\.module\.scss$/,
+        use: [
+          { loader: 'style-loader' },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              modules: {
+                compileType: 'icss',
+              },
+            },
+          },
+          { loader: 'sass-loader' },
+        ],
       },
       {
         test: /\.js$/,
