@@ -113,6 +113,17 @@ ___
 
 You can set options by JavaScript or by data-attribute which `attribute` is a key option. Data-attributes will be overridden by JavaScript options.
 
+#### HTML
+
+```html
+<div class="default-class" data-am-label="test" data-backdrop="false" data-ok-label="fine">
+  <input type="test" class="timepicker-ui-input" value="12:00 AM"> 
+  <button class="timepicker-ui-button" data-open="default-class">Open</button>
+</div>
+```
+---
+
+#### Table with options
 
 | Name     |      Default   |  Type |      Description   |
 |----------|:-------------:|:------:|:--------------------|
