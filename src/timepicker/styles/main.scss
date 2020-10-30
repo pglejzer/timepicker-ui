@@ -35,7 +35,7 @@ body {
 
 
   &-wrapper,
-  .timepicker-ui-wrapper.mobile {
+  &-wrapper.mobile {
     position: fixed;
     z-index: 5001;
     width: 328px;
@@ -50,7 +50,7 @@ body {
     flex-direction: column;
   }
 
-  &-wrapper:not(.timepicker-ui-wrapper.mobile) {
+  &-wrapper:not(.timepicker-ui-wrapper + .mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       flex-direction: row;
       height: 328px;
@@ -88,7 +88,7 @@ body {
     padding-bottom: 0;
   }
 
-  &-header:not(.timepicker-ui-header.mobile) {
+  &-header:not(.timepicker-ui-header + .mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       height: auto;
       flex-direction: column;
@@ -137,7 +137,7 @@ body {
 
   }
 
-  &-footer:not(.timepicker-ui-footer.mobile) {
+  &-footer:not(.timepicker-ui-footer + .mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       justify-content: flex-end;
     }
@@ -195,7 +195,7 @@ body {
     margin-right: 10px;
   }
 
-  &-wrapper-time:not(.timepicker-ui-wrapper-time.mobile) {
+  &-wrapper-time:not(.timepicker-ui-wrapper-time + .mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       margin-right: 0;
     }
@@ -302,8 +302,8 @@ body {
     }
   }
 
-  &-am:not(.timepicker-ui-am.mobile),
-  &-pm:not(.timepicker-ui-pm.mobile) {
+  &-am:not(.timepicker-ui-am + .mobile),
+  &-pm:not(.timepicker-ui-pm + .mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       width: 100%;
     }
@@ -406,14 +406,6 @@ body {
     }
   }
 
-  &-keyboard-icon-wrapper:not(.timepicker-ui-keyboard-icon-wrapper.mobile) {
-    @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
-      position: absolute;
-      bottom: 0;
-    }
-  }
-
-
   &-keyboard-icon,
   &-keyboard-icon.mobile {
     padding: 12px;
@@ -424,6 +416,15 @@ body {
       color: #6200EE;
     }
   }
+
+  &-keyboard-icon-wrapper,
+  &-keyboard-icon-wrapper.mobile {
+    @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
+      position: absolute;
+      bottom: 0;
+    }
+  }
+
 
   &-wrapper-btn,
   &-wrapper-btn.mobile {
@@ -511,6 +512,19 @@ body {
 
   &.show {
     opacity: 1;
+  }
+}
+
+.invalid-value {
+  border-color: #d50000 !important;
+  color: #d50000 !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: #d50000 !important;
+    color: #d50000 !important;
+
   }
 }
 

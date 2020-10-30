@@ -56,6 +56,7 @@ export const getRadians = (el) => el * (Math.PI / 180);
 export const clickOrTouchPosition = ({ clientX, clientY, touches }, object, isMobile = false) => {
   const { left, top } = object.getBoundingClientRect();
   let obj = {};
+
   if (!isMobile) {
     obj = {
       x: clientX - left,

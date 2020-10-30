@@ -348,10 +348,16 @@ class TimepickerUI {
 
   _handleOkButton = () => {
     this.okButton.addEventListener('click', (event) => {
-      const validHourContent = this._handleHoursValAndCheck(this.hour.textContent);
-      const validMinutesContent = this._handleMinutesValAndCheck(this.minutes.textContent);
+      const validHours = this._handleValueAndCheck(this.hour.textContent, 'hour');
+      const validMinutes = this._handleValueAndCheck(this.minutes.textContent, 'minutes');
 
-      if (validHourContent === false || validMinutesContent === false) return;
+      if (validHours === false || validMinutes === false) {
+        if (!validMinutes) {
+          this.minutes.classList.add('invalid-value');
+        }
+
+        return;
+      }
 
       this.input.value = `${this.hour.textContent}:${this.minutes.textContent} ${this.activeTypeMode.textContent}`;
       this.close();
@@ -692,23 +698,21 @@ class TimepickerUI {
     }, 150);
   }
 
-  _handleHoursValAndCheck(val) {
+  _handleValueAndCheck(val, type) {
     const value = Number(val);
 
-    if (value > 0 && value <= 12) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  _handleMinutesValAndCheck(val) {
-    const value = Number(val);
-
-    if (value >= 0 && value <= 59) {
-      return true;
-    } else {
-      return false;
+    if (type === 'hour') {
+      if (value > 0 && value <= 12) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (type === 'minutes') {
+      if (value >= 0 && value <= 59) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
@@ -744,6 +748,31 @@ class TimepickerUI {
           nowActiveType.classList.add('active');
         }, 300);
       } else {
+        const validHours = this._handleValueAndCheck(this.hour.textContent, 'hour');
+        const validMinutes = this._handleValueAndCheck(this.minutes.textContent, 'minutes');
+
+        if (validHours === false || validMinutes === false) {
+          if (!validMinutes) {
+            this.minutes.classList.add('invalid-value');
+          }
+
+          if (!validHours) {
+            this.hour.classList.add('invalid-value');
+          }
+
+          return;
+        }
+
+        if (validHours === true && validMinutes === true) {
+          if (validMinutes) {
+            this.minutes.classList.remove('invalid-value');
+          }
+
+          if (validHours) {
+            this.hour.classList.remove('invalid-value');
+          }
+        }
+
         this.close();
 
         this._isMobileView = false;
@@ -784,6 +813,9 @@ class TimepickerUI {
   // Mobile version
   _handlerClickPmAm = async ({ target }) => {
     const allTrue = this.modalElement.querySelectorAll('[contenteditable]');
+    const validHours = this._handleValueAndCheck(this.hour.textContent, 'hour');
+    const validMinutes = this._handleValueAndCheck(this.minutes.textContent, 'minutes');
+
     if (!hasClass(this.modalElement, 'mobile')) return;
 
     if (!hasClass(target, 'timepicker-ui-hour') && !hasClass(target, 'timepicker-ui-minutes')) {
@@ -791,7 +823,27 @@ class TimepickerUI {
         el.contentEditable = false;
         el.classList.remove('active');
       });
+
+      if (validHours === true && validMinutes === true) {
+        if (validMinutes) {
+          this.minutes.classList.remove('invalid-value');
+        }
+
+        if (validHours) {
+          this.hour.classList.remove('invalid-value');
+        }
+      }
     } else {
+      if (validHours === false || validMinutes === false) {
+        if (!validMinutes) {
+          this.minutes.classList.add('invalid-value');
+        }
+
+        if (!validHours) {
+          this.hour.classList.add('invalid-value');
+        }
+      }
+
       target.contentEditable = true;
     }
   };
@@ -801,8 +853,6 @@ class TimepickerUI {
 
     document.addEventListener('mousedown', this.eventsClickMobileHandler);
     document.addEventListener('touchstart', this.eventsClickMobileHandler);
-    document.addEventListener('touchstart', this.eventsClickMobileHandler);
-    document.addEventListener('mousedown', this.eventsClickMobileHandler);
   }
 }
 export default TimepickerUI;

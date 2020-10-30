@@ -3,7 +3,7 @@
 .timepicker-ui {
 
   &-wrapper,
-  &-wrapper-mobile {
+  &-wrapper.mobile {
 
     &.crane-straight {
       border-radius: 0;
@@ -12,7 +12,7 @@
   }
 
   &-select-time,
-  &-select-time-mobile {
+  &-select-time.mobile {
 
     &.crane-straight {
       color: #E5E5E5;
@@ -20,7 +20,7 @@
   }
 
   &-clock-face,
-  &-clock-face-mobile {
+  &-clock-face.mobile {
 
     &.crane-straight {
       background-color: $cranepurple700;
@@ -28,7 +28,7 @@
   }
 
   &-dot,
-  &-dot-mobile {
+  &-dot.mobile {
 
     &.crane-straight {
       background-color: $cranered400;
@@ -37,8 +37,8 @@
 
   &-hour,
   &-minutes,
-  &-hour-mobile,
-  &-minutes-mobile {
+  &-hour.mobile,
+  &-minutes.mobile {
     &.crane-straight {
       background-color: $cranepurple700;
       border-radius: 0;
@@ -52,8 +52,8 @@
     }
   }
 
-  &-hour-mobile,
-  &-minutes-mobile {
+  &-hour.mobile,
+  &-minutes.mobile {
     &.crane-straight {
 
       &[contenteditable="true"]:focus,
@@ -65,7 +65,7 @@
   }
 
   &-dots,
-  &-dots-mobile {
+  &-dots.mobile {
 
     &.crane-straight {
       color: $white
@@ -73,7 +73,7 @@
   }
 
   &-wrapper-type-time,
-  &-wrapper-type-time-mobile {
+  &-wrapper-type-time.mobile {
     &.crane-straight {
       color: $white
     }
@@ -81,8 +81,8 @@
 
   &-am,
   &-pm,
-  &-am-mobile,
-  &-pm-mobile {
+  &-am.mobile,
+  &-pm.mobile {
 
 
     &.crane-straight {
@@ -104,8 +104,8 @@
 
   &-cancel-btn,
   &-ok-btn,
-  &-cancel-btn-mobile,
-  &-ok-btn-mobile {
+  &-cancel-btn.mobile,
+  &-ok-btn.mobile {
 
     &.crane-straight {
       color: $white;
@@ -122,7 +122,7 @@
   }
 
   &-keyboard-icon-wrapper,
-  &-keyboard-icon-wrapper-mobile {
+  &-keyboard-icon-wrapper.mobile {
     &.crane-straight {
       color: $white;
     }
@@ -130,7 +130,7 @@
     &.crane-straight {
 
       &:hover .timepicker-ui-keyboard-icon,
-      &:hover .timepicker-ui-keyboard-icon-mobile {
+      &:hover .timepicker-ui-keyboard-icon.mobile {
         background-color: $cranered400;
         color: $white;
         border-radius: 0;
@@ -139,7 +139,7 @@
   }
 
   &-keyboard-icon,
-  &-keyboard-icon-mobile {
+  &-keyboard-icon.mobile {
     &.crane-straight {
       &:hover {
         color: $white;
