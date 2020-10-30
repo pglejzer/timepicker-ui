@@ -1,6 +1,6 @@
 # timepicker-ui
 
-<a href="https://npmcharts.com/compare/timepicker-ui?minimal=true"></a> <img src="https://img.shields.io/npm/dw/timepicker-ui" alt="downloads"></a>
+<a href="https://npmcharts.com/compare/timepicker-ui?minimal=true"><img src="https://img.shields.io/npm/dw/timepicker-ui" alt="downloads"></a>
 <a href="https://img.shields.io/npm/l/timepicker-ui"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
 
 
@@ -123,7 +123,7 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 ```
 #### JavaScript
 
-```JavaScript
+```javascript
 const wrapper = document.querySelector('.default-class');
 const options = { okLabel: 'test', amLabel: 'test1', backdrop: false }
 const initTimepicker = new TimepickerUI(wrapper, options);
@@ -133,29 +133,124 @@ const initTimepicker = new TimepickerUI(wrapper, options);
 
 #### Table with options
 
-| Name     |      Default   |  Type |      Description   |
-|----------|:-------------:|:------:|:--------------------|
-| amLabel                           |  AM         | string  |    Set                               |
-| appendModalSelector               |  ''         | string  |                                        |
-| backdrop                          |  true       | boolean |
-| cancelLabel                       |  CANCEL     | string  |                                   |
-| enableScrollbar                   |  false      | boolean |
-| enterTimeLabel                    |  Enter Time | string  |                               |
-| hourMobileLabel                   |  Hour       | string  |
-| iconClass                         |  far fa-keyboard | string |                                 |
-| iconClassMobile                   |  far fa-clock    | string |              |
-| incrementHours                    |  1           | number  |    |
-| incrementMinutes                  |  1           | number  |    |
-| inputTemplate                     |  ''          | string   |            |
-| minuteMobileLabel                 |  Minute      | string   |          |
-| mobile                            |  false       | boolean  |           |
-| okLabel                           |  OK          | string  |            |
-| pmLabel                           |  PM          | string  |            |
-| selectTimeLabel                   |  Select Time | string  |            |
-| switchToMinutesAfterSelectHour    |  false | boolean  |              |
-| theme                             |  basic | string  |              |
-    
-    
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Default</th>
+      <th scope="col">Type</th>
+      <th scope="col">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td scope="row">amLabel</td>
+      <td>AM</td>
+      <td>string</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <td scope="row">appendModalSelector</td>
+      <td>''</td>
+      <td>string</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <td scope="row">backdrop</td>
+      <td>true</td>
+      <td>boolean</td>
+      <td>@twitter</td>
+    </tr>
+       <tr>
+      <td scope="row">cancelLabel</td>
+      <td>CANCEL</td>
+      <td>string</td>
+      <td>@twitter</td>
+    </tr> 
+      <tr>
+      <td scope="row">enableScrollbar</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>@twitter</td>
+    </tr> 
+      <tr>
+      <td scope="row">hourMobileLabel</td>
+      <td>Hour</td>
+      <td>string</td>
+      <td>@twitter</td>
+    </tr>   <tr>
+      <td scope="row">incrementHours</td>
+      <td>1</td>
+      <td>nubmer</td>
+      <td>@twitter</td>
+    </tr>  
+     <tr>
+      <td scope="row">incrementMinutes</td>
+      <td>1</td>
+      <td>nubmer</td>
+      <td>@twitter</td>
+    </tr> 
+      <tr>
+      <td scope="row">inputTemplate</td>
+      <td>''</td>
+      <td>string</td>
+      <td>@twitter</td>
+    </tr>  
+     <tr>
+      <td scope="row">minuteMobileLabel</td>
+      <td>Minute</td>
+      <td>string</td>
+      <td>@twitter</td>
+    </tr>  
+     <tr>
+      <td scope="row">mobile</td>
+      <td>false</td>
+      <td>boolean</td>
+      <td>@twitter</td>
+    </tr>  
+     <tr>
+      <td scope="row">okLabel</td>
+      <td>OK</td>
+      <td>string</td>
+      <td>@twitter</td>
+    </tr> 
+      <tr>
+      <td scope="row">pmLabel</td>
+      <td>PM</td>
+      <td>string</td>
+      <td>@twitter</td>
+    </tr>   <tr>
+      <td scope="row">selectTimeLabel</td>
+      <td>Select Time</td>
+      <td>string</td>
+      <td>@twitter</td>
+    </tr>   
+    <tr>
+      <td scope="row">switchToMinutesAfterSelectHour</td>
+      <td>true</td>
+      <td>boolean</td>
+      <td>@twitter</td>
+    </tr>   
+    <tr>
+      <td scope="row">iconClass</td>
+      <td>far fa-keyboard</td>
+      <td>string</td>
+      <td>@twitter</td>
+    </tr>  
+     <tr>
+      <td scope="row">iconClassMobile</td>
+      <td>string</td>
+      <td>far fas-clokc</td>
+      <td>@twitter</td>
+    </tr>   <tr>
+      <td 
+      scope="row">theme</td>
+      <td>string</td>
+      <td>basic</td>
+      <td>@twitter</td>
+    </tr>  
+  </tbody>
+</table>
     
 ___
 
