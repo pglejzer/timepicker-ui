@@ -10,11 +10,11 @@ module.exports = {
   mode: 'none',
   entry: './src/index.js',
   output: {
-    path: __dirname + '/docs',
+    path: __dirname + '/docs-test',
     filename: 'index.js',
   },
   devServer: {
-    contentBase: path.join(__dirname, 'docs'),
+    contentBase: path.join(__dirname, 'docs-test'),
     port: 9000,
     host: ip,
     hot: true,
