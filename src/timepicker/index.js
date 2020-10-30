@@ -26,7 +26,10 @@ const DEFAULT_OPTIONS = {
   backdrop: true,
   cancelLabel: 'CANCEL',
   enableScrollbar: false,
+  enterTimeLabel: 'Enter Time',
   hourMobileLabel: 'Hour',
+  iconClass: 'far fa-keyboard',
+  iconClassMobile: 'far fa-clock',
   incrementHours: 1,
   incrementMinutes: 1,
   inputTemplate: '',
@@ -35,10 +38,7 @@ const DEFAULT_OPTIONS = {
   okLabel: 'OK',
   pmLabel: 'PM',
   selectTimeLabel: 'Select Time',
-  enterTimeLabel: 'Enter Time',
   switchToMinutesAfterSelectHour: false,
-  iconClass: 'far fa-keyboard',
-  iconClassMobile: 'far fa-clock',
   theme: 'basic',
 };
 

@@ -114,11 +114,29 @@ ___
 You can set options by JavaScript or by data-attribute which `attribute` is a key option. Data-attributes will be overridden by JavaScript options.
 
 
-| Tables   |      Are      |  Cool |
-|----------|:-------------:|------:|
-| col 1 is |  left-aligned | $1600 |
-| col 2 is |    centered   |   $12 |
-| col 3 is | right-aligned |    $1 |
+| Name     |      Default   |  Type |      Description  |
+|----------|:-------------:|:------:|-------------|
+| amLabel                        |  AM         | string  |              |
+| appendModalSelector            |  ''         | string  |             |
+| backdrop                       |  true       | boolean |
+| cancelLabel                    |  CANCEL     | string  |             |
+| enableScrollbar                |  false      | boolean |
+| enterTimeLabel                 |  Enter Time | string  |             |
+| hourMobileLabel                |  Hour       | string  |
+| iconClass                      |  far fa-keyboard | string|   |
+| iconClassMobile                |  far fa-clock    | string   |              |
+| incrementHours                 |  1           | number  |    |
+| incrementMinutes               |  1           | number  |    |
+| inputTemplate                  |  ''          | string   |            |
+| minuteMobileLabel              |  Minute      | string   |          |
+| mobile                         |  false       | boolean  |           |
+| okLabel                        |  OK          | string  |            |
+| pmLabel                        |  PM          | string  |            |
+| selectTimeLabel                |  Select Time | string  |            |
+| switchToMinutesAfterSelectHour |  false | boolean  |              |
+| theme                          |  basic | string  |              |
+
+
 
 ___
 
