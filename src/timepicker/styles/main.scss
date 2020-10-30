@@ -6,7 +6,7 @@
   font-family: 'Roboto', sans-serif;
 }
 
-// usunąć body 
+// remove
 body {
   height: 1000px;
 }
@@ -35,7 +35,7 @@ body {
 
 
   &-wrapper,
-  &-wrapper-mobile {
+  .timepicker-ui-wrapper.mobile {
     position: fixed;
     z-index: 5001;
     width: 328px;
@@ -50,7 +50,7 @@ body {
     flex-direction: column;
   }
 
-  &-wrapper {
+  &-wrapper:not(.timepicker-ui-wrapper.mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       flex-direction: row;
       height: 328px;
@@ -62,19 +62,16 @@ body {
     }
   }
 
+  &-wrapper.mobile {
+    height: 218px;
 
-  &-wrapper-mobile {
     @media screen and (max-width:330px) {
       width: 315px;
     }
   }
 
-  &-wrapper-mobile {
-    height: 218px;
-  }
-
   &-header,
-  &-header-mobile {
+  &-header.mobile {
     padding-top: 52px;
     padding-bottom: 36px;
     padding-right: 24px;
@@ -87,12 +84,11 @@ body {
     position: relative;
   }
 
-  &-header-mobile {
+  &-header.mobile {
     padding-bottom: 0;
   }
 
-  &-header {
-
+  &-header:not(.timepicker-ui-header.mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       height: auto;
       flex-direction: column;
@@ -101,7 +97,7 @@ body {
 
 
   &-select-time,
-  &-select-time-mobile {
+  &-select-time.mobile {
     text-transform: uppercase;
     position: absolute;
     top: calc(28px - .75rem);
@@ -110,14 +106,11 @@ body {
     color: #A9A9A9;
   }
 
-  &-body,
-  &-body-mobile {
+  &-body {
     height: 256px;
     padding-right: 36px;
     padding-left: 36px;
-  }
 
-  &-body {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       padding-right: 0;
       padding-left: 0;
@@ -144,23 +137,19 @@ body {
 
   }
 
-  &-footer {
-
+  &-footer:not(.timepicker-ui-footer.mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       justify-content: flex-end;
     }
   }
 
-  &-clock-face,
-  &-clock-face-mobile {
+  &-clock-face {
     background-color: #E0E0E0;
     height: 100%;
     width: 100%;
     border-radius: 100%;
     position: relative;
-  }
 
-  &-clock-face {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       height: 220px;
       width: 220px;
@@ -169,8 +158,7 @@ body {
   }
 
 
-  &-dot,
-  &-dot-mobile {
+  &-dot {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -184,9 +172,7 @@ body {
   }
 
   &-hour-time-12,
-  &-hour-time-12-mobile,
-  &-minutes-time,
-  &-minutes-time-mobile {
+  &-minutes-time {
     position: absolute;
     width: 32px;
     height: 32px;
@@ -204,26 +190,26 @@ body {
   }
 
   &-wrapper-time,
-  &-wrapper-time-mobile {
+  &-wrapper-time.mobile {
     display: flex;
     margin-right: 10px;
   }
 
-  &-wrapper-time {
+  &-wrapper-time:not(.timepicker-ui-wrapper-time.mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       margin-right: 0;
     }
   }
 
 
-  &-wrapper-time-mobile {
+  &-wrapper-time.mobile {
     position: relative;
   }
 
   &-hour,
   &-minutes,
-  &-hour-mobile,
-  &-minutes-mobile {
+  &-hour.mobile,
+  &-minutes.mobile {
     width: calc(96px - 24px);
     height: calc(80px - 24px);
     display: flex;
@@ -245,8 +231,8 @@ body {
     }
   }
 
-  &-hour-mobile,
-  &-minutes-mobile {
+  &-hour.mobile,
+  &-minutes.mobile {
     height: calc(70px - 24px);
 
     &[contenteditable="true"]:focus,
@@ -258,7 +244,7 @@ body {
   }
 
   &-dots,
-  &-dots-mobile {
+  &-dots.mobile {
     padding-left: 5px;
     padding-right: 5px;
     display: flex;
@@ -272,7 +258,7 @@ body {
 
 
   &-wrapper-type-time,
-  &-wrapper-type-time-mobile {
+  &-wrapper-type-time.mobile {
     display: flex;
     flex-direction: column;
     height: 80px;
@@ -291,15 +277,15 @@ body {
     }
   }
 
-  &-wrapper-type-time-mobile {
+  &-wrapper-type-time.mobile {
     height: 70px;
   }
 
 
   &-am,
   &-pm,
-  &-am-mobile,
-  &-pm-mobile {
+  &-am.mobile,
+  &-pm.mobile {
     height: calc(40px - 2px);
     width: calc(52px - 2px);
     display: flex;
@@ -316,22 +302,21 @@ body {
     }
   }
 
-  &-am,
-  &-pm {
-
+  &-am:not(.timepicker-ui-am.mobile),
+  &-pm:not(.timepicker-ui-pm.mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       width: 100%;
     }
   }
 
   &-am,
-  &-am-mobile {
+  &-am.mobile {
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     border-bottom-width: calc(0.75px / 2);
   }
 
-  &-am {
+  &-am:not(.timepicker-ui-am.mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       border-top-left-radius: 7px;
       border-bottom-left-radius: 7px;
@@ -342,13 +327,13 @@ body {
   }
 
   &-pm,
-  &-pm-mobile {
+  &-pm.mobile {
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
     border-top-width: calc(0.75px / 2);
   }
 
-  &-pm {
+  &-pm:not(.timepicker-ui-pm.mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       border-bottom-right-radius: 7px;
       border-top-right-radius: 7px;
@@ -361,8 +346,8 @@ body {
 
   &-cancel-btn,
   &-ok-btn,
-  &-cancel-btn-mobile,
-  &-ok-btn-mobile {
+  &-cancel-btn.mobile,
+  &-ok.btn-mobile {
     color: #6200EE;
     text-transform: uppercase;
     border-radius: 7px;
@@ -382,13 +367,13 @@ body {
   }
 
   &-cancel-btn,
-  &-cancel-btn-mobile {
+  &-cancel-btn.mobile {
     width: 72px;
     margin-right: 4px;
   }
 
   &-ok-btn,
-  &-ok-btn-mobile {
+  &-ok-btn.mobile {
     width: 64px;
     margin-left: 4px;
 
@@ -405,7 +390,7 @@ body {
   }
 
   &-keyboard-icon-wrapper,
-  &-keyboard-icon-wrapper-mobile {
+  &-keyboard-icon-wrapper.mobile {
 
     width: 44px;
     height: 44px;
@@ -415,13 +400,13 @@ body {
     transition: all .3s ease;
 
     &:hover .timepicker-ui-keyboard-icon,
-    &:hover .timepicker-ui-keyboard-icon-mobile {
+    &:hover .timepicker-ui-keyboard-icon.mobile {
       background-color: #D6D6D6;
       border-radius: 7px;
     }
   }
 
-  &-keyboard-icon-wrapper {
+  &-keyboard-icon-wrapper:not(.timepicker-ui-keyboard-icon-wrapper.mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       position: absolute;
       bottom: 0;
@@ -430,7 +415,7 @@ body {
 
 
   &-keyboard-icon,
-  &-keyboard-icon-mobile {
+  &-keyboard-icon.mobile {
     padding: 12px;
     cursor: pointer;
     transition: all .3s ease;
@@ -441,7 +426,7 @@ body {
   }
 
   &-wrapper-btn,
-  &-wrapper-btn-mobile {
+  &-wrapper-btn.mobile {
     margin-right: 8px;
     position: relative;
     bottom: -14px;
@@ -449,8 +434,8 @@ body {
 
   &-hour-text,
   &-minute-text,
-  &-hour-text-mobile,
-  &-minute-text-mobile {
+  &-hour-text.mobile,
+  &-minute-text.mobile {
     position: absolute;
     bottom: -22px;
     font-size: .8rem;
@@ -459,8 +444,7 @@ body {
 
 
   &-minute-text,
-  &-minute-text-mobile {
-
+  &-minute-text.mobile {
     left: 120px;
   }
 

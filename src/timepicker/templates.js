@@ -39,7 +39,7 @@ export const getModalTemplate = ({
 }) => {
   return `
   <div class="timepicker-ui-modal" role="dialog">
-    <div class="timepicker-ui-wrapper">
+    <div class="timepicker-ui-wrapper ">
       <div class="timepicker-ui-header">
         <div class="timepicker-ui-select-time">${selectTimeLabel}</div>
         <div class="timepicker-ui-wrapper-time">
@@ -63,7 +63,7 @@ export const getModalTemplate = ({
           </div>
         </div>
         <div class="timepicker-ui-footer">
-        <div class="timepicker-ui-keyboard-icon-wrapper" role="button" aria-pressed="false">
+        <div class="timepicker-ui-keyboard-icon-wrapper" role="button" aria-pressed="false" data-view="desktop">
           <i class="${iconClass} timepicker-ui-keyboard-icon"></i>
         </div>
         <div class="timepicker-ui-wrapper-btn">
@@ -87,29 +87,29 @@ export const getMobileModalTemplate = ({
   hourMobileLabel,
 }) => {
   return `
-  <div class="timepicker-ui-modal" role="dialog">
-    <div class="timepicker-ui-wrapper-mobile">
-      <div class="timepicker-ui-header-mobile">
-        <div class="timepicker-ui-select-time-mobile">${enterTimeLabel}</div>
-        <div class="timepicker-ui-wrapper-time-mobile">
-          <div class="timepicker-ui-hour-mobile" contenteditable="false">12</div>  
-          <div class="timepicker-ui-hour-text">${hourMobileLabel}</div>
-          <div class="timepicker-ui-dots-mobile">:</div>  
-          <div class="timepicker-ui-minute-text">${minuteMobileLabel}</div>
-          <div class="timepicker-ui-minutes-mobile" contenteditable="false">00</div>   
+  <div class="timepicker-ui-modal mobile" role="dialog">
+    <div class="timepicker-ui-wrapper mobile">
+      <div class="timepicker-ui-header mobile">
+        <div class="timepicker-ui-select-time mobile">${enterTimeLabel}</div>
+        <div class="timepicker-ui-wrapper-time mobile">
+          <div class="timepicker-ui-hour mobile" contenteditable="false">12</div>  
+          <div class="timepicker-ui-hour-text mobile">${hourMobileLabel}</div>
+          <div class="timepicker-ui-dots mobile">:</div>  
+          <div class="timepicker-ui-minute-text mobile">${minuteMobileLabel}</div>
+          <div class="timepicker-ui-minutes mobile" contenteditable="false">00</div>   
         </div>
-      <div class="timepicker-ui-wrapper-type-time-mobile">
-        <div class="timepicker-ui-type-mode timepicker-ui-am-mobile" data-type="AM">${amLabel}</div>    
-        <div class="timepicker-ui-type-mode timepicker-ui-pm-mobile" data-type="PM">${pmLabel}</div>    
+      <div class="timepicker-ui-wrapper-type-time mobile">
+        <div class="timepicker-ui-type-mode timepicker-ui-am mobile" data-type="AM">${amLabel}</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-pm mobile" data-type="PM">${pmLabel}</div>    
       </div>
       </div>
-      <div class="timepicker-ui-footer-mobile">
-      <div class="timepicker-ui-keyboard-icon-wrapper-mobile" role="button" aria-pressed="false">
-        <i class="${iconClassMobile} timepicker-ui-keyboard-icon-mobile"></i>
+      <div class="timepicker-ui-footer mobile" data-view="mobile">
+      <div class="timepicker-ui-keyboard-icon-wrapper mobile" role="button" aria-pressed="false" data-view="desktop">
+        <i class="${iconClassMobile} timepicker-ui-keyboard-icon mobile"></i>
       </div>
-      <div class="timepicker-ui-wrapper-btn-mobile">
-        <div class="timepicker-ui-cancel-btn-mobile" role="button" aria-pressed="false">${cancelLabel}</div>
-        <div class="timepicker-ui-ok-btn-mobile" role="button" aria-pressed="false">${okLabel}</div>
+      <div class="timepicker-ui-wrapper-btn mobile">
+        <div class="timepicker-ui-cancel-btn mobile" role="button" aria-pressed="false">${cancelLabel}</div>
+        <div class="timepicker-ui-ok-btn mobile" role="button" aria-pressed="false">${okLabel}</div>
       </div>
       </div>
     </div>  
