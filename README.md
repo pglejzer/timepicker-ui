@@ -55,7 +55,7 @@ ___
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import { Timepicker } from 'timepicker-ui';
+import { TimepickerUI } from 'timepicker-ui';
 ```
 
 #### UMD
@@ -85,6 +85,7 @@ timepicker-ui has to be created with a new instance with key `new`. This instanc
 
 ```javascript
 const DOMElement = document.querySelector('.timepicker-ui');
+const options = {};
 const newTimepicker = new TimepickerUI(DOMElement, options)
 ```
 
@@ -121,7 +122,6 @@ ___
 - max/min time options
 - 24h time mode clock face
 - keyboard icon functionality
-- theme concept
 
 If you have more good ideas please let me know in [issue](https://github.com/q448x/timepicker-ui/issues). I will try to add more useful features.
 

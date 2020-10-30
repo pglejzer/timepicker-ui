@@ -71,13 +71,9 @@ export const clickOrTouchPosition = ({ clientX, clientY, touches }, object, isMo
   return obj;
 };
 
-export const mathDegreesIncrement = (degrees, num) => {
-  return Math.round(degrees / num) * num;
-};
+export const mathDegreesIncrement = (degrees, num) => Math.round(degrees / num) * num;
 
-export const hasClass = (element, selector) => {
-  return element.classList.contains(selector);
-};
+export const hasClass = (element, selector) => element.classList.contains(selector);
 
 export const getInputValue = ({ value }) => {
   if (value === '') return;

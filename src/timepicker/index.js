@@ -75,6 +75,7 @@ class TimepickerUI {
     this._options = getConfig(options, DEFAULT_OPTIONS, DEFAULT_TYPE, NAME);
 
     this._isMouseMove = false;
+    this._degreesHours = null;
 
     this.init();
 
@@ -654,6 +655,7 @@ class TimepickerUI {
 
   _setModalTemplate = () => {
     const { appendModalSelector } = this._options;
+
     if (appendModalSelector === '') {
       document.body.insertAdjacentHTML('afterend', this.modalTemplate);
     } else {
@@ -680,7 +682,6 @@ class TimepickerUI {
 
     array.forEach((num, index) => {
       const angle = getRadians(index * el);
-
       const span = document.createElement('span');
       const spanTips = document.createElement('span');
 
