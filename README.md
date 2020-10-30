@@ -121,6 +121,13 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
   <button class="timepicker-ui-button" data-open="default-class">Open</button>
 </div>
 ```
+
+```JavaScript
+const wrapper = document.querySelector('.default-class');
+const options = { okLabel:'test', amLabel:'test1', backdrop:false }
+const initTimepicker = new TimepickerUI(wrapper, options);
+```
+
 ---
 
 #### Table with options
