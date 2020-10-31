@@ -1,14 +1,4 @@
-//Thanks for Bootstrap 5 - alpha version
-export const getConfig = (options, defaultOptions, defaultType, name) => {
-  const config = {
-    ...defaultOptions,
-    ...options,
-  };
-  typeCheckConfig(name, config, defaultType);
-  return config;
-};
-
-//Thanks for Bootstrap 5 - alpha version
+// Thanks for Bootstrap 5 - alpha version
 export const toType = (obj) => {
   if (obj === null || obj === undefined) {
     return `${obj}`;
@@ -20,10 +10,10 @@ export const toType = (obj) => {
     .toLowerCase();
 };
 
-//Thanks for Bootstrap 5 - alpha version
+// Thanks for Bootstrap 5 - alpha version
 export const isElement = (obj) => (obj[0] || obj).nodeType;
 
-//Thanks for Bootstrap 5 - alpha version
+// Thanks for Bootstrap 5 - alpha version
 export const typeCheckConfig = (componentName, config, configTypes) => {
   Object.keys(configTypes).forEach((property) => {
     const expectedTypes = configTypes[property];
@@ -40,7 +30,17 @@ export const typeCheckConfig = (componentName, config, configTypes) => {
   });
 };
 
-//Thanks for Bootstrap 5 - alpha version
+// Thanks for Bootstrap 5 - alpha version
+export const getConfig = (options, defaultOptions, defaultType, name) => {
+  const config = {
+    ...defaultOptions,
+    ...options,
+  };
+  typeCheckConfig(name, config, defaultType);
+  return config;
+};
+
+// Thanks for Bootstrap 5 - alpha version
 export const getScrollbarWidth = () => {
   const scrollDiv = document.createElement('div');
   scrollDiv.className = 'timepicker-ui-measure';
@@ -83,7 +83,7 @@ export const getInputValue = ({ value }) => {
   const [hourSplit, minutesSplit] = hour.split(':');
 
   let min = Number(minutesSplit);
-  let hor = Number(hourSplit);
+  const hor = Number(hourSplit);
 
   if (hor > 12 || min > 59 || hor === 0) return;
 

@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable indent */
 export const numberOfHours24 = [
   '00',
   '13',
@@ -37,8 +39,7 @@ export const getModalTemplate = ({
   cancelLabel,
   okLabel,
   enableSwitchIcon,
-}) => {
-  return `
+}) => `
   <div class="timepicker-ui-modal normalize" role="dialog">
     <div class="timepicker-ui-wrapper ">
       <div class="timepicker-ui-header">
@@ -81,7 +82,6 @@ export const getModalTemplate = ({
       </div>
     </div>  
   </div>`;
-};
 
 export const getMobileModalTemplate = ({
   enterTimeLabel,
@@ -92,8 +92,7 @@ export const getMobileModalTemplate = ({
   iconTemplateMobile,
   minuteMobileLabel,
   hourMobileLabel,
-}) => {
-  return `
+}) => `
   <div class="timepicker-ui-modal normalize mobile" role="dialog">
     <div class="timepicker-ui-wrapper mobile">
       <div class="timepicker-ui-header mobile">
@@ -127,4 +126,3 @@ export const getMobileModalTemplate = ({
       </div>
     </div>  
   </div>`;
-};

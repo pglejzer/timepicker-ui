@@ -1,10 +1,8 @@
 @import './variables.scss';
 
 .timepicker-ui {
-
   &-wrapper,
   &-wrapper.mobile {
-
     &.crane-straight {
       border-radius: 0;
       background-color: $cranepurple900;
@@ -18,15 +16,13 @@
 
   &-select-time,
   &-select-time.mobile {
-
     &.crane-straight {
-      color: #E5E5E5;
+      color: #e5e5e5;
     }
   }
 
   &-clock-face,
   &-clock-face.mobile {
-
     &.crane-straight {
       background-color: $cranepurple700;
     }
@@ -34,7 +30,6 @@
 
   &-dot,
   &-dot.mobile {
-
     &.crane-straight {
       background-color: $cranered400;
     }
@@ -48,7 +43,6 @@
       background-color: $cranepurple700;
       border-radius: 0;
       color: $white;
-
 
       &.radius {
         border-radius: 20px;
@@ -64,9 +58,8 @@
   &-hour.mobile,
   &-minutes.mobile {
     &.crane-straight {
-
-      &[contenteditable="true"]:focus,
-      &[contenteditable="true"]:active {
+      &[contenteditable='true']:focus,
+      &[contenteditable='true']:active {
         border-color: $white;
         outline-color: $white;
       }
@@ -75,16 +68,15 @@
 
   &-dots,
   &-dots.mobile {
-
     &.crane-straight {
-      color: $white
+      color: $white;
     }
   }
 
   &-wrapper-type-time,
   &-wrapper-type-time.mobile {
     &.crane-straight {
-      color: $white
+      color: $white;
     }
   }
 
@@ -92,8 +84,6 @@
   &-pm,
   &-am.mobile,
   &-pm.mobile {
-
-
     &.crane-straight {
       border: 2px solid transparent;
       border-radius: 0;
@@ -102,7 +92,6 @@
 
     &:hover,
     &.active {
-
       &.crane-straight {
         color: $white;
         background-color: $cranered400;
@@ -115,7 +104,6 @@
       &.radius {
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
-
       }
     }
   }
@@ -125,16 +113,14 @@
       &.radius {
         border-bottom-left-radius: 20px;
         border-bottom-right-radius: 20px;
-
       }
     }
   }
 
-  &-am:not(.timepicker-ui-am+.mobile) {
-
+  &-am:not(.timepicker-ui-am + .mobile) {
     &.crane-straight {
       &.radius {
-        @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
+        @media screen and (min-width: 320px) and (max-width: 767px) and(orientation:landscape) {
           border-bottom-left-radius: 20px;
           border-bottom-right-radius: 20px;
         }
@@ -142,11 +128,10 @@
     }
   }
 
-  &-pm:not(.timepicker-ui-pm+.mobile) {
-
+  &-pm:not(.timepicker-ui-pm + .mobile) {
     &.crane-straight {
       &.radius {
-        @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
+        @media screen and (min-width: 320px) and (max-width: 767px) and(orientation:landscape) {
           border-top-left-radius: 20px;
           border-top-right-radius: 20px;
         }
@@ -155,10 +140,9 @@
   }
 
   &-am.mobile {
-
     &.crane-straight {
       &.radius {
-        @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
+        @media screen and (min-width: 320px) and (max-width: 767px) and(orientation:landscape) {
           border-bottom-left-radius: 0px;
           border-bottom-right-radius: 0px;
         }
@@ -167,10 +151,9 @@
   }
 
   &-pm.mobile {
-
     &.crane-straight {
       &.radius {
-        @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
+        @media screen and (min-width: 320px) and (max-width: 767px) and(orientation:landscape) {
           border-top-left-radius: 0px;
           border-top-right-radius: 0px;
         }
@@ -182,7 +165,6 @@
   &-ok-btn,
   &-cancel-btn.mobile,
   &-ok-btn.mobile {
-
     &.crane-straight {
       color: $white;
       border-radius: 0px;
@@ -193,10 +175,8 @@
     }
 
     &:hover {
-
       &.crane-straight {
         background-color: $cranered400;
-
       }
     }
   }
@@ -212,7 +192,6 @@
     }
 
     &.crane-straight {
-
       &:hover .timepicker-ui-keyboard-icon,
       &:hover .timepicker-ui-keyboard-icon.mobile {
         background-color: $cranered400;
@@ -221,7 +200,6 @@
       }
 
       &.radius {
-
         &:hover .timepicker-ui-keyboard-icon,
         &:hover .timepicker-ui-keyboard-icon.mobile {
           border-radius: 14px;
