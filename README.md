@@ -29,7 +29,7 @@ timepicker-ui is an easy library with timepicker. Fully wrote with pure JavaScri
 
 ___
 
-  ### Installation
+### Installation
 
 Install timepicker-ui in your project.
 
