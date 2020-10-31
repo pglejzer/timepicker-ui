@@ -267,7 +267,7 @@ ___
 
 ### Methods
 
-Methods are custom function what can be used to manually change behaviour of timepicker.
+Methods are custom function what can be used to manually change the behavior of timepicker.
 
 
 #### HTML
@@ -299,15 +299,15 @@ timepicker.init();
   <tbody>
    <tr>
       <td scope="row">init</td>
-      <td>Init method is automatically are inject when you have a wrapper with class <code>timepicker-ui</code>. If not you have to init on your own</td>
+      <td>The init method is automatically are inject when you have a wrapper with class <code>timepicker-ui</code>. If not you have to init on your own</td>
     </tr>
     <tr>
       <td scope="row">open</td>
-      <td>Open method open immediately timepicker after init</td>
+      <td>The open method opens immediately timepicker after init</td>
     </tr>
     <tr>
       <td scope="row">close</td>
-        <td>Open method close timepicker</td>
+        <td>Closure method closes the timepicker</td>
     </tr>
   </tbody>
 </table>
@@ -316,7 +316,7 @@ ___
 
 ### Events
 
-Events are custom events triggered when you add some event listeners to your timepicker element. If you want have a property timepicker/input values you have to use <code>detail</code> to event object.
+Events are custom events triggered when you add some event listeners to your timepicker element. If you want to have a property timepicker/input values you have to use <code>detail</code> to the event object.
 
 #### HTML
 ```HTML
@@ -348,35 +348,35 @@ timepicker.addEventListener('show', (event)=> console.log(event.detail))
   <tbody>
     <tr>
       <td scope="row">show</td>
-      <td>Event starts if timepicker is showing up</td>
+      <td>The event starts if timepicker is showing up</td>
     </tr>
     <tr>
       <td scope="row">cancel</td>
-      <td>Event start if timepicker is closing</td>
+      <td>The event starts if timepicker is closing</td>
     </tr>
     <tr>
       <td scope="row">accept</td>
-      <td>Event starts if timepicker button OK is accpeted</td>
+      <td>The event starts if timepicker button OK is accpeted</td>
     </tr>
        <tr>
       <td scope="row">update</td>
-      <td>Event start if mouse/touch events are triggered on clock face (multiple events)</td>
+      <td>The event starts if mouse/touch events are triggered on a clock face (multiple events)</td>
     </tr> 
       <tr>
       <td scope="row">selectminutemode</td>
-      <td>Event start if timepicker minute box is cliked</td>
+      <td>The event starts if timepicker minute box is clicked</td>
     </tr> 
    <tr>
       <td scope="row">selecthourmode</td>
-      <td>Event starts if timepicker hour box is cliked</td>
+      <td>The event starts if timepicker hour box is clicked</td>
     </tr> 
       <tr>
       <td scope="row">selectamtypemode</td>
-      <td>Event starts if timepicker am box is cliked</td>
+      <td>The event starts if timepicker am box is clicked</td>
     </tr> 
       <tr>
       <td scope="row">selectamtypemode</td>
-      <td>Event starts if timepicker pm box is cliked</td>
+      <td>The event starts if timepicker pm box is clicked</td>
     </tr>  
   </tbody>
 </table>
