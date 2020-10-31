@@ -86,7 +86,7 @@ timepicker-ui has to be created with a new instance with key `new`. This instanc
 ```javascript
 const DOMElement = document.querySelector('.timepicker-ui');
 const options = {};
-const newTimepicker = new TimepickerUI(DOMElement, options)
+const newTimepicker = new TimepickerUI(DOMElement, options);
 ```
 
 By default initialization of timepicker is started when you click on input. If you want to change it you have to add `data-open` attribute with selector inside and this element has to be inside wrapper. 
@@ -103,8 +103,10 @@ By default initialization of timepicker is started when you click on input. If y
 #### JavaScript
 
 ```javascript
-const wrapper = document.querySelector('.default-class');
-const initTimepicker = new TimepickerUI(wrapper);
+const timepicker = document.querySelector('.default-class');
+const initTimepicker = new TimepickerUI(timepicker);
+
+timepicker.init();
 ```
 
 ___
@@ -124,9 +126,12 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 #### JavaScript
 
 ```javascript
-const wrapper = document.querySelector('.default-class');
+const timepicker = document.querySelector('.default-class');
 const options = { okLabel: 'test', amLabel: 'test1', backdrop: false }
-const initTimepicker = new TimepickerUI(wrapper, options);
+const initTimepicker = new TimepickerUI(timepicker, options);
+
+
+timepicker.init();
 ```
 
 ---
@@ -253,6 +258,125 @@ const initTimepicker = new TimepickerUI(wrapper, options);
       <td>string</td>
       <td>basic</td>
       <td>Set theme to timpicker. Available options: basic, crane-straight, crane-radius</td>
+    </tr>  
+  </tbody>
+</table>
+
+___
+
+
+### Methods
+
+Methods are custom function what can be used to manually change behaviour of timepicker.
+
+
+#### HTML
+```HTML
+<div class="timepicker-ui-test">
+  <input type="test" class="timepicker-ui-input" value="12:00 AM"> 
+</div>
+```
+
+#### JavaScript
+
+```javascript
+const timepicker = document.querySelector('timepicker-ui-test')
+const init = new TimepickerUI(timepicker)
+
+timepicker.init();
+```
+
+
+#### Table with methods
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+      <td scope="row">init</td>
+      <td>Init method is automatically are inject when you have a wrapper with class <code>timepicker-ui</code>. If not you have to init on your own</td>
+    </tr>
+    <tr>
+      <td scope="row">open</td>
+      <td>Open method open immediately timepicker after init</td>
+    </tr>
+    <tr>
+      <td scope="row">close</td>
+        <td>Open method close timepicker</td>
+    </tr>
+  </tbody>
+</table>
+
+___
+
+### Events
+
+Events are custom events triggered when you add some event listeners to your timepicker element. If you want have a property timepicker/input values you have to use <code>detail</code> to event object.
+
+#### HTML
+```HTML
+<div class="timepicker-ui-test">
+  <input type="test" class="timepicker-ui-input" value="12:00 AM"> 
+</div>
+```
+
+#### JavaScript
+
+```javascript
+const timepicker = document.querySelector('timepicker-ui-test')
+const init = new TimepickerUI(timepicker)
+
+timepicker.init();
+
+timepicker.addEventListener('show', (event)=> console.log(event.detail))
+```
+
+#### Table with events
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td scope="row">show</td>
+      <td>Event starts if timepicker is showing up</td>
+    </tr>
+    <tr>
+      <td scope="row">cancel</td>
+      <td>Event start if timepicker is closing</td>
+    </tr>
+    <tr>
+      <td scope="row">accept</td>
+      <td>Event starts if timepicker button OK is accpeted</td>
+    </tr>
+       <tr>
+      <td scope="row">update</td>
+      <td>Event start if mouse/touch events are triggered on clock face (multiple events)</td>
+    </tr> 
+      <tr>
+      <td scope="row">selectminutemode</td>
+      <td>Event start if timepicker minute box is cliked</td>
+    </tr> 
+   <tr>
+      <td scope="row">selecthourmode</td>
+      <td>Event starts if timepicker hour box is cliked</td>
+    </tr> 
+      <tr>
+      <td scope="row">selectamtypemode</td>
+      <td>Event starts if timepicker am box is cliked</td>
+    </tr> 
+      <tr>
+      <td scope="row">selectamtypemode</td>
+      <td>Event starts if timepicker pm box is cliked</td>
     </tr>  
   </tbody>
 </table>
