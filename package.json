@@ -43,6 +43,7 @@
     "eslint": "^7.12.1",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.1",
+    "file-loader": "^6.2.0",
     "html-webpack-plugin": "^4.5.0",
     "husky": "^4.3.0",
     "lint-staged": "^10.5.0",
@@ -69,6 +70,10 @@
     "stylelint-order": "^4.1.0",
     "stylelint-prettier": "^1.1.2",
     "stylelint-scss": "^3.17.2",
+    "svg-sprite-loader": "^5.0.0",
+    "svg-url-loader": "^6.0.0",
+    "svgo-loader": "^2.2.1",
+    "url-loader": "^4.1.1",
     "webpack": "^5.3.0",
     "webpack-cli": "^4.1.0",
     "webpack-dev-server": "^3.11.0"

@@ -1,5 +1,4 @@
 const path = require('path');
-const loader = require('sass-loader');
 const ni = require('os').networkInterfaces();
 const ip = Object.keys(ni)
   .map((interf) => ni[interf].map((o) => !o.internal && o.family === 'IPv4' && o.address))
@@ -49,6 +48,11 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.svg$/,
+        use: ['svg-url-loader'],
+      },
+      // { test: /.(jpg|jpeg|png|svg)$/, use: ['file-loader', 'url-loader'] },
     ],
   },
 };

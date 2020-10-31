@@ -36,6 +36,7 @@ export const getModalTemplate = ({
   pmLabel,
   cancelLabel,
   okLabel,
+  enableSwitchIcon,
 }) => {
   return `
   <div class="timepicker-ui-modal normalize" role="dialog">
@@ -63,9 +64,15 @@ export const getModalTemplate = ({
           </div>
         </div>
         <div class="timepicker-ui-footer">
-        <div class="timepicker-ui-keyboard-icon-wrapper" role="button" aria-pressed="false" data-view="desktop">
-          <i class="${iconClass} timepicker-ui-keyboard-icon"></i>
-        </div>
+        ${
+          enableSwitchIcon
+            ? `
+      <div class="timepicker-ui-keyboard-icon-wrapper" role="button" aria-pressed="false" data-view="desktop">
+        ${iconClass}
+      </div>`
+            : ''
+        }
+ 
         <div class="timepicker-ui-wrapper-btn">
           <div class="timepicker-ui-cancel-btn" role="button" aria-pressed="false">${cancelLabel}</div>
           <div class="timepicker-ui-ok-btn" role="button" aria-pressed="false">${okLabel}</div>
@@ -104,9 +111,15 @@ export const getMobileModalTemplate = ({
       </div>
       </div>
       <div class="timepicker-ui-footer mobile" data-view="mobile">
+
+      ${
+        enableSwitchIcon
+          ? `
       <div class="timepicker-ui-keyboard-icon-wrapper mobile" role="button" aria-pressed="false" data-view="desktop">
-        <i class="${iconClassMobile} timepicker-ui-keyboard-icon mobile"></i>
-      </div>
+      ${iconClassMobile}
+      </div>`
+          : ''
+      }
       <div class="timepicker-ui-wrapper-btn mobile">
         <div class="timepicker-ui-cancel-btn mobile" role="button" aria-pressed="false">${cancelLabel}</div>
         <div class="timepicker-ui-ok-btn mobile" role="button" aria-pressed="false">${okLabel}</div>

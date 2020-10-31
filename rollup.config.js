@@ -1,12 +1,11 @@
 import nodeResolve from 'rollup-plugin-node-resolve';
-import replace from 'rollup-plugin-replace';
-import postcss from 'rollup-plugin-postcss';
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
+import replace from 'rollup-plugin-replace';
+import postcss from 'rollup-plugin-postcss';
 import pkg from './package.json';
 import { terser } from 'rollup-plugin-terser';
-import scssVariable from 'rollup-plugin-sass-variables';
 
 const dependencies = Object.keys(require('./package.json').dependencies);
 
@@ -27,7 +26,6 @@ const plugins = [
     extract: false,
   }),
   terser(),
-  scssVariable(),
 ];
 
 export default [

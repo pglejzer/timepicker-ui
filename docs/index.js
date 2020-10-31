@@ -23,8 +23,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_main_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(13);
 /* harmony import */ var _styles_theme_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(17);
 /* harmony import */ var _styles_variables_scss__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(19);
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(21);
-/* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(26);
+/* harmony import */ var _icon_keyboard_black_18dp_svg__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(21);
+/* harmony import */ var _icon_keyboard_black_18dp_svg__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_icon_keyboard_black_18dp_svg__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(22);
+/* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(27);
 
 
 
@@ -35,6 +37,7 @@ __webpack_require__.r(__webpack_exports__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
 
 
 
@@ -139,8 +142,8 @@ var TimepickerUI = /*#__PURE__*/function () {
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(this, "_handleCancelButton", function () {
       _this.cancelButton.addEventListener('click', function (event) {
-        var value = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.getInputValue)(_this.input);
-        (0,_utils__WEBPACK_IMPORTED_MODULE_9__.createNewEvent)(_this._element, 'cancelOnClickEvent', value);
+        var value = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.getInputValue)(_this.input);
+        (0,_utils__WEBPACK_IMPORTED_MODULE_10__.createNewEvent)(_this._element, 'cancelOnClickEvent', value);
 
         _this.close();
       });
@@ -168,9 +171,9 @@ var TimepickerUI = /*#__PURE__*/function () {
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(this, "_handleBackdropClick", function (ev) {
       _this.modalElement.addEventListener('click', function (event) {
-        if (!(0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(event.target, 'timepicker-ui-modal')) return;
-        var value = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.getInputValue)(_this.input);
-        (0,_utils__WEBPACK_IMPORTED_MODULE_9__.createNewEvent)(_this._element, 'cancelOnClickEvent', value);
+        if (!(0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(event.target, 'timepicker-ui-modal')) return;
+        var value = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.getInputValue)(_this.input);
+        (0,_utils__WEBPACK_IMPORTED_MODULE_10__.createNewEvent)(_this._element, 'cancelOnClickEvent', value);
 
         _this.close();
       });
@@ -187,7 +190,7 @@ var TimepickerUI = /*#__PURE__*/function () {
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(this, "_setBgColorToCircleWithMinutesTips", function () {
-      if (_templates__WEBPACK_IMPORTED_MODULE_10__.numberOfMinutes.includes(_this.minutes.textContent)) {
+      if (_templates__WEBPACK_IMPORTED_MODULE_11__.numberOfMinutes.includes(_this.minutes.textContent)) {
         if (_this._options.theme === 'crane-straight') {
           _this.circle.style.backgroundColor = _styles_variables_scss__WEBPACK_IMPORTED_MODULE_8__.default.cranered400;
         } else {
@@ -199,7 +202,7 @@ var TimepickerUI = /*#__PURE__*/function () {
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(this, "_removeBgColorToCirleWithMinutesTips", function () {
-      if (_templates__WEBPACK_IMPORTED_MODULE_10__.numberOfMinutes.includes(_this.minutes.textContent)) return;
+      if (_templates__WEBPACK_IMPORTED_MODULE_11__.numberOfMinutes.includes(_this.minutes.textContent)) return;
       _this.circle.style.backgroundColor = '';
 
       _this.circle.classList.add('small-circle');
@@ -221,7 +224,7 @@ var TimepickerUI = /*#__PURE__*/function () {
 
       _this._removeBgColorToCirleWithMinutesTips();
 
-      _this._setNumbersToClockFace(_templates__WEBPACK_IMPORTED_MODULE_10__.numberOfMinutes, 'timepicker-ui-minutes-time');
+      _this._setNumbersToClockFace(_templates__WEBPACK_IMPORTED_MODULE_11__.numberOfMinutes, 'timepicker-ui-minutes-time');
 
       _this._toggleClassActiveToValueTips(value);
     });
@@ -305,7 +308,7 @@ var TimepickerUI = /*#__PURE__*/function () {
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(this, "_handleEventToMoveHand", function (event) {
-      if (!(0,_utils__WEBPACK_IMPORTED_MODULE_9__.whichBrowser)()) event.preventDefault();
+      if (!(0,_utils__WEBPACK_IMPORTED_MODULE_10__.whichBrowser)()) event.preventDefault();
       var type = event.type,
           target = event.target;
       var _this$_options = _this._options,
@@ -313,15 +316,15 @@ var TimepickerUI = /*#__PURE__*/function () {
           incrementHours = _this$_options.incrementHours,
           switchToMinutesAfterSelectHour = _this$_options.switchToMinutesAfterSelectHour;
 
-      var _clickOrTouchPosition = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.clickOrTouchPosition)(event, _this.clockFace),
+      var _clickOrTouchPosition = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.clickOrTouchPosition)(event, _this.clockFace),
           x = _clickOrTouchPosition.x,
           y = _clickOrTouchPosition.y;
 
       var clockFaceRadius = _this.clockFace.offsetWidth / 2;
       var rtangens = Math.atan2(y - clockFaceRadius, x - clockFaceRadius);
 
-      if ((0,_utils__WEBPACK_IMPORTED_MODULE_9__.whichBrowser)()) {
-        var touchClick = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.clickOrTouchPosition)(event, _this.clockFace, true);
+      if ((0,_utils__WEBPACK_IMPORTED_MODULE_10__.whichBrowser)()) {
+        var touchClick = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.clickOrTouchPosition)(event, _this.clockFace, true);
         rtangens = Math.atan2(touchClick.y - clockFaceRadius, touchClick.x - clockFaceRadius);
       }
 
@@ -333,7 +336,7 @@ var TimepickerUI = /*#__PURE__*/function () {
 
       if (type === 'mousedown' || type === 'mousemove' || type === 'touchmove' || type === 'touchmove') {
         if (type === 'mousedown' || type === 'touchstart' || type === 'touchmove') {
-          if ((0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(target, 'timepicker-ui-clock-face') || (0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(target, 'timepicker-ui-circle-hand') || (0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(target, 'timepicker-ui-hour-time-12') || (0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(target, 'timepicker-ui-minutes-time') || (0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(target, 'timepicker-ui-clock-hand') || (0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(target, 'timepicker-ui-value-tips')) {
+          if ((0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(target, 'timepicker-ui-clock-face') || (0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(target, 'timepicker-ui-circle-hand') || (0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(target, 'timepicker-ui-hour-time-12') || (0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(target, 'timepicker-ui-minutes-time') || (0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(target, 'timepicker-ui-clock-hand') || (0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(target, 'timepicker-ui-value-tips')) {
             _this._isMouseMove = true;
           }
         }
@@ -345,11 +348,11 @@ var TimepickerUI = /*#__PURE__*/function () {
         var degrees = Math.trunc(rtangens * 180 / Math.PI) + 90;
 
         if (incrementMinutes === 5) {
-          degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.mathDegreesIncrement)(degrees, 30);
+          degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.mathDegreesIncrement)(degrees, 30);
         } else if (incrementMinutes === 10) {
-          degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.mathDegreesIncrement)(degrees, 60);
+          degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.mathDegreesIncrement)(degrees, 60);
         } else if (incrementMinutes === 15) {
-          degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.mathDegreesIncrement)(degrees, 60);
+          degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.mathDegreesIncrement)(degrees, 60);
         }
 
         var minute;
@@ -376,12 +379,12 @@ var TimepickerUI = /*#__PURE__*/function () {
       if (_this.hourTips !== null) {
         var _degrees = Math.trunc(rtangens * 180 / Math.PI) + 90;
 
-        _degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.mathDegreesIncrement)(_degrees, 30);
+        _degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.mathDegreesIncrement)(_degrees, 30);
 
         if (incrementHours === 2) {
-          _degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.mathDegreesIncrement)(_degrees, 60);
+          _degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.mathDegreesIncrement)(_degrees, 60);
         } else if (incrementHours === 3) {
-          _degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.mathDegreesIncrement)(_degrees, 90);
+          _degrees = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.mathDegreesIncrement)(_degrees, 90);
         }
 
         _this.clockHand.style.transform = "rotateZ(".concat(_degrees, "deg)");
@@ -404,7 +407,7 @@ var TimepickerUI = /*#__PURE__*/function () {
         _this._toggleClassActiveToValueTips(hour);
       }
 
-      (0,_utils__WEBPACK_IMPORTED_MODULE_9__.createNewEvent)(_this._element, 'updateEvent', _objectSpread(_objectSpread({}, (0,_utils__WEBPACK_IMPORTED_MODULE_9__.getInputValue)(_this.input)), {}, {
+      (0,_utils__WEBPACK_IMPORTED_MODULE_10__.createNewEvent)(_this._element, 'updateEvent', _objectSpread(_objectSpread({}, (0,_utils__WEBPACK_IMPORTED_MODULE_10__.getInputValue)(_this.input)), {}, {
         degreesHours: _this._degreesHours,
         degreesMinutes: _this._degreesMinutes,
         eventType: type
@@ -447,19 +450,19 @@ var TimepickerUI = /*#__PURE__*/function () {
 
       if (!enableScrollbar) {
         document.body.style.overflowY = 'hidden';
-        document.body.style.paddingRight = "".concat((0,_utils__WEBPACK_IMPORTED_MODULE_9__.getScrollbarWidth)(), "px");
+        document.body.style.paddingRight = "".concat((0,_utils__WEBPACK_IMPORTED_MODULE_10__.getScrollbarWidth)(), "px");
       }
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(this, "_setNumbersToClockFace", function () {
-      var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _templates__WEBPACK_IMPORTED_MODULE_10__.numberOfHours12;
+      var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _templates__WEBPACK_IMPORTED_MODULE_11__.numberOfHours12;
       var classToAdd = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'timepicker-ui-hour-time-12';
       var el = 360 / array.length;
       var clockWidth = (_this.clockFace.offsetWidth - 32) / 2;
       var clockHeight = (_this.clockFace.offsetHeight - 32) / 2;
       var radius = clockWidth - 9;
       array.forEach(function (num, index) {
-        var angle = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.getRadians)(index * el);
+        var angle = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.getRadians)(index * el);
         var span = document.createElement('span');
         var spanTips = document.createElement('span');
         spanTips.innerHTML = num;
@@ -491,7 +494,7 @@ var TimepickerUI = /*#__PURE__*/function () {
                 validHours = _this._handleValueAndCheck(_this.hour.textContent, 'hour');
                 validMinutes = _this._handleValueAndCheck(_this.minutes.textContent, 'minutes');
 
-                if ((0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(_this.modalElement, 'mobile')) {
+                if ((0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(_this.modalElement, 'mobile')) {
                   _context.next = 6;
                   break;
                 }
@@ -499,7 +502,7 @@ var TimepickerUI = /*#__PURE__*/function () {
                 return _context.abrupt("return");
 
               case 6:
-                if (!(0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(target, 'timepicker-ui-hour') && !(0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(target, 'timepicker-ui-minutes')) {
+                if (!(0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(target, 'timepicker-ui-hour') && !(0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(target, 'timepicker-ui-minutes')) {
                   allTrue.forEach(function (el) {
                     el.contentEditable = false;
                     el.classList.remove('active');
@@ -542,7 +545,7 @@ var TimepickerUI = /*#__PURE__*/function () {
     }());
 
     this._element = _element;
-    this._options = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.getConfig)(options, DEFAULT_OPTIONS, DEFAULT_TYPE, NAME);
+    this._options = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.getConfig)(options, DEFAULT_OPTIONS, DEFAULT_TYPE, NAME);
     this._isMouseMove = false;
     this._degreesHours = null;
     this._isMobileView = false;
@@ -559,6 +562,7 @@ var TimepickerUI = /*#__PURE__*/function () {
     };
 
     this.eventsClickMobileHandler = this.eventsClickMobile.bind(this);
+    console.log((_icon_keyboard_black_18dp_svg__WEBPACK_IMPORTED_MODULE_9___default()));
 
     if (this._options.mobile) {
       this._isMobileView = true;
@@ -569,11 +573,15 @@ var TimepickerUI = /*#__PURE__*/function () {
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default()(TimepickerUI, [{
     key: "_setTheme",
     value: function _setTheme() {
-      if (this._options.theme === 'crane-straight') {
-        var allDiv = this.modalElement.querySelectorAll('div');
+      var allDiv = this.modalElement.querySelectorAll('div');
 
+      if (this._options.theme === 'crane-straight') {
         _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2___default()(allDiv).forEach(function (div) {
           return div.classList.add('crane-straight');
+        });
+      } else if (this._options.theme === 'crane-straight-radius') {
+        _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2___default()(allDiv).forEach(function (div) {
+          return div.classList.add('crane-straight', 'radius');
         });
       }
     }
@@ -583,7 +591,7 @@ var TimepickerUI = /*#__PURE__*/function () {
     value: function _setInputClassToInputElement() {
       var input = this._element.querySelector('input');
 
-      if (!(0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(input, 'timepicker-ui-input')) {
+      if (!(0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(input, 'timepicker-ui-input')) {
         input.classList.add('timepicker-ui-input');
       }
     }
@@ -674,13 +682,13 @@ var TimepickerUI = /*#__PURE__*/function () {
   }, {
     key: "_getInputValueOnOpenAndSet",
     value: function _getInputValueOnOpenAndSet() {
-      var value = (0,_utils__WEBPACK_IMPORTED_MODULE_9__.getInputValue)(this.input);
+      var value = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.getInputValue)(this.input);
 
       if (value === undefined) {
         this.hour.innerText = '12';
         this.minutes.innerText = '00';
         this.AM.classList.add('active');
-        (0,_utils__WEBPACK_IMPORTED_MODULE_9__.createNewEvent)(this._element, 'openOnclickEvent', {
+        (0,_utils__WEBPACK_IMPORTED_MODULE_10__.createNewEvent)(this._element, 'openOnclickEvent', {
           hour: this.hour.textContent,
           minutes: this.minutes.textContent,
           type: this.AM.textContent
@@ -695,7 +703,7 @@ var TimepickerUI = /*#__PURE__*/function () {
       this.hour.innerText = hour;
       this.minutes.innerText = minutes;
       typeMode.classList.add('active');
-      (0,_utils__WEBPACK_IMPORTED_MODULE_9__.createNewEvent)(this._element, 'openOnclickEvent', value);
+      (0,_utils__WEBPACK_IMPORTED_MODULE_10__.createNewEvent)(this._element, 'openOnclickEvent', value);
     }
   }, {
     key: "_handleAnimationSwitchTipsMode",
@@ -764,7 +772,7 @@ var TimepickerUI = /*#__PURE__*/function () {
                       while (1) {
                         switch (_context2.prev = _context2.next) {
                           case 0:
-                            if ((0,_utils__WEBPACK_IMPORTED_MODULE_9__.hasClass)(_this6.modalElement, 'mobile')) {
+                            if ((0,_utils__WEBPACK_IMPORTED_MODULE_10__.hasClass)(_this6.modalElement, 'mobile')) {
                               _context2.next = 11;
                               break;
                             }
@@ -907,9 +915,9 @@ var TimepickerUI = /*#__PURE__*/function () {
     key: "modalTemplate",
     get: function get() {
       if (!this._options.mobile || !this._isMobileView) {
-        return (0,_templates__WEBPACK_IMPORTED_MODULE_10__.getModalTemplate)(this._options);
+        return (0,_templates__WEBPACK_IMPORTED_MODULE_11__.getModalTemplate)(this._options);
       } else {
-        return (0,_templates__WEBPACK_IMPORTED_MODULE_10__.getMobileModalTemplate)(this._options);
+        return (0,_templates__WEBPACK_IMPORTED_MODULE_11__.getMobileModalTemplate)(this._options);
       }
     }
   }, {
@@ -1044,7 +1052,9 @@ var TimepickerUI = /*#__PURE__*/function () {
   var timepickerUiClass = document.querySelectorAll('.timepicker-ui');
 
   _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2___default()(timepickerUiClass).forEach(function (picker) {
-    return new TimepickerUI(picker).init();
+    return new TimepickerUI(picker, {
+      theme: 'crane-straight-radius'
+    }).init();
   });
 })();
 
@@ -2424,7 +2434,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".timepicker-ui-wrapper.crane-straight, .timepicker-ui-wrapper.mobile.crane-straight {\n  border-radius: 0;\n  background-color: #4e0d3a; }\n\n.timepicker-ui-select-time.crane-straight, .timepicker-ui-select-time.mobile.crane-straight {\n  color: #E5E5E5; }\n\n.timepicker-ui-clock-face.crane-straight, .timepicker-ui-clock-face.mobile.crane-straight {\n  background-color: #71135c; }\n\n.timepicker-ui-dot.crane-straight, .timepicker-ui-dot.mobile.crane-straight {\n  background-color: #f7363E; }\n\n.timepicker-ui-hour.crane-straight, .timepicker-ui-minutes.crane-straight, .timepicker-ui-hour.mobile.crane-straight, .timepicker-ui-minutes.mobile.crane-straight {\n  background-color: #71135c;\n  border-radius: 0;\n  color: #fff; }\n  .timepicker-ui-hour.crane-straight:hover, .timepicker-ui-hour.crane-straight.active, .timepicker-ui-minutes.crane-straight:hover, .timepicker-ui-minutes.crane-straight.active, .timepicker-ui-hour.mobile.crane-straight:hover, .timepicker-ui-hour.mobile.crane-straight.active, .timepicker-ui-minutes.mobile.crane-straight:hover, .timepicker-ui-minutes.mobile.crane-straight.active {\n    background-color: #f7363E; }\n\n.timepicker-ui-hour.mobile.crane-straight[contenteditable=\"true\"]:focus, .timepicker-ui-hour.mobile.crane-straight[contenteditable=\"true\"]:active, .timepicker-ui-minutes.mobile.crane-straight[contenteditable=\"true\"]:focus, .timepicker-ui-minutes.mobile.crane-straight[contenteditable=\"true\"]:active {\n  border-color: #fff;\n  outline-color: #fff; }\n\n.timepicker-ui-dots.crane-straight, .timepicker-ui-dots.mobile.crane-straight {\n  color: #fff; }\n\n.timepicker-ui-wrapper-type-time.crane-straight, .timepicker-ui-wrapper-type-time.mobile.crane-straight {\n  color: #fff; }\n\n.timepicker-ui-am.crane-straight, .timepicker-ui-pm.crane-straight, .timepicker-ui-am.mobile.crane-straight, .timepicker-ui-pm.mobile.crane-straight {\n  border: 2px solid transparent;\n  border-radius: 0;\n  background-color: #71135c; }\n\n.timepicker-ui-am:hover.crane-straight, .timepicker-ui-am.active.crane-straight, .timepicker-ui-pm:hover.crane-straight, .timepicker-ui-pm.active.crane-straight, .timepicker-ui-am.mobile:hover.crane-straight, .timepicker-ui-am.mobile.active.crane-straight, .timepicker-ui-pm.mobile:hover.crane-straight, .timepicker-ui-pm.mobile.active.crane-straight {\n  color: #fff;\n  background-color: #f7363E; }\n\n.timepicker-ui-cancel-btn.crane-straight, .timepicker-ui-ok-btn.crane-straight, .timepicker-ui-cancel-btn.mobile.crane-straight, .timepicker-ui-ok-btn.mobile.crane-straight {\n  color: #fff;\n  border-radius: 0px; }\n\n.timepicker-ui-cancel-btn:hover.crane-straight, .timepicker-ui-ok-btn:hover.crane-straight, .timepicker-ui-cancel-btn.mobile:hover.crane-straight, .timepicker-ui-ok-btn.mobile:hover.crane-straight {\n  background-color: #f7363E; }\n\n.timepicker-ui-keyboard-icon-wrapper.crane-straight, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight {\n  color: #fff; }\n\n.timepicker-ui-keyboard-icon-wrapper.crane-straight:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.crane-straight:hover .timepicker-ui-keyboard-icon.mobile, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight:hover .timepicker-ui-keyboard-icon.mobile {\n  background-color: #f7363E;\n  color: #fff;\n  border-radius: 0; }\n\n.timepicker-ui-keyboard-icon.crane-straight:hover, .timepicker-ui-keyboard-icon.mobile.crane-straight:hover {\n  color: #fff; }\n\n.timepicker-ui-clock-hand.crane-straight {\n  background-color: #f7363E; }\n\n.timepicker-ui-circle-hand.crane-straight {\n  border-color: #f7363E; }\n\n.timepicker-ui-value-tips.crane-straight {\n  color: #fff; }\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".timepicker-ui-wrapper.crane-straight, .timepicker-ui-wrapper.mobile.crane-straight {\n  border-radius: 0;\n  background-color: #4e0d3a;\n  color: #fff; }\n  .timepicker-ui-wrapper.crane-straight.radius, .timepicker-ui-wrapper.mobile.crane-straight.radius {\n    border-radius: 20px; }\n\n.timepicker-ui-select-time.crane-straight, .timepicker-ui-select-time.mobile.crane-straight {\n  color: #E5E5E5; }\n\n.timepicker-ui-clock-face.crane-straight, .timepicker-ui-clock-face.mobile.crane-straight {\n  background-color: #71135c; }\n\n.timepicker-ui-dot.crane-straight, .timepicker-ui-dot.mobile.crane-straight {\n  background-color: #f7363E; }\n\n.timepicker-ui-hour.crane-straight, .timepicker-ui-minutes.crane-straight, .timepicker-ui-hour.mobile.crane-straight, .timepicker-ui-minutes.mobile.crane-straight {\n  background-color: #71135c;\n  border-radius: 0;\n  color: #fff; }\n  .timepicker-ui-hour.crane-straight.radius, .timepicker-ui-minutes.crane-straight.radius, .timepicker-ui-hour.mobile.crane-straight.radius, .timepicker-ui-minutes.mobile.crane-straight.radius {\n    border-radius: 20px; }\n  .timepicker-ui-hour.crane-straight:hover, .timepicker-ui-hour.crane-straight.active, .timepicker-ui-minutes.crane-straight:hover, .timepicker-ui-minutes.crane-straight.active, .timepicker-ui-hour.mobile.crane-straight:hover, .timepicker-ui-hour.mobile.crane-straight.active, .timepicker-ui-minutes.mobile.crane-straight:hover, .timepicker-ui-minutes.mobile.crane-straight.active {\n    background-color: #f7363E; }\n\n.timepicker-ui-hour.mobile.crane-straight[contenteditable=\"true\"]:focus, .timepicker-ui-hour.mobile.crane-straight[contenteditable=\"true\"]:active, .timepicker-ui-minutes.mobile.crane-straight[contenteditable=\"true\"]:focus, .timepicker-ui-minutes.mobile.crane-straight[contenteditable=\"true\"]:active {\n  border-color: #fff;\n  outline-color: #fff; }\n\n.timepicker-ui-dots.crane-straight, .timepicker-ui-dots.mobile.crane-straight {\n  color: #fff; }\n\n.timepicker-ui-wrapper-type-time.crane-straight, .timepicker-ui-wrapper-type-time.mobile.crane-straight {\n  color: #fff; }\n\n.timepicker-ui-am.crane-straight, .timepicker-ui-pm.crane-straight, .timepicker-ui-am.mobile.crane-straight, .timepicker-ui-pm.mobile.crane-straight {\n  border: 2px solid transparent;\n  border-radius: 0;\n  background-color: #71135c; }\n\n.timepicker-ui-am:hover.crane-straight, .timepicker-ui-am.active.crane-straight, .timepicker-ui-pm:hover.crane-straight, .timepicker-ui-pm.active.crane-straight, .timepicker-ui-am.mobile:hover.crane-straight, .timepicker-ui-am.mobile.active.crane-straight, .timepicker-ui-pm.mobile:hover.crane-straight, .timepicker-ui-pm.mobile.active.crane-straight {\n  color: #fff;\n  background-color: #f7363E; }\n\n.timepicker-ui-am.crane-straight.radius {\n  border-top-left-radius: 20px;\n  border-top-right-radius: 20px; }\n\n.timepicker-ui-pm.crane-straight.radius {\n  border-bottom-left-radius: 20px;\n  border-bottom-right-radius: 20px; }\n\n@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {\n  .timepicker-ui-am.crane-straight.radius {\n    border-bottom-left-radius: 20px;\n    border-bottom-right-radius: 20px; } }\n\n@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {\n  .timepicker-ui-pm.crane-straight.radius {\n    border-top-left-radius: 20px;\n    border-top-right-radius: 20px; } }\n\n@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {\n  .timepicker-ui-am.mobile.crane-straight.radius {\n    border-bottom-left-radius: 0px;\n    border-bottom-right-radius: 0px; } }\n\n@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {\n  .timepicker-ui-pm.mobile.crane-straight.radius {\n    border-top-left-radius: 0px;\n    border-top-right-radius: 0px; } }\n\n.timepicker-ui-cancel-btn.crane-straight, .timepicker-ui-ok-btn.crane-straight, .timepicker-ui-cancel-btn.mobile.crane-straight, .timepicker-ui-ok-btn.mobile.crane-straight {\n  color: #fff;\n  border-radius: 0px; }\n  .timepicker-ui-cancel-btn.crane-straight.radius, .timepicker-ui-ok-btn.crane-straight.radius, .timepicker-ui-cancel-btn.mobile.crane-straight.radius, .timepicker-ui-ok-btn.mobile.crane-straight.radius {\n    border-radius: 13px; }\n\n.timepicker-ui-cancel-btn:hover.crane-straight, .timepicker-ui-ok-btn:hover.crane-straight, .timepicker-ui-cancel-btn.mobile:hover.crane-straight, .timepicker-ui-ok-btn.mobile:hover.crane-straight {\n  background-color: #f7363E; }\n\n.timepicker-ui-keyboard-icon-wrapper.crane-straight, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight {\n  color: #fff; }\n  .timepicker-ui-keyboard-icon-wrapper.crane-straight.radius, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight.radius {\n    border-radius: 20px; }\n\n.timepicker-ui-keyboard-icon-wrapper.crane-straight:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.crane-straight:hover .timepicker-ui-keyboard-icon.mobile, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight:hover .timepicker-ui-keyboard-icon.mobile {\n  background-color: #f7363E;\n  color: #fff;\n  border-radius: 0; }\n\n.timepicker-ui-keyboard-icon-wrapper.crane-straight.radius:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.crane-straight.radius:hover .timepicker-ui-keyboard-icon.mobile, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight.radius:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight.radius:hover .timepicker-ui-keyboard-icon.mobile {\n  border-radius: 14px; }\n\n.timepicker-ui-keyboard-icon.crane-straight:hover, .timepicker-ui-keyboard-icon.mobile.crane-straight:hover {\n  color: #fff; }\n  .timepicker-ui-keyboard-icon.crane-straight:hover.radius, .timepicker-ui-keyboard-icon.mobile.crane-straight:hover.radius {\n    border-radius: 20px; }\n\n.timepicker-ui-clock-hand.crane-straight {\n  background-color: #f7363E; }\n\n.timepicker-ui-circle-hand.crane-straight {\n  border-color: #f7363E; }\n\n.timepicker-ui-value-tips.crane-straight {\n  color: #fff; }\n", ""]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"cranepurple800": "#5c1349",
@@ -2493,6 +2503,12 @@ ___CSS_LOADER_EXPORT___.locals = {
 
 /***/ }),
 /* 21 */
+/***/ ((module) => {
+
+module.exports = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black' width='18px' height='18px'%3E%3Cpath d='M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z'/%3E%3Cpath d='M0 0h24v24H0zm0 0h24v24H0z' fill='none'/%3E%3C/svg%3E"
+
+/***/ }),
+/* 22 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2511,7 +2527,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "createNewEvent": () => /* binding */ createNewEvent,
 /* harmony export */   "whichBrowser": () => /* binding */ whichBrowser
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(23);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__);
@@ -2639,16 +2655,16 @@ var whichBrowser = function whichBrowser() {
 };
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var arrayWithHoles = __webpack_require__(23);
+var arrayWithHoles = __webpack_require__(24);
 
-var iterableToArrayLimit = __webpack_require__(24);
+var iterableToArrayLimit = __webpack_require__(25);
 
 var unsupportedIterableToArray = __webpack_require__(8);
 
-var nonIterableRest = __webpack_require__(25);
+var nonIterableRest = __webpack_require__(26);
 
 function _slicedToArray(arr, i) {
   return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
@@ -2657,7 +2673,7 @@ function _slicedToArray(arr, i) {
 module.exports = _slicedToArray;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ ((module) => {
 
 function _arrayWithHoles(arr) {
@@ -2667,7 +2683,7 @@ function _arrayWithHoles(arr) {
 module.exports = _arrayWithHoles;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ ((module) => {
 
 function _iterableToArrayLimit(arr, i) {
@@ -2700,7 +2716,7 @@ function _iterableToArrayLimit(arr, i) {
 module.exports = _iterableToArrayLimit;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ ((module) => {
 
 function _nonIterableRest() {
@@ -2710,7 +2726,7 @@ function _nonIterableRest() {
 module.exports = _nonIterableRest;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";

@@ -28,8 +28,8 @@ const DEFAULT_OPTIONS = {
   enableScrollbar: false,
   enterTimeLabel: 'Enter Time',
   hourMobileLabel: 'Hour',
-  iconClass: 'far fa-keyboard',
-  iconClassMobile: 'far fa-clock',
+  iconClass: '<i class="material-icons timepicker-ui-keyboard-icon">keyboard</i>',
+  iconClassMobile: '<i class="material-icons timepicker-ui-keyboard-icon">schedule</i>',
   incrementHours: 1,
   incrementMinutes: 1,
   inputTemplate: '',
@@ -40,6 +40,7 @@ const DEFAULT_OPTIONS = {
   selectTimeLabel: 'Select Time',
   switchToMinutesAfterSelectHour: false,
   theme: 'basic',
+  enableSwitchIcon: false,
 };
 
 const DEFAULT_TYPE = {
@@ -61,6 +62,7 @@ const DEFAULT_TYPE = {
   iconClass: 'string',
   iconClassMobile: 'string',
   theme: 'string',
+  enableSwitchIcon: 'boolean',
 };
 
 const NAME = 'timepicker-ui';
@@ -197,6 +199,10 @@ class TimepickerUI {
     });
   }
 
+  get footer() {
+    return document.querySelector('.timepicker-ui-footer');
+  }
+
   // public
 
   init = () => {
@@ -218,7 +224,7 @@ class TimepickerUI {
 
     if (this._options.theme === 'crane-straight') {
       [...allDiv].forEach((div) => div.classList.add('crane-straight'));
-    } else if (this._options.theme === 'crane-straight-radius') {
+    } else if (this._options.theme === 'crane-radius') {
       [...allDiv].forEach((div) => div.classList.add('crane-straight', 'radius'));
     }
   }
@@ -275,6 +281,10 @@ class TimepickerUI {
     this.modalElement.classList.add('timepicker-ui-normalize');
     allElement.forEach((div) => div.classList.add('timepicker-ui-normalize'));
   }
+  _setFlexEndToFooterIfNoKeyboardIcon() {
+    this.footer.style.justifyContent = 'flex-end';
+  }
+
   _eventsBundle() {
     this._setModalTemplate();
     this._setNormalizeClass();
@@ -282,7 +292,10 @@ class TimepickerUI {
     this._setClassActiveToHourOnOpen();
     this._setBgColorToCirleWithHourTips();
 
-    if (this.clockFace !== null) this._setNumbersToClockFace();
+    if (this.clockFace !== null) {
+      this._setNumbersToClockFace();
+      this._setFlexEndToFooterIfNoKeyboardIcon();
+    }
 
     setTimeout(() => {
       this._setTheme();
@@ -668,6 +681,7 @@ class TimepickerUI {
     const clockWidth = (this.clockFace.offsetWidth - 32) / 2;
     const clockHeight = (this.clockFace.offsetHeight - 32) / 2;
     const radius = clockWidth - 9;
+    const test = document.querySelector('.timepicker-ui-clock-face');
 
     array.forEach((num, index) => {
       const angle = getRadians(index * el);
@@ -814,8 +828,10 @@ class TimepickerUI {
       }
     };
 
-    this.keyboardClockIcon.addEventListener('touchdown', (event) => handlerViewChange(event));
-    this.keyboardClockIcon.addEventListener('mousedown', (event) => handlerViewChange(event));
+    if (this._options.enableSwitchIcon) {
+      this.keyboardClockIcon.addEventListener('touchdown', (event) => handlerViewChange(event));
+      this.keyboardClockIcon.addEventListener('mousedown', (event) => handlerViewChange(event));
+    }
   }
   // Mobile version
   _handlerClickPmAm = async ({ target }) => {
@@ -871,7 +887,5 @@ export { TimepickerUI };
 
   const timepickerUiClass = document.querySelectorAll('.timepicker-ui');
 
-  [...timepickerUiClass].forEach((picker) =>
-    new TimepickerUI(picker, { theme: 'crane-straight-radius' }).init()
-  );
+  [...timepickerUiClass].forEach((picker) => new TimepickerUI(picker).init());
 })();
