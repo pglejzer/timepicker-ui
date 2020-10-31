@@ -8,7 +8,7 @@ const ip = Object.keys(ni)
 
 module.exports = {
   mode: 'none',
-  entry: './src/index.js',
+  entry: './src/timepicker/index.js',
   output: {
     path: __dirname + '/docs',
     filename: 'index.js',

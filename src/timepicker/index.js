@@ -34,7 +34,7 @@ const DEFAULT_OPTIONS = {
   incrementMinutes: 1,
   inputTemplate: '',
   minuteMobileLabel: 'Minute',
-  mobile: true,
+  mobile: false,
   okLabel: 'OK',
   pmLabel: 'PM',
   selectTimeLabel: 'Select Time',
@@ -79,8 +79,6 @@ class TimepickerUI {
 
     this._isMobileView = false;
     this._isDesktopView = true;
-
-    this.init();
 
     this.mutliEventsMove = (event) => this._handleEventToMoveHand(event);
     this.mutliEventsMoveHandler = this.mutliEventsMove.bind(this);
@@ -212,13 +210,16 @@ class TimepickerUI {
 
   open = () => {
     this.init();
+    this._eventsBundle();
   };
 
   _setTheme() {
-    if (this._options.theme === 'crane-straight') {
-      const allDiv = this.modalElement.querySelectorAll('div');
+    const allDiv = this.modalElement.querySelectorAll('div');
 
+    if (this._options.theme === 'crane-straight') {
       [...allDiv].forEach((div) => div.classList.add('crane-straight'));
+    } else if (this._options.theme === 'crane-straight-radius') {
+      [...allDiv].forEach((div) => div.classList.add('crane-straight', 'radius'));
     }
   }
 
@@ -268,9 +269,15 @@ class TimepickerUI {
     this.modalElement.classList.add('removed');
     this.openElement.classList.add('disabled');
   }
+  _setNormalizeClass() {
+    const allElement = this.modalElement.querySelectorAll('div');
 
+    this.modalElement.classList.add('timepicker-ui-normalize');
+    allElement.forEach((div) => div.classList.add('timepicker-ui-normalize'));
+  }
   _eventsBundle() {
     this._setModalTemplate();
+    this._setNormalizeClass();
     this._removeBackdrop();
     this._setClassActiveToHourOnOpen();
     this._setBgColorToCirleWithHourTips();
@@ -855,12 +862,16 @@ class TimepickerUI {
     document.addEventListener('touchstart', this.eventsClickMobileHandler);
   }
 }
-export default TimepickerUI;
+export { TimepickerUI };
 
-const test = document.querySelector('.test');
+// Auto init
 
-const xd = new TimepickerUI(test, { mobile: false });
+(function () {
+  'use strict';
 
-const test1 = document.querySelector('.test1');
+  const timepickerUiClass = document.querySelectorAll('.timepicker-ui');
 
-const xd1 = new TimepickerUI(test1, { mobile: true });
+  [...timepickerUiClass].forEach((picker) =>
+    new TimepickerUI(picker, { theme: 'crane-straight-radius' }).init()
+  );
+})();

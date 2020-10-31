@@ -38,7 +38,7 @@ export const getModalTemplate = ({
   okLabel,
 }) => {
   return `
-  <div class="timepicker-ui-modal" role="dialog">
+  <div class="timepicker-ui-modal normalize" role="dialog">
     <div class="timepicker-ui-wrapper ">
       <div class="timepicker-ui-header">
         <div class="timepicker-ui-select-time">${selectTimeLabel}</div>
@@ -87,7 +87,7 @@ export const getMobileModalTemplate = ({
   hourMobileLabel,
 }) => {
   return `
-  <div class="timepicker-ui-modal mobile" role="dialog">
+  <div class="timepicker-ui-modal normalize mobile" role="dialog">
     <div class="timepicker-ui-wrapper mobile">
       <div class="timepicker-ui-header mobile">
         <div class="timepicker-ui-select-time mobile">${enterTimeLabel}</div>

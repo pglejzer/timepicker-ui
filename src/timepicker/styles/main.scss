@@ -1,19 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
-* {
-  margin: 0;
-  padding: 0;
-  font-family: 'Roboto', sans-serif;
-}
-
-// remove
-body {
-  height: 1000px;
-}
-
 .timepicker-ui {
 
+  &-normalize {
+    box-sizing: content-box !important;
+  }
+
   &-modal {
+    font-family: 'Roboto', sans-serif;
     position: fixed;
     opacity: 0;
     top: 0;
@@ -22,7 +16,6 @@ body {
     right: 0;
     background-color: rgba(156, 155, 155, 0.6);
     z-index: 5000;
-
 
     &.removed {
       top: auto;
@@ -316,7 +309,11 @@ body {
     border-bottom-width: calc(0.75px / 2);
   }
 
-  &-am:not(.timepicker-ui-am.mobile) {
+  &-am.mobile {
+    border-bottom-left-radius: 0;
+  }
+
+  &-am:not(.timepicker-ui-am+.mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       border-top-left-radius: 7px;
       border-bottom-left-radius: 7px;
@@ -333,7 +330,11 @@ body {
     border-top-width: calc(0.75px / 2);
   }
 
-  &-pm:not(.timepicker-ui-pm.mobile) {
+  &-pm.mobile {
+    border-top-right-radius: 0;
+  }
+
+  &-pm:not(.timepicker-ui-pm + .mobile) {
     @media screen and (min-width:320px) and (max-width:767px) and(orientation:landscape) {
       border-bottom-right-radius: 7px;
       border-top-right-radius: 7px;
@@ -505,6 +506,7 @@ body {
     transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
       height 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   }
+
 }
 
 .opacity {

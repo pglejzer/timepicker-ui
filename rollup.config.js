@@ -6,6 +6,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import pkg from './package.json';
 import { terser } from 'rollup-plugin-terser';
+import scssVariable from 'rollup-plugin-sass-variables';
 
 const dependencies = Object.keys(require('./package.json').dependencies);
 
@@ -26,12 +27,13 @@ const plugins = [
     extract: false,
   }),
   terser(),
+  scssVariable(),
 ];
 
 export default [
   {
     external: dependencies,
-    input: 'src/index.js',
+    input: 'src/timepicker/index.js',
     plugins,
     output: [
       {
