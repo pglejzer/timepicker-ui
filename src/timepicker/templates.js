@@ -30,7 +30,7 @@ export const numberOfMinutes = [
 ];
 
 export const getModalTemplate = ({
-  iconClass,
+  iconTemplate,
   selectTimeLabel,
   amLabel,
   pmLabel,
@@ -68,7 +68,7 @@ export const getModalTemplate = ({
           enableSwitchIcon
             ? `
       <div class="timepicker-ui-keyboard-icon-wrapper" role="button" aria-pressed="false" data-view="desktop">
-        ${iconClass}
+        ${iconTemplate}
       </div>`
             : ''
         }
@@ -89,7 +89,7 @@ export const getMobileModalTemplate = ({
   pmLabel,
   cancelLabel,
   okLabel,
-  iconClassMobile,
+  iconTemplateMobile,
   minuteMobileLabel,
   hourMobileLabel,
 }) => {
@@ -116,7 +116,7 @@ export const getMobileModalTemplate = ({
         enableSwitchIcon
           ? `
       <div class="timepicker-ui-keyboard-icon-wrapper mobile" role="button" aria-pressed="false" data-view="desktop">
-      ${iconClassMobile}
+      ${iconTemplateMobile}
       </div>`
           : ''
       }

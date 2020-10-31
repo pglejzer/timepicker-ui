@@ -26,10 +26,11 @@ const DEFAULT_OPTIONS = {
   backdrop: true,
   cancelLabel: 'CANCEL',
   enableScrollbar: false,
+  enableSwitchIcon: false,
   enterTimeLabel: 'Enter Time',
   hourMobileLabel: 'Hour',
-  iconClass: '<i class="material-icons timepicker-ui-keyboard-icon">keyboard</i>',
-  iconClassMobile: '<i class="material-icons timepicker-ui-keyboard-icon">schedule</i>',
+  iconTemplate: '<i class="material-icons timepicker-ui-keyboard-icon">keyboard</i>',
+  iconTemplateMobile: '<i class="material-icons timepicker-ui-keyboard-icon">schedule</i>',
   incrementHours: 1,
   incrementMinutes: 1,
   inputTemplate: '',
@@ -40,7 +41,6 @@ const DEFAULT_OPTIONS = {
   selectTimeLabel: 'Select Time',
   switchToMinutesAfterSelectHour: false,
   theme: 'basic',
-  enableSwitchIcon: false,
 };
 
 const DEFAULT_TYPE = {
@@ -59,8 +59,8 @@ const DEFAULT_TYPE = {
   pmLabel: 'string',
   selectTimeLabel: 'string',
   switchToMinutesAfterSelectHour: 'boolean',
-  iconClass: 'string',
-  iconClassMobile: 'string',
+  iconTemplate: 'string',
+  iconTemplateMobile: 'string',
   theme: 'string',
   enableSwitchIcon: 'boolean',
 };
@@ -576,7 +576,7 @@ class TimepickerUI {
       } else if (incrementMinutes === 10) {
         degrees = mathDegreesIncrement(degrees, 60);
       } else if (incrementMinutes === 15) {
-        degrees = mathDegreesIncrement(degrees, 60);
+        degrees = mathDegreesIncrement(degrees, 90);
       }
 
       let minute;
@@ -887,5 +887,7 @@ export { TimepickerUI };
 
   const timepickerUiClass = document.querySelectorAll('.timepicker-ui');
 
-  [...timepickerUiClass].forEach((picker) => new TimepickerUI(picker).init());
+  [...timepickerUiClass].forEach((picker) =>
+    new TimepickerUI(picker, { incrementMinutes: 15 }).init()
+  );
 })();

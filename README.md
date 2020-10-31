@@ -147,107 +147,112 @@ const initTimepicker = new TimepickerUI(wrapper, options);
       <td scope="row">amLabel</td>
       <td>AM</td>
       <td>string</td>
-      <td>@mdo</td>
+      <td>Set custom text to am label</td>
     </tr>
     <tr>
       <td scope="row">appendModalSelector</td>
       <td>''</td>
       <td>string</td>
-      <td>@fat</td>
+      <td>Set default selector to append timepicker inside it. Timepicker default append to body</td>
     </tr>
     <tr>
       <td scope="row">backdrop</td>
       <td>true</td>
       <td>boolean</td>
-      <td>@twitter</td>
+      <td>Turn on/off backdrop</td>
     </tr>
        <tr>
       <td scope="row">cancelLabel</td>
       <td>CANCEL</td>
       <td>string</td>
-      <td>@twitter</td>
+      <td>Set custom text to cancel button</td>
     </tr> 
       <tr>
       <td scope="row">enableScrollbar</td>
       <td>boolean</td>
       <td>false</td>
-      <td>@twitter</td>
+      <td>Turn on/off scroll if timepicker is open</td>
+    </tr> 
+   <tr>
+      <td scope="row">enableSwitchIcon</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Turn on/off icon to switch desktop/mobile</td>
     </tr> 
       <tr>
       <td scope="row">hourMobileLabel</td>
       <td>Hour</td>
       <td>string</td>
-      <td>@twitter</td>
-    </tr>   <tr>
+      <td>Set custom text to hour label on mobile version</td>
+    </tr> 
+      <tr>
       <td scope="row">incrementHours</td>
       <td>1</td>
       <td>nubmer</td>
-      <td>@twitter</td>
+      <td>Increment hour by 1, 2, 3 hour</td>
     </tr>  
      <tr>
       <td scope="row">incrementMinutes</td>
       <td>1</td>
       <td>nubmer</td>
-      <td>@twitter</td>
-    </tr> 
-      <tr>
-      <td scope="row">inputTemplate</td>
-      <td>''</td>
-      <td>string</td>
-      <td>@twitter</td>
-    </tr>  
+      <td>Increment minutes by 1, 5, 10, 15 minutes</td>
+    </tr>   
      <tr>
       <td scope="row">minuteMobileLabel</td>
       <td>Minute</td>
       <td>string</td>
-      <td>@twitter</td>
+      <td>Set custom text to minute label on mobile version</td>
     </tr>  
      <tr>
       <td scope="row">mobile</td>
       <td>false</td>
       <td>boolean</td>
-      <td>@twitter</td>
+      <td>Turn on mobile version</td>
     </tr>  
      <tr>
       <td scope="row">okLabel</td>
       <td>OK</td>
       <td>string</td>
-      <td>@twitter</td>
+      <td>Set custom text to ok label</td>
     </tr> 
       <tr>
       <td scope="row">pmLabel</td>
       <td>PM</td>
       <td>string</td>
-      <td>@twitter</td>
-    </tr>   <tr>
+      <td>Set custom text to pm label</td>
+    </tr>  
+     <tr>
       <td scope="row">selectTimeLabel</td>
       <td>Select Time</td>
       <td>string</td>
-      <td>@twitter</td>
+      <td>Set custom text to select time label on desktop version</td>
     </tr>   
     <tr>
       <td scope="row">switchToMinutesAfterSelectHour</td>
       <td>true</td>
       <td>boolean</td>
-      <td>@twitter</td>
+      <td>Turn on/off switch to minutes by select hour</td>
     </tr>   
     <tr>
       <td scope="row">iconClass</td>
-      <td>far fa-keyboard</td>
-      <td>string</td>
-      <td>@twitter</td>
+       <td>
+       < i class="material-icons timepicker-ui-keyboard-icon"> keyboard < /i >
+      </td>
+       <td>string</td>
+      <td>Set default template to switch desktop.This options is using by default material design icon</td>
     </tr>  
      <tr>
       <td scope="row">iconClassMobile</td>
+      <td>       < i class="material-icons timepicker-ui-keyboard-icon"> schedule < /i ></td>
       <td>string</td>
-      <td>far fas-clokc</td>
-      <td>@twitter</td>
-    </tr>   <tr>
+      <td>Set default template to switch mobile. This options is using by default material design icon</td>
+    </tr> 
+   <tr>
       <td 
       scope="row">theme</td>
       <td>string</td>
       <td>basic</td>
-      <td>@twitter</td>
+      <td>Set theme to timpicker. Available options: basic, crane-straight, crane-radius</td>
     </tr>  
   </tbody>
 </table>
