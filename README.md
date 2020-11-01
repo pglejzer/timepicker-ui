@@ -76,7 +76,7 @@ You can alawys change icons to another package if you change options <code>iconC
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import { TimepickerUI } from 'timepicker-ui';
+import TimepickerUI from 'timepicker-ui';
 ```
 
 #### UMD
