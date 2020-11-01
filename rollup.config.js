@@ -4,8 +4,8 @@ import commonjs from 'rollup-plugin-commonjs';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import replace from 'rollup-plugin-replace';
 import postcss from 'rollup-plugin-postcss';
-import pkg from './package.json';
 import { terser } from 'rollup-plugin-terser';
+import pkg from './package.json';
 
 const dependencies = Object.keys(require('./package.json').dependencies);
 
@@ -42,7 +42,7 @@ export default [
         file: pkg.module,
         format: 'esm',
       },
-      { file: 'dist/timepicker-ui.umd.js', format: 'umd', name: 'TimepickerUI' },
+      { file: 'package/timepicker-ui.umd.js', format: 'umd', name: 'TimepickerUI' },
     ],
   },
 ];

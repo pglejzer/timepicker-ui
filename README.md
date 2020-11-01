@@ -9,6 +9,8 @@ timepicker-ui is an easy library with timepicker. Fully wrote with pure JavaScri
 - Easy to use
 - Easy to customize
 
+[Click here to see a demo and examples](https://q448x.github.io/timepicker-ui-docs/)
+
 ---
 
 ### Desktop version
@@ -29,7 +31,7 @@ timepicker-ui is an easy library with timepicker. Fully wrote with pure JavaScri
 
 ### Themes
 
-There is two available version of theme ( radius and straight). Examples show radius versions.
+There is two available version of theme ( radius and straight). Examples show radius version.
 
 #### Desktop
 
@@ -62,6 +64,8 @@ $ npm install timepicker-ui
 ```
 
 This library is using [font Roboto](https://fonts.google.com/specimen/Roboto) and [material-design icons](https://google.github.io/material-design-icons/). Basic options for all icons have been taken from material-icons. If you want to use material-icons you have to add dependencies to your project.
+
+You can alawys change icons to another package if you change options <code>iconClass</code> and <code>iconClassMobile</code> which contains templates for icons. <code>iconClass</code> and <code>iconClassMobile</code> requiare default class <code>timepicker-ui-keyboard-icon</code>.
 
 ---
 

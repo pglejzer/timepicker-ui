@@ -649,9 +649,7 @@ class TimepickerUI {
         degrees = 360 + degrees;
       } else {
         hour = Math.round(degrees / 30) % 12;
-        if (hour === 0 || hour > 12) {
-          hour = 12;
-        }
+        if (hour === 0 || hour > 12) hour = 12;
       }
 
       this.hour.innerText = hour > 9 ? hour : `0${hour}`;
@@ -920,9 +918,3 @@ class TimepickerUI {
   };
 }
 export default TimepickerUI;
-
-const test = document.querySelector('.timepicker-ui');
-
-const init = new TimepickerUI(test, { theme: 'crane-radius' });
-
-init.create();

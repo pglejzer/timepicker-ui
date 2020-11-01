@@ -2,10 +2,10 @@
   "name": "timepicker-ui",
   "version": "1.0.0",
   "description": "Pure VanillaJS TimePicker with Material Design",
-  "main": "dist/timepicker-ui.js",
-  "module": "dist/timepicker-ui.esm.js",
+  "main": "package/timepicker-ui.js",
+  "module": "package/timepicker-ui.esm.js",
   "files": [
-    "dist/*"
+    "package/*"
   ],
   "scripts": {
     "build": "rollup -c",
@@ -33,17 +33,18 @@
   },
   "homepage": "https://github.com/q448x/timepicker-ui#readme",
   "lint-staged": {
-    "src/**/*.js": [
+    "./src/**/*.js": [
       "eslint --fix"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && pretty-quick --staged"
+      "pre-commit": "lint-staged && pretty-quick"
     }
   },
   "eslintIgnore": [
-    "dist/"
+    "dist/*",
+    "/dist/*"
   ],
   "devDependencies": {
     "@babel/core": "^7.12.3",
