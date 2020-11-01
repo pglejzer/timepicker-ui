@@ -6,7 +6,6 @@ import { types, options as optionsDefault } from './utils/options';
 import { name, allEvents, selectorActive } from './utils/variables';
 import {
   getConfig,
-  getRadians,
   getScrollbarWidth,
   getClickTouchPosition,
   getMathDegIncrement,
@@ -21,6 +20,7 @@ import {
   getNumberOfHours12,
   getNumberOfMinutes,
 } from './utils/templates';
+import ClockFace from './components/ClockFace';
 
 class TimepickerUI {
   constructor(element, options) {
@@ -254,7 +254,15 @@ class TimepickerUI {
     this._setBgColorToCirleWithHourTips();
 
     if (this.clockFace !== null) {
-      this._setNumbersToClockFace();
+      const initClockFace = new ClockFace({
+        array: getNumberOfHours12,
+        classToAdd: 'timepicker-ui-hour-time-12',
+        clockFace: this.clockFace,
+        tipsWrapper: this.tipsWrapper,
+        theme: this._options.theme,
+      });
+
+      initClockFace.create();
     }
 
     this._setFlexEndToFooterIfNoKeyboardIcon();
@@ -431,18 +439,35 @@ class TimepickerUI {
 
   _setMinutesToClock = (value) => {
     if (this.clockFace !== null) this._setTransformToCircleWithSwitchesMinutes(value);
-    this.tipsWrapper.innerHTML = '';
     this._removeBgColorToCirleWithMinutesTips();
-    this._setNumbersToClockFace(getNumberOfMinutes, 'timepicker-ui-minutes-time');
+
+    const initClockFace = new ClockFace({
+      array: getNumberOfMinutes,
+      classToAdd: 'timepicker-ui-minutes-time',
+      clockFace: this.clockFace,
+      tipsWrapper: this.tipsWrapper,
+      theme: this._options.theme,
+    });
+
+    initClockFace.create();
+
     this._toggleClassActiveToValueTips(value);
   };
 
   _setHoursToClock = (value) => {
     if (this.clockFace !== null) {
       this._setTransformToCircleWithSwitchesHour(value);
-      this.tipsWrapper.innerHTML = '';
       this._setBgColorToCirleWithHourTips();
-      this._setNumbersToClockFace();
+
+      const initClockFace = new ClockFace({
+        array: getNumberOfHours12,
+        classToAdd: 'timepicker-ui-hour-time-12',
+        clockFace: this.clockFace,
+        tipsWrapper: this.tipsWrapper,
+        theme: this._options.theme,
+      });
+      initClockFace.create();
+
       this._toggleClassActiveToValueTips(value);
     }
   };
@@ -709,37 +734,6 @@ class TimepickerUI {
     }
   };
 
-  _setNumbersToClockFace = (
-    array = getNumberOfHours12,
-    classToAdd = 'timepicker-ui-hour-time-12'
-  ) => {
-    const el = 360 / array.length;
-    const clockWidth = (this.clockFace.offsetWidth - 32) / 2;
-    const clockHeight = (this.clockFace.offsetHeight - 32) / 2;
-    const radius = clockWidth - 9;
-
-    array.forEach((num, index) => {
-      const angle = getRadians(index * el);
-      const span = document.createElement('span');
-      const spanTips = document.createElement('span');
-
-      spanTips.innerHTML = num;
-      spanTips.classList.add('timepicker-ui-value-tips');
-      span.classList.add(classToAdd);
-
-      if (this._options.theme === 'crane-straight') {
-        span.classList.add('crane-straight');
-        spanTips.classList.add('crane-straight');
-      }
-
-      span.style.left = `${clockWidth + Math.sin(angle) * radius - span.offsetWidth}px`;
-      span.style.bottom = `${clockHeight + Math.cos(angle) * radius - span.offsetHeight}px`;
-
-      span.appendChild(spanTips);
-      this.tipsWrapper.appendChild(span);
-    });
-  };
-
   _setAnimationToOpen = () => {
     this.modalElement.classList.add('opacity');
 
@@ -887,23 +881,13 @@ class TimepickerUI {
       });
 
       if (validHours === true && validMinutes === true) {
-        if (validMinutes) {
-          this.minutes.classList.remove('invalid-value');
-        }
-
-        if (validHours) {
-          this.hour.classList.remove('invalid-value');
-        }
+        if (validMinutes) this.minutes.classList.remove('invalid-value');
+        if (validHours) this.hour.classList.remove('invalid-value');
       }
     } else {
       if (validHours === false || validMinutes === false) {
-        if (!validMinutes) {
-          this.minutes.classList.add('invalid-value');
-        }
-
-        if (!validHours) {
-          this.hour.classList.add('invalid-value');
-        }
+        if (!validMinutes) this.minutes.classList.add('invalid-value');
+        if (!validHours) this.hour.classList.add('invalid-value');
       }
 
       target.contentEditable = true;
@@ -918,3 +902,7 @@ class TimepickerUI {
   };
 }
 export default TimepickerUI;
+
+const t = document.querySelector('.timepicker-ui');
+const ti = new TimepickerUI(t);
+ti.create();
