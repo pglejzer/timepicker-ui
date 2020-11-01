@@ -92,6 +92,7 @@ export const getMobileModalTemplate = ({
   iconTemplateMobile,
   minuteMobileLabel,
   hourMobileLabel,
+  enableSwitchIcon,
 }) => `
   <div class="timepicker-ui-modal normalize mobile" role="dialog">
     <div class="timepicker-ui-wrapper mobile">

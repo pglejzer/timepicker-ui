@@ -1,5 +1,7 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ni = require('os').networkInterfaces();
+
 const ip = Object.keys(ni)
   .map((interf) => ni[interf].map((o) => !o.internal && o.family === 'IPv4' && o.address))
   .reduce((a, b) => a.concat(b))
@@ -9,14 +11,14 @@ module.exports = {
   mode: 'none',
   entry: './src/timepicker/index.js',
   output: {
-    path: __dirname + '/docs',
+    path: path.join(__dirname, 'docs'),
     filename: 'index.js',
   },
   devServer: {
     contentBase: path.join(__dirname, 'docs'),
     port: 9000,
     host: ip,
-    hot: true,
+    liveReload: true,
   },
   module: {
     rules: [
@@ -48,11 +50,12 @@ module.exports = {
           },
         },
       },
-      {
-        test: /\.svg$/,
-        use: ['svg-url-loader'],
-      },
-      // { test: /.(jpg|jpeg|png|svg)$/, use: ['file-loader', 'url-loader'] },
     ],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'src/index.html',
+      inject: false,
+    }),
+  ],
 };

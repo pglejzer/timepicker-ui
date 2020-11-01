@@ -401,6 +401,7 @@
     transition: all 0.3s ease;
     color: #4e545a;
     height: 20px;
+    box-sizing: content-box;
 
     &:hover {
       color: #6200ee;

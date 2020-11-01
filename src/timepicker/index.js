@@ -165,11 +165,12 @@ class TimepickerUI {
 
   get openElementData() {
     const data = this._element.querySelector('[data-open]');
-
     if (data) {
       return Object.values(data.dataset)[0];
+      // eslint-disable-next-line no-else-return
+    } else {
+      return null;
     }
-    return null;
   }
 
   get openElement() {
@@ -283,7 +284,9 @@ class TimepickerUI {
   }
 
   _setFlexEndToFooterIfNoKeyboardIcon() {
-    this.footer.style.justifyContent = 'flex-end';
+    if (!this._options.enableSwitchIcon) {
+      this.footer.style.justifyContent = 'flex-end';
+    }
   }
 
   _eventsBundle() {
@@ -295,8 +298,9 @@ class TimepickerUI {
 
     if (this.clockFace !== null) {
       this._setNumbersToClockFace();
-      this._setFlexEndToFooterIfNoKeyboardIcon();
     }
+
+    this._setFlexEndToFooterIfNoKeyboardIcon();
 
     setTimeout(() => {
       this._setTheme();
@@ -785,14 +789,18 @@ class TimepickerUI {
     if (type === 'hour') {
       if (value > 0 && value <= 12) {
         return true;
+        // eslint-disable-next-line no-else-return
+      } else {
+        return false;
       }
-      return false;
     }
     if (type === 'minutes') {
       if (value >= 0 && value <= 59) {
         return true;
+        // eslint-disable-next-line no-else-return
+      } else {
+        return false;
       }
-      return false;
     }
   }
 
@@ -939,19 +947,3 @@ class TimepickerUI {
   }
 }
 export { TimepickerUI };
-
-// Auto init
-
-(function () {
-  const timepickerUiClass = document.querySelectorAll('.timepicker-ui');
-
-  [...timepickerUiClass].forEach((picker) =>
-    new TimepickerUI(picker, { incrementMinutes: 15 }).init()
-  );
-})();
-
-const timepicker = document.querySelector('.timepicker-ui');
-
-const tm = new TimepickerUI(timepicker);
-
-tm.init();

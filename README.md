@@ -3,14 +3,14 @@
 <a href="https://npmcharts.com/compare/timepicker-ui?minimal=true"><img src="https://img.shields.io/npm/dw/timepicker-ui" alt="downloads"></a>
 <a href="https://img.shields.io/npm/l/timepicker-ui"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
 
-
 timepicker-ui is an easy library with timepicker. Fully wrote with pure JavaScript. This library is based on Material Design from Google.
 
-  - Free
-  - Easy to use
-  - Easy to customize
+- Free
+- Easy to use
+- Easy to customize
 
 ---
+
 ### Desktop version
 
   <img src="https://i.ibb.co/VgR1Kn0/image.png" alt="desktop-version">
@@ -27,7 +27,7 @@ timepicker-ui is an easy library with timepicker. Fully wrote with pure JavaScri
 
   <img src="https://i.ibb.co/BZ0Vnyb/image.png" alt="mobile-version">
 
-___
+---
 
 ### Installation
 
@@ -36,7 +36,7 @@ Install timepicker-ui in your project.
 #### Yarn
 
 ```bash
-$ yarn add timepicker-ui 
+$ yarn add timepicker-ui
 ```
 
 #### NPM
@@ -45,10 +45,9 @@ $ yarn add timepicker-ui
 $ npm install timepicker-ui
 ```
 
-___
+---
 
 ### Usage
-
 
 #### ES Modules
 
@@ -68,15 +67,16 @@ In your html file you have put script tag with path to `timepicker-ui.umd.js` fi
 
 ###### Information
 
-timepicker-ui has to have a wrapper that has an input inside this wrapper. If you will not add class `timepicker-ui` to your wrapper, it will be automatically added during initialization. 
+timepicker-ui has to have a wrapper that has an input inside this wrapper. If you will not add class `timepicker-ui` to your wrapper, it will be automatically added during initialization.
 
 #### HTML
 
 ```html
 <div class="timepicker-ui">
-  <input type="test" class="timepicker-ui-input" value="12:00 AM"> 
+  <input type="test" class="timepicker-ui-input" value="12:00 AM" />
 </div>
 ```
+
 ---
 
 timepicker-ui has to be created with a new instance with key `new`. This instance accepts two parameters which first is the wrapper element for timepicker and the second is options that allow customization.
@@ -89,13 +89,13 @@ const options = {};
 const newTimepicker = new TimepickerUI(DOMElement, options);
 ```
 
-By default initialization of timepicker is started when you click on input. If you want to change it you have to add `data-open` attribute with selector inside and this element has to be inside wrapper. 
+By default initialization of timepicker is started when you click on input. If you want to change it you have to add `data-open` attribute with selector inside and this element has to be inside wrapper.
 
 #### HTML
 
 ```html
 <div class="default-class">
-  <input type="test" class="timepicker-ui-input" value="12:00 AM"> 
+  <input type="test" class="timepicker-ui-input" value="12:00 AM" />
   <button class="timepicker-ui-button" data-open="default-class">Open</button>
 </div>
 ```
@@ -109,7 +109,7 @@ const initTimepicker = new TimepickerUI(timepicker);
 timepicker.init();
 ```
 
-___
+---
 
 ### Options
 
@@ -119,17 +119,17 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 
 ```html
 <div class="default-class" data-am-label="test" data-backdrop="false" data-ok-label="fine">
-  <input type="test" class="timepicker-ui-input" value="12:00 AM"> 
+  <input type="test" class="timepicker-ui-input" value="12:00 AM" />
   <button class="timepicker-ui-button" data-open="default-class">Open</button>
 </div>
 ```
+
 #### JavaScript
 
 ```javascript
 const timepicker = document.querySelector('.default-class');
-const options = { okLabel: 'test', amLabel: 'test1', backdrop: false }
+const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
 const initTimepicker = new TimepickerUI(timepicker, options);
-
 
 timepicker.init();
 ```
@@ -262,30 +262,28 @@ timepicker.init();
   </tbody>
 </table>
 
-___
-
+---
 
 ### Methods
 
 Methods are custom function what can be used to manually change the behavior of timepicker.
 
-
 #### HTML
+
 ```HTML
 <div class="timepicker-ui-test">
-  <input type="test" class="timepicker-ui-input" value="12:00 AM"> 
+  <input type="test" class="timepicker-ui-input" value="12:00 AM">
 </div>
 ```
 
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('timepicker-ui-test')
-const init = new TimepickerUI(timepicker)
+const timepicker = document.querySelector('timepicker-ui-test');
+const init = new TimepickerUI(timepicker);
 
 timepicker.init();
 ```
-
 
 #### Table with methods
 
@@ -312,28 +310,29 @@ timepicker.init();
   </tbody>
 </table>
 
-___
+---
 
 ### Events
 
 Events are custom events triggered when you add some event listeners to your timepicker element. If you want to have a property timepicker/input values you have to use <code>detail</code> to the event object.
 
 #### HTML
+
 ```HTML
 <div class="timepicker-ui-test">
-  <input type="test" class="timepicker-ui-input" value="12:00 AM"> 
+  <input type="test" class="timepicker-ui-input" value="12:00 AM">
 </div>
 ```
 
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('timepicker-ui-test')
-const init = new TimepickerUI(timepicker)
+const timepicker = document.querySelector('timepicker-ui-test');
+const init = new TimepickerUI(timepicker);
 
 timepicker.init();
 
-timepicker.addEventListener('show', (event)=> console.log(event.detail))
+timepicker.addEventListener('show', (event) => console.log(event.detail));
 ```
 
 #### Table with events
@@ -386,15 +385,14 @@ ___
 ### Future Plans
 
 - validation
-- keyboard accesibilty 
+- keyboard accesibilty
 - max/min time options
 - 24h time mode clock face
 - keyboard icon functionality
 
 If you have more good ideas please let me know in [issue](https://github.com/q448x/timepicker-ui/issues). I will try to add more useful features.
 
-
-___
+---
 
 ### License
 
