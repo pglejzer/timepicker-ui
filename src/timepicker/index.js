@@ -25,7 +25,7 @@ const DEFAULT_OPTIONS = {
   appendModalSelector: '',
   backdrop: true,
   cancelLabel: 'CANCEL',
-  enableScrollbar: false,
+  enableScrollbar: true,
   enableSwitchIcon: false,
   enterTimeLabel: 'Enter Time',
   hourMobileLabel: 'Hour',
@@ -209,7 +209,6 @@ class TimepickerUI {
     this._setTimepickerClassToElement();
     this._setInputClassToInputElement();
     this._setDataOpenToInputIfDosentExistInWrapper();
-    this._setScrollbarOrNot();
     this._setClassTopOpenElement();
     this._handleOpenOnClick();
   };
@@ -242,6 +241,9 @@ class TimepickerUI {
     this._removeAnimationToClose();
 
     this.openElement.classList.remove('disabled');
+
+    document.body.style.overflowY = '';
+    document.body.style.paddingRight = '';
 
     setTimeout(() => {
       this.modalElement.remove();
@@ -290,6 +292,7 @@ class TimepickerUI {
   }
 
   _eventsBundle() {
+    this._setScrollbarOrNot();
     this._setModalTemplate();
     this._setNormalizeClass();
     this._removeBackdrop();
@@ -735,9 +738,12 @@ class TimepickerUI {
   _setScrollbarOrNot = () => {
     const { enableScrollbar } = this._options;
 
-    if (!enableScrollbar) {
+    if (enableScrollbar) {
       document.body.style.overflowY = 'hidden';
       document.body.style.paddingRight = `${getScrollbarWidth()}px`;
+    } else {
+      document.body.style.overflowY = '';
+      document.body.style.paddingRight = 0;
     }
   };
 
@@ -946,4 +952,10 @@ class TimepickerUI {
     document.addEventListener('touchstart', this.eventsClickMobileHandler);
   }
 }
-export { TimepickerUI };
+export default TimepickerUI;
+
+const ss = document.querySelector('.timepicker-ui');
+
+const tt = new TimepickerUI(ss);
+
+tt.init();
