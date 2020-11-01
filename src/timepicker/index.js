@@ -2,6 +2,8 @@ import './styles/main.scss';
 import './styles/theme.scss';
 import variables from './styles/variables.scss';
 
+import { types, options as optionsDefault } from './elements/options';
+import { name, allEvents, selectorActive } from './elements/variables';
 import {
   getConfig,
   getRadians,
@@ -12,69 +14,18 @@ import {
   getInputValue,
   createNewEvent,
   whichBrowser,
-} from './utils';
+} from './elements/utils';
 import {
   getModalTemplate,
   getMobileModalTemplate,
   numberOfHours12,
   numberOfMinutes,
-} from './templates';
-
-const DEFAULT_OPTIONS = {
-  amLabel: 'AM',
-  appendModalSelector: '',
-  backdrop: true,
-  cancelLabel: 'CANCEL',
-  enableScrollbar: true,
-  enableSwitchIcon: false,
-  enterTimeLabel: 'Enter Time',
-  hourMobileLabel: 'Hour',
-  iconTemplate: '<i class="material-icons timepicker-ui-keyboard-icon">keyboard</i>',
-  iconTemplateMobile: '<i class="material-icons timepicker-ui-keyboard-icon">schedule</i>',
-  incrementHours: 1,
-  incrementMinutes: 1,
-  inputTemplate: '',
-  minuteMobileLabel: 'Minute',
-  mobile: false,
-  okLabel: 'OK',
-  pmLabel: 'PM',
-  selectTimeLabel: 'Select Time',
-  switchToMinutesAfterSelectHour: false,
-  theme: 'basic',
-};
-
-const DEFAULT_TYPE = {
-  amLabel: 'string',
-  appendModalSelector: 'string',
-  backdrop: 'boolean',
-  cancelLabel: 'string',
-  enableScrollbar: 'boolean',
-  hourMobileLabel: 'string',
-  incrementHours: 'number',
-  incrementMinutes: 'number',
-  inputTemplate: 'string',
-  minuteMobileLabel: 'string',
-  mobile: 'boolean',
-  okLabel: 'string',
-  pmLabel: 'string',
-  selectTimeLabel: 'string',
-  switchToMinutesAfterSelectHour: 'boolean',
-  iconTemplate: 'string',
-  iconTemplateMobile: 'string',
-  theme: 'string',
-  enableSwitchIcon: 'boolean',
-};
-
-const NAME = 'timepicker-ui';
-const MOUSE_EVENTS = 'mousedown mouseup mousemove mouseleave mouseover';
-const TOUCH_EVENTS = 'touchstart touchmove touchend';
-const ALL_EVENTS = MOUSE_EVENTS.concat(` ${TOUCH_EVENTS}`);
-const SELECTOR_ACTIVE = 'active';
+} from './elements/templates';
 
 class TimepickerUI {
   constructor(element, options) {
     this._element = element;
-    this._options = getConfig(options, DEFAULT_OPTIONS, DEFAULT_TYPE, NAME);
+    this._options = getConfig(options, optionsDefault, types);
 
     this._isMouseMove = false;
     this._degreesHours = Number(getInputValue(this.input).hour) * 30;
@@ -95,10 +46,6 @@ class TimepickerUI {
   }
 
   // getters
-
-  static get NAME() {
-    return NAME;
-  }
 
   get modalTemplate() {
     if (!this._options.mobile || !this._isMobileView) {
@@ -231,9 +178,9 @@ class TimepickerUI {
   close = () => {
     this._isMouseMove = false;
 
-    ALL_EVENTS.split(' ').map((event) =>
-      document.removeEventListener(event, this.mutliEventsMoveHandler, false)
-    );
+    allEvents
+      .split(' ')
+      .map((event) => document.removeEventListener(event, this.mutliEventsMoveHandler, false));
 
     document.removeEventListener('mousedown', this.eventsClickMobileHandler);
     document.removeEventListener('touchstart', this.eventsClickMobileHandler);
@@ -461,13 +408,13 @@ class TimepickerUI {
   };
 
   _setTimepickerClassToElement = () => {
-    this._element.classList.add(NAME);
+    this._element.classList.add(name);
   };
 
   _setClassActiveToHourOnOpen = () => {
     if (this._options.mobile || this._isMobileView) return;
 
-    this.hour.classList.add(SELECTOR_ACTIVE);
+    this.hour.classList.add(selectorActive);
   };
 
   _setMinutesToClock = (value) => {
@@ -502,8 +449,8 @@ class TimepickerUI {
     this.AM.addEventListener('click', (ev) => {
       const { target } = ev;
 
-      target.classList.add(SELECTOR_ACTIVE);
-      this.PM.classList.remove(SELECTOR_ACTIVE);
+      target.classList.add(selectorActive);
+      this.PM.classList.remove(selectorActive);
 
       createNewEvent(this._element, 'selectamtypemode', {
         hour: this.hour.textContent,
@@ -519,8 +466,8 @@ class TimepickerUI {
     this.PM.addEventListener('click', (ev) => {
       const { target } = ev;
 
-      target.classList.add(SELECTOR_ACTIVE);
-      this.AM.classList.remove(SELECTOR_ACTIVE);
+      target.classList.add(selectorActive);
+      this.AM.classList.remove(selectorActive);
 
       createNewEvent(this._element, 'selectpmtypemode', {
         hour: this.hour.textContent,
@@ -556,8 +503,8 @@ class TimepickerUI {
       if (this.clockFace !== null) this._handleAnimationSwitchTipsMode();
 
       this._setHoursToClock(target.textContent);
-      target.classList.add(SELECTOR_ACTIVE);
-      this.minutes.classList.remove(SELECTOR_ACTIVE);
+      target.classList.add(selectorActive);
+      this.minutes.classList.remove(selectorActive);
 
       createNewEvent(this._element, 'selecthourmode', {
         hour: this.hour.textContent,
@@ -578,8 +525,8 @@ class TimepickerUI {
       if (this.clockFace !== null) this._handleAnimationSwitchTipsMode();
 
       if (this.clockFace !== null) this._setMinutesToClock(target.textContent);
-      target.classList.add(SELECTOR_ACTIVE);
-      this.hour.classList.remove(SELECTOR_ACTIVE);
+      target.classList.add(selectorActive);
+      this.hour.classList.remove(selectorActive);
 
       createNewEvent(this._element, 'selectminutemode', {
         hour: this.hour.textContent,
@@ -718,9 +665,9 @@ class TimepickerUI {
   _handleMoveHand = () => {
     if (this._options.mobile || this._isMobileView) return;
 
-    ALL_EVENTS.split(' ').map((event) =>
-      document.addEventListener(event, this.mutliEventsMoveHandler, false)
-    );
+    allEvents
+      .split(' ')
+      .map((event) => document.addEventListener(event, this.mutliEventsMoveHandler, false));
   };
 
   _setModalTemplate = () => {
