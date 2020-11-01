@@ -42,7 +42,7 @@ export default [
         file: pkg.module,
         format: 'esm',
       },
-      { file: 'package/timepicker-ui.umd.js', format: 'umd', name: 'TimepickerUI' },
+      { file: 'dist/timepicker-ui.umd.js', format: 'umd', name: 'TimepickerUI' },
     ],
   },
 ];

@@ -2,10 +2,10 @@
   "name": "timepicker-ui",
   "version": "1.1.0",
   "description": "Pure VanillaJS TimePicker with Material Design",
-  "main": "package/timepicker-ui.js",
-  "module": "package/timepicker-ui.esm.js",
+  "main": "dist/timepicker-ui.js",
+  "module": "dist/timepicker-ui.esm.js",
   "files": [
-    "package/*"
+    "dist/*"
   ],
   "scripts": {
     "build": "rollup -c",
