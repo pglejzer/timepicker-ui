@@ -1,3 +1,4 @@
+@import './variables.scss';
 .timepicker-ui {
   &-normalize {
     box-sizing: content-box !important;
@@ -23,50 +24,57 @@
     }
   }
 
+  &-measure {
+    position: absolute;
+    top: -624.9375rem;
+    width: $mesaruelength;
+    height: $mesaruelength;
+    overflow: scroll;
+  }
+
   &-wrapper,
   &-wrapper.mobile {
     position: fixed;
     z-index: 5001;
-    width: 328px;
-    height: 500px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 20.5rem;
+    height: 31.25rem;
+    top: $tm50percent;
+    left: $tm50percent;
+    transform: $tmtranslatetransform;
     background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14),
-      0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+    border-radius: 0.25rem;
+    box-shadow: $tmwrapperboxshadow;
     display: flex;
     flex-direction: column;
   }
 
   &-wrapper:not(.timepicker-ui-wrapper + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
       flex-direction: row;
-      height: 360px;
-      width: 584px;
+      height: 22.5rem;
+      width: 36.5rem;
     }
 
-    @media screen and (max-width: 330px) and(orientation:portrait) {
-      width: 315px;
+    @media screen and (max-width: 20.625rem) and(orientation:portrait) {
+      width: 19.6875rem;
     }
   }
 
   &-wrapper.mobile {
-    height: 218px;
+    height: 13.625rem;
 
-    @media screen and (max-width: 330px) {
-      width: 315px;
+    @media screen and (max-width: 20.625rem) {
+      width: 19.6875rem;
     }
   }
 
   &-header,
   &-header.mobile {
-    padding-top: 52px;
-    padding-bottom: 36px;
-    padding-right: 24px;
-    padding-left: 24px;
-    height: 104px;
+    padding-top: 3.25rem;
+    padding-bottom: 2.25rem;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    height: 6.5rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -79,7 +87,7 @@
   }
 
   &-header:not(.timepicker-ui-header + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
       height: auto;
       flex-direction: column;
     }
@@ -89,29 +97,29 @@
   &-select-time.mobile {
     text-transform: uppercase;
     position: absolute;
-    top: calc(28px - 0.75rem);
-    left: 24px;
+    top: calc(1.75rem - 0.75rem);
+    left: 1.5rem;
     font-size: 0.75rem;
     color: #a9a9a9;
   }
 
   &-body {
-    height: 256px;
-    padding-right: 36px;
-    padding-left: 36px;
+    height: 16rem;
+    padding-right: 2.25rem;
+    padding-left: 2.25rem;
 
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
       padding-right: 0;
       padding-left: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 23px;
+      margin-top: 1.4375rem;
     }
   }
 
   &-wrapper-landspace {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
       display: flex;
       flex-direction: column;
       width: 100%;
@@ -120,14 +128,14 @@
 
   &-footer,
   &-footer-mobile {
-    height: 76px;
+    height: 4.75rem;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 4px;
+    margin-bottom: 0.25rem;
   }
 
   &-footer:not(.timepicker-ui-footer + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
       justify-content: flex-end;
     }
   }
@@ -139,37 +147,39 @@
     border-radius: 100%;
     position: relative;
 
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
-      height: 256px;
-      width: 256px;
-      top: 15px;
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+      height: 16rem;
+      width: 16rem;
+      top: 0.9375rem;
     }
   }
 
   &-dot {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: $tm50percent;
+    left: $tm50percent;
     user-select: none;
     touch-action: none;
-    transform: translate(-50%, -50%);
-    background-color: #6200ee;
-    height: 8px;
-    width: 8px;
+    transform: $tmtranslatetransform;
+    background-color: $purple;
+    height: 0.5rem;
+    width: 0.5rem;
     border-radius: 100%;
   }
 
   &-hour-time-12,
   &-minutes-time {
     position: absolute;
-    width: 32px;
-    height: 32px;
+    width: 2rem;
+    height: 2rem;
     text-align: center;
     cursor: pointer;
     font-size: 1.1rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    touch-action: none;
+    user-select: none;
 
     span {
       touch-action: none;
@@ -180,11 +190,11 @@
   &-wrapper-time,
   &-wrapper-time.mobile {
     display: flex;
-    margin-right: 10px;
+    margin-right: 0.625rem;
   }
 
   &-wrapper-time:not(.timepicker-ui-wrapper-time + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
       margin-right: 0;
     }
   }
@@ -197,43 +207,43 @@
   &-minutes,
   &-hour.mobile,
   &-minutes.mobile {
-    width: calc(96px - 24px);
-    height: calc(80px - 24px);
+    width: calc(6rem - 1.5rem);
+    height: calc(5rem - 1.5rem);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 3.2rem;
     background-color: #e4e4e4;
-    border-radius: 7px;
+    border-radius: 0.4375rem;
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
-    border: 2px solid transparent;
-    padding: 10px;
+    border: 0.125rem solid transparent;
+    padding: 0.625rem;
 
     &:hover,
     &.active {
-      color: #6200ee;
+      color: $purple;
       background-color: #ece0fd;
     }
   }
 
   &-hour.mobile,
   &-minutes.mobile {
-    height: calc(70px - 24px);
+    height: calc(4.375rem - 1.5rem);
 
     &[contenteditable='true']:focus,
     &[contenteditable='true']:active {
-      border: 2px solid #6200ee;
-      outline-color: #6200ee;
+      border: 0.125rem solid $purple;
+      outline-color: $purple;
       user-select: all;
     }
   }
 
   &-dots,
   &-dots.mobile {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 0.3125rem;
+    padding-right: 0.3125rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -246,7 +256,7 @@
   &-wrapper-type-time.mobile {
     display: flex;
     flex-direction: column;
-    height: 80px;
+    height: 5rem;
     justify-content: center;
     align-items: center;
     font-size: 1rem;
@@ -255,48 +265,48 @@
   }
 
   &-wrapper-type-time {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
       flex-direction: row;
       width: 100%;
     }
   }
 
   &-wrapper-type-time.mobile {
-    height: 70px;
+    height: 4.375rem;
   }
 
   &-am,
   &-pm,
   &-am.mobile,
   &-pm.mobile {
-    height: calc(40px - 2px);
-    width: calc(52px - 2px);
+    height: calc(2.5rem - 0.125rem);
+    width: calc(3.25rem - 0.125rem);
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid #d6d6d6;
+    border: 0.125rem solid #d6d6d6;
     transition: all 0.3s ease;
     cursor: pointer;
 
     &:hover,
     &.active {
-      color: #6200ee;
+      color: $purple;
       background-color: #ece0fd;
     }
   }
 
   &-am:not(.timepicker-ui-am + .mobile),
   &-pm:not(.timepicker-ui-pm + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
       width: 100%;
     }
   }
 
   &-am,
   &-am.mobile {
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-    border-bottom-width: calc(0.75px / 2);
+    border-top-left-radius: 0.4375rem;
+    border-top-right-radius: 0.4375rem;
+    border-bottom-width: calc(0.0469rem / 2);
   }
 
   &-am.mobile {
@@ -304,20 +314,20 @@
   }
 
   &-am:not(.timepicker-ui-am + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
-      border-top-left-radius: 7px;
-      border-bottom-left-radius: 7px;
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+      border-top-left-radius: 0.4375rem;
+      border-bottom-left-radius: 0.4375rem;
       border-top-right-radius: 0;
-      border-top-width: 1.5px;
-      border-right-width: calc(0.75px / 2);
+      border-top-width: 0.0938rem;
+      border-right-width: calc(0.0469rem / 2);
     }
   }
 
   &-pm,
   &-pm.mobile {
-    border-bottom-left-radius: 7px;
-    border-bottom-right-radius: 7px;
-    border-top-width: calc(0.75px / 2);
+    border-bottom-left-radius: 0.4375rem;
+    border-bottom-right-radius: 0.4375rem;
+    border-top-width: calc(0.0469rem / 2);
   }
 
   &-pm.mobile {
@@ -325,12 +335,12 @@
   }
 
   &-pm:not(.timepicker-ui-pm + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
-      border-bottom-right-radius: 7px;
-      border-top-right-radius: 7px;
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+      border-bottom-right-radius: 0.4375rem;
+      border-top-right-radius: 0.4375rem;
       border-bottom-left-radius: 0;
-      border-bottom-width: 1.5px;
-      border-left-width: calc(0.75px / 2);
+      border-bottom-width: 0.0938rem;
+      border-left-width: calc(0.0469rem / 2);
     }
   }
 
@@ -338,14 +348,14 @@
   &-ok-btn,
   &-cancel-btn.mobile,
   &-ok.btn-mobile {
-    color: #6200ee;
+    color: $purple;
     text-transform: uppercase;
-    border-radius: 7px;
+    border-radius: 0.4375rem;
     background-color: transparent;
     text-align: center;
     font-size: 0.95rem;
-    padding-top: 9px;
-    padding-bottom: 9px;
+    padding-top: 0.5625rem;
+    padding-bottom: 0.5625rem;
     font-weight: 500;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -358,14 +368,14 @@
 
   &-cancel-btn,
   &-cancel-btn.mobile {
-    width: 72px;
-    margin-right: 4px;
+    width: 4.5rem;
+    margin-right: 0.25rem;
   }
 
   &-ok-btn,
   &-ok-btn.mobile {
-    width: 64px;
-    margin-left: 4px;
+    width: 4rem;
+    margin-left: 0.25rem;
   }
 
   &-wrapper-btn,
@@ -380,47 +390,47 @@
 
   &-keyboard-icon-wrapper,
   &-keyboard-icon-wrapper.mobile {
-    width: 44px;
-    height: 44px;
+    width: 2.75rem;
+    height: 2.75rem;
     position: relative;
-    bottom: -28px;
-    left: 12px;
+    bottom: -1.75rem;
+    left: 0.75rem;
     transition: all 0.3s ease;
 
     &:hover .timepicker-ui-keyboard-icon,
     &:hover .timepicker-ui-keyboard-icon.mobile {
       background-color: #d6d6d6;
-      border-radius: 7px;
+      border-radius: 0.4375rem;
     }
   }
 
   &-keyboard-icon,
   &-keyboard-icon.mobile {
-    padding: 12px;
+    padding: 0.75rem;
     cursor: pointer;
     transition: all 0.3s ease;
     color: #4e545a;
-    height: 20px;
+    height: 1.25rem;
     box-sizing: content-box;
 
     &:hover {
-      color: #6200ee;
+      color: $purple;
     }
   }
 
   &-keyboard-icon-wrapper,
   &-keyboard-icon-wrapper.mobile {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
       position: absolute;
-      bottom: 8px;
+      bottom: 0.5rem;
     }
   }
 
   &-wrapper-btn,
   &-wrapper-btn.mobile {
-    margin-right: 8px;
+    margin-right: 0.5rem;
     position: relative;
-    bottom: -14px;
+    bottom: -0.875rem;
   }
 
   &-hour-text,
@@ -428,51 +438,52 @@
   &-hour-text.mobile,
   &-minute-text.mobile {
     position: absolute;
-    bottom: -22px;
+    bottom: -1.375rem;
     font-size: 0.8rem;
     color: #a9a9a9;
   }
 
   &-minute-text,
   &-minute-text.mobile {
-    left: 120px;
+    left: 7.5rem;
   }
 
   &-clock-hand {
     position: absolute;
-    background-color: #6200ee;
-    bottom: 50%;
+    background-color: $purple;
+    bottom: $tm50percent;
     height: 40.5%;
-    left: calc(50% - 1px);
+    left: calc(50% - 0.0625rem);
     transform-origin: center bottom 0;
-    width: 2px;
+    width: 0.125rem;
   }
 
   &-circle-hand {
     position: absolute;
-    top: -21px;
-    left: -21px;
-    width: 4px;
-    border: 20px solid #6200ee;
-    height: 4px;
+    top: -1.3125rem;
+    left: -1.3125rem;
+    width: 0.25rem;
+    border: 1.25rem solid $purple;
+    height: 0.25rem;
     box-sizing: content-box;
     border-radius: 100%;
     transition: all 0.2s ease;
 
     &.small-circle {
-      top: -13px;
-      left: -13px;
-      border-width: 12px;
+      top: -0.8125rem;
+      left: -0.8125rem;
+      border-width: 0.75rem;
     }
   }
 
   &-circle-hand {
-    @media screen and (min-width: 320px) and (max-width: 820px) and(orientation:landscape) {
-      top: -17.8px;
+    @media screen and (min-width: 20rem) and (max-width: 51.25rem) and(orientation:landscape) {
+      top: -1.1125rem;
     }
   }
 
   &-value-tips {
+    outline: none;
     &.active {
       color: #fff;
     }
@@ -497,7 +508,7 @@
 }
 
 .opacity {
-  transition: opacity 0.15s linear;
+  transition: $tmopacity;
 
   &.show {
     opacity: 1;
@@ -505,14 +516,14 @@
 }
 
 .invalid-value {
-  border-color: #d50000 !important;
-  color: #d50000 !important;
+  border-color: $redtovalid !important;
+  color: $redtovalid !important;
 
   &:hover,
   &:focus,
   &:active {
-    border-color: #d50000 !important;
-    color: #d50000 !important;
+    border-color: $redtovalid !important;
+    color: $redtovalid !important;
   }
 }
 

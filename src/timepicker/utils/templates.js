@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable indent */
-const numberOfHours24 = [
+const getNumberOfHours24 = [
   '00',
   '13',
   '14',
@@ -15,8 +15,8 @@ const numberOfHours24 = [
   '23',
   '24',
 ];
-const numberOfHours12 = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
-const numberOfMinutes = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'];
+const getNumberOfHours12 = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+const getNumberOfMinutes = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'];
 
 const getModalTemplate = ({
   iconTemplate,
@@ -118,7 +118,7 @@ const getMobileModalTemplate = ({
 export {
   getMobileModalTemplate,
   getModalTemplate,
-  numberOfHours12,
-  numberOfHours24,
-  numberOfMinutes,
+  getNumberOfHours12,
+  getNumberOfHours24,
+  getNumberOfMinutes,
 };

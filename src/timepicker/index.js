@@ -8,18 +8,18 @@ import {
   getConfig,
   getRadians,
   getScrollbarWidth,
-  clickOrTouchPosition,
-  mathDegreesIncrement,
+  getClickTouchPosition,
+  getMathDegIncrement,
   hasClass,
   getInputValue,
   createNewEvent,
-  whichBrowser,
+  getBrowser,
 } from './utils';
 import {
   getModalTemplate,
   getMobileModalTemplate,
-  numberOfHours12,
-  numberOfMinutes,
+  getNumberOfHours12,
+  getNumberOfMinutes,
 } from './utils/templates';
 
 class TimepickerUI {
@@ -27,7 +27,7 @@ class TimepickerUI {
     this._element = element;
     this._options = getConfig(options, optionsDefault, types);
 
-    this._isMouseMove = false;
+    this._isTouchMouseMove = false;
     this._degreesHours = Number(getInputValue(this.input).hour) * 30;
     this._degreesMinutes = Number(getInputValue(this.input).minutes) * 6;
 
@@ -165,7 +165,7 @@ class TimepickerUI {
     this._eventsBundle();
   };
 
-  _setTheme() {
+  _setTheme = () => {
     const allDiv = this.modalElement.querySelectorAll('div');
 
     if (this._options.theme === 'crane-straight') {
@@ -173,10 +173,10 @@ class TimepickerUI {
     } else if (this._options.theme === 'crane-radius') {
       [...allDiv].forEach((div) => div.classList.add('crane-straight', 'radius'));
     }
-  }
+  };
 
   close = () => {
-    this._isMouseMove = false;
+    this._isTouchMouseMove = false;
 
     allEvents
       .split(' ')
@@ -189,56 +189,63 @@ class TimepickerUI {
 
     this.openElement.classList.remove('disabled');
 
-    document.body.style.overflowY = '';
-    document.body.style.paddingRight = '';
+    setTimeout(() => {
+      document.body.style.overflowY = '';
+      document.body.style.paddingRight = '';
+    }, 400);
 
     setTimeout(() => {
+      this.openElement.classList.remove('disabled');
+      if (this._options.focusInputAfterCloseModal) this.input.focus();
       this.modalElement.remove();
     }, 300);
   };
 
   // private
 
-  _setInputClassToInputElement() {
+  _setInputClassToInputElement = () => {
     const input = this._element.querySelector('input');
     if (!hasClass(input, 'timepicker-ui-input')) {
       input.classList.add('timepicker-ui-input');
     }
-  }
+  };
 
-  _setDataOpenToInputIfDosentExistInWrapper() {
+  _setDataOpenToInputIfDosentExistInWrapper = () => {
     const input = this._element.querySelector('input');
 
     if (this.openElementData === null) {
       input.setAttribute('data-open', 'timepicker-ui-input');
     }
-  }
+  };
 
-  _setClassTopOpenElement() {
+  _setClassTopOpenElement = () => {
     this.openElement.classList.add('timepicker-ui-open-element');
-  }
+  };
 
-  _removeBackdrop() {
+  _removeBackdrop = () => {
     if (this._options.backdrop) return;
 
     this.modalElement.classList.add('removed');
     this.openElement.classList.add('disabled');
-  }
+  };
 
-  _setNormalizeClass() {
+  _setNormalizeClass = () => {
     const allElement = this.modalElement.querySelectorAll('div');
 
     this.modalElement.classList.add('timepicker-ui-normalize');
     allElement.forEach((div) => div.classList.add('timepicker-ui-normalize'));
-  }
+  };
 
-  _setFlexEndToFooterIfNoKeyboardIcon() {
+  _setFlexEndToFooterIfNoKeyboardIcon = () => {
     if (!this._options.enableSwitchIcon) {
       this.footer.style.justifyContent = 'flex-end';
     }
-  }
+  };
 
-  _eventsBundle() {
+  _eventsBundle = () => {
+    this.openElement.classList.add('disabled');
+    this.input.blur();
+
     this._setScrollbarOrNot();
     this._setModalTemplate();
     this._setNormalizeClass();
@@ -278,13 +285,13 @@ class TimepickerUI {
 
     this._handleClickOnHourMobile(this.hour);
     this._handleClickOnHourMobile(this.minute);
-  }
+  };
 
   _handleOpenOnClick = () => {
     this.openElement.addEventListener('click', () => this._eventsBundle());
   };
 
-  _getInputValueOnOpenAndSet() {
+  _getInputValueOnOpenAndSet = () => {
     const value = getInputValue(this.input);
 
     if (value === undefined) {
@@ -316,7 +323,7 @@ class TimepickerUI {
       degreesHours: this._degreesHours,
       degreesMinutes: this._degreesMinutes,
     });
-  }
+  };
 
   _handleCancelButton = () => {
     this.cancelButton.addEventListener('click', () => {
@@ -354,6 +361,8 @@ class TimepickerUI {
         hour: this.hour.textContent,
         minutes: this.minutes.textContent,
         type: this.AM.textContent,
+        degreesHours: this._degreesHours,
+        degreesMinutes: this._degreesMinutes,
       });
 
       this.close();
@@ -380,9 +389,10 @@ class TimepickerUI {
   };
 
   _setBgColorToCirleWithHourTips = () => {
-    if (this.minutesTips !== null || this._options.mobile) return;
+    const { mobile, theme } = this._options;
+    if (mobile || this.circle === null) return;
 
-    if (this._options.theme === 'crane-straight') {
+    if (theme === 'crane-straight' || theme === 'crane-radius') {
       this.circle.style.backgroundColor = variables.cranered400;
     } else {
       this.circle.style.backgroundColor = variables.purple;
@@ -390,8 +400,10 @@ class TimepickerUI {
   };
 
   _setBgColorToCircleWithMinutesTips = () => {
-    if (numberOfMinutes.includes(this.minutes.textContent)) {
-      if (this._options.theme === 'crane-straight') {
+    const { theme } = this._options;
+
+    if (getNumberOfMinutes.includes(this.minutes.textContent)) {
+      if (theme === 'crane-straight' || theme === 'crane-radius') {
         this.circle.style.backgroundColor = variables.cranered400;
       } else {
         this.circle.style.backgroundColor = variables.purple;
@@ -401,7 +413,7 @@ class TimepickerUI {
   };
 
   _removeBgColorToCirleWithMinutesTips = () => {
-    if (numberOfMinutes.includes(this.minutes.textContent)) return;
+    if (getNumberOfMinutes.includes(this.minutes.textContent)) return;
 
     this.circle.style.backgroundColor = '';
     this.circle.classList.add('small-circle');
@@ -421,7 +433,7 @@ class TimepickerUI {
     if (this.clockFace !== null) this._setTransformToCircleWithSwitchesMinutes(value);
     this.tipsWrapper.innerHTML = '';
     this._removeBgColorToCirleWithMinutesTips();
-    this._setNumbersToClockFace(numberOfMinutes, 'timepicker-ui-minutes-time');
+    this._setNumbersToClockFace(getNumberOfMinutes, 'timepicker-ui-minutes-time');
     this._toggleClassActiveToValueTips(value);
   };
 
@@ -489,12 +501,12 @@ class TimepickerUI {
     }, 150);
   };
 
-  _handleAnimationSwitchTipsMode() {
+  _handleAnimationSwitchTipsMode = () => {
     this.clockHand.classList.add('timepicker-ui-tips-animation');
     setTimeout(() => {
       this.clockHand.classList.remove('timepicker-ui-tips-animation');
     }, 401);
-  }
+  };
 
   _handleHourClick = () => {
     this.hour.addEventListener('click', (ev) => {
@@ -539,22 +551,23 @@ class TimepickerUI {
   };
 
   _handleEventToMoveHand = (event) => {
-    if (!whichBrowser()) event.preventDefault();
+    if (!getBrowser()) event.preventDefault();
 
     const { type, target } = event;
     const { incrementMinutes, incrementHours, switchToMinutesAfterSelectHour } = this._options;
 
-    const { x, y } = clickOrTouchPosition(event, this.clockFace);
+    const { x, y } = getClickTouchPosition(event, this.clockFace);
     const clockFaceRadius = this.clockFace.offsetWidth / 2;
     let rtangens = Math.atan2(y - clockFaceRadius, x - clockFaceRadius);
 
-    if (whichBrowser()) {
-      const touchClick = clickOrTouchPosition(event, this.clockFace, true);
-      rtangens = Math.atan2(touchClick.y - clockFaceRadius, touchClick.x - clockFaceRadius);
+    if (getBrowser()) {
+      const touched = getClickTouchPosition(event, this.clockFace, true);
+      if (touched === undefined) return;
+      rtangens = Math.atan2(touched.y - clockFaceRadius, touched.x - clockFaceRadius);
     }
 
     if (type === 'mouseup' || type === 'touchend') {
-      this._isMouseMove = false;
+      this._isTouchMouseMove = false;
 
       if (switchToMinutesAfterSelectHour) this.minutes.click();
 
@@ -565,7 +578,7 @@ class TimepickerUI {
       type === 'mousedown' ||
       type === 'mousemove' ||
       type === 'touchmove' ||
-      type === 'touchmove'
+      type === 'touchstart'
     ) {
       if (type === 'mousedown' || type === 'touchstart' || type === 'touchmove') {
         if (
@@ -576,22 +589,24 @@ class TimepickerUI {
           hasClass(target, 'timepicker-ui-clock-hand') ||
           hasClass(target, 'timepicker-ui-value-tips')
         ) {
-          this._isMouseMove = true;
+          this._isTouchMouseMove = true;
+        } else {
+          this._isTouchMouseMove = false;
         }
       }
     }
 
-    if (!this._isMouseMove) return;
+    if (!this._isTouchMouseMove) return;
 
     if (this.minutesTips !== null) {
       let degrees = Math.trunc((rtangens * 180) / Math.PI) + 90;
 
       if (incrementMinutes === 5) {
-        degrees = mathDegreesIncrement(degrees, 30);
+        degrees = getMathDegIncrement(degrees, 30);
       } else if (incrementMinutes === 10) {
-        degrees = mathDegreesIncrement(degrees, 60);
+        degrees = getMathDegIncrement(degrees, 60);
       } else if (incrementMinutes === 15) {
-        degrees = mathDegreesIncrement(degrees, 90);
+        degrees = getMathDegIncrement(degrees, 90);
       }
 
       let minute;
@@ -617,12 +632,12 @@ class TimepickerUI {
     if (this.hourTips !== null) {
       let degrees = Math.trunc((rtangens * 180) / Math.PI) + 90;
 
-      degrees = mathDegreesIncrement(degrees, 30);
+      degrees = getMathDegIncrement(degrees, 30);
 
       if (incrementHours === 2) {
-        degrees = mathDegreesIncrement(degrees, 60);
+        degrees = getMathDegIncrement(degrees, 60);
       } else if (incrementHours === 3) {
-        degrees = mathDegreesIncrement(degrees, 90);
+        degrees = getMathDegIncrement(degrees, 90);
       }
 
       this.clockHand.style.transform = `rotateZ(${degrees}deg)`;
@@ -686,15 +701,20 @@ class TimepickerUI {
     const { enableScrollbar } = this._options;
 
     if (enableScrollbar) {
-      document.body.style.overflowY = 'hidden';
       document.body.style.paddingRight = `${getScrollbarWidth()}px`;
+      document.body.style.overflowY = 'hidden';
     } else {
-      document.body.style.overflowY = '';
-      document.body.style.paddingRight = 0;
+      setTimeout(() => {
+        document.body.style.overflowY = '';
+        document.body.style.paddingRight = '';
+      }, 400);
     }
   };
 
-  _setNumbersToClockFace = (array = numberOfHours12, classToAdd = 'timepicker-ui-hour-time-12') => {
+  _setNumbersToClockFace = (
+    array = getNumberOfHours12,
+    classToAdd = 'timepicker-ui-hour-time-12'
+  ) => {
     const el = 360 / array.length;
     const clockWidth = (this.clockFace.offsetWidth - 32) / 2;
     const clockHeight = (this.clockFace.offsetHeight - 32) / 2;
@@ -722,19 +742,19 @@ class TimepickerUI {
     });
   };
 
-  _setAnimationToOpen() {
+  _setAnimationToOpen = () => {
     this.modalElement.classList.add('opacity');
 
     setTimeout(() => {
       this.modalElement.classList.add('show');
     }, 150);
-  }
+  };
 
-  _removeAnimationToClose() {
+  _removeAnimationToClose = () => {
     setTimeout(() => {
       this.modalElement.classList.remove('show');
     }, 150);
-  }
+  };
 
   _handleValueAndCheck(val, type) {
     const value = Number(val);
@@ -757,7 +777,7 @@ class TimepickerUI {
     }
   }
 
-  async _handleIconChangeView() {
+  _handleIconChangeView = async () => {
     const handlerViewChange = async () => {
       if (!hasClass(this.modalElement, 'mobile')) {
         this.close();
@@ -852,7 +872,7 @@ class TimepickerUI {
       this.keyboardClockIcon.addEventListener('touchdown', (event) => handlerViewChange(event));
       this.keyboardClockIcon.addEventListener('mousedown', (event) => handlerViewChange(event));
     }
-  }
+  };
 
   // Mobile version
   _handlerClickPmAm = async ({ target }) => {
@@ -892,11 +912,17 @@ class TimepickerUI {
     }
   };
 
-  _handleClickOnHourMobile() {
+  _handleClickOnHourMobile = () => {
     if (!this._options.mobile || !this._isMobileView) return;
 
     document.addEventListener('mousedown', this.eventsClickMobileHandler);
     document.addEventListener('touchstart', this.eventsClickMobileHandler);
-  }
+  };
 }
 export default TimepickerUI;
+
+const test = document.querySelector('.timepicker-ui');
+
+const init = new TimepickerUI(test, { theme: 'crane-radius' });
+
+init.create();

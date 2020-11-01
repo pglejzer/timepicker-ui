@@ -27,6 +27,22 @@ timepicker-ui is an easy library with timepicker. Fully wrote with pure JavaScri
 
   <img src="https://i.ibb.co/BZ0Vnyb/image.png" alt="mobile-version">
 
+### Themes
+
+There is two available version of theme ( radius and straight). Examples show radius versions.
+
+#### Desktop
+
+  <img src="https://i.ibb.co/xh2rYN7/image.png" alt="desktop-crane-radius-version">
+
+#### Landspace
+
+  <img src="https://i.ibb.co/KVWRKkk/image.png" alt="desktop-crane-radius-version-mobile">
+
+#### Mobile
+
+  <img src="https://i.ibb.co/TYSML75/image.png" alt="desktop-crane-radius-version-mobile">
+
 ---
 
 ### Installation
@@ -45,6 +61,8 @@ $ yarn add timepicker-ui
 $ npm install timepicker-ui
 ```
 
+This library is using [font Roboto](https://fonts.google.com/specimen/Roboto) and [material-design icons](https://google.github.io/material-design-icons/). Basic options for all icons have been taken from material-icons. If you want to use material-icons you have to add dependencies to your project.
+
 ---
 
 ### Usage
@@ -59,10 +77,12 @@ import { TimepickerUI } from 'timepicker-ui';
 
 #### UMD
 
-In your html file you have put script tag with path to `timepicker-ui.umd.js` file.
+In your html file you have put script tag with path to `timepicker-ui.umd.js` file. After installing by npm/yarn you can copy the file from node_modules or add a path to this file.
 
 ```html
 <script src="timepicker-ui.umd.js"></script>
+<script src="node_modules/path/timepicker-ui.umd.js"></script>
+<script src="/path/timepicker-ui.umd.js"></script>
 ```
 
 ###### Information
@@ -184,6 +204,12 @@ timepicker.create();
       <td>false</td>
       <td>Turn on/off icon to switch desktop/mobile</td>
     </tr> 
+    <tr>
+      <td scope="row">focusInputAfterCloseModal</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Turn on/off focus to input after close modal</td>
+    </tr> 
       <tr>
       <td scope="row">hourMobileLabel</td>
       <td>Hour</td>
@@ -296,8 +322,8 @@ timepicker.create();
   </thead>
   <tbody>
    <tr>
-      <td scope="row">init</td>
-      <td>The init method is automatically are inject when you have a wrapper with class <code>timepicker-ui</code>. If not you have to init on your own</td>
+      <td scope="row">create</td>
+      <td>The create method init timepickert</td>
     </tr>
     <tr>
       <td scope="row">open</td>
@@ -355,7 +381,7 @@ timepicker.addEventListener('show', (event) => console.log(event.detail));
     </tr>
     <tr>
       <td scope="row">accept</td>
-      <td>The event starts if timepicker button OK is accpeted</td>
+      <td>The event starts if timepicker button OK is accepted</td>
     </tr>
        <tr>
       <td scope="row">update</td>

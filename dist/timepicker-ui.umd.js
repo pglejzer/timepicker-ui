@@ -26,10 +26,10 @@
     }
   }
   i(
-    ".timepicker-ui-normalize {\n  box-sizing: content-box !important; }\n\n.timepicker-ui-modal {\n  font-family: 'Roboto', sans-serif;\n  position: fixed;\n  opacity: 0;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: rgba(156, 155, 155, 0.6);\n  z-index: 5000; }\n  .timepicker-ui-modal.removed {\n    top: auto;\n    bottom: auto;\n    left: auto;\n    right: auto;\n    background-color: transparent; }\n\n.timepicker-ui-wrapper, .timepicker-ui-wrapper.mobile {\n  position: fixed;\n  z-index: 5001;\n  width: 328px;\n  height: 500px;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  background-color: #fff;\n  border-radius: 4px;\n  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12);\n  display: flex;\n  flex-direction: column; }\n\n@media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n  .timepicker-ui-wrapper {\n    flex-direction: row;\n    height: 360px;\n    width: 584px; } }\n\n@media screen and (max-width: 330px) and (orientation: portrait) {\n  .timepicker-ui-wrapper {\n    width: 315px; } }\n\n.timepicker-ui-wrapper.mobile {\n  height: 218px; }\n  @media screen and (max-width: 330px) {\n    .timepicker-ui-wrapper.mobile {\n      width: 315px; } }\n\n.timepicker-ui-header, .timepicker-ui-header.mobile {\n  padding-top: 52px;\n  padding-bottom: 36px;\n  padding-right: 24px;\n  padding-left: 24px;\n  height: 104px;\n  display: flex;\n  flex-direction: row;\n  justify-content: center;\n  align-items: center;\n  position: relative; }\n\n.timepicker-ui-header.mobile {\n  padding-bottom: 0; }\n\n@media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n  .timepicker-ui-header {\n    height: auto;\n    flex-direction: column; } }\n\n.timepicker-ui-select-time, .timepicker-ui-select-time.mobile {\n  text-transform: uppercase;\n  position: absolute;\n  top: calc(28px - 0.75rem);\n  left: 24px;\n  font-size: 0.75rem;\n  color: #a9a9a9; }\n\n.timepicker-ui-body {\n  height: 256px;\n  padding-right: 36px;\n  padding-left: 36px; }\n  @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n    .timepicker-ui-body {\n      padding-right: 0;\n      padding-left: 0;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      margin-top: 23px; } }\n\n@media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n  .timepicker-ui-wrapper-landspace {\n    display: flex;\n    flex-direction: column;\n    width: 100%; } }\n\n.timepicker-ui-footer, .timepicker-ui-footer-mobile {\n  height: 76px;\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 4px; }\n\n@media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n  .timepicker-ui-footer {\n    justify-content: flex-end; } }\n\n.timepicker-ui-clock-face {\n  background-color: #e0e0e0;\n  height: 100%;\n  width: 100%;\n  border-radius: 100%;\n  position: relative; }\n  @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n    .timepicker-ui-clock-face {\n      height: 256px;\n      width: 256px;\n      top: 15px; } }\n\n.timepicker-ui-dot {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  user-select: none;\n  touch-action: none;\n  transform: translate(-50%, -50%);\n  background-color: #6200ee;\n  height: 8px;\n  width: 8px;\n  border-radius: 100%; }\n\n.timepicker-ui-hour-time-12, .timepicker-ui-minutes-time {\n  position: absolute;\n  width: 32px;\n  height: 32px;\n  text-align: center;\n  cursor: pointer;\n  font-size: 1.1rem;\n  display: flex;\n  justify-content: center;\n  align-items: center; }\n  .timepicker-ui-hour-time-12 span, .timepicker-ui-minutes-time span {\n    touch-action: none;\n    user-select: none; }\n\n.timepicker-ui-wrapper-time, .timepicker-ui-wrapper-time.mobile {\n  display: flex;\n  margin-right: 10px; }\n\n@media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n  .timepicker-ui-wrapper-time {\n    margin-right: 0; } }\n\n.timepicker-ui-wrapper-time.mobile {\n  position: relative; }\n\n.timepicker-ui-hour, .timepicker-ui-minutes, .timepicker-ui-hour.mobile, .timepicker-ui-minutes.mobile {\n  width: calc(96px - 24px);\n  height: calc(80px - 24px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-size: 3.2rem;\n  background-color: #e4e4e4;\n  border-radius: 7px;\n  cursor: pointer;\n  transition: all 0.3s ease;\n  outline: none;\n  border: 2px solid transparent;\n  padding: 10px; }\n  .timepicker-ui-hour:hover, .timepicker-ui-hour.active, .timepicker-ui-minutes:hover, .timepicker-ui-minutes.active, .timepicker-ui-hour.mobile:hover, .timepicker-ui-hour.mobile.active, .timepicker-ui-minutes.mobile:hover, .timepicker-ui-minutes.mobile.active {\n    color: #6200ee;\n    background-color: #ece0fd; }\n\n.timepicker-ui-hour.mobile, .timepicker-ui-minutes.mobile {\n  height: calc(70px - 24px); }\n  .timepicker-ui-hour.mobile[contenteditable='true']:focus, .timepicker-ui-hour.mobile[contenteditable='true']:active, .timepicker-ui-minutes.mobile[contenteditable='true']:focus, .timepicker-ui-minutes.mobile[contenteditable='true']:active {\n    border: 2px solid #6200ee;\n    outline-color: #6200ee;\n    user-select: all; }\n\n.timepicker-ui-dots, .timepicker-ui-dots.mobile {\n  padding-left: 5px;\n  padding-right: 5px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-size: 3.6rem;\n  user-select: none;\n  touch-action: none; }\n\n.timepicker-ui-wrapper-type-time, .timepicker-ui-wrapper-type-time.mobile {\n  display: flex;\n  flex-direction: column;\n  height: 80px;\n  justify-content: center;\n  align-items: center;\n  font-size: 1rem;\n  font-weight: 500;\n  color: #787878; }\n\n@media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n  .timepicker-ui-wrapper-type-time {\n    flex-direction: row;\n    width: 100%; } }\n\n.timepicker-ui-wrapper-type-time.mobile {\n  height: 70px; }\n\n.timepicker-ui-am, .timepicker-ui-pm, .timepicker-ui-am.mobile, .timepicker-ui-pm.mobile {\n  height: calc(40px - 2px);\n  width: calc(52px - 2px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  border: 2px solid #d6d6d6;\n  transition: all 0.3s ease;\n  cursor: pointer; }\n  .timepicker-ui-am:hover, .timepicker-ui-am.active, .timepicker-ui-pm:hover, .timepicker-ui-pm.active, .timepicker-ui-am.mobile:hover, .timepicker-ui-am.mobile.active, .timepicker-ui-pm.mobile:hover, .timepicker-ui-pm.mobile.active {\n    color: #6200ee;\n    background-color: #ece0fd; }\n\n@media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n  .timepicker-ui-am, .timepicker-ui-pm {\n    width: 100%; } }\n\n.timepicker-ui-am, .timepicker-ui-am.mobile {\n  border-top-left-radius: 7px;\n  border-top-right-radius: 7px;\n  border-bottom-width: calc(0.75px / 2); }\n\n.timepicker-ui-am.mobile {\n  border-bottom-left-radius: 0; }\n\n@media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n  .timepicker-ui-am {\n    border-top-left-radius: 7px;\n    border-bottom-left-radius: 7px;\n    border-top-right-radius: 0;\n    border-top-width: 1.5px;\n    border-right-width: calc(0.75px / 2); } }\n\n.timepicker-ui-pm, .timepicker-ui-pm.mobile {\n  border-bottom-left-radius: 7px;\n  border-bottom-right-radius: 7px;\n  border-top-width: calc(0.75px / 2); }\n\n.timepicker-ui-pm.mobile {\n  border-top-right-radius: 0; }\n\n@media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n  .timepicker-ui-pm {\n    border-bottom-right-radius: 7px;\n    border-top-right-radius: 7px;\n    border-bottom-left-radius: 0;\n    border-bottom-width: 1.5px;\n    border-left-width: calc(0.75px / 2); } }\n\n.timepicker-ui-cancel-btn, .timepicker-ui-ok-btn, .timepicker-ui-cancel-btn.mobile, .timepicker-ui-ok.btn-mobile {\n  color: #6200ee;\n  text-transform: uppercase;\n  border-radius: 7px;\n  background-color: transparent;\n  text-align: center;\n  font-size: 0.95rem;\n  padding-top: 9px;\n  padding-bottom: 9px;\n  font-weight: 500;\n  transition: all 0.3s ease;\n  cursor: pointer;\n  outline: none; }\n  .timepicker-ui-cancel-btn:hover, .timepicker-ui-ok-btn:hover, .timepicker-ui-cancel-btn.mobile:hover, .timepicker-ui-ok.btn-mobile:hover {\n    background-color: #d6d6d6; }\n\n.timepicker-ui-cancel-btn, .timepicker-ui-cancel-btn.mobile {\n  width: 72px;\n  margin-right: 4px; }\n\n.timepicker-ui-ok-btn, .timepicker-ui-ok-btn.mobile {\n  width: 64px;\n  margin-left: 4px; }\n\n.timepicker-ui-wrapper-btn, .timepicker-ui-keyboard-icon, .timepicker-ui-wrapper-btn-mobile, .timepicker-ui-keyboard-icon-mobile {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  outline: none; }\n\n.timepicker-ui-keyboard-icon-wrapper, .timepicker-ui-keyboard-icon-wrapper.mobile {\n  width: 44px;\n  height: 44px;\n  position: relative;\n  bottom: -28px;\n  left: 12px;\n  transition: all 0.3s ease; }\n  .timepicker-ui-keyboard-icon-wrapper:hover .timepicker-ui-keyboard-icon,\n  .timepicker-ui-keyboard-icon-wrapper:hover .timepicker-ui-keyboard-icon.mobile, .timepicker-ui-keyboard-icon-wrapper.mobile:hover .timepicker-ui-keyboard-icon,\n  .timepicker-ui-keyboard-icon-wrapper.mobile:hover .timepicker-ui-keyboard-icon.mobile {\n    background-color: #d6d6d6;\n    border-radius: 7px; }\n\n.timepicker-ui-keyboard-icon, .timepicker-ui-keyboard-icon.mobile {\n  padding: 12px;\n  cursor: pointer;\n  transition: all 0.3s ease;\n  color: #4e545a;\n  height: 20px;\n  box-sizing: content-box; }\n  .timepicker-ui-keyboard-icon:hover, .timepicker-ui-keyboard-icon.mobile:hover {\n    color: #6200ee; }\n\n@media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {\n  .timepicker-ui-keyboard-icon-wrapper, .timepicker-ui-keyboard-icon-wrapper.mobile {\n    position: absolute;\n    bottom: 8px; } }\n\n.timepicker-ui-wrapper-btn, .timepicker-ui-wrapper-btn.mobile {\n  margin-right: 8px;\n  position: relative;\n  bottom: -14px; }\n\n.timepicker-ui-hour-text, .timepicker-ui-minute-text, .timepicker-ui-hour-text.mobile, .timepicker-ui-minute-text.mobile {\n  position: absolute;\n  bottom: -22px;\n  font-size: 0.8rem;\n  color: #a9a9a9; }\n\n.timepicker-ui-minute-text, .timepicker-ui-minute-text.mobile {\n  left: 120px; }\n\n.timepicker-ui-clock-hand {\n  position: absolute;\n  background-color: #6200ee;\n  bottom: 50%;\n  height: 40.5%;\n  left: calc(50% - 1px);\n  transform-origin: center bottom 0;\n  width: 2px; }\n\n.timepicker-ui-circle-hand {\n  position: absolute;\n  top: -21px;\n  left: -21px;\n  width: 4px;\n  border: 20px solid #6200ee;\n  height: 4px;\n  box-sizing: content-box;\n  border-radius: 100%;\n  transition: all 0.2s ease; }\n  .timepicker-ui-circle-hand.small-circle {\n    top: -13px;\n    left: -13px;\n    border-width: 12px; }\n\n@media screen and (min-width: 320px) and (max-width: 820px) and (orientation: landscape) {\n  .timepicker-ui-circle-hand {\n    top: -17.8px; } }\n\n.timepicker-ui-value-tips.active {\n  color: #fff; }\n\n.timepicker-ui-clock-animation {\n  animation: clockanimation 350ms linear; }\n\n.timepicker-ui-open-element.disabled {\n  pointer-events: none;\n  touch-action: none;\n  user-select: none; }\n\n.timepicker-ui-tips-animation {\n  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, height 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; }\n\n.opacity {\n  transition: opacity 0.15s linear; }\n  .opacity.show {\n    opacity: 1; }\n\n.invalid-value {\n  border-color: #d50000 !important;\n  color: #d50000 !important; }\n  .invalid-value:hover, .invalid-value:focus, .invalid-value:active {\n    border-color: #d50000 !important;\n    color: #d50000 !important; }\n\n@keyframes clockanimation {\n  0% {\n    opacity: 0;\n    transform: scale(0.8); }\n  to {\n    opacity: 1;\n    transform: scale(1); } }\n"
+    ":export {\n  cranepurple800: #5c1349;\n  cranepurple900: #4e0d3a;\n  cranepurple700: #71135c;\n  cranered400: #f7363e;\n  white: #fff;\n  purple: #6200ee; }\n\n.timepicker-ui-normalize {\n  box-sizing: content-box !important; }\n\n.timepicker-ui-modal {\n  font-family: 'Roboto', sans-serif;\n  position: fixed;\n  opacity: 0;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: rgba(156, 155, 155, 0.6);\n  z-index: 5000; }\n  .timepicker-ui-modal.removed {\n    top: auto;\n    bottom: auto;\n    left: auto;\n    right: auto;\n    background-color: transparent; }\n\n.timepicker-ui-measure {\n  position: absolute;\n  top: -624.9375rem;\n  width: 3.125rem;\n  height: 3.125rem;\n  overflow: scroll; }\n\n.timepicker-ui-wrapper, .timepicker-ui-wrapper.mobile {\n  position: fixed;\n  z-index: 5001;\n  width: 20.5rem;\n  height: 31.25rem;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  background-color: #fff;\n  border-radius: 0.25rem;\n  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12);\n  display: flex;\n  flex-direction: column; }\n\n@media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n  .timepicker-ui-wrapper {\n    flex-direction: row;\n    height: 22.5rem;\n    width: 36.5rem; } }\n\n@media screen and (max-width: 20.625rem) and (orientation: portrait) {\n  .timepicker-ui-wrapper {\n    width: 19.6875rem; } }\n\n.timepicker-ui-wrapper.mobile {\n  height: 13.625rem; }\n  @media screen and (max-width: 20.625rem) {\n    .timepicker-ui-wrapper.mobile {\n      width: 19.6875rem; } }\n\n.timepicker-ui-header, .timepicker-ui-header.mobile {\n  padding-top: 3.25rem;\n  padding-bottom: 2.25rem;\n  padding-right: 1.5rem;\n  padding-left: 1.5rem;\n  height: 6.5rem;\n  display: flex;\n  flex-direction: row;\n  justify-content: center;\n  align-items: center;\n  position: relative; }\n\n.timepicker-ui-header.mobile {\n  padding-bottom: 0; }\n\n@media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n  .timepicker-ui-header {\n    height: auto;\n    flex-direction: column; } }\n\n.timepicker-ui-select-time, .timepicker-ui-select-time.mobile {\n  text-transform: uppercase;\n  position: absolute;\n  top: calc(1.75rem - 0.75rem);\n  left: 1.5rem;\n  font-size: 0.75rem;\n  color: #a9a9a9; }\n\n.timepicker-ui-body {\n  height: 16rem;\n  padding-right: 2.25rem;\n  padding-left: 2.25rem; }\n  @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n    .timepicker-ui-body {\n      padding-right: 0;\n      padding-left: 0;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      margin-top: 1.4375rem; } }\n\n@media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n  .timepicker-ui-wrapper-landspace {\n    display: flex;\n    flex-direction: column;\n    width: 100%; } }\n\n.timepicker-ui-footer, .timepicker-ui-footer-mobile {\n  height: 4.75rem;\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 0.25rem; }\n\n@media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n  .timepicker-ui-footer {\n    justify-content: flex-end; } }\n\n.timepicker-ui-clock-face {\n  background-color: #e0e0e0;\n  height: 100%;\n  width: 100%;\n  border-radius: 100%;\n  position: relative; }\n  @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n    .timepicker-ui-clock-face {\n      height: 16rem;\n      width: 16rem;\n      top: 0.9375rem; } }\n\n.timepicker-ui-dot {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  user-select: none;\n  touch-action: none;\n  transform: translate(-50%, -50%);\n  background-color: #6200ee;\n  height: 0.5rem;\n  width: 0.5rem;\n  border-radius: 100%; }\n\n.timepicker-ui-hour-time-12, .timepicker-ui-minutes-time {\n  position: absolute;\n  width: 2rem;\n  height: 2rem;\n  text-align: center;\n  cursor: pointer;\n  font-size: 1.1rem;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  touch-action: none;\n  user-select: none; }\n  .timepicker-ui-hour-time-12 span, .timepicker-ui-minutes-time span {\n    touch-action: none;\n    user-select: none; }\n\n.timepicker-ui-wrapper-time, .timepicker-ui-wrapper-time.mobile {\n  display: flex;\n  margin-right: 0.625rem; }\n\n@media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n  .timepicker-ui-wrapper-time {\n    margin-right: 0; } }\n\n.timepicker-ui-wrapper-time.mobile {\n  position: relative; }\n\n.timepicker-ui-hour, .timepicker-ui-minutes, .timepicker-ui-hour.mobile, .timepicker-ui-minutes.mobile {\n  width: calc(6rem - 1.5rem);\n  height: calc(5rem - 1.5rem);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-size: 3.2rem;\n  background-color: #e4e4e4;\n  border-radius: 0.4375rem;\n  cursor: pointer;\n  transition: all 0.3s ease;\n  outline: none;\n  border: 0.125rem solid transparent;\n  padding: 0.625rem; }\n  .timepicker-ui-hour:hover, .timepicker-ui-hour.active, .timepicker-ui-minutes:hover, .timepicker-ui-minutes.active, .timepicker-ui-hour.mobile:hover, .timepicker-ui-hour.mobile.active, .timepicker-ui-minutes.mobile:hover, .timepicker-ui-minutes.mobile.active {\n    color: #6200ee;\n    background-color: #ece0fd; }\n\n.timepicker-ui-hour.mobile, .timepicker-ui-minutes.mobile {\n  height: calc(4.375rem - 1.5rem); }\n  .timepicker-ui-hour.mobile[contenteditable='true']:focus, .timepicker-ui-hour.mobile[contenteditable='true']:active, .timepicker-ui-minutes.mobile[contenteditable='true']:focus, .timepicker-ui-minutes.mobile[contenteditable='true']:active {\n    border: 0.125rem solid #6200ee;\n    outline-color: #6200ee;\n    user-select: all; }\n\n.timepicker-ui-dots, .timepicker-ui-dots.mobile {\n  padding-left: 0.3125rem;\n  padding-right: 0.3125rem;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-size: 3.6rem;\n  user-select: none;\n  touch-action: none; }\n\n.timepicker-ui-wrapper-type-time, .timepicker-ui-wrapper-type-time.mobile {\n  display: flex;\n  flex-direction: column;\n  height: 5rem;\n  justify-content: center;\n  align-items: center;\n  font-size: 1rem;\n  font-weight: 500;\n  color: #787878; }\n\n@media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n  .timepicker-ui-wrapper-type-time {\n    flex-direction: row;\n    width: 100%; } }\n\n.timepicker-ui-wrapper-type-time.mobile {\n  height: 4.375rem; }\n\n.timepicker-ui-am, .timepicker-ui-pm, .timepicker-ui-am.mobile, .timepicker-ui-pm.mobile {\n  height: calc(2.5rem - 0.125rem);\n  width: calc(3.25rem - 0.125rem);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  border: 0.125rem solid #d6d6d6;\n  transition: all 0.3s ease;\n  cursor: pointer; }\n  .timepicker-ui-am:hover, .timepicker-ui-am.active, .timepicker-ui-pm:hover, .timepicker-ui-pm.active, .timepicker-ui-am.mobile:hover, .timepicker-ui-am.mobile.active, .timepicker-ui-pm.mobile:hover, .timepicker-ui-pm.mobile.active {\n    color: #6200ee;\n    background-color: #ece0fd; }\n\n@media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n  .timepicker-ui-am, .timepicker-ui-pm {\n    width: 100%; } }\n\n.timepicker-ui-am, .timepicker-ui-am.mobile {\n  border-top-left-radius: 0.4375rem;\n  border-top-right-radius: 0.4375rem;\n  border-bottom-width: calc(0.0469rem / 2); }\n\n.timepicker-ui-am.mobile {\n  border-bottom-left-radius: 0; }\n\n@media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n  .timepicker-ui-am {\n    border-top-left-radius: 0.4375rem;\n    border-bottom-left-radius: 0.4375rem;\n    border-top-right-radius: 0;\n    border-top-width: 0.0938rem;\n    border-right-width: calc(0.0469rem / 2); } }\n\n.timepicker-ui-pm, .timepicker-ui-pm.mobile {\n  border-bottom-left-radius: 0.4375rem;\n  border-bottom-right-radius: 0.4375rem;\n  border-top-width: calc(0.0469rem / 2); }\n\n.timepicker-ui-pm.mobile {\n  border-top-right-radius: 0; }\n\n@media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n  .timepicker-ui-pm {\n    border-bottom-right-radius: 0.4375rem;\n    border-top-right-radius: 0.4375rem;\n    border-bottom-left-radius: 0;\n    border-bottom-width: 0.0938rem;\n    border-left-width: calc(0.0469rem / 2); } }\n\n.timepicker-ui-cancel-btn, .timepicker-ui-ok-btn, .timepicker-ui-cancel-btn.mobile, .timepicker-ui-ok.btn-mobile {\n  color: #6200ee;\n  text-transform: uppercase;\n  border-radius: 0.4375rem;\n  background-color: transparent;\n  text-align: center;\n  font-size: 0.95rem;\n  padding-top: 0.5625rem;\n  padding-bottom: 0.5625rem;\n  font-weight: 500;\n  transition: all 0.3s ease;\n  cursor: pointer;\n  outline: none; }\n  .timepicker-ui-cancel-btn:hover, .timepicker-ui-ok-btn:hover, .timepicker-ui-cancel-btn.mobile:hover, .timepicker-ui-ok.btn-mobile:hover {\n    background-color: #d6d6d6; }\n\n.timepicker-ui-cancel-btn, .timepicker-ui-cancel-btn.mobile {\n  width: 4.5rem;\n  margin-right: 0.25rem; }\n\n.timepicker-ui-ok-btn, .timepicker-ui-ok-btn.mobile {\n  width: 4rem;\n  margin-left: 0.25rem; }\n\n.timepicker-ui-wrapper-btn, .timepicker-ui-keyboard-icon, .timepicker-ui-wrapper-btn-mobile, .timepicker-ui-keyboard-icon-mobile {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  outline: none; }\n\n.timepicker-ui-keyboard-icon-wrapper, .timepicker-ui-keyboard-icon-wrapper.mobile {\n  width: 2.75rem;\n  height: 2.75rem;\n  position: relative;\n  bottom: -1.75rem;\n  left: 0.75rem;\n  transition: all 0.3s ease; }\n  .timepicker-ui-keyboard-icon-wrapper:hover .timepicker-ui-keyboard-icon,\n  .timepicker-ui-keyboard-icon-wrapper:hover .timepicker-ui-keyboard-icon.mobile, .timepicker-ui-keyboard-icon-wrapper.mobile:hover .timepicker-ui-keyboard-icon,\n  .timepicker-ui-keyboard-icon-wrapper.mobile:hover .timepicker-ui-keyboard-icon.mobile {\n    background-color: #d6d6d6;\n    border-radius: 0.4375rem; }\n\n.timepicker-ui-keyboard-icon, .timepicker-ui-keyboard-icon.mobile {\n  padding: 0.75rem;\n  cursor: pointer;\n  transition: all 0.3s ease;\n  color: #4e545a;\n  height: 1.25rem;\n  box-sizing: content-box; }\n  .timepicker-ui-keyboard-icon:hover, .timepicker-ui-keyboard-icon.mobile:hover {\n    color: #6200ee; }\n\n@media screen and (min-width: 20rem) and (max-width: 51.5625rem) and (orientation: landscape) {\n  .timepicker-ui-keyboard-icon-wrapper, .timepicker-ui-keyboard-icon-wrapper.mobile {\n    position: absolute;\n    bottom: 0.5rem; } }\n\n.timepicker-ui-wrapper-btn, .timepicker-ui-wrapper-btn.mobile {\n  margin-right: 0.5rem;\n  position: relative;\n  bottom: -0.875rem; }\n\n.timepicker-ui-hour-text, .timepicker-ui-minute-text, .timepicker-ui-hour-text.mobile, .timepicker-ui-minute-text.mobile {\n  position: absolute;\n  bottom: -1.375rem;\n  font-size: 0.8rem;\n  color: #a9a9a9; }\n\n.timepicker-ui-minute-text, .timepicker-ui-minute-text.mobile {\n  left: 7.5rem; }\n\n.timepicker-ui-clock-hand {\n  position: absolute;\n  background-color: #6200ee;\n  bottom: 50%;\n  height: 40.5%;\n  left: calc($tm50percent - 0.0625rem);\n  transform-origin: center bottom 0;\n  width: 0.125rem; }\n\n.timepicker-ui-circle-hand {\n  position: absolute;\n  top: -1.3125rem;\n  left: -1.3125rem;\n  width: 0.25rem;\n  border: 1.25rem solid #6200ee;\n  height: 0.25rem;\n  box-sizing: content-box;\n  border-radius: 100%;\n  transition: all 0.2s ease; }\n  .timepicker-ui-circle-hand.small-circle {\n    top: -0.8125rem;\n    left: -0.8125rem;\n    border-width: 0.75rem; }\n\n@media screen and (min-width: 20rem) and (max-width: 51.25rem) and (orientation: landscape) {\n  .timepicker-ui-circle-hand {\n    top: -1.1125rem; } }\n\n.timepicker-ui-value-tips {\n  outline: none; }\n  .timepicker-ui-value-tips.active {\n    color: #fff; }\n\n.timepicker-ui-clock-animation {\n  animation: clockanimation 350ms linear; }\n\n.timepicker-ui-open-element.disabled {\n  pointer-events: none;\n  touch-action: none;\n  user-select: none; }\n\n.timepicker-ui-tips-animation {\n  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, height 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; }\n\n.opacity {\n  transition: opacity 0.15s linear; }\n  .opacity.show {\n    opacity: 1; }\n\n.invalid-value {\n  border-color: #d50000 !important;\n  color: #d50000 !important; }\n  .invalid-value:hover, .invalid-value:focus, .invalid-value:active {\n    border-color: #d50000 !important;\n    color: #d50000 !important; }\n\n@keyframes clockanimation {\n  0% {\n    opacity: 0;\n    transform: scale(0.8); }\n  to {\n    opacity: 1;\n    transform: scale(1); } }\n"
   );
   i(
-    ":export {\n  cranepurple800: #5c1349;\n  cranepurple900: #4e0d3a;\n  cranepurple700: #71135c;\n  cranered400: #f7363e;\n  white: #fff;\n  purple: #6200ee; }\n\n.timepicker-ui-wrapper.crane-straight, .timepicker-ui-wrapper.mobile.crane-straight {\n  border-radius: 0;\n  background-color: #4e0d3a;\n  color: #fff; }\n  .timepicker-ui-wrapper.crane-straight.radius, .timepicker-ui-wrapper.mobile.crane-straight.radius {\n    border-radius: 20px; }\n\n.timepicker-ui-select-time.crane-straight, .timepicker-ui-select-time.mobile.crane-straight {\n  color: #e5e5e5; }\n\n.timepicker-ui-clock-face.crane-straight, .timepicker-ui-clock-face.mobile.crane-straight {\n  background-color: #71135c; }\n\n.timepicker-ui-dot.crane-straight, .timepicker-ui-dot.mobile.crane-straight {\n  background-color: #f7363e; }\n\n.timepicker-ui-hour.crane-straight, .timepicker-ui-minutes.crane-straight, .timepicker-ui-hour.mobile.crane-straight, .timepicker-ui-minutes.mobile.crane-straight {\n  background-color: #71135c;\n  border-radius: 0;\n  color: #fff; }\n  .timepicker-ui-hour.crane-straight.radius, .timepicker-ui-minutes.crane-straight.radius, .timepicker-ui-hour.mobile.crane-straight.radius, .timepicker-ui-minutes.mobile.crane-straight.radius {\n    border-radius: 20px; }\n  .timepicker-ui-hour.crane-straight:hover, .timepicker-ui-hour.crane-straight.active, .timepicker-ui-minutes.crane-straight:hover, .timepicker-ui-minutes.crane-straight.active, .timepicker-ui-hour.mobile.crane-straight:hover, .timepicker-ui-hour.mobile.crane-straight.active, .timepicker-ui-minutes.mobile.crane-straight:hover, .timepicker-ui-minutes.mobile.crane-straight.active {\n    background-color: #f7363e; }\n\n.timepicker-ui-hour.mobile.crane-straight[contenteditable='true']:focus, .timepicker-ui-hour.mobile.crane-straight[contenteditable='true']:active, .timepicker-ui-minutes.mobile.crane-straight[contenteditable='true']:focus, .timepicker-ui-minutes.mobile.crane-straight[contenteditable='true']:active {\n  border-color: #fff;\n  outline-color: #fff; }\n\n.timepicker-ui-dots.crane-straight, .timepicker-ui-dots.mobile.crane-straight {\n  color: #fff; }\n\n.timepicker-ui-wrapper-type-time.crane-straight, .timepicker-ui-wrapper-type-time.mobile.crane-straight {\n  color: #fff; }\n\n.timepicker-ui-am.crane-straight, .timepicker-ui-pm.crane-straight, .timepicker-ui-am.mobile.crane-straight, .timepicker-ui-pm.mobile.crane-straight {\n  border: 2px solid transparent;\n  border-radius: 0;\n  background-color: #71135c; }\n\n.timepicker-ui-am:hover.crane-straight, .timepicker-ui-am.active.crane-straight, .timepicker-ui-pm:hover.crane-straight, .timepicker-ui-pm.active.crane-straight, .timepicker-ui-am.mobile:hover.crane-straight, .timepicker-ui-am.mobile.active.crane-straight, .timepicker-ui-pm.mobile:hover.crane-straight, .timepicker-ui-pm.mobile.active.crane-straight {\n  color: #fff;\n  background-color: #f7363e; }\n\n.timepicker-ui-am.crane-straight.radius {\n  border-top-left-radius: 20px;\n  border-top-right-radius: 20px; }\n\n.timepicker-ui-pm.crane-straight.radius {\n  border-bottom-left-radius: 20px;\n  border-bottom-right-radius: 20px; }\n\n@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {\n  .timepicker-ui-am.crane-straight.radius {\n    border-bottom-left-radius: 20px;\n    border-bottom-right-radius: 20px; } }\n\n@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {\n  .timepicker-ui-pm.crane-straight.radius {\n    border-top-left-radius: 20px;\n    border-top-right-radius: 20px; } }\n\n@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {\n  .timepicker-ui-am.mobile.crane-straight.radius {\n    border-bottom-left-radius: 0px;\n    border-bottom-right-radius: 0px; } }\n\n@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {\n  .timepicker-ui-pm.mobile.crane-straight.radius {\n    border-top-left-radius: 0px;\n    border-top-right-radius: 0px; } }\n\n.timepicker-ui-cancel-btn.crane-straight, .timepicker-ui-ok-btn.crane-straight, .timepicker-ui-cancel-btn.mobile.crane-straight, .timepicker-ui-ok-btn.mobile.crane-straight {\n  color: #fff;\n  border-radius: 0px; }\n  .timepicker-ui-cancel-btn.crane-straight.radius, .timepicker-ui-ok-btn.crane-straight.radius, .timepicker-ui-cancel-btn.mobile.crane-straight.radius, .timepicker-ui-ok-btn.mobile.crane-straight.radius {\n    border-radius: 13px; }\n\n.timepicker-ui-cancel-btn:hover.crane-straight, .timepicker-ui-ok-btn:hover.crane-straight, .timepicker-ui-cancel-btn.mobile:hover.crane-straight, .timepicker-ui-ok-btn.mobile:hover.crane-straight {\n  background-color: #f7363e; }\n\n.timepicker-ui-keyboard-icon-wrapper.crane-straight, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight {\n  color: #fff; }\n  .timepicker-ui-keyboard-icon-wrapper.crane-straight.radius, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight.radius {\n    border-radius: 20px; }\n\n.timepicker-ui-keyboard-icon-wrapper.crane-straight:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.crane-straight:hover .timepicker-ui-keyboard-icon.mobile, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight:hover .timepicker-ui-keyboard-icon.mobile {\n  background-color: #f7363e;\n  color: #fff;\n  border-radius: 0; }\n\n.timepicker-ui-keyboard-icon-wrapper.crane-straight.radius:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.crane-straight.radius:hover .timepicker-ui-keyboard-icon.mobile, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight.radius:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight.radius:hover .timepicker-ui-keyboard-icon.mobile {\n  border-radius: 14px; }\n\n.timepicker-ui-keyboard-icon.crane-straight:hover, .timepicker-ui-keyboard-icon.mobile.crane-straight:hover {\n  color: #fff; }\n  .timepicker-ui-keyboard-icon.crane-straight:hover.radius, .timepicker-ui-keyboard-icon.mobile.crane-straight:hover.radius {\n    border-radius: 20px; }\n\n.timepicker-ui-clock-hand.crane-straight {\n  background-color: #f7363e; }\n\n.timepicker-ui-circle-hand.crane-straight {\n  border-color: #f7363e; }\n\n.timepicker-ui-value-tips.crane-straight {\n  color: #fff; }\n"
+    ":export {\n  cranepurple800: #5c1349;\n  cranepurple900: #4e0d3a;\n  cranepurple700: #71135c;\n  cranered400: #f7363e;\n  white: #fff;\n  purple: #6200ee; }\n\n.timepicker-ui-wrapper.crane-straight, .timepicker-ui-wrapper.mobile.crane-straight {\n  border-radius: 0;\n  background-color: #4e0d3a;\n  color: #fff; }\n  .timepicker-ui-wrapper.crane-straight.radius, .timepicker-ui-wrapper.mobile.crane-straight.radius {\n    border-radius: 1.25rem; }\n\n.timepicker-ui-select-time.crane-straight, .timepicker-ui-select-time.mobile.crane-straight {\n  color: #e5e5e5; }\n\n.timepicker-ui-clock-face.crane-straight, .timepicker-ui-clock-face.mobile.crane-straight {\n  background-color: #71135c; }\n\n.timepicker-ui-dot.crane-straight, .timepicker-ui-dot.mobile.crane-straight {\n  background-color: #f7363e; }\n\n.timepicker-ui-hour.crane-straight, .timepicker-ui-minutes.crane-straight, .timepicker-ui-hour.mobile.crane-straight, .timepicker-ui-minutes.mobile.crane-straight {\n  background-color: #71135c;\n  border-radius: 0;\n  color: #fff; }\n  .timepicker-ui-hour.crane-straight.radius, .timepicker-ui-minutes.crane-straight.radius, .timepicker-ui-hour.mobile.crane-straight.radius, .timepicker-ui-minutes.mobile.crane-straight.radius {\n    border-radius: 1.25rem; }\n  .timepicker-ui-hour.crane-straight:hover, .timepicker-ui-hour.crane-straight.active, .timepicker-ui-minutes.crane-straight:hover, .timepicker-ui-minutes.crane-straight.active, .timepicker-ui-hour.mobile.crane-straight:hover, .timepicker-ui-hour.mobile.crane-straight.active, .timepicker-ui-minutes.mobile.crane-straight:hover, .timepicker-ui-minutes.mobile.crane-straight.active {\n    background-color: #f7363e; }\n\n.timepicker-ui-hour.mobile.crane-straight[contenteditable='true']:focus, .timepicker-ui-hour.mobile.crane-straight[contenteditable='true']:active, .timepicker-ui-minutes.mobile.crane-straight[contenteditable='true']:focus, .timepicker-ui-minutes.mobile.crane-straight[contenteditable='true']:active {\n  border-color: #fff;\n  outline-color: #fff; }\n\n.timepicker-ui-dots.crane-straight, .timepicker-ui-dots.mobile.crane-straight {\n  color: #fff; }\n\n.timepicker-ui-wrapper-type-time.crane-straight, .timepicker-ui-wrapper-type-time.mobile.crane-straight {\n  color: #fff; }\n\n.timepicker-ui-am.crane-straight, .timepicker-ui-pm.crane-straight, .timepicker-ui-am.mobile.crane-straight, .timepicker-ui-pm.mobile.crane-straight {\n  border: 0.125rem solid transparent;\n  border-radius: 0;\n  background-color: #71135c; }\n\n.timepicker-ui-am:hover.crane-straight, .timepicker-ui-am.active.crane-straight, .timepicker-ui-pm:hover.crane-straight, .timepicker-ui-pm.active.crane-straight, .timepicker-ui-am.mobile:hover.crane-straight, .timepicker-ui-am.mobile.active.crane-straight, .timepicker-ui-pm.mobile:hover.crane-straight, .timepicker-ui-pm.mobile.active.crane-straight {\n  color: #fff;\n  background-color: #f7363e; }\n\n.timepicker-ui-am.crane-straight.radius {\n  border-top-left-radius: 1.25rem;\n  border-top-right-radius: 1.25rem; }\n\n.timepicker-ui-pm.crane-straight.radius {\n  border-bottom-left-radius: 1.25rem;\n  border-bottom-right-radius: 1.25rem; }\n\n@media screen and (min-width: 20rem) and (max-width: 47.9375rem) and (orientation: landscape) {\n  .timepicker-ui-am.crane-straight.radius {\n    border-bottom-left-radius: 1.25rem;\n    border-bottom-right-radius: 1.25rem; } }\n\n@media screen and (min-width: 20rem) and (max-width: 47.9375rem) and (orientation: landscape) {\n  .timepicker-ui-pm.crane-straight.radius {\n    border-top-left-radius: 1.25rem;\n    border-top-right-radius: 1.25rem; } }\n\n@media screen and (min-width: 20rem) and (max-width: 47.9375rem) and (orientation: landscape) {\n  .timepicker-ui-am.mobile.crane-straight.radius {\n    border-bottom-left-radius: 0rem;\n    border-bottom-right-radius: 0rem; } }\n\n@media screen and (min-width: 20rem) and (max-width: 47.9375rem) and (orientation: landscape) {\n  .timepicker-ui-pm.mobile.crane-straight.radius {\n    border-top-left-radius: 0rem;\n    border-top-right-radius: 0rem; } }\n\n.timepicker-ui-cancel-btn.crane-straight, .timepicker-ui-ok-btn.crane-straight, .timepicker-ui-cancel-btn.mobile.crane-straight, .timepicker-ui-ok-btn.mobile.crane-straight {\n  color: #fff;\n  border-radius: 0rem; }\n  .timepicker-ui-cancel-btn.crane-straight.radius, .timepicker-ui-ok-btn.crane-straight.radius, .timepicker-ui-cancel-btn.mobile.crane-straight.radius, .timepicker-ui-ok-btn.mobile.crane-straight.radius {\n    border-radius: 0.8125rem; }\n\n.timepicker-ui-cancel-btn:hover.crane-straight, .timepicker-ui-ok-btn:hover.crane-straight, .timepicker-ui-cancel-btn.mobile:hover.crane-straight, .timepicker-ui-ok-btn.mobile:hover.crane-straight {\n  background-color: #f7363e; }\n\n.timepicker-ui-keyboard-icon-wrapper.crane-straight, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight {\n  color: #fff; }\n  .timepicker-ui-keyboard-icon-wrapper.crane-straight.radius, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight.radius {\n    border-radius: 1.25rem; }\n\n.timepicker-ui-keyboard-icon-wrapper.crane-straight:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.crane-straight:hover .timepicker-ui-keyboard-icon.mobile, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight:hover .timepicker-ui-keyboard-icon.mobile {\n  background-color: #f7363e;\n  color: #fff;\n  border-radius: 0; }\n\n.timepicker-ui-keyboard-icon-wrapper.crane-straight.radius:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.crane-straight.radius:hover .timepicker-ui-keyboard-icon.mobile, .timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight.radius:hover .timepicker-ui-keyboard-icon,\n.timepicker-ui-keyboard-icon-wrapper.mobile.crane-straight.radius:hover .timepicker-ui-keyboard-icon.mobile {\n  border-radius: 0.875rem; }\n\n.timepicker-ui-keyboard-icon.crane-straight:hover, .timepicker-ui-keyboard-icon.mobile.crane-straight:hover {\n  color: #fff; }\n  .timepicker-ui-keyboard-icon.crane-straight:hover.radius, .timepicker-ui-keyboard-icon.mobile.crane-straight:hover.radius {\n    border-radius: 1.25rem; }\n\n.timepicker-ui-clock-hand.crane-straight {\n  background-color: #f7363e; }\n\n.timepicker-ui-circle-hand.crane-straight {\n  border-color: #f7363e; }\n\n.timepicker-ui-value-tips.crane-straight {\n  color: #fff; }\n"
   );
   var t =
     ':export {\n  cranepurple800: #5c1349;\n  cranepurple900: #4e0d3a;\n  cranepurple700: #71135c;\n  cranered400: #f7363e;\n  white: #fff;\n  purple: #6200ee; }\n';
@@ -42,6 +42,7 @@
       enableScrollbar: !0,
       enableSwitchIcon: !1,
       enterTimeLabel: 'Enter Time',
+      focusInputAfterCloseModal: !1,
       hourMobileLabel: 'Hour',
       iconTemplate: '<i class="material-icons timepicker-ui-keyboard-icon">keyboard</i>',
       iconTemplateMobile: '<i class="material-icons timepicker-ui-keyboard-icon">schedule</i>',
@@ -76,6 +77,7 @@
       iconTemplateMobile: 'string',
       theme: 'string',
       enableSwitchIcon: 'boolean',
+      focusInputAfterCloseModal: 'boolean',
     },
     o = 'mousedown mouseup mousemove mouseleave mouseover'.concat(' touchstart touchmove touchend'),
     s = 'active',
@@ -88,7 +90,7 @@
               o = i[n],
               s =
                 o && ((a = o)[0] || a).nodeType
-                  ? 'element'
+                  ? 'el'
                   : ((e) =>
                       null == e
                         ? '' + e
@@ -109,18 +111,20 @@
         r
       );
     },
-    c = ({ clientX: e, clientY: i, touches: t }, n, r = !1) => {
-      const { left: o, top: s } = n.getBoundingClientRect();
-      let a = {};
-      return (
-        r
-          ? r && Object.keys(t).length > 0 && (a = { x: t[0].clientX - o, y: t[0].clientY - s })
-          : (a = { x: e - o, y: i - s }),
-        a
-      );
+    c = (e, i, t = !1) => {
+      const { clientX: n, clientY: r, touches: o } = e,
+        { left: s, top: a } = i.getBoundingClientRect();
+      let c = {};
+      if (t) {
+        if (t && void 0 !== o && Object.keys(o).length > 0) {
+          const { clientX: e, clientY: i } = o[0];
+          c = { x: e - s, y: i - a };
+        }
+      } else c = { x: n - s, y: r - a };
+      if (0 !== Object.keys(c).length || c.constructor !== Object) return c;
     },
-    l = (e, i) => Math.round(e / i) * i,
-    m = (e, i) => e.classList.contains(i),
+    m = (e, i) => Math.round(e / i) * i,
+    l = (e, i) => e.classList.contains(i),
     u = ({ value: e }) => {
       if ('' === e) return;
       const [i, t] = e.split(' '),
@@ -136,11 +140,11 @@
       const n = new CustomEvent(i, { detail: t });
       e.dispatchEvent(n);
     },
-    p = () =>
+    h = () =>
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
-    h = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
+    p = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
     k = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'];
-  return class {
+  class b {
     constructor(i, b) {
       e(this, 'create', () => {
         this._setTimepickerClassToElement(),
@@ -152,8 +156,15 @@
         e(this, 'open', () => {
           this.create(), this._eventsBundle();
         }),
+        e(this, '_setTheme', () => {
+          const e = this.modalElement.querySelectorAll('div');
+          'crane-straight' === this._options.theme
+            ? [...e].forEach((e) => e.classList.add('crane-straight'))
+            : 'crane-radius' === this._options.theme &&
+              [...e].forEach((e) => e.classList.add('crane-straight', 'radius'));
+        }),
         e(this, 'close', () => {
-          (this._isMouseMove = !1),
+          (this._isTouchMouseMove = !1),
             o
               .split(' ')
               .map((e) => document.removeEventListener(e, this.mutliEventsMoveHandler, !1)),
@@ -161,14 +172,100 @@
             document.removeEventListener('touchstart', this.eventsClickMobileHandler),
             this._removeAnimationToClose(),
             this.openElement.classList.remove('disabled'),
-            (document.body.style.overflowY = ''),
-            (document.body.style.paddingRight = ''),
             setTimeout(() => {
-              this.modalElement.remove();
+              (document.body.style.overflowY = ''), (document.body.style.paddingRight = '');
+            }, 400),
+            setTimeout(() => {
+              this.openElement.classList.remove('disabled'),
+                this._options.focusInputAfterCloseModal && this.input.focus(),
+                this.modalElement.remove();
             }, 300);
+        }),
+        e(this, '_setInputClassToInputElement', () => {
+          const e = this._element.querySelector('input');
+          l(e, 'timepicker-ui-input') || e.classList.add('timepicker-ui-input');
+        }),
+        e(this, '_setDataOpenToInputIfDosentExistInWrapper', () => {
+          const e = this._element.querySelector('input');
+          null === this.openElementData && e.setAttribute('data-open', 'timepicker-ui-input');
+        }),
+        e(this, '_setClassTopOpenElement', () => {
+          this.openElement.classList.add('timepicker-ui-open-element');
+        }),
+        e(this, '_removeBackdrop', () => {
+          this._options.backdrop ||
+            (this.modalElement.classList.add('removed'),
+            this.openElement.classList.add('disabled'));
+        }),
+        e(this, '_setNormalizeClass', () => {
+          const e = this.modalElement.querySelectorAll('div');
+          this.modalElement.classList.add('timepicker-ui-normalize'),
+            e.forEach((e) => e.classList.add('timepicker-ui-normalize'));
+        }),
+        e(this, '_setFlexEndToFooterIfNoKeyboardIcon', () => {
+          this._options.enableSwitchIcon || (this.footer.style.justifyContent = 'flex-end');
+        }),
+        e(this, '_eventsBundle', () => {
+          this.openElement.classList.add('disabled'),
+            this.input.blur(),
+            this._setScrollbarOrNot(),
+            this._setModalTemplate(),
+            this._setNormalizeClass(),
+            this._removeBackdrop(),
+            this._setClassActiveToHourOnOpen(),
+            this._setBgColorToCirleWithHourTips(),
+            null !== this.clockFace && this._setNumbersToClockFace(),
+            this._setFlexEndToFooterIfNoKeyboardIcon(),
+            setTimeout(() => {
+              this._setTheme();
+            }, 0),
+            this._setAnimationToOpen(),
+            this._getInputValueOnOpenAndSet(),
+            this._toggleClassActiveToValueTips(this.hour.textContent),
+            null !== this.clockFace &&
+              (this._setTransformToCircleWithSwitchesHour(this.hour.textContent),
+              this._handleAnimationClock()),
+            this._handleMinutesClick(),
+            this._handleHourClick(),
+            this._handleAmClick(),
+            this._handlePmClick(),
+            this._handleMoveHand(),
+            this._handleCancelButton(),
+            this._handleOkButton(),
+            this._handleBackdropClick(),
+            this._handleIconChangeView(),
+            this._handleClickOnHourMobile(this.hour),
+            this._handleClickOnHourMobile(this.minute);
         }),
         e(this, '_handleOpenOnClick', () => {
           this.openElement.addEventListener('click', () => this._eventsBundle());
+        }),
+        e(this, '_getInputValueOnOpenAndSet', () => {
+          const e = u(this.input);
+          if (void 0 === e)
+            return (
+              (this.hour.innerText = '12'),
+              (this.minutes.innerText = '00'),
+              this.AM.classList.add('active'),
+              void d(this._element, 'show', {
+                hour: this.hour.textContent,
+                minutes: this.minutes.textContent,
+                type: this.AM.textContent,
+                degreesHours: this._degreesHours,
+                degreesMinutes: this._degreesMinutes,
+              })
+            );
+          const { hour: i, minutes: t, type: n } = e,
+            r = document.querySelector(`[data-type="${n}"]`);
+          (this.hour.innerText = i),
+            (this.minutes.innerText = t),
+            r.classList.add('active'),
+            d(this._element, 'show', {
+              ...e,
+              type: this.AM.textContent,
+              degreesHours: this._degreesHours,
+              degreesMinutes: this._degreesMinutes,
+            });
         }),
         e(this, '_handleCancelButton', () => {
           this.cancelButton.addEventListener('click', () => {
@@ -194,6 +291,8 @@
                   hour: this.hour.textContent,
                   minutes: this.minutes.textContent,
                   type: this.AM.textContent,
+                  degreesHours: this._degreesHours,
+                  degreesMinutes: this._degreesMinutes,
                 }),
                 this.close())
               : i || this.minutes.classList.add('invalid-value');
@@ -201,7 +300,7 @@
         }),
         e(this, '_handleBackdropClick', () => {
           this.modalElement.addEventListener('click', (e) => {
-            if (!m(e.target, 'timepicker-ui-modal')) return;
+            if (!l(e.target, 'timepicker-ui-modal')) return;
             const i = u(this.input);
             d(this._element, 'cancel', {
               ...i,
@@ -297,6 +396,12 @@
               }, 600);
           }, 150);
         }),
+        e(this, '_handleAnimationSwitchTipsMode', () => {
+          this.clockHand.classList.add('timepicker-ui-tips-animation'),
+            setTimeout(() => {
+              this.clockHand.classList.remove('timepicker-ui-tips-animation');
+            }, 401);
+        }),
         e(this, '_handleHourClick', () => {
           this.hour.addEventListener('click', (e) => {
             const { target: i } = e;
@@ -331,7 +436,7 @@
           });
         }),
         e(this, '_handleEventToMoveHand', (e) => {
-          p() || e.preventDefault();
+          h() || e.preventDefault();
           const { type: i, target: t } = e,
             {
               incrementMinutes: n,
@@ -339,30 +444,32 @@
               switchToMinutesAfterSelectHour: o,
             } = this._options,
             { x: s, y: a } = c(e, this.clockFace),
-            h = this.clockFace.offsetWidth / 2;
-          let k = Math.atan2(a - h, s - h);
-          if (p()) {
+            p = this.clockFace.offsetWidth / 2;
+          let k = Math.atan2(a - p, s - p);
+          if (h()) {
             const i = c(e, this.clockFace, !0);
-            k = Math.atan2(i.y - h, i.x - h);
+            if (void 0 === i) return;
+            k = Math.atan2(i.y - p, i.x - p);
           }
           if ('mouseup' === i || 'touchend' === i)
-            return (this._isMouseMove = !1), void (o && this.minutes.click());
+            return (this._isTouchMouseMove = !1), void (o && this.minutes.click());
           if (
-            (('mousedown' !== i && 'mousemove' !== i && 'touchmove' !== i && 'touchmove' !== i) ||
+            (('mousedown' !== i && 'mousemove' !== i && 'touchmove' !== i && 'touchstart' !== i) ||
               ('mousedown' !== i && 'touchstart' !== i && 'touchmove' !== i) ||
-              ((m(t, 'timepicker-ui-clock-face') ||
-                m(t, 'timepicker-ui-circle-hand') ||
-                m(t, 'timepicker-ui-hour-time-12') ||
-                m(t, 'timepicker-ui-minutes-time') ||
-                m(t, 'timepicker-ui-clock-hand') ||
-                m(t, 'timepicker-ui-value-tips')) &&
-                (this._isMouseMove = !0)),
-            this._isMouseMove)
+              (l(t, 'timepicker-ui-clock-face') ||
+              l(t, 'timepicker-ui-circle-hand') ||
+              l(t, 'timepicker-ui-hour-time-12') ||
+              l(t, 'timepicker-ui-minutes-time') ||
+              l(t, 'timepicker-ui-clock-hand') ||
+              l(t, 'timepicker-ui-value-tips')
+                ? (this._isTouchMouseMove = !0)
+                : (this._isTouchMouseMove = !1)),
+            this._isTouchMouseMove)
           ) {
             if (null !== this.minutesTips) {
               let e,
                 i = Math.trunc((180 * k) / Math.PI) + 90;
-              5 === n ? (i = l(i, 30)) : 10 === n ? (i = l(i, 60)) : 15 === n && (i = l(i, 90)),
+              5 === n ? (i = m(i, 30)) : 10 === n ? (i = m(i, 60)) : 15 === n && (i = m(i, 90)),
                 i < 0
                   ? ((e = Math.round(360 + i / 6) % 60), (i = 360 + 6 * Math.round(i / 6)))
                   : ((e = Math.round(i / 6) % 60), (i = 6 * Math.round(i / 6))),
@@ -376,8 +483,8 @@
             if (null !== this.hourTips) {
               let e,
                 i = Math.trunc((180 * k) / Math.PI) + 90;
-              (i = l(i, 30)),
-                2 === r ? (i = l(i, 60)) : 3 === r && (i = l(i, 90)),
+              (i = m(i, 30)),
+                2 === r ? (i = m(i, 60)) : 3 === r && (i = m(i, 90)),
                 (this.clockHand.style.transform = `rotateZ(${i}deg)`),
                 (this._degreesHours = i),
                 i < 0
@@ -414,17 +521,19 @@
         e(this, '_setScrollbarOrNot', () => {
           const { enableScrollbar: e } = this._options;
           e
-            ? ((document.body.style.overflowY = 'hidden'),
-              (document.body.style.paddingRight =
+            ? ((document.body.style.paddingRight =
                 (() => {
                   const e = document.createElement('div');
                   (e.className = 'timepicker-ui-measure'), document.body.appendChild(e);
                   const i = e.getBoundingClientRect().width - e.clientWidth;
                   return document.body.removeChild(e), i;
-                })() + 'px'))
-            : ((document.body.style.overflowY = ''), (document.body.style.paddingRight = 0));
+                })() + 'px'),
+              (document.body.style.overflowY = 'hidden'))
+            : setTimeout(() => {
+                (document.body.style.overflowY = ''), (document.body.style.paddingRight = '');
+              }, 400);
         }),
-        e(this, '_setNumbersToClockFace', (e = h, i = 'timepicker-ui-hour-time-12') => {
+        e(this, '_setNumbersToClockFace', (e = p, i = 'timepicker-ui-hour-time-12') => {
           const t = 360 / e.length,
             n = (this.clockFace.offsetWidth - 32) / 2,
             r = (this.clockFace.offsetHeight - 32) / 2,
@@ -432,24 +541,94 @@
           e.forEach((e, s) => {
             const a = ((e) => e * (Math.PI / 180))(s * t),
               c = document.createElement('span'),
-              l = document.createElement('span');
-            (l.innerHTML = e),
-              l.classList.add('timepicker-ui-value-tips'),
+              m = document.createElement('span');
+            (m.innerHTML = e),
+              m.classList.add('timepicker-ui-value-tips'),
               c.classList.add(i),
               'crane-straight' === this._options.theme &&
-                (c.classList.add('crane-straight'), l.classList.add('crane-straight')),
+                (c.classList.add('crane-straight'), m.classList.add('crane-straight')),
               (c.style.left = n + Math.sin(a) * o - c.offsetWidth + 'px'),
               (c.style.bottom = r + Math.cos(a) * o - c.offsetHeight + 'px'),
-              c.appendChild(l),
+              c.appendChild(m),
               this.tipsWrapper.appendChild(c);
           });
+        }),
+        e(this, '_setAnimationToOpen', () => {
+          this.modalElement.classList.add('opacity'),
+            setTimeout(() => {
+              this.modalElement.classList.add('show');
+            }, 150);
+        }),
+        e(this, '_removeAnimationToClose', () => {
+          setTimeout(() => {
+            this.modalElement.classList.remove('show');
+          }, 150);
+        }),
+        e(this, '_handleIconChangeView', async () => {
+          const e = async () => {
+            if (l(this.modalElement, 'mobile')) {
+              const e = this._handleValueAndCheck(this.hour.textContent, 'hour'),
+                i = this._handleValueAndCheck(this.minutes.textContent, 'minutes');
+              if (!1 === e || !1 === i)
+                return (
+                  i || this.minutes.classList.add('invalid-value'),
+                  void (e || this.hour.classList.add('invalid-value'))
+                );
+              !0 === e &&
+                !0 === i &&
+                (i && this.minutes.classList.remove('invalid-value'),
+                e && this.hour.classList.remove('invalid-value')),
+                this.close(),
+                (this._isMobileView = !1),
+                (this._options.mobile = !1),
+                (this._isDesktopView = !0);
+              const t = this.hour.textContent,
+                n = this.minutes.textContent,
+                r = this.activeTypeMode.textContent;
+              setTimeout(() => {
+                this._eventsBundle(),
+                  (this._isMobileView = !0),
+                  (this._options.mobile = !0),
+                  (this._isDesktopView = !1),
+                  (this.hour.textContent = t),
+                  (this.minutes.textContent = n);
+                const e = document.querySelectorAll('.timepicker-ui-type-mode');
+                e.forEach((e) => e.classList.remove('active'));
+                [...e].find((e) => e.textContent === r).classList.add('active'),
+                  this._setTransformToCircleWithSwitchesHour(this.hour.textContent),
+                  this._toggleClassActiveToValueTips(this.hour.textContent);
+              }, 300);
+            } else {
+              this.close(),
+                (this._isMobileView = !0),
+                (this._options.mobile = !0),
+                (this._isDesktopView = !1);
+              const e = this.hour.textContent,
+                i = this.minutes.textContent,
+                t = this.activeTypeMode.textContent;
+              setTimeout(() => {
+                this._eventsBundle(),
+                  (this._isMobileView = !1),
+                  (this._options.mobile = !1),
+                  (this._isDesktopView = !0),
+                  (this.hour.textContent = e),
+                  (this.minutes.textContent = i);
+                const n = document.querySelectorAll('.timepicker-ui-type-mode');
+                n.forEach((e) => e.classList.remove('active'));
+                [...n].find((e) => e.textContent === t).classList.add('active');
+              }, 300);
+            }
+          };
+          this._options.enableSwitchIcon &&
+            (this.keyboardClockIcon.addEventListener('touchdown', (i) => e()),
+            this.keyboardClockIcon.addEventListener('mousedown', (i) => e()));
         }),
         e(this, '_handlerClickPmAm', async ({ target: e }) => {
           const i = this.modalElement.querySelectorAll('[contenteditable]'),
             t = this._handleValueAndCheck(this.hour.textContent, 'hour'),
             n = this._handleValueAndCheck(this.minutes.textContent, 'minutes');
-          m(this.modalElement, 'mobile') &&
-            (m(e, 'timepicker-ui-hour') || m(e, 'timepicker-ui-minutes')
+          l(this.modalElement, 'mobile') &&
+            (l(e, 'timepicker-ui-hour') || l(e, 'timepicker-ui-minutes')
               ? ((!1 !== t && !1 !== n) ||
                   (n || this.minutes.classList.add('invalid-value'),
                   t || this.hour.classList.add('invalid-value')),
@@ -462,9 +641,15 @@
                   (n && this.minutes.classList.remove('invalid-value'),
                   t && this.hour.classList.remove('invalid-value'))));
         }),
+        e(this, '_handleClickOnHourMobile', () => {
+          this._options.mobile &&
+            this._isMobileView &&
+            (document.addEventListener('mousedown', this.eventsClickMobileHandler),
+            document.addEventListener('touchstart', this.eventsClickMobileHandler));
+        }),
         (this._element = i),
         (this._options = a(b, n, r)),
-        (this._isMouseMove = !1),
+        (this._isTouchMouseMove = !1),
         (this._degreesHours = 30 * Number(u(this.input).hour)),
         (this._degreesMinutes = 6 * Number(u(this.input).minutes)),
         (this._isMobileView = !1),
@@ -581,178 +766,13 @@
     get footer() {
       return document.querySelector('.timepicker-ui-footer');
     }
-    _setTheme() {
-      const e = this.modalElement.querySelectorAll('div');
-      'crane-straight' === this._options.theme
-        ? [...e].forEach((e) => e.classList.add('crane-straight'))
-        : 'crane-radius' === this._options.theme &&
-          [...e].forEach((e) => e.classList.add('crane-straight', 'radius'));
-    }
-    _setInputClassToInputElement() {
-      const e = this._element.querySelector('input');
-      m(e, 'timepicker-ui-input') || e.classList.add('timepicker-ui-input');
-    }
-    _setDataOpenToInputIfDosentExistInWrapper() {
-      const e = this._element.querySelector('input');
-      null === this.openElementData && e.setAttribute('data-open', 'timepicker-ui-input');
-    }
-    _setClassTopOpenElement() {
-      this.openElement.classList.add('timepicker-ui-open-element');
-    }
-    _removeBackdrop() {
-      this._options.backdrop ||
-        (this.modalElement.classList.add('removed'), this.openElement.classList.add('disabled'));
-    }
-    _setNormalizeClass() {
-      const e = this.modalElement.querySelectorAll('div');
-      this.modalElement.classList.add('timepicker-ui-normalize'),
-        e.forEach((e) => e.classList.add('timepicker-ui-normalize'));
-    }
-    _setFlexEndToFooterIfNoKeyboardIcon() {
-      this._options.enableSwitchIcon || (this.footer.style.justifyContent = 'flex-end');
-    }
-    _eventsBundle() {
-      this._setScrollbarOrNot(),
-        this._setModalTemplate(),
-        this._setNormalizeClass(),
-        this._removeBackdrop(),
-        this._setClassActiveToHourOnOpen(),
-        this._setBgColorToCirleWithHourTips(),
-        null !== this.clockFace && this._setNumbersToClockFace(),
-        this._setFlexEndToFooterIfNoKeyboardIcon(),
-        setTimeout(() => {
-          this._setTheme();
-        }, 0),
-        this._setAnimationToOpen(),
-        this._getInputValueOnOpenAndSet(),
-        this._toggleClassActiveToValueTips(this.hour.textContent),
-        null !== this.clockFace &&
-          (this._setTransformToCircleWithSwitchesHour(this.hour.textContent),
-          this._handleAnimationClock()),
-        this._handleMinutesClick(),
-        this._handleHourClick(),
-        this._handleAmClick(),
-        this._handlePmClick(),
-        this._handleMoveHand(),
-        this._handleCancelButton(),
-        this._handleOkButton(),
-        this._handleBackdropClick(),
-        this._handleIconChangeView(),
-        this._handleClickOnHourMobile(this.hour),
-        this._handleClickOnHourMobile(this.minute);
-    }
-    _getInputValueOnOpenAndSet() {
-      const e = u(this.input);
-      if (void 0 === e)
-        return (
-          (this.hour.innerText = '12'),
-          (this.minutes.innerText = '00'),
-          this.AM.classList.add('active'),
-          void d(this._element, 'show', {
-            hour: this.hour.textContent,
-            minutes: this.minutes.textContent,
-            type: this.AM.textContent,
-            degreesHours: this._degreesHours,
-            degreesMinutes: this._degreesMinutes,
-          })
-        );
-      const { hour: i, minutes: t, type: n } = e,
-        r = document.querySelector(`[data-type="${n}"]`);
-      (this.hour.innerText = i),
-        (this.minutes.innerText = t),
-        r.classList.add('active'),
-        d(this._element, 'show', {
-          ...e,
-          type: this.AM.textContent,
-          degreesHours: this._degreesHours,
-          degreesMinutes: this._degreesMinutes,
-        });
-    }
-    _handleAnimationSwitchTipsMode() {
-      this.clockHand.classList.add('timepicker-ui-tips-animation'),
-        setTimeout(() => {
-          this.clockHand.classList.remove('timepicker-ui-tips-animation');
-        }, 401);
-    }
-    _setAnimationToOpen() {
-      this.modalElement.classList.add('opacity'),
-        setTimeout(() => {
-          this.modalElement.classList.add('show');
-        }, 150);
-    }
-    _removeAnimationToClose() {
-      setTimeout(() => {
-        this.modalElement.classList.remove('show');
-      }, 150);
-    }
     _handleValueAndCheck(e, i) {
       const t = Number(e);
       return 'hour' === i ? t > 0 && t <= 12 : 'minutes' === i ? t >= 0 && t <= 59 : void 0;
     }
-    async _handleIconChangeView() {
-      const e = async () => {
-        if (m(this.modalElement, 'mobile')) {
-          const e = this._handleValueAndCheck(this.hour.textContent, 'hour'),
-            i = this._handleValueAndCheck(this.minutes.textContent, 'minutes');
-          if (!1 === e || !1 === i)
-            return (
-              i || this.minutes.classList.add('invalid-value'),
-              void (e || this.hour.classList.add('invalid-value'))
-            );
-          !0 === e &&
-            !0 === i &&
-            (i && this.minutes.classList.remove('invalid-value'),
-            e && this.hour.classList.remove('invalid-value')),
-            this.close(),
-            (this._isMobileView = !1),
-            (this._options.mobile = !1),
-            (this._isDesktopView = !0);
-          const t = this.hour.textContent,
-            n = this.minutes.textContent,
-            r = this.activeTypeMode.textContent;
-          setTimeout(() => {
-            this._eventsBundle(),
-              (this._isMobileView = !0),
-              (this._options.mobile = !0),
-              (this._isDesktopView = !1),
-              (this.hour.textContent = t),
-              (this.minutes.textContent = n);
-            const e = document.querySelectorAll('.timepicker-ui-type-mode');
-            e.forEach((e) => e.classList.remove('active'));
-            [...e].find((e) => e.textContent === r).classList.add('active'),
-              this._setTransformToCircleWithSwitchesHour(this.hour.textContent),
-              this._toggleClassActiveToValueTips(this.hour.textContent);
-          }, 300);
-        } else {
-          this.close(),
-            (this._isMobileView = !0),
-            (this._options.mobile = !0),
-            (this._isDesktopView = !1);
-          const e = this.hour.textContent,
-            i = this.minutes.textContent,
-            t = this.activeTypeMode.textContent;
-          setTimeout(() => {
-            this._eventsBundle(),
-              (this._isMobileView = !1),
-              (this._options.mobile = !1),
-              (this._isDesktopView = !0),
-              (this.hour.textContent = e),
-              (this.minutes.textContent = i);
-            const n = document.querySelectorAll('.timepicker-ui-type-mode');
-            n.forEach((e) => e.classList.remove('active'));
-            [...n].find((e) => e.textContent === t).classList.add('active');
-          }, 300);
-        }
-      };
-      this._options.enableSwitchIcon &&
-        (this.keyboardClockIcon.addEventListener('touchdown', (i) => e()),
-        this.keyboardClockIcon.addEventListener('mousedown', (i) => e()));
-    }
-    _handleClickOnHourMobile() {
-      this._options.mobile &&
-        this._isMobileView &&
-        (document.addEventListener('mousedown', this.eventsClickMobileHandler),
-        document.addEventListener('touchstart', this.eventsClickMobileHandler));
-    }
-  };
+  }
+  return (
+    new b(document.querySelector('.timepicker-ui'), { theme: 'crane-radius', mobile: !0 }).create(),
+    b
+  );
 });

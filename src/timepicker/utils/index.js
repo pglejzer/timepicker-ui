@@ -1,5 +1,5 @@
 // Thanks for Bootstrap 5 - alpha version
-export const toType = (obj) => {
+const toType = (obj) => {
   if (obj === null || obj === undefined) {
     return `${obj}`;
   }
@@ -11,14 +11,14 @@ export const toType = (obj) => {
 };
 
 // Thanks for Bootstrap 5 - alpha version
-export const isElement = (obj) => (obj[0] || obj).nodeType;
+const isElement = (obj) => (obj[0] || obj).nodeType;
 
 // Thanks for Bootstrap 5 - alpha version
-export const typeCheckConfig = (componentName, config, configTypes) => {
+const typeCheckConfig = (componentName, config, configTypes) => {
   Object.keys(configTypes).forEach((property) => {
     const expectedTypes = configTypes[property];
     const value = config[property];
-    const valueType = value && isElement(value) ? 'element' : toType(value);
+    const valueType = value && isElement(value) ? 'el' : toType(value);
 
     if (!new RegExp(expectedTypes).test(valueType)) {
       throw new Error(
@@ -31,7 +31,7 @@ export const typeCheckConfig = (componentName, config, configTypes) => {
 };
 
 // Thanks for Bootstrap 5 - alpha version
-export const getConfig = (options, defaultOptions, defaultType, name) => {
+const getConfig = (options, defaultOptions, defaultType, name) => {
   const config = {
     ...defaultOptions,
     ...options,
@@ -41,7 +41,7 @@ export const getConfig = (options, defaultOptions, defaultType, name) => {
 };
 
 // Thanks for Bootstrap 5 - alpha version
-export const getScrollbarWidth = () => {
+const getScrollbarWidth = () => {
   const scrollDiv = document.createElement('div');
   scrollDiv.className = 'timepicker-ui-measure';
   document.body.appendChild(scrollDiv);
@@ -51,9 +51,10 @@ export const getScrollbarWidth = () => {
   return scrollbarWidth;
 };
 
-export const getRadians = (el) => el * (Math.PI / 180);
+const getRadians = (el) => el * (Math.PI / 180);
 
-export const clickOrTouchPosition = ({ clientX, clientY, touches }, object, isMobile = false) => {
+const getClickTouchPosition = (event, object, isMobile = false) => {
+  const { clientX, clientY, touches } = event;
   const { left, top } = object.getBoundingClientRect();
   let obj = {};
 
@@ -62,21 +63,27 @@ export const clickOrTouchPosition = ({ clientX, clientY, touches }, object, isMo
       x: clientX - left,
       y: clientY - top,
     };
-  } else if (isMobile && Object.keys(touches).length > 0) {
-    obj = {
-      x: touches[0].clientX - left,
-      y: touches[0].clientY - top,
-    };
+  } else if (isMobile && touches !== undefined) {
+    if (Object.keys(touches).length > 0) {
+      const { clientX: clx, clientY: cly } = touches[0];
+
+      obj = {
+        x: clx - left,
+        y: cly - top,
+      };
+    }
   }
+
+  if (Object.keys(obj).length === 0 && obj.constructor === Object) return;
 
   return obj;
 };
 
-export const mathDegreesIncrement = (degrees, num) => Math.round(degrees / num) * num;
+const getMathDegIncrement = (degrees, num) => Math.round(degrees / num) * num;
 
-export const hasClass = (element, selector) => element.classList.contains(selector);
+const hasClass = (el, selector) => el.classList.contains(selector);
 
-export const getInputValue = ({ value }) => {
+const getInputValue = ({ value }) => {
   if (value === '') return;
 
   const [hour, type] = value.split(' ');
@@ -102,11 +109,26 @@ export const getInputValue = ({ value }) => {
   };
 };
 
-export const createNewEvent = (element, eventName, value) => {
+const createNewEvent = (el, eventName, value) => {
   const ev = new CustomEvent(eventName, { detail: value });
 
-  element.dispatchEvent(ev);
+  el.dispatchEvent(ev);
 };
 
-export const whichBrowser = () =>
+const getBrowser = () =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+export {
+  toType,
+  isElement,
+  typeCheckConfig,
+  getConfig,
+  getScrollbarWidth,
+  getRadians,
+  getClickTouchPosition,
+  getInputValue,
+  createNewEvent,
+  getBrowser,
+  hasClass,
+  getMathDegIncrement,
+};
