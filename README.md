@@ -419,7 +419,7 @@ ___
 - max/min time options
 - 24h time mode clock face
 
-If you have more good ideas please let me know in [issue](https://github.com/q448x/timepicker-ui/issues). I will try to add more useful features.
+If you have more good ideas please let me know in [issue](https://github.com/q448x/timepicker-ui/issues). I will try to add more useful features. This project is still develop, if you find some bugs please report on the [issue](https://github.com/q448x/timepicker-ui/issues) page.
 
 ---
 
