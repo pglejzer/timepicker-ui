@@ -2,8 +2,8 @@ import './styles/main.scss';
 import './styles/theme.scss';
 import variables from './styles/variables.scss';
 
-import { types, options as optionsDefault } from './elements/options';
-import { name, allEvents, selectorActive } from './elements/variables';
+import { types, options as optionsDefault } from './utils/options';
+import { name, allEvents, selectorActive } from './utils/variables';
 import {
   getConfig,
   getRadians,
@@ -14,13 +14,13 @@ import {
   getInputValue,
   createNewEvent,
   whichBrowser,
-} from './elements/utils';
+} from './utils';
 import {
   getModalTemplate,
   getMobileModalTemplate,
   numberOfHours12,
   numberOfMinutes,
-} from './elements/templates';
+} from './utils/templates';
 
 class TimepickerUI {
   constructor(element, options) {
