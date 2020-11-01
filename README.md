@@ -106,7 +106,7 @@ By default initialization of timepicker is started when you click on input. If y
 const timepicker = document.querySelector('.default-class');
 const initTimepicker = new TimepickerUI(timepicker);
 
-timepicker.init();
+timepicker.create();
 ```
 
 ---
@@ -131,7 +131,7 @@ const timepicker = document.querySelector('.default-class');
 const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
 const initTimepicker = new TimepickerUI(timepicker, options);
 
-timepicker.init();
+timepicker.create();
 ```
 
 ---
@@ -241,14 +241,14 @@ timepicker.init();
     <tr>
       <td scope="row">iconClass</td>
        <td>
-       < i class="material-icons timepicker-ui-keyboard-icon"> keyboard < /i >
+       &lt;i class="material-icons timepicker-ui-keyboard-icon"> keyboard &lt;/i&gt;
       </td>
        <td>string</td>
       <td>Set default template to switch desktop.This options is using by default material design icon</td>
     </tr>  
      <tr>
       <td scope="row">iconClassMobile</td>
-      <td>       < i class="material-icons timepicker-ui-keyboard-icon"> schedule < /i ></td>
+      <td>&lt;i class="material-icons timepicker-ui-keyboard-icon"> schedule  &lt;/i&gt;</td>
       <td>string</td>
       <td>Set default template to switch mobile. This options is using by default material design icon</td>
     </tr> 
@@ -282,7 +282,7 @@ Methods are custom function what can be used to manually change the behavior of 
 const timepicker = document.querySelector('timepicker-ui-test');
 const init = new TimepickerUI(timepicker);
 
-timepicker.init();
+timepicker.create();
 ```
 
 #### Table with methods
@@ -330,7 +330,7 @@ Events are custom events triggered when you add some event listeners to your tim
 const timepicker = document.querySelector('timepicker-ui-test');
 const init = new TimepickerUI(timepicker);
 
-timepicker.init();
+timepicker.create();
 
 timepicker.addEventListener('show', (event) => console.log(event.detail));
 ```

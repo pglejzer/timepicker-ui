@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable indent */
-export const numberOfHours24 = [
+const numberOfHours24 = [
   '00',
   '13',
   '14',
@@ -15,23 +15,10 @@ export const numberOfHours24 = [
   '23',
   '24',
 ];
-export const numberOfHours12 = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
-export const numberOfMinutes = [
-  '00',
-  '05',
-  '10',
-  '15',
-  '20',
-  '25',
-  '30',
-  '35',
-  '40',
-  '45',
-  '50',
-  '55',
-];
+const numberOfHours12 = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+const numberOfMinutes = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'];
 
-export const getModalTemplate = ({
+const getModalTemplate = ({
   iconTemplate,
   selectTimeLabel,
   amLabel,
@@ -83,7 +70,7 @@ export const getModalTemplate = ({
     </div>  
   </div>`;
 
-export const getMobileModalTemplate = ({
+const getMobileModalTemplate = ({
   enterTimeLabel,
   amLabel,
   pmLabel,
@@ -127,3 +114,11 @@ export const getMobileModalTemplate = ({
       </div>
     </div>  
   </div>`;
+
+export {
+  getMobileModalTemplate,
+  getModalTemplate,
+  numberOfHours12,
+  numberOfHours24,
+  numberOfMinutes,
+};

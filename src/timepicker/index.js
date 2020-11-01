@@ -152,7 +152,7 @@ class TimepickerUI {
 
   // public
 
-  init = () => {
+  create = () => {
     this._setTimepickerClassToElement();
     this._setInputClassToInputElement();
     this._setDataOpenToInputIfDosentExistInWrapper();
@@ -161,7 +161,7 @@ class TimepickerUI {
   };
 
   open = () => {
-    this.init();
+    this.create();
     this._eventsBundle();
   };
 
@@ -900,9 +900,3 @@ class TimepickerUI {
   }
 }
 export default TimepickerUI;
-
-const ss = document.querySelector('.timepicker-ui');
-
-const tt = new TimepickerUI(ss);
-
-tt.init();
