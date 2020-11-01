@@ -1,7 +1,7 @@
 {
   "name": "timepicker-ui",
   "version": "1.1.0",
-  "description": "Pure VanillaJS TimePicker with Material Design",
+  "description": "timepicker-ui is an easy library with timepicker. Created with pure JavaScript based on Material Design from Google.",
   "main": "dist/timepicker-ui.js",
   "module": "dist/timepicker-ui.esm.js",
   "files": [

@@ -418,7 +418,6 @@ ___
 - keyboard accesibilty
 - max/min time options
 - 24h time mode clock face
-- keyboard icon functionality
 
 If you have more good ideas please let me know in [issue](https://github.com/q448x/timepicker-ui/issues). I will try to add more useful features.
 
