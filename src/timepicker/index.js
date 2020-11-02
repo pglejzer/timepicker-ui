@@ -902,7 +902,3 @@ class TimepickerUI {
   };
 }
 export default TimepickerUI;
-
-const t = document.querySelector('.timepicker-ui');
-const ti = new TimepickerUI(t);
-ti.create();
