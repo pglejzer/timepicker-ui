@@ -28,8 +28,8 @@ class TimepickerUI {
     this._options = getConfig(options, optionsDefault, types);
 
     this._isTouchMouseMove = false;
-    this._degreesHours = Number(getInputValue(this.input).hour) * 30;
-    this._degreesMinutes = Number(getInputValue(this.input).minutes) * 6;
+    this._degreesHours = Number(getInputValue(this._element.querySelector('input')).hour) * 30;
+    this._degreesMinutes = Number(getInputValue(this._element.querySelector('input')).minutes) * 6;
 
     this._isMobileView = false;
     this._isDesktopView = true;
@@ -111,9 +111,13 @@ class TimepickerUI {
   }
 
   get openElementData() {
-    const data = this._element.querySelector('[data-open]');
-    if (data) {
-      return Object.values(data.dataset)[0];
+    const data = this._element.querySelectorAll('[data-open]');
+
+    if (data.length > 0) {
+      const arr = [];
+
+      [...data].map(({ dataset }) => arr.push(dataset.open));
+      return [...new Set(arr)];
       // eslint-disable-next-line no-else-return
     } else {
       return null;
@@ -121,7 +125,9 @@ class TimepickerUI {
   }
 
   get openElement() {
-    return this._element.querySelector(`[data-open='${this.openElementData}']`);
+    return this.openElementData.map((open) =>
+      this._element.querySelectorAll(`[data-open='${open}']`)
+    )[0];
   }
 
   get cancelButton() {
@@ -187,7 +193,7 @@ class TimepickerUI {
 
     this._removeAnimationToClose();
 
-    this.openElement.classList.remove('disabled');
+    this.openElement.forEach((openEl) => openEl.classList.remove('disabled'));
 
     setTimeout(() => {
       document.body.style.overflowY = '';
@@ -195,7 +201,8 @@ class TimepickerUI {
     }, 400);
 
     setTimeout(() => {
-      this.openElement.classList.remove('disabled');
+      this.openElement.forEach((openEl) => openEl.classList.remove('disabled'));
+
       if (this._options.focusInputAfterCloseModal) this.input.focus();
       this.modalElement.remove();
     }, 300);
@@ -219,14 +226,14 @@ class TimepickerUI {
   };
 
   _setClassTopOpenElement = () => {
-    this.openElement.classList.add('timepicker-ui-open-element');
+    this.openElement.forEach((openEl) => openEl.classList.add('timepicker-ui-open-element'));
   };
 
   _removeBackdrop = () => {
     if (this._options.backdrop) return;
 
     this.modalElement.classList.add('removed');
-    this.openElement.classList.add('disabled');
+    this.openElement.forEach((openEl) => openEl.classList.add('disabled'));
   };
 
   _setNormalizeClass = () => {
@@ -243,7 +250,8 @@ class TimepickerUI {
   };
 
   _eventsBundle = () => {
-    this.openElement.classList.add('disabled');
+    this.openElement.forEach((openEl) => openEl.classList.add('disabled'));
+
     this.input.blur();
 
     this._setScrollbarOrNot();
@@ -296,7 +304,9 @@ class TimepickerUI {
   };
 
   _handleOpenOnClick = () => {
-    this.openElement.addEventListener('click', () => this._eventsBundle());
+    this.openElement.forEach((openEl) =>
+      openEl.addEventListener('click', () => this._eventsBundle())
+    );
   };
 
   _getInputValueOnOpenAndSet = () => {
@@ -310,7 +320,7 @@ class TimepickerUI {
       createNewEvent(this._element, 'show', {
         hour: this.hour.textContent,
         minutes: this.minutes.textContent,
-        type: this.AM.textContent,
+        type: this.activeTypeMode.textContent,
         degreesHours: this._degreesHours,
         degreesMinutes: this._degreesMinutes,
       });
@@ -327,7 +337,7 @@ class TimepickerUI {
 
     createNewEvent(this._element, 'show', {
       ...value,
-      type: this.AM.textContent,
+      type: this.activeTypeMode.textContent,
       degreesHours: this._degreesHours,
       degreesMinutes: this._degreesMinutes,
     });
@@ -341,7 +351,7 @@ class TimepickerUI {
         ...value,
         hourNotAccepted: this.hour.textContent,
         minutesNotAccepted: this.minutes.textContent,
-        type: this.AM.textContent,
+        type: this.activeTypeMode.textContent,
         degreesHours: this._degreesHours,
         degreesMinutes: this._degreesMinutes,
       });
@@ -368,7 +378,7 @@ class TimepickerUI {
       createNewEvent(this._element, 'accept', {
         hour: this.hour.textContent,
         minutes: this.minutes.textContent,
-        type: this.AM.textContent,
+        type: this.activeTypeMode.textContent,
         degreesHours: this._degreesHours,
         degreesMinutes: this._degreesMinutes,
       });
@@ -387,7 +397,7 @@ class TimepickerUI {
         ...value,
         hourNotAccepted: this.hour.textContent,
         minutesNotAccepted: this.minutes.textContent,
-        type: this.AM.textContent,
+        type: this.activeTypeMode.textContent,
         degreesHours: this._degreesHours,
         degreesMinutes: this._degreesMinutes,
       });
@@ -492,7 +502,7 @@ class TimepickerUI {
       createNewEvent(this._element, 'selectamtypemode', {
         hour: this.hour.textContent,
         minutes: this.minutes.textContent,
-        type: this.AM.textContent,
+        type: this.activeTypeMode.textContent,
         degreesHours: this._degreesHours,
         degreesMinutes: this._degreesMinutes,
       });
@@ -509,7 +519,7 @@ class TimepickerUI {
       createNewEvent(this._element, 'selectpmtypemode', {
         hour: this.hour.textContent,
         minutes: this.minutes.textContent,
-        type: this.AM.textContent,
+        type: this.activeTypeMode.textContent,
         degreesHours: this._degreesHours,
         degreesMinutes: this._degreesMinutes,
       });
@@ -546,7 +556,7 @@ class TimepickerUI {
       createNewEvent(this._element, 'selecthourmode', {
         hour: this.hour.textContent,
         minutes: this.minutes.textContent,
-        type: this.AM.textContent,
+        type: this.activeTypeMode.textContent,
         degreesHours: this._degreesHours,
         degreesMinutes: this._degreesMinutes,
       });
@@ -568,7 +578,7 @@ class TimepickerUI {
       createNewEvent(this._element, 'selectminutemode', {
         hour: this.hour.textContent,
         minutes: this.minutes.textContent,
-        type: this.AM.textContent,
+        type: this.activeTypeMode.textContent,
         degreesHours: this._degreesHours,
         degreesMinutes: this._degreesMinutes,
       });
@@ -902,7 +912,3 @@ class TimepickerUI {
   };
 }
 export default TimepickerUI;
-
-const t = document.querySelector('.timepicker-ui');
-const ti = new TimepickerUI(t);
-ti.create();
