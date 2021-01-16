@@ -1,0 +1,25 @@
+$cranepurple800: #5c1349;
+$cranepurple900: #4e0d3a;
+$cranepurple700: #71135c;
+$cranered400: #f7363e;
+$white: #fff;
+$purple: #6200ee;
+$redtovalid: #d50000;
+
+$tmwrapperboxshadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14),
+  0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+
+$tm50percent: 50%;
+$tmtranslatetransform: translate(-50%, -50%);
+$mesaruelength: 3.125rem;
+$tmopacity: opacity 0.15s linear;
+$paddingsrlheader: 1.5rem;
+
+:export {
+  cranepurple800: $cranepurple800;
+  cranepurple900: $cranepurple900;
+  cranepurple700: $cranepurple700;
+  cranered400: $cranered400;
+  white: $white;
+  purple: $purple;
+}

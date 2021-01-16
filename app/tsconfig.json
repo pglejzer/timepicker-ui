@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "declaration": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["dom", "ESNext"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noErrorTruncation": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "sourceMap": false,
+    "strict": true,
+    "target": "es5",
+    "typeRoots": ["./src/index.d.ts", "./node_modules/@types"],
+    "types": ["@types/jest", "node", "jest", "@testing-library/jest-dom"],
+    "paths": {
+      "timepicker-ui": ["./src/index.d.ts"]
+    }
+  },
+  "exclude": ["dist", "node_modules", "__tests__", "coverage"]
+}
