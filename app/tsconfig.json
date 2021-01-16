@@ -16,7 +16,7 @@
     "strict": true,
     "target": "es5",
     "typeRoots": ["./src/index.d.ts", "./node_modules/@types"],
-    "types": ["@types/jest", "node", "jest", "@testing-library/jest-dom"],
+    "types": ["node"],
     "paths": {
       "timepicker-ui": ["./src/index.d.ts"]
     }

@@ -1,17 +1,17 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
+import nodeResolve from '@rollup/plugin-node-resolve';
+import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
-import replace from 'rollup-plugin-replace';
+import replace from '@rollup/plugin-replace';
 import postcss from 'rollup-plugin-postcss';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
-const dependencies = Object.keys(require('./package.json').dependencies);
+const { dependencies } = Object.keys(require('./package.json'));
 
 const plugins = [
   peerDepsExternal(),
-  // replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+  replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
   nodeResolve({
     jsnext: true,
     main: true,

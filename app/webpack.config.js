@@ -2,17 +2,23 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'none',
-  entry: './src/timepicker/index.js',
+  mode: 'development',
+  entry: './docs/index.js',
   output: {
-    path: path.join(__dirname, 'docs'),
-    filename: 'index.js',
+    publicPath: '/',
+  },
+  resolve: {
+    alias: {
+      'timepicker-ui': path.resolve('./src/index.js'),
+    },
+    extensions: ['.tsx', '.ts', '.js', '.d.ts'],
   },
   devServer: {
-    contentBase: path.join(__dirname, 'docs'),
-    port: 9000,
-    liveReload: true,
+    historyApiFallback: true,
     open: true,
+    compress: true,
+    port: 8080,
+    hot: true,
   },
   module: {
     rules: [
@@ -44,12 +50,16 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        exclude: /node_modules/,
+      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
-      inject: false,
+      template: 'docs/index.html',
     }),
   ],
 };

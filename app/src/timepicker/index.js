@@ -20,7 +20,7 @@ import {
   getNumberOfHours12,
   getNumberOfMinutes,
 } from './utils/templates';
-import ClockFace from './components/ClockFace';
+import ClockFace from './components/ClockFace/index';
 
 class TimepickerUI {
   constructor(element, options) {
