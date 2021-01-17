@@ -17,7 +17,7 @@ declare type optionTypes = {
   switchToMinutesAfterSelectHour?: boolean;
   iconTemplate?: string;
   iconTemplateMobile?: string;
-  theme?: string;
+  theme?: 'basic' | 'crane-straight' | 'crane-radius';
   enableSwitchIcon?: boolean;
   focusInputAfterCloseModal?: boolean;
 };
