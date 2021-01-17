@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.0.1] - 2021-01-18
+
+### Fixed
+
+- Fixed problem with keyboard icon click on mobile.
+
+---
+
 ## [2.0.0] - 2021-01-17
 
 ### Changed
