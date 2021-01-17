@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "declaration": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["dom", "ESNext", "dom.iterable"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noErrorTruncation": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "sourceMap": false,
+    "strict": true,
+    "target": "es5",
+    "downlevelIteration": true,
+    "typeRoots": ["./src/index.d.ts", "./node_modules/@types"],
+    "types": ["node"],
+    "paths": {
+      "timepicker-ui": ["./src/index.d.ts"]
+    }
+  },
+  "exclude": ["dist", "node_modules", "__tests__", "coverage", "./src/timepicker/styles", "docs"]
+}

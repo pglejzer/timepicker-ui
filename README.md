@@ -4,7 +4,7 @@
 [![npm version](https://badge.fury.io/js/timepicker-ui.svg)](https://badge.fury.io/js/timepicker-ui)
 <a href="https://img.shields.io/npm/l/timepicker-ui"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
 
-timepicker-ui is an easy library with timepicker. Fully wrote with pure JavaScript. This library is based on Material Design from Google.
+timepicker-ui is an easy library with timepicker. Fully wrote with TypeScript. This library is based on Material Design from Google.
 
 - Free
 - Easy to use
@@ -77,17 +77,17 @@ You can alawys change icons to another package if you change options <code>iconC
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import TimepickerUI from 'timepicker-ui';
+import { TimepickerUI } from 'timepicker-ui';
 ```
 
 #### UMD
 
-In your html file you have put script tag with path to `timepicker-ui.umd.js` file. After installing by npm/yarn you can copy the file from node_modules or add a path to this file.
+In your html file you have put script tag with path to `timepicker-ui.js` file. After installing by npm/yarn you can copy the file from node_modules or add a path to this file.
 
 ```html
-<script src="timepicker-ui.umd.js"></script>
-<script src="node_modules/path/timepicker-ui.umd.js"></script>
-<script src="/path/timepicker-ui.umd.js"></script>
+<script src="timepicker-ui.js"></script>
+<script src="node_modules/path/timepicker-ui.js"></script>
+<script src="/path/timepicker-ui.js"></script>
 ```
 
 ###### Information
@@ -143,7 +143,12 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 #### HTML
 
 ```html
-<div class="default-class" data-am-label="test" data-backdrop="false" data-ok-label="fine">
+<div
+  class="default-class"
+  data-am-label="test"
+  data-backdrop="false"
+  data-ok-label="fine"
+>
   <input type="test" class="timepicker-ui-input" value="12:00 AM" />
   <button class="timepicker-ui-button" data-open="default-class">Open</button>
 </div>

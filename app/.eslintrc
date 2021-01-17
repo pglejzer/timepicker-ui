@@ -1,0 +1,29 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "plugins": ["prettier", "@typescript-eslint"],
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-underscore-dangle": ["error", { "allowAfterThis": true }],
+    "func-names": "off",
+    "class-methods-use-this": "off",
+    "operator-linebreak": "off",
+    "consistent-return": "off",
+    "no-param-reassign": "off",
+    "import/prefer-default-export": "off",
+    "implicit-arrow-linebreak": "off",
+    "comma-dangle": "off",
+    "function-paren-newline": "off",
+    "wrap-iife": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
+  }
+}
