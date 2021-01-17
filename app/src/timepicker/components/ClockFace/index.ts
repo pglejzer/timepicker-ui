@@ -1,7 +1,18 @@
 import { getRadians } from '../../utils';
 
 class ClockFace {
-  constructor(obj) {
+  private array: any;
+  private classToAdd: string;
+  private clockFace: HTMLElement;
+  private tipsWrapper: HTMLElement;
+  private theme: string;
+  constructor(obj: {
+    array: Array<string>;
+    classToAdd: string;
+    clockFace: HTMLElement;
+    tipsWrapper: HTMLElement;
+    theme: string;
+  }) {
     this.array = obj.array;
     this.classToAdd = obj.classToAdd;
     this.clockFace = obj.clockFace;
@@ -9,14 +20,14 @@ class ClockFace {
     this.theme = obj.theme;
   }
 
-  create = () => {
+  create = (): void => {
     const clockWidth = (this.clockFace.offsetWidth - 32) / 2;
     const clockHeight = (this.clockFace.offsetHeight - 32) / 2;
     const radius = clockWidth - 9;
 
     this.tipsWrapper.innerHTML = '';
 
-    this.array.forEach((num, index) => {
+    this.array.forEach((num: string, index: number) => {
       const angle = getRadians(index * (360 / this.array.length));
       const span = document.createElement('span');
       const spanTips = document.createElement('span');

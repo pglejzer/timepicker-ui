@@ -9,7 +9,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'timepicker-ui': path.resolve('./src/index.js'),
+      'timepicker-ui': path.resolve('./src/index.ts'),
     },
     extensions: ['.tsx', '.ts', '.js', '.d.ts'],
   },
@@ -27,6 +27,7 @@ module.exports = {
         exclude: /\.module\.scss$/,
         use: [
           { loader: 'style-loader' },
+          { loader: 'css-modules-typescript-loader' },
           {
             loader: 'css-loader',
             options: {

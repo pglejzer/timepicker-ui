@@ -1,9 +1,11 @@
 // Thanks for Bootstrap 5 - alpha version
-const toType = (obj) => {
+const toType = (obj: null | undefined | string | number): string => {
   if (obj === null || obj === undefined) {
     return `${obj}`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
   return {}.toString
     .call(obj)
     .match(/\s([a-z]+)/i)[1]
@@ -11,10 +13,14 @@ const toType = (obj) => {
 };
 
 // Thanks for Bootstrap 5 - alpha version
-const isElement = (obj) => (obj[0] || obj).nodeType;
+const isElement = (obj: string | any[] | any): string => (obj[0] || obj).nodeType;
 
 // Thanks for Bootstrap 5 - alpha version
-const typeCheckConfig = (componentName, config, configTypes) => {
+const typeCheckConfig = (
+  componentName: string,
+  config: { [x: string]: any },
+  configTypes: { [x: string]: any }
+): void => {
   Object.keys(configTypes).forEach((property) => {
     const expectedTypes = configTypes[property];
     const value = config[property];
@@ -31,17 +37,20 @@ const typeCheckConfig = (componentName, config, configTypes) => {
 };
 
 // Thanks for Bootstrap 5 - alpha version
-const getConfig = (options, defaultOptions, defaultType, name) => {
+const getConfig = (
+  options: Record<string, unknown>,
+  defaultOptions: Record<string, unknown>
+): Record<string, unknown> => {
   const config = {
     ...defaultOptions,
     ...options,
   };
-  typeCheckConfig(name, config, defaultType);
+
   return config;
 };
 
 // Thanks for Bootstrap 5 - alpha version
-const getScrollbarWidth = () => {
+const getScrollbarWidth = (): number => {
   const scrollDiv = document.createElement('div');
   scrollDiv.className = 'timepicker-ui-measure';
   document.body.appendChild(scrollDiv);
@@ -51,12 +60,23 @@ const getScrollbarWidth = () => {
   return scrollbarWidth;
 };
 
-const getRadians = (el) => el * (Math.PI / 180);
+const getRadians = (el: number): number => el * (Math.PI / 180);
 
-const getClickTouchPosition = (event, object, isMobile = false) => {
+const getClickTouchPosition = (
+  event: {
+    preventDefault?: any;
+    type?: any;
+    target?: any;
+    clientX?: any;
+    clientY?: any;
+    touches?: any;
+  },
+  object: HTMLElement,
+  isMobile = false
+): Record<string, unknown> => {
   const { clientX, clientY, touches } = event;
   const { left, top } = object.getBoundingClientRect();
-  let obj = {};
+  let obj: Record<string, unknown> = { x: null, y: null };
 
   if (!isMobile) {
     obj = {
@@ -74,26 +94,33 @@ const getClickTouchPosition = (event, object, isMobile = false) => {
     }
   }
 
+  //@ts-ignore
   if (Object.keys(obj).length === 0 && obj.constructor === Object) return;
 
   return obj;
 };
 
-const getMathDegIncrement = (degrees, num) => Math.round(degrees / num) * num;
+const getMathDegIncrement = (degrees: number, num: number): number =>
+  Math.round(degrees / num) * num;
 
-const hasClass = (el, selector) => el.classList.contains(selector);
+const hasClass = (el: HTMLElement, selector: string): boolean => el.classList.contains(selector);
 
-const getInputValue = ({ value }) => {
+const getInputValue = (el: HTMLInputElement): Record<string, string> => {
+  const { value } = el;
+
+  //@ts-ignore
   if (value === '') return;
 
   const [hour, type] = value.split(' ');
   const [hourSplit, minutesSplit] = hour.split(':');
 
-  let min = Number(minutesSplit);
+  let min: number | string = Number(minutesSplit);
   const hor = Number(hourSplit);
 
+  //@ts-ignore
   if (hor > 12 || min > 59 || hor === 0) return;
 
+  //@ts-ignore
   if (type !== 'AM' && type !== 'PM') return;
 
   if (min < 10) {
@@ -109,13 +136,27 @@ const getInputValue = ({ value }) => {
   };
 };
 
-const createNewEvent = (el, eventName, value) => {
+const createNewEvent = (
+  el: Element,
+  eventName: string,
+  value: {
+    hour?: string | null;
+    minutes?: string | null;
+    type?: string | null;
+    degreesHours?: number;
+    degreesMinutes?: number;
+    hourNotAccepted?: string | null;
+    minutesNotAccepted?: string | null;
+    eventType?: any;
+    test?: string;
+  }
+): void => {
   const ev = new CustomEvent(eventName, { detail: value });
 
   el.dispatchEvent(ev);
 };
 
-const getBrowser = () =>
+const getBrowser = (): boolean =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 export {

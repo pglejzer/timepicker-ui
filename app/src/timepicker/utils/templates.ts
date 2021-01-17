@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable indent */
-const getNumberOfHours24 = [
+const getNumberOfHours24: Array<string> = [
   '00',
   '13',
   '14',
@@ -15,18 +15,55 @@ const getNumberOfHours24 = [
   '23',
   '24',
 ];
-const getNumberOfHours12 = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
-const getNumberOfMinutes = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'];
+const getNumberOfHours12: Array<string> = [
+  '12',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+];
+const getNumberOfMinutes: Array<string> = [
+  '00',
+  '05',
+  '10',
+  '15',
+  '20',
+  '25',
+  '30',
+  '35',
+  '40',
+  '45',
+  '50',
+  '55',
+];
 
-const getModalTemplate = ({
-  iconTemplate,
-  selectTimeLabel,
-  amLabel,
-  pmLabel,
-  cancelLabel,
-  okLabel,
-  enableSwitchIcon,
-}) => `
+const getModalTemplate = (options: {
+  iconTemplate: string;
+  selectTimeLabel: string;
+  amLabel: string;
+  pmLabel: string;
+  cancelLabel: string;
+  okLabel: string;
+  enableSwitchIcon: boolean;
+}): string => {
+  const {
+    iconTemplate,
+    selectTimeLabel,
+    amLabel,
+    pmLabel,
+    cancelLabel,
+    okLabel,
+    enableSwitchIcon,
+  } = options;
+
+  return `
   <div class="timepicker-ui-modal normalize" role="dialog">
     <div class="timepicker-ui-wrapper ">
       <div class="timepicker-ui-header">
@@ -60,7 +97,6 @@ const getModalTemplate = ({
       </div>`
             : ''
         }
- 
         <div class="timepicker-ui-wrapper-btn">
           <div class="timepicker-ui-cancel-btn" role="button" aria-pressed="false">${cancelLabel}</div>
           <div class="timepicker-ui-ok-btn" role="button" aria-pressed="false">${okLabel}</div>
@@ -69,18 +105,31 @@ const getModalTemplate = ({
       </div>
     </div>  
   </div>`;
+};
 
-const getMobileModalTemplate = ({
-  enterTimeLabel,
-  amLabel,
-  pmLabel,
-  cancelLabel,
-  okLabel,
-  iconTemplateMobile,
-  minuteMobileLabel,
-  hourMobileLabel,
-  enableSwitchIcon,
-}) => `
+const getMobileModalTemplate = (options: {
+  enterTimeLabel: string;
+  amLabel: string;
+  pmLabel: string;
+  cancelLabel: string;
+  okLabel: string;
+  iconTemplateMobile: string;
+  minuteMobileLabel: string;
+  hourMobileLabel: string;
+  enableSwitchIcon: boolean;
+}): string => {
+  const {
+    enterTimeLabel,
+    amLabel,
+    pmLabel,
+    cancelLabel,
+    okLabel,
+    iconTemplateMobile,
+    minuteMobileLabel,
+    hourMobileLabel,
+    enableSwitchIcon,
+  } = options;
+  return `
   <div class="timepicker-ui-modal normalize mobile" role="dialog">
     <div class="timepicker-ui-wrapper mobile">
       <div class="timepicker-ui-header mobile">
@@ -98,7 +147,6 @@ const getMobileModalTemplate = ({
       </div>
       </div>
       <div class="timepicker-ui-footer mobile" data-view="mobile">
-
       ${
         enableSwitchIcon
           ? `
@@ -114,6 +162,7 @@ const getMobileModalTemplate = ({
       </div>
     </div>  
   </div>`;
+};
 
 export {
   getMobileModalTemplate,
