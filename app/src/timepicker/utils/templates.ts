@@ -45,13 +45,13 @@ const getNumberOfMinutes: Array<string> = [
 ];
 
 const getModalTemplate = (options: {
-  iconTemplate: string;
-  selectTimeLabel: string;
-  amLabel: string;
-  pmLabel: string;
-  cancelLabel: string;
-  okLabel: string;
-  enableSwitchIcon: boolean;
+  iconTemplate?: string;
+  selectTimeLabel?: string;
+  amLabel?: string;
+  pmLabel?: string;
+  cancelLabel?: string;
+  okLabel?: string;
+  enableSwitchIcon?: boolean;
 }): string => {
   const {
     iconTemplate,
@@ -108,15 +108,15 @@ const getModalTemplate = (options: {
 };
 
 const getMobileModalTemplate = (options: {
-  enterTimeLabel: string;
-  amLabel: string;
-  pmLabel: string;
-  cancelLabel: string;
-  okLabel: string;
-  iconTemplateMobile: string;
-  minuteMobileLabel: string;
-  hourMobileLabel: string;
-  enableSwitchIcon: boolean;
+  enterTimeLabel?: string;
+  amLabel?: string;
+  pmLabel?: string;
+  cancelLabel?: string;
+  okLabel?: string;
+  iconTemplateMobile?: string;
+  minuteMobileLabel?: string;
+  hourMobileLabel?: string;
+  enableSwitchIcon?: boolean;
 }): string => {
   const {
     enterTimeLabel,

@@ -1,7 +1,28 @@
-import './styles/main.scss';
-import './styles/theme.scss';
-import type { optionTypes } from '../timepicker/utils/types';
-export default class TimepickerUI {
+declare type optionTypes = {
+    amLabel?: string;
+    appendModalSelector?: HTMLAllCollection | string;
+    backdrop?: boolean;
+    cancelLabel?: string;
+    enableScrollbar?: boolean;
+    hourMobileLabel?: string;
+    enterTimeLabel?: string;
+    incrementHours?: number;
+    incrementMinutes?: number;
+    inputTemplate?: string;
+    minuteMobileLabel?: string;
+    mobile?: boolean;
+    okLabel?: string;
+    pmLabel?: string;
+    selectTimeLabel?: string;
+    switchToMinutesAfterSelectHour?: boolean;
+    iconTemplate?: string;
+    iconTemplateMobile?: string;
+    theme?: string;
+    enableSwitchIcon?: boolean;
+    focusInputAfterCloseModal?: boolean;
+};
+
+declare class TimepickerUI {
     _degreesHours: number;
     _degreesMinutes: number;
     _element: Element;
@@ -83,3 +104,5 @@ export default class TimepickerUI {
     }) => Promise<void>;
     _handleClickOnHourMobile: () => void;
 }
+
+export default TimepickerUI;

@@ -7,6 +7,8 @@ import postcss from 'rollup-plugin-postcss';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 import typescript from 'rollup-plugin-typescript2';
+import dts from 'rollup-plugin-dts';
+import cleanup from 'rollup-plugin-cleanup';
 
 const { dependencies } = Object.keys(require('./package.json'));
 const tsconfigDefaults = { compilerOptions: { declaration: true } };
@@ -34,12 +36,13 @@ const plugins = [
     extract: false,
   }),
   terser(),
+  cleanup(),
 ];
 
 export default [
   {
     external: dependencies,
-    input: './src/index.js',
+    input: './src/index.ts',
     plugins,
     output: [
       {
@@ -54,7 +57,7 @@ export default [
   },
   {
     input: './src/index.d.ts',
-    output: [{ file: 'dist/index.d.ts', format: 'es' }],
+    output: [{ file: '../dist/types/index.d.ts', format: 'es' }],
     plugins: [dts()],
   },
 ];

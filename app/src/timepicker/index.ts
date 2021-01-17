@@ -2,6 +2,7 @@ import './styles/main.scss';
 import './styles/theme.scss';
 import variables from './styles/variables.scss';
 import { options as optionsDefault } from './utils/options';
+import type { optionTypes } from '../timepicker/utils/types';
 import { name, allEvents, selectorActive } from './utils/variables';
 import {
   createNewEvent,
@@ -27,7 +28,7 @@ export default class TimepickerUI {
   _element: Element;
   _isMobileView: boolean;
   _isTouchMouseMove: boolean;
-  _options: any;
+  _options: optionTypes;
   eventsClickMobile: (event: Event) => Promise<void>;
   eventsClickMobileHandler: any;
   mutliEventsMove: (event: Event) => void;
@@ -735,9 +736,9 @@ export default class TimepickerUI {
     if (appendModalSelector === '') {
       document.body.insertAdjacentHTML('afterend', this.modalTemplate);
     } else {
-      const element = document.querySelector(appendModalSelector);
-
-      element.insertAdjacentHTML('beforeend', this.modalTemplate);
+      //@ts-ignore
+      const element = document?.querySelector(appendModalSelector);
+      element?.insertAdjacentHTML('beforeend', this.modalTemplate);
     }
   };
 

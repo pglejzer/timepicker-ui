@@ -1,8 +1,8 @@
-type optionTypes = {
+declare type optionTypes = {
   amLabel?: string;
-  appendModalSelector?: string;
+  appendModalSelector?: HTMLAllCollection | string | Element;
   backdrop?: boolean;
-  cancelLabel: string;
+  cancelLabel?: string;
   enableScrollbar?: boolean;
   hourMobileLabel?: string;
   enterTimeLabel?: string;

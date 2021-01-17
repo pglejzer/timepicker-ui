@@ -5,13 +5,13 @@ class ClockFace {
   private classToAdd: string;
   private clockFace: HTMLElement;
   private tipsWrapper: HTMLElement;
-  private theme: string;
+  private theme: string | undefined;
   constructor(obj: {
     array: Array<string>;
     classToAdd: string;
     clockFace: HTMLElement;
     tipsWrapper: HTMLElement;
-    theme: string;
+    theme?: string;
   }) {
     this.array = obj.array;
     this.classToAdd = obj.classToAdd;

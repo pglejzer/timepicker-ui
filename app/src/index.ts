@@ -1,3 +1,3 @@
-import TimepickerUI from './timepicker/index';
+import TimepickerUI from './timepicker';
 
-export { TimepickerUI };
+export default TimepickerUI;
