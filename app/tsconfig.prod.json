@@ -4,5 +4,5 @@
     "outDir": "../dist/types",
     "module": "ESNext"
   },
-  "exclude": ["dist", "node_modules", "__tests__", "docs", "docs-mdb"]
+  "exclude": ["dist", "node_modules", "__tests__", "docs"]
 }

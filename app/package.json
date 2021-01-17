@@ -7,7 +7,7 @@
     "dist/*"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "webpack && rollup -c",
     "start": "webpack-dev-server --watch --config webpack.config.js --hot",
     "lint": "lint-staged && pretty-quick --staged",
     "test": "jest"

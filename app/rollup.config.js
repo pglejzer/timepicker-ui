@@ -30,12 +30,17 @@ const plugins = [
     include: 'node_modules/**',
   }),
   babel({
+    babelHelpers: 'runtime',
     exclude: 'node_modules/**',
   }),
   postcss({
     extract: false,
   }),
-  terser(),
+  terser({
+    output: {
+      comments: false,
+    },
+  }),
   cleanup(),
 ];
 

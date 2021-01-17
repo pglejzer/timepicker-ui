@@ -3,7 +3,7 @@
 <a href="https://npmcharts.com/compare/timepicker-ui?minimal=true"><img src="https://img.shields.io/npm/dw/timepicker-ui" alt="downloads"></a>
 <a href="https://img.shields.io/npm/l/timepicker-ui"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
 
-timepicker-ui is an easy library with timepicker. Fully wrote with pure JavaScript. This library is based on Material Design from Google.
+timepicker-ui is an easy library with timepicker. Fully wrote with TypeScript. This library is based on Material Design from Google.
 
 - Free
 - Easy to use
@@ -76,7 +76,7 @@ You can alawys change icons to another package if you change options <code>iconC
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import TimepickerUI from 'timepicker-ui';
+import { TimepickerUI } from 'timepicker-ui';
 ```
 
 #### UMD
@@ -142,7 +142,12 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 #### HTML
 
 ```html
-<div class="default-class" data-am-label="test" data-backdrop="false" data-ok-label="fine">
+<div
+  class="default-class"
+  data-am-label="test"
+  data-backdrop="false"
+  data-ok-label="fine"
+>
   <input type="test" class="timepicker-ui-input" value="12:00 AM" />
   <button class="timepicker-ui-button" data-open="default-class">Open</button>
 </div>

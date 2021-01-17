@@ -1,6 +1,6 @@
 declare type optionTypes = {
     amLabel?: string;
-    appendModalSelector?: HTMLAllCollection | string;
+    appendModalSelector?: HTMLAllCollection | string | Element;
     backdrop?: boolean;
     cancelLabel?: string;
     enableScrollbar?: boolean;

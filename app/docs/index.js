@@ -1,4 +1,4 @@
-import TimepickerUI from 'timepicker-ui';
+import { TimepickerUI } from 'timepicker-ui';
 
 const basic = document.querySelector('.basic');
 

@@ -1,6 +1,6 @@
 declare type optionTypes = {
     amLabel?: string;
-    appendModalSelector?: HTMLAllCollection | string;
+    appendModalSelector?: HTMLAllCollection | string | Element;
     backdrop?: boolean;
     cancelLabel?: string;
     enableScrollbar?: boolean;
@@ -25,15 +25,16 @@ declare type optionTypes = {
 declare class TimepickerUI {
     _degreesHours: number;
     _degreesMinutes: number;
-    _element: Element;
-    _isMobileView: boolean;
-    _isTouchMouseMove: boolean;
     _options: optionTypes;
     eventsClickMobile: (event: Event) => Promise<void>;
     eventsClickMobileHandler: any;
     mutliEventsMove: (event: Event) => void;
     mutliEventsMoveHandler: any;
-    constructor(element: HTMLDivElement, options: Record<string, unknown>);
+    private _clickTouchEvents;
+    private _element;
+    private _isMobileView;
+    private _isTouchMouseMove;
+    constructor(element: HTMLDivElement, options: optionTypes);
     private get modalTemplate();
     private get modalElement();
     private get clockFace();
@@ -105,4 +106,4 @@ declare class TimepickerUI {
     _handleClickOnHourMobile: () => void;
 }
 
-export default TimepickerUI;
+export { TimepickerUI };

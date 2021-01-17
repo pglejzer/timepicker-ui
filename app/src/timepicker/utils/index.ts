@@ -1,3 +1,5 @@
+import { optionTypes } from './types';
+
 // Thanks for Bootstrap 5 - alpha version
 const toType = (obj: null | undefined | string | number): string => {
   if (obj === null || obj === undefined) {
@@ -38,7 +40,7 @@ const typeCheckConfig = (
 
 // Thanks for Bootstrap 5 - alpha version
 const getConfig = (
-  options: Record<string, unknown>,
+  options: optionTypes,
   defaultOptions: Record<string, unknown>
 ): Record<string, unknown> => {
   const config = {

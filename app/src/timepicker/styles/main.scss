@@ -476,12 +476,6 @@
     }
   }
 
-  &-circle-hand {
-    @media screen and (min-width: 20rem) and (max-width: 51.25rem) and(orientation:landscape) {
-      top: -1.1125rem;
-    }
-  }
-
   &-value-tips {
     outline: none;
     &.active {

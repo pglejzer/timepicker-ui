@@ -1,3 +1,4 @@
+import { optionTypes } from './types';
 declare const toType: (obj: null | undefined | string | number) => string;
 declare const isElement: (obj: string | any[] | any) => string;
 declare const typeCheckConfig: (componentName: string, config: {
@@ -5,7 +6,7 @@ declare const typeCheckConfig: (componentName: string, config: {
 }, configTypes: {
     [x: string]: any;
 }) => void;
-declare const getConfig: (options: Record<string, unknown>, defaultOptions: Record<string, unknown>) => Record<string, unknown>;
+declare const getConfig: (options: optionTypes, defaultOptions: Record<string, unknown>) => Record<string, unknown>;
 declare const getScrollbarWidth: () => number;
 declare const getRadians: (el: number) => number;
 declare const getClickTouchPosition: (event: {
