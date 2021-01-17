@@ -153,7 +153,9 @@ function App(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    console.log(inputValue);
+    if (inputValue === "10:00 PM") {
+      alert("You selected 10:00 PM");
+    }
   }, [inputValue]);
 
   useEffect(() => {
@@ -176,8 +178,7 @@ function App(): JSX.Element {
       <input
         type='test'
         className='timepicker-ui-input'
-        value={inputValue}
-        onChange={(e) => console.log(e)}
+        defaultValue={inputValue}
       />
     </div>
   );
