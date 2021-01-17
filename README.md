@@ -136,6 +136,60 @@ timepicker.create();
 
 ---
 
+## React integration
+
+It is possible to use this library on the React application. It's necessary to use the useRef hook to attach a dom element and add a custom event handler to this ref.
+
+```javascript
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { TimepickerUI } from 'timepicker-ui';
+
+function App(): JSX.Element {
+  const tmRef = useRef(null);
+  const [inputValue, setInputValue] = useState('12:00 PM');
+
+  const testHandler = useCallback((e: CustomEvent) => {
+    setInputValue(`${e.detail.hour}:${e.detail.minutes} ${e.detail.type}`);
+  }, []);
+
+  useEffect(() => {
+    console.log(inputValue);
+  }, [inputValue]);
+
+  useEffect(() => {
+    const tm = (tmRef.current as unknown) as HTMLDivElement;
+
+    const newPicker = new TimepickerUI(tm, {});
+    newPicker.create();
+
+    //@ts-ignore
+    tm.addEventListener('accept', testHandler);
+
+    return () => {
+      //@ts-ignore
+      tm.removeEventListener('accept', testHandler);
+    };
+  }, [testHandler]);
+
+  return (
+    <div className='timepicker-ui' ref={tmRef}>
+      <input
+        type='test'
+        className='timepicker-ui-input'
+        value={inputValue}
+        onChange={(e) => console.log(e)}
+      />
+    </div>
+  );
+}
+
+export default App;
+
+
+```
+
+---
+
 ### Options
 
 You can set options by JavaScript or by data-attribute which `attribute` is a key option. Data-attributes will be overridden by JavaScript options.
