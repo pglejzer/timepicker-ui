@@ -136,9 +136,42 @@ timepicker.create();
 
 ---
 
+### Options
+
+You can set options by JavaScript or by data-attribute which `attribute` is a key option. Data-attributes will be overridden by JavaScript options.
+
+#### HTML
+
+```html
+<div
+  class="default-class"
+  data-am-label="test"
+  data-backdrop="false"
+  data-ok-label="fine"
+>
+  <input type="test" class="timepicker-ui-input" value="12:00 AM" />
+  <button class="timepicker-ui-button" data-open="default-class">Open</button>
+</div>
+```
+
+#### JavaScript
+
+```javascript
+const timepicker = document.querySelector('.default-class');
+const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
+const initTimepicker = new TimepickerUI(timepicker, options);
+
+timepicker.create();
+```
+
+---
+
 ## React integration
 
 It is possible to use this library on the React application. It's necessary to use the useRef hook to attach a dom element and add a custom event handler to this ref.
+
+Link to an example with [React Hooks](https://codesandbox.io/s/modest-swanson-xqzme). <br/>
+Link to an example with [React Class Component](https://codesandbox.io/s/vigilant-knuth-cx0yv).
 
 ```javascript
 import React, { useRef, useEffect, useState, useCallback } from 'react';
@@ -185,38 +218,47 @@ function App(): JSX.Element {
 }
 
 export default App;
-
-
 ```
 
 ---
 
-### Options
+### Vue integration
 
-You can set options by JavaScript or by data-attribute which `attribute` is a key option. Data-attributes will be overridden by JavaScript options.
+This library can be used on Vue too. You have to use this.$refs to attach elements on DOM and add a custom event listener to this element.
 
-#### HTML
-
-```html
-<div
-  class="default-class"
-  data-am-label="test"
-  data-backdrop="false"
-  data-ok-label="fine"
->
-  <input type="test" class="timepicker-ui-input" value="12:00 AM" />
-  <button class="timepicker-ui-button" data-open="default-class">Open</button>
-</div>
-```
-
-#### JavaScript
+Link to an example with [Vue 2](https://codesandbox.io/s/ancient-http-59o3w)<br/>
+Link to an example with [Vue 3](https://codesandbox.io/s/falling-resonance-s96g6)
 
 ```javascript
-const timepicker = document.querySelector('.default-class');
-const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
-const initTimepicker = new TimepickerUI(timepicker, options);
+<template>
+  <div class="hello">
+    <div className="timepicker-ui" ref="tm">
+      <input v-model="inputValue" type="text" className="timepicker-ui-input" />
+    </div>
+    {{ inputValue }}
+  </div>
+</template>
 
-timepicker.create();
+<script>
+import { TimepickerUI } from "timepicker-ui";
+
+export default {
+  name: "HelloWorld",
+  data() {
+    return {
+      inputValue: "10:10 PM",
+    };
+  },
+  mounted() {
+    const test = new TimepickerUI(this.$refs.tm, { enableSwitchIcon: true });
+    test.create();
+
+    this.$refs.tm.addEventListener("accept", ({ detail }) => {
+      this.inputValue = `${detail.hour}:${detail.minutes} ${detail.type}`;
+    });
+  },
+};
+</script>
 ```
 
 ---
