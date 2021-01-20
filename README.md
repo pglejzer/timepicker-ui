@@ -98,7 +98,7 @@ timepicker-ui has to have a wrapper that has an input inside this wrapper. If yo
 
 ```html
 <div class="timepicker-ui">
-  <input type="test" class="timepicker-ui-input" value="12:00 AM" />
+  <input type="text" class="timepicker-ui-input" value="12:00 AM" />
 </div>
 ```
 
@@ -120,7 +120,7 @@ By default initialization of timepicker is started when you click on input. If y
 
 ```html
 <div class="default-class">
-  <input type="test" class="timepicker-ui-input" value="12:00 AM" />
+  <input type="text" class="timepicker-ui-input" value="12:00 AM" />
   <button class="timepicker-ui-button" data-open="default-class">Open</button>
 </div>
 ```
@@ -149,7 +149,7 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
   data-backdrop="false"
   data-ok-label="fine"
 >
-  <input type="test" class="timepicker-ui-input" value="12:00 AM" />
+  <input type="text" class="timepicker-ui-input" value="12:00 AM" />
   <button class="timepicker-ui-button" data-open="default-class">Open</button>
 </div>
 ```
@@ -232,8 +232,8 @@ Link to an example with [Vue 3](https://codesandbox.io/s/falling-resonance-s96g6
 ```javascript
 <template>
   <div class="hello">
-    <div className="timepicker-ui" ref="tm">
-      <input v-model="inputValue" type="text" className="timepicker-ui-input" />
+    <div class="timepicker-ui" ref="tm">
+      <input v-model="inputValue" type="text" class="timepicker-ui-input" />
     </div>
     {{ inputValue }}
   </div>
@@ -405,7 +405,7 @@ Methods are custom function what can be used to manually change the behavior of 
 
 ```HTML
 <div class="timepicker-ui-test">
-  <input type="test" class="timepicker-ui-input" value="12:00 AM">
+  <input type="text" class="timepicker-ui-input" value="12:00 AM">
 </div>
 ```
 
@@ -430,7 +430,7 @@ timepicker.create();
   <tbody>
    <tr>
       <td scope="row">create</td>
-      <td>The create method init timepickert</td>
+      <td>The create method init timepicker</td>
     </tr>
     <tr>
       <td scope="row">open</td>
@@ -453,7 +453,7 @@ Events are custom events triggered when you add some event listeners to your tim
 
 ```HTML
 <div class="timepicker-ui-test">
-  <input type="test" class="timepicker-ui-input" value="12:00 AM">
+  <input type="text" class="timepicker-ui-input" value="12:00 AM">
 </div>
 ```
 
