@@ -56,7 +56,7 @@ declare class TimepickerUI {
     private get activeTypeMode();
     private get keyboardClockIcon();
     private get footer();
-    create(): void;
+    create: () => void;
     open: () => void;
     close: () => void;
     private _setTheme;
