@@ -173,13 +173,13 @@ export default class TimepickerUI {
 
   // public
 
-  public create(): void {
+  public create = (): void => {
     this._setTimepickerClassToElement();
     this._setInputClassToInputElement();
     this._setDataOpenToInputIfDosentExistInWrapper();
     this._setClassTopOpenElement();
     this._handleOpenOnClick();
-  }
+  };
 
   public open = (): void => {
     this.create();
@@ -196,8 +196,10 @@ export default class TimepickerUI {
     document.removeEventListener('mousedown', this.eventsClickMobileHandler);
     document.removeEventListener('touchstart', this.eventsClickMobileHandler);
 
-    this.keyboardClockIcon.removeEventListener('touchstart', this.handlerViewChange);
-    this.keyboardClockIcon.removeEventListener('click', this.handlerViewChange);
+    if (this._options.enableSwitchIcon) {
+      this.keyboardClockIcon.removeEventListener('touchstart', this.handlerViewChange);
+      this.keyboardClockIcon.removeEventListener('mousedown', this.handlerViewChange);
+    }
 
     this._removeAnimationToClose();
 
