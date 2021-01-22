@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './docs/index.js',
+  entry: './docs/index.ts',
   output: {
     publicPath: '/',
   },
@@ -18,10 +18,13 @@ module.exports = {
     open: true,
     compress: true,
     port: 8080,
-    hot: true,
   },
   module: {
     rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
       {
         test: /\.s[ac]ss$/i,
         exclude: /\.module\.scss$/,

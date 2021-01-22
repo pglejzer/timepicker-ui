@@ -16,11 +16,18 @@
     "strict": true,
     "target": "es5",
     "downlevelIteration": true,
-    "typeRoots": ["./src/index.d.ts", "./node_modules/@types"],
+    "typeRoots": [
+      "./src/index.d.ts",
+      "./node_modules/@types",
+      "./typings",
+      "../dist/typings",
+      "../dist/types",
+      "./types"
+    ],
     "types": ["node"],
     "paths": {
       "timepicker-ui": ["./src/index.d.ts"]
     }
   },
-  "exclude": ["dist", "node_modules", "__tests__", "coverage", "./src/timepicker/styles", "docs"]
+  "exclude": ["dist", "node_modules", "__tests__", "coverage", "./src/timepicker/styles"]
 }

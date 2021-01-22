@@ -1,0 +1,15 @@
+{
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    [
+      "prismjs",
+      {
+        "languages": ["javascript", "css", "markup"],
+        "plugins": ["line-numbers"],
+        "theme": "twilight",
+        "css": true
+      }
+    ]
+  ],
+  "presets": ["@babel/preset-typescript", "@babel/preset-env"]
+}

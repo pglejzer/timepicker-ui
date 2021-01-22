@@ -1,7 +1,29 @@
-import './styles/main.scss';
-import './styles/theme.scss';
-import type { optionTypes } from '../timepicker/utils/types';
-export default class TimepickerUI {
+declare module 'timepicker-ui' {
+  type optionTypes = {
+    amLabel?: string;
+    appendModalSelector?: HTMLAllCollection | string | Element;
+    backdrop?: boolean;
+    cancelLabel?: string;
+    enableScrollbar?: boolean;
+    hourMobileLabel?: string;
+    enterTimeLabel?: string;
+    incrementHours?: number;
+    incrementMinutes?: number;
+    inputTemplate?: string;
+    minuteMobileLabel?: string;
+    mobile?: boolean;
+    okLabel?: string;
+    pmLabel?: string;
+    selectTimeLabel?: string;
+    switchToMinutesAfterSelectHour?: boolean;
+    iconTemplate?: string;
+    iconTemplateMobile?: string;
+    theme?: 'basic' | 'crane-straight' | 'crane-radius';
+    enableSwitchIcon?: boolean;
+    focusInputAfterCloseModal?: boolean;
+  };
+
+  export class TimepickerUI {
     _degreesHours: number;
     _degreesMinutes: number;
     _options: optionTypes;
@@ -13,8 +35,7 @@ export default class TimepickerUI {
     private _element;
     private _isMobileView;
     private _isTouchMouseMove;
-    isOpen: boolean;
-    constructor(element: HTMLDivElement, options?: optionTypes);
+    constructor(element: HTMLDivElement, options: optionTypes);
     private get modalTemplate();
     private get modalElement();
     private get clockFace();
@@ -39,7 +60,6 @@ export default class TimepickerUI {
     create: () => void;
     open: () => void;
     close: () => void;
-    destroy: () => void;
     private _setTheme;
     private _setInputClassToInputElement;
     private _setDataOpenToInputIfDosentExistInWrapper;
@@ -80,4 +100,5 @@ export default class TimepickerUI {
     private _handleIconChangeView;
     private _handlerClickPmAm;
     private _handleClickOnHourMobile;
+  }
 }

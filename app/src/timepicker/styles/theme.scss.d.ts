@@ -5,6 +5,7 @@ interface CssExports {
   'cranepurple800': string;
   'cranepurple900': string;
   'cranered400': string;
+  'opacity': string;
   'purple': string;
   'white': string;
 }

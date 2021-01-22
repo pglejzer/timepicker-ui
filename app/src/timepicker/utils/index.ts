@@ -40,8 +40,8 @@ const typeCheckConfig = (
 
 // Thanks for Bootstrap 5 - alpha version
 const getConfig = (
-  options: optionTypes,
-  defaultOptions: Record<string, unknown>
+  options?: optionTypes,
+  defaultOptions?: Record<string, unknown>
 ): Record<string, unknown> => {
   const config = {
     ...defaultOptions,
@@ -102,8 +102,9 @@ const getClickTouchPosition = (
   return obj;
 };
 
-const getMathDegIncrement = (degrees: number, num: number): number =>
-  Math.round(degrees / num) * num;
+const getMathDegIncrement = (degrees: number, num: number): number => {
+  return Math.round(degrees / num) * num;
+};
 
 const hasClass = (el: HTMLElement, selector: string): boolean => el.classList.contains(selector);
 
@@ -161,6 +162,10 @@ const createNewEvent = (
 const getBrowser = (): boolean =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+const getIncrementTimes = (degrees: number, type: any, count: number) => {
+  return getMathDegIncrement(degrees, (type as never) * count);
+};
+
 export {
   toType,
   isElement,
@@ -174,4 +179,5 @@ export {
   getBrowser,
   hasClass,
   getMathDegIncrement,
+  getIncrementTimes,
 };
