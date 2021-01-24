@@ -276,6 +276,12 @@ export default {
   </thead>
   <tbody>
     <tr>
+      <td scope="row">animated</td>
+      <td>true</td>
+      <td>boolean</td>
+      <td>Turn on/off animations on picker on start/close</td>
+    </tr>
+    <tr>
       <td scope="row">amLabel</td>
       <td>AM</td>
       <td>string</td>
@@ -293,11 +299,17 @@ export default {
       <td>boolean</td>
       <td>Turn on/off backdrop</td>
     </tr>
-       <tr>
+    <tr>
       <td scope="row">cancelLabel</td>
       <td>CANCEL</td>
       <td>string</td>
       <td>Set custom text to cancel button</td>
+    </tr> 
+    <tr>
+      <td scope="row">editable</td>
+      <td>false</td>
+      <td>boolean</td>
+      <td>Edit hour/minutes on the web mode</td>
     </tr> 
       <tr>
       <td scope="row">enableScrollbar</td>
@@ -359,6 +371,12 @@ export default {
       <td>string</td>
       <td>Set custom text to pm label</td>
     </tr>  
+    <tr>
+      <td scope="row">preventDefault</td>
+      <td>true</td>
+      <td>boolean</td>
+      <td>Turn on/off defaults events to clock face events</td>
+    </tr> 
      <tr>
       <td scope="row">selectTimeLabel</td>
       <td>Select Time</td>
