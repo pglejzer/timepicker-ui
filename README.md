@@ -295,8 +295,8 @@ export default {
     </tr>
     <tr>
       <td scope="row">backdrop</td>
-      <td>true</td>
       <td>boolean</td>
+      <td>true</td>
       <td>Turn on/off backdrop</td>
     </tr>
     <tr>
@@ -313,20 +313,20 @@ export default {
     </tr> 
       <tr>
       <td scope="row">enableScrollbar</td>
-      <td>boolean</td>
       <td>false</td>
+      <td>boolean</td>
       <td>Turn on/off scroll if timepicker is open</td>
     </tr> 
    <tr>
       <td scope="row">enableSwitchIcon</td>
-      <td>boolean</td>
       <td>false</td>
+      <td>boolean</td>
       <td>Turn on/off icon to switch desktop/mobile</td>
     </tr> 
     <tr>
       <td scope="row">focusInputAfterCloseModal</td>
-      <td>boolean</td>
       <td>false</td>
+      <td>boolean</td>
       <td>Turn on/off focus to input after close modal</td>
     </tr> 
       <tr>
@@ -335,7 +335,7 @@ export default {
       <td>string</td>
       <td>Set custom text to hour label on mobile version</td>
     </tr> 
-      <tr>
+    <tr>
       <td scope="row">incrementHours</td>
       <td>1</td>
       <td>nubmer</td>
@@ -355,8 +355,8 @@ export default {
     </tr>  
      <tr>
       <td scope="row">mobile</td>
-      <td>false</td>
       <td>boolean</td>
+      <td>false</td>
       <td>Turn on mobile version</td>
     </tr>  
      <tr>
@@ -373,8 +373,8 @@ export default {
     </tr>  
     <tr>
       <td scope="row">preventDefault</td>
-      <td>true</td>
       <td>boolean</td>
+      <td>true</td>
       <td>Turn on/off defaults events to clock face events</td>
     </tr> 
      <tr>
@@ -385,8 +385,8 @@ export default {
     </tr>   
     <tr>
       <td scope="row">switchToMinutesAfterSelectHour</td>
-      <td>true</td>
       <td>boolean</td>
+      <td>true</td>
       <td>Turn on/off switch to minutes by select hour</td>
     </tr>   
     <tr>
@@ -406,8 +406,8 @@ export default {
    <tr>
       <td 
       scope="row">theme</td>
-      <td>string</td>
       <td>basic</td>
+      <td>string</td>
       <td>Set theme to timpicker. Available options: basic, crane-straight, crane-radius</td>
     </tr>  
   </tbody>
