@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1.0] - 2021-01-24
+
+### Added
+
+- Added new option <code>animated</code> to turn on/off animations on picker on start/close.
+- Added new option <code>editable</code> to edit hour/minutes on the web mode.
+- Added new option <code>preventDefault</code> to turn on/off defaults events to clock face events.
+
+### Change
+
+- Change docs example
+- Removed unnecessary option <code>inputTemplate</code> from options types.
+
+### Fixed
+
+- Fixed problem with events on remove
+
+---
+
 ## [2.0.2] - 2021-01-21
 
 ### Fixed

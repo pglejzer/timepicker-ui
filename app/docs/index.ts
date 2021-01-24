@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     appendModalSelector: '.test',
     backdrop: true,
     cancelLabel: 'CANCEL',
-    editable: false,
+    editable: true,
     enableScrollbar: true,
     enableSwitchIcon: false,
     enterTimeLabel: 'Enter Time',
@@ -81,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
       backdrop: true,
       preventDefault: false,
       enableScrollbar: true,
+      editable: true,
     };
 
     objs = { ...obj };

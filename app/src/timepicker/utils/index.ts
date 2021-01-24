@@ -146,8 +146,8 @@ const createNewEvent = (
     hour?: string | null;
     minutes?: string | null;
     type?: string | null;
-    degreesHours?: number;
-    degreesMinutes?: number;
+    degreesHours?: number | null;
+    degreesMinutes?: number | null;
     hourNotAccepted?: string | null;
     minutesNotAccepted?: string | null;
     eventType?: any;

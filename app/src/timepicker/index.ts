@@ -23,8 +23,8 @@ import {
 import ClockFace from './components/ClockFace';
 
 export default class TimepickerUI {
-  _degreesHours: number;
-  _degreesMinutes: number;
+  _degreesHours: number | null;
+  _degreesMinutes: number | null;
   _options: optionTypes;
   private eventsClickMobile: (event: Event) => Promise<void>;
   private eventsClickMobileHandler: any;
@@ -32,15 +32,12 @@ export default class TimepickerUI {
   private mutliEventsMoveHandler: any;
   private _clickTouchEvents: string[];
   private _element: Element;
-  private _isMobileView: boolean;
-  private _isTouchMouseMove: boolean;
-  isOpen: boolean;
+  private _isMobileView: boolean | null;
+  private _isTouchMouseMove: boolean | null;
 
   constructor(element: HTMLDivElement, options?: optionTypes) {
     this._element = element;
     this._options = getConfig(options, optionsDefault);
-
-    this.isOpen = false;
 
     this._isTouchMouseMove = false;
     this._degreesHours =
@@ -53,7 +50,7 @@ export default class TimepickerUI {
     this.mutliEventsMove = (event) => this._handleEventToMoveHand(event);
     this.mutliEventsMoveHandler = this.mutliEventsMove.bind(this);
 
-    this.eventsClickMobile = (event) => this._handlerClickPmAm(event);
+    this.eventsClickMobile = (event) => this._handlerClickHourMinutes(event);
     this.eventsClickMobileHandler = this.eventsClickMobile.bind(this);
 
     if (this._options.mobile) {
@@ -186,15 +183,12 @@ export default class TimepickerUI {
   };
 
   public open = (): void => {
-    this.isOpen = true;
-
     this.create();
     this._eventsBundle();
   };
 
   public close = (): void => {
     this._isTouchMouseMove = false;
-    this.isOpen = false;
 
     allEvents
       .split(' ')
@@ -240,6 +234,15 @@ export default class TimepickerUI {
       this.keyboardClockIcon.removeEventListener('touchstart', this.handlerViewChange);
       this.keyboardClockIcon.removeEventListener('mousedown', this.handlerViewChange);
     }
+
+    //@ts-ignore
+    this._options = null;
+    //@ts-ignore
+    this._element = null;
+    this._isTouchMouseMove = null;
+    this._degreesHours = null;
+    this._degreesMinutes = null;
+    this._isMobileView = null;
   };
 
   // private
@@ -495,7 +498,7 @@ export default class TimepickerUI {
     this.hour.classList.add(selectorActive);
   };
 
-  private _setMinutesToClock = (value: string): void => {
+  private _setMinutesToClock = (value: string | null): void => {
     if (this.clockFace !== null) this._setTransformToCircleWithSwitchesMinutes(value);
     this._removeBgColorToCirleWithMinutesTips();
 
@@ -510,7 +513,7 @@ export default class TimepickerUI {
     this._toggleClassActiveToValueTips(value);
   };
 
-  private _setHoursToClock = (value: string): void => {
+  private _setHoursToClock = (value: string | null): void => {
     if (this.clockFace !== null) {
       this._setTransformToCircleWithSwitchesHour(value);
       this._setBgColorToCirleWithHourTips();
@@ -529,17 +532,24 @@ export default class TimepickerUI {
 
   private _setTransformToCircleWithSwitchesHour = (val: string | null): void => {
     const value = Number(val);
+
     let degrees = value > 12 ? value * 30 - 360 : value * 30;
 
     if (degrees === 360) {
       degrees = 0;
     }
 
+    if (degrees > 360) return;
+
     this.clockHand.style.transform = `rotateZ(${degrees}deg)`;
   };
 
-  private _setTransformToCircleWithSwitchesMinutes = (val: string): void => {
-    this.clockHand.style.transform = `rotateZ(${Number(val) * 6}deg)`;
+  private _setTransformToCircleWithSwitchesMinutes = (val: string | null): void => {
+    const degrees = Number(val) * 6;
+
+    if (degrees > 360) return;
+
+    this.clockHand.style.transform = `rotateZ(${degrees}deg)`;
   };
 
   private _handleAmClick = (): void => {
@@ -947,8 +957,7 @@ export default class TimepickerUI {
     }
   };
 
-  // Mobile version
-  private _handlerClickPmAm = async (event: Event): Promise<void> => {
+  private _handlerClickHourMinutes = async (event: Event): Promise<void> => {
     const target = event.target as HTMLDivElement;
     const allTrue = this.modalElement.querySelectorAll('[contenteditable]');
     const validHours = this._handleValueAndCheck(this.hour.textContent, 'hour');
@@ -967,6 +976,12 @@ export default class TimepickerUI {
       if (validHours === true && validMinutes === true) {
         if (validMinutes) this.minutes.classList.remove('invalid-value');
         if (validHours) this.hour.classList.remove('invalid-value');
+      }
+
+      if (this.minutesTips) {
+        this._setMinutesToClock(this.minutes.textContent);
+      } else if (this.hourTips) {
+        this._setHoursToClock(this.hour.textContent);
       }
     } else {
       if (validHours === false || validMinutes === false) {

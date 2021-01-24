@@ -2,8 +2,8 @@ import './styles/main.scss';
 import './styles/theme.scss';
 import type { optionTypes } from '../timepicker/utils/types';
 export default class TimepickerUI {
-    _degreesHours: number;
-    _degreesMinutes: number;
+    _degreesHours: number | null;
+    _degreesMinutes: number | null;
     _options: optionTypes;
     private eventsClickMobile;
     private eventsClickMobileHandler;
@@ -13,7 +13,6 @@ export default class TimepickerUI {
     private _element;
     private _isMobileView;
     private _isTouchMouseMove;
-    isOpen: boolean;
     constructor(element: HTMLDivElement, options?: optionTypes);
     private get modalTemplate();
     private get modalElement();
@@ -78,6 +77,6 @@ export default class TimepickerUI {
     private _handleValueAndCheck;
     private handlerViewChange;
     private _handleIconChangeView;
-    private _handlerClickPmAm;
+    private _handlerClickHourMinutes;
     private _handleClickOnHourMobile;
 }

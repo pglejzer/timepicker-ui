@@ -1,30 +1,32 @@
 declare type optionTypes = {
     amLabel?: string;
+    animation?: boolean;
     appendModalSelector?: HTMLAllCollection | string | Element;
     backdrop?: boolean;
     cancelLabel?: string;
+    editable?: boolean;
     enableScrollbar?: boolean;
-    hourMobileLabel?: string;
+    enableSwitchIcon?: boolean;
     enterTimeLabel?: string;
+    focusInputAfterCloseModal?: boolean;
+    hourMobileLabel?: string;
+    iconTemplate?: string;
+    iconTemplateMobile?: string;
     incrementHours?: number;
     incrementMinutes?: number;
-    inputTemplate?: string;
     minuteMobileLabel?: string;
     mobile?: boolean;
     okLabel?: string;
     pmLabel?: string;
+    preventDefault?: boolean;
     selectTimeLabel?: string;
     switchToMinutesAfterSelectHour?: boolean;
-    iconTemplate?: string;
-    iconTemplateMobile?: string;
     theme?: 'basic' | 'crane-straight' | 'crane-radius';
-    enableSwitchIcon?: boolean;
-    focusInputAfterCloseModal?: boolean;
 };
 
 declare class TimepickerUI {
-    _degreesHours: number;
-    _degreesMinutes: number;
+    _degreesHours: number | null;
+    _degreesMinutes: number | null;
     _options: optionTypes;
     private eventsClickMobile;
     private eventsClickMobileHandler;
@@ -34,7 +36,7 @@ declare class TimepickerUI {
     private _element;
     private _isMobileView;
     private _isTouchMouseMove;
-    constructor(element: HTMLDivElement, options: optionTypes);
+    constructor(element: HTMLDivElement, options?: optionTypes);
     private get modalTemplate();
     private get modalElement();
     private get clockFace();
@@ -59,6 +61,7 @@ declare class TimepickerUI {
     create: () => void;
     open: () => void;
     close: () => void;
+    destroy: () => void;
     private _setTheme;
     private _setInputClassToInputElement;
     private _setDataOpenToInputIfDosentExistInWrapper;
@@ -97,7 +100,7 @@ declare class TimepickerUI {
     private _handleValueAndCheck;
     private handlerViewChange;
     private _handleIconChangeView;
-    private _handlerClickPmAm;
+    private _handlerClickHourMinutes;
     private _handleClickOnHourMobile;
 }
 

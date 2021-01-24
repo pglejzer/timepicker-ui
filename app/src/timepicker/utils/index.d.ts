@@ -24,8 +24,8 @@ declare const createNewEvent: (el: Element, eventName: string, value: {
     hour?: string | null;
     minutes?: string | null;
     type?: string | null;
-    degreesHours?: number;
-    degreesMinutes?: number;
+    degreesHours?: number | null;
+    degreesMinutes?: number | null;
     hourNotAccepted?: string | null;
     minutesNotAccepted?: string | null;
     eventType?: any;
