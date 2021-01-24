@@ -6,7 +6,7 @@ declare const typeCheckConfig: (componentName: string, config: {
 }, configTypes: {
     [x: string]: any;
 }) => void;
-declare const getConfig: (options: optionTypes, defaultOptions: Record<string, unknown>) => Record<string, unknown>;
+declare const getConfig: (options?: optionTypes | undefined, defaultOptions?: Record<string, unknown> | undefined) => Record<string, unknown>;
 declare const getScrollbarWidth: () => number;
 declare const getRadians: (el: number) => number;
 declare const getClickTouchPosition: (event: {
@@ -32,4 +32,5 @@ declare const createNewEvent: (el: Element, eventName: string, value: {
     test?: string;
 }) => void;
 declare const getBrowser: () => boolean;
-export { toType, isElement, typeCheckConfig, getConfig, getScrollbarWidth, getRadians, getClickTouchPosition, getInputValue, createNewEvent, getBrowser, hasClass, getMathDegIncrement, };
+declare const getIncrementTimes: (degrees: number, type: any, count: number) => number;
+export { toType, isElement, typeCheckConfig, getConfig, getScrollbarWidth, getRadians, getClickTouchPosition, getInputValue, createNewEvent, getBrowser, hasClass, getMathDegIncrement, getIncrementTimes, };

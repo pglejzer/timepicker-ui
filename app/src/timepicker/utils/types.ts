@@ -1,25 +1,27 @@
 declare type optionTypes = {
   amLabel?: string;
+  animation?: boolean;
   appendModalSelector?: HTMLAllCollection | string | Element;
   backdrop?: boolean;
   cancelLabel?: string;
+  editable?: boolean;
   enableScrollbar?: boolean;
-  hourMobileLabel?: string;
+  enableSwitchIcon?: boolean;
   enterTimeLabel?: string;
+  focusInputAfterCloseModal?: boolean;
+  hourMobileLabel?: string;
+  iconTemplate?: string;
+  iconTemplateMobile?: string;
   incrementHours?: number;
   incrementMinutes?: number;
-  inputTemplate?: string;
   minuteMobileLabel?: string;
   mobile?: boolean;
   okLabel?: string;
   pmLabel?: string;
+  preventDefault?: boolean;
   selectTimeLabel?: string;
   switchToMinutesAfterSelectHour?: boolean;
-  iconTemplate?: string;
-  iconTemplateMobile?: string;
   theme?: 'basic' | 'crane-straight' | 'crane-radius';
-  enableSwitchIcon?: boolean;
-  focusInputAfterCloseModal?: boolean;
 };
 
 export { optionTypes };

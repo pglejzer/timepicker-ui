@@ -9,6 +9,8 @@ declare const getModalTemplate: (options: {
     cancelLabel?: string | undefined;
     okLabel?: string | undefined;
     enableSwitchIcon?: boolean | undefined;
+    animation?: boolean | undefined;
+    editable?: boolean | undefined;
 }) => string;
 declare const getMobileModalTemplate: (options: {
     enterTimeLabel?: string | undefined;
@@ -20,5 +22,6 @@ declare const getMobileModalTemplate: (options: {
     minuteMobileLabel?: string | undefined;
     hourMobileLabel?: string | undefined;
     enableSwitchIcon?: boolean | undefined;
+    animation?: boolean | undefined;
 }) => string;
 export { getMobileModalTemplate, getModalTemplate, getNumberOfHours12, getNumberOfHours24, getNumberOfMinutes, };

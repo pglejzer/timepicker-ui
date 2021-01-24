@@ -507,7 +507,7 @@ timepicker.addEventListener('show', (event) => console.log(event.detail));
       <td>The event starts if timepicker am box is clicked</td>
     </tr> 
       <tr>
-      <td scope="row">selectamtypemode</td>
+      <td scope="row">selectpmtypemode</td>
       <td>The event starts if timepicker pm box is clicked</td>
     </tr>  
   </tbody>

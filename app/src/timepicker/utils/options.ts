@@ -2,9 +2,11 @@ import { optionTypes } from './types';
 
 const options: optionTypes = {
   amLabel: 'AM',
+  animation: true,
   appendModalSelector: '',
   backdrop: true,
   cancelLabel: 'CANCEL',
+  editable: false,
   enableScrollbar: false,
   enableSwitchIcon: false,
   enterTimeLabel: 'Enter Time',
@@ -14,7 +16,6 @@ const options: optionTypes = {
   iconTemplateMobile: '<i class="material-icons timepicker-ui-keyboard-icon">schedule</i>',
   incrementHours: 1,
   incrementMinutes: 1,
-  inputTemplate: '',
   minuteMobileLabel: 'Minute',
   mobile: false,
   okLabel: 'OK',
@@ -22,6 +23,7 @@ const options: optionTypes = {
   selectTimeLabel: 'Select Time',
   switchToMinutesAfterSelectHour: false,
   theme: 'basic',
+  preventDefault: true,
 };
 
 export { options };

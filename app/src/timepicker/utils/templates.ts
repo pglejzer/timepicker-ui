@@ -1,3 +1,5 @@
+import variables from '../styles/variables.scss';
+
 /* eslint-disable no-undef */
 /* eslint-disable indent */
 const getNumberOfHours24: Array<string> = [
@@ -52,6 +54,8 @@ const getModalTemplate = (options: {
   cancelLabel?: string;
   okLabel?: string;
   enableSwitchIcon?: boolean;
+  animation?: boolean;
+  editable?: boolean;
 }): string => {
   const {
     iconTemplate,
@@ -61,17 +65,25 @@ const getModalTemplate = (options: {
     cancelLabel,
     okLabel,
     enableSwitchIcon,
+    animation,
+    editable,
   } = options;
 
   return `
-  <div class="timepicker-ui-modal normalize" role="dialog">
+  <div class="timepicker-ui-modal normalize" role="dialog" style='transition:${
+    animation ? variables.opacity : 'none'
+  }'>
     <div class="timepicker-ui-wrapper ">
       <div class="timepicker-ui-header">
         <div class="timepicker-ui-select-time">${selectTimeLabel}</div>
         <div class="timepicker-ui-wrapper-time">
-          <div class="timepicker-ui-hour" role="button">05</div>  
+          <div class="timepicker-ui-hour" role="button" contenteditable="${
+            editable ? true : false
+          }">05</div>  
           <div class="timepicker-ui-dots">:</div>    
-          <div class="timepicker-ui-minutes" role="button">00</div>   
+          <div class="timepicker-ui-minutes" role="button" contenteditable="${
+            editable ? true : false
+          }">00</div>   
         </div>
       <div class="timepicker-ui-wrapper-type-time">
         <div class="timepicker-ui-type-mode timepicker-ui-am" role="button" data-type="AM">${amLabel}</div>    
@@ -117,6 +129,7 @@ const getMobileModalTemplate = (options: {
   minuteMobileLabel?: string;
   hourMobileLabel?: string;
   enableSwitchIcon?: boolean;
+  animation?: boolean;
 }): string => {
   const {
     enterTimeLabel,
@@ -128,9 +141,12 @@ const getMobileModalTemplate = (options: {
     minuteMobileLabel,
     hourMobileLabel,
     enableSwitchIcon,
+    animation,
   } = options;
   return `
-  <div class="timepicker-ui-modal normalize mobile" role="dialog">
+  <div class="timepicker-ui-modal normalize mobile" role="dialog" style='transition:${
+    animation ? variables.opacity : 'none'
+  }'>
     <div class="timepicker-ui-wrapper mobile">
       <div class="timepicker-ui-header mobile">
         <div class="timepicker-ui-select-time mobile">${enterTimeLabel}</div>
