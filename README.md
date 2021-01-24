@@ -295,8 +295,8 @@ export default {
     </tr>
     <tr>
       <td scope="row">backdrop</td>
-      <td>boolean</td>
       <td>true</td>
+      <td>boolean</td>
       <td>Turn on/off backdrop</td>
     </tr>
     <tr>
@@ -355,8 +355,8 @@ export default {
     </tr>  
      <tr>
       <td scope="row">mobile</td>
-      <td>boolean</td>
       <td>false</td>
+      <td>boolean</td>
       <td>Turn on mobile version</td>
     </tr>  
      <tr>
@@ -373,8 +373,8 @@ export default {
     </tr>  
     <tr>
       <td scope="row">preventDefault</td>
-      <td>boolean</td>
       <td>true</td>
+      <td>boolean</td>
       <td>Turn on/off defaults events to clock face events</td>
     </tr> 
      <tr>
@@ -385,8 +385,8 @@ export default {
     </tr>   
     <tr>
       <td scope="row">switchToMinutesAfterSelectHour</td>
-      <td>boolean</td>
       <td>true</td>
+      <td>boolean</td>
       <td>Turn on/off switch to minutes by select hour</td>
     </tr>   
     <tr>
