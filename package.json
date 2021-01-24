@@ -25,9 +25,5 @@
   "bugs": {
     "url": "https://github.com/q448x/timepicker-ui/issues"
   },
-  "homepage": "https://github.com/q448x/timepicker-ui#readme",
-  "devDependencies": {
-    "babel-plugin-prismjs": "^2.0.1",
-    "prismjs": "^1.23.0"
-  }
+  "homepage": "https://github.com/q448x/timepicker-ui#readme"
 }
