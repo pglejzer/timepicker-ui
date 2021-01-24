@@ -1,5 +1,3 @@
-import variables from '../styles/variables.scss';
-
 /* eslint-disable no-undef */
 /* eslint-disable indent */
 const getNumberOfHours24: Array<string> = [
@@ -71,7 +69,7 @@ const getModalTemplate = (options: {
 
   return `
   <div class="timepicker-ui-modal normalize" role="dialog" style='transition:${
-    animation ? variables.opacity : 'none'
+    animation ? 'opacity 0.15s linear' : 'none'
   }'>
     <div class="timepicker-ui-wrapper ">
       <div class="timepicker-ui-header">
@@ -145,7 +143,7 @@ const getMobileModalTemplate = (options: {
   } = options;
   return `
   <div class="timepicker-ui-modal normalize mobile" role="dialog" style='transition:${
-    animation ? variables.opacity : 'none'
+    animation ? 'opacity 0.15s linear' : 'none'
   }'>
     <div class="timepicker-ui-wrapper mobile">
       <div class="timepicker-ui-header mobile">
