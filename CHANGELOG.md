@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.2.1] - 2021-09-24
+
+### Fixed
+
+- Fixed scss with landscape version
+- Fixed class active to hour/minutes
+
+---
+
 ## [2.2.0] - 2021-09-23
 
 ### Added
@@ -18,8 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Change scss styles
 - Update types
-
----
 
 ---
 
