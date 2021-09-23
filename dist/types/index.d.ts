@@ -22,6 +22,7 @@ declare type optionTypes = {
     selectTimeLabel?: string;
     switchToMinutesAfterSelectHour?: boolean;
     theme?: 'basic' | 'crane-straight' | 'crane-radius';
+    clockType?: '12h' | '24h';
 };
 
 declare class TimepickerUI {
@@ -36,6 +37,7 @@ declare class TimepickerUI {
     private _element;
     private _isMobileView;
     private _isTouchMouseMove;
+    isMinutesClick: boolean;
     constructor(element: HTMLDivElement, options?: optionTypes);
     private get modalTemplate();
     private get modalElement();
@@ -44,6 +46,7 @@ declare class TimepickerUI {
     private get clockHand();
     private get circle();
     private get tipsWrapper();
+    private get tipsWrapperFor24h();
     private get minutes();
     private get hour();
     private get AM();
@@ -62,6 +65,11 @@ declare class TimepickerUI {
     open: () => void;
     close: () => void;
     destroy: () => void;
+    private removeCircleClockClasses24h;
+    private setCircleClockClasses24h;
+    private setErrorHandler;
+    private removeErrorHandler;
+    private _setOnStartCSSClassesIfClockType24h;
     private _setTheme;
     private _setInputClassToInputElement;
     private _setDataOpenToInputIfDosentExistInWrapper;

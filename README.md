@@ -285,13 +285,13 @@ export default {
       <td scope="row">amLabel</td>
       <td>AM</td>
       <td>string</td>
-      <td>Set custom text to am label</td>
+      <td>You can set custom text to am label</td>
     </tr>
     <tr>
       <td scope="row">appendModalSelector</td>
       <td>''</td>
       <td>string</td>
-      <td>Set default selector to append timepicker inside it. Timepicker default append to body</td>
+      <td>You can set default selector to append timepicker inside it. Timepicker default append to body</td>
     </tr>
     <tr>
       <td scope="row">backdrop</td>
@@ -303,7 +303,13 @@ export default {
       <td scope="row">cancelLabel</td>
       <td>CANCEL</td>
       <td>string</td>
-      <td>Set custom text to cancel button</td>
+      <td>You can set custom text to cancel button</td>
+    </tr>
+    <tr>
+      <td scope="row">clockType</td>
+      <td>12</td>
+      <td>string</td>
+      <td>You can set type of clock, it contains 2 versions: 12h and 24h</td>
     </tr> 
     <tr>
       <td scope="row">editable</td>
@@ -333,7 +339,7 @@ export default {
       <td scope="row">hourMobileLabel</td>
       <td>Hour</td>
       <td>string</td>
-      <td>Set custom text to hour label on mobile version</td>
+      <td>You can set custom text to hour label on mobile version</td>
     </tr> 
     <tr>
       <td scope="row">incrementHours</td>
@@ -351,7 +357,7 @@ export default {
       <td scope="row">minuteMobileLabel</td>
       <td>Minute</td>
       <td>string</td>
-      <td>Set custom text to minute label on mobile version</td>
+      <td>You can set custom text to minute label on mobile version</td>
     </tr>  
      <tr>
       <td scope="row">mobile</td>
@@ -363,25 +369,25 @@ export default {
       <td scope="row">okLabel</td>
       <td>OK</td>
       <td>string</td>
-      <td>Set custom text to ok label</td>
+      <td>You can set custom text to ok label</td>
     </tr> 
       <tr>
       <td scope="row">pmLabel</td>
       <td>PM</td>
       <td>string</td>
-      <td>Set custom text to pm label</td>
+      <td>You can set custom text to pm label</td>
     </tr>  
     <tr>
       <td scope="row">preventDefault</td>
       <td>true</td>
       <td>boolean</td>
-      <td>Turn on/off defaults events to clock face events</td>
+      <td>You can set on/off defaults events to clock face events</td>
     </tr> 
      <tr>
       <td scope="row">selectTimeLabel</td>
       <td>Select Time</td>
       <td>string</td>
-      <td>Set custom text to select time label on desktop version</td>
+      <td>You can set custom text to select time label on desktop version</td>
     </tr>   
     <tr>
       <td scope="row">switchToMinutesAfterSelectHour</td>
@@ -395,20 +401,20 @@ export default {
        &lt;i class="material-icons timepicker-ui-keyboard-icon"> keyboard &lt;/i&gt;
       </td>
        <td>string</td>
-      <td>Set default template to switch desktop.This options is using by default material design icon</td>
+      <td>You can set default template to switch desktop.This options is using by default material design icon</td>
     </tr>  
      <tr>
       <td scope="row">iconClassMobile</td>
       <td>&lt;i class="material-icons timepicker-ui-keyboard-icon"> schedule  &lt;/i&gt;</td>
       <td>string</td>
-      <td>Set default template to switch mobile. This options is using by default material design icon</td>
+      <td>You can set default template to switch mobile. This options is using by default material design icon</td>
     </tr> 
    <tr>
       <td 
       scope="row">theme</td>
       <td>basic</td>
       <td>string</td>
-      <td>Set theme to timpicker. Available options: basic, crane-straight, crane-radius</td>
+      <td>You can set theme to timepicker. Available options: basic, crane-straight, crane-radius</td>
     </tr>  
   </tbody>
 </table>
@@ -524,10 +530,14 @@ timepicker.addEventListener("show", (event) => console.log(event.detail));
       <td scope="row">selectamtypemode</td>
       <td>The event starts if timepicker am box is clicked</td>
     </tr> 
-      <tr>
+    <tr>
       <td scope="row">selectpmtypemode</td>
       <td>The event starts if timepicker pm box is clicked</td>
     </tr>  
+    <tr>
+      <td scope="row">geterror</td>
+      <td>The event start if value in the input is wrong</td>
+    </tr> 
   </tbody>
 </table>
     
