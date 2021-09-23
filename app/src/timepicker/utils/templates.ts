@@ -13,7 +13,6 @@ const getNumberOfHours24: Array<string> = [
   '21',
   '22',
   '23',
-  '24',
 ];
 const getNumberOfHours12: Array<string> = [
   '12',
@@ -54,6 +53,7 @@ const getModalTemplate = (options: {
   enableSwitchIcon?: boolean;
   animation?: boolean;
   editable?: boolean;
+  clockType?: string;
 }): string => {
   const {
     iconTemplate,
@@ -65,6 +65,7 @@ const getModalTemplate = (options: {
     enableSwitchIcon,
     animation,
     editable,
+    clockType,
   } = options;
 
   return `
@@ -74,7 +75,9 @@ const getModalTemplate = (options: {
     <div class="timepicker-ui-wrapper ">
       <div class="timepicker-ui-header">
         <div class="timepicker-ui-select-time">${selectTimeLabel}</div>
-        <div class="timepicker-ui-wrapper-time">
+        <div class="timepicker-ui-wrapper-time ${
+          clockType === '24h' ? 'timepicker-ui-wrapper-time-24h' : ''
+        }">
           <div class="timepicker-ui-hour" role="button" contenteditable="${
             editable ? true : false
           }">05</div>  
@@ -83,10 +86,16 @@ const getModalTemplate = (options: {
             editable ? true : false
           }">00</div>   
         </div>
+      ${
+        clockType !== '24h'
+          ? `
       <div class="timepicker-ui-wrapper-type-time">
         <div class="timepicker-ui-type-mode timepicker-ui-am" role="button" data-type="AM">${amLabel}</div>    
         <div class="timepicker-ui-type-mode timepicker-ui-pm" role="button" data-type="PM">${pmLabel}</div>    
       </div>
+      `
+          : ''
+      }
       </div>
       <div class="timepicker-ui-wrapper-landspace">
         <div class="timepicker-ui-body">
@@ -96,6 +105,7 @@ const getModalTemplate = (options: {
               <div class="timepicker-ui-circle-hand"></div>
             </div>
             <div class="timepicker-ui-tips-wrapper"></div>
+            ${clockType === '24h' ? '<div class="timepicker-ui-tips-wrapper-24h"></div>' : ''}
           </div>
         </div>
         <div class="timepicker-ui-footer">
@@ -128,6 +138,7 @@ const getMobileModalTemplate = (options: {
   hourMobileLabel?: string;
   enableSwitchIcon?: boolean;
   animation?: boolean;
+  clockType?: string;
 }): string => {
   const {
     enterTimeLabel,
@@ -140,6 +151,7 @@ const getMobileModalTemplate = (options: {
     hourMobileLabel,
     enableSwitchIcon,
     animation,
+    clockType,
   } = options;
   return `
   <div class="timepicker-ui-modal normalize mobile" role="dialog" style='transition:${
@@ -155,10 +167,14 @@ const getMobileModalTemplate = (options: {
           <div class="timepicker-ui-minute-text mobile">${minuteMobileLabel}</div>
           <div class="timepicker-ui-minutes mobile" contenteditable="false">00</div>   
         </div>
-      <div class="timepicker-ui-wrapper-type-time mobile">
-        <div class="timepicker-ui-type-mode timepicker-ui-am mobile" data-type="AM">${amLabel}</div>    
-        <div class="timepicker-ui-type-mode timepicker-ui-pm mobile" data-type="PM">${pmLabel}</div>    
-      </div>
+  ${
+    clockType !== '24h'
+      ? `<div class="timepicker-ui-wrapper-type-time mobile">
+          <div class="timepicker-ui-type-mode timepicker-ui-am mobile" data-type="AM">${amLabel}</div>    
+          <div class="timepicker-ui-type-mode timepicker-ui-pm mobile" data-type="PM">${pmLabel}</div>    
+        </div>`
+      : ''
+  }
       </div>
       <div class="timepicker-ui-footer mobile" data-view="mobile">
       ${

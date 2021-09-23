@@ -16,10 +16,10 @@ declare const getClickTouchPosition: (event: {
     clientX?: any;
     clientY?: any;
     touches?: any;
-}, object: HTMLElement, isMobile?: boolean) => Record<string, unknown>;
+}, object: HTMLElement, isMobile?: boolean) => Record<string, unknown> | boolean;
 declare const getMathDegIncrement: (degrees: number, num: number) => number;
-declare const hasClass: (el: HTMLElement, selector: string) => boolean;
-declare const getInputValue: (el: HTMLInputElement) => Record<string, string>;
+declare const hasClass: (el: HTMLElement | null, selector: string) => boolean;
+declare const getInputValue: (el: HTMLInputElement, clockType?: string | undefined) => any;
 declare const createNewEvent: (el: Element, eventName: string, value: {
     hour?: string | null;
     minutes?: string | null;
@@ -30,7 +30,12 @@ declare const createNewEvent: (el: Element, eventName: string, value: {
     minutesNotAccepted?: string | null;
     eventType?: any;
     test?: string;
+    error?: string;
+    currentHour?: string | number;
+    currentMin?: string | number;
+    currentType?: string;
+    currentLength?: string | number;
 }) => void;
 declare const getBrowser: () => boolean;
 declare const getIncrementTimes: (degrees: number, type: any, count: number) => number;
-export { toType, isElement, typeCheckConfig, getConfig, getScrollbarWidth, getRadians, getClickTouchPosition, getInputValue, createNewEvent, getBrowser, hasClass, getMathDegIncrement, getIncrementTimes, };
+export { createNewEvent, getBrowser, getClickTouchPosition, getConfig, getIncrementTimes, getInputValue, getMathDegIncrement, getRadians, getScrollbarWidth, hasClass, isElement, toType, typeCheckConfig, };

@@ -1,9 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
 body {
-  line-height: 1.15;
-  overflow: hidden;
-  height: 0px;
+  background-color: #e3f2fd;
 }
 
 h1 {
@@ -156,53 +154,4 @@ pre[class*='language-'] {
 
 pre {
   user-select: all;
-}
-
-.cards {
-  border: none;
-  box-shadow: -2px 13px 19px rgba(0, 0, 0, 0.2);
-  border-radius: 7px;
-  margin: 20px 0;
-  height: 800px;
-}
-
-.test {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.timepicker-ui-wrapper {
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-}
-
-.timepicker-ui-modal {
-  position: absolute !important;
-}
-
-.second-column {
-  overflow: hidden;
-  overflow-y: scroll;
-  max-height: 800px;
-  width: 0px;
-  transition: 0.4s ease-out;
-}
-.second-column::-webkit-scrollbar {
-  display: none;
-}
-.second-column.show {
-  width: 400px;
-  transition: 0.4s ease-in;
-}
-
-.timepicker-ui-modal.removed {
-  top: 0 !important;
-  bottom: 0 !important;
-  right: 0 !important;
-  left: 0 !important;
 }

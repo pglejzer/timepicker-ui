@@ -6,18 +6,21 @@ class ClockFace {
   private clockFace: HTMLElement;
   private tipsWrapper: HTMLElement;
   private theme: string | undefined;
+  private clockType: string | undefined;
   constructor(obj: {
     array: Array<string>;
     classToAdd: string;
     clockFace: HTMLElement;
     tipsWrapper: HTMLElement;
     theme?: string;
+    clockType?: string;
   }) {
     this.array = obj.array;
     this.classToAdd = obj.classToAdd;
     this.clockFace = obj.clockFace;
     this.tipsWrapper = obj.tipsWrapper;
     this.theme = obj.theme;
+    this.clockType = obj.clockType;
   }
 
   create = (): void => {
@@ -33,7 +36,13 @@ class ClockFace {
       const spanTips = document.createElement('span');
 
       spanTips.innerHTML = num;
-      spanTips.classList.add('timepicker-ui-value-tips');
+
+      if (this.clockType === '24h') {
+        spanTips.classList.add('timepicker-ui-value-tips-24h');
+      } else {
+        spanTips.classList.add('timepicker-ui-value-tips');
+      }
+
       span.classList.add(this.classToAdd);
 
       if (this.theme === 'crane-straight') {

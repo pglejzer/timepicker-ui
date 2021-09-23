@@ -4,9 +4,14 @@ declare module 'timepicker-ui' {
     appendModalSelector?: HTMLAllCollection | string | Element;
     backdrop?: boolean;
     cancelLabel?: string;
+    clockType?: '12h' | '24h';
     enableScrollbar?: boolean;
-    hourMobileLabel?: string;
+    enableSwitchIcon?: boolean;
     enterTimeLabel?: string;
+    focusInputAfterCloseModal?: boolean;
+    hourMobileLabel?: string;
+    iconTemplate?: string;
+    iconTemplateMobile?: string;
     incrementHours?: number;
     incrementMinutes?: number;
     inputTemplate?: string;
@@ -16,11 +21,8 @@ declare module 'timepicker-ui' {
     pmLabel?: string;
     selectTimeLabel?: string;
     switchToMinutesAfterSelectHour?: boolean;
-    iconTemplate?: string;
-    iconTemplateMobile?: string;
     theme?: 'basic' | 'crane-straight' | 'crane-radius';
-    enableSwitchIcon?: boolean;
-    focusInputAfterCloseModal?: boolean;
+    editable?: boolean;
   };
 
   export class TimepickerUI {

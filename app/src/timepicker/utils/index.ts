@@ -75,8 +75,12 @@ const getClickTouchPosition = (
   },
   object: HTMLElement,
   isMobile = false
-): Record<string, unknown> => {
+): Record<string, unknown> | boolean => {
   const { clientX, clientY, touches } = event;
+
+  // @ts-ignore
+  if (!object) return false;
+
   const { left, top } = object.getBoundingClientRect();
   let obj: Record<string, unknown> = { x: null, y: null };
 
@@ -106,25 +110,48 @@ const getMathDegIncrement = (degrees: number, num: number): number => {
   return Math.round(degrees / num) * num;
 };
 
-const hasClass = (el: HTMLElement, selector: string): boolean => el.classList.contains(selector);
+const hasClass = (el: HTMLElement | null, selector: string): boolean =>
+  el ? el.classList.contains(selector) : false;
 
-const getInputValue = (el: HTMLInputElement): Record<string, string> => {
+const getInputValue = (el: HTMLInputElement, clockType?: string): any => {
   const { value } = el;
 
-  //@ts-ignore
-  if (value === '') return;
+  if (value === '') {
+    return {
+      hour: '12',
+      minutes: '00',
+      type: clockType === '24h' ? undefined : 'PM',
+    };
+  }
 
   const [hour, type] = value.split(' ');
   const [hourSplit, minutesSplit] = hour.split(':');
 
+  if (/[a-z]/i.test(hour)) {
+    return {
+      error: 'The input contains invalid letters or whitespace.',
+    };
+  }
+
+  if (value.includes(' ')) {
+    if (!type) {
+      return {
+        error: `The input contains invalid letters or whitespace.
+        Problem is with input length (max 5), currentLength: ${value.length}.`,
+        currentLength: value.length,
+      };
+    } else if (value.length > 8 || (type !== 'AM' && type !== 'PM')) {
+      return {
+        error: `The input contains invalid letters or whitespace.
+        Problem is with input length (max 8), currentLength: ${value.length} or invalid type (PM or AM), currentType: ${type}.`,
+        currentLength: value.length,
+        currentType: type,
+      };
+    }
+  }
+
   let min: number | string = Number(minutesSplit);
   const hor = Number(hourSplit);
-
-  //@ts-ignore
-  if (hor > 12 || min > 59 || hor === 0) return;
-
-  //@ts-ignore
-  if (type !== 'AM' && type !== 'PM') return;
 
   if (min < 10) {
     min = `0${min}`;
@@ -132,11 +159,39 @@ const getInputValue = (el: HTMLInputElement): Record<string, string> => {
     min = '00';
   }
 
-  return {
-    hour: hor < 10 ? `0${hor}` : hor.toString(),
-    minutes: min.toString(),
-    type,
-  };
+  if (!clockType && clockType !== '24h') {
+    if (hor > 12 || min > 59 || min < 0 || hor === 0 || (type !== 'AM' && type !== 'PM')) {
+      return {
+        error: `The input contains invalid letters or numbers. Problem is with hour which should be less than 13 and higher or equal 0, currentHour: ${hor}. Minutes should be less than 60 and higher or equal 0, currentMinutes: ${Number(
+          min
+        )} or invalid type (PM or AM), currentType: ${type}.`,
+        currentHour: hor,
+        currentMin: min,
+        currentType: type,
+      };
+    }
+
+    return {
+      hour: hor < 10 ? `0${hor}` : hor.toString(),
+      minutes: min.toString(),
+      type,
+    };
+  } else {
+    if (hor < 0 || hor > 23 || min > 59) {
+      return {
+        error: `The input contains invalid numbers. Problem is with hour which should be less than 24 and higher or equal 0, currentHour: ${hor}. Minutes should be less than 60 and higher or equal 0, currentMinutes: ${Number(
+          min
+        )}`,
+        currentHour: hor,
+        currentMin: min,
+      };
+    }
+
+    return {
+      hour: hor < 10 ? `0${hor}` : hor.toString(),
+      minutes: min.toString(),
+    };
+  }
 };
 
 const createNewEvent = (
@@ -152,6 +207,11 @@ const createNewEvent = (
     minutesNotAccepted?: string | null;
     eventType?: any;
     test?: string;
+    error?: string;
+    currentHour?: string | number;
+    currentMin?: string | number;
+    currentType?: string;
+    currentLength?: string | number;
   }
 ): void => {
   const ev = new CustomEvent(eventName, { detail: value });
@@ -167,17 +227,17 @@ const getIncrementTimes = (degrees: number, type: any, count: number) => {
 };
 
 export {
-  toType,
-  isElement,
-  typeCheckConfig,
-  getConfig,
-  getScrollbarWidth,
-  getRadians,
-  getClickTouchPosition,
-  getInputValue,
   createNewEvent,
   getBrowser,
-  hasClass,
-  getMathDegIncrement,
+  getClickTouchPosition,
+  getConfig,
   getIncrementTimes,
+  getInputValue,
+  getMathDegIncrement,
+  getRadians,
+  getScrollbarWidth,
+  hasClass,
+  isElement,
+  toType,
+  typeCheckConfig,
 };

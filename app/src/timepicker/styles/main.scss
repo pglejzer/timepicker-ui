@@ -1,7 +1,8 @@
 @import './variables.scss';
+
 .timepicker-ui {
-  &-normalize {
-    box-sizing: content-box !important;
+  * {
+    box-sizing: border-box !important;
   }
 
   &-modal {
@@ -26,7 +27,7 @@
 
   &-measure {
     position: absolute;
-    top: -624.9375rem;
+    top: -9999px;
     width: $mesaruelength;
     height: $mesaruelength;
     overflow: scroll;
@@ -36,58 +37,60 @@
   &-wrapper.mobile {
     position: fixed;
     z-index: 5001;
-    width: 20.5rem;
-    height: 31.25rem;
+    width: 328px;
+    height: 500px;
     top: $tm50percent;
     left: $tm50percent;
     transform: $tmtranslatetransform;
     background-color: #fff;
-    border-radius: 0.25rem;
+    border-radius: 4px;
     box-shadow: $tmwrapperboxshadow;
     display: flex;
     flex-direction: column;
   }
 
   &-wrapper:not(.timepicker-ui-wrapper + .mobile) {
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
       flex-direction: row;
-      height: 22.5rem;
-      width: 36.5rem;
+      height: 360px;
+      width: 584px;
     }
 
-    @media screen and (max-width: 20.625rem) and(orientation:portrait) {
-      width: 19.6875rem;
+    @media screen and (max-width: 330px) and(orientation:portrait) {
+      width: 315px;
     }
   }
 
   &-wrapper.mobile {
-    height: 13.625rem;
+    height: 218px;
 
-    @media screen and (max-width: 20.625rem) {
-      width: 19.6875rem;
+    @media screen and (max-width: 330px) {
+      width: 315px;
     }
   }
 
   &-header,
   &-header.mobile {
-    padding-top: 3.25rem;
-    padding-bottom: 2.25rem;
-    padding-right: 1.5rem;
-    padding-left: 1.5rem;
-    height: 6.5rem;
+    padding-top: 52px;
+    padding-bottom: 36px;
+    padding-right: 24px;
+    padding-left: 24px;
+    height: 104px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     position: relative;
+    height: 100%;
   }
 
   &-header.mobile {
     padding-bottom: 0;
+    padding-top: 35px;
   }
 
   &-header:not(.timepicker-ui-header + .mobile) {
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
       height: auto;
       flex-direction: column;
     }
@@ -97,29 +100,31 @@
   &-select-time.mobile {
     text-transform: uppercase;
     position: absolute;
-    top: calc(1.75rem - 0.75rem);
-    left: 1.5rem;
-    font-size: 0.75rem;
+    top: calc(28px - 12px);
+    left: 24px;
+    font-size: 12px;
     color: #a9a9a9;
   }
 
   &-body {
-    height: 16rem;
-    padding-right: 2.25rem;
-    padding-left: 2.25rem;
+    height: 256px;
+    width: 256px;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 100%;
 
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
       padding-right: 0;
       padding-left: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 1.4375rem;
+      margin-top: 23px;
     }
   }
 
   &-wrapper-landspace {
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
       display: flex;
       flex-direction: column;
       width: 100%;
@@ -128,16 +133,20 @@
 
   &-footer,
   &-footer-mobile {
-    height: 4.75rem;
+    height: 76px;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.25rem;
+    margin-bottom: 4px;
   }
 
   &-footer:not(.timepicker-ui-footer + .mobile) {
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
       justify-content: flex-end;
     }
+  }
+
+  &-footer.mobile {
+    align-items: flex-start;
   }
 
   &-clock-face {
@@ -147,10 +156,10 @@
     border-radius: 100%;
     position: relative;
 
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
-      height: 16rem;
-      width: 16rem;
-      top: 0.9375rem;
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+      height: 256px;
+      width: 256px;
+      top: 15px;
     }
   }
 
@@ -162,19 +171,40 @@
     touch-action: none;
     transform: $tmtranslatetransform;
     background-color: $purple;
-    height: 0.5rem;
-    width: 0.5rem;
+    height: 8px;
+    width: 8px;
     border-radius: 100%;
+  }
+  &-tips-wrapper {
+    height: 100%;
+    width: 100%;
+  }
+  &-tips-wrapper-24h {
+    position: absolute;
+    height: 160px;
+    width: 160px;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    border-radius: 50%;
+
+    &-disabled {
+      pointer-events: none;
+      touch-action: none;
+      user-select: none;
+    }
   }
 
   &-hour-time-12,
-  &-minutes-time {
+  &-minutes-time,
+  &-hour-time-24 {
     position: absolute;
-    width: 2rem;
-    height: 2rem;
+    width: 32px;
+    height: 32px;
     text-align: center;
     cursor: pointer;
-    font-size: 1.1rem;
+    font-size: 17.6px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -187,16 +217,29 @@
     }
   }
 
+  &-hour-time-12 {
+    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   &-wrapper-time,
   &-wrapper-time.mobile {
     display: flex;
-    margin-right: 0.625rem;
+    margin-right: 10px;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
   }
-
   &-wrapper-time:not(.timepicker-ui-wrapper-time + .mobile) {
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
       margin-right: 0;
     }
+  }
+
+  &-wrapper-time-24h {
+    margin-right: 0px;
   }
 
   &-wrapper-time.mobile {
@@ -207,19 +250,18 @@
   &-minutes,
   &-hour.mobile,
   &-minutes.mobile {
-    width: calc(6rem - 1.5rem);
-    height: calc(5rem - 1.5rem);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3.2rem;
+    font-size: 51.2px;
     background-color: #e4e4e4;
-    border-radius: 0.4375rem;
+    border-radius: 7px;
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
-    border: 0.125rem solid transparent;
-    padding: 0.625rem;
+    border: 2px solid transparent;
+    padding: 10px;
+    width: 96px;
 
     &:hover,
     &.active {
@@ -230,11 +272,10 @@
 
   &-hour.mobile,
   &-minutes.mobile {
-    height: calc(4.375rem - 1.5rem);
-
+    height: 70px;
     &[contenteditable='true']:focus,
     &[contenteditable='true']:active {
-      border: 0.125rem solid $purple;
+      border: 2px solid $purple;
       outline-color: $purple;
       user-select: all;
     }
@@ -242,12 +283,12 @@
 
   &-dots,
   &-dots.mobile {
-    padding-left: 0.3125rem;
-    padding-right: 0.3125rem;
+    padding-left: 5px;
+    padding-right: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3.6rem;
+    font-size: 57.6px;
     user-select: none;
     touch-action: none;
   }
@@ -256,37 +297,37 @@
   &-wrapper-type-time.mobile {
     display: flex;
     flex-direction: column;
-    height: 5rem;
+    height: 80px;
     justify-content: center;
     align-items: center;
-    font-size: 1rem;
+    font-size: 16px;
     font-weight: 500;
     color: #787878;
   }
 
   &-wrapper-type-time {
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
       flex-direction: row;
       width: 100%;
     }
   }
 
   &-wrapper-type-time.mobile {
-    height: 4.375rem;
+    height: 70px;
   }
 
   &-am,
   &-pm,
   &-am.mobile,
   &-pm.mobile {
-    height: calc(2.5rem - 0.125rem);
-    width: calc(3.25rem - 0.125rem);
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 0.125rem solid #d6d6d6;
+    border: 2px solid #d6d6d6;
     transition: all 0.3s ease;
     cursor: pointer;
+    width: 100%;
+    height: 100%;
 
     &:hover,
     &.active {
@@ -297,16 +338,16 @@
 
   &-am:not(.timepicker-ui-am + .mobile),
   &-pm:not(.timepicker-ui-pm + .mobile) {
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
       width: 100%;
     }
   }
 
   &-am,
   &-am.mobile {
-    border-top-left-radius: 0.4375rem;
-    border-top-right-radius: 0.4375rem;
-    border-bottom-width: calc(0.0469rem / 2);
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-width: calc(0.7504px / 2);
   }
 
   &-am.mobile {
@@ -314,20 +355,21 @@
   }
 
   &-am:not(.timepicker-ui-am + .mobile) {
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
-      border-top-left-radius: 0.4375rem;
-      border-bottom-left-radius: 0.4375rem;
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+      border-top-left-radius: 7px;
+      border-bottom-left-radius: 7px;
       border-top-right-radius: 0;
-      border-top-width: 0.0938rem;
-      border-right-width: calc(0.0469rem / 2);
+      border-top-width: 1.5008px;
+      border-right-width: calc(0.7504px / 2);
     }
   }
 
   &-pm,
   &-pm.mobile {
-    border-bottom-left-radius: 0.4375rem;
-    border-bottom-right-radius: 0.4375rem;
-    border-top-width: calc(0.0469rem / 2);
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-top-width: calc(0.7504px / 2);
+    width: 54px;
   }
 
   &-pm.mobile {
@@ -335,12 +377,12 @@
   }
 
   &-pm:not(.timepicker-ui-pm + .mobile) {
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
-      border-bottom-right-radius: 0.4375rem;
-      border-top-right-radius: 0.4375rem;
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+      border-bottom-right-radius: 7px;
+      border-top-right-radius: 7px;
       border-bottom-left-radius: 0;
-      border-bottom-width: 0.0938rem;
-      border-left-width: calc(0.0469rem / 2);
+      border-bottom-width: 1.5008px;
+      border-left-width: calc(0.7504px / 2);
     }
   }
 
@@ -350,12 +392,12 @@
   &-ok.btn-mobile {
     color: $purple;
     text-transform: uppercase;
-    border-radius: 0.4375rem;
+    border-radius: 7px;
     background-color: transparent;
     text-align: center;
-    font-size: 0.95rem;
-    padding-top: 0.5625rem;
-    padding-bottom: 0.5625rem;
+    font-size: 15.2px;
+    padding-top: 9px;
+    padding-bottom: 9px;
     font-weight: 500;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -368,14 +410,14 @@
 
   &-cancel-btn,
   &-cancel-btn.mobile {
-    width: 4.5rem;
-    margin-right: 0.25rem;
+    width: 72px;
+    margin-right: 4px;
   }
 
   &-ok-btn,
   &-ok-btn.mobile {
-    width: 4rem;
-    margin-left: 0.25rem;
+    width: 64px;
+    margin-left: 4px;
   }
 
   &-wrapper-btn,
@@ -390,28 +432,32 @@
 
   &-keyboard-icon-wrapper,
   &-keyboard-icon-wrapper.mobile {
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 44px;
+    height: 44px;
     position: relative;
-    bottom: -1.75rem;
-    left: 0.75rem;
+    bottom: -26px;
+    left: 12px;
     transition: all 0.3s ease;
 
     &:hover .timepicker-ui-keyboard-icon,
     &:hover .timepicker-ui-keyboard-icon.mobile {
       background-color: #d6d6d6;
-      border-radius: 0.4375rem;
+      border-radius: 7px;
     }
+  }
+
+  &-keyboard-icon-wrapper.mobile {
+    bottom: -5px;
   }
 
   &-keyboard-icon,
   &-keyboard-icon.mobile {
-    padding: 0.75rem;
+    padding: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
     color: #4e545a;
-    height: 1.25rem;
-    box-sizing: content-box;
+    height: 44px;
+    width: 44px;
 
     &:hover {
       color: $purple;
@@ -420,17 +466,17 @@
 
   &-keyboard-icon-wrapper,
   &-keyboard-icon-wrapper.mobile {
-    @media screen and (min-width: 20rem) and (max-width: 51.5625rem) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
       position: absolute;
-      bottom: 0.5rem;
+      bottom: 8px;
     }
   }
 
   &-wrapper-btn,
   &-wrapper-btn.mobile {
-    margin-right: 0.5rem;
+    margin-right: 8px;
     position: relative;
-    bottom: -0.875rem;
+    bottom: -14px;
   }
 
   &-hour-text,
@@ -438,45 +484,65 @@
   &-hour-text.mobile,
   &-minute-text.mobile {
     position: absolute;
-    bottom: -1.375rem;
-    font-size: 0.8rem;
+    bottom: 6px;
+    font-size: 12.8px;
     color: #a9a9a9;
+    left: 0;
   }
 
   &-minute-text,
   &-minute-text.mobile {
-    left: 7.5rem;
+    left: 120px;
   }
 
   &-clock-hand {
     position: absolute;
     background-color: $purple;
     bottom: $tm50percent;
-    height: 40.5%;
-    left: calc(50% - 0.0625rem);
+    height: 40%;
+    left: calc(50% - 1px);
     transform-origin: center bottom 0;
-    width: 0.125rem;
+    width: 2px;
+  }
+
+  &-clock-hand-24h {
+    height: 23%;
   }
 
   &-circle-hand {
     position: absolute;
-    top: -1.3125rem;
-    left: -1.3125rem;
-    width: 0.25rem;
-    border: 1.25rem solid $purple;
-    height: 0.25rem;
-    box-sizing: content-box;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 4px;
     border-radius: 100%;
     transition: all 0.2s ease;
+    height: 46px;
+    width: 46px;
+    box-sizing: border-box !important;
+    background-color: $purple;
 
     &.small-circle {
-      top: -0.8125rem;
-      left: -0.8125rem;
-      border-width: 0.75rem;
+      height: 36px;
+      width: 36px;
+      box-sizing: border-box !important;
     }
   }
 
-  &-value-tips {
+  &-circle-hand-24h {
+    height: 32px;
+    width: 32px;
+    top: 4px;
+    left: 1px;
+  }
+
+  &-value-tips,
+  &-value-tips-24h {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     outline: none;
     &.active {
       color: #fff;
@@ -531,4 +597,13 @@
     opacity: 1;
     transform: scale(1);
   }
+}
+
+.timepicker-ui-invalid-format {
+  border: 2px solid red;
+  color: red;
+}
+
+.timepicker-ui-invalid-text {
+  color: red;
 }

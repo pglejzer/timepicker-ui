@@ -4,282 +4,84 @@ import 'prismjs/themes/prism.css';
 import '../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css';
 import '../node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const options = {
-    amLabel: 'AM',
-    animation: true,
-    appendModalSelector: '.test',
-    backdrop: true,
-    cancelLabel: 'CANCEL',
-    editable: true,
-    enableScrollbar: true,
-    enableSwitchIcon: false,
-    enterTimeLabel: 'Enter Time',
-    focusInputAfterCloseModal: false,
-    hourMobileLabel: 'Hour',
-    iconTemplate: `<i class='material-icons timepicker-ui-keyboard-icon'>keyboard</i>`,
-    iconTemplateMobile: `<i class='material-icons timepicker-ui-keyboard-icon'>schedule</i>`,
-    incrementHours: 1,
-    incrementMinutes: 1,
-    minuteMobileLabel: 'Minute',
-    mobile: false,
-    okLabel: 'OK',
-    pmLabel: 'PM',
-    preventDefault: false,
-    selectTimeLabel: 'Select Time',
-    switchToMinutesAfterSelectHour: false,
-    theme: 'basic',
-  };
+Prism.highlightAll();
 
-  const events = [
-    'accept',
-    'show',
-    'cancel',
-    'update',
-    'selectminutemode',
-    'selecthourmode',
-    'selectamtypemode',
-    'selectpmtypemode',
-  ];
+const basic = document.querySelector('.basic') as HTMLDivElement;
 
-  const basic = document.querySelector('.basic') as HTMLDivElement;
-  const radioClass = document.querySelector('.radio') as HTMLDivElement;
-  const inputClass = document.querySelector('.inputs') as HTMLDivElement;
-  const secondColumn = document.querySelector('.second-column') as HTMLDivElement;
-  const eventsDiv = document.querySelector('.events') as HTMLDivElement;
+const basicPicker = new TimepickerUI(basic, { enableScrollbar: true, editable: true });
+basicPicker.create();
 
-  let objs: any = {};
-
-  const handleCheckboxEvent = (check: any) => {
-    alert(`You selected ${check.target.value} event`);
-  };
-
-  const handleCheckboxChangeEvents = (el: any) => {
-    const checkTarget = el.target as HTMLInputElement;
-
-    if (checkTarget.checked) {
-      basic.addEventListener(`${checkTarget.value}`, () => handleCheckboxEvent(el));
-    }
-
-    basic.removeEventListener(`${checkTarget.value}`, handleCheckboxEvent);
-  };
-
-  const handleEvents = (picker: HTMLDivElement) => {
-    setTimeout(() => {
-      const checkboxEvents = document.querySelectorAll('.tm-checkbox-events');
-
-      checkboxEvents.forEach((el) => {
-        return el.addEventListener('change', handleCheckboxChangeEvents);
-      });
-    }, 100);
-  };
-
-  const basicPicker = () => {
-    const obj = {
-      appendModalSelector: '.test',
-      animation: true,
-      backdrop: true,
-      preventDefault: false,
-      enableScrollbar: true,
-      editable: true,
-    };
-
-    objs = { ...obj };
-
-    const tm = new TimepickerUI(basic, obj);
-
-    tm.create();
-    tm.open();
-
-    handleEvents(basic);
-  };
-
-  basicPicker();
-
-  const basicPicker1 = (opt: Record<string, unknown>, destroy: boolean) => {
-    const okbutton = document.querySelector('.timepicker-ui-ok-btn') as HTMLDivElement;
-
-    if (okbutton) {
-      if (destroy) {
-        setTimeout(() => {
-          events.map((e) => {
-            return basic.removeEventListener(e, handleCheckboxEvent);
-          });
-        }, 200);
-        okbutton.click();
-      }
-    }
-
-    objs = { ...objs, ...opt };
-
-    const tm = new TimepickerUI(basic, objs);
-
-    setTimeout(() => {
-      tm.create();
-      tm.open();
-    }, 300);
-  };
-
-  const obj = Object.keys(options).reduce((acc, curr) => {
-    const accumulator: any = acc;
-
-    accumulator.push({
-      type: {
-        text: curr,
-        //@ts-ignore
-        option: options[curr],
-      },
-    });
-
-    return accumulator;
-  }, []);
-
-  obj.map(({ type: { text, option } }, index) => {
-    if (typeof option === 'boolean') {
-      const template = `
-  <div class="form-check">
-  <input class="form-check-input tm-checkbox tm-${text}" type="checkbox" name="checkbox-name-${index}" id="checkbox-id-${index}" value="${text}" ${
-        option ? 'checked' : ''
-      }>
-  <label class="form-check-label" for="checkbox-id-${index}">
-    ${text}
-  </label>
-  </div>`;
-      radioClass.insertAdjacentHTML('beforeend', template);
-    } else {
-      const template = `
-      <div class="form-group py-2 px-1" >
-      <label for="input-id=${index}" class="h6">${text}</label>
-      <input type="text" class="form-control tm-input tm-${text}" id="input-id-${index}" data-text="${text}" value="${option}">
-    </div>`;
-
-      inputClass.insertAdjacentHTML('beforeend', template);
-    }
-  });
-
-  const handleDisable = () => {
-    const { mobile, enableSwitchIcon } = objs;
-
-    const switches = document.querySelector(
-      '.tm-switchToMinutesAfterSelectHour'
-    ) as HTMLInputElement;
-    const enterTimeLabel = document.querySelector('.tm-enterTimeLabel') as HTMLInputElement;
-    const iconTemplateMobile = document.querySelector('.tm-iconTemplateMobile') as HTMLInputElement;
-    const iconTemplate = document.querySelector('.tm-iconTemplate') as HTMLInputElement;
-    const minuteMobileLabel = document.querySelector('.tm-minuteMobileLabel') as HTMLInputElement;
-    const selectTimeLabel = document.querySelector('.tm-selectTimeLabel') as HTMLInputElement;
-    const incrementHours = document.querySelector('.tm-incrementHours') as HTMLInputElement;
-    const incrementMinutes = document.querySelector('.tm-incrementMinutes') as HTMLInputElement;
-    const hourMobileLabel = document.querySelector('.tm-hourMobileLabel') as HTMLInputElement;
-
-    if (mobile) {
-      enterTimeLabel.disabled = false;
-      hourMobileLabel.disabled = false;
-      iconTemplate.disabled = true;
-      incrementHours.disabled = true;
-      incrementMinutes.disabled = true;
-      minuteMobileLabel.disabled = false;
-      selectTimeLabel.disabled = true;
-      switches.disabled = true;
-
-      if (enableSwitchIcon) {
-        iconTemplateMobile.disabled = false;
-      } else {
-        iconTemplateMobile.disabled = true;
-      }
-    } else {
-      enterTimeLabel.disabled = true;
-      hourMobileLabel.disabled = true;
-      iconTemplateMobile.disabled = true;
-      incrementHours.disabled = false;
-      incrementMinutes.disabled = false;
-      minuteMobileLabel.disabled = true;
-      selectTimeLabel.disabled = false;
-      switches.disabled = false;
-
-      if (enableSwitchIcon) {
-        iconTemplate.disabled = false;
-      } else {
-        iconTemplate.disabled = true;
-      }
-    }
-  };
-  handleDisable();
-
-  const checkboxes = document.querySelectorAll('.tm-checkbox');
-  const inputs = document.querySelectorAll('.tm-input');
-
-  const handleCheckboxChange = (e: Event) => {
-    const { value, checked } = e.target as HTMLInputElement;
-    basicPicker1({ [value]: checked }, true);
-    handleDisable();
-
-    const test = document.querySelector('.code-test') as HTMLDivElement;
-
-    test.innerHTML = `
-          import { TimepickerUI } from "timepicker-ui";
-          
-          const basic = document.querySelector('.basic');
-          const basicPicker = new TimepickerUI(basic, ${JSON.stringify(objs)});
-
-          basicPicker.create();
-    `;
-
-    Prism.highlightAll();
-  };
-
-  const handleInputsChange = (e: Event) => {
-    const {
-      dataset: { text },
-      value,
-    } = e.target as HTMLInputElement;
-    const texts: any = text;
-
-    basicPicker1({ [texts]: value }, true);
-    const test = document.querySelector('.code-test') as HTMLDivElement;
-
-    test.innerHTML = `
-        import { TimepickerUI } from "timepicker-ui";
-
-        const basicPicker = new TimepickerUI(basic, ${JSON.stringify(objs)});
-        basicPicker.create();
-`;
-
-    Prism.highlightAll();
-  };
-
-  checkboxes.forEach((el) => {
-    return el.addEventListener('change', handleCheckboxChange);
-  });
-
-  inputs.forEach((el) => {
-    return el.addEventListener('change', handleInputsChange);
-  });
-
-  const btnToggle = document.querySelector('#btn-toggle') as HTMLButtonElement;
-
-  btnToggle.addEventListener('click', () => {
-    secondColumn.classList.toggle('show');
-    const inv = secondColumn.querySelector('.options-wrapper');
-
-    if (secondColumn.classList.contains('show')) {
-      inv?.classList.remove('invisible');
-    } else {
-      setTimeout(() => {
-        inv?.classList.add('invisible');
-      }, 300);
-    }
-  });
-
-  // events.forEach((el) => {
-  //   const template = `
-  //   <div class="form-check">
-  //   <input class="form-check-input tm-checkbox-events" type="checkbox" name="checkbox-name-${el}" id="checkbox-id-${el}" value="${el}">
-  //   <label class="form-check-label" for="checkbox-id-${el}">
-  //     ${el}
-  //   </label>
-  //   </div>`;
-
-  //   eventsDiv.insertAdjacentHTML('beforeend', template);
-  // });
+const mobiles = document.querySelector('.mobile') as HTMLDivElement;
+const mobilePicker = new TimepickerUI(mobiles, {
+  mobile: true,
 });
+
+mobilePicker.create();
+
+const keyboardIcon = document.querySelector('.keyboard-icon-add') as HTMLDivElement;
+const keyboardIconInit = new TimepickerUI(keyboardIcon, {
+  enableSwitchIcon: true,
+});
+
+keyboardIconInit.create();
+
+const themeCrane = document.querySelector('.theme-crane-straight') as HTMLDivElement;
+const themeCraneInit = new TimepickerUI(themeCrane, {
+  enableSwitchIcon: true,
+  theme: 'crane-straight',
+});
+themeCraneInit.create();
+
+const themeCraneRadius = document.querySelector('.theme-crane-radius') as HTMLDivElement;
+const themeCraneRadiusInit = new TimepickerUI(themeCraneRadius, {
+  enableSwitchIcon: true,
+  theme: 'crane-radius',
+});
+themeCraneRadiusInit.create();
+
+const acceptEvent = document.querySelector('.accept-event') as HTMLDivElement;
+const acceptEventInit = new TimepickerUI(acceptEvent, {
+  enableSwitchIcon: true,
+});
+acceptEventInit.create();
+
+const acceptValue = document.querySelector('#accept-value') as HTMLDivElement;
+
+acceptEvent.addEventListener(
+  'accept',
+  // @ts-ignore
+  ({ detail: { hour, minutes, type } }) => (acceptValue.innerHTML = `${hour}:${minutes} ${type}`)
+);
+
+const errorValueDiv = document.querySelector('#error-value') as HTMLDivElement;
+
+const openByButton = document.querySelector('.open-by-button') as HTMLDivElement;
+
+const openByButtonInit = new TimepickerUI(openByButton, { clockType: '24h', editable: true });
+
+openByButtonInit.create();
+
+openByButton.addEventListener('geterror', (e) => {
+  console.log(e);
+
+  // @ts-ignore
+  errorValueDiv.innerHTML = `Error: ${e.detail.error}`;
+});
+
+openByButton.addEventListener('show', () => {
+  errorValueDiv.innerHTML = '';
+});
+
+const test = document.querySelector('.test') as HTMLDivElement;
+
+const testPicker = new TimepickerUI(test, { enableScrollbar: true, clockType: '24h' });
+testPicker.create();
+
+const mobiles24 = document.querySelector('.mobile-24') as HTMLDivElement;
+
+const mobilePicker24 = new TimepickerUI(mobiles24, {
+  mobile: true,
+  clockType: '24h',
+});
+
+mobilePicker24.create();

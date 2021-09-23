@@ -22,6 +22,7 @@ declare type optionTypes = {
   selectTimeLabel?: string;
   switchToMinutesAfterSelectHour?: boolean;
   theme?: 'basic' | 'crane-straight' | 'crane-radius';
+  clockType?: '12h' | '24h';
 };
 
 export { optionTypes };

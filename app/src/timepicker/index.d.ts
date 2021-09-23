@@ -13,6 +13,7 @@ export default class TimepickerUI {
     private _element;
     private _isMobileView;
     private _isTouchMouseMove;
+    isMinutesClick: boolean;
     constructor(element: HTMLDivElement, options?: optionTypes);
     private get modalTemplate();
     private get modalElement();
@@ -21,6 +22,7 @@ export default class TimepickerUI {
     private get clockHand();
     private get circle();
     private get tipsWrapper();
+    private get tipsWrapperFor24h();
     private get minutes();
     private get hour();
     private get AM();
@@ -39,6 +41,11 @@ export default class TimepickerUI {
     open: () => void;
     close: () => void;
     destroy: () => void;
+    private removeCircleClockClasses24h;
+    private setCircleClockClasses24h;
+    private setErrorHandler;
+    private removeErrorHandler;
+    private _setOnStartCSSClassesIfClockType24h;
     private _setTheme;
     private _setInputClassToInputElement;
     private _setDataOpenToInputIfDosentExistInWrapper;

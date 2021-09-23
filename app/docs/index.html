@@ -21,129 +21,437 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="../docs/style.css" />
-
     <title>timepicker-ui-examples</title>
   </head>
 
   <body>
-    <div class="container-fluid">
-      <div class="row">
-        <div
-          class="col-md-12 col-lg-4"
-          style="overflow-y: scroll; overflow-x: hidden; max-height: 100vh"
+    <div class="container">
+      <h1 class="h1 mt-3">timepicker-ui</h1>
+
+      <hr class="my-3" />
+
+      <p>
+        timepicker-ui is an easy library with timepicker. Fully wrote with pure JavaScript. This
+        library is based on Material Design from Google.
+      </p>
+
+      <p>
+        These are examples of use timepicker-ui library. Fully wrote documentation you can find
+        <a href="https://q448x.github.io/timepicker-ui/" target="_blank">here</a>
+        or on the
+        <a href="https://github.com/q448x/timepicker-ui" target="_blank">GitHub page</a>.
+      </p>
+
+      <p>
+        This site is using
+        <a href="https://getbootstrap.com/" target="_blank">Bootstrap 4</a>, font
+        <a href="https://fonts.google.com/specimen/Roboto" target="_blank">Roboto</a>
+        and
+        <a href="https://google.github.io/material-design-icons/" target="_blank">material-icons</a>
+        from Google.
+      </p>
+
+      <iframe
+        src="https://ghbtns.com/github-btn.html?user=q448x&repo=timepicker-ui&type=star&count=true&size=large"
+        frameborder="0"
+        scrolling="0"
+        width="120"
+        height="30"
+        title="GitHub"
+      ></iframe>
+
+      <hr class="mt-4" />
+
+      <div class="class-example-docs">
+        <h2 class="h2">Basic</h2>
+
+        <div class="mt-4" />
+
+        <section
+          class="d-flex justify-content-center align-items-center border docs"
+          style="height: 200px"
         >
-          <h1 class="h1 mt-3">timepicker-ui</h1>
-
-          <hr class="my-3" />
-
-          <p>
-            timepicker-ui is an easy library with timepicker. Fully wrote with TypeScript. This
-            library is based on Material Design from Google.
-          </p>
-
-          <p>
-            These are examples of use timepicker-ui library. Fully wrote documentation you can find
-            <a href="https://q448x.github.io/timepicker-ui/" target="_blank">here</a>
-            or on the
-            <a href="https://github.com/q448x/timepicker-ui" target="_blank">GitHub page</a>.
-          </p>
-
-          <p>
-            This site is using
-            <a href="https://getbootstrap.com/" target="_blank">Bootstrap 4</a>, font
-            <a href="https://fonts.google.com/specimen/Roboto" target="_blank">Roboto</a>
-            and
-            <a href="https://google.github.io/material-design-icons/" target="_blank"
-              >material-icons</a
-            >
-            from Google.
-          </p>
-
-          <iframe
-            src="https://ghbtns.com/github-btn.html?user=q448x&repo=timepicker-ui&type=star&count=true&size=large"
-            frameborder="0"
-            scrolling="0"
-            width="120"
-            height="30"
-            title="GitHub"
-          ></iframe>
-
-          <hr class="my-4" />
-
-          <section>
-            <div class="basic form-check">
-              <div class="timepicker-ui">
-                <input type="text" class="timepicker-ui-input" value="12:00 AM" disabled />
-              </div>
-            </div>
-
-            <hr class="my-4" />
-
-            <h6 class="my-3">HTML</h6>
-
-            <pre class="shadow" style="display: flex">
-                <code class="language-html">
-          &lt;div class="basic" &gt;
-            &lt;input
-              type="text"
-              class="timepicker-ui-input"
-              value="12:00 PM"
-            /&gt;
-          &lt;/div&gt;
-              </code>
-            </pre>
-
-            <h6 class="my-3 mt-5">JavaScript</h6>
-
-            <pre class="shadow" style="display: flex">
-                <code class="language-javascript code-test">
-          import { TimepickerUI } from "timepicker-ui";
-
-          const basic = document.querySelector('.basic');
-          const basicPicker = new TimepickerUI(basic, {});
-          basicPicker.create();
-                </code>
-              </pre>
-          </section>
-        </div>
-        <div class="col-md-12 col-lg-8" style="position: fixed; right: 0">
-          <div class="card cards">
-            <div class="row h-100">
-              <div class="col-md-12 h-100">
-                <div class="test"></div>
-              </div>
-              <button
-                id="btn-toggle"
-                class="btn btn-danger btn-sm mt-2 position-absolute"
-                style="left: 20px; z-index: 10000"
-              >
-                Toggle options
-              </button>
-              <div
-                class="second-column col-md-4 position-absolute"
-                style="
-                  right: 0;
-                  z-index: 9999;
-                  background-color: #fff;
-                  box-shadow: -10px 0px 10px 1px rgba(0, 0, 0, 0.2);
-                  padding: 0;
-                "
-              >
-                <div class="p-3">
-                  <div class="options-wrapper invisible">
-                    <!-- <h4 class="text-center p-3">Events</h4>
-                    <div class="events"></div> -->
-                    <hr />
-                    <h4 class="text-center p-3">Options</h4>
-                    <div class="radio"></div>
-                    <div class="inputs mt-4"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="test" style="max-width: 300px">
+            <input type="text" class="timepicker-ui-input form-control" value="12:00 PM" />
           </div>
-        </div>
+
+          <div class="basic" style="max-width: 300px">
+            <input type="text" class="timepicker-ui-input form-control" value="12:00 PM" />
+          </div>
+        </section>
+
+        <br class="my-4" />
+
+        <section>
+          <h6 class="my-3">HTML</h6>
+
+          <pre class="shadow">
+            <code class="language-html">
+            &lt;div class="basic" &gt;
+              &lt;input
+                type="text"
+                class="timepicker-ui-input"
+                value="12:00 PM"
+              /&gt;
+            &lt;/div&gt;
+          </code>
+        </pre>
+
+          <h6 class="my-3 mt-5">JavaScript</h6>
+
+          <pre class="shadow">
+            <code class="language-javascript">
+            import TimepickerUI from "timepicker-ui";
+              
+            const basicPicker = new TimepickerUI(basic);
+            basicPicker.create();
+            </code>
+          </pre>
+        </section>
+      </div>
+
+      <hr class="mt-5" />
+
+      <div class="class-example-docs">
+        <h2 class="h2">Mobile version</h2>
+
+        <div class="mt-4" />
+
+        <section
+          class="d-flex justify-content-center align-items-center border docs"
+          style="height: 200px"
+        >
+          <div class="mobile" style="max-width: 300px">
+            <input type="text" class="timepicker-ui-input form-control" value="12:00 PM" />
+          </div>
+
+          <div class="mobile-24" style="max-width: 300px">
+            <input type="text" class="timepicker-ui-input form-control" value="12:00" />
+          </div>
+        </section>
+
+        <br class="my-4" />
+
+        <section>
+          <h6 class="my-3">HTML</h6>
+
+          <pre class="shadow">
+            <code class="language-html">
+            &lt;div class="mobile" &gt;
+              &lt;input
+                type="text"
+                class="timepicker-ui-input"
+                value="12:00 PM"
+              /&gt;
+            &lt;/div&gt;
+          </code>
+        </pre>
+
+          <h6 class="my-3 mt-5">JavaScript</h6>
+
+          <pre class="shadow">
+            <code class="language-javascript">
+            import TimepickerUI from "timepicker-ui";
+              
+            const mobile = document.querySelector(".mobile");
+            const mobilePicker = new TimepickerUI(mobile, { mobile: true });
+            mobilePicker.create();
+            </code>
+          </pre>
+        </section>
+      </div>
+
+      <hr class="mt-5" />
+
+      <div class="class-example-docs">
+        <h2 class="h2">Keyboard Icon</h2>
+
+        <div class="mt-4" />
+
+        <section
+          class="d-flex justify-content-center align-items-center border docs"
+          style="height: 200px"
+        >
+          <div class="keyboard-icon-add" style="max-width: 300px">
+            <input type="text" class="timepicker-ui-input form-control" value="12:00 PM" />
+          </div>
+        </section>
+
+        <br class="my-4" />
+
+        <section>
+          <h6 class="my-3">HTML</h6>
+
+          <pre class="shadow">
+            <code class="language-html">
+            &lt;div class="keyboard-icon-add" &gt;
+              &lt;input
+                type="text"
+                class="timepicker-ui-input"
+                value="12:00 PM"
+              /&gt;
+            &lt;/div&gt;
+          </code>
+        </pre>
+
+          <h6 class="my-3 mt-5">JavaScript</h6>
+
+          <pre class="shadow">
+            <code class="language-javascript">
+              import TimepickerUI from "timepicker-ui";
+              
+              const keyboardIcon = document.querySelector(".keyboard-icon-add");
+              const keyboardIconInit = new TimepickerUI(keyboardIcon, {
+                enableSwitchIcon: true,
+              });
+              keyboardIconInit.create();
+            </code>
+          </pre>
+        </section>
+      </div>
+
+      <hr class="mt-5" />
+
+      <div class="class-example-docs">
+        <h2 class="h2">Open by button</h2>
+
+        <div class="mt-4" />
+
+        <section
+          class="d-flex justify-content-center align-items-center border docs"
+          style="height: 200px"
+        >
+          <div class="open-by-button" style="max-width: 300px">
+            <input type="text" class="timepicker-ui-input form-control" value="23:00" />
+
+            <div class="mt-2 d-flex d-block">
+              <button class="btn btn-primary btn-block" data-open="open-by-button">Open</button>
+            </div>
+
+            <div id="error-value"></div>
+          </div>
+        </section>
+
+        <br class="my-4" />
+
+        <section>
+          <h6 class="my-3">HTML</h6>
+
+          <pre class="shadow">
+            <code class="language-html">
+            &lt;div class="open-by-button" style="max-width: 300px"&gt;
+              &lt;input
+                type="text"
+                class="timepicker-ui-input"
+                value="12:00 PM"
+              /&gt;
+  
+              &lt;button
+                class="btn btn-primary"
+                data-open="open-by-button"
+              &gt;
+                Open
+              &lt;/button&gt;
+            &lt;/div&gt;
+          </code>
+        </pre>
+
+          <h6 class="my-3 mt-5">JavaScript</h6>
+
+          <pre class="shadow">
+            <code class="language-javascript">
+              import TimepickerUI from "timepicker-ui";
+              
+              const openByButton = document.querySelector(".open-by-button");
+
+              const openByButtonInit = new TimepickerUI(openByButton);
+              
+              openByButtonInit.create();
+            </code>
+          </pre>
+        </section>
+      </div>
+
+      <hr class="mt-5" />
+
+      <div class="class-example-docs">
+        <h2 class="h2">Theme crane straight</h2>
+
+        <div class="mt-4" />
+
+        <section
+          class="d-flex justify-content-center align-items-center border docs"
+          style="height: 200px"
+        >
+          <div class="theme-crane-straight" style="max-width: 300px">
+            <input type="text" class="timepicker-ui-input form-control" value="12:00 PM" />
+          </div>
+        </section>
+
+        <br class="my-4" />
+
+        <section>
+          <h6 class="my-3">HTML</h6>
+
+          <pre class="shadow">
+            <code class="language-html">
+            &lt;div class="theme-crane-straight" &gt;
+              &lt;input
+                type="text"
+                class="timepicker-ui-input"
+                value="12:00 PM"
+              /&gt;
+            &lt;/div&gt;
+          </code>
+        </pre>
+
+          <h6 class="my-3 mt-5">JavaScript</h6>
+
+          <pre class="shadow">
+            <code class="language-javascript">
+              import TimepickerUI from "timepicker-ui";
+              
+              const themeCrane = document.querySelector(".theme-crane-straight");
+              const themeCraneInit = new TimepickerUI(themeCrane, {
+                enableSwitchIcon: true,
+                theme: "crane-straight",
+              });
+              themeCraneInit.create();
+            </code>
+          </pre>
+        </section>
+      </div>
+
+      <hr class="mt-5" />
+
+      <div class="class-example-docs">
+        <h2 class="h2">Theme crane radius</h2>
+
+        <div class="mt-4" />
+
+        <section
+          class="d-flex justify-content-center align-items-center border docs"
+          style="height: 200px"
+        >
+          <div class="theme-crane-radius" style="max-width: 300px">
+            <input type="text" class="timepicker-ui-input form-control" value="12:00 PM" />
+          </div>
+        </section>
+
+        <br class="my-4" />
+
+        <section>
+          <h6 class="my-3">HTML</h6>
+
+          <pre class="shadow">
+            <code class="language-html">
+            &lt;div class="theme-crane-radius" &gt;
+              &lt;input
+                type="text"
+                class="timepicker-ui-input"
+                value="12:00 PM"
+              /&gt;
+            &lt;/div&gt;
+          </code>
+        </pre>
+
+          <h6 class="my-3 mt-5">JavaScript</h6>
+
+          <pre class="shadow">
+            <code class="language-javascript">
+              import TimepickerUI from "timepicker-ui";
+              
+              const themeCraneRadius = document.querySelector(".theme-crane-radius");
+              const themeCraneRadiusInit = new TimepickerUI(themeCraneRadius, {
+                enableSwitchIcon: true,
+                theme: "crane-radius",
+              });
+              themeCraneRadiusInit.create();
+            </code>
+          </pre>
+        </section>
+      </div>
+
+      <hr class="mt-5" />
+
+      <div class="class-example-docs">
+        <h2 class="h2">Accept event</h2>
+
+        <div class="mt-4" />
+
+        <section
+          class="d-flex justify-content-center align-items-center border docs flex-column"
+          style="height: 200px"
+        >
+          <div class="accept-event" style="max-width: 300px">
+            <input type="text" class="timepicker-ui-input form-control" value="12:00 PM" />
+          </div>
+
+          <div class="pt-3">
+            <p>Timepicker value: <span id="accept-value"></span></p>
+          </div>
+        </section>
+
+        <br class="my-4" />
+
+        <section>
+          <h6 class="my-3">HTML</h6>
+
+          <pre class="shadow">
+            <code class="language-html">
+            &lt;div class="accept-event" &gt;
+              &lt;input
+                type="text"
+                class="timepicker-ui-input"
+                value="12:00 PM"
+              /&gt;
+            &lt;/div&gt;
+
+            &lt;p&gt;Timepicker value: &lt;span id="accept-value"&gt;&lt;/span&gt;&lt;/p&gt;
+          </code>
+        </pre>
+
+          <h6 class="my-3 mt-5">JavaScript</h6>
+
+          <pre class="shadow">
+            <code class="language-javascript">
+              import TimepickerUI from "timepicker-ui";
+              
+              const acceptEvent = document.querySelector(".accept-event");
+              const acceptValue = document.querySelector("#accept-value");
+              const acceptEventInit = new TimepickerUI(acceptEvent, {
+                enableSwitchIcon: true,
+              });
+              acceptEventInit.create();
+              
+              acceptEvent.addEventListener( "accept", ({ detail: { hour, minutes, type } }) => 
+                  acceptValue.innerHTML = `${hour}:${minutes} ${type}`
+              );          
+            </code>
+          </pre>
+        </section>
       </div>
     </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/prism.min.js"
+      integrity="sha512-9+422Bs3A87UkWfp+qV80Nfv9arhbCXKY1rxrF2seorI36mIIstMiuBfyKLF1yH1nnzQkEWq2xrzT4XU3Z+vrA=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/components/prism-css.min.js"
+      integrity="sha512-zDjwO/e5eVa5WfYra8CE827RFyA/nqhp8y4da+geEpAqpCnmfAHopCNobQ9sJeLBMQY0OLB+hT+k6bbb0FhdYQ=="
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
