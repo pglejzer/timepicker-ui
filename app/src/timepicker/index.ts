@@ -391,10 +391,12 @@ export default class TimepickerUI {
     this._setModalTemplate();
     this._setNormalizeClass();
     this._removeBackdrop();
-    this._setClassActiveToHourOnOpen();
+
     this._setBgColorToCirleWithHourTips();
 
     this._setOnStartCSSClassesIfClockType24h();
+
+    this._setClassActiveToHourOnOpen();
 
     if (this.clockFace !== null) {
       const initClockFace = new ClockFace({
@@ -862,6 +864,8 @@ export default class TimepickerUI {
     if (!this._isTouchMouseMove) return;
 
     if (this.minutesTips !== null) {
+      this.minutes.classList.add('active');
+
       let deg = getIncrementTimes(Math.trunc((rtangens * 180) / Math.PI) + 90, incrementMinutes, 6);
 
       let minute: number;
@@ -889,6 +893,8 @@ export default class TimepickerUI {
       : null;
 
     if (this.hourTips !== null) {
+      this.hour.classList.add('active');
+
       if (
         !hasClass(realTarget ? realTarget : target, 'timepicker-ui-value-tips-24h') ||
         hasClass(realTarget ? realTarget : target, 'timepicker-ui-value-tips') ||
@@ -1026,12 +1032,14 @@ export default class TimepickerUI {
   };
 
   private _removeAnimationToClose = (): void => {
-    if (this._options.animation) {
-      setTimeout(() => {
+    if (this.modalElement) {
+      if (this._options.animation) {
+        setTimeout(() => {
+          this.modalElement.classList.remove('show');
+        }, 150);
+      } else {
         this.modalElement.classList.remove('show');
-      }, 150);
-    } else {
-      this.modalElement.classList.remove('show');
+      }
     }
   };
 
