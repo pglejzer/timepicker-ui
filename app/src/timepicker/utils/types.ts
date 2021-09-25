@@ -1,7 +1,7 @@
-declare type optionTypes = {
+export declare type optionTypes = {
   amLabel?: string;
   animation?: boolean;
-  appendModalSelector?: HTMLAllCollection | string | Element;
+  appendModalSelector?: string;
   backdrop?: boolean;
   cancelLabel?: string;
   editable?: boolean;
@@ -24,5 +24,3 @@ declare type optionTypes = {
   theme?: 'basic' | 'crane-straight' | 'crane-radius';
   clockType?: '12h' | '24h';
 };
-
-export { optionTypes };

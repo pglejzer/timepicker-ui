@@ -122,7 +122,8 @@
       &.radius {
         @media screen and (min-width: 20rem) and (max-width: 47.9375rem) and(orientation:landscape) {
           border-bottom-left-radius: 1.25rem;
-          border-bottom-right-radius: 1.25rem;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
         }
       }
     }
@@ -132,8 +133,10 @@
     &.crane-straight {
       &.radius {
         @media screen and (min-width: 20rem) and (max-width: 47.9375rem) and(orientation:landscape) {
-          border-top-left-radius: 1.25rem;
+          border-bottom-right-radius: 1.25rem;
           border-top-right-radius: 1.25rem;
+          border-bottom-left-radius: 0;
+          border-top-left-radius: 0;
         }
       }
     }
@@ -230,6 +233,7 @@
   &-circle-hand {
     &.crane-straight {
       border-color: $cranered400;
+      background-color: $cranered400;
     }
   }
 

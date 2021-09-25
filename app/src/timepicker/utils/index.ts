@@ -64,25 +64,14 @@ const getScrollbarWidth = (): number => {
 
 const getRadians = (el: number): number => el * (Math.PI / 180);
 
-const getClickTouchPosition = (
-  event: {
-    preventDefault?: any;
-    type?: any;
-    target?: any;
-    clientX?: any;
-    clientY?: any;
-    touches?: any;
-  },
-  object: HTMLElement,
-  isMobile = false
-): Record<string, unknown> | boolean => {
-  const { clientX, clientY, touches } = event;
+const getClickTouchPosition = (event: TouchEvent, object: HTMLElement, isMobile = false) => {
+  const { touches } = event;
+  const { clientX, clientY } = (event as unknown) as MouseEvent;
 
-  // @ts-ignore
-  if (!object) return false;
+  if (!object) return;
 
   const { left, top } = object.getBoundingClientRect();
-  let obj: Record<string, unknown> = { x: null, y: null };
+  let obj: { x: number; y: number } = { x: 0, y: 0 };
 
   if (!isMobile) {
     obj = {
@@ -100,7 +89,6 @@ const getClickTouchPosition = (
     }
   }
 
-  //@ts-ignore
   if (Object.keys(obj).length === 0 && obj.constructor === Object) return;
 
   return obj;
@@ -110,10 +98,10 @@ const getMathDegIncrement = (degrees: number, num: number): number => {
   return Math.round(degrees / num) * num;
 };
 
-const hasClass = (el: HTMLElement | null, selector: string): boolean =>
+const hasClass = (el: HTMLElement | null | Element, selector: string): boolean =>
   el ? el.classList.contains(selector) : false;
 
-const getInputValue = (el: HTMLInputElement, clockType?: string): any => {
+const getInputValue = (el: HTMLInputElement, clockType?: string) => {
   const { value } = el;
 
   if (value === '') {

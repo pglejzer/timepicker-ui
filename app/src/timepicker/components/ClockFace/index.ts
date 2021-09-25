@@ -1,7 +1,7 @@
 import { getRadians } from '../../utils';
 
 class ClockFace {
-  private array: any;
+  private array: string[];
   private classToAdd: string;
   private clockFace: HTMLElement;
   private tipsWrapper: HTMLElement;

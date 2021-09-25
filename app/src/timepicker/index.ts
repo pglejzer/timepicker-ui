@@ -59,7 +59,7 @@ export default class TimepickerUI {
 
     this._isMobileView = false;
 
-    this.mutliEventsMove = (event) => this._handleEventToMoveHand(event);
+    this.mutliEventsMove = (event) => this._handleEventToMoveHand(event as TouchEvent);
     this.mutliEventsMoveHandler = this.mutliEventsMove.bind(this);
 
     this.eventsClickMobile = (event) => this._handlerClickHourMinutes(event);
@@ -222,7 +222,7 @@ export default class TimepickerUI {
 
     this._removeAnimationToClose();
 
-    this.openElement.forEach((openEl: any) => openEl.classList.remove('disabled'));
+    this.openElement.forEach((openEl) => openEl.classList.remove('disabled'));
 
     setTimeout(() => {
       document.body.style.overflowY = '';
@@ -230,7 +230,7 @@ export default class TimepickerUI {
     }, 400);
 
     setTimeout(() => {
-      this.openElement.forEach((openEl: any) => openEl.classList.remove('disabled'));
+      this.openElement.forEach((openEl) => openEl.classList.remove('disabled'));
 
       if (this._options.focusInputAfterCloseModal) this.input.focus();
 
@@ -356,14 +356,14 @@ export default class TimepickerUI {
   };
 
   private _setClassTopOpenElement = (): void => {
-    this.openElement.forEach((openEl: any) => openEl.classList.add('timepicker-ui-open-element'));
+    this.openElement.forEach((openEl) => openEl.classList.add('timepicker-ui-open-element'));
   };
 
   private _removeBackdrop = (): void => {
     if (this._options.backdrop) return;
 
     this.modalElement.classList.add('removed');
-    this.openElement.forEach((openEl: any) => openEl.classList.add('disabled'));
+    this.openElement.forEach((openEl) => openEl.classList.add('disabled'));
   };
 
   private _setNormalizeClass = (): void => {
@@ -383,7 +383,7 @@ export default class TimepickerUI {
     this.setErrorHandler();
     this.removeErrorHandler();
 
-    this.openElement.forEach((openEl: any) => openEl.classList.add('disabled'));
+    this.openElement.forEach((openEl) => openEl.classList.add('disabled'));
 
     this.input.blur();
 
@@ -456,7 +456,7 @@ export default class TimepickerUI {
   };
 
   private _handleOpenOnClick = (): void => {
-    return this.openElement.forEach((openEl: any) =>
+    return this.openElement.forEach((openEl) =>
       this._clickTouchEvents.map((el: string) => {
         return openEl.addEventListener(el, () => this._eventsBundle());
       })
@@ -485,8 +485,8 @@ export default class TimepickerUI {
 
     const { hour, minutes, type } = value;
 
-    this.hour.innerText = hour;
-    this.minutes.innerText = minutes;
+    this.hour.innerText = hour as string;
+    this.minutes.innerText = minutes as string;
 
     const typeMode = document.querySelector(`[data-type="${type}"]`) as HTMLElement;
 
@@ -554,8 +554,10 @@ export default class TimepickerUI {
 
   private _handleBackdropClick = (): void => {
     this._clickTouchEvents.map((el: string) => {
-      this.modalElement.addEventListener(el, (event: any) => {
-        if (!hasClass(event.target, 'timepicker-ui-modal')) return;
+      this.modalElement.addEventListener(el, (ev) => {
+        const target = (ev.target as Element) as HTMLElement;
+
+        if (!hasClass(target, 'timepicker-ui-modal')) return;
 
         const value = getInputValue(this.input, this._options.clockType);
 
@@ -586,8 +588,8 @@ export default class TimepickerUI {
 
   private _setBgColorToCircleWithMinutesTips = (): void => {
     const { theme } = this._options;
-    // @ts-ignore
-    if (getNumberOfMinutes.includes(this.minutes.textContent)) {
+
+    if (this.minutes.textContent && getNumberOfMinutes.includes(this.minutes.textContent)) {
       if (theme === 'crane-straight' || theme === 'crane-radius') {
         this.circle.style.backgroundColor = variables.cranered400;
       } else {
@@ -598,8 +600,7 @@ export default class TimepickerUI {
   };
 
   private _removeBgColorToCirleWithMinutesTips = (): void => {
-    // @ts-ignore
-    if (getNumberOfMinutes.includes(this.minutes.textContent)) return;
+    if (this.minutes.textContent && getNumberOfMinutes.includes(this.minutes.textContent)) return;
 
     this.circle.style.backgroundColor = '';
     this.circle.classList.add('small-circle');
@@ -686,8 +687,8 @@ export default class TimepickerUI {
 
   private _handleAmClick = (): void => {
     this._clickTouchEvents.map((e: string) => {
-      this.AM.addEventListener(e, (ev: any) => {
-        const { target } = ev;
+      this.AM.addEventListener(e, (ev) => {
+        const target = ev.target as Element;
 
         target.classList.add(selectorActive);
         this.PM.classList.remove(selectorActive);
@@ -705,8 +706,8 @@ export default class TimepickerUI {
 
   private _handlePmClick = (): void => {
     this._clickTouchEvents.map((el: string) => {
-      this.PM.addEventListener(el, (ev: any) => {
-        const { target } = ev;
+      this.PM.addEventListener(el, (ev) => {
+        const target = ev.target as Element;
 
         target.classList.add(selectorActive);
         this.AM.classList.remove(selectorActive);
@@ -743,8 +744,8 @@ export default class TimepickerUI {
 
   private _handleHourClick = (): void => {
     this._clickTouchEvents.map((el: string) => {
-      this.hour.addEventListener(el, (ev: any) => {
-        const { target } = ev;
+      this.hour.addEventListener(el, (ev) => {
+        const target = ev.target as Element;
 
         if (this.clockFace !== null) this._handleAnimationSwitchTipsMode();
 
@@ -777,8 +778,8 @@ export default class TimepickerUI {
 
   private _handleMinutesClick = (): void => {
     this._clickTouchEvents.map((el: string) => {
-      this.minutes.addEventListener(el, (ev: any) => {
-        const { target } = ev;
+      this.minutes.addEventListener(el, (ev) => {
+        const target = ev.target as Element;
 
         if (this.clockFace !== null) {
           this._handleAnimationSwitchTipsMode();
@@ -807,25 +808,27 @@ export default class TimepickerUI {
     });
   };
 
-  private _handleEventToMoveHand = (event: any): void => {
+  private _handleEventToMoveHand = (event: TouchEvent): void => {
     if (this._options.preventDefault) {
       event.preventDefault();
     }
+    const { target: t, type, touches } = event;
+    const target = t as Element;
 
-    const { type, target } = event;
     const { incrementMinutes, incrementHours, switchToMinutesAfterSelectHour } = this._options;
 
-    if (getClickTouchPosition(event, this.clockFace) === false) return;
+    if (!getClickTouchPosition(event, this.clockFace)) return;
 
-    // @ts-ignore
-    const obj: Record<string, any> = getClickTouchPosition(event, this.clockFace);
+    const obj = getClickTouchPosition(event, this.clockFace);
 
     const clockFaceRadius = this.clockFace.offsetWidth / 2;
-    let rtangens = Math.atan2(obj.y - clockFaceRadius, obj.x - clockFaceRadius);
+
+    let rtangens = obj && Math.atan2(obj.y - clockFaceRadius, obj.x - clockFaceRadius);
 
     if (getBrowser()) {
-      const touched: any = getClickTouchPosition(event, this.clockFace, true);
-      if (touched === undefined) return;
+      const touched = getClickTouchPosition(event, this.clockFace, true);
+      if (!touched) return;
+
       rtangens = Math.atan2(touched.y - clockFaceRadius, touched.x - clockFaceRadius);
     }
     if (type === 'mouseup' || type === 'touchend') {
@@ -865,8 +868,11 @@ export default class TimepickerUI {
 
     if (this.minutesTips !== null) {
       this.minutes.classList.add('active');
+      let deg =
+        rtangens &&
+        getIncrementTimes(Math.trunc((rtangens * 180) / Math.PI) + 90, incrementMinutes, 6);
 
-      let deg = getIncrementTimes(Math.trunc((rtangens * 180) / Math.PI) + 90, incrementMinutes, 6);
+      if (deg === undefined) return;
 
       let minute: number;
       if (deg < 0) {
@@ -887,10 +893,11 @@ export default class TimepickerUI {
       this._setBgColorToCircleWithMinutesTips();
     }
 
-    const myLocation = event.touches ? event.touches[0] : undefined;
-    const realTarget = event.touches
-      ? (document.elementFromPoint(myLocation.clientX, myLocation.clientY) as HTMLDivElement)
-      : null;
+    const myLocation = touches ? touches[0] : undefined;
+    const realTarget =
+      touches && myLocation
+        ? (document.elementFromPoint(myLocation.clientX, myLocation.clientY) as HTMLDivElement)
+        : null;
 
     if (this.hourTips !== null) {
       this.hour.classList.add('active');
@@ -901,15 +908,14 @@ export default class TimepickerUI {
         hasClass(realTarget ? realTarget : target, 'timepicker-ui-tips-wrapper')
       ) {
         this.removeCircleClockClasses24h();
-
-        let deg = getIncrementTimes(
-          Math.trunc((rtangens * 180) / Math.PI) + 90,
-          incrementHours,
-          30
-        );
+        let deg =
+          rtangens &&
+          getIncrementTimes(Math.trunc((rtangens * 180) / Math.PI) + 90, incrementHours, 30);
 
         this.clockHand.style.transform = `rotateZ(${deg}deg)`;
-        this._degreesHours = deg;
+        this._degreesHours = deg as number;
+
+        if (deg === undefined) return;
 
         let hour: number;
 
@@ -931,16 +937,16 @@ export default class TimepickerUI {
         hasClass(realTarget ? realTarget : target, 'timepicker-ui-tips-wrapper-24h')
       ) {
         this.setCircleClockClasses24h();
-        let deg = getIncrementTimes(
-          Math.trunc((rtangens * 180) / Math.PI) + 90,
-          incrementHours,
-          30
-        );
+        let deg =
+          rtangens &&
+          getIncrementTimes(Math.trunc((rtangens * 180) / Math.PI) + 90, incrementHours, 30);
 
         this.clockHand.style.transform = `rotateZ(${deg}deg)`;
-        this._degreesHours = deg;
+        this._degreesHours = deg as number;
 
         let hour: number | string;
+
+        if (deg === undefined) return;
 
         if (deg < 0) {
           hour = Math.round(360 + deg / 30) % 24;
@@ -982,7 +988,7 @@ export default class TimepickerUI {
   private _handleMoveHand = (): void => {
     if (this._options.mobile || this._isMobileView) return;
 
-    allEvents.split(' ').map((event: any) => {
+    allEvents.split(' ').map((event) => {
       if (event === 'touchstart' || event === 'touchmove' || event === 'touchend') {
         document.addEventListener(event, this.mutliEventsMoveHandler, {
           passive: false,
@@ -996,10 +1002,9 @@ export default class TimepickerUI {
   private _setModalTemplate = (): void => {
     const { appendModalSelector } = this._options;
 
-    if (appendModalSelector === '') {
+    if (appendModalSelector === '' || !appendModalSelector) {
       document.body.insertAdjacentHTML('afterend', this.modalTemplate);
     } else {
-      //@ts-ignore
       const element = document?.querySelector(appendModalSelector);
       element?.insertAdjacentHTML('beforeend', this.modalTemplate);
     }
@@ -1147,12 +1152,12 @@ export default class TimepickerUI {
 
         const typeMode = (document.querySelectorAll(
           '.timepicker-ui-type-mode'
-        ) as any) as Array<HTMLElement>;
+        ) as unknown) as Array<HTMLElement>;
         typeMode.map((type) => type.classList.remove('active'));
 
         const nowActiveType = (typeMode.find(
           (type) => type.textContent === beforeTypeModeContent
-        ) as any) as HTMLElement;
+        ) as unknown) as HTMLElement;
         nowActiveType.classList.add('active');
 
         this._setTransformToCircleWithSwitchesHour(this.hour.textContent);
@@ -1183,9 +1188,11 @@ export default class TimepickerUI {
 
     if (!hasClass(target, 'timepicker-ui-hour') && !hasClass(target, 'timepicker-ui-minutes')) {
       const arr = Array.from(allTrue);
-      arr.map((el: any) => {
-        el.contentEditable = false;
-        el.classList.remove('active');
+      arr.map((el) => {
+        const target = el as HTMLDivElement;
+
+        target.contentEditable = 'false';
+        target.classList.remove('active');
       });
 
       if (validHours === true && validMinutes === true) {
