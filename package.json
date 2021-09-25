@@ -7,7 +7,7 @@
   "types": "./dist/types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/q448x/timepicker-ui.git"
+    "url": "git+https://github.com/pglejzer/timepicker-ui.git"
   },
   "keywords": [
     "material-design",
@@ -20,10 +20,10 @@
     "vanillajs",
     "typescript"
   ],
-  "author": "q448x",
+  "author": "pglejzer",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/q448x/timepicker-ui/issues"
+    "url": "https://github.com/pglejzer/timepicker-ui/issues"
   },
-  "homepage": "https://github.com/q448x/timepicker-ui#readme"
+  "homepage": "https://github.com/pglejzer/timepicker-ui#readme"
 }
