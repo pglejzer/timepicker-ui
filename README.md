@@ -18,6 +18,10 @@ timepicker-ui is an easy library with timepicker. Fully wrote with TypeScript. T
 
   <img src="https://i.ibb.co/VgR1Kn0/image.png" alt="desktop-version">
 
+### 24h version
+
+<img src="https://i.ibb.co/wpch19P/image.png" alt="desktop-24h">
+
 ---
 
 ### Landspace version
