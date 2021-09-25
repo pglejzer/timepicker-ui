@@ -76,12 +76,24 @@ You can alawys change icons to another package if you change options <code>iconC
 
 ### Usage
 
+#### Styles
+
+We provide CSS styles built-in but sometimes if you don't use some normalize/reset CSS styles you have to add `box-sizing: border-box` to your app to display the correct layout.
+
+```CSS
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+```
+
 #### ES Modules
 
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import { TimepickerUI } from "timepicker-ui";
+import { TimepickerUI } from 'timepicker-ui';
 ```
 
 #### UMD
@@ -113,7 +125,7 @@ timepicker-ui has to be created with a new instance with key `new`. This instanc
 #### JavaScript
 
 ```javascript
-const DOMElement = document.querySelector(".timepicker-ui");
+const DOMElement = document.querySelector('.timepicker-ui');
 const options = {};
 const newTimepicker = new TimepickerUI(DOMElement, options);
 ```
@@ -132,7 +144,7 @@ By default initialization of timepicker is started when you click on input. If y
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector(".default-class");
+const timepicker = document.querySelector('.default-class');
 const initTimepicker = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -161,8 +173,8 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector(".default-class");
-const options = { okLabel: "test", amLabel: "test1", backdrop: false };
+const timepicker = document.querySelector('.default-class');
+const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
 const initTimepicker = new TimepickerUI(timepicker, options);
 
 timepicker.create();
@@ -440,7 +452,7 @@ Methods are custom function what can be used to manually change the behavior of 
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector("timepicker-ui-test");
+const timepicker = document.querySelector('timepicker-ui-test');
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -488,12 +500,12 @@ Events are custom events triggered when you add some event listeners to your tim
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector("timepicker-ui-test");
+const timepicker = document.querySelector('timepicker-ui-test');
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
 
-timepicker.addEventListener("show", (event) => console.log(event.detail));
+timepicker.addEventListener('show', (event) => console.log(event.detail));
 ```
 
 #### Table with events

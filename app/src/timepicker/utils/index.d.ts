@@ -9,17 +9,76 @@ declare const typeCheckConfig: (componentName: string, config: {
 declare const getConfig: (options?: optionTypes | undefined, defaultOptions?: Record<string, unknown> | undefined) => Record<string, unknown>;
 declare const getScrollbarWidth: () => number;
 declare const getRadians: (el: number) => number;
-declare const getClickTouchPosition: (event: {
-    preventDefault?: any;
-    type?: any;
-    target?: any;
-    clientX?: any;
-    clientY?: any;
-    touches?: any;
-}, object: HTMLElement, isMobile?: boolean) => Record<string, unknown> | boolean;
+declare const getClickTouchPosition: (event: TouchEvent, object: HTMLElement, isMobile?: boolean) => {
+    x: number;
+    y: number;
+} | undefined;
 declare const getMathDegIncrement: (degrees: number, num: number) => number;
-declare const hasClass: (el: HTMLElement | null, selector: string) => boolean;
-declare const getInputValue: (el: HTMLInputElement, clockType?: string | undefined) => any;
+declare const hasClass: (el: HTMLElement | null | Element, selector: string) => boolean;
+declare const getInputValue: (el: HTMLInputElement, clockType?: string | undefined) => {
+    hour: string;
+    minutes: string;
+    type: string | undefined;
+    error?: undefined;
+    currentLength?: undefined;
+    currentType?: undefined;
+    currentHour?: undefined;
+    currentMin?: undefined;
+} | {
+    error: string;
+    hour?: undefined;
+    minutes?: undefined;
+    type?: undefined;
+    currentLength?: undefined;
+    currentType?: undefined;
+    currentHour?: undefined;
+    currentMin?: undefined;
+} | {
+    error: string;
+    currentLength: number;
+    hour?: undefined;
+    minutes?: undefined;
+    type?: undefined;
+    currentType?: undefined;
+    currentHour?: undefined;
+    currentMin?: undefined;
+} | {
+    error: string;
+    currentLength: number;
+    currentType: string;
+    hour?: undefined;
+    minutes?: undefined;
+    type?: undefined;
+    currentHour?: undefined;
+    currentMin?: undefined;
+} | {
+    error: string;
+    currentHour: number;
+    currentMin: string | number;
+    currentType: string;
+    hour?: undefined;
+    minutes?: undefined;
+    type?: undefined;
+    currentLength?: undefined;
+} | {
+    error: string;
+    currentHour: number;
+    currentMin: string | number;
+    hour?: undefined;
+    minutes?: undefined;
+    type?: undefined;
+    currentLength?: undefined;
+    currentType?: undefined;
+} | {
+    hour: string;
+    minutes: string;
+    type?: undefined;
+    error?: undefined;
+    currentLength?: undefined;
+    currentType?: undefined;
+    currentHour?: undefined;
+    currentMin?: undefined;
+};
 declare const createNewEvent: (el: Element, eventName: string, value: {
     hour?: string | null;
     minutes?: string | null;

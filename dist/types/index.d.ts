@@ -1,7 +1,7 @@
 declare type optionTypes = {
     amLabel?: string;
     animation?: boolean;
-    appendModalSelector?: HTMLAllCollection | string | Element;
+    appendModalSelector?: string;
     backdrop?: boolean;
     cancelLabel?: string;
     editable?: boolean;
