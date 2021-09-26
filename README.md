@@ -10,7 +10,7 @@ timepicker-ui is an easy library with timepicker. Fully wrote with TypeScript. T
 - Easy to use
 - Easy to customize
 
-[Click here to see a demo and examples](https://pglejzerx.github.io/timepicker-ui-docs/)
+[Click here to see a demo and examples](https://pglejzer.github.io/timepicker-ui-docs/)
 
 ---
 
@@ -566,7 +566,7 @@ ___
 - max/min time options
 - 24h time mode clock face
 
-If you have more good ideas please let me know in [issue](https://github.com/pglejzerx/timepicker-ui/issues). I will try to add more useful features. This project is still develop, if you find some bugs please report on the [issue](https://github.com/pglejzerx/timepicker-ui/issues) page.
+If you have more good ideas please let me know in [issue](https://github.com/pglejzer/timepicker-ui/issues). I will try to add more useful features. This project is still develop, if you find some bugs please report on the [issue](https://github.com/pglejzer/timepicker-ui/issues) page.
 
 ---
 
