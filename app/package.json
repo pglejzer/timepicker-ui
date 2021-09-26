@@ -13,9 +13,9 @@
     "lint": "lint-staged && pretty-quick --staged",
     "test": "jest"
   },
-  "author": "q448x",
+  "author": "pglejzerx",
   "license": "MIT",
-  "homepage": "https://github.com/q448x/timepicker-ui#readme",
+  "homepage": "https://github.com/pglejzerx/timepicker-ui#readme",
   "lint-staged": {
     "./src/**/*.js": [
       "eslint --fix"
