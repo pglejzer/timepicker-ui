@@ -45,7 +45,7 @@ const getNumberOfMinutes: Array<string> = [
 
 const getModalTemplate = (options: {
   iconTemplate?: string;
-  selectTimeLabel?: string;
+  timeLabel?: string;
   amLabel?: string;
   pmLabel?: string;
   cancelLabel?: string;
@@ -57,7 +57,7 @@ const getModalTemplate = (options: {
 }): string => {
   const {
     iconTemplate,
-    selectTimeLabel,
+    timeLabel,
     amLabel,
     pmLabel,
     cancelLabel,
@@ -74,7 +74,7 @@ const getModalTemplate = (options: {
   }'>
     <div class="timepicker-ui-wrapper ">
       <div class="timepicker-ui-header">
-        <div class="timepicker-ui-select-time">${selectTimeLabel}</div>
+        <div class="timepicker-ui-select-time">${timeLabel}</div>
         <div class="timepicker-ui-wrapper-time ${
           clockType === '24h' ? 'timepicker-ui-wrapper-time-24h' : ''
         }">
@@ -128,7 +128,7 @@ const getModalTemplate = (options: {
 };
 
 const getMobileModalTemplate = (options: {
-  enterTimeLabel?: string;
+  mobileTimeLabel?: string;
   amLabel?: string;
   pmLabel?: string;
   cancelLabel?: string;
@@ -141,7 +141,7 @@ const getMobileModalTemplate = (options: {
   clockType?: string;
 }): string => {
   const {
-    enterTimeLabel,
+    mobileTimeLabel,
     amLabel,
     pmLabel,
     cancelLabel,
@@ -159,7 +159,7 @@ const getMobileModalTemplate = (options: {
   }'>
     <div class="timepicker-ui-wrapper mobile">
       <div class="timepicker-ui-header mobile">
-        <div class="timepicker-ui-select-time mobile">${enterTimeLabel}</div>
+        <div class="timepicker-ui-select-time mobile">${mobileTimeLabel}</div>
         <div class="timepicker-ui-wrapper-time mobile">
           <div class="timepicker-ui-hour mobile" contenteditable="false">12</div>  
           <div class="timepicker-ui-hour-text mobile">${hourMobileLabel}</div>

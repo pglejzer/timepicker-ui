@@ -97,4 +97,5 @@ declare const createNewEvent: (el: Element, eventName: string, value: {
 }) => void;
 declare const getBrowser: () => boolean;
 declare const getIncrementTimes: (degrees: number, type: any, count: number) => number;
+export declare const createObjectFromData: (obj: optionTypes) => any;
 export { createNewEvent, getBrowser, getClickTouchPosition, getConfig, getIncrementTimes, getInputValue, getMathDegIncrement, getRadians, getScrollbarWidth, hasClass, isElement, toType, typeCheckConfig, };

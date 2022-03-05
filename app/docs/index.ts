@@ -8,10 +8,11 @@ Prism.highlightAll();
 
 const basic = document.querySelector('.basic') as HTMLDivElement;
 
-const basicPicker = new TimepickerUI(basic, { enableScrollbar: true, editable: true });
+const basicPicker = new TimepickerUI(basic, { enableScrollbar: true });
 basicPicker.create();
 
 const mobiles = document.querySelector('.mobile') as HTMLDivElement;
+
 const mobilePicker = new TimepickerUI(mobiles, {
   mobile: true,
 });
@@ -57,7 +58,11 @@ const errorValueDiv = document.querySelector('#error-value') as HTMLDivElement;
 
 const openByButton = document.querySelector('.open-by-button') as HTMLDivElement;
 
-const openByButtonInit = new TimepickerUI(openByButton, { clockType: '24h', editable: true });
+const openByButtonInit = new TimepickerUI(openByButton, {
+  clockType: '12h',
+  editable: true,
+  focusInputAfterCloseModal: true,
+});
 
 openByButtonInit.create();
 
@@ -68,8 +73,8 @@ openByButton.addEventListener('geterror', (e) => {
   errorValueDiv.innerHTML = `Error: ${e.detail.error}`;
 });
 
-openByButton.addEventListener('show', () => {
-  errorValueDiv.innerHTML = '';
+openByButton.addEventListener('update', (e) => {
+  console.log(e);
 });
 
 const test = document.querySelector('.test') as HTMLDivElement;

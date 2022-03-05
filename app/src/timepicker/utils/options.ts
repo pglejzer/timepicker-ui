@@ -9,7 +9,7 @@ const options: optionTypes = {
   editable: false,
   enableScrollbar: false,
   enableSwitchIcon: false,
-  enterTimeLabel: 'Enter Time',
+  mobileTimeLabel: 'Enter Time',
   focusInputAfterCloseModal: false,
   hourMobileLabel: 'Hour',
   iconTemplate: '<i class="material-icons timepicker-ui-keyboard-icon">keyboard</i>',
@@ -20,10 +20,11 @@ const options: optionTypes = {
   mobile: false,
   okLabel: 'OK',
   pmLabel: 'PM',
-  selectTimeLabel: 'Select Time',
+  timeLabel: 'Select Time',
   switchToMinutesAfterSelectHour: false,
   theme: 'basic',
   preventDefault: true,
+  clockType: '12h',
 };
 
 export { options };

@@ -7,7 +7,7 @@ declare module 'timepicker-ui' {
     clockType?: '12h' | '24h';
     enableScrollbar?: boolean;
     enableSwitchIcon?: boolean;
-    enterTimeLabel?: string;
+    mobileTimeLabel?: string;
     focusInputAfterCloseModal?: boolean;
     hourMobileLabel?: string;
     iconTemplate?: string;
@@ -19,7 +19,7 @@ declare module 'timepicker-ui' {
     mobile?: boolean;
     okLabel?: string;
     pmLabel?: string;
-    selectTimeLabel?: string;
+    timeLabel?: string;
     switchToMinutesAfterSelectHour?: boolean;
     theme?: 'basic' | 'crane-straight' | 'crane-radius';
     editable?: boolean;

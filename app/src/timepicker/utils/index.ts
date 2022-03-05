@@ -102,9 +102,17 @@ const hasClass = (el: HTMLElement | null | Element, selector: string): boolean =
   el ? el.classList.contains(selector) : false;
 
 const getInputValue = (el: HTMLInputElement, clockType?: string) => {
+  if (!el) {
+    return {
+      hour: '12',
+      minutes: '00',
+      type: clockType === '24h' ? undefined : 'PM',
+    };
+  }
+
   const { value } = el;
 
-  if (value === '') {
+  if (value === '' || !value) {
     return {
       hour: '12',
       minutes: '00',
@@ -147,7 +155,7 @@ const getInputValue = (el: HTMLInputElement, clockType?: string) => {
     min = '00';
   }
 
-  if (!clockType && clockType !== '24h') {
+  if (clockType === '12h') {
     if (hor > 12 || min > 59 || min < 0 || hor === 0 || (type !== 'AM' && type !== 'PM')) {
       return {
         error: `The input contains invalid letters or numbers. Problem is with hour which should be less than 13 and higher or equal 0, currentHour: ${hor}. Minutes should be less than 60 and higher or equal 0, currentMinutes: ${Number(
@@ -212,6 +220,25 @@ const getBrowser = (): boolean =>
 
 const getIncrementTimes = (degrees: number, type: any, count: number) => {
   return getMathDegIncrement(degrees, (type as never) * count);
+};
+
+export const createObjectFromData = (obj: optionTypes): any => {
+  if (!obj) return;
+
+  const parse = JSON.parse(JSON.stringify(obj));
+  const keys = Object.keys(parse);
+
+  return Object.values(parse).reduce((acc: any, curr, index) => {
+    if (Number(curr)) {
+      acc[keys[index]] = Number(curr);
+    } else if (curr === 'true' || curr === 'false') {
+      acc[keys[index]] = JSON.parse(curr);
+    } else {
+      acc[keys[index]] = curr;
+    }
+
+    return acc;
+  }, {});
 };
 
 export {

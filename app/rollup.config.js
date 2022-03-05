@@ -58,6 +58,11 @@ export default [
         file: pkg.module,
         format: 'esm',
       },
+      {
+        file: '../dist/timepicker-ui.umd.js',
+        format: 'umd',
+        name: 'tui',
+      },
     ],
   },
   {

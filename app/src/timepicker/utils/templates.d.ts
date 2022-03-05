@@ -3,7 +3,7 @@ declare const getNumberOfHours12: Array<string>;
 declare const getNumberOfMinutes: Array<string>;
 declare const getModalTemplate: (options: {
     iconTemplate?: string;
-    selectTimeLabel?: string;
+    timeLabel?: string;
     amLabel?: string;
     pmLabel?: string;
     cancelLabel?: string;
@@ -14,7 +14,7 @@ declare const getModalTemplate: (options: {
     clockType?: string;
 }) => string;
 declare const getMobileModalTemplate: (options: {
-    enterTimeLabel?: string;
+    mobileTimeLabel?: string;
     amLabel?: string;
     pmLabel?: string;
     cancelLabel?: string;
