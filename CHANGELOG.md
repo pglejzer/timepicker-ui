@@ -7,7 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.2.32] - 2021-09-26
+## [2.3.0] - 2022-03-05
+
+### Fix
+
+- fixed problem with [switchToMinutesAfterSelectHour](https://github.com/pglejzer/timepicker-ui/issues/13) option
+- fixed problem with [update](https://github.com/pglejzer/timepicker-ui/issues/12) event
+- fixed problem with [animation](https://github.com/pglejzer/timepicker-ui/issues/11) option name
+- fixed problem with [iconTemplete and iconTemplateMobile](https://github.com/pglejzer/timepicker-ui/issues/9) names
+- fixed problem with [switching mobile/desktop view](https://github.com/pglejzer/timepicker-ui/issues/9)
+- fixed problem to set options with data-attributes
+
+### Change
+
+- changed option name from `selectLabelTime` to `labelTime`
+
+### Add
+
+- added [UMD version](https://github.com/pglejzer/timepicker-ui/issues/8)
+- added new options `mobileTimeLabel` to change time label on mobile version
+
+---
+
+## [2.2.3] - 2021-09-26
 
 ### Update
 

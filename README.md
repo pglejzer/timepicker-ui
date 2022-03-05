@@ -70,7 +70,7 @@ $ npm install timepicker-ui
 
 This library is using [font Roboto](https://fonts.google.com/specimen/Roboto) and [material-design icons](https://google.github.io/material-design-icons/). Basic options for all icons have been taken from material-icons. If you want to use material-icons you have to add dependencies to your project.
 
-You can alawys change icons to another package if you change options <code>iconClass</code> and <code>iconClassMobile</code> which contains templates for icons. <code>iconClass</code> and <code>iconClassMobile</code> requiare default class <code>timepicker-ui-keyboard-icon</code>.
+You can alawys change icons to another package if you change options <code>iconTemplate</code> and <code>iconTemplateMobile</code> which contains templates for icons. <code>iconTemplate</code> and <code>iconTemplateMobile</code> requiare default class <code>timepicker-ui-keyboard-icon</code>.
 
 ---
 
@@ -93,17 +93,17 @@ We provide CSS styles built-in but sometimes if you don't use some normalize/res
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import { TimepickerUI } from 'timepicker-ui';
+import { TimepickerUI } from "timepicker-ui";
 ```
 
 #### UMD
 
-In your html file you have put script tag with path to `timepicker-ui.js` file. After installing by npm/yarn you can copy the file from node_modules or add a path to this file.
+In your html file you have put script tag with path to `timepicker-ui.umd.js` file. After installing by npm/yarn you can copy the file from node_modules or add a path to this file.
 
 ```html
-<script src="timepicker-ui.js"></script>
-<script src="node_modules/path/timepicker-ui.js"></script>
-<script src="/path/timepicker-ui.js"></script>
+<script src="timepicker-ui.umd.js"></script>
+<script src="node_modules/path/timepicker-ui.umd.js"></script>
+<script src="/path/timepicker-ui.umd.js"></script>
 ```
 
 ###### Information
@@ -125,12 +125,22 @@ timepicker-ui has to be created with a new instance with key `new`. This instanc
 #### JavaScript
 
 ```javascript
-const DOMElement = document.querySelector('.timepicker-ui');
+const DOMElement = document.querySelector(".timepicker-ui");
 const options = {};
 const newTimepicker = new TimepickerUI(DOMElement, options);
 ```
 
 By default initialization of timepicker is started when you click on input. If you want to change it you have to add `data-open` attribute with selector inside and this element has to be inside wrapper.
+
+To initalize a timepicker with UMD version you have to init a window object with `tui`.
+
+```js
+const DOMElement = document.querySelector(".timepicker-ui");
+const options = {};
+const newTimepicker = new window.tui.TimepickerUI(DOMElement, options);
+
+newTimepicker.create();
+```
 
 #### HTML
 
@@ -144,7 +154,7 @@ By default initialization of timepicker is started when you click on input. If y
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('.default-class');
+const timepicker = document.querySelector(".default-class");
 const initTimepicker = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -173,8 +183,8 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('.default-class');
-const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
+const timepicker = document.querySelector(".default-class");
+const options = { okLabel: "test", amLabel: "test1", backdrop: false };
 const initTimepicker = new TimepickerUI(timepicker, options);
 
 timepicker.create();
@@ -292,7 +302,7 @@ export default {
   </thead>
   <tbody>
     <tr>
-      <td scope="row">animated</td>
+      <td scope="row">animation</td>
       <td>true</td>
       <td>boolean</td>
       <td>Turn on/off animations on picker on start/close</td>
@@ -323,9 +333,9 @@ export default {
     </tr>
     <tr>
       <td scope="row">clockType</td>
-      <td>12</td>
+      <td>12h</td>
       <td>string</td>
-      <td>You can set type of clock, it contains 2 versions: 12h and 24h</td>
+      <td>You can set type of clock, it contains 2 versions: 12h and 24h.</td>
     </tr> 
     <tr>
       <td scope="row">editable</td>
@@ -375,11 +385,17 @@ export default {
       <td>string</td>
       <td>You can set custom text to minute label on mobile version</td>
     </tr>  
-     <tr>
+    <tr>
       <td scope="row">mobile</td>
       <td>false</td>
       <td>boolean</td>
       <td>Turn on mobile version</td>
+    </tr>  
+    <tr>
+      <td scope="row">mobileTimeLabel</td>
+      <td>Enter Time</td>
+      <td>string</td>
+      <td>You can set custom text to time label on mobile version</td>
     </tr>  
      <tr>
       <td scope="row">okLabel</td>
@@ -400,10 +416,10 @@ export default {
       <td>You can set on/off defaults events to clock face events</td>
     </tr> 
      <tr>
-      <td scope="row">selectTimeLabel</td>
+      <td scope="row">mobileTimeLabel</td>
       <td>Select Time</td>
       <td>string</td>
-      <td>You can set custom text to select time label on desktop version</td>
+      <td>You can set custom text to time label on desktop version</td>
     </tr>   
     <tr>
       <td scope="row">switchToMinutesAfterSelectHour</td>
@@ -412,7 +428,7 @@ export default {
       <td>Turn on/off switch to minutes by select hour</td>
     </tr>   
     <tr>
-      <td scope="row">iconClass</td>
+      <td scope="row">iconTemplate</td>
        <td>
        &lt;i class="material-icons timepicker-ui-keyboard-icon"> keyboard &lt;/i&gt;
       </td>
@@ -420,7 +436,7 @@ export default {
       <td>You can set default template to switch desktop.This options is using by default material design icon</td>
     </tr>  
      <tr>
-      <td scope="row">iconClassMobile</td>
+      <td scope="row">iconTemplateMobile</td>
       <td>&lt;i class="material-icons timepicker-ui-keyboard-icon"> schedule  &lt;/i&gt;</td>
       <td>string</td>
       <td>You can set default template to switch mobile. This options is using by default material design icon</td>
@@ -452,7 +468,7 @@ Methods are custom function what can be used to manually change the behavior of 
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('timepicker-ui-test');
+const timepicker = document.querySelector("timepicker-ui-test");
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -500,12 +516,12 @@ Events are custom events triggered when you add some event listeners to your tim
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('timepicker-ui-test');
+const timepicker = document.querySelector("timepicker-ui-test");
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
 
-timepicker.addEventListener('show', (event) => console.log(event.detail));
+timepicker.addEventListener("show", (event) => console.log(event.detail));
 ```
 
 #### Table with events

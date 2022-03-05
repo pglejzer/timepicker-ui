@@ -7,7 +7,7 @@ declare type optionTypes = {
     editable?: boolean;
     enableScrollbar?: boolean;
     enableSwitchIcon?: boolean;
-    enterTimeLabel?: string;
+    mobileTimeLabel?: string;
     focusInputAfterCloseModal?: boolean;
     hourMobileLabel?: string;
     iconTemplate?: string;
@@ -19,7 +19,7 @@ declare type optionTypes = {
     okLabel?: string;
     pmLabel?: string;
     preventDefault?: boolean;
-    selectTimeLabel?: string;
+    timeLabel?: string;
     switchToMinutesAfterSelectHour?: boolean;
     theme?: 'basic' | 'crane-straight' | 'crane-radius';
     clockType?: '12h' | '24h';
