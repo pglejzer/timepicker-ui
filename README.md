@@ -93,7 +93,7 @@ We provide CSS styles built-in but sometimes if you don't use some normalize/res
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import { TimepickerUI } from "timepicker-ui";
+import { TimepickerUI } from 'timepicker-ui';
 ```
 
 #### UMD
@@ -125,7 +125,7 @@ timepicker-ui has to be created with a new instance with key `new`. This instanc
 #### JavaScript
 
 ```javascript
-const DOMElement = document.querySelector(".timepicker-ui");
+const DOMElement = document.querySelector('.timepicker-ui');
 const options = {};
 const newTimepicker = new TimepickerUI(DOMElement, options);
 ```
@@ -135,7 +135,7 @@ By default initialization of timepicker is started when you click on input. If y
 To initalize a timepicker with UMD version you have to init a window object with `tui`.
 
 ```js
-const DOMElement = document.querySelector(".timepicker-ui");
+const DOMElement = document.querySelector('.timepicker-ui');
 const options = {};
 const newTimepicker = new window.tui.TimepickerUI(DOMElement, options);
 
@@ -154,7 +154,7 @@ newTimepicker.create();
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector(".default-class");
+const timepicker = document.querySelector('.default-class');
 const initTimepicker = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -183,8 +183,8 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector(".default-class");
-const options = { okLabel: "test", amLabel: "test1", backdrop: false };
+const timepicker = document.querySelector('.default-class');
+const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
 const initTimepicker = new TimepickerUI(timepicker, options);
 
 timepicker.create();
@@ -416,7 +416,7 @@ export default {
       <td>You can set on/off defaults events to clock face events</td>
     </tr> 
      <tr>
-      <td scope="row">mobileTimeLabel</td>
+      <td scope="row">timeLabel</td>
       <td>Select Time</td>
       <td>string</td>
       <td>You can set custom text to time label on desktop version</td>
@@ -468,7 +468,7 @@ Methods are custom function what can be used to manually change the behavior of 
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector("timepicker-ui-test");
+const timepicker = document.querySelector('timepicker-ui-test');
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -516,12 +516,12 @@ Events are custom events triggered when you add some event listeners to your tim
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector("timepicker-ui-test");
+const timepicker = document.querySelector('timepicker-ui-test');
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
 
-timepicker.addEventListener("show", (event) => console.log(event.detail));
+timepicker.addEventListener('show', (event) => console.log(event.detail));
 ```
 
 #### Table with events
