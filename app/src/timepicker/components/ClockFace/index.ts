@@ -7,6 +7,8 @@ class ClockFace {
   private tipsWrapper: HTMLElement;
   private theme: string | undefined;
   private clockType: string | undefined;
+  private disabledTime: any;
+  private hour: any;
   constructor(obj: {
     array: Array<string>;
     classToAdd: string;
@@ -14,6 +16,8 @@ class ClockFace {
     tipsWrapper: HTMLElement;
     theme?: string;
     clockType?: string;
+    disabledTime?: any;
+    hour?: any;
   }) {
     this.array = obj.array;
     this.classToAdd = obj.classToAdd;
@@ -21,6 +25,8 @@ class ClockFace {
     this.tipsWrapper = obj.tipsWrapper;
     this.theme = obj.theme;
     this.clockType = obj.clockType;
+    this.disabledTime = obj.disabledTime;
+    this.hour = obj.hour;
   }
 
   create = (): void => {
@@ -36,6 +42,29 @@ class ClockFace {
       const spanTips = document.createElement('span');
 
       spanTips.innerHTML = num;
+
+      if (this.disabledTime) {
+        if (Array.isArray(this.disabledTime) && this.disabledTime?.includes(num)) {
+          spanTips.classList.add('timepicker-ui-tips-disabled');
+          span.classList.add('timepicker-ui-tips-disabled');
+        }
+
+        if (
+          this.hour === this.disabledTime.removedStartedHour &&
+          this.disabledTime?.startMinutes?.includes(num)
+        ) {
+          spanTips.classList.add('timepicker-ui-tips-disabled');
+          span.classList.add('timepicker-ui-tips-disabled');
+        }
+
+        if (
+          this.hour === this.disabledTime.removedEndHour &&
+          this.disabledTime?.endMinutes?.includes(num)
+        ) {
+          spanTips.classList.add('timepicker-ui-tips-disabled');
+          span.classList.add('timepicker-ui-tips-disabled');
+        }
+      }
 
       if (this.clockType === '24h') {
         spanTips.classList.add('timepicker-ui-value-tips-24h');

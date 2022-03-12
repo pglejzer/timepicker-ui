@@ -23,4 +23,5 @@ export declare type optionTypes = {
   switchToMinutesAfterSelectHour?: boolean;
   theme?: 'basic' | 'crane-straight' | 'crane-radius';
   clockType?: '12h' | '24h';
+  disabledTime?: any;
 };

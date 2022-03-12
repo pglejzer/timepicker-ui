@@ -1,7 +1,7 @@
 import { optionTypes } from './types';
 
 // Thanks for Bootstrap 5 - alpha version
-const toType = (obj: null | undefined | string | number): string => {
+export const toType = (obj: null | undefined | string | number): string => {
   if (obj === null || obj === undefined) {
     return `${obj}`;
   }
@@ -15,10 +15,10 @@ const toType = (obj: null | undefined | string | number): string => {
 };
 
 // Thanks for Bootstrap 5 - alpha version
-const isElement = (obj: string | any[] | any): string => (obj[0] || obj).nodeType;
+export const isElement = (obj: string | any[] | any): string => (obj[0] || obj).nodeType;
 
 // Thanks for Bootstrap 5 - alpha version
-const typeCheckConfig = (
+export const typeCheckConfig = (
   componentName: string,
   config: { [x: string]: any },
   configTypes: { [x: string]: any }
@@ -39,7 +39,7 @@ const typeCheckConfig = (
 };
 
 // Thanks for Bootstrap 5 - alpha version
-const getConfig = (
+export const getConfig = (
   options?: optionTypes,
   defaultOptions?: Record<string, unknown>
 ): Record<string, unknown> => {
@@ -52,7 +52,7 @@ const getConfig = (
 };
 
 // Thanks for Bootstrap 5 - alpha version
-const getScrollbarWidth = (): number => {
+export const getScrollbarWidth = (): number => {
   const scrollDiv = document.createElement('div');
   scrollDiv.className = 'timepicker-ui-measure';
   document.body.appendChild(scrollDiv);
@@ -62,9 +62,9 @@ const getScrollbarWidth = (): number => {
   return scrollbarWidth;
 };
 
-const getRadians = (el: number): number => el * (Math.PI / 180);
+export const getRadians = (el: number): number => el * (Math.PI / 180);
 
-const getClickTouchPosition = (event: TouchEvent, object: HTMLElement, isMobile = false) => {
+export const getClickTouchPosition = (event: TouchEvent, object: HTMLElement, isMobile = false) => {
   const { touches } = event;
   const { clientX, clientY } = (event as unknown) as MouseEvent;
 
@@ -94,14 +94,14 @@ const getClickTouchPosition = (event: TouchEvent, object: HTMLElement, isMobile 
   return obj;
 };
 
-const getMathDegIncrement = (degrees: number, num: number): number => {
+export const getMathDegIncrement = (degrees: number, num: number): number => {
   return Math.round(degrees / num) * num;
 };
 
-const hasClass = (el: HTMLElement | null | Element, selector: string): boolean =>
+export const hasClass = (el: HTMLElement | null | Element, selector: string): boolean =>
   el ? el.classList.contains(selector) : false;
 
-const getInputValue = (el: HTMLInputElement, clockType?: string) => {
+export const getInputValue = (el: HTMLInputElement, clockType?: string) => {
   if (!el) {
     return {
       hour: '12',
@@ -190,7 +190,7 @@ const getInputValue = (el: HTMLInputElement, clockType?: string) => {
   }
 };
 
-const createNewEvent = (
+export const createNewEvent = (
   el: Element,
   eventName: string,
   value: {
@@ -215,10 +215,10 @@ const createNewEvent = (
   el.dispatchEvent(ev);
 };
 
-const getBrowser = (): boolean =>
+export const getBrowser = (): boolean =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-const getIncrementTimes = (degrees: number, type: any, count: number) => {
+export const getIncrementTimes = (degrees: number, type: any, count: number) => {
   return getMathDegIncrement(degrees, (type as never) * count);
 };
 
@@ -241,18 +241,95 @@ export const createObjectFromData = (obj: optionTypes): any => {
   }, {});
 };
 
-export {
-  createNewEvent,
-  getBrowser,
-  getClickTouchPosition,
-  getConfig,
-  getIncrementTimes,
-  getInputValue,
-  getMathDegIncrement,
-  getRadians,
-  getScrollbarWidth,
-  hasClass,
-  isElement,
-  toType,
-  typeCheckConfig,
+export const range = (start?: number | string, stop?: number | string) =>
+  Array.from({ length: Number(stop) - Number(start) + 1 }, (_, i) => Number(start) + i);
+
+export const reverseRange = (start?: number | string, stop?: number | string) =>
+  Array.from({ length: Number(stop) - Number(start) + 1 }, (_, i) => Number(stop) - i).reverse();
+
+export const getS = (options: any) => {
+  const { disabledTime, clockType } = options;
+
+  if (
+    !disabledTime ||
+    Object.keys(disabledTime).length <= 0 ||
+    disabledTime.constructor.name !== 'Object'
+  )
+    return;
+
+  const { hours, interval, minutes } = disabledTime;
+
+  if (interval) {
+    delete disabledTime.hours;
+    delete disabledTime.minutes;
+
+    const [first, second] = interval.toString().split('-');
+
+    const { hour: startHour, minutes: startMinutes } = getInputValue(
+      { value: first.trimEnd() } as any,
+      clockType
+    );
+
+    const { hour: endHour, minutes: endMinutes } = getInputValue(
+      { value: second.trimEnd().trimStart() } as any,
+      clockType
+    );
+
+    let rangeArrHour = range(startHour, endHour).map((e: number | string) =>
+      e === '00' || Number(e) === 0 ? `0${Number(e)}` : `${Number(e)}`
+    );
+
+    const removedHours: any = [];
+
+    if (Number(startMinutes) > 0 && Number(endMinutes) <= 0) {
+      removedHours.push(rangeArrHour[0]);
+      rangeArrHour = rangeArrHour.slice(1);
+    } else if (Number(endMinutes) > 0 && Number(startMinutes) <= 0) {
+      removedHours.push(rangeArrHour[rangeArrHour.length - 1]);
+      rangeArrHour = rangeArrHour.slice(-1);
+    } else if (Number(endMinutes) > 0 && Number(startMinutes) > 0) {
+      removedHours.push(rangeArrHour[0], rangeArrHour[rangeArrHour.length - 1]);
+      rangeArrHour = rangeArrHour.slice(1, -1);
+    }
+
+    return {
+      value: {
+        removedStartedHour: Number(removedHours[0]) <= 9 ? `0${removedHours[0]}` : removedHours[0],
+        removedEndHour: Number(removedHours[1]) <= 9 ? `0${removedHours[1]}` : removedHours[1],
+        rangeArrHour: rangeArrHour,
+        isInterval: true,
+        startMinutes: range(startMinutes, 59).map((e: number | string) =>
+          Number(e) <= 9 ? `0${e}` : `${e}`
+        ),
+        endMinutes: reverseRange(0, endMinutes).map((e: number | string) =>
+          Number(e) <= 9 ? `0${e}` : `${e}`
+        ),
+      },
+    };
+  } else {
+    hours.value.forEach((e: number | string) => {
+      if (clockType === '12h' && Number(e) > 12) {
+        throw new Error('The disabled hours value has to be less than 13');
+      }
+
+      if (clockType === '24h' && Number(e) > 23) {
+        throw new Error('The disabled hours value has to be less than 24');
+      }
+    });
+
+    minutes.value.forEach((e: number | string) => {
+      if (Number(e) > 59) {
+        throw new Error('The disabled minutes value has to be less than 60');
+      }
+    });
+
+    return {
+      value: {
+        hours: hours.value.map((e: number | string) =>
+          e === '00' || Number(e) === 0 ? `0${Number(e)}` : `${Number(e)}`
+        ),
+        minutes: minutes.value.map((e: number | string) => (Number(e) <= 9 ? `0${e}` : `${e}`)),
+      },
+    };
+  }
 };

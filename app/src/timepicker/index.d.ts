@@ -41,6 +41,7 @@ export default class TimepickerUI {
     open: () => void;
     close: () => void;
     destroy: () => void;
+    private _checkDisableOptions;
     private removeCircleClockClasses24h;
     private setCircleClockClasses24h;
     private setErrorHandler;

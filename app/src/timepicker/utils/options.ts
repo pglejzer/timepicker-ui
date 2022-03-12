@@ -25,6 +25,7 @@ const options: optionTypes = {
   theme: 'basic',
   preventDefault: true,
   clockType: '12h',
+  disabledTime: '',
 };
 
 export { options };

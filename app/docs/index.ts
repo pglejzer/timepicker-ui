@@ -8,13 +8,51 @@ Prism.highlightAll();
 
 const basic = document.querySelector('.basic') as HTMLDivElement;
 
-const basicPicker = new TimepickerUI(basic, { enableScrollbar: true });
+const basicPicker = new TimepickerUI(basic, {
+  enableScrollbar: true,
+  clockType: '12h',
+  disabledTime: {
+    minutes: {
+      value: ['12', 5, '10', '3', '13', 44, '55', 33],
+    },
+    hours: {
+      value: [1, 9, '3', 4, 5, '12'],
+    },
+    interval: '5:52 AM - 10:45 AM',
+  },
+});
+
 basicPicker.create();
+
+const test = document.querySelector('.test') as HTMLDivElement;
+
+const testPicker = new TimepickerUI(test, {
+  enableScrollbar: true,
+  clockType: '24h',
+  disabledTime: {
+    minutes: {
+      value: ['12', 5, '10', '3', '13', 44, '55', 33],
+    },
+    hours: {
+      value: [1, 2, '3', 4, 5, '14', 17, 18, 22, '00'],
+    },
+    interval: '5:30 - 10:30',
+  },
+});
+testPicker.create();
 
 const mobiles = document.querySelector('.mobile') as HTMLDivElement;
 
 const mobilePicker = new TimepickerUI(mobiles, {
   mobile: true,
+  disabledTime: {
+    minutes: {
+      value: [12, 13, 44, 55, 33],
+    },
+    hours: {
+      value: [1, 2, 3, 4, 5],
+    },
+  },
 });
 
 mobilePicker.create();
@@ -77,16 +115,11 @@ openByButton.addEventListener('update', (e) => {
   console.log(e);
 });
 
-const test = document.querySelector('.test') as HTMLDivElement;
-
-const testPicker = new TimepickerUI(test, { enableScrollbar: true, clockType: '24h' });
-testPicker.create();
-
 const mobiles24 = document.querySelector('.mobile-24') as HTMLDivElement;
 
 const mobilePicker24 = new TimepickerUI(mobiles24, {
   mobile: true,
-  clockType: '24h',
+  clockType: '12h',
 });
 
 mobilePicker24.create();
