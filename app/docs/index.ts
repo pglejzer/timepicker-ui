@@ -11,15 +11,15 @@ const basic = document.querySelector('.basic') as HTMLDivElement;
 const basicPicker = new TimepickerUI(basic, {
   enableScrollbar: true,
   clockType: '12h',
-  disabledTime: {
-    minutes: {
-      value: ['12', 5, '10', '3', '13', 44, '55', 33],
-    },
-    hours: {
-      value: [1, 9, '3', 4, 5, '12'],
-    },
-    interval: '5:52 AM - 10:45 AM',
-  },
+  // disabledTime: {
+  //   minutes: {
+  //     value: ['12', 5, '10', '3', '13', 44, '55', 33],
+  //   },
+  //   hours: {
+  //     value: [1, 9, '3', 4, 5, '12'],
+  //   },
+  //   interval: '6:00 AM - 10:00 PM',
+  // },
 });
 
 basicPicker.create();
@@ -30,13 +30,13 @@ const testPicker = new TimepickerUI(test, {
   enableScrollbar: true,
   clockType: '24h',
   disabledTime: {
-    minutes: {
-      value: ['12', 5, '10', '3', '13', 44, '55', 33],
-    },
-    hours: {
-      value: [1, 2, '3', 4, 5, '14', 17, 18, 22, '00'],
-    },
-    interval: '5:30 - 10:30',
+    // minutes: {
+    //   value: ['12', 5, '10', '3', '13', 44, '55', 33],
+    // },
+    // hours: {
+    //   value: [1, 2, '3', 4, 5, '14', 17, 18, 22, '00'],
+    // },
+    interval: '6:00 - 22:00',
   },
 });
 testPicker.create();

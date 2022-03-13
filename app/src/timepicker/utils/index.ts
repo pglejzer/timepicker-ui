@@ -265,12 +265,12 @@ export const getS = (options: any) => {
 
     const [first, second] = interval.toString().split('-');
 
-    const { hour: startHour, minutes: startMinutes } = getInputValue(
+    const { hour: startHour, minutes: startMinutes, type: startType } = getInputValue(
       { value: first.trimEnd() } as any,
       clockType
     );
 
-    const { hour: endHour, minutes: endMinutes } = getInputValue(
+    const { hour: endHour, minutes: endMinutes, type: endType } = getInputValue(
       { value: second.trimEnd().trimStart() } as any,
       clockType
     );
@@ -290,13 +290,16 @@ export const getS = (options: any) => {
     } else if (Number(endMinutes) > 0 && Number(startMinutes) > 0) {
       removedHours.push(rangeArrHour[0], rangeArrHour[rangeArrHour.length - 1]);
       rangeArrHour = rangeArrHour.slice(1, -1);
+    } else if (Number(endMinutes) === 0 && Number(startMinutes) === 0) {
+      removedHours.push(undefined, rangeArrHour[rangeArrHour.length - 1]);
+      rangeArrHour.pop();
     }
 
     return {
       value: {
         removedStartedHour: Number(removedHours[0]) <= 9 ? `0${removedHours[0]}` : removedHours[0],
         removedEndHour: Number(removedHours[1]) <= 9 ? `0${removedHours[1]}` : removedHours[1],
-        rangeArrHour: rangeArrHour,
+        rangeArrHour,
         isInterval: true,
         startMinutes: range(startMinutes, 59).map((e: number | string) =>
           Number(e) <= 9 ? `0${e}` : `${e}`
@@ -304,6 +307,8 @@ export const getS = (options: any) => {
         endMinutes: reverseRange(0, endMinutes).map((e: number | string) =>
           Number(e) <= 9 ? `0${e}` : `${e}`
         ),
+        endType,
+        startType,
       },
     };
   } else {

@@ -1004,11 +1004,20 @@ export default class TimepickerUI {
 
         const isInterval = this._disabledTime?.value.isInterval ? 'rangeArrHour' : 'hours';
 
-        if (this._disabledTime?.value[isInterval]?.includes(hour.toString())) {
+        if (typeof this._disabledTime?.value?.endType === 'string') {
+          if (
+            this._disabledTime?.value?.endType === this.activeTypeMode?.textContent &&
+            this._disabledTime?.value?.startType === this.activeTypeMode?.textContent
+          ) {
+            if (this._disabledTime?.value[isInterval]?.includes(hour.toString())) {
+              return;
+            }
+          }
+        } else if (this._disabledTime?.value[isInterval]?.includes(hour.toString())) {
           return;
-        } else {
-          this.removeCircleClockClasses24h();
         }
+
+        this.removeCircleClockClasses24h();
 
         this.clockHand.style.transform = `rotateZ(${deg}deg)`;
         this.hour.innerText = hour > 9 ? `${hour}` : `0${hour}`;
