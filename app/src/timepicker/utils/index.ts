@@ -210,6 +210,8 @@ export const createNewEvent = (
     currentLength?: string | number;
   }
 ): void => {
+  if (!el) return;
+
   const ev = new CustomEvent(eventName, { detail: value });
 
   el.dispatchEvent(ev);
@@ -248,6 +250,7 @@ export const reverseRange = (start?: number | string, stop?: number | string) =>
   Array.from({ length: Number(stop) - Number(start) + 1 }, (_, i) => Number(stop) - i).reverse();
 
 export const getS = (options: any) => {
+  if (!options) return;
   const { disabledTime, clockType } = options;
 
   if (
@@ -336,5 +339,11 @@ export const getS = (options: any) => {
         minutes: minutes.value.map((e: number | string) => (Number(e) <= 9 ? `0${e}` : `${e}`)),
       },
     };
+  }
+};
+
+export const initCallback = (callback?: Function | string): void => {
+  if (callback && typeof callback === 'function') {
+    callback();
   }
 };

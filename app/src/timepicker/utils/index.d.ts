@@ -1,21 +1,21 @@
 import { optionTypes } from './types';
-declare const toType: (obj: null | undefined | string | number) => string;
-declare const isElement: (obj: string | any[] | any) => string;
-declare const typeCheckConfig: (componentName: string, config: {
+export declare const toType: (obj: null | undefined | string | number) => string;
+export declare const isElement: (obj: string | any[] | any) => string;
+export declare const typeCheckConfig: (componentName: string, config: {
     [x: string]: any;
 }, configTypes: {
     [x: string]: any;
 }) => void;
-declare const getConfig: (options?: optionTypes | undefined, defaultOptions?: Record<string, unknown> | undefined) => Record<string, unknown>;
-declare const getScrollbarWidth: () => number;
-declare const getRadians: (el: number) => number;
-declare const getClickTouchPosition: (event: TouchEvent, object: HTMLElement, isMobile?: boolean) => {
+export declare const getConfig: (options?: optionTypes | undefined, defaultOptions?: Record<string, unknown> | undefined) => Record<string, unknown>;
+export declare const getScrollbarWidth: () => number;
+export declare const getRadians: (el: number) => number;
+export declare const getClickTouchPosition: (event: TouchEvent, object: HTMLElement, isMobile?: boolean) => {
     x: number;
     y: number;
 } | undefined;
-declare const getMathDegIncrement: (degrees: number, num: number) => number;
-declare const hasClass: (el: HTMLElement | null | Element, selector: string) => boolean;
-declare const getInputValue: (el: HTMLInputElement, clockType?: string | undefined) => {
+export declare const getMathDegIncrement: (degrees: number, num: number) => number;
+export declare const hasClass: (el: HTMLElement | null | Element, selector: string) => boolean;
+export declare const getInputValue: (el: HTMLInputElement, clockType?: string | undefined) => {
     hour: string;
     minutes: string;
     type: string | undefined;
@@ -79,7 +79,7 @@ declare const getInputValue: (el: HTMLInputElement, clockType?: string | undefin
     currentHour?: undefined;
     currentMin?: undefined;
 };
-declare const createNewEvent: (el: Element, eventName: string, value: {
+export declare const createNewEvent: (el: Element, eventName: string, value: {
     hour?: string | null;
     minutes?: string | null;
     type?: string | null;
@@ -95,7 +95,36 @@ declare const createNewEvent: (el: Element, eventName: string, value: {
     currentType?: string;
     currentLength?: string | number;
 }) => void;
-declare const getBrowser: () => boolean;
-declare const getIncrementTimes: (degrees: number, type: any, count: number) => number;
+export declare const getBrowser: () => boolean;
+export declare const getIncrementTimes: (degrees: number, type: any, count: number) => number;
 export declare const createObjectFromData: (obj: optionTypes) => any;
-export { createNewEvent, getBrowser, getClickTouchPosition, getConfig, getIncrementTimes, getInputValue, getMathDegIncrement, getRadians, getScrollbarWidth, hasClass, isElement, toType, typeCheckConfig, };
+export declare const range: (start?: string | number | undefined, stop?: string | number | undefined) => number[];
+export declare const reverseRange: (start?: string | number | undefined, stop?: string | number | undefined) => number[];
+export declare const getS: (options: any) => {
+    value: {
+        removedStartedHour: any;
+        removedEndHour: any;
+        rangeArrHour: string[];
+        isInterval: boolean;
+        startMinutes: string[];
+        endMinutes: string[];
+        endType: string | undefined;
+        startType: string | undefined;
+        hours?: undefined;
+        minutes?: undefined;
+    };
+} | {
+    value: {
+        hours: any;
+        minutes: any;
+        removedStartedHour?: undefined;
+        removedEndHour?: undefined;
+        rangeArrHour?: undefined;
+        isInterval?: undefined;
+        startMinutes?: undefined;
+        endMinutes?: undefined;
+        endType?: undefined;
+        startType?: undefined;
+    };
+} | undefined;
+export declare const initCallback: (callback?: string | Function | undefined) => void;

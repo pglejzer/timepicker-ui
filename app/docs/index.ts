@@ -1,4 +1,4 @@
-import { TimepickerUI } from 'timepicker-ui';
+import { optionTypes, TimepickerUI } from 'timepicker-ui';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism.css';
 import '../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css';
@@ -6,10 +6,11 @@ import '../node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css'
 
 Prism.highlightAll();
 
-const basic = document.querySelector('.basic') as HTMLDivElement;
+let basic = document.querySelector('.basic') as HTMLDivElement;
 
 const basicPicker = new TimepickerUI(basic, {
   enableScrollbar: true,
+  backdrop: false,
   clockType: '12h',
   // disabledTime: {
   //   minutes: {
@@ -24,19 +25,42 @@ const basicPicker = new TimepickerUI(basic, {
 
 basicPicker.create();
 
+const arr: optionTypes[] = [
+  { mobile: true, amLabel: 'Test' },
+  { mobile: false, amLabel: 'Not Test', pmLabel: 'test' },
+  { mobile: false, backdrop: false, pmLabel: 'OMG' },
+];
+
+document.querySelector('#test-button')?.addEventListener('click', () => {
+  basicPicker.destroy(() => {
+    console.log('destroyed');
+  });
+
+  const randomIndex = Math.floor(Math.random() * arr.length);
+
+  basicPicker.update({
+    options: arr[randomIndex],
+    create: true,
+  });
+
+  basicPicker.close(() => {
+    console.log('lo');
+  });
+});
+
 const test = document.querySelector('.test') as HTMLDivElement;
 
 const testPicker = new TimepickerUI(test, {
   enableScrollbar: true,
   clockType: '24h',
   disabledTime: {
-    // minutes: {
-    //   value: ['12', 5, '10', '3', '13', 44, '55', 33],
-    // },
-    // hours: {
-    //   value: [1, 2, '3', 4, 5, '14', 17, 18, 22, '00'],
-    // },
-    interval: '6:00 - 22:00',
+    minutes: {
+      value: ['12', 5, '10', '3', '13', 44, '55', 33],
+    },
+    hours: {
+      value: [1, 2, '3', 4, 5, '14', 17, 18, 22, '00'],
+    },
+    // interval: '5:30 - 22:00',
   },
 });
 testPicker.create();

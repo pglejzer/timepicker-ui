@@ -14,6 +14,8 @@ export default class TimepickerUI {
     private _isMobileView;
     private _isTouchMouseMove;
     isMinutesClick: boolean;
+    private _disabledTime;
+    private _cloned;
     constructor(element: HTMLDivElement, options?: optionTypes);
     private get modalTemplate();
     private get modalElement();
@@ -38,10 +40,15 @@ export default class TimepickerUI {
     private get keyboardClockIcon();
     private get footer();
     create: () => void;
-    open: () => void;
-    close: () => void;
-    destroy: () => void;
-    private _checkDisableOptions;
+    open: (callback?: Function | undefined) => void;
+    close: (...args: any) => void;
+    destroy: (callback?: Function | undefined) => void;
+    update: (value: {
+        options: optionTypes;
+        create?: boolean;
+    }, callback?: Function | undefined) => void;
+    private checkMobileOption;
+    private _getDisableTime;
     private removeCircleClockClasses24h;
     private setCircleClockClasses24h;
     private setErrorHandler;

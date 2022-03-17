@@ -5,6 +5,8 @@ declare class ClockFace {
     private tipsWrapper;
     private theme;
     private clockType;
+    private disabledTime;
+    private hour;
     constructor(obj: {
         array: Array<string>;
         classToAdd: string;
@@ -12,6 +14,8 @@ declare class ClockFace {
         tipsWrapper: HTMLElement;
         theme?: string;
         clockType?: string;
+        disabledTime?: any;
+        hour?: any;
     });
     create: () => void;
 }

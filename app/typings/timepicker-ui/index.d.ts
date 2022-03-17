@@ -1,5 +1,5 @@
 declare module 'timepicker-ui' {
-  type optionTypes = {
+  export type optionTypes = {
     amLabel?: string;
     animation?: boolean;
     appendModalSelector?: string;
@@ -28,8 +28,8 @@ declare module 'timepicker-ui' {
   };
 
   export class TimepickerUI {
-    _degreesHours: number;
-    _degreesMinutes: number;
+    _degreesHours: number | null;
+    _degreesMinutes: number | null;
     _options: optionTypes;
     private eventsClickMobile;
     private eventsClickMobileHandler;
@@ -39,7 +39,10 @@ declare module 'timepicker-ui' {
     private _element;
     private _isMobileView;
     private _isTouchMouseMove;
-    constructor(element: HTMLDivElement, options: optionTypes);
+    isMinutesClick: boolean;
+    private _disabledTime;
+    private _cloned;
+    constructor(element: HTMLDivElement, options?: optionTypes);
     private get modalTemplate();
     private get modalElement();
     private get clockFace();
@@ -47,6 +50,7 @@ declare module 'timepicker-ui' {
     private get clockHand();
     private get circle();
     private get tipsWrapper();
+    private get tipsWrapperFor24h();
     private get minutes();
     private get hour();
     private get AM();
@@ -62,8 +66,23 @@ declare module 'timepicker-ui' {
     private get keyboardClockIcon();
     private get footer();
     create: () => void;
-    open: () => void;
-    close: () => void;
+    open: (callback?: Function | undefined) => void;
+    close: (...args: any) => void;
+    destroy: (callback?: Function | undefined) => void;
+    update: (
+      value: {
+        options: optionTypes;
+        create?: boolean;
+      },
+      callback?: Function | undefined
+    ) => void;
+    private checkMobileOption;
+    private _getDisableTime;
+    private removeCircleClockClasses24h;
+    private setCircleClockClasses24h;
+    private setErrorHandler;
+    private removeErrorHandler;
+    private _setOnStartCSSClassesIfClockType24h;
     private _setTheme;
     private _setInputClassToInputElement;
     private _setDataOpenToInputIfDosentExistInWrapper;
@@ -102,7 +121,7 @@ declare module 'timepicker-ui' {
     private _handleValueAndCheck;
     private handlerViewChange;
     private _handleIconChangeView;
-    private _handlerClickPmAm;
+    private _handlerClickHourMinutes;
     private _handleClickOnHourMobile;
   }
 }
