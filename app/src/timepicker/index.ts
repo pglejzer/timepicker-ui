@@ -211,10 +211,11 @@ export default class TimepickerUI {
     initCallback(callback);
   };
 
-  public close = (...args: any): void => {
-    if (args.length > 2) return;
-    const [update] = args.filter((e: any) => typeof e === 'boolean');
-    const [callback] = args.filter((e: any) => typeof e === 'function');
+  public close = (...args: Array<boolean | Function>): void => {
+    if (args.length > 2 || !this.modalElement) return;
+
+    const [update] = args.filter((e) => typeof e === 'boolean');
+    const [callback] = args.filter((e) => typeof e === 'function');
 
     if (update) {
       this._handleOkButton();
@@ -254,7 +255,7 @@ export default class TimepickerUI {
       this.modalElement.remove();
     }, 300);
 
-    initCallback(callback);
+    initCallback(callback as Function);
   };
 
   public destroy = (callback?: Function) => {
@@ -273,9 +274,14 @@ export default class TimepickerUI {
     this._cloned = this._element.cloneNode(true);
     this._element.after(this._cloned);
     this._element.remove();
-    this._element = this._cloned;
+    // @ts-ignore
+    this._element = null;
 
-    initCallback(callback);
+    if (this._element === null) {
+      initCallback(callback);
+    }
+
+    this._element = this._cloned;
   };
 
   public update = (
@@ -536,9 +542,8 @@ export default class TimepickerUI {
 
     const { hour, minutes, type } = value;
 
-    // @ts-ignore
-    this.hour?.innerText = hour as string; // @ts-ignore
-    this.minutes?.innerText = minutes as string;
+    this.hour.innerText = hour as string;
+    this.minutes.innerText = minutes as string;
 
     const typeMode = document.querySelector(`[data-type="${type}"]`) as HTMLElement;
 

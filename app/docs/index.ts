@@ -43,7 +43,7 @@ document.querySelector('#test-button')?.addEventListener('click', () => {
     create: true,
   });
 
-  basicPicker.close(() => {
+  basicPicker.close(true, () => {
     console.log('lo');
   });
 });

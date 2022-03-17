@@ -67,7 +67,7 @@ declare module 'timepicker-ui' {
     private get footer();
     create: () => void;
     open: (callback?: Function | undefined) => void;
-    close: (...args: any) => void;
+    close: (...args: Array<boolean | Function>) => void;
     destroy: (callback?: Function | undefined) => void;
     update: (
       value: {

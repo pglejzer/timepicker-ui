@@ -127,4 +127,4 @@ export declare const getS: (options: any) => {
         startType?: undefined;
     };
 } | undefined;
-export declare const initCallback: (callback?: string | Function | undefined) => void;
+export declare const initCallback: (callback?: Function | undefined) => void;

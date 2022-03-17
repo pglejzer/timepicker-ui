@@ -342,7 +342,7 @@ export const getS = (options: any) => {
   }
 };
 
-export const initCallback = (callback?: Function | string): void => {
+export const initCallback = (callback?: Function): void => {
   if (callback && typeof callback === 'function') {
     callback();
   }
