@@ -93,7 +93,7 @@ We provide CSS styles built-in but sometimes if you don't use some normalize/res
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import { TimepickerUI } from "timepicker-ui";
+import { TimepickerUI } from 'timepicker-ui';
 ```
 
 #### UMD
@@ -125,7 +125,7 @@ timepicker-ui has to be created with a new instance with key `new`. This instanc
 #### JavaScript
 
 ```javascript
-const DOMElement = document.querySelector(".timepicker-ui");
+const DOMElement = document.querySelector('.timepicker-ui');
 const options = {};
 const newTimepicker = new TimepickerUI(DOMElement, options);
 ```
@@ -135,7 +135,7 @@ By default initialization of timepicker is started when you click on input. If y
 To initalize a timepicker with UMD version you have to init a window object with `tui`.
 
 ```js
-const DOMElement = document.querySelector(".timepicker-ui");
+const DOMElement = document.querySelector('.timepicker-ui');
 const options = {};
 const newTimepicker = new window.tui.TimepickerUI(DOMElement, options);
 
@@ -154,7 +154,7 @@ newTimepicker.create();
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector(".default-class");
+const timepicker = document.querySelector('.default-class');
 const initTimepicker = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -183,11 +183,28 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector(".default-class");
-const options = { okLabel: "test", amLabel: "test1", backdrop: false };
+const timepicker = document.querySelector('.default-class');
+const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
 const initTimepicker = new TimepickerUI(timepicker, options);
 
 timepicker.create();
+```
+
+---
+
+### CDNJS
+
+This library is aviable in cdnjs packages. Here is a link to the full description https://cdnjs.com/libraries/timepicker-ui.
+
+You can put script tags in your HTML file and use UMD version, without installation.
+
+```html
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/timepicker-ui/2.3.0/timepicker-ui.umd.js"
+  integrity="sha512-a3QUlKZYbhDBhA0b++tX+QjrbEwk1DNTyCR7rzwM34AUx16sNOLDzh4JQhqV5xYLs010+xsnFjrDjz2jx2+qLw=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
 ```
 
 ---
@@ -468,7 +485,7 @@ Methods are custom function what can be used to manually change the behavior of 
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector("timepicker-ui-test");
+const timepicker = document.querySelector('timepicker-ui-test');
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -561,12 +578,12 @@ Events are custom events triggered when you add some event listeners to your tim
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector("timepicker-ui-test");
+const timepicker = document.querySelector('timepicker-ui-test');
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
 
-timepicker.addEventListener("show", (event) => console.log(event.detail));
+timepicker.addEventListener('show', (event) => console.log(event.detail));
 ```
 
 #### Table with events

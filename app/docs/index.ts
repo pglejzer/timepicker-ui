@@ -12,6 +12,8 @@ const basicPicker = new TimepickerUI(basic, {
   enableScrollbar: true,
   backdrop: false,
   clockType: '12h',
+  enableSwitchIcon: true,
+  iconTemplate: '<span>test</span>',
   // disabledTime: {
   //   minutes: {
   //     value: ['12', 5, '10', '3', '13', 44, '55', 33],
