@@ -28,9 +28,9 @@ declare module 'timepicker-ui' {
   };
 
   export class TimepickerUI {
-    _degreesHours: number | null;
-    _degreesMinutes: number | null;
-    _options: optionTypes;
+    private _degreesHours;
+    private _degreesMinutes;
+    private _options;
     private eventsClickMobile;
     private eventsClickMobileHandler;
     private mutliEventsMove;
@@ -39,7 +39,6 @@ declare module 'timepicker-ui' {
     private _element;
     private _isMobileView;
     private _isTouchMouseMove;
-    isMinutesClick: boolean;
     private _disabledTime;
     private _cloned;
     constructor(element: HTMLDivElement, options?: optionTypes);

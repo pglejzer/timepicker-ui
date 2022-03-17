@@ -25,20 +25,19 @@ import {
 import ClockFace from './components/ClockFace';
 
 export default class TimepickerUI {
-  _degreesHours: number | null;
-  _degreesMinutes: number | null;
-  _options: optionTypes;
+  private _degreesHours: number | null;
+  private _degreesMinutes: number | null;
+  private _options: optionTypes;
   private eventsClickMobile: (event: Event) => Promise<void>;
-  private eventsClickMobileHandler: any;
+  private eventsClickMobileHandler: EventListenerOrEventListenerObject;
   private mutliEventsMove: (event: Event) => void;
-  private mutliEventsMoveHandler: any;
+  private mutliEventsMoveHandler: EventListenerOrEventListenerObject;
   private _clickTouchEvents: string[];
   private _element: HTMLElement;
   private _isMobileView: boolean | null;
   private _isTouchMouseMove: boolean | null;
-  isMinutesClick: boolean;
   private _disabledTime: any;
-  private _cloned: any;
+  private _cloned: Node | null;
 
   constructor(element: HTMLDivElement, options?: optionTypes) {
     this._element = element;
@@ -75,7 +74,6 @@ export default class TimepickerUI {
     this.checkMobileOption();
 
     this._clickTouchEvents = ['click', 'touchstart'];
-    this.isMinutesClick = true;
     this._disabledTime = null;
   }
 
@@ -281,7 +279,7 @@ export default class TimepickerUI {
       initCallback(callback);
     }
 
-    this._element = this._cloned;
+    this._element = this._cloned as HTMLElement;
   };
 
   public update = (
@@ -430,18 +428,14 @@ export default class TimepickerUI {
     this.removeErrorHandler();
 
     this.openElement.forEach((openEl) => openEl?.classList.add('disabled'));
-
     this.input?.blur();
 
     this._setScrollbarOrNot();
     this._setModalTemplate();
     this._setNormalizeClass();
     this._removeBackdrop();
-
     this._setBgColorToCirleWithHourTips();
-
     this._setOnStartCSSClassesIfClockType24h();
-
     this._setClassActiveToHourOnOpen();
 
     if (this.clockFace !== null) {
@@ -505,7 +499,6 @@ export default class TimepickerUI {
     this._handleCancelButton();
     this._handleOkButton();
     this._handleBackdropClick();
-
     this._handleIconChangeView();
     this._handleClickOnHourMobile();
   };
@@ -522,10 +515,8 @@ export default class TimepickerUI {
     const value = getInputValue(this.input as any, this._options.clockType);
 
     if (value === undefined) {
-      // @ts-ignore
-      this.hour?.innerText = '12';
-      // @ts-ignore
-      this.minutes?.innerText = '00';
+      this.hour.innerText = '12';
+      this.minutes.innerText = '00';
 
       createNewEvent(this._element, 'show', {
         hour: this.hour.textContent,

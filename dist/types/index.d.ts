@@ -27,9 +27,9 @@ declare type optionTypes = {
 };
 
 declare class TimepickerUI {
-    _degreesHours: number | null;
-    _degreesMinutes: number | null;
-    _options: optionTypes;
+    private _degreesHours;
+    private _degreesMinutes;
+    private _options;
     private eventsClickMobile;
     private eventsClickMobileHandler;
     private mutliEventsMove;
@@ -38,7 +38,6 @@ declare class TimepickerUI {
     private _element;
     private _isMobileView;
     private _isTouchMouseMove;
-    isMinutesClick: boolean;
     private _disabledTime;
     private _cloned;
     constructor(element: HTMLDivElement, options?: optionTypes);

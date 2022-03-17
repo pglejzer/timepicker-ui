@@ -26,7 +26,7 @@ const basicPicker = new TimepickerUI(basic, {
 basicPicker.create();
 
 const arr: optionTypes[] = [
-  { mobile: true, amLabel: 'Test' },
+  { mobile: true, backdrop: true, amLabel: 'Test' },
   { mobile: false, amLabel: 'Not Test', pmLabel: 'test' },
   { mobile: false, backdrop: false, pmLabel: 'OMG' },
 ];
