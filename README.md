@@ -93,7 +93,7 @@ We provide CSS styles built-in but sometimes if you don't use some normalize/res
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import { TimepickerUI } from 'timepicker-ui';
+import { TimepickerUI } from "timepicker-ui";
 ```
 
 #### UMD
@@ -125,7 +125,7 @@ timepicker-ui has to be created with a new instance with key `new`. This instanc
 #### JavaScript
 
 ```javascript
-const DOMElement = document.querySelector('.timepicker-ui');
+const DOMElement = document.querySelector(".timepicker-ui");
 const options = {};
 const newTimepicker = new TimepickerUI(DOMElement, options);
 ```
@@ -135,7 +135,7 @@ By default initialization of timepicker is started when you click on input. If y
 To initalize a timepicker with UMD version you have to init a window object with `tui`.
 
 ```js
-const DOMElement = document.querySelector('.timepicker-ui');
+const DOMElement = document.querySelector(".timepicker-ui");
 const options = {};
 const newTimepicker = new window.tui.TimepickerUI(DOMElement, options);
 
@@ -154,7 +154,7 @@ newTimepicker.create();
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('.default-class');
+const timepicker = document.querySelector(".default-class");
 const initTimepicker = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -183,8 +183,8 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('.default-class');
-const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
+const timepicker = document.querySelector(".default-class");
+const options = { okLabel: "test", amLabel: "test1", backdrop: false };
 const initTimepicker = new TimepickerUI(timepicker, options);
 
 timepicker.create();
@@ -468,7 +468,7 @@ Methods are custom function what can be used to manually change the behavior of 
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('timepicker-ui-test');
+const timepicker = document.querySelector("timepicker-ui-test");
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -481,21 +481,66 @@ timepicker.create();
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Description</th>
+      <th scope="col">Parameters</th>
+      <th scope="col">Default</th>
+      <th scope="col">Parameters description</th>
     </tr>
   </thead>
   <tbody>
    <tr>
       <td scope="row">create</td>
       <td>The create method init timepicker</td>
+      <td align="center">-</td>
+      <td align="center">-</td>
+      <td align="center">-</td>
     </tr>
     <tr>
       <td scope="row">open</td>
       <td>The open method opens immediately timepicker after init</td>
+      <td align="center">(callback)</td>
+      <td align="center">undefined</td>
+      <td>The callback function is tiggered when timepicker is open by this method.  <br/>  <br/>Example: <br/>
+      tmInstance.open(()=> console.log('triggered after open'));
+      </td>
     </tr>
     <tr>
       <td scope="row">close</td>
-        <td>Closure method closes the timepicker</td>
+      <td>Closure method closes the timepicker</td>
+      <td align="center">(boolean, function)</td>
+      <td align="center">undefined</td>
+      <td>These parameters in this method are optional and order is any. You can set callback function first or boolean, or just boolean or just callback. If the boolean is set to true the input will be updating with the current value on picker. <br/> The callback function start immediately after close, if is invoke. The max parameters length is set to 2.
+       <br/><br/>
+       Examples:  <br/>
+       tmInstance.close(() => console.log('triggered after close')); <br/>
+       tmInstance.close(true, () => console.log('triggered after close')); <br/>
+       tmInstance.close(true);
+      </td>
     </tr>
+    <tr>
+      <td scope="row">update</td>
+      <td>The update method</td>
+      <td align="center">(object, function)</td>
+      <td align="center">({ options: {}, create: boolean }, callback)</td>
+      <td>The first parameter is a object with key options which is timepicker options and it will be updated to current instance and is `required` The `create` key wchich if is set to true is starting the create() method after invoke update function and is optional. The `create` option is useful if you are using destroy and update methods together. The callback function is triggered after update method is invoke and this parameter is optional.
+      <br/><br/>
+       Examples:  <br/>
+       tmInstance.update({options:{ amLabel:"test" }}, () => console.log('triggered after update')); <br/>
+       tmInstance.update({options:{ amLabel:"test" }, create: true}, () => console.log('triggered after update')); <br/>
+       tmInstance.update({options:{ amLabel:"test" }); <br/>
+      </td>
+    </tr>
+    <tr>
+      <td scope="row">destroy</td>
+      <td>The destroy method destroy actual instance of picker by cloning element.</td>
+      <td align="center">(function)</td>
+      <td align="center">undefined</td>
+      <td>The callback function is started after destroyed method. This parameter is optional.
+       <br/><br/>
+       Example:  <br/>
+       tmInstance.destroy(() => console.log('triggered after destroy')); <br/>
+      </td>
+    </tr>
+
   </tbody>
 </table>
 
@@ -516,12 +561,12 @@ Events are custom events triggered when you add some event listeners to your tim
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('timepicker-ui-test');
+const timepicker = document.querySelector("timepicker-ui-test");
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
 
-timepicker.addEventListener('show', (event) => console.log(event.detail));
+timepicker.addEventListener("show", (event) => console.log(event.detail));
 ```
 
 #### Table with events

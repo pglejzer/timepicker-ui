@@ -8,3 +8,4 @@ demo*
 timepicker-ui-*
 .npmrc
 .github*
+.vscode
