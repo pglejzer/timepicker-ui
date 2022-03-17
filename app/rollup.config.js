@@ -37,6 +37,7 @@ const plugins = [
     extract: false,
   }),
   terser({
+    compress: true,
     output: {
       comments: false,
     },
@@ -68,6 +69,6 @@ export default [
   {
     input: './src/index.d.ts',
     output: [{ file: '../dist/types/index.d.ts', format: 'es' }],
-    plugins: [dts()],
+    plugins: [dts({ compilerOptions: { removeComments: false } })],
   },
 ];
