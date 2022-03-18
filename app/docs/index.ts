@@ -146,7 +146,7 @@ const mobiles24 = document.querySelector('.mobile-24') as HTMLDivElement;
 
 const mobilePicker24 = new TimepickerUI(mobiles24, {
   mobile: true,
-  clockType: '12h',
+  clockType: '24h',
 });
 
 mobilePicker24.create();

@@ -1,23 +1,19 @@
 import { optionTypes } from './types';
 
-// Thanks for Bootstrap 5 - alpha version
 export const toType = (obj: null | undefined | string | number): string => {
   if (obj === null || obj === undefined) {
     return `${obj}`;
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //@ts-ignore
+  // @ts-ignore
   return {}.toString
     .call(obj)
     .match(/\s([a-z]+)/i)[1]
     .toLowerCase();
 };
 
-// Thanks for Bootstrap 5 - alpha version
 export const isElement = (obj: string | any[] | any): string => (obj[0] || obj).nodeType;
 
-// Thanks for Bootstrap 5 - alpha version
 export const typeCheckConfig = (
   componentName: string,
   config: { [x: string]: any },
@@ -38,7 +34,6 @@ export const typeCheckConfig = (
   });
 };
 
-// Thanks for Bootstrap 5 - alpha version
 export const getConfig = (
   options?: optionTypes,
   defaultOptions?: Record<string, unknown>
@@ -51,7 +46,6 @@ export const getConfig = (
   return config;
 };
 
-// Thanks for Bootstrap 5 - alpha version
 export const getScrollbarWidth = (): number => {
   const scrollDiv = document.createElement('div');
   scrollDiv.className = 'timepicker-ui-measure';

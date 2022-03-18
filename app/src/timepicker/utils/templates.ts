@@ -1,6 +1,5 @@
-/* eslint-disable no-undef */
-/* eslint-disable indent */
-const getNumberOfHours24: Array<string> = [
+import { optionTypes } from 'timepicker-ui';
+export const getNumberOfHours24 = [
   '00',
   '13',
   '14',
@@ -14,21 +13,8 @@ const getNumberOfHours24: Array<string> = [
   '22',
   '23',
 ];
-const getNumberOfHours12: Array<string> = [
-  '12',
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  '10',
-  '11',
-];
-const getNumberOfMinutes: Array<string> = [
+export const getNumberOfHours12 = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+export const getNumberOfMinutes = [
   '00',
   '05',
   '10',
@@ -43,18 +29,7 @@ const getNumberOfMinutes: Array<string> = [
   '55',
 ];
 
-const getModalTemplate = (options: {
-  iconTemplate?: string;
-  timeLabel?: string;
-  amLabel?: string;
-  pmLabel?: string;
-  cancelLabel?: string;
-  okLabel?: string;
-  enableSwitchIcon?: boolean;
-  animation?: boolean;
-  editable?: boolean;
-  clockType?: string;
-}): string => {
+export const getModalTemplate = (options: optionTypes): string => {
   const {
     iconTemplate,
     timeLabel,
@@ -127,19 +102,7 @@ const getModalTemplate = (options: {
   </div>`;
 };
 
-const getMobileModalTemplate = (options: {
-  mobileTimeLabel?: string;
-  amLabel?: string;
-  pmLabel?: string;
-  cancelLabel?: string;
-  okLabel?: string;
-  iconTemplateMobile?: string;
-  minuteMobileLabel?: string;
-  hourMobileLabel?: string;
-  enableSwitchIcon?: boolean;
-  animation?: boolean;
-  clockType?: string;
-}): string => {
+export const getMobileModalTemplate = (options: optionTypes): string => {
   const {
     mobileTimeLabel,
     amLabel,
@@ -153,6 +116,7 @@ const getMobileModalTemplate = (options: {
     animation,
     clockType,
   } = options;
+
   return `
   <div class="timepicker-ui-modal normalize mobile" role="dialog" style='transition:${
     animation ? 'opacity 0.15s linear' : 'none'
@@ -192,12 +156,4 @@ const getMobileModalTemplate = (options: {
       </div>
     </div>  
   </div>`;
-};
-
-export {
-  getMobileModalTemplate,
-  getModalTemplate,
-  getNumberOfHours12,
-  getNumberOfHours24,
-  getNumberOfMinutes,
 };
