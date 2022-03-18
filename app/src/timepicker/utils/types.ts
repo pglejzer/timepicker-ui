@@ -65,18 +65,18 @@ export declare type optionTypes = {
    */
   iconTemplateMobile?: string;
   /**
-   * @description Turn on/off focus to input after close modal
-   * @default false
+   * @description Set increment hour by 1, 2, 3 hour
+   * @default 1
    */
   incrementHours?: number;
   /**
-   * @description Set increment hour by 1, 2, 3 hour
+   * @description Set increment minutes by 1, 5, 10, 15 minutes
    * @default 1
    */
   incrementMinutes?: number;
   /**
-   * @description Set increment minutes by 1, 5, 10, 15 minutes
-   * @default 1
+   * @description set custom text to minute label on mobile version
+   * @default "Minute"
    */
   minuteMobileLabel?: string;
   /**

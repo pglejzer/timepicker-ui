@@ -249,7 +249,7 @@ export const range = (start?: number | string, stop?: number | string) =>
 export const reverseRange = (start?: number | string, stop?: number | string) =>
   Array.from({ length: Number(stop) - Number(start) + 1 }, (_, i) => Number(stop) - i).reverse();
 
-export const getS = (options: any) => {
+export const createDisabledTime = (options: any) => {
   if (!options) return;
   const { disabledTime, clockType } = options;
 
@@ -345,5 +345,66 @@ export const getS = (options: any) => {
 export const initCallback = (callback?: Function): void => {
   if (callback && typeof callback === 'function') {
     callback();
+  }
+};
+
+export const handleValueAndCheck = (
+  val: string | number | null,
+  type: 'hour' | 'minutes',
+  clockType?: optionTypes['clockType']
+): undefined | boolean => {
+  const value = Number(val);
+
+  if (type === 'hour') {
+    if (clockType !== '24h') {
+      if (value > 0 && value <= 12) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      if (value >= 0 && value <= 23) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  if (type === 'minutes') {
+    if (value >= 0 && value <= 59) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+
+export const checkDisabledHoursAndMinutes = (
+  value: (string | number)[] | string | number | undefined,
+  type: 'hour' | 'minutes',
+  clockType?: optionTypes['clockType'],
+  arrValue?: (string | number)[]
+) => {
+  if (!value) return;
+
+  if (Array.isArray(value) && value.length > 0) {
+    const checkArr = value.map((e) => handleValueAndCheck(e, type, clockType));
+
+    if (checkArr.some((e) => e === false)) {
+      return false;
+    }
+
+    return true;
+  } else if (typeof value === 'string' || typeof value === 'number') {
+    const isValid = handleValueAndCheck(value, type, clockType);
+
+    const isIncludes = arrValue?.map(Number).includes(Number(value));
+
+    if (isValid && !isIncludes) {
+      return true;
+    }
+
+    return false;
   }
 };

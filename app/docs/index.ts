@@ -12,17 +12,18 @@ const basicPicker = new TimepickerUI(basic, {
   enableScrollbar: true,
   backdrop: false,
   clockType: '12h',
+  editable: true,
   enableSwitchIcon: true,
   iconTemplate: '<span>test</span>',
-  // disabledTime: {
-  //   minutes: {
-  //     value: ['12', 5, '10', '3', '13', 44, '55', 33],
-  //   },
-  //   hours: {
-  //     value: [1, 9, '3', 4, 5, '12'],
-  //   },
-  //   interval: '6:00 AM - 10:00 PM',
-  // },
+  disabledTime: {
+    minutes: {
+      value: ['12', 5, '10', '3', '13', 44, '55', 33],
+    },
+    hours: {
+      value: [1, 9, '3', 4, 5, '12'],
+    },
+    interval: '6:00 AM - 10:00 PM',
+  },
 });
 
 basicPicker.create();
