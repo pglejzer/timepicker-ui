@@ -6,67 +6,99 @@ import '../node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css'
 
 Prism.highlightAll();
 
-let basic = document.querySelector('.basic') as HTMLDivElement;
+// let basic = document.querySelector('.basic') as HTMLDivElement;
 
-const basicPicker = new TimepickerUI(basic, {
-  enableScrollbar: true,
-  backdrop: false,
-  clockType: '12h',
-  editable: true,
-  enableSwitchIcon: true,
-  iconTemplate: '<span>test</span>',
-  disabledTime: {
-    minutes: {
-      value: ['12', 5, '10', '3', '13', 44, '55', 33],
-    },
-    hours: {
-      value: [1, 9, '3', 4, 5, '12'],
-    },
-    interval: '6:00 AM - 10:00 PM',
-  },
-});
+// const basicPicker = new TimepickerUI(basic, {
+//   disabledTime: {
+//     minutes: {
+//       value: ['12', 5, '10', '3', '13', 44, '55', 33],
+//     },
+//     hours: {
+//       value: [1, 9, '3', 4, 5, '12'],
+//     },
+//     interval: '6:00 AM - 10:00 PM',
+//   },
+// });
 
-basicPicker.create();
-
-const arr: optionTypes[] = [
-  { mobile: true, backdrop: true, amLabel: 'Test' },
-  { mobile: false, amLabel: 'Not Test', pmLabel: 'test' },
-  { mobile: false, backdrop: false, pmLabel: 'OMG' },
-];
-
-document.querySelector('#test-button')?.addEventListener('click', () => {
-  basicPicker.destroy(() => {
-    console.log('destroyed');
-  });
-
-  const randomIndex = Math.floor(Math.random() * arr.length);
-
-  basicPicker.update({
-    options: arr[randomIndex],
-    create: true,
-  });
-
-  basicPicker.close(true, () => {
-    console.log('lo');
-  });
-});
+// basicPicker.create();
 
 const test = document.querySelector('.test') as HTMLDivElement;
-
+// good
 const testPicker = new TimepickerUI(test, {
-  enableScrollbar: true,
   clockType: '24h',
   disabledTime: {
-    minutes: {
-      value: ['12', 5, '10', '3', '13', 44, '55', 33],
-    },
-    hours: {
-      value: [1, 2, '3', 4, 5, '14', 17, 18, 22, '00'],
-    },
-    // interval: '5:30 - 22:00',
+    interval: '5:00 - 21:00',
   },
 });
 testPicker.create();
+
+const test1 = document.querySelector('.test1') as HTMLDivElement;
+
+// good
+const testPicker1 = new TimepickerUI(test1, {
+  clockType: '24h',
+  disabledTime: {
+    interval: '5:55 - 21:55',
+  },
+});
+testPicker1.create();
+
+const test2 = document.querySelector('.test2') as HTMLDivElement;
+
+// good
+
+const testPicker2 = new TimepickerUI(test2, {
+  clockType: '24h',
+  disabledTime: {
+    interval: '5:00 - 21:59',
+  },
+});
+testPicker2.create();
+
+const test3 = document.querySelector('.test3') as HTMLDivElement;
+// goood
+const testPicker3 = new TimepickerUI(test3, {
+  enableScrollbar: true,
+  clockType: '24h',
+  disabledTime: {
+    interval: '5:55 - 21:00',
+  },
+});
+testPicker3.create();
+
+const test4 = document.querySelector('.test4') as HTMLDivElement;
+// goood
+const testPicker4 = new TimepickerUI(test4, {
+  enableScrollbar: true,
+  clockType: '24h',
+  disabledTime: {
+    interval: '5:30 - 21:30',
+  },
+});
+testPicker4.create();
+
+// const arr: optionTypes[] = [
+//   { mobile: true, backdrop: true, amLabel: 'Test' },
+//   { mobile: false, amLabel: 'Not Test', pmLabel: 'test' },
+//   { mobile: false, backdrop: false, pmLabel: 'OMG' },
+// ];
+
+// document.querySelector('#test-button')?.addEventListener('click', () => {
+//   basicPicker.destroy(() => {
+//     console.log('destroyed');
+//   });
+
+//   const randomIndex = Math.floor(Math.random() * arr.length);
+
+//   basicPicker.update({
+//     options: arr[randomIndex],
+//     create: true,
+//   });
+
+//   basicPicker.close(true, () => {
+//     console.log('lo');
+//   });
+// });
 
 const mobiles = document.querySelector('.mobile') as HTMLDivElement;
 

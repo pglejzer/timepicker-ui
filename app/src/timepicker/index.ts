@@ -232,6 +232,7 @@ export default class TimepickerUI {
 
     document.removeEventListener('mousedown', this.eventsClickMobileHandler);
     document.removeEventListener('touchstart', this.eventsClickMobileHandler);
+    document.removeEventListener('keypress', this._handleEscClick);
 
     if (this._options.enableSwitchIcon) {
       this.keyboardClockIcon.removeEventListener('touchstart', this.handlerViewChange);
@@ -305,7 +306,7 @@ export default class TimepickerUI {
   };
 
   private _checkDisabledValuesOnStart() {
-    if (!this._options.disabledTime) return;
+    if (!this._options.disabledTime?.hours || !this._options.disabledTime?.minutes) return;
 
     const {
       disabledTime: { hours, minutes },
@@ -322,14 +323,11 @@ export default class TimepickerUI {
 
   private checkMobileOption() {
     if (this._options.mobile) {
-      console.log('lol');
       this._isMobileView = true;
       this._options.editable = true;
     } else if (this._options && !this._options.preventDefault) {
-      console.log('lol1');
       this._options.editable = true;
     } else {
-      console.log('lol2');
       this._isMobileView = false;
       this._options.editable = false;
     }
@@ -449,6 +447,7 @@ export default class TimepickerUI {
   };
 
   private _eventsBundle = (): void => {
+    this._handleEscClick();
     this.setErrorHandler();
     this.removeErrorHandler();
 
@@ -494,6 +493,8 @@ export default class TimepickerUI {
         });
 
         initClockFace24h.create();
+      } else {
+        initClockFace.update();
       }
     }
 
@@ -615,8 +616,6 @@ export default class TimepickerUI {
           disabledTime?.minutes?.value
         );
 
-        console.log({ validHoursDisabled }, { validMinutesDisabled });
-
         if (
           validHours === false ||
           validMinutes === false ||
@@ -726,7 +725,7 @@ export default class TimepickerUI {
       ? this._disabledTime?.value?.minutes
       : this._disabledTime?.value;
 
-    new ClockFace({
+    const initClockFace = new ClockFace({
       array: getNumberOfMinutes,
       classToAdd: 'timepicker-ui-minutes-time',
       clockFace: this.clockFace,
@@ -735,7 +734,13 @@ export default class TimepickerUI {
       disabledTime: getDisabledMinutes,
       hour: this.hour.textContent,
       clockType: this._options.clockType,
-    }).create();
+    });
+
+    initClockFace.create();
+
+    if (this._options.clockType === '12h') {
+      initClockFace.update();
+    }
 
     this._toggleClassActiveToValueTips(value);
 
@@ -749,18 +754,22 @@ export default class TimepickerUI {
       this._setTransformToCircleWithSwitchesHour(value);
       this._setBgColorToCirleWithHourTips();
 
-      new ClockFace({
+      const disabledTime = this._disabledTime?.value?.isInterval
+        ? this._disabledTime?.value.rangeArrHour
+        : this._disabledTime?.value?.hours;
+
+      const init12h = new ClockFace({
         array: getNumberOfHours12,
         classToAdd: 'timepicker-ui-hour-time-12',
         clockFace: this.clockFace,
         tipsWrapper: this.tipsWrapper,
         theme: this._options.theme,
-        disabledTime: this._disabledTime?.value?.isInterval
-          ? this._disabledTime?.value.rangeArrHour
-          : this._disabledTime?.value?.hours,
+        disabledTime,
         clockType: '12h',
         hour: this.hour.textContent,
-      }).create();
+      });
+
+      init12h.create();
 
       if (this._options.clockType === '24h') {
         new ClockFace({
@@ -770,11 +779,11 @@ export default class TimepickerUI {
           tipsWrapper: this.tipsWrapperFor24h,
           theme: this._options.theme,
           clockType: '24h',
-          disabledTime: this._disabledTime?.value?.isInterval
-            ? this._disabledTime?.value.rangeArrHour
-            : this._disabledTime?.value?.hours,
+          disabledTime,
           hour: this.hour.textContent,
         }).create();
+      } else {
+        init12h.update();
       }
 
       this._toggleClassActiveToValueTips(value);
@@ -810,6 +819,14 @@ export default class TimepickerUI {
 
         target.classList.add(selectorActive);
         this.PM.classList.remove(selectorActive);
+
+        const test = new ClockFace({
+          clockFace: this.clockFace,
+          tipsWrapper: this.tipsWrapper,
+          array: hasClass(this.hour, 'active') ? getNumberOfHours12 : getNumberOfMinutes,
+        });
+
+        test.update();
 
         createNewEvent(this._element, 'selectamtypemode', {
           hour: this.hour.textContent,
@@ -1012,29 +1029,31 @@ export default class TimepickerUI {
         deg = Math.round(deg / 6) * 6;
       }
 
-      if (!this._disabledTime?.value.isInterval) {
-        if (
-          this._disabledTime?.value?.minutes?.includes(minute <= 9 ? `0${minute}` : `${minute}`)
-        ) {
-          return;
-        }
-      } else {
-        if (
-          this._disabledTime?.value?.endMinutes?.includes(
-            minute <= 9 ? `0${minute}` : `${minute}`
-          ) &&
-          this.hour.textContent === this._disabledTime?.value?.removedEndHour
-        ) {
-          return;
-        }
+      if (this._options.clockType === '24h') {
+        if (!this._disabledTime?.value.isInterval) {
+          if (
+            this._disabledTime?.value?.minutes?.includes(minute <= 9 ? `0${minute}` : `${minute}`)
+          ) {
+            return;
+          }
+        } else {
+          if (
+            this._disabledTime?.value?.endMinutes?.includes(
+              minute <= 9 ? `0${minute}` : `${minute}`
+            ) &&
+            this.hour.textContent === this._disabledTime?.value?.removedEndHour
+          ) {
+            return;
+          }
 
-        if (
-          this._disabledTime?.value?.startMinutes?.includes(
-            minute <= 9 ? `0${minute}` : `${minute}`
-          ) &&
-          this.hour.textContent === this._disabledTime?.value?.removedStartedHour
-        ) {
-          return;
+          if (
+            this._disabledTime?.value?.startMinutes?.includes(
+              minute <= 9 ? `0${minute}` : `${minute}`
+            ) &&
+            this.hour.textContent === this._disabledTime?.value?.removedStartedHour
+          ) {
+            return;
+          }
         }
       }
 
@@ -1390,5 +1409,15 @@ export default class TimepickerUI {
   private _handleClickOnHourMobile = (): void => {
     document.addEventListener('mousedown', this.eventsClickMobileHandler);
     document.addEventListener('touchstart', this.eventsClickMobileHandler);
+  };
+
+  private _handleKeyPress = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && this.modalElement) {
+      this.close();
+    }
+  };
+
+  private _handleEscClick = (): void => {
+    document.addEventListener('keydown', this._handleKeyPress);
   };
 }

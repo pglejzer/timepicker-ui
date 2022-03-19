@@ -277,17 +277,19 @@ export const createDisabledTime = (options: any) => {
     );
 
     const removedHours: any = [];
+    const numberStart = Number(startMinutes);
+    const numerEnd = Number(endMinutes);
 
-    if (Number(startMinutes) > 0 && Number(endMinutes) <= 0) {
-      removedHours.push(rangeArrHour[0]);
-      rangeArrHour = rangeArrHour.slice(1);
-    } else if (Number(endMinutes) > 0 && Number(startMinutes) <= 0) {
-      removedHours.push(rangeArrHour[rangeArrHour.length - 1]);
-      rangeArrHour = rangeArrHour.slice(-1);
-    } else if (Number(endMinutes) > 0 && Number(startMinutes) > 0) {
+    if (numberStart > 0 && numerEnd <= 0) {
       removedHours.push(rangeArrHour[0], rangeArrHour[rangeArrHour.length - 1]);
       rangeArrHour = rangeArrHour.slice(1, -1);
-    } else if (Number(endMinutes) === 0 && Number(startMinutes) === 0) {
+    } else if (numerEnd < 59 && numerEnd > 0 && numberStart <= 0) {
+      removedHours.push(undefined, rangeArrHour[rangeArrHour.length - 1]);
+      rangeArrHour = rangeArrHour.slice(0, -1);
+    } else if (numerEnd > 0 && numberStart > 0) {
+      removedHours.push(rangeArrHour[0], rangeArrHour[rangeArrHour.length - 1]);
+      rangeArrHour = rangeArrHour.slice(1, -1);
+    } else if (numerEnd === 0 && numberStart === 0) {
       removedHours.push(undefined, rangeArrHour[rangeArrHour.length - 1]);
       rangeArrHour.pop();
     }
