@@ -335,6 +335,10 @@
       color: $purple;
       background-color: #ece0fd;
     }
+
+    &.active {
+      pointer-events: none;
+    }
   }
 
   &-am:not(.timepicker-ui-am + .mobile),
@@ -515,7 +519,7 @@
 
   &-circle-hand {
     position: absolute;
-    transform: translate(-50%, -50%);
+    transform: translate(-48%, -50%);
     width: 4px;
     height: 4px;
     border-radius: 100%;
@@ -533,6 +537,7 @@
   }
 
   &-circle-hand-24h {
+    transform: translate(-50%, -50%);
     height: 32px;
     width: 32px;
     top: 4px;
@@ -546,10 +551,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
     outline: none;
+    transition: 0.3s ease color;
+
     &.active {
       color: #fff;
+      transition: none;
     }
   }
 

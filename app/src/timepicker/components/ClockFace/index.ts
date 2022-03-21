@@ -29,7 +29,7 @@ class ClockFace {
     this.hour = obj?.hour;
   }
 
-  update = (): void => {
+  public clean = () => {
     const spanHours = this.tipsWrapper?.querySelectorAll('span.timepicker-ui-hour-time-12');
     const spanMinutes = this.tipsWrapper?.querySelectorAll('span.timepicker-ui-minutes-time');
 
@@ -37,7 +37,7 @@ class ClockFace {
     this._removeClasses(spanMinutes);
   };
 
-  create = (): void => {
+  public create = (): void => {
     if (!this.clockFace || !this.array || !this.classToAdd || !this.tipsWrapper) return;
 
     const clockWidth = (this.clockFace.offsetWidth - 32) / 2;
@@ -101,10 +101,129 @@ class ClockFace {
     });
   };
 
-  _removeClasses = (spanHours: NodeListOf<Element> | undefined) => {
-    spanHours?.forEach(({ classList, children }) => {
+  public updateDisable = (obj?: any): void => {
+    const spanHours = this.tipsWrapper?.querySelectorAll('span.timepicker-ui-hour-time-12');
+    const spanMinutes = this.tipsWrapper?.querySelectorAll('span.timepicker-ui-minutes-time');
+
+    this._removeClasses(spanHours);
+    this._removeClasses(spanMinutes);
+
+    if (obj?.hoursToUpdate && spanHours) {
+      this._addClassesWithIncludes(spanHours, obj.hoursToUpdate);
+    }
+
+    if (obj?.minutesToUpdate && spanMinutes) {
+      const {
+        actualHour,
+        removedEndHour,
+        removedStartedHour,
+        startMinutes,
+        endMinutes,
+      } = obj.minutesToUpdate;
+
+      if (removedEndHour === actualHour && endMinutes.length > 0) {
+        this._addClassesWithIncludes(spanMinutes, endMinutes);
+      } else if (actualHour < removedEndHour && removedStartedHour !== actualHour) {
+        this._addClasses(spanMinutes);
+      }
+
+      if (removedStartedHour === actualHour && startMinutes.length > 0) {
+        this._addClassesWithIncludes(spanMinutes, startMinutes);
+      } else if (actualHour < removedStartedHour) {
+        this._addClasses(spanMinutes);
+      }
+    }
+
+    if (obj) {
+      const {
+        amHours,
+        pmHours,
+        activeMode,
+        startMinutes,
+        endMinutes,
+        removedAmHour,
+        removedPmHour,
+        actualHour,
+      } = obj.minutesToUpdate;
+
+      if (spanHours) {
+        if (amHours && activeMode === 'AM') {
+          this._addClassesWithIncludes(spanHours, amHours);
+        }
+
+        if (pmHours && activeMode === 'PM') {
+          this._addClassesWithIncludes(spanHours, pmHours);
+        }
+      }
+
+      if (spanMinutes && startMinutes && endMinutes) {
+        if (activeMode === 'AM') {
+          if (startMinutes.length === 0 && endMinutes.length === 1 && endMinutes[0] === '00') {
+            if (Number(actualHour) >= Number(amHours[0])) {
+              this._addClasses(spanMinutes);
+            }
+          }
+
+          if (startMinutes.length === 0 && endMinutes.length > 1) {
+            if (Number(actualHour) >= Number(removedAmHour)) {
+              this._addClasses(spanMinutes);
+            }
+          }
+
+          if (startMinutes.length > 0 && endMinutes.length > 1 && endMinutes[0] === '00') {
+            if (Number(removedAmHour) === Number(actualHour)) {
+              this._addClassesWithIncludes(spanMinutes, startMinutes);
+            } else if (Number(actualHour) > Number(removedAmHour)) {
+              this._addClasses(spanMinutes);
+            }
+          }
+
+          if (endMinutes[0] === '00' && endMinutes.length === 1 && startMinutes.length > 0) {
+            if (Number(removedAmHour) === Number(actualHour)) {
+              this._addClassesWithIncludes(spanMinutes, startMinutes);
+            } else if (Number(actualHour) > Number(removedAmHour)) {
+              this._addClasses(spanMinutes);
+            }
+          }
+        }
+
+        if (activeMode === 'PM') {
+          if (actualHour < Number(removedPmHour)) {
+            this._addClasses(spanMinutes);
+          }
+
+          if (actualHour === removedPmHour) {
+            this._addClassesWithIncludes(spanMinutes, endMinutes);
+          }
+
+          if (endMinutes.length > 0 && Number(actualHour) === removedPmHour - 1) {
+            this._addClassesWithIncludes(spanMinutes, endMinutes);
+          }
+        }
+      }
+    }
+  };
+
+  private _removeClasses = (list?: NodeListOf<Element>) => {
+    list?.forEach(({ classList, children }) => {
       classList.remove('timepicker-ui-tips-disabled');
       children[0].classList.remove('timepicker-ui-tips-disabled');
+    });
+  };
+
+  private _addClasses = (nodeList?: NodeListOf<Element>) => {
+    nodeList?.forEach(({ classList, children }) => {
+      classList.add('timepicker-ui-tips-disabled');
+      children[0].classList.add('timepicker-ui-tips-disabled');
+    });
+  };
+
+  private _addClassesWithIncludes = (nodeList?: NodeListOf<Element>, includesArr?: any) => {
+    nodeList?.forEach(({ classList, children, textContent }) => {
+      if (includesArr?.includes(textContent)) {
+        classList.add('timepicker-ui-tips-disabled');
+        children[0].classList.add('timepicker-ui-tips-disabled');
+      }
     });
   };
 }

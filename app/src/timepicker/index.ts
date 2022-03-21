@@ -494,7 +494,35 @@ export default class TimepickerUI {
 
         initClockFace24h.create();
       } else {
-        initClockFace.update();
+        if (this._disabledTime.value.startType === this._disabledTime.value.endType) {
+          setTimeout(() => {
+            if (this._disabledTime.value.startType === this.activeTypeMode?.textContent) {
+              initClockFace.updateDisable({
+                hoursToUpdate: this._disabledTime.value.rangeArrHour,
+                minutesToUpdate: {
+                  endMinutes: this._disabledTime.value.endMinutes,
+                  removedEndHour: this._disabledTime.value.removedEndHour,
+                  removedStartedHour: this._disabledTime.value.removedStartedHour,
+                  actualHour: this.hour.textContent,
+                  startMinutes: this._disabledTime.value.startMinutes,
+                },
+              });
+            }
+          }, 300);
+        } else {
+          setTimeout(() => {
+            initClockFace.updateDisable({
+              minutesToUpdate: {
+                actualHour: this.hour.textContent,
+                pmHours: this._disabledTime.value.pmHours,
+                amHours: this._disabledTime.value.amHours,
+                activeMode: this.activeTypeMode?.textContent,
+              },
+            });
+          }, 300);
+        }
+
+        initClockFace.updateDisable();
       }
     }
 
@@ -739,7 +767,7 @@ export default class TimepickerUI {
     initClockFace.create();
 
     if (this._options.clockType === '12h') {
-      initClockFace.update();
+      initClockFace.updateDisable();
     }
 
     this._toggleClassActiveToValueTips(value);
@@ -783,7 +811,7 @@ export default class TimepickerUI {
           hour: this.hour.textContent,
         }).create();
       } else {
-        init12h.update();
+        init12h.updateDisable();
       }
 
       this._toggleClassActiveToValueTips(value);
@@ -820,13 +848,49 @@ export default class TimepickerUI {
         target.classList.add(selectorActive);
         this.PM.classList.remove(selectorActive);
 
-        const test = new ClockFace({
-          clockFace: this.clockFace,
-          tipsWrapper: this.tipsWrapper,
-          array: hasClass(this.hour, 'active') ? getNumberOfHours12 : getNumberOfMinutes,
-        });
+        if (this._options.clockType === '12h' && this._options.disabledTime?.interval) {
+          const test = new ClockFace({
+            clockFace: this.clockFace,
+            tipsWrapper: this.tipsWrapper,
+            array: hasClass(this.hour, 'active') ? getNumberOfHours12 : getNumberOfMinutes,
+          });
 
-        test.update();
+          if (this._disabledTime.value.startType === this._disabledTime.value.endType) {
+            setTimeout(() => {
+              if (this._disabledTime.value.startType === this.activeTypeMode?.textContent) {
+                test.updateDisable({
+                  hoursToUpdate: this._disabledTime.value.rangeArrHour,
+                  minutesToUpdate: {
+                    endMinutes: this._disabledTime.value.endMinutes,
+                    removedEndHour: this._disabledTime.value.removedEndHour,
+                    removedStartedHour: this._disabledTime.value.removedStartedHour,
+                    actualHour: this.hour.textContent,
+                    startMinutes: this._disabledTime.value.startMinutes,
+                  },
+                });
+              } else {
+                test.clean();
+              }
+            }, 300);
+          } else {
+            setTimeout(() => {
+              test.updateDisable({
+                minutesToUpdate: {
+                  actualHour: this.hour.textContent,
+                  pmHours: this._disabledTime.value.pmHours,
+                  amHours: this._disabledTime.value.amHours,
+                  activeMode: this.activeTypeMode?.textContent,
+                  startMinutes: this._disabledTime.value.startMinutes,
+                  endMinutes: this._disabledTime.value.endMinutes,
+                  removedAmHour: this._disabledTime.value.removedAmHour,
+                  removedPmHour: this._disabledTime.value.removedPmHour,
+                },
+              });
+            }, 300);
+          }
+
+          test.updateDisable();
+        }
 
         createNewEvent(this._element, 'selectamtypemode', {
           hour: this.hour.textContent,
@@ -846,6 +910,48 @@ export default class TimepickerUI {
 
         target.classList.add(selectorActive);
         this.AM.classList.remove(selectorActive);
+
+        if (this._options.clockType === '12h' && this._options.disabledTime?.interval) {
+          const test = new ClockFace({
+            clockFace: this.clockFace,
+            tipsWrapper: this.tipsWrapper,
+            array: hasClass(this.hour, 'active') ? getNumberOfHours12 : getNumberOfMinutes,
+          });
+
+          if (this._disabledTime.value.startType === this._disabledTime.value.endType) {
+            setTimeout(() => {
+              if (this._disabledTime.value.startType === this.activeTypeMode?.textContent) {
+                test.updateDisable({
+                  hoursToUpdate: this._disabledTime.value.rangeArrHour,
+                  minutesToUpdate: {
+                    endMinutes: this._disabledTime.value.endMinutes,
+                    removedEndHour: this._disabledTime.value.removedEndHour,
+                    removedStartedHour: this._disabledTime.value.removedStartedHour,
+                    actualHour: this.hour.textContent,
+                    startMinutes: this._disabledTime.value.startMinutes,
+                  },
+                });
+              } else {
+                test.clean();
+              }
+            }, 300);
+          } else {
+            setTimeout(() => {
+              test.updateDisable({
+                minutesToUpdate: {
+                  actualHour: this.hour.textContent,
+                  pmHours: this._disabledTime.value.pmHours,
+                  amHours: this._disabledTime.value.amHours,
+                  activeMode: this.activeTypeMode?.textContent,
+                  startMinutes: this._disabledTime.value.startMinutes,
+                  endMinutes: this._disabledTime.value.endMinutes,
+                  removedAmHour: this._disabledTime.value.removedAmHour,
+                  removedPmHour: this._disabledTime.value.removedPmHour,
+                },
+              });
+            }, 300);
+          }
+        }
 
         createNewEvent(this._element, 'selectpmtypemode', {
           hour: this.hour.textContent,
@@ -897,6 +1003,47 @@ export default class TimepickerUI {
         this._setHoursToClock(target.textContent);
         target.classList.add(selectorActive);
         this.minutes.classList.remove(selectorActive);
+        if (this._options.clockType === '12h' && this._options.disabledTime?.interval) {
+          const test = new ClockFace({
+            clockFace: this.clockFace,
+            tipsWrapper: this.tipsWrapper,
+            array: hasClass(this.hour, 'active') ? getNumberOfHours12 : getNumberOfMinutes,
+          });
+
+          if (this._disabledTime.value.startType === this._disabledTime.value.endType) {
+            setTimeout(() => {
+              if (this._disabledTime.value.startType === this.activeTypeMode?.textContent) {
+                test.updateDisable({
+                  hoursToUpdate: this._disabledTime.value.rangeArrHour,
+                  minutesToUpdate: {
+                    endMinutes: this._disabledTime.value.endMinutes,
+                    removedEndHour: this._disabledTime.value.removedEndHour,
+                    removedStartedHour: this._disabledTime.value.removedStartedHour,
+                    actualHour: this.hour.textContent,
+                    startMinutes: this._disabledTime.value.startMinutes,
+                  },
+                });
+              } else {
+                test.clean();
+              }
+            }, 300);
+          } else {
+            setTimeout(() => {
+              test.updateDisable({
+                minutesToUpdate: {
+                  actualHour: this.hour.textContent,
+                  pmHours: this._disabledTime.value.pmHours,
+                  amHours: this._disabledTime.value.amHours,
+                  activeMode: this.activeTypeMode?.textContent,
+                  startMinutes: this._disabledTime.value.startMinutes,
+                  endMinutes: this._disabledTime.value.endMinutes,
+                  removedAmHour: this._disabledTime.value.removedAmHour,
+                  removedPmHour: this._disabledTime.value.removedPmHour,
+                },
+              });
+            }, 300);
+          }
+        }
 
         createNewEvent(this._element, 'selecthourmode', {
           hour: this.hour.textContent,
@@ -931,6 +1078,47 @@ export default class TimepickerUI {
 
         target.classList.add(selectorActive);
         this.hour?.classList.remove(selectorActive);
+        if (this._options.clockType === '12h' && this._options.disabledTime?.interval) {
+          const test = new ClockFace({
+            clockFace: this.clockFace,
+            tipsWrapper: this.tipsWrapper,
+            array: hasClass(this.hour, 'active') ? getNumberOfHours12 : getNumberOfMinutes,
+          });
+
+          if (this._disabledTime.value.startType === this._disabledTime.value.endType) {
+            setTimeout(() => {
+              if (this._disabledTime.value.startType === this.activeTypeMode?.textContent) {
+                test.updateDisable({
+                  hoursToUpdate: this._disabledTime.value.rangeArrHour,
+                  minutesToUpdate: {
+                    endMinutes: this._disabledTime.value.endMinutes,
+                    removedEndHour: this._disabledTime.value.removedEndHour,
+                    removedStartedHour: this._disabledTime.value.removedStartedHour,
+                    actualHour: this.hour.textContent,
+                    startMinutes: this._disabledTime.value.startMinutes,
+                  },
+                });
+              } else {
+                test.clean();
+              }
+            }, 300);
+          } else {
+            setTimeout(() => {
+              test.updateDisable({
+                minutesToUpdate: {
+                  actualHour: this.hour.textContent,
+                  pmHours: this._disabledTime.value.pmHours,
+                  amHours: this._disabledTime.value.amHours,
+                  activeMode: this.activeTypeMode?.textContent,
+                  startMinutes: this._disabledTime.value.startMinutes,
+                  endMinutes: this._disabledTime.value.endMinutes,
+                  removedAmHour: this._disabledTime.value.removedAmHour,
+                  removedPmHour: this._disabledTime.value.removedPmHour,
+                },
+              });
+            }, 300);
+          }
+        }
 
         createNewEvent(this._element, 'selectminutemode', {
           hour: this.hour.textContent,

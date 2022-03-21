@@ -277,39 +277,99 @@ export const createDisabledTime = (options: any) => {
     );
 
     const removedHours: any = [];
-    const numberStart = Number(startMinutes);
-    const numerEnd = Number(endMinutes);
+    const numberStartMinutes = Number(startMinutes);
+    const numerEndMinutes = Number(endMinutes);
 
-    if (numberStart > 0 && numerEnd <= 0) {
-      removedHours.push(rangeArrHour[0], rangeArrHour[rangeArrHour.length - 1]);
-      rangeArrHour = rangeArrHour.slice(1, -1);
-    } else if (numerEnd < 59 && numerEnd > 0 && numberStart <= 0) {
-      removedHours.push(undefined, rangeArrHour[rangeArrHour.length - 1]);
-      rangeArrHour = rangeArrHour.slice(0, -1);
-    } else if (numerEnd > 0 && numberStart > 0) {
-      removedHours.push(rangeArrHour[0], rangeArrHour[rangeArrHour.length - 1]);
-      rangeArrHour = rangeArrHour.slice(1, -1);
-    } else if (numerEnd === 0 && numberStart === 0) {
-      removedHours.push(undefined, rangeArrHour[rangeArrHour.length - 1]);
-      rangeArrHour.pop();
+    if (endType === startType) {
+      if (numberStartMinutes > 0 && numerEndMinutes <= 0) {
+        removedHours.push(rangeArrHour[0], rangeArrHour[rangeArrHour.length - 1]);
+        rangeArrHour = rangeArrHour.slice(1, -1);
+      } else if (numerEndMinutes < 59 && numerEndMinutes > 0 && numberStartMinutes <= 0) {
+        removedHours.push(undefined, rangeArrHour[rangeArrHour.length - 1]);
+        rangeArrHour = rangeArrHour.slice(0, -1);
+      } else if (numerEndMinutes > 0 && numberStartMinutes > 0) {
+        removedHours.push(rangeArrHour[0], rangeArrHour[rangeArrHour.length - 1]);
+        rangeArrHour = rangeArrHour.slice(1, -1);
+      } else if (numerEndMinutes === 0 && numberStartMinutes === 0) {
+        removedHours.push(undefined, rangeArrHour[rangeArrHour.length - 1]);
+        rangeArrHour.pop();
+      }
+
+      return {
+        value: {
+          removedStartedHour:
+            Number(removedHours[0]) <= 9 ? `0${removedHours[0]}` : removedHours[0],
+          removedEndHour: Number(removedHours[1]) <= 9 ? `0${removedHours[1]}` : removedHours[1],
+          rangeArrHour,
+          isInterval: true,
+          startMinutes: range(startMinutes, 59).map((e: number | string) =>
+            Number(e) <= 9 ? `0${e}` : `${e}`
+          ),
+          endMinutes: reverseRange(0, endMinutes).map((e: number | string) =>
+            Number(e) <= 9 ? `0${e}` : `${e}`
+          ),
+          endType,
+          startType,
+        },
+      };
+    } else {
+      let amHours = range(startHour, 12).map(String);
+      let pmHours = reverseRange(1, endHour).map(String);
+
+      const removedPmHours: string[] = [];
+      const removedAmHours = [];
+
+      if (numberStartMinutes > 0 && numerEndMinutes <= 0) {
+        console.log('test');
+
+        removedPmHours.push(pmHours[pmHours.length - 1]);
+        removedAmHours.push(amHours[0]);
+
+        pmHours.splice(-1, 1);
+        amHours.splice(0, 1);
+      } else if (numerEndMinutes < 59 && numerEndMinutes > 0 && numberStartMinutes <= 0) {
+        console.log('test1');
+        removedAmHours.push(amHours[0]);
+        removedPmHours.push(pmHours[pmHours.length - 1]);
+
+        pmHours.splice(-1, 1);
+      } else if (numerEndMinutes > 0 && numberStartMinutes > 0) {
+        removedPmHours.push(pmHours[pmHours.length - 1]);
+        removedAmHours.push(amHours[0]);
+
+        pmHours.splice(-1, 1);
+        amHours.splice(0, 1);
+      } else if (numerEndMinutes === 0 && numberStartMinutes === 0) {
+        console.log('test3');
+
+        removedPmHours.push(pmHours[pmHours.length - 1]);
+        removedAmHours.push(amHours[0]);
+        pmHours.pop();
+      }
+
+      return {
+        value: {
+          isInterval: true,
+          endType,
+          startType,
+          pmHours,
+          amHours,
+          startMinutes:
+            Number(startMinutes) === 0
+              ? []
+              : range(startMinutes, 59).map((e: number | string) =>
+                  Number(e) <= 9 ? `0${e}` : `${e}`
+                ),
+          endMinutes: reverseRange(0, endMinutes).map((e: number | string) =>
+            Number(e) <= 9 ? `0${e}` : `${e}`
+          ),
+          removedAmHour:
+            Number(removedAmHours[0]) <= 9 ? `0${removedAmHours[0]}` : removedAmHours[0],
+          removedPmHour:
+            Number(removedPmHours[0]) <= 9 ? `0${removedPmHours[0]}` : removedPmHours[0],
+        },
+      };
     }
-
-    return {
-      value: {
-        removedStartedHour: Number(removedHours[0]) <= 9 ? `0${removedHours[0]}` : removedHours[0],
-        removedEndHour: Number(removedHours[1]) <= 9 ? `0${removedHours[1]}` : removedHours[1],
-        rangeArrHour,
-        isInterval: true,
-        startMinutes: range(startMinutes, 59).map((e: number | string) =>
-          Number(e) <= 9 ? `0${e}` : `${e}`
-        ),
-        endMinutes: reverseRange(0, endMinutes).map((e: number | string) =>
-          Number(e) <= 9 ? `0${e}` : `${e}`
-        ),
-        endType,
-        startType,
-      },
-    };
   } else {
     hours.value.forEach((e: number | string) => {
       if (clockType === '12h' && Number(e) > 12) {

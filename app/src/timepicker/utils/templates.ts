@@ -55,11 +55,11 @@ export const getModalTemplate = (options: optionTypes): string => {
         }">
           <div class="timepicker-ui-hour" role="button" contenteditable="${
             editable ? true : false
-          }">05</div>  
+          }"></div>  
           <div class="timepicker-ui-dots">:</div>    
           <div class="timepicker-ui-minutes" role="button" contenteditable="${
             editable ? true : false
-          }">00</div>   
+          }"></div>   
         </div>
       ${
         clockType !== '24h'

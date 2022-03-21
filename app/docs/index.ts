@@ -77,6 +77,93 @@ const testPicker4 = new TimepickerUI(test4, {
 });
 testPicker4.create();
 
+const test20 = document.querySelector('.test20') as HTMLDivElement;
+// good
+const testPicker20 = new TimepickerUI(test20, {
+  disabledTime: {
+    interval: '5:30 AM - 10:30 AM',
+  },
+});
+testPicker20.create();
+
+const test21 = document.querySelector('.test21') as HTMLDivElement;
+
+// good
+const testPicker21 = new TimepickerUI(test21, {
+  disabledTime: {
+    interval: '5:30 PM - 10:30 PM',
+  },
+});
+testPicker21.create();
+
+const test22 = document.querySelector('.test22') as HTMLDivElement;
+
+// good
+
+const testPicker22 = new TimepickerUI(test22, {
+  disabledTime: {
+    interval: '4:30 PM - 11:30 PM',
+  },
+});
+testPicker22.create();
+
+//////////////////////////////////////
+
+const test23 = document.querySelector('.test23') as HTMLDivElement;
+// good
+const testPicker23 = new TimepickerUI(test23, {
+  enableScrollbar: true,
+
+  disabledTime: {
+    interval: '4:00 AM - 5:00 PM',
+  },
+});
+testPicker23.create();
+
+const test24 = document.querySelector('.test24') as HTMLDivElement;
+
+const testPicker24 = new TimepickerUI(test24, {
+  enableScrollbar: true,
+
+  disabledTime: {
+    interval: '4:30 AM - 5:30 PM',
+  },
+});
+testPicker24.create();
+
+const test25 = document.querySelector('.test25') as HTMLDivElement;
+
+const testPicker25 = new TimepickerUI(test25, {
+  enableScrollbar: true,
+
+  disabledTime: {
+    interval: '4:00 AM - 5:50 PM',
+  },
+});
+testPicker25.create();
+
+const test26 = document.querySelector('.test26') as HTMLDivElement;
+
+const testPicker26 = new TimepickerUI(test26, {
+  enableScrollbar: true,
+
+  disabledTime: {
+    interval: '4:25 AM - 4:55 PM',
+  },
+});
+testPicker26.create();
+
+const test27 = document.querySelector('.test27') as HTMLDivElement;
+
+const testPicker27 = new TimepickerUI(test27, {
+  enableScrollbar: true,
+
+  disabledTime: {
+    interval: '4:25 AM - 4:00 PM',
+  },
+});
+testPicker27.create();
+
 // const arr: optionTypes[] = [
 //   { mobile: true, backdrop: true, amLabel: 'Test' },
 //   { mobile: false, amLabel: 'Not Test', pmLabel: 'test' },

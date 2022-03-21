@@ -46,6 +46,7 @@ export default class TimepickerUI {
         options: optionTypes;
         create?: boolean;
     }, callback?: Function | undefined) => void;
+    private _checkDisabledValuesOnStart;
     private checkMobileOption;
     private _getDisableTime;
     private removeCircleClockClasses24h;
@@ -88,9 +89,10 @@ export default class TimepickerUI {
     private _setScrollbarOrNot;
     private _setAnimationToOpen;
     private _removeAnimationToClose;
-    private _handleValueAndCheck;
     private handlerViewChange;
     private _handleIconChangeView;
     private _handlerClickHourMinutes;
     private _handleClickOnHourMobile;
+    private _handleKeyPress;
+    private _handleEscClick;
 }
