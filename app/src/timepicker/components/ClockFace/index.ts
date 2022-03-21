@@ -122,14 +122,23 @@ class ClockFace {
       } = obj.minutesToUpdate;
 
       if (removedEndHour === actualHour && endMinutes.length > 0) {
+        console.log('lol');
         this._addClassesWithIncludes(spanMinutes, endMinutes);
-      } else if (actualHour < removedEndHour && removedStartedHour !== actualHour) {
+      } else if (
+        Number(actualHour) > Number(removedStartedHour) &&
+        Number(actualHour) < Number(removedEndHour)
+      ) {
+        console.log('lol1');
+
         this._addClasses(spanMinutes);
       }
 
       if (removedStartedHour === actualHour && startMinutes.length > 0) {
         this._addClassesWithIncludes(spanMinutes, startMinutes);
-      } else if (actualHour < removedStartedHour) {
+      } else if (
+        Number(actualHour) > Number(removedStartedHour) &&
+        Number(actualHour) < Number(removedEndHour)
+      ) {
         this._addClasses(spanMinutes);
       }
     }
@@ -145,6 +154,8 @@ class ClockFace {
         removedPmHour,
         actualHour,
       } = obj.minutesToUpdate;
+
+      if (!amHours || !pmHours) return;
 
       if (spanHours) {
         if (amHours && activeMode === 'AM') {

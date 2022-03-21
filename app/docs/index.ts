@@ -102,7 +102,7 @@ const test22 = document.querySelector('.test22') as HTMLDivElement;
 
 const testPicker22 = new TimepickerUI(test22, {
   disabledTime: {
-    interval: '4:30 PM - 11:30 PM',
+    interval: '4:00 PM - 11:00 PM',
   },
 });
 testPicker22.create();

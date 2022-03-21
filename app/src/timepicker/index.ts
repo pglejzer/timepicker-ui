@@ -1217,19 +1217,20 @@ export default class TimepickerUI {
         deg = Math.round(deg / 6) * 6;
       }
 
-      if (this._options.clockType === '24h') {
-        if (!this._disabledTime?.value.isInterval) {
-          if (
-            this._disabledTime?.value?.minutes?.includes(minute <= 9 ? `0${minute}` : `${minute}`)
-          ) {
-            return;
-          }
-        } else {
+      if (!this._disabledTime?.value.isInterval) {
+        if (
+          this._disabledTime?.value?.minutes?.includes(minute <= 9 ? `0${minute}` : `${minute}`)
+        ) {
+          return;
+        }
+      } else {
+        if (this._disabledTime.value.endType === this._disabledTime.value.startType) {
           if (
             this._disabledTime?.value?.endMinutes?.includes(
               minute <= 9 ? `0${minute}` : `${minute}`
             ) &&
-            this.hour.textContent === this._disabledTime?.value?.removedEndHour
+            this.hour.textContent === this._disabledTime?.value?.removedEndHour &&
+            this._disabledTime.value.endType === this.activeTypeMode.textContent
           ) {
             return;
           }
@@ -1238,9 +1239,33 @@ export default class TimepickerUI {
             this._disabledTime?.value?.startMinutes?.includes(
               minute <= 9 ? `0${minute}` : `${minute}`
             ) &&
-            this.hour.textContent === this._disabledTime?.value?.removedStartedHour
+            this.hour.textContent === this._disabledTime?.value?.removedStartedHour &&
+            this._disabledTime.value.startType === this.activeTypeMode.textContent
           ) {
             return;
+          }
+        } else {
+          if (this.activeTypeMode.textContent === this._disabledTime.value.endType) {
+            if (
+              (this._disabledTime?.value?.endMinutes?.includes(
+                minute <= 9 ? `0${minute}` : `${minute}`
+              ) &&
+                this._disabledTime.value.removedPmHour === this.hour.textContent) ||
+              this._disabledTime.value.pmHours.map(Number).includes(Number(this.hour.textContent))
+            ) {
+              return;
+            }
+          }
+          if (this.activeTypeMode.textContent === this._disabledTime.value.startType) {
+            if (
+              (this._disabledTime?.value?.startMinutes?.includes(
+                minute <= 9 ? `0${minute}` : `${minute}`
+              ) &&
+                this._disabledTime.value.removedAmHour === this.hour.textContent) ||
+              this._disabledTime.value.amHours.map(Number).includes(Number(this.hour.textContent))
+            ) {
+              return;
+            }
           }
         }
       }
@@ -1298,17 +1323,31 @@ export default class TimepickerUI {
 
         const isInterval = this._disabledTime?.value.isInterval ? 'rangeArrHour' : 'hours';
 
-        if (typeof this._disabledTime?.value?.endType === 'string') {
-          if (
-            this._disabledTime?.value?.endType === this.activeTypeMode?.textContent &&
-            this._disabledTime?.value?.startType === this.activeTypeMode?.textContent
-          ) {
-            if (this._disabledTime?.value[isInterval]?.includes(hour.toString())) {
+        if (this._disabledTime?.value.endType === this._disabledTime?.value?.startType) {
+          if (typeof this._disabledTime?.value?.endType === 'string') {
+            if (
+              this._disabledTime?.value?.endType === this.activeTypeMode?.textContent &&
+              this._disabledTime?.value?.startType === this.activeTypeMode?.textContent
+            ) {
+              if (this._disabledTime?.value[isInterval]?.includes(hour.toString())) {
+                return;
+              }
+            }
+          } else if (this._disabledTime?.value[isInterval]?.includes(hour.toString())) {
+            return;
+          }
+        } else {
+          if (this._disabledTime?.value.startType === this.activeTypeMode.textContent) {
+            if (this._disabledTime?.value.amHours.includes(hour.toString())) {
               return;
             }
           }
-        } else if (this._disabledTime?.value[isInterval]?.includes(hour.toString())) {
-          return;
+
+          if (this._disabledTime?.value.endType === this.activeTypeMode.textContent) {
+            if (this._disabledTime?.value.pmHours.includes(hour.toString())) {
+              return;
+            }
+          }
         }
 
         this._removeCircleClockClasses24h();
