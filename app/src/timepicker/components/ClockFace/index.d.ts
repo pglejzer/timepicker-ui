@@ -22,6 +22,6 @@ declare class ClockFace {
     updateDisable: (obj?: any) => void;
     private _removeClasses;
     private _addClasses;
-    _addClassesWithIncludes: (nodeList?: NodeListOf<Element> | undefined, includesArr?: any) => void;
+    private _addClassesWithIncludes;
 }
 export default ClockFace;

@@ -34,10 +34,10 @@ export default class TimepickerUI {
   private _degreesHours: number | null;
   private _degreesMinutes: number | null;
   private _options: optionTypes;
-  private eventsClickMobile: (event: Event) => Promise<void>;
-  private eventsClickMobileHandler: EventListenerOrEventListenerObject;
-  private mutliEventsMove: (event: Event) => void;
-  private mutliEventsMoveHandler: EventListenerOrEventListenerObject;
+  private _eventsClickMobile: (event: Event) => Promise<void>;
+  private _eventsClickMobileHandler: EventListenerOrEventListenerObject;
+  private _mutliEventsMove: (event: Event) => void;
+  private _mutliEventsMoveHandler: EventListenerOrEventListenerObject;
   private _clickTouchEvents: string[];
   private _element: HTMLElement;
   private _isMobileView: boolean | null;
@@ -71,13 +71,13 @@ export default class TimepickerUI {
 
     this._isMobileView = false;
 
-    this.mutliEventsMove = (event) => this._handleEventToMoveHand(event as TouchEvent);
-    this.mutliEventsMoveHandler = this.mutliEventsMove.bind(this);
+    this._mutliEventsMove = (event) => this._handleEventToMoveHand(event as TouchEvent);
+    this._mutliEventsMoveHandler = this._mutliEventsMove.bind(this);
 
-    this.eventsClickMobile = (event) => this._handlerClickHourMinutes(event);
-    this.eventsClickMobileHandler = this.eventsClickMobile.bind(this);
+    this._eventsClickMobile = (event) => this._handlerClickHourMinutes(event);
+    this._eventsClickMobileHandler = this._eventsClickMobile.bind(this);
 
-    this.checkMobileOption();
+    this._checkMobileOption();
 
     this._clickTouchEvents = ['click', 'touchstart'];
     this._disabledTime = null;
@@ -228,15 +228,15 @@ export default class TimepickerUI {
 
     allEvents
       .split(' ')
-      .map((event) => document.removeEventListener(event, this.mutliEventsMoveHandler, false));
+      .map((event) => document.removeEventListener(event, this._mutliEventsMoveHandler, false));
 
-    document.removeEventListener('mousedown', this.eventsClickMobileHandler);
-    document.removeEventListener('touchstart', this.eventsClickMobileHandler);
+    document.removeEventListener('mousedown', this._eventsClickMobileHandler);
+    document.removeEventListener('touchstart', this._eventsClickMobileHandler);
     document.removeEventListener('keypress', this._handleEscClick);
 
     if (this._options.enableSwitchIcon) {
-      this.keyboardClockIcon.removeEventListener('touchstart', this.handlerViewChange);
-      this.keyboardClockIcon.removeEventListener('mousedown', this.handlerViewChange);
+      this.keyboardClockIcon.removeEventListener('touchstart', this._handlerViewChange);
+      this.keyboardClockIcon.removeEventListener('mousedown', this._handlerViewChange);
     }
 
     this._removeAnimationToClose();
@@ -264,14 +264,14 @@ export default class TimepickerUI {
   public destroy = (callback?: Function) => {
     allEvents
       .split(' ')
-      .map((event) => document.removeEventListener(event, this.mutliEventsMoveHandler, false));
+      .map((event) => document.removeEventListener(event, this._mutliEventsMoveHandler, false));
 
-    document.removeEventListener('mousedown', this.eventsClickMobileHandler);
-    document.removeEventListener('touchstart', this.eventsClickMobileHandler);
+    document.removeEventListener('mousedown', this._eventsClickMobileHandler);
+    document.removeEventListener('touchstart', this._eventsClickMobileHandler);
 
     if (this._options.enableSwitchIcon && this.keyboardClockIcon) {
-      this.keyboardClockIcon.removeEventListener('touchstart', this.handlerViewChange);
-      this.keyboardClockIcon.removeEventListener('mousedown', this.handlerViewChange);
+      this.keyboardClockIcon.removeEventListener('touchstart', this._handlerViewChange);
+      this.keyboardClockIcon.removeEventListener('mousedown', this._handlerViewChange);
     }
 
     this._cloned = this._element.cloneNode(true);
@@ -296,7 +296,7 @@ export default class TimepickerUI {
   ): void => {
     this._options = { ...this._options, ...value.options };
 
-    this.checkMobileOption();
+    this._checkMobileOption();
 
     if (value.create) {
       this.create();
@@ -321,7 +321,7 @@ export default class TimepickerUI {
     }
   }
 
-  private checkMobileOption() {
+  private _checkMobileOption() {
     if (this._options.mobile) {
       this._isMobileView = true;
       this._options.editable = true;
@@ -337,17 +337,17 @@ export default class TimepickerUI {
     this._disabledTime = createDisabledTime(this._options);
   }
 
-  private removeCircleClockClasses24h() {
+  private _removeCircleClockClasses24h() {
     this.circle?.classList.remove('timepicker-ui-circle-hand-24h');
     this.clockHand?.classList.remove('timepicker-ui-clock-hand-24h');
   }
 
-  private setCircleClockClasses24h() {
+  private _setCircleClockClasses24h() {
     this.circle.classList.add('timepicker-ui-circle-hand-24h');
     this.clockHand.classList.add('timepicker-ui-clock-hand-24h');
   }
 
-  private setErrorHandler() {
+  private _setErrorHandler() {
     const { error, currentHour, currentMin, currentType, currentLength } = getInputValue(
       this.input as any,
       this._options.clockType
@@ -380,7 +380,7 @@ export default class TimepickerUI {
     return;
   }
 
-  private removeErrorHandler() {
+  private _removeErrorHandler() {
     this.input?.classList.remove('timepicker-ui-invalid-format');
     const divToRemove = this._element?.querySelector(
       '.timepicker-ui-invalid-text'
@@ -395,7 +395,7 @@ export default class TimepickerUI {
       const { hour } = getInputValue(this.input as any, this._options.clockType);
 
       if (Number(hour) > 12 || Number(hour) === 0) {
-        this.setCircleClockClasses24h();
+        this._setCircleClockClasses24h();
       }
     }
   }
@@ -448,8 +448,8 @@ export default class TimepickerUI {
 
   private _eventsBundle = (): void => {
     this._handleEscClick();
-    this.setErrorHandler();
-    this.removeErrorHandler();
+    this._setErrorHandler();
+    this._removeErrorHandler();
 
     this.openElement.forEach((openEl) => openEl?.classList.add('disabled'));
     this.input?.blur();
@@ -992,7 +992,7 @@ export default class TimepickerUI {
 
         if (this._options.clockType === '24h') {
           if (Number(target.textContent) > 12 || target.textContent === '00') {
-            this.setCircleClockClasses24h();
+            this._setCircleClockClasses24h();
           }
 
           if (!this._options.mobile) {
@@ -1069,7 +1069,7 @@ export default class TimepickerUI {
         }
 
         if (this._options.clockType === '24h') {
-          this.removeCircleClockClasses24h();
+          this._removeCircleClockClasses24h();
 
           if (!this._options.mobile) {
             this.tipsWrapperFor24h?.classList.add('timepicker-ui-tips-wrapper-24h-disabled');
@@ -1311,7 +1311,7 @@ export default class TimepickerUI {
           return;
         }
 
-        this.removeCircleClockClasses24h();
+        this._removeCircleClockClasses24h();
 
         this.clockHand.style.transform = `rotateZ(${deg}deg)`;
         this.hour.innerText = hour > 9 ? `${hour}` : `0${hour}`;
@@ -1350,7 +1350,7 @@ export default class TimepickerUI {
         if (this._disabledTime?.value[isInterval]?.includes(hour.toString())) {
           return;
         } else {
-          this.setCircleClockClasses24h();
+          this._setCircleClockClasses24h();
         }
 
         this.clockHand.style.transform = `rotateZ(${deg}deg)`;
@@ -1386,11 +1386,11 @@ export default class TimepickerUI {
 
     allEvents.split(' ').map((event) => {
       if (event === 'touchstart' || event === 'touchmove' || event === 'touchend') {
-        document.addEventListener(event, this.mutliEventsMoveHandler, {
+        document.addEventListener(event, this._mutliEventsMoveHandler, {
           passive: false,
         });
       } else {
-        document.addEventListener(event, this.mutliEventsMoveHandler, false);
+        document.addEventListener(event, this._mutliEventsMoveHandler, false);
       }
     });
   };
@@ -1444,7 +1444,7 @@ export default class TimepickerUI {
     }
   };
 
-  private handlerViewChange = async () => {
+  private _handlerViewChange = async () => {
     const { clockType } = this._options;
 
     if (!hasClass(this.modalElement, 'mobile')) {
@@ -1516,7 +1516,7 @@ export default class TimepickerUI {
         this._eventsBundle();
 
         if (Number(beforeHourContent) > 12 || Number(beforeHourContent) === 0) {
-          this.setCircleClockClasses24h();
+          this._setCircleClockClasses24h();
         }
 
         this._isMobileView = true;
@@ -1546,9 +1546,9 @@ export default class TimepickerUI {
   private _handleIconChangeView = async (): Promise<void> => {
     if (this._options.enableSwitchIcon) {
       if (getBrowser()) {
-        this.keyboardClockIcon.addEventListener('touchstart', this.handlerViewChange);
+        this.keyboardClockIcon.addEventListener('touchstart', this._handlerViewChange);
       } else {
-        this.keyboardClockIcon.addEventListener('click', this.handlerViewChange);
+        this.keyboardClockIcon.addEventListener('click', this._handlerViewChange);
       }
     }
   };
@@ -1595,8 +1595,8 @@ export default class TimepickerUI {
   };
 
   private _handleClickOnHourMobile = (): void => {
-    document.addEventListener('mousedown', this.eventsClickMobileHandler);
-    document.addEventListener('touchstart', this.eventsClickMobileHandler);
+    document.addEventListener('mousedown', this._eventsClickMobileHandler);
+    document.addEventListener('touchstart', this._eventsClickMobileHandler);
   };
 
   private _handleKeyPress = (e: KeyboardEvent) => {
