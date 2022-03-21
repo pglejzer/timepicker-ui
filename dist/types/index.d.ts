@@ -65,18 +65,18 @@ declare type optionTypes = {
      */
     iconTemplateMobile?: string;
     /**
-     * @description Turn on/off focus to input after close modal
-     * @default false
+     * @description Set increment hour by 1, 2, 3 hour
+     * @default 1
      */
     incrementHours?: number;
     /**
-     * @description Set increment hour by 1, 2, 3 hour
+     * @description Set increment minutes by 1, 5, 10, 15 minutes
      * @default 1
      */
     incrementMinutes?: number;
     /**
-     * @description Set increment minutes by 1, 5, 10, 15 minutes
-     * @default 1
+     * @description set custom text to minute label on mobile version
+     * @default "Minute"
      */
     minuteMobileLabel?: string;
     /**
@@ -138,10 +138,10 @@ declare class TimepickerUI {
     private _degreesHours;
     private _degreesMinutes;
     private _options;
-    private eventsClickMobile;
-    private eventsClickMobileHandler;
-    private mutliEventsMove;
-    private mutliEventsMoveHandler;
+    private _eventsClickMobile;
+    private _eventsClickMobileHandler;
+    private _mutliEventsMove;
+    private _mutliEventsMoveHandler;
     private _clickTouchEvents;
     private _element;
     private _isMobileView;
@@ -179,12 +179,13 @@ declare class TimepickerUI {
         options: optionTypes;
         create?: boolean;
     }, callback?: Function | undefined) => void;
-    private checkMobileOption;
+    private _checkDisabledValuesOnStart;
+    private _checkMobileOption;
     private _getDisableTime;
-    private removeCircleClockClasses24h;
-    private setCircleClockClasses24h;
-    private setErrorHandler;
-    private removeErrorHandler;
+    private _removeCircleClockClasses24h;
+    private _setCircleClockClasses24h;
+    private _setErrorHandler;
+    private _removeErrorHandler;
     private _setOnStartCSSClassesIfClockType24h;
     private _setTheme;
     private _setInputClassToInputElement;
@@ -221,11 +222,12 @@ declare class TimepickerUI {
     private _setScrollbarOrNot;
     private _setAnimationToOpen;
     private _removeAnimationToClose;
-    private _handleValueAndCheck;
-    private handlerViewChange;
+    private _handlerViewChange;
     private _handleIconChangeView;
     private _handlerClickHourMinutes;
     private _handleClickOnHourMobile;
+    private _handleKeyPress;
+    private _handleEscClick;
 }
 
 export { TimepickerUI };
