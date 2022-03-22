@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - added new update method
 - added new destroy method
-- added new option `disabledTime` that allows to set to timepicker
+- added new option `disabledTime` that allows to set to timepicker disabled time
 
 ### Update
 
