@@ -155,3 +155,5 @@ export declare const createDisabledTime: (options: any) => {
 export declare const initCallback: (callback?: (() => void) | undefined) => void;
 export declare const handleValueAndCheck: (val: string | number | null, type: 'hour' | 'minutes', clockType?: OptionTypes['clockType']) => undefined | boolean;
 export declare const checkDisabledHoursAndMinutes: (value: (string | number)[] | string | number | undefined, type: 'hour' | 'minutes', clockType?: OptionTypes['clockType'], arrValue?: (string | number)[] | undefined) => boolean | undefined;
+export declare const timeConversion: (str?: string) => string;
+export declare const checkedDisabledValuesInterval: (hour?: any, minutes?: any, type?: any, interval?: any) => boolean;
