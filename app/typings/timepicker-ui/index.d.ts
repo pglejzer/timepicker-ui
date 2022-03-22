@@ -1,5 +1,5 @@
 declare module 'timepicker-ui' {
-  export type optionTypes = {
+  export type OptionTypes = {
     /**
      * @description Set custom text to AM label
      * @default "AM"
@@ -16,7 +16,7 @@ declare module 'timepicker-ui' {
      */
     appendModalSelector?: string;
     /**
-     * @description 	Turn on/off backdrop
+     * @description Turn on/off backdrop
      * @default true
      */
     backdrop?: boolean;
@@ -66,18 +66,18 @@ declare module 'timepicker-ui' {
      */
     iconTemplateMobile?: string;
     /**
-     * @description Turn on/off focus to input after close modal
-     * @default false
+     * @description Set increment hour by 1, 2, 3 hour
+     * @default 1
      */
     incrementHours?: number;
     /**
-     * @description Set increment hour by 1, 2, 3 hour
+     * @description Set increment minutes by 1, 5, 10, 15 minutes
      * @default 1
      */
     incrementMinutes?: number;
     /**
-     * @description Set increment minutes by 1, 5, 10, 15 minutes
-     * @default 1
+     * @description set custom text to minute label on mobile version
+     * @default "Minute"
      */
     minuteMobileLabel?: string;
     /**
@@ -116,32 +116,44 @@ declare module 'timepicker-ui' {
      */
     theme?: 'basic' | 'crane-straight' | 'crane-radius';
     /**
-     * @description Turn on/off focus to input after close modal
+     * @description Set type of clock, it contains 2 versions: 12h and 24h.
      * @default false
      */
     clockType?: '12h' | '24h';
     /**
-     * @description Set type of clock, it contains 2 versions: 12h and 24h.
-     * @default "12h"
+     * @description The hours and minutes are arrays which accept strings and numbers to block select hours/minutes. The interval key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType.
+     * If the interval key is set, the hours/minutes keys are ignored.
+     * @example
+      disabledTime: {
+        minutes: [1,2,4,5,55,23,"22","38"];
+        hours: [1,"3","5", 8];
+        interval: "10:00 AM - 12:00 PM";
+      }
+     * @default  undefined
      */
-    disabledTime?: any;
+    disabledTime?: {
+      minutes?: Array<string | number>;
+      hours?: Array<string | number>;
+      interval?: string;
+    };
   };
 
+  type TypeFunction = () => void;
   export class TimepickerUI {
     private _degreesHours;
     private _degreesMinutes;
     private _options;
-    private eventsClickMobile;
-    private eventsClickMobileHandler;
-    private mutliEventsMove;
-    private mutliEventsMoveHandler;
+    private _eventsClickMobile;
+    private _eventsClickMobileHandler;
+    private _mutliEventsMove;
+    private _mutliEventsMoveHandler;
     private _clickTouchEvents;
     private _element;
     private _isMobileView;
     private _isTouchMouseMove;
     private _disabledTime;
     private _cloned;
-    constructor(element: HTMLDivElement, options?: optionTypes);
+    constructor(element: HTMLDivElement, options?: OptionTypes);
     private get modalTemplate();
     private get modalElement();
     private get clockFace();
@@ -165,22 +177,23 @@ declare module 'timepicker-ui' {
     private get keyboardClockIcon();
     private get footer();
     create: () => void;
-    open: (callback?: Function | undefined) => void;
-    close: (...args: Array<boolean | Function>) => void;
-    destroy: (callback?: Function | undefined) => void;
+    open: (callback?: (() => void) | undefined) => void;
+    close: (...args: Array<boolean | TypeFunction>) => void;
+    destroy: (callback?: TypeFunction | undefined) => void;
     update: (
       value: {
-        options: optionTypes;
+        options: OptionTypes;
         create?: boolean;
       },
-      callback?: Function | undefined
+      callback?: TypeFunction | undefined,
     ) => void;
-    private checkMobileOption;
+    private _checkDisabledValuesOnStart;
+    private _checkMobileOption;
     private _getDisableTime;
-    private removeCircleClockClasses24h;
-    private setCircleClockClasses24h;
-    private setErrorHandler;
-    private removeErrorHandler;
+    private _removeCircleClockClasses24h;
+    private _setCircleClockClasses24h;
+    private _setErrorHandler;
+    private _removeErrorHandler;
     private _setOnStartCSSClassesIfClockType24h;
     private _setTheme;
     private _setInputClassToInputElement;
@@ -217,10 +230,11 @@ declare module 'timepicker-ui' {
     private _setScrollbarOrNot;
     private _setAnimationToOpen;
     private _removeAnimationToClose;
-    private _handleValueAndCheck;
-    private handlerViewChange;
+    private _handlerViewChange;
     private _handleIconChangeView;
     private _handlerClickHourMinutes;
     private _handleClickOnHourMobile;
+    private _handleKeyPress;
+    private _handleEscClick;
   }
 }

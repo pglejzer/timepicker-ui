@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
+    "rootDir": ".",
     "declaration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -16,18 +17,21 @@
     "strict": true,
     "target": "es6",
     "downlevelIteration": true,
-    "typeRoots": [
-      "./src/index.d.ts",
-      "./node_modules/@types",
-      "./typings",
-      "../dist/typings",
-      "../dist/types",
-      "./types"
-    ],
+    "typeRoots": ["./src/index.d.ts", "./node_modules/@types", "./typings", "./dist/types", "./types"],
     "types": ["node"],
     "paths": {
       "timepicker-ui": ["./src/index.d.ts"]
     }
   },
-  "exclude": ["dist", "node_modules", "__tests__", "coverage", "./src/timepicker/styles"]
+  "include": ["./.eslintrc.js", "src"],
+  "exclude": [
+    "./dist",
+    "node_modules",
+    "./src/timepicker/styles",
+    "./webpack.config.js",
+    "./rollup.config.js",
+    "./.eslintignore",
+    "./typings",
+    "./src/**/*.d.ts"
+  ]
 }

@@ -9,3 +9,5 @@ timepicker-ui-*
 .npmrc
 .github*
 .vscode
+tsconfig*
+lib*

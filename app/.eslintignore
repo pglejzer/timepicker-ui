@@ -3,3 +3,7 @@ node_modules/
 yarn.lock
 package-lock.json
 dist
+webpack.config.js
+rollup*
+typings/index.ts
+.eslintrc*

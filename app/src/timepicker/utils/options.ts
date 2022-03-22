@@ -1,6 +1,6 @@
-import { optionTypes } from './types';
+import { OptionTypes } from './types';
 
-const options: optionTypes = {
+const options: OptionTypes = {
   amLabel: 'AM',
   animation: true,
   appendModalSelector: '',

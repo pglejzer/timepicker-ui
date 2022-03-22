@@ -93,7 +93,7 @@ We provide CSS styles built-in but sometimes if you don't use some normalize/res
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import { TimepickerUI } from 'timepicker-ui';
+import { TimepickerUI } from "timepicker-ui";
 ```
 
 #### UMD
@@ -125,7 +125,7 @@ timepicker-ui has to be created with a new instance with key `new`. This instanc
 #### JavaScript
 
 ```javascript
-const DOMElement = document.querySelector('.timepicker-ui');
+const DOMElement = document.querySelector(".timepicker-ui");
 const options = {};
 const newTimepicker = new TimepickerUI(DOMElement, options);
 ```
@@ -135,7 +135,7 @@ By default initialization of timepicker is started when you click on input. If y
 To initalize a timepicker with UMD version you have to init a window object with `tui`.
 
 ```js
-const DOMElement = document.querySelector('.timepicker-ui');
+const DOMElement = document.querySelector(".timepicker-ui");
 const options = {};
 const newTimepicker = new window.tui.TimepickerUI(DOMElement, options);
 
@@ -154,7 +154,7 @@ newTimepicker.create();
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('.default-class');
+const timepicker = document.querySelector(".default-class");
 const initTimepicker = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -183,8 +183,8 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('.default-class');
-const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
+const timepicker = document.querySelector(".default-class");
+const options = { okLabel: "test", amLabel: "test1", backdrop: false };
 const initTimepicker = new TimepickerUI(timepicker, options);
 
 timepicker.create();
@@ -360,7 +360,7 @@ export default {
       <td>boolean</td>
       <td>Edit hour/minutes on the web mode. You have set option <code>preventDefault</code> to false.</td>
     </tr> 
-      <tr>
+    <tr>
       <td scope="row">enableScrollbar</td>
       <td>false</td>
       <td>boolean</td>
@@ -378,7 +378,7 @@ export default {
       <td>boolean</td>
       <td>Turn on/off focus to input after close modal</td>
     </tr> 
-      <tr>
+    <tr>
       <td scope="row">hourMobileLabel</td>
       <td>Hour</td>
       <td>string</td>
@@ -390,13 +390,13 @@ export default {
       <td>nubmer</td>
       <td>Increment hour by 1, 2, 3 hour</td>
     </tr>  
-     <tr>
+   <tr>
       <td scope="row">incrementMinutes</td>
       <td>1</td>
       <td>nubmer</td>
       <td>Increment minutes by 1, 5, 10, 15 minutes</td>
     </tr>   
-     <tr>
+   <tr>
       <td scope="row">minuteMobileLabel</td>
       <td>Minute</td>
       <td>string</td>
@@ -414,13 +414,13 @@ export default {
       <td>string</td>
       <td>You can set custom text to time label on mobile version</td>
     </tr>  
-     <tr>
+   <tr>
       <td scope="row">okLabel</td>
       <td>OK</td>
       <td>string</td>
       <td>You can set custom text to ok label</td>
     </tr> 
-      <tr>
+    <tr>
       <td scope="row">pmLabel</td>
       <td>PM</td>
       <td>string</td>
@@ -432,7 +432,7 @@ export default {
       <td>boolean</td>
       <td>You can set on/off defaults events to clock face events</td>
     </tr> 
-     <tr>
+   <tr>
       <td scope="row">timeLabel</td>
       <td>Select Time</td>
       <td>string</td>
@@ -452,18 +452,36 @@ export default {
        <td>string</td>
       <td>You can set default template to switch desktop.This options is using by default material design icon</td>
     </tr>  
-     <tr>
+   <tr>
       <td scope="row">iconTemplateMobile</td>
       <td>&lt;i class="material-icons timepicker-ui-keyboard-icon"> schedule  &lt;/i&gt;</td>
       <td>string</td>
       <td>You can set default template to switch mobile. This options is using by default material design icon</td>
     </tr> 
    <tr>
-      <td 
-      scope="row">theme</td>
+    <td scope="row">theme</td>
       <td>basic</td>
       <td>string</td>
       <td>You can set theme to timepicker. Available options: basic, crane-straight, crane-radius</td>
+    </tr>  
+    <tr>
+      <td scope="row">disabledTime</td>
+      <td>undefined</td>
+      <td>object</td>
+      <td>This option allows 3 keys: <span style="padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+    background-color: var(--color-neutral-muted);
+    border-radius: 6px;">hours</span>, <span style="padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+    background-color: var(--color-neutral-muted);
+    border-radius: 6px;">minutes</span> and <span style="padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+    background-color: var(--color-neutral-muted);
+    border-radius: 6px;">interval</span>. The hours and minutes are arrays which accept strings and numbers to block select hours/minutes. The interval key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType. If the interval key is set, the hours/minutes keys are ignored.
+  </td>
     </tr>  
   </tbody>
 </table>
@@ -485,7 +503,7 @@ Methods are custom function what can be used to manually change the behavior of 
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('timepicker-ui-test');
+const timepicker = document.querySelector("timepicker-ui-test");
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -514,7 +532,7 @@ timepicker.create();
     <tr>
       <td scope="row">open</td>
       <td>The open method opens immediately timepicker after init</td>
-      <td align="center">(callback)</td>
+      <td align="center">(function)</td>
       <td align="center">undefined</td>
       <td>The callback function is tiggered when timepicker is open by this method.  <br/>  <br/>Example: <br/>
       tmInstance.open(()=> console.log('triggered after open'));
@@ -578,12 +596,12 @@ Events are custom events triggered when you add some event listeners to your tim
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('timepicker-ui-test');
+const timepicker = document.querySelector("timepicker-ui-test");
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
 
-timepicker.addEventListener('show', (event) => console.log(event.detail));
+timepicker.addEventListener("show", (event) => console.log(event.detail));
 ```
 
 #### Table with events
@@ -608,11 +626,11 @@ timepicker.addEventListener('show', (event) => console.log(event.detail));
       <td scope="row">accept</td>
       <td>The event starts if timepicker button OK is accepted</td>
     </tr>
-       <tr>
+     <tr>
       <td scope="row">update</td>
       <td>The event starts if mouse/touch events are triggered on a clock face (multiple events)</td>
     </tr> 
-      <tr>
+    <tr>
       <td scope="row">selectminutemode</td>
       <td>The event starts if timepicker minute box is clicked</td>
     </tr> 
@@ -620,7 +638,7 @@ timepicker.addEventListener('show', (event) => console.log(event.detail));
       <td scope="row">selecthourmode</td>
       <td>The event starts if timepicker hour box is clicked</td>
     </tr> 
-      <tr>
+    <tr>
       <td scope="row">selectamtypemode</td>
       <td>The event starts if timepicker am box is clicked</td>
     </tr> 
@@ -634,8 +652,8 @@ timepicker.addEventListener('show', (event) => console.log(event.detail));
     </tr> 
   </tbody>
 </table>
-    
-___
+
+---
 
 ### Future Plans
 

@@ -2,13 +2,21 @@ import { getRadians } from '../../utils';
 
 class ClockFace {
   private array: string[] | undefined;
+
   private classToAdd: string | undefined;
+
   private clockFace: HTMLElement | undefined;
+
   private tipsWrapper: HTMLElement | undefined;
+
   private theme: string | undefined;
+
   private clockType: string | undefined;
+
   private disabledTime: any;
+
   private hour: any;
+
   constructor(obj?: {
     array?: Array<string>;
     classToAdd?: string;
@@ -68,15 +76,10 @@ class ClockFace {
           span.classList.add('timepicker-ui-tips-disabled');
         }
 
-        if (
-          this.hour === this.disabledTime.removedEndHour &&
-          this.disabledTime?.endMinutes?.includes(num)
-        ) {
+        if (this.hour === this.disabledTime.removedEndHour && this.disabledTime?.endMinutes?.includes(num)) {
           spanTips.classList.add('timepicker-ui-tips-disabled');
           span.classList.add('timepicker-ui-tips-disabled');
         }
-      } else {
-        // console.log(this.disabledTime);
       }
 
       if (this.clockType === '24h') {
@@ -85,8 +88,7 @@ class ClockFace {
         spanTips.classList.add('timepicker-ui-value-tips');
       }
 
-      // @ts-ignore
-      span.classList.add(this.classToAdd);
+      span.classList.add(this.classToAdd as string);
 
       if (this.theme === 'crane-straight') {
         span.classList.add('crane-straight');
@@ -113,23 +115,15 @@ class ClockFace {
     }
 
     if (obj?.minutesToUpdate && spanMinutes) {
-      const {
-        actualHour,
-        removedEndHour,
-        removedStartedHour,
-        startMinutes,
-        endMinutes,
-      } = obj.minutesToUpdate;
+      const { actualHour, removedEndHour, removedStartedHour, startMinutes, endMinutes } =
+        obj.minutesToUpdate;
 
       if (removedEndHour === actualHour && endMinutes.length > 0) {
-        console.log('lol');
         this._addClassesWithIncludes(spanMinutes, endMinutes);
       } else if (
         Number(actualHour) > Number(removedStartedHour) &&
         Number(actualHour) < Number(removedEndHour)
       ) {
-        console.log('lol1');
-
         this._addClasses(spanMinutes);
       }
 

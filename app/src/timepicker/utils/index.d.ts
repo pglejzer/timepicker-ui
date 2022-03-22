@@ -1,4 +1,4 @@
-import { optionTypes } from './types';
+import { OptionTypes } from './types';
 export declare const toType: (obj: null | undefined | string | number) => string;
 export declare const isElement: (obj: string | any[] | any) => string;
 export declare const typeCheckConfig: (componentName: string, config: {
@@ -6,7 +6,7 @@ export declare const typeCheckConfig: (componentName: string, config: {
 }, configTypes: {
     [x: string]: any;
 }) => void;
-export declare const getConfig: (options?: optionTypes | undefined, defaultOptions?: Record<string, unknown> | undefined) => Record<string, unknown>;
+export declare const getConfig: (options?: OptionTypes | undefined, defaultOptions?: Record<string, unknown> | undefined) => Record<string, unknown>;
 export declare const getScrollbarWidth: () => number;
 export declare const getRadians: (el: number) => number;
 export declare const getClickTouchPosition: (event: TouchEvent, object: HTMLElement, isMobile?: boolean) => {
@@ -97,7 +97,7 @@ export declare const createNewEvent: (el: Element, eventName: string, value: {
 }) => void;
 export declare const getBrowser: () => boolean;
 export declare const getIncrementTimes: (degrees: number, type: any, count: number) => number;
-export declare const createObjectFromData: (obj: optionTypes) => any;
+export declare const createObjectFromData: (obj: OptionTypes) => any;
 export declare const range: (start?: string | number | undefined, stop?: string | number | undefined) => number[];
 export declare const reverseRange: (start?: string | number | undefined, stop?: string | number | undefined) => number[];
 export declare const createDisabledTime: (options: any) => {
@@ -152,6 +152,6 @@ export declare const createDisabledTime: (options: any) => {
         removedPmHour?: undefined;
     };
 } | undefined;
-export declare const initCallback: (callback?: Function | undefined) => void;
-export declare const handleValueAndCheck: (val: string | number | null, type: 'hour' | 'minutes', clockType?: optionTypes['clockType']) => undefined | boolean;
-export declare const checkDisabledHoursAndMinutes: (value: (string | number)[] | string | number | undefined, type: 'hour' | 'minutes', clockType?: optionTypes['clockType'], arrValue?: (string | number)[] | undefined) => boolean | undefined;
+export declare const initCallback: (callback?: (() => void) | undefined) => void;
+export declare const handleValueAndCheck: (val: string | number | null, type: 'hour' | 'minutes', clockType?: OptionTypes['clockType']) => undefined | boolean;
+export declare const checkDisabledHoursAndMinutes: (value: (string | number)[] | string | number | undefined, type: 'hour' | 'minutes', clockType?: OptionTypes['clockType'], arrValue?: (string | number)[] | undefined) => boolean | undefined;

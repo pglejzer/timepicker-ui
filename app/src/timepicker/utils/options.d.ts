@@ -1,3 +1,3 @@
-import { optionTypes } from './types';
-declare const options: optionTypes;
+import { OptionTypes } from './types';
+declare const options: OptionTypes;
 export { options };

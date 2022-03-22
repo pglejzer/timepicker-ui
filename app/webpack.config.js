@@ -14,11 +14,11 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js', '.d.ts'],
   },
   devServer: {
-    historyApiFallback: true,
     open: true,
     compress: true,
     port: 8005,
     hot: true,
+    static: './docs',
   },
   module: {
     rules: [
@@ -64,7 +64,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'docs/index.html',
+      template: './docs/index.html',
+      filename: 'index.html',
     }),
   ],
 };

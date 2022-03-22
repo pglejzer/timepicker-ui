@@ -4,3 +4,4 @@ package-lock.json
 yarn-error.log
 app/dist
 timepicker-ui-*
+lib*

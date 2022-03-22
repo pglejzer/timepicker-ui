@@ -1,35 +1,10 @@
-import { optionTypes } from 'timepicker-ui';
-export const getNumberOfHours24 = [
-  '00',
-  '13',
-  '14',
-  '15',
-  '16',
-  '17',
-  '18',
-  '19',
-  '20',
-  '21',
-  '22',
-  '23',
-];
-export const getNumberOfHours12 = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
-export const getNumberOfMinutes = [
-  '00',
-  '05',
-  '10',
-  '15',
-  '20',
-  '25',
-  '30',
-  '35',
-  '40',
-  '45',
-  '50',
-  '55',
-];
+import { OptionTypes } from './types';
 
-export const getModalTemplate = (options: optionTypes): string => {
+export const getNumberOfHours24 = ['00', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+export const getNumberOfHours12 = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+export const getNumberOfMinutes = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'];
+
+export const getModalTemplate = (options: OptionTypes): string => {
   const {
     iconTemplate,
     timeLabel,
@@ -53,13 +28,9 @@ export const getModalTemplate = (options: optionTypes): string => {
         <div class="timepicker-ui-wrapper-time ${
           clockType === '24h' ? 'timepicker-ui-wrapper-time-24h' : ''
         }">
-          <div class="timepicker-ui-hour" role="button" contenteditable="${
-            editable ? true : false
-          }"></div>  
+          <div class="timepicker-ui-hour" role="button" contenteditable="${!!editable}"></div>  
           <div class="timepicker-ui-dots">:</div>    
-          <div class="timepicker-ui-minutes" role="button" contenteditable="${
-            editable ? true : false
-          }"></div>   
+          <div class="timepicker-ui-minutes" role="button" contenteditable="${!!editable}"></div>   
         </div>
       ${
         clockType !== '24h'
@@ -102,7 +73,7 @@ export const getModalTemplate = (options: optionTypes): string => {
   </div>`;
 };
 
-export const getMobileModalTemplate = (options: optionTypes): string => {
+export const getMobileModalTemplate = (options: OptionTypes): string => {
   const {
     mobileTimeLabel,
     amLabel,

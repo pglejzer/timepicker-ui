@@ -1,4 +1,4 @@
-declare type optionTypes = {
+declare type OptionTypes = {
     /**
      * @description Set custom text to AM label
      * @default "AM"
@@ -15,7 +15,7 @@ declare type optionTypes = {
      */
     appendModalSelector?: string;
     /**
-     * @description 	Turn on/off backdrop
+     * @description Turn on/off backdrop
      * @default true
      */
     backdrop?: boolean;
@@ -120,20 +120,24 @@ declare type optionTypes = {
      */
     clockType?: '12h' | '24h';
     /**
-     * @description Set disabled time to timepicker. It contains object with minutes, hours and inverval keys.
-     * @default  """
+     * @description The hours and minutes are arrays which accept strings and numbers to block select hours/minutes. The interval key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType.
+     * If the interval key is set, the hours/minutes keys are ignored.
+     * @example
+      disabledTime: {
+        minutes: [1,2,4,5,55,23,"22","38"];
+        hours: [1,"3","5", 8];
+        interval: "10:00 AM - 12:00 PM";
+      }
+     * @default  undefined
      */
     disabledTime?: {
-        minutes?: {
-            value: Array<string | number>;
-        };
-        hours?: {
-            value: Array<string | number>;
-        };
+        minutes?: Array<string | number>;
+        hours?: Array<string | number>;
         interval?: string;
     };
 };
 
+declare type TypeFunction = () => void;
 declare class TimepickerUI {
     private _degreesHours;
     private _degreesMinutes;
@@ -148,7 +152,7 @@ declare class TimepickerUI {
     private _isTouchMouseMove;
     private _disabledTime;
     private _cloned;
-    constructor(element: HTMLDivElement, options?: optionTypes);
+    constructor(element: HTMLDivElement, options?: OptionTypes);
     private get modalTemplate();
     private get modalElement();
     private get clockFace();
@@ -172,13 +176,13 @@ declare class TimepickerUI {
     private get keyboardClockIcon();
     private get footer();
     create: () => void;
-    open: (callback?: Function | undefined) => void;
-    close: (...args: Array<boolean | Function>) => void;
-    destroy: (callback?: Function | undefined) => void;
+    open: (callback?: (() => void) | undefined) => void;
+    close: (...args: Array<boolean | TypeFunction>) => void;
+    destroy: (callback?: TypeFunction | undefined) => void;
     update: (value: {
-        options: optionTypes;
+        options: OptionTypes;
         create?: boolean;
-    }, callback?: Function | undefined) => void;
+    }, callback?: TypeFunction | undefined) => void;
     private _checkDisabledValuesOnStart;
     private _checkMobileOption;
     private _getDisableTime;
@@ -209,6 +213,7 @@ declare class TimepickerUI {
     private _setHoursToClock;
     private _setTransformToCircleWithSwitchesHour;
     private _setTransformToCircleWithSwitchesMinutes;
+    private _getDestructuringObj;
     private _handleAmClick;
     private _handlePmClick;
     private _handleAnimationClock;

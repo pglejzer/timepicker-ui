@@ -1,8 +1,10 @@
-import { optionTypes, TimepickerUI } from 'timepicker-ui';
+/* eslint-disable import/no-extraneous-dependencies */
+//@ts-ignore
+import { TimepickerUI } from 'timepicker-ui';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism.css';
-import '../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css';
-import '../node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css';
+import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
+import 'prismjs/plugins/line-highlight/prism-line-highlight.css';
 
 Prism.highlightAll();
 
@@ -27,7 +29,8 @@ const test = document.querySelector('.test') as HTMLDivElement;
 const testPicker = new TimepickerUI(test, {
   clockType: '24h',
   disabledTime: {
-    interval: '5:00 - 21:00',
+    minutes: [12, 13, 44, 55, 33],
+    hours: [1, 2, 3, 4, 5],
   },
 });
 testPicker.create();
@@ -107,7 +110,7 @@ const testPicker22 = new TimepickerUI(test22, {
 });
 testPicker22.create();
 
-//////////////////////////////////////
+/// ///////////////////////////////////
 
 const test23 = document.querySelector('.test23') as HTMLDivElement;
 // good
@@ -164,7 +167,7 @@ const testPicker27 = new TimepickerUI(test27, {
 });
 testPicker27.create();
 
-// const arr: optionTypes[] = [
+// const arr: OptionTypes[] = [
 //   { mobile: true, backdrop: true, amLabel: 'Test' },
 //   { mobile: false, amLabel: 'Not Test', pmLabel: 'test' },
 //   { mobile: false, backdrop: false, pmLabel: 'OMG' },
@@ -191,14 +194,6 @@ const mobiles = document.querySelector('.mobile') as HTMLDivElement;
 
 const mobilePicker = new TimepickerUI(mobiles, {
   mobile: true,
-  disabledTime: {
-    minutes: {
-      value: [12, 13, 44, 55, 33],
-    },
-    hours: {
-      value: [1, 2, 3, 4, 5],
-    },
-  },
 });
 
 mobilePicker.create();
@@ -235,7 +230,8 @@ const acceptValue = document.querySelector('#accept-value') as HTMLDivElement;
 acceptEvent.addEventListener(
   'accept',
   // @ts-ignore
-  ({ detail: { hour, minutes, type } }) => (acceptValue.innerHTML = `${hour}:${minutes} ${type}`)
+  // eslint-disable-next-line no-return-assign
+  ({ detail: { hour, minutes, type } }) => (acceptValue.innerHTML = `${hour}:${minutes} ${type}`),
 );
 
 const errorValueDiv = document.querySelector('#error-value') as HTMLDivElement;

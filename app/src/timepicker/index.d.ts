@@ -1,6 +1,7 @@
 import './styles/main.scss';
 import './styles/theme.scss';
-import type { optionTypes } from '../timepicker/utils/types';
+import type { OptionTypes } from './utils/types';
+declare type TypeFunction = () => void;
 export default class TimepickerUI {
     private _degreesHours;
     private _degreesMinutes;
@@ -15,7 +16,7 @@ export default class TimepickerUI {
     private _isTouchMouseMove;
     private _disabledTime;
     private _cloned;
-    constructor(element: HTMLDivElement, options?: optionTypes);
+    constructor(element: HTMLDivElement, options?: OptionTypes);
     private get modalTemplate();
     private get modalElement();
     private get clockFace();
@@ -39,13 +40,13 @@ export default class TimepickerUI {
     private get keyboardClockIcon();
     private get footer();
     create: () => void;
-    open: (callback?: Function | undefined) => void;
-    close: (...args: Array<boolean | Function>) => void;
-    destroy: (callback?: Function | undefined) => void;
+    open: (callback?: (() => void) | undefined) => void;
+    close: (...args: Array<boolean | TypeFunction>) => void;
+    destroy: (callback?: TypeFunction | undefined) => void;
     update: (value: {
-        options: optionTypes;
+        options: OptionTypes;
         create?: boolean;
-    }, callback?: Function | undefined) => void;
+    }, callback?: TypeFunction | undefined) => void;
     private _checkDisabledValuesOnStart;
     private _checkMobileOption;
     private _getDisableTime;
@@ -76,6 +77,7 @@ export default class TimepickerUI {
     private _setHoursToClock;
     private _setTransformToCircleWithSwitchesHour;
     private _setTransformToCircleWithSwitchesMinutes;
+    private _getDestructuringObj;
     private _handleAmClick;
     private _handlePmClick;
     private _handleAnimationClock;
@@ -96,3 +98,4 @@ export default class TimepickerUI {
     private _handleKeyPress;
     private _handleEscClick;
 }
+export {};

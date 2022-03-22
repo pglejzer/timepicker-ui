@@ -2,7 +2,7 @@
   "bracketSpacing": true,
   "semi": true,
   "singleQuote": true,
-  "trailingComma": "es5",
-  "printWidth": 100,
-  "endOfLine": "auto"
+  "trailingComma": "all",
+  "printWidth": 110,
+  "endOfLine": "crlf"
 }
