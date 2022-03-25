@@ -2,8 +2,6 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "rootDir": ".",
-    "declaration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
@@ -23,7 +21,7 @@
       "timepicker-ui": ["./src/index.d.ts"]
     }
   },
-  "include": ["./.eslintrc.js", "src"],
+  "include": ["./.eslintrc.js", "src", "docs/index.ts"],
   "exclude": [
     "./dist",
     "node_modules",

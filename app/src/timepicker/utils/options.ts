@@ -26,6 +26,7 @@ const options: OptionTypes = {
   preventDefault: true,
   clockType: '12h',
   disabledTime: undefined,
+  currentTime: undefined,
 };
 
 export { options };

@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-return */
 import {
   checkedDisabledValuesInterval,
   createObjectFromData,
@@ -58,7 +59,7 @@ export default class TimepickerUI {
 
   private _cloned: Node | null;
 
-  constructor(element: HTMLDivElement, options?: OptionTypes) {
+  constructor(element: HTMLElement, options?: OptionTypes) {
     this._element = element;
     this._cloned = null;
     this._options = getConfig(
@@ -90,6 +91,8 @@ export default class TimepickerUI {
 
     this._clickTouchEvents = ['click', 'touchstart'];
     this._disabledTime = null;
+
+    this._preventClockTypeByCurrentTime();
   }
 
   private get modalTemplate() {
@@ -204,6 +207,7 @@ export default class TimepickerUI {
   }
 
   public create = (): void => {
+    this._updateInputValueWithCurrentTimeOnStart();
     this._checkDisabledValuesOnStart();
     this._setTimepickerClassToElement();
     this._setInputClassToInputElement();
@@ -312,6 +316,27 @@ export default class TimepickerUI {
     initCallback(callback);
   };
 
+  private _preventClockTypeByCurrentTime = () => {
+    if (typeof this._options?.currentTime !== 'boolean' && this._options?.currentTime?.preventClockType) {
+      const { currentTime, clockType } = this._options;
+      const { type } = getInputValue(this.input as unknown as HTMLInputElement, clockType, currentTime, true);
+
+      this._options.clockType = type ? '12h' : '24h';
+    }
+  };
+
+  private _updateInputValueWithCurrentTimeOnStart = () => {
+    if (typeof this._options?.currentTime !== 'boolean' && this._options?.currentTime?.updateInput) {
+      const { hour, minutes, type } = getInputValue(
+        this.input as unknown as HTMLInputElement,
+        this._options.clockType,
+        this._options.currentTime,
+      );
+
+      this.input.value = type ? `${hour}:${minutes} ${type}` : `${hour}:${minutes}`;
+    }
+  };
+
   private _checkDisabledValuesOnStart() {
     if (!this._options.disabledTime?.hours || !this._options.disabledTime?.minutes) return;
 
@@ -356,7 +381,7 @@ export default class TimepickerUI {
 
   private _setErrorHandler() {
     const { error, currentHour, currentMin, currentType, currentLength } = getInputValue(
-      this.input as any,
+      this.input as unknown as HTMLInputElement,
       this._options.clockType,
     );
 
@@ -398,7 +423,11 @@ export default class TimepickerUI {
 
   private _setOnStartCSSClassesIfClockType24h() {
     if (this._options.clockType === '24h') {
-      const { hour } = getInputValue(this.input as any, this._options.clockType);
+      const { hour } = getInputValue(
+        this.input as unknown as HTMLInputElement,
+        this._options.clockType,
+        this._options.currentTime,
+      );
 
       if (Number(hour) > 12 || Number(hour) === 0) {
         this._setCircleClockClasses24h();
@@ -417,7 +446,7 @@ export default class TimepickerUI {
   };
 
   private _setInputClassToInputElement = (): void => {
-    if (!hasClass(this.input as any, 'timepicker-ui-input')) {
+    if (!hasClass(this.input as unknown as HTMLInputElement, 'timepicker-ui-input')) {
       this.input?.classList.add('timepicker-ui-input');
     }
   };
@@ -504,13 +533,13 @@ export default class TimepickerUI {
           setTimeout(() => {
             if (this._disabledTime?.value.startType === this.activeTypeMode?.textContent) {
               initClockFace.updateDisable({
-                hoursToUpdate: this._disabledTime.value.rangeArrHour,
+                hoursToUpdate: this._disabledTime?.value?.rangeArrHour,
                 minutesToUpdate: {
-                  endMinutes: this._disabledTime.value.endMinutes,
-                  removedEndHour: this._disabledTime.value.removedEndHour,
-                  removedStartedHour: this._disabledTime.value.removedStartedHour,
+                  endMinutes: this._disabledTime?.value.endMinutes,
+                  removedEndHour: this._disabledTime?.value.removedEndHour,
+                  removedStartedHour: this._disabledTime?.value.removedStartedHour,
                   actualHour: this.hour.textContent,
-                  startMinutes: this._disabledTime.value.startMinutes,
+                  startMinutes: this._disabledTime?.value.startMinutes,
                 },
               });
             }
@@ -520,8 +549,8 @@ export default class TimepickerUI {
             initClockFace.updateDisable({
               minutesToUpdate: {
                 actualHour: this.hour.textContent,
-                pmHours: this._disabledTime.value.pmHours,
-                amHours: this._disabledTime.value.amHours,
+                pmHours: this._disabledTime?.value.pmHours,
+                amHours: this._disabledTime?.value.amHours,
                 activeMode: this.activeTypeMode?.textContent,
               },
             });
@@ -563,13 +592,18 @@ export default class TimepickerUI {
     this._handleClickOnHourMobile();
   };
 
-  private _handleOpenOnClick = (): void =>
+  private _handleOpenOnClick = (): void => {
     this.openElement.forEach((openEl) =>
       this._clickTouchEvents.map((el: string) => openEl?.addEventListener(el, () => this._eventsBundle())),
     );
+  };
 
   private _getInputValueOnOpenAndSet = (): void => {
-    const value = getInputValue(this.input as any, this._options.clockType);
+    const value = getInputValue(
+      this.input as unknown as HTMLInputElement,
+      this._options.clockType,
+      this._options.currentTime,
+    );
 
     if (value === undefined) {
       this.hour.innerText = '12';
@@ -612,7 +646,7 @@ export default class TimepickerUI {
   private _handleCancelButton = (): void => {
     this._clickTouchEvents.forEach((el: string) => {
       this.cancelButton.addEventListener(el, () => {
-        const value = getInputValue(this.input as any, this._options.clockType);
+        const value = getInputValue(this.input as unknown as HTMLInputElement, this._options.clockType);
 
         createNewEvent(this._element, 'cancel', {
           ...value,
@@ -701,7 +735,7 @@ export default class TimepickerUI {
 
         if (!hasClass(target, 'timepicker-ui-modal')) return;
 
-        const value = getInputValue(this.input as any, this._options.clockType);
+        const value = getInputValue(this.input as unknown as HTMLInputElement, this._options.clockType);
 
         createNewEvent(this._element, 'cancel', {
           ...value,
@@ -909,11 +943,11 @@ export default class TimepickerUI {
             array: hasClass(this.hour, 'active') ? getNumberOfHours12 : getNumberOfMinutes,
           });
 
-          if (this._disabledTime?.value.startType === this._disabledTime.value.endType) {
+          if (this._disabledTime?.value.startType === this._disabledTime?.value.endType) {
             setTimeout(() => {
               if (this._disabledTime?.value.startType === this.activeTypeMode?.textContent) {
                 initClockFace.updateDisable({
-                  hoursToUpdate: this._disabledTime.value.rangeArrHour,
+                  hoursToUpdate: this._disabledTime?.value?.rangeArrHour,
                   ...this._getDestructuringObj(),
                 });
               } else {
@@ -961,7 +995,7 @@ export default class TimepickerUI {
             setTimeout(() => {
               if (this._disabledTime?.value.startType === this.activeTypeMode?.textContent) {
                 initClockFace.updateDisable({
-                  hoursToUpdate: this._disabledTime.value.rangeArrHour,
+                  hoursToUpdate: this._disabledTime?.value?.rangeArrHour,
                   ...this._getDestructuringObj(),
                 });
               } else {
@@ -1027,6 +1061,7 @@ export default class TimepickerUI {
         this._setHoursToClock(target.textContent);
         target.classList.add(selectorActive);
         this.minutes.classList.remove(selectorActive);
+
         if (this._options.clockType === '12h' && this._options.disabledTime?.interval) {
           const initClockFace = new ClockFace({
             clockFace: this.clockFace,
@@ -1038,7 +1073,7 @@ export default class TimepickerUI {
             setTimeout(() => {
               if (this._disabledTime?.value.startType === this.activeTypeMode?.textContent) {
                 initClockFace.updateDisable({
-                  hoursToUpdate: this._disabledTime.value.rangeArrHour,
+                  hoursToUpdate: this._disabledTime?.value?.rangeArrHour,
                   ...this._getDestructuringObj(),
                 });
               } else {
@@ -1087,6 +1122,7 @@ export default class TimepickerUI {
 
         target.classList.add(selectorActive);
         this.hour?.classList.remove(selectorActive);
+
         if (this._options.clockType === '12h' && this._options.disabledTime?.interval) {
           const initClockFace = new ClockFace({
             clockFace: this.clockFace,
@@ -1098,7 +1134,7 @@ export default class TimepickerUI {
             setTimeout(() => {
               if (this._disabledTime?.value.startType === this.activeTypeMode?.textContent) {
                 initClockFace.updateDisable({
-                  hoursToUpdate: this._disabledTime.value.rangeArrHour,
+                  hoursToUpdate: this._disabledTime?.value.rangeArrHour,
                   ...this._getDestructuringObj(),
                 });
               } else {
@@ -1215,7 +1251,7 @@ export default class TimepickerUI {
           if (
             this._disabledTime?.value?.endMinutes?.includes(minute <= 9 ? `0${minute}` : `${minute}`) &&
             this.hour.textContent === this._disabledTime?.value?.removedEndHour &&
-            this._disabledTime.value.endType === this.activeTypeMode?.textContent
+            this._disabledTime?.value.endType === this.activeTypeMode?.textContent
           ) {
             return;
           }
@@ -1223,25 +1259,25 @@ export default class TimepickerUI {
           if (
             this._disabledTime?.value?.startMinutes?.includes(minute <= 9 ? `0${minute}` : `${minute}`) &&
             this.hour.textContent === this._disabledTime?.value?.removedStartedHour &&
-            this._disabledTime.value.startType === this.activeTypeMode?.textContent
+            this._disabledTime?.value.startType === this.activeTypeMode?.textContent
           ) {
             return;
           }
         } else {
-          if (this.activeTypeMode?.textContent === this._disabledTime.value.endType) {
+          if (this.activeTypeMode?.textContent === this._disabledTime?.value.endType) {
             if (
               (this._disabledTime?.value?.endMinutes?.includes(minute <= 9 ? `0${minute}` : `${minute}`) &&
-                this._disabledTime.value.removedPmHour === this.hour.textContent) ||
-              this._disabledTime.value.pmHours.map(Number).includes(Number(this.hour.textContent))
+                this._disabledTime?.value.removedPmHour === this.hour.textContent) ||
+              this._disabledTime?.value.pmHours.map(Number).includes(Number(this.hour.textContent))
             ) {
               return;
             }
           }
-          if (this.activeTypeMode?.textContent === this._disabledTime.value.startType) {
+          if (this.activeTypeMode?.textContent === this._disabledTime?.value.startType) {
             if (
               (this._disabledTime?.value?.startMinutes?.includes(minute <= 9 ? `0${minute}` : `${minute}`) &&
-                this._disabledTime.value.removedAmHour === this.hour.textContent) ||
-              this._disabledTime.value.amHours.map(Number).includes(Number(this.hour.textContent))
+                this._disabledTime?.value.removedAmHour === this.hour.textContent) ||
+              this._disabledTime?.value.amHours.map(Number).includes(Number(this.hour.textContent))
             ) {
               return;
             }
@@ -1259,7 +1295,7 @@ export default class TimepickerUI {
       this._setBgColorToCircleWithMinutesTips();
 
       createNewEvent(this._element, 'update', {
-        ...getInputValue(this.input as any, this._options.clockType),
+        ...getInputValue(this.input as unknown as HTMLInputElement, this._options.clockType),
         degreesHours: this._degreesHours,
         degreesMinutes: this._degreesMinutes,
         eventType: type,
@@ -1376,7 +1412,7 @@ export default class TimepickerUI {
       }
 
       createNewEvent(this._element, 'update', {
-        ...getInputValue(this.input as any, this._options.clockType),
+        ...getInputValue(this.input as unknown as HTMLInputElement, this._options.clockType),
         degreesHours: this._degreesHours,
         degreesMinutes: this._degreesMinutes,
         eventType: type,

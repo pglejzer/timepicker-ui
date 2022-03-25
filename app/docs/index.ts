@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-//@ts-ignore
+
 import { TimepickerUI } from 'timepicker-ui';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism.css';
@@ -25,14 +25,18 @@ Prism.highlightAll();
 // basicPicker.create();
 
 const test = document.querySelector('.test') as HTMLDivElement;
-// good
 const testPicker = new TimepickerUI(test, {
-  clockType: '24h',
-  disabledTime: {
-    minutes: [12, 13, 44, 55, 33],
-    hours: [1, 2, 3, 4, 5],
+  currentTime: {
+    preventClockType: true,
+    time: new Date(),
+    updateInput: true,
   },
 });
+
+// const inputElement = test.querySelector('input') as HTMLInputElement;
+
+// inputElement.value = new Date().toLocaleTimeString('en-us', { timeStyle: 'short' });
+
 testPicker.create();
 
 const test1 = document.querySelector('.test1') as HTMLDivElement;

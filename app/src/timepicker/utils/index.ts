@@ -94,7 +94,12 @@ export const getMathDegIncrement = (degrees: number, num: number): number => Mat
 export const hasClass = (el: HTMLElement | null | Element, selector: string): boolean =>
   el ? el.classList.contains(selector) : false;
 
-export const getInputValue = (el: HTMLInputElement, clockType?: string) => {
+export const getInputValue = (
+  el: HTMLInputElement,
+  clockType?: string,
+  currentTime?: OptionTypes['currentTime'],
+  updateOptions?: boolean,
+) => {
   if (!el) {
     return {
       hour: '12',
@@ -105,11 +110,113 @@ export const getInputValue = (el: HTMLInputElement, clockType?: string) => {
 
   const { value } = el;
 
-  if (value === '' || !value) {
+  if (!currentTime) {
+    if (value === '' || !value) {
+      return {
+        hour: '12',
+        minutes: '00',
+        type: clockType === '24h' ? undefined : 'PM',
+      };
+    }
+  } else if (typeof currentTime === 'boolean' && currentTime) {
+    const [hour, splitMinutes] = new Date().toLocaleTimeString().split(':');
+
+    if (/[a-z]/i.test(splitMinutes) && clockType === '12h') {
+      const [minutes, type] = splitMinutes.split(' ');
+
+      return {
+        hour: Number(hour) <= 9 ? `0${Number(hour)}` : hour,
+        minutes,
+        type,
+      };
+    } else if (clockType === '12h') {
+      const [h, r] = new Date(`1970-01-01T${hour}:${splitMinutes}Z`)
+        .toLocaleTimeString('en-US', {
+          timeZone: 'UTC',
+          hour12: true,
+          hour: 'numeric',
+          minute: 'numeric',
+        })
+        .split(':');
+
+      const [nm, t] = r.split(' ');
+
+      return {
+        hour: Number(h) <= 9 ? `0${Number(h)}` : hour,
+        minutes: nm,
+        type: t,
+      };
+    }
+
     return {
-      hour: '12',
-      minutes: '00',
-      type: clockType === '24h' ? undefined : 'PM',
+      hour: Number(hour) <= 9 ? `0${Number(hour)}` : hour,
+      minutes: splitMinutes,
+      type: undefined,
+    };
+  } else {
+    const { time, locales, preventClockType } = currentTime;
+    let cTime = time;
+
+    if (!time) {
+      cTime = new Date();
+    }
+
+    if (preventClockType && updateOptions) {
+      const [preventHour, splitedRest] = new Date(cTime as Date).toLocaleTimeString().split(':');
+
+      if (/[a-z]/i.test(splitedRest)) {
+        const [splitedMinutes, restType] = splitedRest.split(' ');
+        return {
+          hour: preventHour,
+          minutes: splitedMinutes,
+          type: restType,
+        };
+      }
+
+      return {
+        hour: Number(preventHour) <= 9 ? `0${Number(preventHour)}` : preventHour,
+        minutes: splitedRest,
+        type: undefined,
+      };
+    }
+
+    const [hour, splitMinutes] = new Date(cTime as Date)
+      .toLocaleTimeString(locales, {
+        timeStyle: 'short',
+      })
+      .split(':');
+
+    if (/[a-z]/i.test(splitMinutes) && clockType === '12h') {
+      const [minutes, type] = splitMinutes.split(' ');
+
+      return {
+        hour: Number(hour) <= 9 ? `0${Number(hour)}` : hour,
+        minutes,
+        type,
+      };
+    } else if (clockType === '12h') {
+      const [h, r] = new Date(`1970-01-01T${hour}:${splitMinutes}Z`)
+        .toLocaleTimeString('en-US', {
+          timeZone: 'UTC',
+          hour12: true,
+          hour: 'numeric',
+          minute: 'numeric',
+        })
+        .split(':');
+
+      const [nm, t] = r.split(' ');
+
+      return {
+        hour: Number(h) <= 9 ? `0${Number(h)}` : hour,
+        minutes: nm,
+        type: t,
+      };
+    }
+
+    return {
+      hour: Number(hour) <= 9 ? `0${Number(hour)}` : hour,
+      minutes: splitMinutes,
+      type: undefined,
     };
   }
 
