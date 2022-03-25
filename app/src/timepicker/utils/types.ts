@@ -142,11 +142,14 @@ export declare type OptionTypes = {
    * The `time` key allows to put any valid date to update picker.
    * If `updateInput` key is set to true it's going update input value with set time key.
    * The `locales` key can change language from toLocaleTimeString().
+   * The `preventClockType` key if is set to `true` it's `force` the clockType option to set value "12h" or "24h" based on your location
+   * with current time and `locales` key value is ignored.
    * @example
       currentTime: {
         time: new Date(),
         updateInput: true,
-        locales: "en-US"
+        locales: "en-US",
+        preventClockType: false
       };
    * @default  undefined
    */

@@ -1,20 +1,21 @@
 /* eslint-disable no-useless-return */
 import {
-  checkedDisabledValuesInterval,
-  createObjectFromData,
-  createDisabledTime,
-  initCallback,
-  checkDisabledHoursAndMinutes,
-  handleValueAndCheck,
   createNewEvent,
+  createObjectFromData,
   getBrowser,
   getClickTouchPosition,
   getConfig,
   getIncrementTimes,
-  getInputValue,
   getScrollbarWidth,
   hasClass,
+  initCallback,
 } from './utils';
+import { getInputValue, handleValueAndCheck } from './utils/input';
+import {
+  createDisabledTime,
+  checkDisabledHoursAndMinutes,
+  checkedDisabledValuesInterval,
+} from './utils/disable';
 import './styles/main.scss';
 import './styles/theme.scss';
 import variables from './styles/variables.scss';
@@ -206,6 +207,9 @@ export default class TimepickerUI {
     return document.querySelector('.timepicker-ui-footer') as HTMLDivElement;
   }
 
+  /**
+   * @description The create method that init timepicker
+   */
   public create = (): void => {
     this._updateInputValueWithCurrentTimeOnStart();
     this._checkDisabledValuesOnStart();
@@ -217,6 +221,10 @@ export default class TimepickerUI {
     this._getDisableTime();
   };
 
+  /**
+   * @description The open method opens immediately timepicker after init
+   * @param callback - The callback function triggered when timepicker is open by this method
+   */
   public open = (callback?: () => void): void => {
     this.create();
     this._eventsBundle();
@@ -224,6 +232,12 @@ export default class TimepickerUI {
     initCallback(callback);
   };
 
+  /**
+   * @description Closure method closes the timepicker
+   * @param args - These parameters in this method are optional and order is any. You can set callback function first or boolean,
+   * or just boolean or just callback. If the boolean is set to true the input will be updating with the current value on picker.
+   * The callback function start immediately after close, if is invoke. The max parameters length is set to 2
+   */
   public close = (...args: Array<boolean | TypeFunction>): void => {
     if (args.length > 2 || !this.modalElement) return;
 
@@ -272,6 +286,10 @@ export default class TimepickerUI {
     initCallback(callback as TypeFunction);
   };
 
+  /**
+   * @description The destroy method destroy actual instance of picker by cloning element.
+   * @param callback - The callback function is started after destroyed method. This parameter is optional.
+   */
   public destroy = (callback?: TypeFunction) => {
     allEvents
       .split(' ')
@@ -298,6 +316,13 @@ export default class TimepickerUI {
     this._element = this._cloned as HTMLElement;
   };
 
+  /**
+   * @description The update method which update timepicker with new options and can create a new instance.
+   * @param value - The first parameter is a object with key options which is timepicker options and it will be updated to current
+   * instance and is `required`. The `create` key is a boolean which if is set to true it starting the create() method after invoke update
+   * function and is optional. The `create` option is useful if you are using destroy and update methods together.
+   * @param callback - The `callback` function is started after update method. This parameter is optional.
+   */
   public update = (
     value: {
       options: OptionTypes;

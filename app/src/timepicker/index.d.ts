@@ -16,7 +16,7 @@ export default class TimepickerUI {
     private _isTouchMouseMove;
     private _disabledTime;
     private _cloned;
-    constructor(element: HTMLDivElement, options?: OptionTypes);
+    constructor(element: HTMLElement, options?: OptionTypes);
     private get modalTemplate();
     private get modalElement();
     private get clockFace();
@@ -39,14 +39,40 @@ export default class TimepickerUI {
     private get activeTypeMode();
     private get keyboardClockIcon();
     private get footer();
+    /**
+     * @description The create method that init timepicker
+     */
     create: () => void;
+    /**
+     * @description The open method opens immediately timepicker after init
+     * @param callback - The callback function triggered when timepicker is open by this method
+     */
     open: (callback?: (() => void) | undefined) => void;
+    /**
+     * @description Closure method closes the timepicker
+     * @param args - These parameters in this method are optional and order is any. You can set callback function first or boolean,
+     * or just boolean or just callback. If the boolean is set to true the input will be updating with the current value on picker.
+     * The callback function start immediately after close, if is invoke. The max parameters length is set to 2
+     */
     close: (...args: Array<boolean | TypeFunction>) => void;
+    /**
+     * @description The destroy method destroy actual instance of picker by cloning element.
+     * @param callback - The callback function is started after destroyed method. This parameter is optional.
+     */
     destroy: (callback?: TypeFunction | undefined) => void;
+    /**
+     * @description The update method which update timepicker with new options and can create a new instance.
+     * @param value - The first parameter is a object with key options which is timepicker options and it will be updated to current
+     * instance and is `required`. The `create` key is a boolean which if is set to true it starting the create() method after invoke update
+     * function and is optional. The `create` option is useful if you are using destroy and update methods together.
+     * @param callback - The `callback` function is started after update method. This parameter is optional.
+     */
     update: (value: {
         options: OptionTypes;
         create?: boolean;
     }, callback?: TypeFunction | undefined) => void;
+    private _preventClockTypeByCurrentTime;
+    private _updateInputValueWithCurrentTimeOnStart;
     private _checkDisabledValuesOnStart;
     private _checkMobileOption;
     private _getDisableTime;
