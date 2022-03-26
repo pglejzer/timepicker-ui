@@ -93,7 +93,7 @@ We provide CSS styles built-in but sometimes if you don't use some normalize/res
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import { TimepickerUI } from "timepicker-ui";
+import { TimepickerUI } from 'timepicker-ui';
 ```
 
 #### UMD
@@ -125,7 +125,7 @@ timepicker-ui has to be created with a new instance with key `new`. This instanc
 #### JavaScript
 
 ```javascript
-const DOMElement = document.querySelector(".timepicker-ui");
+const DOMElement = document.querySelector('.timepicker-ui');
 const options = {};
 const newTimepicker = new TimepickerUI(DOMElement, options);
 ```
@@ -135,7 +135,7 @@ By default initialization of timepicker is started when you click on input. If y
 To initalize a timepicker with UMD version you have to init a window object with `tui`.
 
 ```js
-const DOMElement = document.querySelector(".timepicker-ui");
+const DOMElement = document.querySelector('.timepicker-ui');
 const options = {};
 const newTimepicker = new window.tui.TimepickerUI(DOMElement, options);
 
@@ -154,7 +154,7 @@ newTimepicker.create();
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector(".default-class");
+const timepicker = document.querySelector('.default-class');
 const initTimepicker = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -183,8 +183,8 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector(".default-class");
-const options = { okLabel: "test", amLabel: "test1", backdrop: false };
+const timepicker = document.querySelector('.default-class');
+const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
 const initTimepicker = new TimepickerUI(timepicker, options);
 
 timepicker.create();
@@ -468,21 +468,35 @@ export default {
       <td scope="row">disabledTime</td>
       <td>undefined</td>
       <td>object</td>
-      <td>This option allows 3 keys: <span style="padding: 0.2em 0.4em;
-    margin: 0;
-    font-size: 85%;
-    background-color: var(--color-neutral-muted);
-    border-radius: 6px;">hours</span>, <span style="padding: 0.2em 0.4em;
-    margin: 0;
-    font-size: 85%;
-    background-color: var(--color-neutral-muted);
-    border-radius: 6px;">minutes</span> and <span style="padding: 0.2em 0.4em;
-    margin: 0;
-    font-size: 85%;
-    background-color: var(--color-neutral-muted);
-    border-radius: 6px;">interval</span>. The hours and minutes are arrays which accept strings and numbers to block select hours/minutes. The interval key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType. If the interval key is set, the hours/minutes keys are ignored.
+      <td>This option allows 3 keys: <code>hours</code>, <code>minutes</code> and <code>interval</code>. The hours and minutes are arrays which accept strings and numbers to block select hours/minutes. The interval key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType. If the interval key is set, the hours/minutes keys are ignored.
   </td>
     </tr>  
+    <tr>
+      <td scope="row">currentTime</td>
+      <td>undefined</td>
+      <td>boolean | object</td>
+      <td>
+        Set current time to the input and timepicker.<br />
+        If this options is set to <code>true</code> it's gonna update picker with toLocaleTimeString() and
+        input with value based on your location. The clockType option is forced in that case.<br />
+        This option also allows to put object with properties which:<br />
+        <ul>
+          <li>The <code>time</code> key allows to put any valid date to update picker with time. It's converting Date to time.</li>
+          <li>
+            The <code>updateInput</code> key is set to true it's going update input value with the setted time key.
+          </li>
+          <li>The <code>locales</code>key can change language from toLocaleTimeString().</li>
+          <li>
+            The <code>preventClockType</code> key if is set to <code>true</code> it's force the clockType
+            option to set value "12h" or "24h" based on your location with current time and
+            <code>locales</code> key value is ignored in that case.<br />
+            <code>
+              currentTime: { time: new Date(), updateInput: true, locales: "en-US", preventClockType: false };
+            </code>
+          </li>
+        </ul>
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -503,7 +517,7 @@ Methods are custom function what can be used to manually change the behavior of 
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector("timepicker-ui-test");
+const timepicker = document.querySelector('timepicker-ui-test');
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -596,12 +610,12 @@ Events are custom events triggered when you add some event listeners to your tim
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector("timepicker-ui-test");
+const timepicker = document.querySelector('timepicker-ui-test');
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
 
-timepicker.addEventListener("show", (event) => console.log(event.detail));
+timepicker.addEventListener('show', (event) => console.log(event.detail));
 ```
 
 #### Table with events
