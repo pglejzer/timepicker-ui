@@ -38,25 +38,6 @@ export const getInputValue = (
       };
     }
 
-    if (clockType === '12h') {
-      const [h, r] = new Date(`1970-01-01T${hour}:${splitMinutes}Z`)
-        .toLocaleTimeString('en-US', {
-          timeZone: 'UTC',
-          hour12: true,
-          hour: 'numeric',
-          minute: 'numeric',
-        })
-        .split(':');
-
-      const [nm, t] = r.split(' ');
-
-      return {
-        hour: Number(h) <= 9 ? `0${Number(h)}` : hour,
-        minutes: nm,
-        type: t,
-      };
-    }
-
     return {
       hour: Number(hour) <= 9 ? `0${Number(hour)}` : hour,
       minutes: splitMinutes,

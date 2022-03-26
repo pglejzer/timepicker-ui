@@ -43,22 +43,18 @@ const test1 = document.querySelector('.test1') as HTMLDivElement;
 
 // good
 const testPicker1 = new TimepickerUI(test1, {
-  clockType: '24h',
-  disabledTime: {
-    interval: '5:55 - 21:55',
-  },
+  // currentTime: {
+  //   time: new Date(),
+  //   updateInput: true,
+  // },
 });
 testPicker1.create();
 
 const test2 = document.querySelector('.test2') as HTMLDivElement;
 
 // good
-
 const testPicker2 = new TimepickerUI(test2, {
-  clockType: '24h',
-  disabledTime: {
-    interval: '5:00 - 21:59',
-  },
+  currentTime: true,
 });
 testPicker2.create();
 

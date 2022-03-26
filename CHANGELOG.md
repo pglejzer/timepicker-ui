@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.1] - 2022-03-26
+
+### Add
+
+- added new `currentTime` option
+
+### Fix
+
+- fixed landscape on the mobile view
+
+### Update
+
+- updated comments in code to methods/options to show properly descriptions in codes editors
+
+---
+
 ## [2.4.0] - 2022-03-22
 
 ### Add
@@ -18,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Update
 
 - updated a methods open, close with new parameters and callbacks
+
+---
 
 ## [2.3.0] - 2022-03-05
 

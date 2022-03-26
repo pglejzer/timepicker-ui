@@ -120,8 +120,9 @@ export declare type OptionTypes = {
    */
   clockType?: '12h' | '24h';
   /**
-   * @description The `hours` and `minutes` are arrays which accept strings and numbers to block select hours/minutes. The `interval` key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType.
-   * If the interval key is set, the hours/minutes keys are ignored.
+   * @description - The `hours` and `minutes` are arrays which accept strings and numbers to block select hours/minutes.
+   * - The `interval` key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType.
+   * - If the interval key is set, the hours/minutes keys are `ignored`.
    * @example
     disabledTime: {
       minutes: [1,2,4,5,55,23,"22","38"];
@@ -136,13 +137,13 @@ export declare type OptionTypes = {
     interval?: string;
   };
   /**
-   * @description Set current time to the input and timepicker.
-   * If this options is set to `true` it's gonna update picker with toLocaleTimeString().
-   * This option also allows to put object with properties.
-   * The `time` key allows to put any valid date to update picker.
-   * If `updateInput` key is set to true it's going update input value with set time key.
-   * The `locales` key can change language from toLocaleTimeString().
-   * The `preventClockType` key if is set to `true` it's `force` the clockType option to set value "12h" or "24h" based on your location
+   * @description Set current time to the input and timepicker.\
+   * If this options is set to `true` it's gonna update picker with toLocaleTimeString() and input with value based on your location.
+   * This option also allows to put object with properties which:
+   * - The `time` key allows to put any valid date to update picker.
+   * - The `updateInput` key is set to true it's going update input value with set time key.
+   * - The `locales` key can change language from toLocaleTimeString().
+   * - The `preventClockType` key if is set to `true` it's `force` the clockType option to set value "12h" or "24h" based on your location
    * with current time and `locales` key value is ignored.
    * @example
       currentTime: {
@@ -151,6 +152,7 @@ export declare type OptionTypes = {
         locales: "en-US",
         preventClockType: false
       };
+   * @example currentTime: true
    * @default  undefined
    */
   currentTime?:

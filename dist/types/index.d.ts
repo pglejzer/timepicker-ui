@@ -10,7 +10,7 @@ declare type OptionTypes = {
      */
     animation?: boolean;
     /**
-     * @description Set default selector to append timepicker inside it. Timepicker default append to body
+     * @description Set default selector to append timepicker inside it. Timepicker default append to `body`
      * @default ""
      */
     appendModalSelector?: string;
@@ -25,7 +25,7 @@ declare type OptionTypes = {
      */
     cancelLabel?: string;
     /**
-     * @description Edit hour/minutes on the web mode. You have set option preventDefault to false.
+     * @description Edit hour/minutes on the web mode. You have set option `preventDefault` to false.
      * @default false
      */
     editable?: boolean;
@@ -65,12 +65,12 @@ declare type OptionTypes = {
      */
     iconTemplateMobile?: string;
     /**
-     * @description Set increment hour by 1, 2, 3 hour
+     * @description Set increment hour by `1`, `2`, `3` hour
      * @default 1
      */
     incrementHours?: number;
     /**
-     * @description Set increment minutes by 1, 5, 10, 15 minutes
+     * @description Set increment minutes by `1`, `5`, `10`, `15` minutes
      * @default 1
      */
     incrementMinutes?: number;
@@ -110,18 +110,19 @@ declare type OptionTypes = {
      */
     switchToMinutesAfterSelectHour?: boolean;
     /**
-     * @description Set theme to timepicker. Available options: basic, crane-straight, crane-radius
+     * @description Set theme to timepicker. Available options: `basic`, `crane-straight`, `crane-radius`
      * @default "basic"
      */
     theme?: 'basic' | 'crane-straight' | 'crane-radius';
     /**
-     * @description Set type of clock, it contains 2 versions: 12h and 24h.
+     * @description Set type of clock, it contains 2 versions: `12h` and `24h`.
      * @default false
      */
     clockType?: '12h' | '24h';
     /**
-     * @description The hours and minutes are arrays which accept strings and numbers to block select hours/minutes. The interval key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType.
-     * If the interval key is set, the hours/minutes keys are ignored.
+     * @description - The `hours` and `minutes` are arrays which accept strings and numbers to block select hours/minutes.
+     * - The `interval` key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType.
+     * - If the interval key is set, the hours/minutes keys are `ignored`.
      * @example
       disabledTime: {
         minutes: [1,2,4,5,55,23,"22","38"];
@@ -135,6 +136,31 @@ declare type OptionTypes = {
         hours?: Array<string | number>;
         interval?: string;
     };
+    /**
+     * @description Set current time to the input and timepicker.\
+     * If this options is set to `true` it's gonna update picker with toLocaleTimeString() and input with value based on your location.
+     * This option also allows to put object with properties which:
+     * - The `time` key allows to put any valid date to update picker.
+     * - The `updateInput` key is set to true it's going update input value with set time key.
+     * - The `locales` key can change language from toLocaleTimeString().
+     * - The `preventClockType` key if is set to `true` it's `force` the clockType option to set value "12h" or "24h" based on your location
+     * with current time and `locales` key value is ignored.
+     * @example
+        currentTime: {
+          time: new Date(),
+          updateInput: true,
+          locales: "en-US",
+          preventClockType: false
+        };
+     * @example currentTime: true
+     * @default  undefined
+     */
+    currentTime?: {
+        time?: Date;
+        updateInput?: boolean;
+        locales?: string | string[];
+        preventClockType?: boolean;
+    } | boolean;
 };
 
 declare type TypeFunction = () => void;
@@ -152,7 +178,7 @@ declare class TimepickerUI {
     private _isTouchMouseMove;
     private _disabledTime;
     private _cloned;
-    constructor(element: HTMLDivElement, options?: OptionTypes);
+    constructor(element: HTMLElement, options?: OptionTypes);
     private get modalTemplate();
     private get modalElement();
     private get clockFace();
@@ -175,14 +201,40 @@ declare class TimepickerUI {
     private get activeTypeMode();
     private get keyboardClockIcon();
     private get footer();
+    /**
+     * @description The create method that init timepicker
+     */
     create: () => void;
+    /**
+     * @description The open method opens immediately timepicker after init
+     * @param callback - The callback function triggered when timepicker is open by this method
+     */
     open: (callback?: (() => void) | undefined) => void;
+    /**
+     * @description Closure method closes the timepicker
+     * @param args - These parameters in this method are optional and order is any. You can set callback function first or boolean,
+     * or just boolean or just callback. If the boolean is set to true the input will be updating with the current value on picker.
+     * The callback function start immediately after close, if is invoke. The max parameters length is set to 2
+     */
     close: (...args: Array<boolean | TypeFunction>) => void;
+    /**
+     * @description The destroy method destroy actual instance of picker by cloning element.
+     * @param callback - The callback function is started after destroyed method. This parameter is optional.
+     */
     destroy: (callback?: TypeFunction | undefined) => void;
+    /**
+     * @description The update method which update timepicker with new options and can create a new instance.
+     * @param value - The first parameter is a object with key options which is timepicker options and it will be updated to current
+     * instance and is `required`. The `create` key is a boolean which if is set to true it starting the create() method after invoke update
+     * function and is optional. The `create` option is useful if you are using destroy and update methods together.
+     * @param callback - The `callback` function is started after update method. This parameter is optional.
+     */
     update: (value: {
         options: OptionTypes;
         create?: boolean;
     }, callback?: TypeFunction | undefined) => void;
+    private _preventClockTypeByCurrentTime;
+    private _updateInputValueWithCurrentTimeOnStart;
     private _checkDisabledValuesOnStart;
     private _checkMobileOption;
     private _getDisableTime;

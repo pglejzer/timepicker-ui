@@ -342,7 +342,10 @@ export default class TimepickerUI {
   };
 
   private _preventClockTypeByCurrentTime = () => {
-    if (typeof this._options?.currentTime !== 'boolean' && this._options?.currentTime?.preventClockType) {
+    if (
+      (typeof this._options?.currentTime !== 'boolean' && this._options?.currentTime?.preventClockType) ||
+      (typeof this._options?.currentTime === 'boolean' && this._options?.currentTime)
+    ) {
       const { currentTime, clockType } = this._options;
       const { type } = getInputValue(this.input as unknown as HTMLInputElement, clockType, currentTime, true);
 
@@ -351,7 +354,10 @@ export default class TimepickerUI {
   };
 
   private _updateInputValueWithCurrentTimeOnStart = () => {
-    if (typeof this._options?.currentTime !== 'boolean' && this._options?.currentTime?.updateInput) {
+    if (
+      (typeof this._options?.currentTime !== 'boolean' && this._options?.currentTime?.updateInput) ||
+      (typeof this._options?.currentTime === 'boolean' && this._options?.currentTime)
+    ) {
       const { hour, minutes, type } = getInputValue(
         this.input as unknown as HTMLInputElement,
         this._options.clockType,
