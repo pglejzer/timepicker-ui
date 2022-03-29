@@ -481,9 +481,12 @@ export default {
         input with value based on your location. The clockType option is forced in that case.<br />
         This option also allows to put object with properties which:<br />
         <ul>
-          <li>The <code>time</code> key allows to put any valid date to update picker with time. It's converting Date to time.</li>
           <li>
             The <code>updateInput</code> key is set to true it's going update input value with the setted time key.
+          </li>
+          <li>The <code>time</code> key allows to put any valid date to update picker with time. It's converting Date to time.<br>
+          If the <code>updateInput</code> is set to <code>false/undefined</code> and the default value from the input not exist, the <code>time</code> key value will be displayed in the picker. <br>
+          If the <code>updateInput</code> is set to <code>false/undefined</code> but the default value from the input exist, the <code>time</code> key will be ignored. <br>
           </li>
           <li>The <code>locales</code>key can change language from toLocaleTimeString().</li>
           <li>

@@ -454,11 +454,16 @@ export default class TimepickerUI {
 
   private _setOnStartCSSClassesIfClockType24h() {
     if (this._options.clockType === '24h') {
-      const { hour } = getInputValue(
+      let { hour } = getInputValue(
         this.input as unknown as HTMLInputElement,
         this._options.clockType,
         this._options.currentTime,
       );
+
+      if (this.input.value.length > 0) {
+        // eslint-disable-next-line prefer-destructuring
+        hour = this.input.value.split(':')[0];
+      }
 
       if (Number(hour) > 12 || Number(hour) === 0) {
         this._setCircleClockClasses24h();
@@ -655,10 +660,16 @@ export default class TimepickerUI {
       return;
     }
 
-    const { hour, minutes, type } = value;
+    let [hour, minutes, type] = this.input.value.split(':').join(' ').split(' ');
 
-    this.hour.innerText = hour as string;
-    this.minutes.innerText = minutes as string;
+    if (this.input.value.length === 0) {
+      hour = value.hour as string;
+      minutes = value.minutes as string;
+      type = value.type as string;
+    }
+
+    this.hour.innerText = hour;
+    this.minutes.innerText = minutes;
 
     const typeMode = document.querySelector(`[data-type="${type}"]`) as HTMLElement;
 
@@ -1533,6 +1544,8 @@ export default class TimepickerUI {
 
       this._isMobileView = true;
       this._options.mobile = true;
+      this._options.preventDefault = false;
+      this._options.editable = true;
 
       const beforeHourContent = this.hour.textContent;
       const beforeMinutesContent = this.minutes.textContent;
@@ -1543,6 +1556,8 @@ export default class TimepickerUI {
 
         this._isMobileView = false;
         this._options.mobile = false;
+        this._options.preventDefault = true;
+        this._options.editable = true;
 
         this.hour.textContent = beforeHourContent;
         this.minutes.textContent = beforeMinutesContent;
@@ -1600,6 +1615,8 @@ export default class TimepickerUI {
 
         this._isMobileView = true;
         this._options.mobile = true;
+        this._options.preventDefault = true;
+        this._options.editable = false;
 
         this.hour.textContent = beforeHourContent;
         this.minutes.textContent = beforeMinutesContent;

@@ -24,12 +24,14 @@ Prism.highlightAll();
 
 // basicPicker.create();
 
+const currentDate = new Date();
+currentDate.setMinutes(0);
+
 const test = document.querySelector('.test') as HTMLDivElement;
 const testPicker = new TimepickerUI(test, {
   currentTime: {
+    time: currentDate,
     preventClockType: true,
-    time: new Date(),
-    updateInput: true,
   },
 });
 

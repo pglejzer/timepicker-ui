@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.2] - 2022-03-29
+
+### Fix
+
+- fixed problem with `currentTime` about displaying wrong hour in the picker
+- fixed problem with `editable` option when switch during desktop/mobile options
+
+### Add
+
+- added `OptionTypes` to allows to import types from package
+
+---
+
 ## [2.4.1] - 2022-03-26
 
 ### Add

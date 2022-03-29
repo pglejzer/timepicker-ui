@@ -139,12 +139,7 @@ export declare type OptionTypes = {
     /**
      * @description Set current time to the input and timepicker.\
      * If this options is set to `true` it's gonna update picker with toLocaleTimeString() and input with value based on your location.
-     * This option also allows to put object with properties which:
-     * - The `time` key allows to put any valid date to update picker.
-     * - The `updateInput` key is set to true it's going update input value with set time key.
-     * - The `locales` key can change language from toLocaleTimeString().
-     * - The `preventClockType` key if is set to `true` it's `force` the clockType option to set value "12h" or "24h" based on your location
-     * with current time and `locales` key value is ignored.
+     * This option also allows to put object with properties.
      * @example
         currentTime: {
           time: new Date(),
@@ -156,9 +151,26 @@ export declare type OptionTypes = {
      * @default  undefined
      */
     currentTime?: {
+        /**
+         * The `time` key allows to put any valid date to update picker.
+         * @requires
+         * If the `updateInput` is set to `false/undefined` and the default value from the input not exist, the `time` key value will be displayed in the picker.
+         *
+         * If the `updateInput` is set to `false/undefined` but the default value from the input exist, the `time` key will be ignored.
+         */
         time?: Date;
+        /**
+         * The `updateInput` key is set to `true` it's going update input value with set time key.
+         */
         updateInput?: boolean;
+        /**
+         * The `locales` key can change language from `toLocaleTimeString()`.
+         */
         locales?: string | string[];
+        /**
+         * The `preventClockType` key if is set to `true` it's `force` the clockType option to set value "12h" or "24h" based on your location
+         * with current time and `locales` key value is ignored.
+         */
         preventClockType?: boolean;
     } | boolean;
 };
