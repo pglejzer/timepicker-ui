@@ -207,6 +207,10 @@ export default class TimepickerUI {
     return document.querySelector('.timepicker-ui-footer') as HTMLDivElement;
   }
 
+  private get wrapper() {
+    return document.querySelector('.timepicker-ui-wrapper') as HTMLDivElement;
+  }
+
   /**
    * @description The create method that init timepicker
    */
@@ -258,6 +262,7 @@ export default class TimepickerUI {
     document.removeEventListener('mousedown', this._eventsClickMobileHandler);
     document.removeEventListener('touchstart', this._eventsClickMobileHandler);
     document.removeEventListener('keypress', this._handleEscClick);
+    this.wrapper.removeEventListener('keydown', this._focusTrapHandler);
 
     if (this._options.enableSwitchIcon) {
       this.keyboardClockIcon.removeEventListener('touchstart', this._handlerViewChange);
@@ -369,15 +374,15 @@ export default class TimepickerUI {
   };
 
   private _checkDisabledValuesOnStart() {
-    if (!this._options.disabledTime?.hours || !this._options.disabledTime?.minutes) return;
+    if (!this._options.disabledTime || this._options.disabledTime.interval) return;
 
     const {
       disabledTime: { hours, minutes },
       clockType,
     } = this._options;
 
-    const isValidHours = checkDisabledHoursAndMinutes(hours, 'hour', clockType);
-    const isValidMinutes = checkDisabledHoursAndMinutes(minutes, 'minutes', clockType);
+    const isValidHours = hours ? checkDisabledHoursAndMinutes(hours, 'hour', clockType) : true;
+    const isValidMinutes = minutes ? checkDisabledHoursAndMinutes(minutes, 'minutes', clockType) : true;
 
     if (!isValidHours || !isValidMinutes) {
       throw new Error('You set wrong hours or minutes in disabled option');
@@ -626,6 +631,9 @@ export default class TimepickerUI {
     this._handleBackdropClick();
     this._handleIconChangeView();
     this._handleClickOnHourMobile();
+    if (this._options.focusTrap) {
+      this._focusTrapHandler();
+    }
   };
 
   private _handleOpenOnClick = (): void => {
@@ -1701,5 +1709,33 @@ export default class TimepickerUI {
 
   private _handleEscClick = (): void => {
     document.addEventListener('keydown', this._handleKeyPress);
+  };
+
+  private _focusTrapHandler = (): void => {
+    setTimeout(() => {
+      const focusableEls = this.wrapper.querySelectorAll('div[tabindex="0"]:not([disabled])');
+      const firstFocusableEl = focusableEls[0] as HTMLDivElement;
+      const lastFocusableEl = focusableEls[focusableEls.length - 1] as HTMLDivElement;
+
+      firstFocusableEl.focus();
+
+      this.wrapper.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+          if (e.shiftKey) {
+            if (document.activeElement === firstFocusableEl) {
+              lastFocusableEl.focus();
+              e.preventDefault();
+            }
+          }
+
+          if (document.activeElement === lastFocusableEl) {
+            firstFocusableEl.focus();
+            e.preventDefault();
+          }
+        }
+      });
+
+      this.wrapper.addEventListener('click', () => (document.activeElement as HTMLDivElement).blur());
+    }, 301);
   };
 }

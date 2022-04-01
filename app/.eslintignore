@@ -7,3 +7,4 @@ webpack.config.js
 rollup*
 typings/index.ts
 .eslintrc*
+docs/index.ts

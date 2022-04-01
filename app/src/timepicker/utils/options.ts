@@ -27,6 +27,7 @@ const options: OptionTypes = {
   clockType: '12h',
   disabledTime: undefined,
   currentTime: undefined,
+  focusTrap: false,
 };
 
 export { options };

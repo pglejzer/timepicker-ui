@@ -260,9 +260,14 @@
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
+
     border: 2px solid transparent;
     padding: 10px;
     width: 96px;
+
+    &:focus {
+      outline: auto;
+    }
 
     &:hover,
     &.active {
@@ -409,7 +414,6 @@
     font-weight: 500;
     transition: all 0.3s ease;
     cursor: pointer;
-    outline: none;
 
     &:hover {
       background-color: #d6d6d6;
@@ -435,7 +439,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    outline: none;
   }
 
   &-keyboard-icon-wrapper,
@@ -551,8 +554,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    outline: none;
     transition: 0.3s ease color;
+    border-radius: 50%;
+    outline: none;
+
+    &:focus {
+      outline: auto;
+    }
 
     &.active {
       color: #fff;

@@ -45,10 +45,10 @@ const test1 = document.querySelector('.test1') as HTMLDivElement;
 
 // good
 const testPicker1 = new TimepickerUI(test1, {
-  // currentTime: {
-  //   time: new Date(),
-  //   updateInput: true,
-  // },
+  currentTime: {
+    time: new Date(),
+    updateInput: true,
+  },
 });
 testPicker1.create();
 
@@ -66,7 +66,7 @@ const testPicker3 = new TimepickerUI(test3, {
   enableScrollbar: true,
   clockType: '24h',
   disabledTime: {
-    interval: '5:55 - 21:00',
+    minutes: [1, 2, 4, 55, '25'],
   },
 });
 testPicker3.create();

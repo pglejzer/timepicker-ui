@@ -22,22 +22,22 @@ export const getModalTemplate = (options: OptionTypes): string => {
   <div class="timepicker-ui-modal normalize" role="dialog" style='transition:${
     animation ? 'opacity 0.15s linear' : 'none'
   }'>
-    <div class="timepicker-ui-wrapper ">
+    <div class="timepicker-ui-wrapper">
       <div class="timepicker-ui-header">
         <div class="timepicker-ui-select-time">${timeLabel}</div>
         <div class="timepicker-ui-wrapper-time ${
           clockType === '24h' ? 'timepicker-ui-wrapper-time-24h' : ''
         }">
-          <div class="timepicker-ui-hour" role="button" contenteditable="${!!editable}"></div>  
+          <div class="timepicker-ui-hour" tabindex="0" role="button" contenteditable="${!!editable}"></div>  
           <div class="timepicker-ui-dots">:</div>    
-          <div class="timepicker-ui-minutes" role="button" contenteditable="${!!editable}"></div>   
+          <div class="timepicker-ui-minutes" tabindex="0" role="button" contenteditable="${!!editable}"></div>   
         </div>
       ${
         clockType !== '24h'
           ? `
       <div class="timepicker-ui-wrapper-type-time">
-        <div class="timepicker-ui-type-mode timepicker-ui-am" role="button" data-type="AM">${amLabel}</div>    
-        <div class="timepicker-ui-type-mode timepicker-ui-pm" role="button" data-type="PM">${pmLabel}</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-am" tabindex="0" role="button" data-type="AM">${amLabel}</div>    
+        <div class="timepicker-ui-type-mode timepicker-ui-pm" tabindex="0" role="button" data-type="PM">${pmLabel}</div>    
       </div>
       `
           : ''
@@ -58,14 +58,14 @@ export const getModalTemplate = (options: OptionTypes): string => {
         ${
           enableSwitchIcon
             ? `
-      <div class="timepicker-ui-keyboard-icon-wrapper" role="button" aria-pressed="false" data-view="desktop">
+      <div class="timepicker-ui-keyboard-icon-wrapper" tabindex="0" role="button" aria-pressed="false" data-view="desktop">
         ${iconTemplate}
       </div>`
             : ''
         }
         <div class="timepicker-ui-wrapper-btn">
-          <div class="timepicker-ui-cancel-btn" role="button" aria-pressed="false">${cancelLabel}</div>
-          <div class="timepicker-ui-ok-btn" role="button" aria-pressed="false">${okLabel}</div>
+          <div class="timepicker-ui-cancel-btn" tabindex="0" role="button" aria-pressed="false">${cancelLabel}</div>
+          <div class="timepicker-ui-ok-btn" tabindex="0" role="button" aria-pressed="false">${okLabel}</div>
         </div>
         </div>
       </div>
@@ -96,17 +96,17 @@ export const getMobileModalTemplate = (options: OptionTypes): string => {
       <div class="timepicker-ui-header mobile">
         <div class="timepicker-ui-select-time mobile">${mobileTimeLabel}</div>
         <div class="timepicker-ui-wrapper-time mobile">
-          <div class="timepicker-ui-hour mobile" contenteditable="false">12</div>  
+          <div class="timepicker-ui-hour mobile" contenteditable="false" tabindex="0"></div>  
           <div class="timepicker-ui-hour-text mobile">${hourMobileLabel}</div>
           <div class="timepicker-ui-dots mobile">:</div>  
           <div class="timepicker-ui-minute-text mobile">${minuteMobileLabel}</div>
-          <div class="timepicker-ui-minutes mobile" contenteditable="false">00</div>   
+          <div class="timepicker-ui-minutes mobile" contenteditable="false" tabindex="0"></div>   
         </div>
   ${
     clockType !== '24h'
       ? `<div class="timepicker-ui-wrapper-type-time mobile">
-          <div class="timepicker-ui-type-mode timepicker-ui-am mobile" data-type="AM">${amLabel}</div>    
-          <div class="timepicker-ui-type-mode timepicker-ui-pm mobile" data-type="PM">${pmLabel}</div>    
+          <div class="timepicker-ui-type-mode timepicker-ui-am mobile" data-type="AM" tabindex="0">${amLabel}</div>    
+          <div class="timepicker-ui-type-mode timepicker-ui-pm mobile" data-type="PM" tabindex="0">${pmLabel}</div>    
         </div>`
       : ''
   }
@@ -115,14 +115,14 @@ export const getMobileModalTemplate = (options: OptionTypes): string => {
       ${
         enableSwitchIcon
           ? `
-      <div class="timepicker-ui-keyboard-icon-wrapper mobile" role="button" aria-pressed="false" data-view="desktop">
+      <div class="timepicker-ui-keyboard-icon-wrapper mobile" role="button" aria-pressed="false" data-view="desktop" tabindex="0">
       ${iconTemplateMobile}
       </div>`
           : ''
       }
       <div class="timepicker-ui-wrapper-btn mobile">
-        <div class="timepicker-ui-cancel-btn mobile" role="button" aria-pressed="false">${cancelLabel}</div>
-        <div class="timepicker-ui-ok-btn mobile" role="button" aria-pressed="false">${okLabel}</div>
+        <div class="timepicker-ui-cancel-btn mobile" role="button" aria-pressed="false" tabindex="0">${cancelLabel}</div>
+        <div class="timepicker-ui-ok-btn mobile" role="button" aria-pressed="false" tabindex="0">${okLabel}</div>
       </div>
       </div>
     </div>  

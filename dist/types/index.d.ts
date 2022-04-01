@@ -125,9 +125,9 @@ declare type OptionTypes = {
      * - If the interval key is set, the hours/minutes keys are `ignored`.
      * @example
       disabledTime: {
-        minutes: [1,2,4,5,55,23,"22","38"];
-        hours: [1,"3","5", 8];
-        interval: "10:00 AM - 12:00 PM";
+        minutes: [1,2,4,5,55,23,"22","38"],
+        hours: [1,"3","5", 8],
+        interval: "10:00 AM - 12:00 PM",
       }
      * @default  undefined
      */
@@ -213,6 +213,7 @@ declare class TimepickerUI {
     private get activeTypeMode();
     private get keyboardClockIcon();
     private get footer();
+    private get wrapper();
     /**
      * @description The create method that init timepicker
      */
@@ -297,6 +298,7 @@ declare class TimepickerUI {
     private _handleClickOnHourMobile;
     private _handleKeyPress;
     private _handleEscClick;
+    private _focusTrapHandler;
 }
 
 export { OptionTypes, TimepickerUI };
