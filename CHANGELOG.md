@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.3] - 2022-04-02
+
+### Fix
+
+- fixed problem with `minutes` option in `currentTime`
+
+### Add
+
+- added `focusTrap` to turn off/on focus traping on picker. The default value is set to true
+- added possibility to open picker by click enter if input is focused
+
+---
+
 ## [2.4.2] - 2022-03-29
 
 ### Fix

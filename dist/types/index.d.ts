@@ -173,6 +173,11 @@ declare type OptionTypes = {
          */
         preventClockType?: boolean;
     } | boolean;
+    /**
+     * @description Set focus trap to the modal element to all elements with tabindex in the picker
+     * @default true
+     */
+    focusTrap?: boolean;
 };
 
 declare type TypeFunction = () => void;
@@ -299,6 +304,7 @@ declare class TimepickerUI {
     private _handleKeyPress;
     private _handleEscClick;
     private _focusTrapHandler;
+    private _handleOpenOnEnterFocus;
 }
 
 export { OptionTypes, TimepickerUI };

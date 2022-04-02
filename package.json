@@ -1,6 +1,6 @@
 {
   "name": "timepicker-ui",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "timepicker-ui is an easy library with timepicker. Created with TypeScript based on Material Design from Google.",
   "main": "./dist/timepicker-ui.js",
   "module": "./dist/timepicker-ui.esm.js",

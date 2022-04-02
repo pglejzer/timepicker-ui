@@ -379,6 +379,12 @@ export default {
       <td>Turn on/off focus to input after close modal</td>
     </tr> 
     <tr>
+    <td scope="row">focusTrap</td>
+      <td>true</td>
+      <td>boolean</td>
+      <td>Turn off/on focus trap to the picker</td>
+    </tr>
+    <tr>
       <td scope="row">hourMobileLabel</td>
       <td>Hour</td>
       <td>string</td>

@@ -125,5 +125,6 @@ export default class TimepickerUI {
     private _handleKeyPress;
     private _handleEscClick;
     private _focusTrapHandler;
+    private _handleOpenOnEnterFocus;
 }
 export {};
