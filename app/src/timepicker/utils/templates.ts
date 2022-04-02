@@ -22,7 +22,7 @@ export const getModalTemplate = (options: OptionTypes): string => {
   <div class="timepicker-ui-modal normalize" role="dialog" style='transition:${
     animation ? 'opacity 0.15s linear' : 'none'
   }'>
-    <div class="timepicker-ui-wrapper">
+    <div class="timepicker-ui-wrapper" tabindex="0">
       <div class="timepicker-ui-header">
         <div class="timepicker-ui-select-time">${timeLabel}</div>
         <div class="timepicker-ui-wrapper-time ${
@@ -63,7 +63,7 @@ export const getModalTemplate = (options: OptionTypes): string => {
       </div>`
             : ''
         }
-        <div class="timepicker-ui-wrapper-btn">
+        <div class="timepicker-ui-wrapper-btn" >
           <div class="timepicker-ui-cancel-btn" tabindex="0" role="button" aria-pressed="false">${cancelLabel}</div>
           <div class="timepicker-ui-ok-btn" tabindex="0" role="button" aria-pressed="false">${okLabel}</div>
         </div>
@@ -92,7 +92,7 @@ export const getMobileModalTemplate = (options: OptionTypes): string => {
   <div class="timepicker-ui-modal normalize mobile" role="dialog" style='transition:${
     animation ? 'opacity 0.15s linear' : 'none'
   }'>
-    <div class="timepicker-ui-wrapper mobile">
+    <div class="timepicker-ui-wrapper mobile" tabindex="0">
       <div class="timepicker-ui-header mobile">
         <div class="timepicker-ui-select-time mobile">${mobileTimeLabel}</div>
         <div class="timepicker-ui-wrapper-time mobile">

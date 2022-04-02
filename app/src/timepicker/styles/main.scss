@@ -47,6 +47,7 @@
     box-shadow: $tmwrapperboxshadow;
     display: flex;
     flex-direction: column;
+    outline: none;
   }
 
   &-wrapper:not(.timepicker-ui-wrapper + .mobile) {
@@ -559,7 +560,8 @@
     outline: none;
 
     &:focus {
-      outline: auto;
+      background: rgba(143, 143, 143, 0.315);
+      box-shadow: $tmwrapperboxshadow;
     }
 
     &.active {

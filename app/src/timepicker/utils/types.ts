@@ -178,7 +178,7 @@ export declare type OptionTypes = {
 
   /**
    * @description Set focus trap to the modal element to all elements with tabindex in the picker
-   * @default false
+   * @default true
    */
   focusTrap?: boolean;
 };
