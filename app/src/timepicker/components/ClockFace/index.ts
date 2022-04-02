@@ -172,7 +172,7 @@ class ClockFace {
 
       if (spanMinutes && startMinutes && endMinutes) {
         if (activeMode === 'AM') {
-          if (startMinutes.length === 0 && endMinutes.length === 0 && endMinutes[0] === '00') {
+          if (endMinutes[0] === '00' && endMinutes.length === 1 && startMinutes.length === 0) {
             if (Number(actualHour) >= Number(amHours[0])) {
               this._addClasses(spanMinutes);
             }
@@ -192,7 +192,7 @@ class ClockFace {
             }
           }
 
-          if (endMinutes[0] === '00' && endMinutes.length === 0 && startMinutes.length > 0) {
+          if (endMinutes[0] === '00' && endMinutes.length === 1 && startMinutes.length > 0) {
             if (Number(removedAmHour) === Number(actualHour)) {
               this._addClassesWithIncludes(spanMinutes, startMinutes);
             } else if (Number(actualHour) > Number(removedAmHour)) {

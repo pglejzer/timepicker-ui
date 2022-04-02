@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.5] - 2022-04-02
+
+### Fix
+
+- fixed unnecessary change code to `disable Time`
+
+---
+
 ## [2.4.4] - 2022-04-02
 
 ### Fix
