@@ -1718,18 +1718,16 @@ export default class TimepickerUI {
 
       this.wrapper.focus();
 
-      this.wrapper.addEventListener('keydown', ({ key, shiftKey, target: t, preventDefault }) => {
+      this.wrapper.addEventListener('keydown', ({ key, shiftKey, target: t }) => {
         const target = t as HTMLDivElement;
 
         if (key === 'Tab') {
           if (shiftKey) {
             if (document.activeElement === firstFocusableEl) {
               lastFocusableEl.focus();
-              preventDefault();
             }
           } else if (document.activeElement === lastFocusableEl) {
             firstFocusableEl.focus();
-            preventDefault();
           }
         }
 

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.4] - 2022-04-02
+
+### Fix
+
+- fixed problem with `focusTrap` with React about eval error
+
+---
+
 ## [2.4.3] - 2022-04-02
 
 ### Fix
