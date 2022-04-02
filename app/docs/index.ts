@@ -33,6 +33,7 @@ const testPicker = new TimepickerUI(test, {
     time: currentDate,
     preventClockType: true,
   },
+  focusTrap: true,
 });
 
 // const inputElement = test.querySelector('input') as HTMLInputElement;
@@ -45,10 +46,10 @@ const test1 = document.querySelector('.test1') as HTMLDivElement;
 
 // good
 const testPicker1 = new TimepickerUI(test1, {
-  // currentTime: {
-  //   time: new Date(),
-  //   updateInput: true,
-  // },
+  currentTime: {
+    time: new Date(),
+    updateInput: true,
+  },
 });
 testPicker1.create();
 
@@ -66,7 +67,7 @@ const testPicker3 = new TimepickerUI(test3, {
   enableScrollbar: true,
   clockType: '24h',
   disabledTime: {
-    interval: '5:55 - 21:00',
+    minutes: [1, 2, 4, 55, '25'],
   },
 });
 testPicker3.create();
@@ -203,6 +204,7 @@ mobilePicker.create();
 const keyboardIcon = document.querySelector('.keyboard-icon-add') as HTMLDivElement;
 const keyboardIconInit = new TimepickerUI(keyboardIcon, {
   enableSwitchIcon: true,
+  focusTrap: true,
 });
 
 keyboardIconInit.create();
@@ -211,6 +213,7 @@ const themeCrane = document.querySelector('.theme-crane-straight') as HTMLDivEle
 const themeCraneInit = new TimepickerUI(themeCrane, {
   enableSwitchIcon: true,
   theme: 'crane-straight',
+  focusTrap: true,
 });
 themeCraneInit.create();
 
@@ -218,6 +221,7 @@ const themeCraneRadius = document.querySelector('.theme-crane-radius') as HTMLDi
 const themeCraneRadiusInit = new TimepickerUI(themeCraneRadius, {
   enableSwitchIcon: true,
   theme: 'crane-radius',
+  focusTrap: true,
 });
 themeCraneRadiusInit.create();
 

@@ -207,6 +207,10 @@ export default class TimepickerUI {
     return document.querySelector('.timepicker-ui-footer') as HTMLDivElement;
   }
 
+  private get wrapper() {
+    return document.querySelector('.timepicker-ui-wrapper') as HTMLDivElement;
+  }
+
   /**
    * @description The create method that init timepicker
    */
@@ -217,6 +221,7 @@ export default class TimepickerUI {
     this._setInputClassToInputElement();
     this._setDataOpenToInputIfDosentExistInWrapper();
     this._setClassTopOpenElement();
+    this._handleOpenOnEnterFocus();
     this._handleOpenOnClick();
     this._getDisableTime();
   };
@@ -258,6 +263,7 @@ export default class TimepickerUI {
     document.removeEventListener('mousedown', this._eventsClickMobileHandler);
     document.removeEventListener('touchstart', this._eventsClickMobileHandler);
     document.removeEventListener('keypress', this._handleEscClick);
+    this.wrapper.removeEventListener('keydown', this._focusTrapHandler);
 
     if (this._options.enableSwitchIcon) {
       this.keyboardClockIcon.removeEventListener('touchstart', this._handlerViewChange);
@@ -369,15 +375,15 @@ export default class TimepickerUI {
   };
 
   private _checkDisabledValuesOnStart() {
-    if (!this._options.disabledTime?.hours || !this._options.disabledTime?.minutes) return;
+    if (!this._options.disabledTime || this._options.disabledTime.interval) return;
 
     const {
       disabledTime: { hours, minutes },
       clockType,
     } = this._options;
 
-    const isValidHours = checkDisabledHoursAndMinutes(hours, 'hour', clockType);
-    const isValidMinutes = checkDisabledHoursAndMinutes(minutes, 'minutes', clockType);
+    const isValidHours = hours ? checkDisabledHoursAndMinutes(hours, 'hour', clockType) : true;
+    const isValidMinutes = minutes ? checkDisabledHoursAndMinutes(minutes, 'minutes', clockType) : true;
 
     if (!isValidHours || !isValidMinutes) {
       throw new Error('You set wrong hours or minutes in disabled option');
@@ -626,6 +632,10 @@ export default class TimepickerUI {
     this._handleBackdropClick();
     this._handleIconChangeView();
     this._handleClickOnHourMobile();
+
+    if (this._options.focusTrap) {
+      this._focusTrapHandler();
+    }
   };
 
   private _handleOpenOnClick = (): void => {
@@ -671,7 +681,7 @@ export default class TimepickerUI {
     this.hour.innerText = hour;
     this.minutes.innerText = minutes;
 
-    const typeMode = document.querySelector(`[data-type="${type}"]`) as HTMLElement;
+    const typeMode = document.querySelector(`[data-type='${type}']`) as HTMLElement;
 
     if (this._options.clockType !== '24h' && typeMode) {
       typeMode.classList.add('active');
@@ -1207,7 +1217,6 @@ export default class TimepickerUI {
     if (this._options.preventDefault) {
       event.preventDefault();
     }
-
     const { target: t, type, touches } = event;
     const target = t as Element;
 
@@ -1242,7 +1251,6 @@ export default class TimepickerUI {
 
       return;
     }
-
     if (type === 'mousedown' || type === 'mousemove' || type === 'touchmove' || type === 'touchstart') {
       if (type === 'mousedown' || type === 'touchstart' || type === 'touchmove') {
         if (
@@ -1353,7 +1361,6 @@ export default class TimepickerUI {
 
     if (this.hourTips !== null) {
       this.hour?.classList.add('active');
-
       if (
         !hasClass(realTarget || target, 'timepicker-ui-value-tips-24h') &&
         !hasClass(realTarget || target, 'timepicker-ui-tips-disabled') &&
@@ -1701,5 +1708,103 @@ export default class TimepickerUI {
 
   private _handleEscClick = (): void => {
     document.addEventListener('keydown', this._handleKeyPress);
+  };
+
+  private _focusTrapHandler = (): void => {
+    setTimeout(() => {
+      const focusableEls = this.wrapper.querySelectorAll('div[tabindex="0"]:not([disabled])');
+      const firstFocusableEl = focusableEls[0] as HTMLDivElement;
+      const lastFocusableEl = focusableEls[focusableEls.length - 1] as HTMLDivElement;
+
+      this.wrapper.focus();
+
+      this.wrapper.addEventListener('keydown', ({ key, shiftKey, target: t, preventDefault }) => {
+        const target = t as HTMLDivElement;
+
+        if (key === 'Tab') {
+          if (shiftKey) {
+            if (document.activeElement === firstFocusableEl) {
+              lastFocusableEl.focus();
+              preventDefault();
+            }
+          } else if (document.activeElement === lastFocusableEl) {
+            firstFocusableEl.focus();
+            preventDefault();
+          }
+        }
+
+        if (key === 'Enter') {
+          if (hasClass(target, 'timepicker-ui-minutes')) {
+            this.minutes.click();
+          }
+
+          if (hasClass(target, 'timepicker-ui-hour')) {
+            this.hour.click();
+          }
+
+          if (hasClass(target, 'timepicker-ui-cancel-btn')) {
+            this.cancelButton.click();
+          }
+
+          if (hasClass(target, 'timepicker-ui-ok-btn')) {
+            this.okButton.click();
+          }
+
+          if (hasClass(target, 'timepicker-ui-keyboard-icon-wrapper')) {
+            this.keyboardClockIcon.click();
+          }
+
+          if (hasClass(target, 'timepicker-ui-am')) {
+            this.AM.click();
+          }
+
+          if (hasClass(target, 'timepicker-ui-pm')) {
+            this.PM.click();
+          }
+
+          if (
+            hasClass(target, 'timepicker-ui-value-tips') ||
+            hasClass(target, 'timepicker-ui-value-tips-24h')
+          ) {
+            const { left, top, x, y, width, height } = target.getBoundingClientRect();
+            const tabIndexElement = document.elementFromPoint(x, y);
+
+            // eslint-disable-next-line no-inner-declarations
+            const simulateMousedownEvent = () => {
+              const ev = new MouseEvent('mousedown', {
+                clientX: left + width / 2,
+                clientY: top + height / 2,
+                cancelable: true,
+                bubbles: true,
+              });
+
+              if (hasClass(tabIndexElement, 'timepicker-ui-value-tips-24h')) {
+                tabIndexElement?.dispatchEvent(ev);
+              } else {
+                tabIndexElement?.childNodes[0]?.dispatchEvent(ev);
+              }
+
+              this._isTouchMouseMove = false;
+            };
+
+            simulateMousedownEvent();
+          }
+        }
+
+        setTimeout(() => {
+          this.wrapper.addEventListener('mousedown', () => (document.activeElement as HTMLDivElement).blur());
+        }, 100);
+      });
+    }, 301);
+  };
+
+  private _handleOpenOnEnterFocus = (): void => {
+    this.input.addEventListener('keydown', ({ target, key }) => {
+      if ((target as HTMLInputElement).disabled) return;
+
+      if (key === 'Enter') {
+        this.open();
+      }
+    });
   };
 }

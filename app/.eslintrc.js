@@ -11,7 +11,7 @@ module.exports = {
     'airbnb-base',
     'airbnb-typescript/base',
   ],
-  plugins: ['prettier', '@typescript-eslint'],
+  plugins: ['prettier', '@typescript-eslint', 'tree-shaking'],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -26,6 +26,7 @@ module.exports = {
     'rollup.config.js',
     'webpack.config.js',
     './src/**/*.d.ts',
+    'docs/index.ts',
   ],
   rules: {
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
@@ -47,5 +48,7 @@ module.exports = {
     '@typescript-eslint/indent': ['off'],
     'max-len': 'off',
     'no-confusing-arrow': 'off',
+    'tree-shaking/no-side-effects-in-initialization': 2,
   },
 };
+

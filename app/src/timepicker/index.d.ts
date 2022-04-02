@@ -39,6 +39,7 @@ export default class TimepickerUI {
     private get activeTypeMode();
     private get keyboardClockIcon();
     private get footer();
+    private get wrapper();
     /**
      * @description The create method that init timepicker
      */
@@ -123,5 +124,6 @@ export default class TimepickerUI {
     private _handleClickOnHourMobile;
     private _handleKeyPress;
     private _handleEscClick;
+    private _focusTrapHandler;
 }
 export {};

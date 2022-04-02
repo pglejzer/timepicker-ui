@@ -47,6 +47,7 @@
     box-shadow: $tmwrapperboxshadow;
     display: flex;
     flex-direction: column;
+    outline: none;
   }
 
   &-wrapper:not(.timepicker-ui-wrapper + .mobile) {
@@ -260,9 +261,14 @@
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
+
     border: 2px solid transparent;
     padding: 10px;
     width: 96px;
+
+    &:focus {
+      outline: auto;
+    }
 
     &:hover,
     &.active {
@@ -409,7 +415,6 @@
     font-weight: 500;
     transition: all 0.3s ease;
     cursor: pointer;
-    outline: none;
 
     &:hover {
       background-color: #d6d6d6;
@@ -435,7 +440,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    outline: none;
   }
 
   &-keyboard-icon-wrapper,
@@ -551,8 +555,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    outline: none;
     transition: 0.3s ease color;
+    border-radius: 50%;
+    outline: none;
+
+    &:focus {
+      background: rgba(143, 143, 143, 0.315);
+      box-shadow: $tmwrapperboxshadow;
+    }
 
     &.active {
       color: #fff;

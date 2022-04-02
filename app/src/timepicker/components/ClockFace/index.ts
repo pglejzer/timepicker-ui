@@ -1,4 +1,4 @@
-import { getRadians } from '../../utils';
+import { getRadians, hasClass } from '../../utils';
 
 class ClockFace {
   private array: string[] | undefined;
@@ -74,18 +74,27 @@ class ClockFace {
         ) {
           spanTips.classList.add('timepicker-ui-tips-disabled');
           span.classList.add('timepicker-ui-tips-disabled');
+          spanTips.tabIndex = -1;
         }
 
         if (this.hour === this.disabledTime.removedEndHour && this.disabledTime?.endMinutes?.includes(num)) {
           spanTips.classList.add('timepicker-ui-tips-disabled');
           span.classList.add('timepicker-ui-tips-disabled');
+          spanTips.tabIndex = -1;
         }
       }
 
       if (this.clockType === '24h') {
         spanTips.classList.add('timepicker-ui-value-tips-24h');
+
+        if (!hasClass(spanTips, 'timepicker-ui-tips-disabled')) {
+          spanTips.tabIndex = 0;
+        }
       } else {
         spanTips.classList.add('timepicker-ui-value-tips');
+        if (!hasClass(spanTips, 'timepicker-ui-tips-disabled')) {
+          spanTips.tabIndex = 0;
+        }
       }
 
       span.classList.add(this.classToAdd as string);
@@ -163,7 +172,7 @@ class ClockFace {
 
       if (spanMinutes && startMinutes && endMinutes) {
         if (activeMode === 'AM') {
-          if (startMinutes.length === 0 && endMinutes.length === 1 && endMinutes[0] === '00') {
+          if (startMinutes.length === 0 && endMinutes.length === 0 && endMinutes[0] === '00') {
             if (Number(actualHour) >= Number(amHours[0])) {
               this._addClasses(spanMinutes);
             }
@@ -183,7 +192,7 @@ class ClockFace {
             }
           }
 
-          if (endMinutes[0] === '00' && endMinutes.length === 1 && startMinutes.length > 0) {
+          if (endMinutes[0] === '00' && endMinutes.length === 0 && startMinutes.length > 0) {
             if (Number(removedAmHour) === Number(actualHour)) {
               this._addClassesWithIncludes(spanMinutes, startMinutes);
             } else if (Number(actualHour) > Number(removedAmHour)) {
@@ -213,6 +222,7 @@ class ClockFace {
     list?.forEach(({ classList, children }) => {
       classList.remove('timepicker-ui-tips-disabled');
       children[0].classList.remove('timepicker-ui-tips-disabled');
+      (children[0] as HTMLDivElement).tabIndex = 0;
     });
   };
 
@@ -220,6 +230,7 @@ class ClockFace {
     nodeList?.forEach(({ classList, children }) => {
       classList.add('timepicker-ui-tips-disabled');
       children[0].classList.add('timepicker-ui-tips-disabled');
+      (children[0] as HTMLDivElement).tabIndex = -1;
     });
   };
 
@@ -228,6 +239,7 @@ class ClockFace {
       if (includesArr?.includes(textContent)) {
         classList.add('timepicker-ui-tips-disabled');
         children[0].classList.add('timepicker-ui-tips-disabled');
+        (children[0] as HTMLDivElement).tabIndex = -1;
       }
     });
   };
