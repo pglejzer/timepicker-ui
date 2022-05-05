@@ -358,7 +358,7 @@ export default {
       <td scope="row">editable</td>
       <td>false</td>
       <td>boolean</td>
-      <td>Edit hour/minutes on the web mode. You have set option <code>preventDefault</code> to false.</td>
+      <td>Edit hour/minutes on the web mode.</td>
     </tr> 
     <tr>
       <td scope="row">enableScrollbar</td>
@@ -432,12 +432,6 @@ export default {
       <td>string</td>
       <td>You can set custom text to pm label</td>
     </tr>  
-    <tr>
-      <td scope="row">preventDefault</td>
-      <td>true</td>
-      <td>boolean</td>
-      <td>You can set on/off defaults events to clock face events</td>
-    </tr> 
    <tr>
       <td scope="row">timeLabel</td>
       <td>Select Time</td>

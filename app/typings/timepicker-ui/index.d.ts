@@ -11,7 +11,7 @@ declare module 'timepicker-ui' {
      */
     animation?: boolean;
     /**
-     * @description Set default selector to append timepicker inside it. Timepicker default append to body
+     * @description Set default selector to append timepicker inside it. Timepicker default append to `body`
      * @default ""
      */
     appendModalSelector?: string;
@@ -26,7 +26,7 @@ declare module 'timepicker-ui' {
      */
     cancelLabel?: string;
     /**
-     * @description Edit hour/minutes on the web mode. You have set option preventDefault to false.
+     * @description Edit hour/minutes on the web mode. You have set option `preventDefault` to false.
      * @default false
      */
     editable?: boolean;
@@ -66,12 +66,12 @@ declare module 'timepicker-ui' {
      */
     iconTemplateMobile?: string;
     /**
-     * @description Set increment hour by 1, 2, 3 hour
+     * @description Set increment hour by `1`, `2`, `3` hour
      * @default 1
      */
     incrementHours?: number;
     /**
-     * @description Set increment minutes by 1, 5, 10, 15 minutes
+     * @description Set increment minutes by `1`, `5`, `10`, `15` minutes
      * @default 1
      */
     incrementMinutes?: number;
@@ -111,23 +111,24 @@ declare module 'timepicker-ui' {
      */
     switchToMinutesAfterSelectHour?: boolean;
     /**
-     * @description Set theme to timepicker. Available options: basic, crane-straight, crane-radius
+     * @description Set theme to timepicker. Available options: `basic`, `crane-straight`, `crane-radius`
      * @default "basic"
      */
     theme?: 'basic' | 'crane-straight' | 'crane-radius';
     /**
-     * @description Set type of clock, it contains 2 versions: 12h and 24h.
+     * @description Set type of clock, it contains 2 versions: `12h` and `24h`.
      * @default false
      */
     clockType?: '12h' | '24h';
     /**
-     * @description The hours and minutes are arrays which accept strings and numbers to block select hours/minutes. The interval key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType.
-     * If the interval key is set, the hours/minutes keys are ignored.
+     * @description - The `hours` and `minutes` are arrays which accept strings and numbers to block select hours/minutes.
+     * - The `interval` key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType.
+     * - If the interval key is set, the hours/minutes keys are `ignored`.
      * @example
       disabledTime: {
-        minutes: [1,2,4,5,55,23,"22","38"];
-        hours: [1,"3","5", 8];
-        interval: "10:00 AM - 12:00 PM";
+        minutes: [1,2,4,5,55,23,"22","38"],
+        hours: [1,"3","5", 8],
+        interval: "10:00 AM - 12:00 PM",
       }
      * @default  undefined
      */
@@ -136,6 +137,50 @@ declare module 'timepicker-ui' {
       hours?: Array<string | number>;
       interval?: string;
     };
+    /**
+     * @description Set current time to the input and timepicker.\
+     * If this options is set to `true` it's gonna update picker with toLocaleTimeString() and input with value based on your location.
+     * This option also allows to put object with properties.
+     * @example
+        currentTime: {
+          time: new Date(),
+          updateInput: true,
+          locales: "en-US",
+          preventClockType: false
+        };
+     * @example currentTime: true
+     * @default  undefined
+     */
+    currentTime?:
+      | {
+          /**
+           * The `time` key allows to put any valid date to update picker.
+           * @requires
+           * If the `updateInput` is set to `false/undefined` and the default value from the input not exist, the `time` key value will be displayed in the picker.
+           *
+           * If the `updateInput` is set to `false/undefined` but the default value from the input exist, the `time` key will be ignored.
+           */
+          time?: Date;
+          /**
+           * The `updateInput` key is set to `true` it's going update input value with set time key.
+           */
+          updateInput?: boolean;
+          /**
+           * The `locales` key can change language from `toLocaleTimeString()`.
+           */
+          locales?: string | string[];
+          /**
+           * The `preventClockType` key if is set to `true` it's `force` the clockType option to set value "12h" or "24h" based on your location
+           * with current time and `locales` key value is ignored.
+           */
+          preventClockType?: boolean;
+        }
+      | boolean;
+    /**
+     * @description Set focus trap to the modal element to all elements with tabindex in the picker
+     * @default true
+     */
+    focusTrap?: boolean;
   };
 
   type TypeFunction = () => void;

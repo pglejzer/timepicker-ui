@@ -197,6 +197,7 @@ const mobiles = document.querySelector('.mobile') as HTMLDivElement;
 
 const mobilePicker = new TimepickerUI(mobiles, {
   mobile: true,
+  enableSwitchIcon: true,
 });
 
 mobilePicker.create();
@@ -268,6 +269,28 @@ const mobiles24 = document.querySelector('.mobile-24') as HTMLDivElement;
 const mobilePicker24 = new TimepickerUI(mobiles24, {
   mobile: true,
   clockType: '24h',
+  editable: true,
 });
 
 mobilePicker24.create();
+
+const errorPicker = document.querySelector('.error') as HTMLDivElement;
+
+const errorPickerInit = new TimepickerUI(errorPicker, {
+  cancelLabel: 'cancel',
+  clockType: '24h',
+  mobile: false,
+  okLabel: 'ok',
+  hourMobileLabel: '',
+  minuteMobileLabel: '',
+  mobileTimeLabel: 'select time',
+  // @ts-ignore
+  selectTimeLabel: 'select time',
+  backdrop: true,
+  editable: true,
+  enableSwitchIcon: true,
+  iconTemplate: '<div class="keyboard-time"></div>',
+  iconTemplateMobile: '<div class="clock-time"></div>',
+});
+
+errorPickerInit.create();

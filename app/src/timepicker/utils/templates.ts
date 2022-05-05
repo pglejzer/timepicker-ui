@@ -14,8 +14,8 @@ export const getModalTemplate = (options: OptionTypes): string => {
     okLabel,
     enableSwitchIcon,
     animation,
-    editable,
     clockType,
+    editable,
   } = options;
 
   return `
@@ -28,9 +28,15 @@ export const getModalTemplate = (options: OptionTypes): string => {
         <div class="timepicker-ui-wrapper-time ${
           clockType === '24h' ? 'timepicker-ui-wrapper-time-24h' : ''
         }">
-          <div class="timepicker-ui-hour" tabindex="0" role="button" contenteditable="${!!editable}"></div>  
+          <input ${
+            !editable ? 'readonly' : ''
+          } class="timepicker-ui-hour" tabindex="0" type="number" min="0" max="${
+    clockType === '12h' ? '12' : '23'
+  }" />
           <div class="timepicker-ui-dots">:</div>    
-          <div class="timepicker-ui-minutes" tabindex="0" role="button" contenteditable="${!!editable}"></div>   
+          <input ${
+            !editable ? 'readonly' : ''
+          } class="timepicker-ui-minutes" tabindex="0" type="number" min="0" max="59" /> 
         </div>
       ${
         clockType !== '24h'
@@ -96,11 +102,13 @@ export const getMobileModalTemplate = (options: OptionTypes): string => {
       <div class="timepicker-ui-header mobile">
         <div class="timepicker-ui-select-time mobile">${mobileTimeLabel}</div>
         <div class="timepicker-ui-wrapper-time mobile">
-          <div class="timepicker-ui-hour mobile" contenteditable="false" tabindex="0"></div>  
+          <input class="timepicker-ui-hour mobile" tabindex="0" type="number" min="0" max="${
+            clockType === '12h' ? '12' : '23'
+          }" />
           <div class="timepicker-ui-hour-text mobile">${hourMobileLabel}</div>
           <div class="timepicker-ui-dots mobile">:</div>  
           <div class="timepicker-ui-minute-text mobile">${minuteMobileLabel}</div>
-          <div class="timepicker-ui-minutes mobile" contenteditable="false" tabindex="0"></div>   
+          <input class="timepicker-ui-minutes mobile" tabindex="0" type="number" min="0" max="59" /> 
         </div>
   ${
     clockType !== '24h'

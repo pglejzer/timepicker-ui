@@ -23,7 +23,6 @@ const options: OptionTypes = {
   timeLabel: 'Select Time',
   switchToMinutesAfterSelectHour: false,
   theme: 'basic',
-  preventDefault: true,
   clockType: '12h',
   disabledTime: undefined,
   currentTime: undefined,

@@ -15,6 +15,11 @@
     right: 0;
     background-color: rgba(156, 155, 155, 0.6);
     z-index: 5000;
+    pointer-events: none;
+
+    &.show {
+      pointer-events: auto;
+    }
 
     &.removed {
       top: auto;
@@ -261,12 +266,12 @@
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
-
     border: 2px solid transparent;
     padding: 10px;
     width: 96px;
+    text-align: center;
 
-    &:focus {
+    &:focus-visible {
       outline: auto;
     }
 
@@ -275,11 +280,34 @@
       color: $purple;
       background-color: #ece0fd;
     }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none !important;
+      margin: 0 !important;
+    }
+    &[type='number'] {
+      -moz-appearance: textfield !important;
+    }
+  }
+
+  &-hour,
+  &-minutes {
+    outline: none;
+    border: 2px solid transparent;
+    &[contenteditable='true']:focus,
+    &[contenteditable='true']:active {
+      border: 2px solid $purple;
+      outline-color: $purple;
+      user-select: all;
+    }
   }
 
   &-hour.mobile,
   &-minutes.mobile {
     height: 70px;
+    outline: none;
+    border: 2px solid transparent;
     &[contenteditable='true']:focus,
     &[contenteditable='true']:active {
       border: 2px solid $purple;
@@ -589,6 +617,7 @@
 
   &-tips-disabled {
     color: rgba(156, 155, 155, 0.6);
+    pointer-events: none;
   }
 }
 

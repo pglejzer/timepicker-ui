@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.5.0] - 2022-05-05
+
+### Change
+
+- changed logic about `hour` and `minutes`. Previous version used divs as buttons, the current version is using `inputs` instead divs.
+- removed `preventDefault` option
+
+### Fix
+
+- fixed problem with `edtiable` options durning change hour/minutes on desktop/mobile
+
+---
+
 ## [2.4.5] - 2022-04-02
 
 ### Fix
