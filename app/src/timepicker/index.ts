@@ -9,7 +9,6 @@ import {
   getScrollbarWidth,
   hasClass,
   initCallback,
-  debounce,
 } from './utils';
 import { getInputValue, handleValueAndCheck } from './utils/input';
 import {
@@ -31,6 +30,20 @@ import {
   getNumberOfHours24,
 } from './utils/templates';
 import ClockFace from './components/ClockFace';
+
+const debounce = <T extends (...args: any[]) => ReturnType<T>>(
+  callback: T,
+  timeout: number,
+): ((...args: Parameters<T>) => void) => {
+  let timer: ReturnType<typeof setTimeout>;
+
+  return (...args: Parameters<T>) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      callback(...args);
+    }, timeout);
+  };
+};
 
 type TypeFunction = () => void;
 
@@ -62,6 +75,8 @@ export default class TimepickerUI {
   private _cloned: Node | null;
 
   private _inputEvents: string[];
+
+  private _isModalRemove?: boolean;
 
   constructor(element: HTMLElement, options?: OptionTypes) {
     this._element = element;
@@ -99,6 +114,8 @@ export default class TimepickerUI {
     this._disabledTime = null;
 
     this._preventClockTypeByCurrentTime();
+
+    this._isModalRemove = true;
   }
 
   private get modalTemplate() {
@@ -248,7 +265,7 @@ export default class TimepickerUI {
    * or just boolean or just callback. If the boolean is set to true the input will be updating with the current value on picker.
    * The callback function start immediately after close, if is invoke. The max parameters length is set to 2
    */
-  public close = (...args: Array<boolean | TypeFunction>): void => {
+  public close = debounce((...args: Array<boolean | TypeFunction>): void => {
     if (args.length > 2 || !this.modalElement) return;
 
     const [update] = args.filter((e) => typeof e === 'boolean');
@@ -284,18 +301,21 @@ export default class TimepickerUI {
       document.body.style.paddingRight = '';
     }, 400);
 
-    setTimeout(() => {
-      this.openElement.forEach((openEl) => openEl?.classList.remove('disabled'));
+    /// tu jest problem z wieksza iloscia modali
+    this.openElement.forEach((openEl) => openEl?.classList.remove('disabled'));
 
+    setTimeout(() => {
       if (this._options.focusInputAfterCloseModal) this.input?.focus();
 
       if (this.modalElement === null) return;
 
       this.modalElement.remove();
+
+      this._isModalRemove = true;
     }, 300);
 
     initCallback(callback as TypeFunction);
-  };
+  }, 300);
 
   /**
    * @description The destroy method destroy actual instance of picker by cloning element.
@@ -529,6 +549,10 @@ export default class TimepickerUI {
   };
 
   private _eventsBundle = (): void => {
+    if (!this._isModalRemove) {
+      return;
+    }
+
     this._handleEscClick();
     this._setErrorHandler();
     this._removeErrorHandler();
@@ -653,7 +677,9 @@ export default class TimepickerUI {
 
   private _handleOpenOnClick = (): void => {
     this.openElement.forEach((openEl) =>
-      this._clickTouchEvents.map((el: string) => openEl?.addEventListener(el, () => this._eventsBundle())),
+      this._clickTouchEvents.forEach((el: string) =>
+        openEl?.addEventListener(el, () => this._eventsBundle()),
+      ),
     );
   };
 
@@ -1591,7 +1617,7 @@ export default class TimepickerUI {
     }
   };
 
-  private _handlerViewChange = async () => {
+  private _handlerViewChange = debounce(() => {
     const { clockType } = this._options;
 
     if (!hasClass(this.modalElement, 'mobile')) {
@@ -1605,21 +1631,25 @@ export default class TimepickerUI {
       const beforeTypeModeContent = this.activeTypeMode?.dataset.type;
 
       setTimeout(() => {
-        this._eventsBundle();
+        this.destroy();
+        this.update({
+          options: { mobile: true },
+        });
+        setTimeout(() => {
+          this.open();
 
-        this._isMobileView = false;
-        this._options.mobile = false;
-        this.hour.value = beforeHourContent;
-        this.minutes.value = beforeMinutesContent;
+          this.hour.value = beforeHourContent;
+          this.minutes.value = beforeMinutesContent;
 
-        const typeMode = [...document.querySelectorAll('.timepicker-ui-type-mode')] as Array<HTMLElement>;
+          if (beforeTypeModeContent) {
+            const afterTypeModeContent = this.activeTypeMode?.dataset.type;
 
-        typeMode?.map((type) => type.classList.remove(selectorActive));
-
-        const nowActiveType = typeMode.find(
-          (type) => type.textContent === beforeTypeModeContent,
-        ) as HTMLElement;
-        nowActiveType?.classList.add(selectorActive);
+            // @ts-ignore
+            this[beforeTypeModeContent as string].classList.add(selectorActive);
+            // @ts-ignore
+            this[afterTypeModeContent].classList.remove(selectorActive);
+          }
+        }, 300);
       }, 300);
     } else {
       const validHours = handleValueAndCheck(this.hour.value, 'hour', clockType);
@@ -1657,33 +1687,28 @@ export default class TimepickerUI {
       const beforeTypeModeContent = this.activeTypeMode?.dataset.type;
 
       setTimeout(() => {
-        this._eventsBundle();
+        this.destroy();
+        this.update({
+          options: { mobile: false },
+        });
+        setTimeout(() => {
+          this.open();
 
-        if (Number(beforeHourContent) > 12 || Number(beforeHourContent) === 0) {
-          this._setCircleClockClasses24h();
-        }
+          this.hour.value = beforeHourContent;
+          this.minutes.value = beforeMinutesContent;
 
-        this._isMobileView = true;
-        this._options.mobile = true;
+          if (beforeTypeModeContent) {
+            const afterTypeModeContent = this.activeTypeMode?.dataset.type;
 
-        this.hour.value = beforeHourContent;
-        this.minutes.value = beforeMinutesContent;
-
-        const typeMode = [...document.querySelectorAll('.timepicker-ui-type-mode')] as Array<HTMLElement>;
-
-        typeMode?.map((type) => type.classList.remove(selectorActive));
-
-        const nowActiveType = typeMode.find(
-          (type) => type.textContent === beforeTypeModeContent,
-        ) as HTMLElement;
-
-        nowActiveType?.classList.add(selectorActive);
-
-        this._setTransformToCircleWithSwitchesHour(this.hour.value);
-        this._toggleClassActiveToValueTips(this.hour.value);
+            // @ts-ignore
+            this[beforeTypeModeContent].classList.add(selectorActive);
+            // @ts-ignore
+            this[afterTypeModeContent].classList.remove(selectorActive);
+          }
+        }, 300);
       }, 300);
     }
-  };
+  }, 400);
 
   private _handleIconChangeView = async (): Promise<void> => {
     if (this._options.enableSwitchIcon) {
