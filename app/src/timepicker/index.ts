@@ -503,11 +503,14 @@ export default class TimepickerUI {
 
   private _setTheme = (): void => {
     const allDiv = this.modalElement?.querySelectorAll('div');
+    const allInput = this.modalElement?.querySelectorAll('input');
+    const allElements = [...allInput, ...allDiv] as Array<HTMLDivElement | HTMLInputElement>;
+
     const { theme } = this._options;
     if (theme === 'crane-straight') {
-      allDiv.forEach((div: HTMLDivElement) => div.classList.add('crane-straight'));
+      allElements.forEach((el) => el.classList.add('crane-straight'));
     } else if (theme === 'crane-radius') {
-      allDiv.forEach((div: HTMLDivElement) => div.classList.add('crane-straight', 'radius'));
+      allElements.forEach((el) => el.classList.add('crane-straight', 'radius'));
     }
   };
 
