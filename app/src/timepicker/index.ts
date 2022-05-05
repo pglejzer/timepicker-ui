@@ -1709,6 +1709,15 @@ export default class TimepickerUI {
             // @ts-ignore
             this[toRemoveType].classList.remove(selectorActive);
           }
+
+          this._setTransformToCircleWithSwitchesHour(this.hour.value);
+          this._toggleClassActiveToValueTips(this.hour.value);
+
+          if (Number(this.hour.value) > 12 || Number(this.hour.value) === 0) {
+            this._setCircleClockClasses24h();
+          } else {
+            this._removeCircleClockClasses24h();
+          }
         }, 300);
       }, 300);
     }
