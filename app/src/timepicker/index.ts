@@ -301,7 +301,6 @@ export default class TimepickerUI {
       document.body.style.paddingRight = '';
     }, 400);
 
-    /// tu jest problem z wieksza iloscia modali
     this.openElement.forEach((openEl) => openEl?.classList.remove('disabled'));
 
     setTimeout(() => {
