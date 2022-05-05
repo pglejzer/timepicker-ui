@@ -1643,13 +1643,14 @@ export default class TimepickerUI {
           this.hour.value = beforeHourContent;
           this.minutes.value = beforeMinutesContent;
 
-          if (beforeTypeModeContent) {
-            const afterTypeModeContent = this.activeTypeMode?.dataset.type;
+          if (this._options.clockType === '12h') {
+            const toAddType = beforeTypeModeContent === 'PM' ? 'PM' : 'AM';
+            const toRemoveType = beforeTypeModeContent === 'PM' ? 'AM' : 'PM';
 
             // @ts-ignore
-            this[beforeTypeModeContent as string].classList.add(selectorActive);
+            this[toAddType].classList.add(selectorActive);
             // @ts-ignore
-            this[afterTypeModeContent].classList.remove(selectorActive);
+            this[toRemoveType].classList.remove(selectorActive);
           }
         }, 300);
       }, 300);
@@ -1699,13 +1700,14 @@ export default class TimepickerUI {
           this.hour.value = beforeHourContent;
           this.minutes.value = beforeMinutesContent;
 
-          if (beforeTypeModeContent) {
-            const afterTypeModeContent = this.activeTypeMode?.dataset.type;
+          if (this._options.clockType === '12h') {
+            const toAddType = beforeTypeModeContent === 'PM' ? 'PM' : 'AM';
+            const toRemoveType = beforeTypeModeContent === 'PM' ? 'AM' : 'PM';
 
             // @ts-ignore
-            this[beforeTypeModeContent].classList.add(selectorActive);
+            this[toAddType].classList.add(selectorActive);
             // @ts-ignore
-            this[afterTypeModeContent].classList.remove(selectorActive);
+            this[toRemoveType].classList.remove(selectorActive);
           }
         }, 300);
       }, 300);
