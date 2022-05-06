@@ -7,12 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.5.0] - 2022-05-05
+## [2.5.0] - 2022-05-06
 
 ### Change
 
 - changed logic about `hour` and `minutes`. Previous version used divs as buttons, the current version is using `inputs` instead divs.
-- removed `preventDefault` option
+- removed `preventDefault` option, to use `editable` option is enough to set this option to `true`
+
+### Add
+
+- added `debounce` function to close/open timepicker
 
 ### Fix
 
