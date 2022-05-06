@@ -16,6 +16,8 @@ export default class TimepickerUI {
     private _isTouchMouseMove;
     private _disabledTime;
     private _cloned;
+    private _inputEvents;
+    private _isModalRemove?;
     constructor(element: HTMLElement, options?: OptionTypes);
     private get modalTemplate();
     private get modalElement();
@@ -55,7 +57,7 @@ export default class TimepickerUI {
      * or just boolean or just callback. If the boolean is set to true the input will be updating with the current value on picker.
      * The callback function start immediately after close, if is invoke. The max parameters length is set to 2
      */
-    close: (...args: Array<boolean | TypeFunction>) => void;
+    close: (...args: (boolean | TypeFunction)[]) => void;
     /**
      * @description The destroy method destroy actual instance of picker by cloning element.
      * @param callback - The callback function is started after destroyed method. This parameter is optional.
@@ -94,6 +96,7 @@ export default class TimepickerUI {
     private _getInputValueOnOpenAndSet;
     private _handleCancelButton;
     private _handleOkButton;
+    private _setShowClassToBackdrop;
     private _handleBackdropClick;
     private _setBgColorToCirleWithHourTips;
     private _setBgColorToCircleWithMinutesTips;
@@ -109,8 +112,9 @@ export default class TimepickerUI {
     private _handlePmClick;
     private _handleAnimationClock;
     private _handleAnimationSwitchTipsMode;
-    private _handleHourClick;
-    private _handleMinutesClick;
+    private _handleClasses24h;
+    private _handleHourEvents;
+    private _handleMinutesEvents;
     private _handleEventToMoveHand;
     private _toggleClassActiveToValueTips;
     private _handleMoveHand;

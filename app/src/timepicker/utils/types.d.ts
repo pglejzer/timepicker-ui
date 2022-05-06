@@ -25,7 +25,7 @@ export declare type OptionTypes = {
      */
     cancelLabel?: string;
     /**
-     * @description Edit hour/minutes on the web mode. You have set option `preventDefault` to false.
+     * @description Edit hour/minutes on the web mode.
      * @default false
      */
     editable?: boolean;
@@ -94,11 +94,6 @@ export declare type OptionTypes = {
      * @default "PM"
      */
     pmLabel?: string;
-    /**
-     * @description Set on/off defaults events to clock face events
-     * @default true
-     */
-    preventDefault?: boolean;
     /**
      * @description Set custom text to time label on desktop version
      * @default "Select Time"

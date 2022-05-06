@@ -38,3 +38,4 @@ export declare const range: (start?: string | number | undefined, stop?: string 
 export declare const reverseRange: (start?: string | number | undefined, stop?: string | number | undefined) => number[];
 export declare const initCallback: (callback?: (() => void) | undefined) => void;
 export declare const timeConversion: (str?: string) => string;
+export declare const debounce: <T extends (...args: any[]) => ReturnType<T>>(callback: T, timeout: number) => (...args: Parameters<T>) => void;
