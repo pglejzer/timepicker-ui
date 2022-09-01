@@ -68,12 +68,12 @@ export const getClickTouchPosition = (event: TouchEvent, object: HTMLElement, is
   const { left, top } = object.getBoundingClientRect();
   let obj: { x: number; y: number } = { x: 0, y: 0 };
 
-  if (!isMobile) {
+  if (touches === undefined) {
     obj = {
       x: clientX - left,
       y: clientY - top,
     };
-  } else if (isMobile && touches !== undefined) {
+  } else if (touches !== undefined && touches.length > 0) {
     if (Object.keys(touches).length > 0) {
       const { clientX: clx, clientY: cly } = touches[0];
 
