@@ -56,13 +56,13 @@
   }
 
   &-wrapper:not(.timepicker-ui-wrapper + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       flex-direction: row;
       height: 360px;
       width: 584px;
     }
 
-    @media screen and (max-width: 330px) and(orientation:portrait) {
+    @media screen and (max-width: 330px) and (orientation: portrait) {
       width: 315px;
     }
   }
@@ -96,7 +96,7 @@
   }
 
   &-header:not(.timepicker-ui-header + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       height: auto;
       flex-direction: column;
     }
@@ -119,7 +119,7 @@
     position: relative;
     border-radius: 100%;
 
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       padding-right: 0;
       padding-left: 0;
       display: flex;
@@ -130,7 +130,7 @@
   }
 
   &-wrapper-landspace {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       display: flex;
       flex-direction: column;
       width: 100%;
@@ -146,7 +146,7 @@
   }
 
   &-footer:not(.timepicker-ui-footer + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       justify-content: flex-end;
     }
   }
@@ -162,7 +162,7 @@
     border-radius: 100%;
     position: relative;
 
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       height: 256px;
       width: 256px;
       top: 15px;
@@ -239,7 +239,7 @@
     align-items: center;
   }
   &-wrapper-time:not(.timepicker-ui-wrapper-time + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       margin-right: 0;
       height: auto;
     }
@@ -341,7 +341,7 @@
   }
 
   &-wrapper-type-time {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       flex-direction: row;
       width: 100%;
     }
@@ -377,7 +377,7 @@
 
   &-am:not(.timepicker-ui-am + .mobile),
   &-pm:not(.timepicker-ui-pm + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       width: 50%;
       height: 44px;
     }
@@ -395,7 +395,7 @@
   }
 
   &-am:not(.timepicker-ui-am + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       border-top-left-radius: 7px;
       border-bottom-left-radius: 7px;
       border-top-right-radius: 0;
@@ -417,7 +417,7 @@
   }
 
   &-pm:not(.timepicker-ui-pm + .mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       border-bottom-right-radius: 7px;
       border-top-right-radius: 7px;
       border-bottom-left-radius: 0;
@@ -506,7 +506,7 @@
 
   &-keyboard-icon-wrapper,
   &-keyboard-icon-wrapper.mobile {
-    @media screen and (min-width: 320px) and (max-width: 825px) and(orientation:landscape) {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
       position: absolute;
       bottom: 8px;
     }
