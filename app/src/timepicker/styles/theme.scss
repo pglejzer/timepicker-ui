@@ -120,7 +120,7 @@
   &-am:not(.timepicker-ui-am + .mobile) {
     &.crane-straight {
       &.radius {
-        @media screen and (min-width: 320px) and (max-width: 826px) and(orientation:landscape) {
+        @media screen and (min-width: 320px) and (max-width: 826px) and (orientation: landscape) {
           border-bottom-left-radius: 1.25rem;
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
@@ -132,7 +132,7 @@
   &-pm:not(.timepicker-ui-pm + .mobile) {
     &.crane-straight {
       &.radius {
-        @media screen and (min-width: 320px) and (max-width: 826px) and(orientation:landscape) {
+        @media screen and (min-width: 320px) and (max-width: 826px) and (orientation: landscape) {
           border-bottom-right-radius: 1.25rem;
           border-top-right-radius: 1.25rem;
           border-bottom-left-radius: 0;
@@ -145,7 +145,7 @@
   &-am.mobile {
     &.crane-straight {
       &.radius {
-        @media screen and (min-width: 320px) and (max-width: 767px) and(orientation:landscape) {
+        @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {
           border-bottom-left-radius: 0rem;
           border-bottom-right-radius: 0rem;
         }
@@ -156,7 +156,7 @@
   &-pm.mobile {
     &.crane-straight {
       &.radius {
-        @media screen and (min-width: 320px) and (max-width: 767px) and(orientation:landscape) {
+        @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {
           border-top-left-radius: 0rem;
           border-top-right-radius: 0rem;
         }

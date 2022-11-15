@@ -1303,14 +1303,7 @@ export default class TimepickerUI {
 
     const clockFaceRadius = this.clockFace.offsetWidth / 2;
 
-    let rtangens = obj && Math.atan2(obj.y - clockFaceRadius, obj.x - clockFaceRadius);
-
-    if (getBrowser()) {
-      const touched = getClickTouchPosition(event, this.clockFace, true);
-      if (!touched) return;
-
-      rtangens = Math.atan2(touched.y - clockFaceRadius, touched.x - clockFaceRadius);
-    }
+    const rtangens = obj && Math.atan2(obj.y - clockFaceRadius, obj.x - clockFaceRadius);
 
     if (type === 'mouseup' || type === 'touchend') {
       this._isTouchMouseMove = false;
