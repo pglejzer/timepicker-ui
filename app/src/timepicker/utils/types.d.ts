@@ -173,4 +173,9 @@ export declare type OptionTypes = {
      * @default true
      */
     focusTrap?: boolean;
+    /**
+     * @description Set delay to clickable elements like button "OK", "CANCEL" etc. The value has to be set in milliseconds.
+     * @default 300
+     */
+    delayHandler?: number;
 };

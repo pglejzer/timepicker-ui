@@ -93,7 +93,7 @@ We provide CSS styles built-in but sometimes if you don't use some normalize/res
 In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
-import { TimepickerUI } from 'timepicker-ui';
+import { TimepickerUI } from "timepicker-ui";
 ```
 
 #### UMD
@@ -125,7 +125,7 @@ timepicker-ui has to be created with a new instance with key `new`. This instanc
 #### JavaScript
 
 ```javascript
-const DOMElement = document.querySelector('.timepicker-ui');
+const DOMElement = document.querySelector(".timepicker-ui");
 const options = {};
 const newTimepicker = new TimepickerUI(DOMElement, options);
 ```
@@ -135,7 +135,7 @@ By default initialization of timepicker is started when you click on input. If y
 To initalize a timepicker with UMD version you have to init a window object with `tui`.
 
 ```js
-const DOMElement = document.querySelector('.timepicker-ui');
+const DOMElement = document.querySelector(".timepicker-ui");
 const options = {};
 const newTimepicker = new window.tui.TimepickerUI(DOMElement, options);
 
@@ -154,7 +154,7 @@ newTimepicker.create();
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('.default-class');
+const timepicker = document.querySelector(".default-class");
 const initTimepicker = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -183,8 +183,8 @@ You can set options by JavaScript or by data-attribute which `attribute` is a ke
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('.default-class');
-const options = { okLabel: 'test', amLabel: 'test1', backdrop: false };
+const timepicker = document.querySelector(".default-class");
+const options = { okLabel: "test", amLabel: "test1", backdrop: false };
 const initTimepicker = new TimepickerUI(timepicker, options);
 
 timepicker.create();
@@ -500,6 +500,12 @@ export default {
         </ul>
       </td>
     </tr>
+    <tr>
+      <td scope="row">delayHandler</td>
+      <td>300</td>
+      <td>number</td>
+      <td>Set delay to clickable elements like button "OK", "CANCEL" etc. The value has to be set in milliseconds.</td>
+    </tr> 
   </tbody>
 </table>
 
@@ -520,7 +526,7 @@ Methods are custom function what can be used to manually change the behavior of 
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('timepicker-ui-test');
+const timepicker = document.querySelector("timepicker-ui-test");
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
@@ -558,14 +564,14 @@ timepicker.create();
     <tr>
       <td scope="row">close</td>
       <td>Closure method closes the timepicker</td>
-      <td align="center">(boolean, function)</td>
+      <td align="center">()(boolean, function)</td>
       <td align="center">undefined</td>
-      <td>These parameters in this method are optional and order is any. You can set callback function first or boolean, or just boolean or just callback. If the boolean is set to true the input will be updating with the current value on picker. <br/> The callback function start immediately after close, if is invoke. The max parameters length is set to 2.
+      <td>The first parentheses doesn't have any paremeters. The second parentheses accepts parameters and these parameters are optional in this method and order is any. You can set callback function first or boolean, or just boolean or just callback. If the boolean is set to true the input will be updating with the current value on picker. The callback function start immediately after close, if is invoke. The max parameters length are set to 2
        <br/><br/>
        Examples:  <br/>
-       tmInstance.close(() => console.log('triggered after close')); <br/>
-       tmInstance.close(true, () => console.log('triggered after close')); <br/>
-       tmInstance.close(true);
+       tmInstance.close()(() => console.log('triggered after close')); <br/>
+       tmInstance.close()(true, () => console.log('triggered after close')); <br/>
+       tmInstance.close()(true);
       </td>
     </tr>
     <tr>
@@ -613,12 +619,12 @@ Events are custom events triggered when you add some event listeners to your tim
 #### JavaScript
 
 ```javascript
-const timepicker = document.querySelector('timepicker-ui-test');
+const timepicker = document.querySelector("timepicker-ui-test");
 const init = new TimepickerUI(timepicker);
 
 timepicker.create();
 
-timepicker.addEventListener('show', (event) => console.log(event.detail));
+timepicker.addEventListener("show", (event) => console.log(event.detail));
 ```
 
 #### Table with events

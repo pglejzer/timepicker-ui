@@ -1,7 +1,6 @@
 import { OptionTypes } from './types';
-export declare const createDisabledTime: (options: any) =>
-  | {
-      value: {
+export declare const createDisabledTime: (options: any) => {
+    value: {
         removedStartedHour: any;
         removedEndHour: any;
         rangeArrHour: string[];
@@ -16,10 +15,9 @@ export declare const createDisabledTime: (options: any) =>
         removedPmHour?: undefined;
         hours?: undefined;
         minutes?: undefined;
-      };
-    }
-  | {
-      value: {
+    };
+} | {
+    value: {
         isInterval: boolean;
         endType: string | undefined;
         startType: string | undefined;
@@ -34,10 +32,9 @@ export declare const createDisabledTime: (options: any) =>
         rangeArrHour?: undefined;
         hours?: undefined;
         minutes?: undefined;
-      };
-    }
-  | {
-      value: {
+    };
+} | {
+    value: {
         hours: any;
         minutes: any;
         removedStartedHour?: undefined;
@@ -52,18 +49,7 @@ export declare const createDisabledTime: (options: any) =>
         amHours?: undefined;
         removedAmHour?: undefined;
         removedPmHour?: undefined;
-      };
-    }
-  | undefined;
-export declare const checkDisabledHoursAndMinutes: (
-  value: (string | number)[] | string | number | undefined,
-  type: 'hour' | 'minutes',
-  clockType?: OptionTypes['clockType'],
-  arrValue?: (string | number)[],
-) => boolean | undefined;
-export declare const checkedDisabledValuesInterval: (
-  hour?: any,
-  minutes?: any,
-  type?: any,
-  interval?: any,
-) => boolean;
+    };
+} | undefined;
+export declare const checkDisabledHoursAndMinutes: (value: (string | number)[] | string | number | undefined, type: 'hour' | 'minutes', clockType?: OptionTypes['clockType'], arrValue?: (string | number)[] | undefined) => boolean | undefined;
+export declare const checkedDisabledValuesInterval: (hour?: any, minutes?: any, type?: any, interval?: any) => boolean;
