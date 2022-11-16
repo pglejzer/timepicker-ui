@@ -27,6 +27,7 @@ const options: OptionTypes = {
   disabledTime: undefined,
   currentTime: undefined,
   focusTrap: true,
+  delayHandler: 300,
 };
 
 export { options };

@@ -260,61 +260,64 @@ export default class TimepickerUI {
   };
 
   /**
-   * @description Closure method closes the timepicker
-   * @param args - These parameters in this method are optional and order is any. You can set callback function first or boolean,
+   * @description Closure method closes the timepicker with double parentheses
+   * @param args - The first parentheses doesn't have any paremeters. The second parentheses accepts parameters and these parameters are optional in this method and order is any. You can set callback function first or boolean,
    * or just boolean or just callback. If the boolean is set to true the input will be updating with the current value on picker.
    * The callback function start immediately after close, if is invoke. The max parameters length is set to 2
    */
-  public close = debounce((...args: Array<boolean | TypeFunction>): void => {
-    if (args.length > 2 || !this.modalElement) return;
+  public close = () =>
+    debounce((...args: Array<boolean | TypeFunction>): void => {
+      if (args.length > 2 || !this.modalElement) return;
 
-    const [update] = args.filter((e) => typeof e === 'boolean');
-    const [callback] = args.filter((e) => typeof e === 'function');
+      const [update] = args.filter((e) => typeof e === 'boolean');
+      const [callback] = args.filter((e) => typeof e === 'function');
 
-    if (update) {
-      this._handleOkButton();
-      this.okButton?.click();
-    }
+      if (update) {
+        this._handleOkButton();
+        this.okButton?.click();
+      }
 
-    this._isTouchMouseMove = false;
+      this._isTouchMouseMove = false;
 
-    allEvents
-      .split(' ')
-      .map((event) => document.removeEventListener(event, this._mutliEventsMoveHandler, false));
+      allEvents
+        .split(' ')
+        .map((event) => document.removeEventListener(event, this._mutliEventsMoveHandler, false));
 
-    document.removeEventListener('mousedown', this._eventsClickMobileHandler);
-    document.removeEventListener('touchstart', this._eventsClickMobileHandler);
-    document.removeEventListener('keypress', this._handleEscClick);
-    this.wrapper.removeEventListener('keydown', this._focusTrapHandler);
+      document.removeEventListener('mousedown', this._eventsClickMobileHandler);
+      document.removeEventListener('touchstart', this._eventsClickMobileHandler);
+      document.removeEventListener('keypress', this._handleEscClick);
+      this.wrapper.removeEventListener('keydown', this._focusTrapHandler);
 
-    if (this._options.enableSwitchIcon) {
-      this.keyboardClockIcon.removeEventListener('touchstart', this._handlerViewChange);
-      this.keyboardClockIcon.removeEventListener('mousedown', this._handlerViewChange);
-    }
+      if (this._options.enableSwitchIcon) {
+        this.keyboardClockIcon.removeEventListener('touchstart', this._handlerViewChange());
+        this.keyboardClockIcon.removeEventListener('mousedown', this._handlerViewChange());
+      }
 
-    this._removeAnimationToClose();
+      this._removeAnimationToClose();
 
-    this.openElement.forEach((openEl) => openEl?.classList.remove('disabled'));
+      this.openElement.forEach((openEl) => openEl?.classList.remove('disabled'));
 
-    setTimeout(() => {
-      document.body.style.overflowY = '';
-      document.body.style.paddingRight = '';
-    }, 400);
+      setTimeout(() => {
+        document.body.style.overflowY = '';
+        document.body.style.paddingRight = '';
+      }, 400);
 
-    this.openElement.forEach((openEl) => openEl?.classList.remove('disabled'));
+      this.openElement.forEach((openEl) => openEl?.classList.remove('disabled'));
 
-    setTimeout(() => {
-      if (this._options.focusInputAfterCloseModal) this.input?.focus();
+      setTimeout(() => {
+        if (this._options.focusInputAfterCloseModal) this.input?.focus();
 
-      if (this.modalElement === null) return;
+        if (this.modalElement === null) return;
 
-      this.modalElement.remove();
+        this.modalElement.remove();
 
-      this._isModalRemove = true;
-    }, 300);
+        this._isModalRemove = true;
+      }, 300);
 
-    initCallback(callback as TypeFunction);
-  }, 300);
+      initCallback(callback as TypeFunction);
+      // @ts-ignore
+      // eslint-disable-next-line tree-shaking/no-side-effects-in-initialization
+    }, this._options.delayHandler || 300);
 
   /**
    * @description The destroy method destroy actual instance of picker by cloning element.
@@ -329,8 +332,8 @@ export default class TimepickerUI {
     document.removeEventListener('touchstart', this._eventsClickMobileHandler);
 
     if (this._options.enableSwitchIcon && this.keyboardClockIcon) {
-      this.keyboardClockIcon.removeEventListener('touchstart', this._handlerViewChange);
-      this.keyboardClockIcon.removeEventListener('mousedown', this._handlerViewChange);
+      this.keyboardClockIcon.removeEventListener('touchstart', this._handlerViewChange());
+      this.keyboardClockIcon.removeEventListener('mousedown', this._handlerViewChange());
     }
 
     this._cloned = this._element.cloneNode(true);
@@ -750,7 +753,7 @@ export default class TimepickerUI {
           degreesMinutes: this._degreesMinutes,
         });
 
-        this.close();
+        this.close()();
       });
     });
   };
@@ -816,7 +819,7 @@ export default class TimepickerUI {
           degreesMinutes: this._degreesMinutes,
         });
 
-        this.close();
+        this.close()();
       });
     });
   };
@@ -846,7 +849,7 @@ export default class TimepickerUI {
         degreesMinutes: this._degreesMinutes,
       });
 
-      this.close();
+      this.close()();
     });
   };
 
@@ -1612,116 +1615,113 @@ export default class TimepickerUI {
     }
   };
 
-  private _handlerViewChange = debounce(() => {
-    const { clockType } = this._options;
+  private _handlerViewChange = () =>
+    debounce(() => {
+      const { clockType } = this._options;
 
-    if (!hasClass(this.modalElement, 'mobile')) {
-      this.close();
+      if (!hasClass(this.modalElement, 'mobile')) {
+        this.close()();
 
-      this._isMobileView = true;
-      this._options.mobile = true;
+        this._isMobileView = true;
+        this._options.mobile = true;
 
-      const beforeHourContent = this.hour.value;
-      const beforeMinutesContent = this.minutes.value;
-      const beforeTypeModeContent = this.activeTypeMode?.dataset.type;
+        const beforeHourContent = this.hour.value;
+        const beforeMinutesContent = this.minutes.value;
+        const beforeTypeModeContent = this.activeTypeMode?.dataset.type;
 
-      setTimeout(() => {
-        this.destroy();
-        this.update({
-          options: { mobile: true },
-        });
         setTimeout(() => {
-          this.open();
+          this.destroy();
+          this.update({
+            options: { mobile: true },
+          });
+          setTimeout(() => {
+            this.open();
 
-          this.hour.value = beforeHourContent;
-          this.minutes.value = beforeMinutesContent;
+            this.hour.value = beforeHourContent;
+            this.minutes.value = beforeMinutesContent;
 
-          if (this._options.clockType === '12h') {
-            const toAddType = beforeTypeModeContent === 'PM' ? 'PM' : 'AM';
-            const toRemoveType = beforeTypeModeContent === 'PM' ? 'AM' : 'PM';
+            if (this._options.clockType === '12h') {
+              const toAddType = beforeTypeModeContent === 'PM' ? 'PM' : 'AM';
+              const toRemoveType = beforeTypeModeContent === 'PM' ? 'AM' : 'PM';
 
-            // @ts-ignore
-            this[toAddType].classList.add(selectorActive);
-            // @ts-ignore
-            this[toRemoveType].classList.remove(selectorActive);
-          }
+              this[toAddType].classList.add(selectorActive);
+              this[toRemoveType].classList.remove(selectorActive);
+            }
+          }, 300);
         }, 300);
-      }, 300);
-    } else {
-      const validHours = handleValueAndCheck(this.hour.value, 'hour', clockType);
-      const validMinutes = handleValueAndCheck(this.minutes.value, 'minutes', clockType);
+      } else {
+        const validHours = handleValueAndCheck(this.hour.value, 'hour', clockType);
+        const validMinutes = handleValueAndCheck(this.minutes.value, 'minutes', clockType);
 
-      if (validHours === false || validMinutes === false) {
-        if (!validMinutes) {
-          this.minutes.classList.add('invalid-value');
+        if (validHours === false || validMinutes === false) {
+          if (!validMinutes) {
+            this.minutes.classList.add('invalid-value');
+          }
+
+          if (!validHours) {
+            this.hour?.classList.add('invalid-value');
+          }
+
+          return;
         }
 
-        if (!validHours) {
-          this.hour?.classList.add('invalid-value');
+        if (validHours === true && validMinutes === true) {
+          if (validMinutes) {
+            this.minutes.classList.remove('invalid-value');
+          }
+
+          if (validHours) {
+            this.hour?.classList.remove('invalid-value');
+          }
         }
 
-        return;
-      }
+        this.close()();
 
-      if (validHours === true && validMinutes === true) {
-        if (validMinutes) {
-          this.minutes.classList.remove('invalid-value');
-        }
+        this._isMobileView = false;
+        this._options.mobile = false;
 
-        if (validHours) {
-          this.hour?.classList.remove('invalid-value');
-        }
-      }
+        const beforeHourContent = this.hour.value;
+        const beforeMinutesContent = this.minutes.value;
+        const beforeTypeModeContent = this.activeTypeMode?.dataset.type;
 
-      this.close();
-
-      this._isMobileView = false;
-      this._options.mobile = false;
-
-      const beforeHourContent = this.hour.value;
-      const beforeMinutesContent = this.minutes.value;
-      const beforeTypeModeContent = this.activeTypeMode?.dataset.type;
-
-      setTimeout(() => {
-        this.destroy();
-        this.update({
-          options: { mobile: false },
-        });
         setTimeout(() => {
-          this.open();
+          this.destroy();
+          this.update({
+            options: { mobile: false },
+          });
+          setTimeout(() => {
+            this.open();
 
-          this.hour.value = beforeHourContent;
-          this.minutes.value = beforeMinutesContent;
+            this.hour.value = beforeHourContent;
+            this.minutes.value = beforeMinutesContent;
 
-          if (this._options.clockType === '12h') {
-            const toAddType = beforeTypeModeContent === 'PM' ? 'PM' : 'AM';
-            const toRemoveType = beforeTypeModeContent === 'PM' ? 'AM' : 'PM';
+            if (this._options.clockType === '12h') {
+              const toAddType = beforeTypeModeContent === 'PM' ? 'PM' : 'AM';
+              const toRemoveType = beforeTypeModeContent === 'PM' ? 'AM' : 'PM';
 
-            // @ts-ignore
-            this[toAddType].classList.add(selectorActive);
-            // @ts-ignore
-            this[toRemoveType].classList.remove(selectorActive);
-          }
+              this[toAddType].classList.add(selectorActive);
+              this[toRemoveType].classList.remove(selectorActive);
+            }
 
-          this._setTransformToCircleWithSwitchesHour(this.hour.value);
-          this._toggleClassActiveToValueTips(this.hour.value);
+            this._setTransformToCircleWithSwitchesHour(this.hour.value);
+            this._toggleClassActiveToValueTips(this.hour.value);
 
-          if (Number(this.hour.value) > 12 || Number(this.hour.value) === 0) {
-            this._setCircleClockClasses24h();
-          } else {
-            this._removeCircleClockClasses24h();
-          }
+            if (Number(this.hour.value) > 12 || Number(this.hour.value) === 0) {
+              this._setCircleClockClasses24h();
+            } else {
+              this._removeCircleClockClasses24h();
+            }
+          }, 300);
         }, 300);
-      }, 300);
-    }
-  }, 400);
+      }
+    }, this._options.delayHandler || 300);
 
   private _handleIconChangeView = async (): Promise<void> => {
     if (this._options.enableSwitchIcon) {
       if (getBrowser()) {
-        this.keyboardClockIcon.addEventListener('touchstart', this._handlerViewChange);
+        this.keyboardClockIcon.addEventListener('touchstart', this._handlerViewChange());
       } else {
-        this.keyboardClockIcon.addEventListener('click', this._handlerViewChange);
+        this.keyboardClockIcon.addEventListener('click', this._handlerViewChange());
       }
     }
   };
@@ -1754,7 +1754,7 @@ export default class TimepickerUI {
 
   private _handleKeyPress = (e: KeyboardEvent) => {
     if (e.key === 'Escape' && this.modalElement) {
-      this.close();
+      this.close()();
     }
   };
 

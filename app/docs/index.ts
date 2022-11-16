@@ -237,7 +237,6 @@ const acceptValue = document.querySelector('#accept-value') as HTMLDivElement;
 acceptEvent.addEventListener(
   'accept',
   // @ts-ignore
-  // eslint-disable-next-line no-return-assign
   ({ detail: { hour, minutes, type } }) => (acceptValue.innerHTML = `${hour}:${minutes} ${type}`),
 );
 
@@ -277,20 +276,25 @@ mobilePicker24.create();
 const errorPicker = document.querySelector('.error') as HTMLDivElement;
 
 const errorPickerInit = new TimepickerUI(errorPicker, {
-  cancelLabel: 'cancel',
+  cancelLabel: 'error',
   clockType: '24h',
   mobile: false,
   okLabel: 'ok',
   hourMobileLabel: '',
   minuteMobileLabel: '',
   mobileTimeLabel: 'select time',
-  // @ts-ignore
-  selectTimeLabel: 'select time',
   backdrop: true,
   editable: true,
   enableSwitchIcon: true,
   iconTemplate: '<div class="keyboard-time"></div>',
   iconTemplateMobile: '<div class="clock-time"></div>',
+  delayHandler: 2000,
 });
 
 errorPickerInit.create();
+
+errorPickerInit.open(() => {
+  setTimeout(() => {
+    errorPickerInit.close()(true, () => console.log('triggered after close'));
+  }, 3000);
+});

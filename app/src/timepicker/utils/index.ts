@@ -59,7 +59,7 @@ export const getScrollbarWidth = (): number => {
 
 export const getRadians = (el: number): number => el * (Math.PI / 180);
 
-export const getClickTouchPosition = (event: TouchEvent, object: HTMLElement, isMobile = false) => {
+export const getClickTouchPosition = (event: TouchEvent, object: HTMLElement) => {
   const { touches } = event;
   const { clientX, clientY } = event as unknown as MouseEvent;
 
@@ -165,18 +165,4 @@ export const timeConversion = (str = '') => {
   const mins = date.getMinutes().toString().padStart(2, '0');
 
   return `${hours}:${mins}`;
-};
-
-export const debounce = <T extends (...args: any[]) => ReturnType<T>>(
-  callback: T,
-  timeout: number,
-): ((...args: Parameters<T>) => void) => {
-  let timer: ReturnType<typeof setTimeout>;
-
-  return (...args: Parameters<T>) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      callback(...args);
-    }, timeout);
-  };
 };

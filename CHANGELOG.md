@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.6.0] - 2022-11-16
+
+### Change
+
+- changed invoke of `close()` method. These method has to invoke with double parentheses `close()()`. The first parentheses doesn't have any parameters, the second has the same what had in the previous method.
+
+### Add
+
+- added `delayHandler` prop to avoid delay on buttons
+
+### Fix
+
+- fixed problem with 0NaN error when using touch input. Thanks to @grizzlymannn
+
+---
+
 ## [2.5.0] - 2022-05-06
 
 ### Change

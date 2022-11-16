@@ -173,6 +173,11 @@ declare type OptionTypes = {
      * @default true
      */
     focusTrap?: boolean;
+    /**
+     * @description Set delay to clickable elements like button "OK", "CANCEL" etc. The value has to be set in milliseconds.
+     * @default 300
+     */
+    delayHandler?: number;
 };
 
 declare type TypeFunction = () => void;
@@ -224,19 +229,19 @@ declare class TimepickerUI {
      * @description The open method opens immediately timepicker after init
      * @param callback - The callback function triggered when timepicker is open by this method
      */
-    open: (callback?: () => void) => void;
+    open: (callback?: (() => void) | undefined) => void;
     /**
-     * @description Closure method closes the timepicker
-     * @param args - These parameters in this method are optional and order is any. You can set callback function first or boolean,
+     * @description Closure method closes the timepicker with double parentheses
+     * @param args - The first parentheses doesn't have any paremeters. The second parentheses accepts parameters and these parameters are optional in this method and order is any. You can set callback function first or boolean,
      * or just boolean or just callback. If the boolean is set to true the input will be updating with the current value on picker.
      * The callback function start immediately after close, if is invoke. The max parameters length is set to 2
      */
-    close: (...args: (boolean | TypeFunction)[]) => void;
+    close: () => (...args: (boolean | TypeFunction)[]) => void;
     /**
      * @description The destroy method destroy actual instance of picker by cloning element.
      * @param callback - The callback function is started after destroyed method. This parameter is optional.
      */
-    destroy: (callback?: TypeFunction) => void;
+    destroy: (callback?: TypeFunction | undefined) => void;
     /**
      * @description The update method which update timepicker with new options and can create a new instance.
      * @param value - The first parameter is a object with key options which is timepicker options and it will be updated to current
@@ -247,7 +252,7 @@ declare class TimepickerUI {
     update: (value: {
         options: OptionTypes;
         create?: boolean;
-    }, callback?: TypeFunction) => void;
+    }, callback?: TypeFunction | undefined) => void;
     private _preventClockTypeByCurrentTime;
     private _updateInputValueWithCurrentTimeOnStart;
     private _checkDisabledValuesOnStart;
