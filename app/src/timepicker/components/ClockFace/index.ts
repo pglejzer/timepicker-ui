@@ -104,6 +104,11 @@ class ClockFace {
         spanTips.classList.add('crane-straight');
       }
 
+      if (this.theme === 'm3') {
+        span.classList.add('m3');
+        spanTips.classList.add('m3');
+      }
+
       span.style.left = `${clockWidth + Math.sin(angle) * radius - span.offsetWidth}px`;
       span.style.bottom = `${clockHeight + Math.cos(angle) * radius - span.offsetHeight}px`;
 

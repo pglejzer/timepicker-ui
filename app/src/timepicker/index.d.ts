@@ -1,5 +1,6 @@
 import './styles/main.scss';
 import './styles/theme.scss';
+import './styles/theme-m3.scss';
 import type { OptionTypes } from './utils/types';
 declare type TypeFunction = () => void;
 export default class TimepickerUI {

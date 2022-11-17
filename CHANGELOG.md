@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.7.0] - 2022-11-17
+
+### Add
+
+- added new value to the property `theme` called `m3`.
+  Theme `m3` based on the new Material Design v3. Material Design 3 is still not release in offical version for WEB but you can use it if you want.
+  There is new version of [Material Design 3](https://m3.material.io/components/time-pickers/overview).
+  If new version M3 will be released this design will get improve.
+
+---
+
 ## [2.6.0] - 2022-11-16
 
 ### Change
