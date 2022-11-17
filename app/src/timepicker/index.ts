@@ -18,6 +18,7 @@ import {
 } from './utils/disable';
 import './styles/main.scss';
 import './styles/theme.scss';
+import './styles/theme-m3.scss';
 import variables from './styles/variables.scss';
 import { options as optionsDefault } from './utils/options';
 import type { OptionTypes } from './utils/types';
@@ -514,6 +515,8 @@ export default class TimepickerUI {
       allElements.forEach((el) => el.classList.add('crane-straight'));
     } else if (theme === 'crane-radius') {
       allElements.forEach((el) => el.classList.add('crane-straight', 'radius'));
+    } else if (theme === 'm3') {
+      allElements.forEach((el) => el.classList.add('m3'));
     }
   };
 

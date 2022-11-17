@@ -1,0 +1,81 @@
+@import './variables.scss';
+
+.timepicker-ui {
+  &-hour-time-12.m3,
+  &-hour-time-24.m3 {
+    color: #1a1c18;
+  }
+
+  &-wrapper.m3 {
+    border-radius: 35px;
+    background-color: #e5eadc;
+    box-shadow: unset;
+  }
+
+  &-hour.active.m3,
+  &-minutes.active.m3 {
+    background-color: #b8f397;
+    color: #042100;
+  }
+
+  &-minutes.m3,
+  &-hour.m3 {
+    background-color: #dfe4d6;
+  }
+
+  &-minutes:hover.m3,
+  &-hour:hover.m3 {
+    color: #386a20;
+  }
+
+  &-clock-face.m3 {
+    background-color: #dfe4d6;
+  }
+
+  &-clock-hand.m3,
+  &-dot.m3,
+  &-circle-hand.m3 {
+    background-color: #386a20 !important;
+  }
+
+  &-cancel-btn.m3,
+  &-ok-btn.m3 {
+    color: #386a20;
+  }
+
+  &-cancel-btn:hover.m3,
+  &-ok-btn:hover.m3 {
+    background-color: #dfe4d6;
+  }
+
+  &-wrapper-type-time.m3 {
+    color: #6b7165;
+  }
+
+  &-am.m3,
+  &-am.m3,
+  &-pm.m3,
+  &-pm.m3 {
+    border-color: #74796e;
+    border-width: 1px;
+  }
+
+  &-am.m3,
+  &-am.m3 {
+    border-bottom-width: 0px;
+  }
+
+  &-am:hover.m3,
+  &-am.active.m3,
+  &-pm:hover.m3,
+  &-pm.active.m3 {
+    background-color: #bbebeb;
+    color: #002021;
+  }
+
+  &-hour.mobile:hover.m3,
+  &-minutes.mobile:hover.m3 {
+    background-color: #dfe4d6;
+  }
+}
+

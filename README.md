@@ -36,7 +36,11 @@ timepicker-ui is an easy library with timepicker. Fully wrote with TypeScript. T
 
 ### Themes
 
-There is two available version of theme ( radius and straight). Examples show radius version.
+There is 3 available version of theme: crane-straight, crane-radius and m3.
+
+Theme `m3` based on the new Material Design v3. Material Design 3 is still not release in offical version for WEB but you can use it if you want.
+There is new version of [Material Design 3](https://m3.material.io/components/time-pickers/overview).
+If new version M3 will be released this design will get improve.
 
 #### Desktop
 
@@ -49,6 +53,14 @@ There is two available version of theme ( radius and straight). Examples show ra
 #### Mobile
 
   <img src="https://i.ibb.co/TYSML75/image.png" alt="desktop-crane-radius-version-mobile">
+
+### Theme m3
+
+  <img src="https://i.ibb.co/xLjYbNv/image.png" alt="desktop-m3-version">
+
+### Theme m3-mobile
+
+<img src="https://i.ibb.co/Zzm55P6/image.png" alt="desktop-m3-version-mobile">
 
 ---
 
@@ -462,7 +474,9 @@ export default {
     <td scope="row">theme</td>
       <td>basic</td>
       <td>string</td>
-      <td>You can set theme to timepicker. Available options: basic, crane-straight, crane-radius</td>
+      <td>You can set theme to timepicker. Available options: basic, crane-straight, crane-radius and m3. <br>
+      The offical version of Material Design 3 is still not avaialbe for the WEB version. Theme <code>m3</code> has been added based on the design what you can find <a target="_blank" href="https://m3.material.io/components/time-pickers/overview">here</a>. If new version M3 will be released this design will get improve.
+      </td>
     </tr>  
     <tr>
       <td scope="row">disabledTime</td>

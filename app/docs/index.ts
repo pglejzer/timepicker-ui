@@ -275,26 +275,6 @@ mobilePicker24.create();
 
 const errorPicker = document.querySelector('.error') as HTMLDivElement;
 
-const errorPickerInit = new TimepickerUI(errorPicker, {
-  cancelLabel: 'error',
-  clockType: '24h',
-  mobile: false,
-  okLabel: 'ok',
-  hourMobileLabel: '',
-  minuteMobileLabel: '',
-  mobileTimeLabel: 'select time',
-  backdrop: true,
-  editable: true,
-  enableSwitchIcon: true,
-  iconTemplate: '<div class="keyboard-time"></div>',
-  iconTemplateMobile: '<div class="clock-time"></div>',
-  delayHandler: 2000,
-});
+const errorPickerInit = new TimepickerUI(errorPicker, { clockType: '12h', theme: 'm3', mobile: false });
 
 errorPickerInit.create();
-
-errorPickerInit.open(() => {
-  setTimeout(() => {
-    errorPickerInit.close()(true, () => console.log('triggered after close'));
-  }, 3000);
-});

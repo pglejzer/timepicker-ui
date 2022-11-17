@@ -105,10 +105,14 @@ export declare type OptionTypes = {
      */
     switchToMinutesAfterSelectHour?: boolean;
     /**
-     * @description Set theme to timepicker. Available options: `basic`, `crane-straight`, `crane-radius`
+     * @description Set theme to timepicker. Available options: `basic`, `crane-straight`, `crane-radius`, `m3`.
+  
+     * The offical version of Material Design 3 is still not avaialbe for the WEB version.Theme `m3` has been added
+     * based on the design what you can find [here](https://m3.material.io/components/time-pickers/overview).
+     * If new version M3 will be released this design will get improve.
      * @default "basic"
      */
-    theme?: 'basic' | 'crane-straight' | 'crane-radius';
+    theme?: 'basic' | 'crane-straight' | 'crane-radius' | 'm3';
     /**
      * @description Set type of clock, it contains 2 versions: `12h` and `24h`.
      * @default false
