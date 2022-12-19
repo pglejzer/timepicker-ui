@@ -42,7 +42,7 @@
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
-    "@rollup/plugin-replace": "^2.4.2",
+    "@rollup/plugin-replace": "^5.0.2",
     "@types/node": "^17.0.45",
     "@types/prismjs": "^1.26.0",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
