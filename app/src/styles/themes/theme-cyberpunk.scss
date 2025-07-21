@@ -1,0 +1,89 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  &-wrapper.cyberpunk {
+    background-color: #0f0c29;
+    border-radius: 1rem;
+    color: #f8f8ff;
+    box-shadow: 0 0 12px #00f0ff;
+  }
+
+  &-select-time.cyberpunk {
+    color: #00f0ff;
+  }
+
+  &-clock-face.cyberpunk {
+    background: linear-gradient(135deg, #1a1a2e, #0f3460);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+  }
+
+  &-dot.cyberpunk,
+  &-clock-hand.cyberpunk,
+  &-circle-hand.cyberpunk {
+    background-color: #00f0ff !important;
+    box-shadow: 0 0 6px #00f0ff;
+  }
+
+  &-hour.cyberpunk,
+  &-minutes.cyberpunk {
+    background-color: #1a1a2e;
+    border-radius: 0.75rem;
+    color: #f8f8ff;
+
+    &:hover,
+    &.active {
+      background-color: #00f0ff;
+      color: #0f0c29;
+      box-shadow: 0 0 8px #00f0ff;
+    }
+  }
+
+  &-wrapper-type-time.cyberpunk,
+  &-dots.cyberpunk {
+    color: #00f0ff;
+  }
+
+  &-am.cyberpunk,
+  &-pm.cyberpunk {
+    border: 1px solid #00f0ff;
+    background-color: #1a1a2e;
+    color: #f8f8ff;
+
+    &:hover,
+    &.active {
+      background-color: #00f0ff;
+      color: #0f0c29;
+    }
+  }
+
+  &-cancel-btn.cyberpunk,
+  &-ok-btn.cyberpunk {
+    color: #00f0ff;
+    background-color: #1a1a2e;
+    border-radius: 0.5rem;
+
+    &:hover {
+      background-color: #00f0ff;
+      color: #0f0c29;
+      box-shadow: 0 0 6px #00f0ff;
+    }
+  }
+
+  &-keyboard-icon-wrapper.cyberpunk {
+    color: #00f0ff;
+
+    &:hover .timepicker-ui-keyboard-icon.cyberpunk {
+      background-color: #00f0ff;
+      color: #0f0c29;
+    }
+  }
+
+  &-value-tips.cyberpunk {
+    color: #00f0ff;
+  }
+
+  &-value-tips.cyberpunk.active {
+    color: #0f0c29;
+  }
+}
+

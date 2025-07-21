@@ -1,0 +1,82 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  &-wrapper.ai {
+    background-color: #f3f4f6;
+    border-radius: 0.75rem;
+    color: #111827;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  &-select-time.ai {
+    color: #6b7280;
+  }
+
+  &-clock-face.ai {
+    background-color: #e5e7eb;
+    border: 1px solid #d1d5db;
+  }
+
+  &-dot.ai,
+  &-clock-hand.ai,
+  &-circle-hand.ai {
+    background-color: #3b82f6 !important;
+  }
+
+  &-hour.ai,
+  &-minutes.ai {
+    background-color: #e5e7eb;
+    border-radius: 0.5rem;
+    color: #111827;
+
+    &:hover,
+    &.active {
+      background-color: #3b82f6;
+      color: white;
+    }
+  }
+
+  &-wrapper-type-time.ai,
+  &-dots.ai {
+    color: #374151;
+  }
+
+  &-am.ai,
+  &-pm.ai {
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+    color: #111827;
+
+    &:hover,
+    &.active {
+      background-color: #3b82f6;
+      color: white;
+    }
+  }
+
+  &-cancel-btn.ai,
+  &-ok-btn.ai {
+    color: #111827;
+    background-color: #f3f4f6;
+    border-radius: 0.5rem;
+
+    &:hover {
+      background-color: #3b82f6;
+      color: white;
+    }
+  }
+
+  &-keyboard-icon-wrapper.ai {
+    color: #6b7280;
+
+    &:hover .timepicker-ui-keyboard-icon.ai {
+      background-color: #3b82f6;
+      color: white;
+    }
+  }
+
+  &-value-tips.ai {
+    color: #111827;
+  }
+}
+

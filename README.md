@@ -1,706 +1,641 @@
 # timepicker-ui
 
-<a href="https://npmcharts.com/compare/timepicker-ui?minimal=true"><img src="https://img.shields.io/npm/dw/timepicker-ui" alt="downloads"></a>
+> ⚠️ **Upgrading from v2 to v3?**  
+> Major changes were introduced in version 3.0.  
+> 👉 [Click here to view the Upgrade Guide](#📈-upgrade-guide-v2-→-v3)
+
+A modern, lightweight, and fully customizable time picker library built with TypeScript. Features Google's Material Design principles with extensive theming support and framework-agnostic architecture.
+
 [![npm version](https://badge.fury.io/js/timepicker-ui.svg)](https://badge.fury.io/js/timepicker-ui)
-<a href="https://img.shields.io/npm/l/timepicker-ui"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
-
-timepicker-ui is an easy library with timepicker. Fully wrote with TypeScript. This library is based on Material Design from Google.
-
-- Free
-- Easy to use
-- Easy to customize
-
-[Click here to see a demo and examples](https://pglejzer.github.io/timepicker-ui-docs/)
+[![downloads](https://img.shields.io/npm/dw/timepicker-ui)](https://npmcharts.com/compare/timepicker-ui?minimal=true)
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://img.shields.io/npm/l/timepicker-ui)
 
 ---
 
-### Desktop version
+## 📦 Live Demo
 
-  <img src="https://i.ibb.co/VgR1Kn0/image.png" alt="desktop-version">
-
-### 24h version
-
-<img src="https://i.ibb.co/wpch19P/image.png" alt="desktop-24h">
+Curious how it works in practice?  
+👉 [Click here to see live examples](https://pglejzer.github.io/timepicker-ui/)
 
 ---
 
-### Landspace version
+## ✨ Features
 
-<img src="https://i.ibb.co/vYfmrc0/image.png" alt="desktop-version">
-
----
-
-### Mobile version
-
-  <img src="https://i.ibb.co/BZ0Vnyb/image.png" alt="mobile-version">
-
-### Themes
-
-There is 3 available version of theme: crane-straight, crane-radius and m3.
-
-Theme `m3` based on the new Material Design v3. Material Design 3 is still not release in offical version for WEB but you can use it if you want.
-There is new version of [Material Design 3](https://m3.material.io/components/time-pickers/overview).
-If new version M3 will be released this design will get improve.
-
-#### Desktop
-
-  <img src="https://i.ibb.co/xh2rYN7/image.png" alt="desktop-crane-radius-version">
-
-#### Landspace
-
-  <img src="https://i.ibb.co/KVWRKkk/image.png" alt="desktop-crane-radius-version-mobile">
-
-#### Mobile
-
-  <img src="https://i.ibb.co/TYSML75/image.png" alt="desktop-crane-radius-version-mobile">
-
-### Theme m3
-
-  <img src="https://i.ibb.co/xLjYbNv/image.png" alt="desktop-m3-version">
-
-### Theme m3-mobile
-
-<img src="https://i.ibb.co/Zzm55P6/image.png" alt="desktop-m3-version-mobile">
+- 🎨 **9 Built-in Themes** — Material, Crane, Dark, Glassmorphic, Cyberpunk, AI, and more
+- 📱 **Mobile-First Design** — Responsive with touch and keyboard support
+- 🚀 **Framework Agnostic** — Works with vanilla JS, React, Vue, Angular, and others
+- 🔧 **TypeScript Support** — Full type definitions and IntelliSense
+- 🎯 **Inline Mode** — Always-visible timepicker without modal overlay
+- 🛠️ **Rich API** — Comprehensive methods and event system
+- ♿ **Accessible** — ARIA-compliant with keyboard navigation
+- 🌐 **SSR Compatible** — Works with Next.js, Nuxt, and other SSR frameworks
+- 📦 **Lightweight** — Minimal footprint with tree-shaking support
 
 ---
 
-### Installation
-
-Install timepicker-ui in your project.
-
-#### Yarn
+## 🚀 Installation
 
 ```bash
-$ yarn add timepicker-ui
+npm install timepicker-ui
+# or
+yarn add timepicker-ui
 ```
-
-#### NPM
-
-```bash
-$ npm install timepicker-ui
-```
-
-This library is using [font Roboto](https://fonts.google.com/specimen/Roboto) and [material-design icons](https://google.github.io/material-design-icons/). Basic options for all icons have been taken from material-icons. If you want to use material-icons you have to add dependencies to your project.
-
-You can alawys change icons to another package if you change options <code>iconTemplate</code> and <code>iconTemplateMobile</code> which contains templates for icons. <code>iconTemplate</code> and <code>iconTemplateMobile</code> requiare default class <code>timepicker-ui-keyboard-icon</code>.
 
 ---
 
-### Usage
+## 📖 Quick Start
 
-#### Styles
+### Basic Usage
 
-We provide CSS styles built-in but sometimes if you don't use some normalize/reset CSS styles you have to add `box-sizing: border-box` to your app to display the correct layout.
-
-```CSS
-*,
-::after,
-::before {
-    box-sizing: border-box;
-}
+```html
+<input id="timepicker" type="text" />
 ```
-
-#### ES Modules
-
-In your project you have to import timepicker from package to your JavaScript file.
 
 ```javascript
 import { TimepickerUI } from "timepicker-ui";
+
+const input = document.querySelector("#timepicker");
+const picker = new TimepickerUI(input);
+picker.create();
 ```
 
-#### UMD
-
-In your html file you have put script tag with path to `timepicker-ui.umd.js` file. After installing by npm/yarn you can copy the file from node_modules or add a path to this file.
-
-```html
-<script src="timepicker-ui.umd.js"></script>
-<script src="node_modules/path/timepicker-ui.umd.js"></script>
-<script src="/path/timepicker-ui.umd.js"></script>
-```
-
-###### Information
-
-timepicker-ui has to have a wrapper that has an input inside this wrapper. If you will not add class `timepicker-ui` to your wrapper, it will be automatically added during initialization.
-
-#### HTML
-
-```html
-<div class="timepicker-ui">
-  <input type="text" class="timepicker-ui-input" value="12:00 AM" />
-</div>
-```
-
----
-
-timepicker-ui has to be created with a new instance with key `new`. This instance accepts two parameters which first is the wrapper element for timepicker and the second is options that allow customization.
-
-#### JavaScript
+### With Options
 
 ```javascript
-const DOMElement = document.querySelector(".timepicker-ui");
-const options = {};
-const newTimepicker = new TimepickerUI(DOMElement, options);
+const picker = new TimepickerUI(input, {
+  theme: "dark",
+  clockType: "24h",
+  animation: true,
+  backdrop: true,
+});
+picker.create();
 ```
 
-By default initialization of timepicker is started when you click on input. If you want to change it you have to add `data-open` attribute with selector inside and this element has to be inside wrapper.
+### React Integration
 
-To initalize a timepicker with UMD version you have to init a window object with `tui`.
+```tsx
+import { useEffect, useRef } from "react";
+import { TimepickerUI } from "timepicker-ui";
 
-```js
-const DOMElement = document.querySelector(".timepicker-ui");
-const options = {};
-const newTimepicker = new window.tui.TimepickerUI(DOMElement, options);
+function TimePickerComponent() {
+  const inputRef = useRef<HTMLInputElement>(null);
 
-newTimepicker.create();
-```
+  useEffect(() => {
+    if (inputRef.current) {
+      const picker = new TimepickerUI(inputRef.current, {
+        onConfirm: (data) => {
+          console.log("Time selected:", data);
+        },
+      });
+      picker.create();
 
-#### HTML
-
-```html
-<div class="default-class">
-  <input type="text" class="timepicker-ui-input" value="12:00 AM" />
-  <button class="timepicker-ui-button" data-open="default-class">Open</button>
-</div>
-```
-
-#### JavaScript
-
-```javascript
-const timepicker = document.querySelector(".default-class");
-const initTimepicker = new TimepickerUI(timepicker);
-
-timepicker.create();
-```
-
----
-
-### Options
-
-You can set options by JavaScript or by data-attribute which `attribute` is a key option. Data-attributes will be overridden by JavaScript options.
-
-#### HTML
-
-```html
-<div
-  class="default-class"
-  data-am-label="test"
-  data-backdrop="false"
-  data-ok-label="fine"
->
-  <input type="text" class="timepicker-ui-input" value="12:00 AM" />
-  <button class="timepicker-ui-button" data-open="default-class">Open</button>
-</div>
-```
-
-#### JavaScript
-
-```javascript
-const timepicker = document.querySelector(".default-class");
-const options = { okLabel: "test", amLabel: "test1", backdrop: false };
-const initTimepicker = new TimepickerUI(timepicker, options);
-
-timepicker.create();
-```
-
----
-
-### CDNJS
-
-This library is aviable in cdnjs packages. Here is a link to the full description https://cdnjs.com/libraries/timepicker-ui.
-
-You can put script tags in your HTML file and use UMD version, without installation.
-
-```html
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/timepicker-ui/2.3.0/timepicker-ui.umd.js"
-  integrity="sha512-a3QUlKZYbhDBhA0b++tX+QjrbEwk1DNTyCR7rzwM34AUx16sNOLDzh4JQhqV5xYLs010+xsnFjrDjz2jx2+qLw=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
-```
-
----
-
-## React integration
-
-It is possible to use this library on the React application. It's necessary to use the useRef hook to attach a dom element and add a custom event handler to this ref.
-
-Link to an example with [React Hooks](https://codesandbox.io/s/modest-swanson-xqzme). <br/>
-Link to an example with [React Class Component](https://codesandbox.io/s/vigilant-knuth-cx0yv).
-
-```javascript
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { TimepickerUI } from 'timepicker-ui';
-
-function App(): JSX.Element {
-  const tmRef = useRef(null);
-  const [inputValue, setInputValue] = useState('12:00 PM');
-
-  const testHandler = useCallback((e: CustomEvent) => {
-    setInputValue(`${e.detail.hour}:${e.detail.minutes} ${e.detail.type}`);
+      return () => picker.destroy();
+    }
   }, []);
 
-  useEffect(() => {
-    if (inputValue === "10:00 PM") {
-      alert("You selected 10:00 PM");
-    }
-  }, [inputValue]);
-
-  useEffect(() => {
-    const tm = (tmRef.current as unknown) as HTMLDivElement;
-
-    const newPicker = new TimepickerUI(tm, {});
-    newPicker.create();
-
-    //@ts-ignore
-    tm.addEventListener('accept', testHandler);
-
-    return () => {
-      //@ts-ignore
-      tm.removeEventListener('accept', testHandler);
-    };
-  }, [testHandler]);
-
-  return (
-    <div className='timepicker-ui' ref={tmRef}>
-      <input
-        type='test'
-        className='timepicker-ui-input'
-        defaultValue={inputValue}
-      />
-    </div>
-  );
+  return <input ref={inputRef} type="text" />;
 }
-
-export default App;
 ```
 
 ---
 
-### Vue integration
+## ⚙️ Configuration Options
 
-This library can be used on Vue too. You have to use this.$refs to attach elements on DOM and add a custom event listener to this element.
+| Option                           | Type                | Default         | Description                                          |
+| -------------------------------- | ------------------- | --------------- | ---------------------------------------------------- |
+| `amLabel`                        | `string`            | `"AM"`          | Custom text for AM label                             |
+| `animation`                      | `boolean`           | `true`          | Enable/disable open/close animations                 |
+| `appendModalSelector`            | `string`            | `""`            | DOM selector to append timepicker (defaults to body) |
+| `backdrop`                       | `boolean`           | `true`          | Show/hide backdrop overlay                           |
+| `cancelLabel`                    | `string`            | `"CANCEL"`      | Text for cancel button                               |
+| `clockType`                      | `"12h" \| "24h"`    | `"12h"`         | Clock format type                                    |
+| `cssClass`                       | `string`            | `undefined`     | Additional CSS class for timepicker wrapper          |
+| `currentTime`                    | `boolean \| object` | `undefined`     | Set current time to input and picker                 |
+| `delayHandler`                   | `number`            | `300`           | Debounce delay for buttons (ms)                      |
+| `disabledTime`                   | `object`            | `undefined`     | Disable specific hours, minutes, or intervals        |
+| `editable`                       | `boolean`           | `false`         | Allow manual input editing                           |
+| `enableScrollbar`                | `boolean`           | `false`         | Keep page scroll when picker is open                 |
+| `enableSwitchIcon`               | `boolean`           | `false`         | Show desktop/mobile switch icon                      |
+| `focusInputAfterCloseModal`      | `boolean`           | `false`         | Focus input after closing modal                      |
+| `focusTrap`                      | `boolean`           | `true`          | Trap focus within modal                              |
+| `hourMobileLabel`                | `string`            | `"Hour"`        | Hour label for mobile version                        |
+| `iconTemplate`                   | `string`            | Material Icons  | HTML template for desktop switch icon                |
+| `iconTemplateMobile`             | `string`            | Material Icons  | HTML template for mobile switch icon                 |
+| `id`                             | `string`            | `undefined`     | Custom ID for timepicker instance                    |
+| `incrementHours`                 | `number`            | `1`             | Hour increment step (1, 2, 3)                        |
+| `incrementMinutes`               | `number`            | `1`             | Minute increment step (1, 5, 10, 15)                 |
+| `inline`                         | `object`            | `undefined`     | Inline mode configuration                            |
+| `minuteMobileLabel`              | `string`            | `"Minute"`      | Minute label for mobile version                      |
+| `mobile`                         | `boolean`           | `false`         | Force mobile version                                 |
+| `mobileTimeLabel`                | `string`            | `"Enter Time"`  | Time label for mobile version                        |
+| `okLabel`                        | `string`            | `"OK"`          | Text for OK button                                   |
+| `pmLabel`                        | `string`            | `"PM"`          | Custom text for PM label                             |
+| `switchToMinutesAfterSelectHour` | `boolean`           | `true`          | Auto-switch to minutes after hour selection          |
+| `theme`                          | Theme               | `"basic"`       | UI theme (see themes section)                        |
+| `timeLabel`                      | `string`            | `"Select Time"` | Time label for desktop version                       |
 
-Link to an example with [Vue 2](https://codesandbox.io/s/ancient-http-59o3w)<br/>
-Link to an example with [Vue 3](https://codesandbox.io/s/falling-resonance-s96g6)
+### Inline Mode Configuration
 
 ```javascript
-<template>
-  <div class="hello">
-    <div class="timepicker-ui" ref="tm">
-      <input v-model="inputValue" type="text" class="timepicker-ui-input" />
-    </div>
-    {{ inputValue }}
-  </div>
-</template>
+const picker = new TimepickerUI(input, {
+  inline: {
+    enabled: true,
+    containerId: "timepicker-container",
+    showButtons: false, // Hide OK/Cancel buttons
+    autoUpdate: true, // Auto-update input on change
+  },
+});
+```
 
-<script>
+### Disabled Time Configuration
+
+```javascript
+const picker = new TimepickerUI(input, {
+  disabledTime: {
+    hours: [1, 3, 5, 8], // Disable specific hours
+    minutes: [15, 30, 45], // Disable specific minutes
+    interval: "10:00 AM - 2:00 PM", // Disable time range
+  },
+});
+```
+
+---
+
+## 🎨 Themes
+
+> **Note:** As of v3.0, you must import CSS styles manually. See [Upgrade Guide](#upgrade-guide-v2--v3) for details.
+
+Choose from 9 built-in themes:
+
+| Theme            | Description                            |
+| ---------------- | -------------------------------------- |
+| `basic`          | Default Material Design theme          |
+| `crane-straight` | Google Crane theme with straight edges |
+| `crane-radius`   | Google Crane theme with rounded edges  |
+| `m3`             | Material Design 3 (Material You)       |
+| `dark`           | Dark mode theme                        |
+| `glassmorphic`   | Modern glass effect                    |
+| `pastel`         | Soft pastel colors                     |
+| `ai`             | Futuristic AI-inspired theme           |
+| `cyberpunk`      | Neon cyberpunk aesthetic               |
+
+```javascript
+const picker = new TimepickerUI(input, {
+  theme: "cyberpunk",
+});
+```
+
+---
+
+## 📞 Callbacks
+
+Configure callback functions to handle timepicker events:
+
+| Callback         | Type             | Description                                    |
+| ---------------- | ---------------- | ---------------------------------------------- |
+| `onOpen`         | `(data) => void` | Triggered when timepicker opens                |
+| `onCancel`       | `(data) => void` | Triggered when picker is cancelled             |
+| `onConfirm`      | `(data) => void` | Triggered when time is confirmed (OK clicked)  |
+| `onUpdate`       | `(data) => void` | Triggered during clock interaction (real-time) |
+| `onSelectHour`   | `(data) => void` | Triggered when hour mode is activated          |
+| `onSelectMinute` | `(data) => void` | Triggered when minute mode is activated        |
+| `onSelectAM`     | `(data) => void` | Triggered when AM is selected                  |
+| `onSelectPM`     | `(data) => void` | Triggered when PM is selected                  |
+| `onError`        | `(data) => void` | Triggered when invalid time format is detected |
+
+### Callback Data Structure
+
+```typescript
+interface CallbackData {
+  hour?: string;
+  minutes?: string;
+  type?: string; // 'AM' or 'PM'
+  degreesHours?: number;
+  degreesMinutes?: number;
+  error?: string; // Only for onError
+  // ... additional context data
+}
+```
+
+### Example Usage
+
+```javascript
+const picker = new TimepickerUI(input, {
+  onConfirm: (data) => {
+    console.log(`Time selected: ${data.hour}:${data.minutes} ${data.type}`);
+  },
+  onCancel: (data) => {
+    console.log("User cancelled time selection");
+  },
+  onError: (data) => {
+    alert(`Invalid time format: ${data.error}`);
+  },
+});
+```
+
+---
+
+## 🎯 Events
+
+Listen to DOM events dispatched on the input element:
+
+| Event                      | Description                        |
+| -------------------------- | ---------------------------------- |
+| `timepicker:open`          | Fired when timepicker opens        |
+| `timepicker:cancel`        | Fired when user cancels            |
+| `timepicker:confirm`       | Fired when time is confirmed       |
+| `timepicker:update`        | Fired during clock interaction     |
+| `timepicker:select-hour`   | Fired when hour mode is selected   |
+| `timepicker:select-minute` | Fired when minute mode is selected |
+| `timepicker:select-am`     | Fired when AM is selected          |
+| `timepicker:select-pm`     | Fired when PM is selected          |
+| `timepicker:error`         | Fired when input validation fails  |
+
+### Event Usage
+
+```javascript
+const input = document.querySelector("#timepicker");
+const picker = new TimepickerUI(input);
+picker.create();
+
+// Listen to events
+input.addEventListener("timepicker:confirm", (e) => {
+  console.log("Time confirmed:", e.detail);
+  // e.detail contains: { hour, minutes, type, degreesHours, degreesMinutes }
+});
+
+input.addEventListener("timepicker:cancel", (e) => {
+  console.log("Cancelled:", e.detail);
+});
+
+input.addEventListener("timepicker:error", (e) => {
+  console.error("Error:", e.detail.error);
+});
+```
+
+---
+
+## 🛠️ API Methods
+
+### Instance Methods
+
+```javascript
+const picker = new TimepickerUI(input, options);
+
+// Core methods
+picker.create(); // Initialize the timepicker
+picker.open(); // Open the timepicker programmatically
+picker.close(); // Close the timepicker
+picker.destroy(); // Destroy instance and clean up
+
+// Value methods
+picker.getValue(); // Get current time value
+picker.setValue("14:30"); // Set time programmatically
+
+// Configuration methods
+picker.update({ options: newOptions }); // Update configuration
+picker.getElement(); // Get the DOM element
+```
+
+### Static Methods
+
+```javascript
+// Instance management
+TimepickerUI.getById("my-id"); // Get instance by ID
+TimepickerUI.getAllInstances(); // Get all active instances
+TimepickerUI.destroyAll(); // Destroy all instances
+TimepickerUI.isAvailable(element); // Check if element exists
+```
+
+### Method Examples
+
+```javascript
+// Get current value
+const currentTime = picker.getValue();
+console.log(currentTime);
+// Output: { hour: '14', minutes: '30', type: '', time: '14:30', degreesHours: 30, degreesMinutes: 180 }
+
+// Set new time
+picker.setValue("09:15 AM");
+
+// Update configuration
+picker.update({
+  options: { theme: "dark", clockType: "24h" },
+  create: true, // Reinitialize after update
+});
+
+// Instance management
+const picker1 = new TimepickerUI("#picker1", { id: "picker-1" });
+const picker2 = new TimepickerUI("#picker2", { id: "picker-2" });
+
+// Later...
+const foundPicker = TimepickerUI.getById("picker-1");
+```
+
+---
+
+## 🆕 What's New in v3.0
+
+### ✅ New Features
+
+- **Inline Mode**: Always-visible timepicker without modal overlay
+- **Instance Management**: `getById()`, `destroyAll()`, and custom instance IDs
+- **Callback System**: Direct callback functions instead of manual event listeners
+- **New Themes**: Added `dark`, `glassmorphic`, `pastel`, `ai`, `cyberpunk`
+- **Enhanced API**: `getValue()`, `setValue()`, improved `destroy()`
+- **SSR Compatibility**: Better support for server-side rendering
+- **TypeScript Improvements**: Complete type definitions and better IntelliSense
+
+### 🔄 Breaking Changes
+
+- **Event Names**: All events now use `timepicker:` prefix
+- **Destroy Behavior**: `.destroy()` no longer removes input from DOM
+- **Theme Options**: Some theme names have changed
+- **API Changes**: Some method signatures have been updated
+- **Styles are no longer auto-loaded**
+  You must now explicitly import CSS files. Use:
+
+  - `main.css` – core styles with `basic` theme only
+  - `index.css` – all styles including all themes
+  - or import specific themes from `themes/`
+
+---
+
+## 📈 Upgrade Guide: v2 → v3
+
+### 1. Update Event Listeners
+
+**v2 (Old):**
+
+```javascript
+input.addEventListener('show', (e) => { ... });
+input.addEventListener('cancel', (e) => { ... });
+input.addEventListener('accept', (e) => { ... });
+```
+
+**v3 (New):**
+
+```javascript
+input.addEventListener('timepicker:open', (e) => { ... });
+input.addEventListener('timepicker:cancel', (e) => { ... });
+input.addEventListener('timepicker:confirm', (e) => { ... });
+```
+
+### 2. Replace Event Listeners with Callbacks
+
+**v2 (Old):**
+
+```javascript
+const picker = new TimepickerUI(input);
+input.addEventListener("accept", (e) => {
+  console.log("Time selected:", e.detail);
+});
+```
+
+**v3 (New):**
+
+```javascript
+const picker = new TimepickerUI(input, {
+  onConfirm: (data) => {
+    console.log("Time selected:", data);
+  },
+});
+```
+
+### 3. Update Destroy Method Usage
+
+**v2 (Old):**
+
+```javascript
+picker.destroy(); // This removed the input from DOM
+```
+
+**v3 (New):**
+
+```javascript
+picker.destroy(); // Only destroys timepicker, keeps input intact
+// If you need to remove input, do it manually:
+// input.remove();
+```
+
+### 4. Theme Updates
+
+**v2 (Old):**
+
+```javascript
+// Limited theme options
+theme: "basic" | "crane-straight" | "crane-radius" | "m3";
+```
+
+**v3 (New):**
+
+```javascript
+// Extended theme options
+theme: "basic" |
+  "crane-straight" |
+  "crane-radius" |
+  "m3" |
+  "dark" |
+  "glassmorphic" |
+  "pastel" |
+  "ai" |
+  "cyberpunk";
+```
+
+### 5. Add Inline Mode (Optional)
+
+**v3 New Feature:**
+
+```javascript
+const picker = new TimepickerUI(input, {
+  inline: {
+    enabled: true,
+    containerId: "timepicker-container",
+    showButtons: false,
+    autoUpdate: true,
+  },
+});
+```
+
+### 6. Instance Management (Optional)
+
+**v3 New Feature:**
+
+```javascript
+// Create with custom ID
+const picker = new TimepickerUI(input, { id: "my-timepicker" });
+
+// Later, get by ID
+const foundPicker = TimepickerUI.getById("my-timepicker");
+
+// Destroy all instances
+TimepickerUI.destroyAll();
+```
+
+### 7. Import CSS Manually (New Requirement)
+
+**v2 (Old):**
+Styles were bundled and automatically injected.
+
+**v3 (New):**
+You must now import the styles yourself:
+
+#### Option 1 – All-in-one (includes every theme):
+
+```js
+import "timepicker-ui/index.css";
+```
+
+#### Option 2 – Core only (main styles + basic theme):
+
+```js
+import "timepicker-ui/main.css";
+```
+
+#### Option 3 – Use only the theme you need:
+
+```js
+import "timepicker-ui/main.css"; // Required base
+import "timepicker-ui/theme-dark.css"; // Or any other theme
+```
+
+---
+
+## 🌐 Framework Integration
+
+### React
+
+```tsx
+import { useEffect, useRef } from "react";
 import { TimepickerUI } from "timepicker-ui";
 
-export default {
-  name: "HelloWorld",
-  data() {
-    return {
-      inputValue: "10:10 PM",
-    };
-  },
-  mounted() {
-    const test = new TimepickerUI(this.$refs.tm, { enableSwitchIcon: true });
-    test.create();
+function TimePicker({ onChange }) {
+  const inputRef = useRef(null);
+  const pickerRef = useRef(null);
 
-    this.$refs.tm.addEventListener("accept", ({ detail }) => {
-      this.inputValue = `${detail.hour}:${detail.minutes} ${detail.type}`;
-    });
-  },
-};
+  useEffect(() => {
+    if (inputRef.current) {
+      pickerRef.current = new TimepickerUI(inputRef.current, {
+        theme: "dark",
+        onConfirm: (data) => {
+          onChange?.(data);
+        },
+      });
+      pickerRef.current.create();
+    }
+
+    return () => {
+      pickerRef.current?.destroy();
+    };
+  }, [onChange]);
+
+  return <input ref={inputRef} type="text" />;
+}
+```
+
+### Vue 3
+
+```vue
+<template>
+  <input ref="inputRef" type="text" />
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from "vue";
+import { TimepickerUI } from "timepicker-ui";
+
+const inputRef = ref(null);
+let picker = null;
+
+const emit = defineEmits(["time-selected"]);
+
+onMounted(() => {
+  picker = new TimepickerUI(inputRef.value, {
+    theme: "glassmorphic",
+    onConfirm: (data) => {
+      emit("time-selected", data);
+    },
+  });
+  picker.create();
+});
+
+onUnmounted(() => {
+  picker?.destroy();
+});
 </script>
 ```
 
----
+### Angular
 
-#### Table with options
+```typescript
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+} from "@angular/core";
+import { TimepickerUI } from "timepicker-ui";
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Default</th>
-      <th scope="col">Type</th>
-      <th scope="col">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td scope="row">animation</td>
-      <td>true</td>
-      <td>boolean</td>
-      <td>Turn on/off animations on picker on start/close</td>
-    </tr>
-    <tr>
-      <td scope="row">amLabel</td>
-      <td>AM</td>
-      <td>string</td>
-      <td>You can set custom text to am label</td>
-    </tr>
-    <tr>
-      <td scope="row">appendModalSelector</td>
-      <td>''</td>
-      <td>string</td>
-      <td>You can set default selector to append timepicker inside it. Timepicker default append to body</td>
-    </tr>
-    <tr>
-      <td scope="row">backdrop</td>
-      <td>true</td>
-      <td>boolean</td>
-      <td>Turn on/off backdrop</td>
-    </tr>
-    <tr>
-      <td scope="row">cancelLabel</td>
-      <td>CANCEL</td>
-      <td>string</td>
-      <td>You can set custom text to cancel button</td>
-    </tr>
-    <tr>
-      <td scope="row">clockType</td>
-      <td>12h</td>
-      <td>string</td>
-      <td>You can set type of clock, it contains 2 versions: 12h and 24h.</td>
-    </tr> 
-    <tr>
-      <td scope="row">editable</td>
-      <td>false</td>
-      <td>boolean</td>
-      <td>Edit hour/minutes on the web mode.</td>
-    </tr> 
-    <tr>
-      <td scope="row">enableScrollbar</td>
-      <td>false</td>
-      <td>boolean</td>
-      <td>Turn on/off scroll if timepicker is open</td>
-    </tr> 
-   <tr>
-      <td scope="row">enableSwitchIcon</td>
-      <td>false</td>
-      <td>boolean</td>
-      <td>Turn on/off icon to switch desktop/mobile</td>
-    </tr> 
-    <tr>
-      <td scope="row">focusInputAfterCloseModal</td>
-      <td>false</td>
-      <td>boolean</td>
-      <td>Turn on/off focus to input after close modal</td>
-    </tr> 
-    <tr>
-    <td scope="row">focusTrap</td>
-      <td>true</td>
-      <td>boolean</td>
-      <td>Turn off/on focus trap to the picker</td>
-    </tr>
-    <tr>
-      <td scope="row">hourMobileLabel</td>
-      <td>Hour</td>
-      <td>string</td>
-      <td>You can set custom text to hour label on mobile version</td>
-    </tr> 
-    <tr>
-      <td scope="row">incrementHours</td>
-      <td>1</td>
-      <td>nubmer</td>
-      <td>Increment hour by 1, 2, 3 hour</td>
-    </tr>  
-   <tr>
-      <td scope="row">incrementMinutes</td>
-      <td>1</td>
-      <td>nubmer</td>
-      <td>Increment minutes by 1, 5, 10, 15 minutes</td>
-    </tr>   
-   <tr>
-      <td scope="row">minuteMobileLabel</td>
-      <td>Minute</td>
-      <td>string</td>
-      <td>You can set custom text to minute label on mobile version</td>
-    </tr>  
-    <tr>
-      <td scope="row">mobile</td>
-      <td>false</td>
-      <td>boolean</td>
-      <td>Turn on mobile version</td>
-    </tr>  
-    <tr>
-      <td scope="row">mobileTimeLabel</td>
-      <td>Enter Time</td>
-      <td>string</td>
-      <td>You can set custom text to time label on mobile version</td>
-    </tr>  
-   <tr>
-      <td scope="row">okLabel</td>
-      <td>OK</td>
-      <td>string</td>
-      <td>You can set custom text to ok label</td>
-    </tr> 
-    <tr>
-      <td scope="row">pmLabel</td>
-      <td>PM</td>
-      <td>string</td>
-      <td>You can set custom text to pm label</td>
-    </tr>  
-   <tr>
-      <td scope="row">timeLabel</td>
-      <td>Select Time</td>
-      <td>string</td>
-      <td>You can set custom text to time label on desktop version</td>
-    </tr>   
-    <tr>
-      <td scope="row">switchToMinutesAfterSelectHour</td>
-      <td>true</td>
-      <td>boolean</td>
-      <td>Turn on/off switch to minutes by select hour</td>
-    </tr>   
-    <tr>
-      <td scope="row">iconTemplate</td>
-       <td>
-       &lt;i class="material-icons timepicker-ui-keyboard-icon"> keyboard &lt;/i&gt;
-      </td>
-       <td>string</td>
-      <td>You can set default template to switch desktop.This options is using by default material design icon</td>
-    </tr>  
-   <tr>
-      <td scope="row">iconTemplateMobile</td>
-      <td>&lt;i class="material-icons timepicker-ui-keyboard-icon"> schedule  &lt;/i&gt;</td>
-      <td>string</td>
-      <td>You can set default template to switch mobile. This options is using by default material design icon</td>
-    </tr> 
-   <tr>
-    <td scope="row">theme</td>
-      <td>basic</td>
-      <td>string</td>
-      <td>You can set theme to timepicker. Available options: basic, crane-straight, crane-radius and m3. <br>
-      The offical version of Material Design 3 is still not avaialbe for the WEB version. Theme <code>m3</code> has been added based on the design what you can find <a target="_blank" href="https://m3.material.io/components/time-pickers/overview">here</a>. If new version M3 will be released this design will get improve.
-      </td>
-    </tr>  
-    <tr>
-      <td scope="row">disabledTime</td>
-      <td>undefined</td>
-      <td>object</td>
-      <td>This option allows 3 keys: <code>hours</code>, <code>minutes</code> and <code>interval</code>. The hours and minutes are arrays which accept strings and numbers to block select hours/minutes. The interval key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType. If the interval key is set, the hours/minutes keys are ignored.
-  </td>
-    </tr>  
-    <tr>
-      <td scope="row">currentTime</td>
-      <td>undefined</td>
-      <td>boolean | object</td>
-      <td>
-        Set current time to the input and timepicker.<br />
-        If this options is set to <code>true</code> it's gonna update picker with toLocaleTimeString() and
-        input with value based on your location. The clockType option is forced in that case.<br />
-        This option also allows to put object with properties which:<br />
-        <ul>
-          <li>
-            The <code>updateInput</code> key is set to true it's going update input value with the setted time key.
-          </li>
-          <li>The <code>time</code> key allows to put any valid date to update picker with time. It's converting Date to time.<br>
-          If the <code>updateInput</code> is set to <code>false/undefined</code> and the default value from the input not exist, the <code>time</code> key value will be displayed in the picker. <br>
-          If the <code>updateInput</code> is set to <code>false/undefined</code> but the default value from the input exist, the <code>time</code> key will be ignored. <br>
-          </li>
-          <li>The <code>locales</code>key can change language from toLocaleTimeString().</li>
-          <li>
-            The <code>preventClockType</code> key if is set to <code>true</code> it's force the clockType
-            option to set value "12h" or "24h" based on your location with current time and
-            <code>locales</code> key value is ignored in that case.<br />
-            <code>
-              currentTime: { time: new Date(), updateInput: true, locales: "en-US", preventClockType: false };
-            </code>
-          </li>
-        </ul>
-      </td>
-    </tr>
-    <tr>
-      <td scope="row">delayHandler</td>
-      <td>300</td>
-      <td>number</td>
-      <td>Set delay to clickable elements like button "OK", "CANCEL" etc. The value has to be set in milliseconds.</td>
-    </tr> 
-  </tbody>
-</table>
+@Component({
+  selector: "app-timepicker",
+  template: '<input #timepickerInput type="text" />',
+})
+export class TimepickerComponent implements AfterViewInit, OnDestroy {
+  @ViewChild("timepickerInput") inputRef!: ElementRef;
+  private picker!: TimepickerUI;
 
----
+  ngAfterViewInit() {
+    this.picker = new TimepickerUI(this.inputRef.nativeElement, {
+      theme: "ai",
+      onConfirm: (data) => {
+        console.log("Time selected:", data);
+      },
+    });
+    this.picker.create();
+  }
 
-### Methods
-
-Methods are custom function what can be used to manually change the behavior of timepicker.
-
-#### HTML
-
-```HTML
-<div class="timepicker-ui-test">
-  <input type="text" class="timepicker-ui-input" value="12:00 AM">
-</div>
+  ngOnDestroy() {
+    this.picker?.destroy();
+  }
+}
 ```
 
-#### JavaScript
+---
 
-```javascript
-const timepicker = document.querySelector("timepicker-ui-test");
-const init = new TimepickerUI(timepicker);
+## 🔧 Development
 
-timepicker.create();
-```
-
-#### Table with methods
-
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Description</th>
-      <th scope="col">Parameters</th>
-      <th scope="col">Default</th>
-      <th scope="col">Parameters description</th>
-    </tr>
-  </thead>
-  <tbody>
-   <tr>
-      <td scope="row">create</td>
-      <td>The create method init timepicker</td>
-      <td align="center">-</td>
-      <td align="center">-</td>
-      <td align="center">-</td>
-    </tr>
-    <tr>
-      <td scope="row">open</td>
-      <td>The open method opens immediately timepicker after init</td>
-      <td align="center">(function)</td>
-      <td align="center">undefined</td>
-      <td>The callback function is tiggered when timepicker is open by this method.  <br/>  <br/>Example: <br/>
-      tmInstance.open(()=> console.log('triggered after open'));
-      </td>
-    </tr>
-    <tr>
-      <td scope="row">close</td>
-      <td>Closure method closes the timepicker</td>
-      <td align="center">()(boolean, function)</td>
-      <td align="center">undefined</td>
-      <td>The first parentheses doesn't have any paremeters. The second parentheses accepts parameters and these parameters are optional in this method and order is any. You can set callback function first or boolean, or just boolean or just callback. If the boolean is set to true the input will be updating with the current value on picker. The callback function start immediately after close, if is invoke. The max parameters length are set to 2
-       <br/><br/>
-       Examples:  <br/>
-       tmInstance.close()(() => console.log('triggered after close')); <br/>
-       tmInstance.close()(true, () => console.log('triggered after close')); <br/>
-       tmInstance.close()(true);
-      </td>
-    </tr>
-    <tr>
-      <td scope="row">update</td>
-      <td>The update method</td>
-      <td align="center">(object, function)</td>
-      <td align="center">({ options: {}, create: boolean }, callback)</td>
-      <td>The first parameter is a object with key options which is timepicker options and it will be updated to current instance and is `required` The `create` key wchich if is set to true is starting the create() method after invoke update function and is optional. The `create` option is useful if you are using destroy and update methods together. The callback function is triggered after update method is invoke and this parameter is optional.
-      <br/><br/>
-       Examples:  <br/>
-       tmInstance.update({options:{ amLabel:"test" }}, () => console.log('triggered after update')); <br/>
-       tmInstance.update({options:{ amLabel:"test" }, create: true}, () => console.log('triggered after update')); <br/>
-       tmInstance.update({options:{ amLabel:"test" }); <br/>
-      </td>
-    </tr>
-    <tr>
-      <td scope="row">destroy</td>
-      <td>The destroy method destroy actual instance of picker by cloning element.</td>
-      <td align="center">(function)</td>
-      <td align="center">undefined</td>
-      <td>The callback function is started after destroyed method. This parameter is optional.
-       <br/><br/>
-       Example:  <br/>
-       tmInstance.destroy(() => console.log('triggered after destroy')); <br/>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+All development and build tooling is located in the [`app/`](./app) directory.
+Please refer to [`app/README.md`](./app/README.md) for instructions on running the development server, building the library, running tests, and using the full toolchain.
 
 ---
 
-### Events
+## 📄 License
 
-Events are custom events triggered when you add some event listeners to your timepicker element. If you want to have a property timepicker/input values you have to use <code>detail</code> to the event object.
-
-#### HTML
-
-```HTML
-<div class="timepicker-ui-test">
-  <input type="text" class="timepicker-ui-input" value="12:00 AM">
-</div>
-```
-
-#### JavaScript
-
-```javascript
-const timepicker = document.querySelector("timepicker-ui-test");
-const init = new TimepickerUI(timepicker);
-
-timepicker.create();
-
-timepicker.addEventListener("show", (event) => console.log(event.detail));
-```
-
-#### Table with events
-
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td scope="row">show</td>
-      <td>The event starts if timepicker is showing up</td>
-    </tr>
-    <tr>
-      <td scope="row">cancel</td>
-      <td>The event starts if timepicker is closing</td>
-    </tr>
-    <tr>
-      <td scope="row">accept</td>
-      <td>The event starts if timepicker button OK is accepted</td>
-    </tr>
-     <tr>
-      <td scope="row">update</td>
-      <td>The event starts if mouse/touch events are triggered on a clock face (multiple events)</td>
-    </tr> 
-    <tr>
-      <td scope="row">selectminutemode</td>
-      <td>The event starts if timepicker minute box is clicked</td>
-    </tr> 
-   <tr>
-      <td scope="row">selecthourmode</td>
-      <td>The event starts if timepicker hour box is clicked</td>
-    </tr> 
-    <tr>
-      <td scope="row">selectamtypemode</td>
-      <td>The event starts if timepicker am box is clicked</td>
-    </tr> 
-    <tr>
-      <td scope="row">selectpmtypemode</td>
-      <td>The event starts if timepicker pm box is clicked</td>
-    </tr>  
-    <tr>
-      <td scope="row">geterror</td>
-      <td>The event start if value in the input is wrong</td>
-    </tr> 
-  </tbody>
-</table>
+MIT © [Piotr Glejzer](https://github.com/pglejzer)
 
 ---
 
-### Future Plans
+## 🤝 Contributing
 
-- keyboard accesibilty
-- max/min time options
-
-If you have more good ideas please let me know in [issue](https://github.com/pglejzer/timepicker-ui/issues). I will try to add more useful features. This project is still develop, if you find some bugs please report on the [issue](https://github.com/pglejzer/timepicker-ui/issues) page.
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/pglejzer/timepicker-ui/issues).
 
 ---
 
-### License
+## 📊 Browser Support
 
-MIT
+- Chrome 60+
+- Firefox 55+
+- Safari 12+
+- Edge 79+
+- iOS Safari 12+
+- Chrome Android 60+
+
+---
+
+## 🙋‍♂️ Support
+
+- 📖 [Documentation](https://pglejzer.github.io/timepicker-ui-docs/)
+- 🐛 [Report Bug](https://github.com/pglejzer/timepicker-ui/issues)
+- 💡 [Request Feature](https://github.com/pglejzer/timepicker-ui/issues)
+- 💬 [Discussions](https://github.com/pglejzer/timepicker-ui/discussions)

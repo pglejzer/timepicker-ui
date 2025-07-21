@@ -5,12 +5,7 @@ module.exports = {
     es2020: true,
   },
   parser: '@typescript-eslint/parser',
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'airbnb-base',
-    'airbnb-typescript/base',
-  ],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   plugins: ['prettier', '@typescript-eslint', 'tree-shaking'],
   parserOptions: {
     ecmaVersion: 'latest',
@@ -51,4 +46,3 @@ module.exports = {
     'tree-shaking/no-side-effects-in-initialization': 2,
   },
 };
-

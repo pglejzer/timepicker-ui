@@ -1,280 +1,327 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
 import { TimepickerUI } from 'timepicker-ui';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism.css';
-import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
-import 'prismjs/plugins/line-highlight/prism-line-highlight.css';
+import { codeToHtml } from 'shiki';
 
-Prism.highlightAll();
+console.log(
+  `%c
+████████╗██╗███╗   ███╗███████╗██████╗ ██╗ ██████╗███████╗██████╗ 
+╚══██╔══╝██║████╗ ████║██╔════╝██╔══██╗██║██╔════╝██╔════╝██╔══██╗
+   ██║   ██║██╔████╔██║█████╗  ██████╔╝██║██║     █████╗  ██████╔╝
+   ██║   ██║██║╚██╔╝██║██╔══╝  ██╔═══╝ ██║██║     ██╔══╝  ██╔══██╗
+   ██║   ██║██║ ╚═╝ ██║███████╗██║     ██║╚██████╗███████╗██║  ██║
+   ╚═╝   ╚═╝╚═╝     ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝╚══════╝╚═╝  ╚═╝
+                    T I M E P I C K E R - U I                  
 
-// let basic = document.querySelector('.basic') as HTMLDivElement;
-
-// const basicPicker = new TimepickerUI(basic, {
-//   disabledTime: {
-//     minutes: {
-//       value: ['12', 5, '10', '3', '13', 44, '55', 33],
-//     },
-//     hours: {
-//       value: [1, 9, '3', 4, 5, '12'],
-//     },
-//     interval: '6:00 AM - 10:00 PM',
-//   },
-// });
-
-// basicPicker.create();
-
-const currentDate = new Date();
-currentDate.setMinutes(0);
-
-const test = document.querySelector('.test') as HTMLDivElement;
-const testPicker = new TimepickerUI(test, {
-  currentTime: {
-    time: currentDate,
-    preventClockType: true,
-  },
-  focusTrap: true,
-});
-
-// const inputElement = test.querySelector('input') as HTMLInputElement;
-
-// inputElement.value = new Date().toLocaleTimeString('en-us', { timeStyle: 'short' });
-
-testPicker.create();
-
-const test1 = document.querySelector('.test1') as HTMLDivElement;
-
-// good
-const testPicker1 = new TimepickerUI(test1, {
-  currentTime: {
-    time: new Date(),
-    updateInput: true,
-  },
-});
-testPicker1.create();
-
-const test2 = document.querySelector('.test2') as HTMLDivElement;
-
-// good
-const testPicker2 = new TimepickerUI(test2, {
-  currentTime: true,
-});
-testPicker2.create();
-
-const test3 = document.querySelector('.test3') as HTMLDivElement;
-// goood
-const testPicker3 = new TimepickerUI(test3, {
-  enableScrollbar: true,
-  clockType: '24h',
-  disabledTime: {
-    minutes: [1, 2, 4, 55, '25'],
-  },
-});
-testPicker3.create();
-
-const test4 = document.querySelector('.test4') as HTMLDivElement;
-// goood
-const testPicker4 = new TimepickerUI(test4, {
-  enableScrollbar: true,
-  clockType: '24h',
-  disabledTime: {
-    interval: '5:30 - 21:30',
-  },
-});
-testPicker4.create();
-
-const test20 = document.querySelector('.test20') as HTMLDivElement;
-// good
-const testPicker20 = new TimepickerUI(test20, {
-  disabledTime: {
-    interval: '5:30 AM - 10:30 AM',
-  },
-});
-testPicker20.create();
-
-const test21 = document.querySelector('.test21') as HTMLDivElement;
-
-// good
-const testPicker21 = new TimepickerUI(test21, {
-  disabledTime: {
-    interval: '5:30 PM - 10:30 PM',
-  },
-});
-testPicker21.create();
-
-const test22 = document.querySelector('.test22') as HTMLDivElement;
-
-// good
-
-const testPicker22 = new TimepickerUI(test22, {
-  disabledTime: {
-    interval: '4:00 PM - 11:00 PM',
-  },
-});
-testPicker22.create();
-
-/// ///////////////////////////////////
-
-const test23 = document.querySelector('.test23') as HTMLDivElement;
-// good
-const testPicker23 = new TimepickerUI(test23, {
-  enableScrollbar: true,
-
-  disabledTime: {
-    interval: '4:00 AM - 5:00 PM',
-  },
-});
-testPicker23.create();
-
-const test24 = document.querySelector('.test24') as HTMLDivElement;
-
-const testPicker24 = new TimepickerUI(test24, {
-  enableScrollbar: true,
-
-  disabledTime: {
-    interval: '4:30 AM - 5:30 PM',
-  },
-});
-testPicker24.create();
-
-const test25 = document.querySelector('.test25') as HTMLDivElement;
-
-const testPicker25 = new TimepickerUI(test25, {
-  enableScrollbar: true,
-
-  disabledTime: {
-    interval: '4:00 AM - 5:50 PM',
-  },
-});
-testPicker25.create();
-
-const test26 = document.querySelector('.test26') as HTMLDivElement;
-
-const testPicker26 = new TimepickerUI(test26, {
-  enableScrollbar: true,
-
-  disabledTime: {
-    interval: '4:25 AM - 4:55 PM',
-  },
-});
-testPicker26.create();
-
-const test27 = document.querySelector('.test27') as HTMLDivElement;
-
-const testPicker27 = new TimepickerUI(test27, {
-  enableScrollbar: true,
-
-  disabledTime: {
-    interval: '4:25 AM - 4:00 PM',
-  },
-});
-testPicker27.create();
-
-// const arr: OptionTypes[] = [
-//   { mobile: true, backdrop: true, amLabel: 'Test' },
-//   { mobile: false, amLabel: 'Not Test', pmLabel: 'test' },
-//   { mobile: false, backdrop: false, pmLabel: 'OMG' },
-// ];
-
-// document.querySelector('#test-button')?.addEventListener('click', () => {
-//   basicPicker.destroy(() => {
-//     console.log('destroyed');
-//   });
-
-//   const randomIndex = Math.floor(Math.random() * arr.length);
-
-//   basicPicker.update({
-//     options: arr[randomIndex],
-//     create: true,
-//   });
-
-//   basicPicker.close(true, () => {
-//     console.log('lo');
-//   });
-// });
-
-const mobiles = document.querySelector('.mobile') as HTMLDivElement;
-
-const mobilePicker = new TimepickerUI(mobiles, {
-  mobile: true,
-  enableSwitchIcon: true,
-});
-
-mobilePicker.create();
-
-const keyboardIcon = document.querySelector('.keyboard-icon-add') as HTMLDivElement;
-const keyboardIconInit = new TimepickerUI(keyboardIcon, {
-  enableSwitchIcon: true,
-  focusTrap: true,
-});
-
-keyboardIconInit.create();
-
-const themeCrane = document.querySelector('.theme-crane-straight') as HTMLDivElement;
-const themeCraneInit = new TimepickerUI(themeCrane, {
-  enableSwitchIcon: true,
-  theme: 'crane-straight',
-  focusTrap: true,
-});
-themeCraneInit.create();
-
-const themeCraneRadius = document.querySelector('.theme-crane-radius') as HTMLDivElement;
-const themeCraneRadiusInit = new TimepickerUI(themeCraneRadius, {
-  enableSwitchIcon: true,
-  theme: 'crane-radius',
-  focusTrap: true,
-});
-themeCraneRadiusInit.create();
-
-const acceptEvent = document.querySelector('.accept-event') as HTMLDivElement;
-const acceptEventInit = new TimepickerUI(acceptEvent, {
-  enableSwitchIcon: true,
-});
-acceptEventInit.create();
-
-const acceptValue = document.querySelector('#accept-value') as HTMLDivElement;
-
-acceptEvent.addEventListener(
-  'accept',
-  // @ts-ignore
-  ({ detail: { hour, minutes, type } }) => (acceptValue.innerHTML = `${hour}:${minutes} ${type}`),
+✨ Because native <input type="time"> is illegal.
+🤫 Shh... it just wraps <input>. But damn it looks good.
+👉 github.com/pglejzer/timepicker-ui
+`,
+  'color: #00BCD4; font-weight: bold; font-family: monospace; font-size: 11px;',
 );
 
-const errorValueDiv = document.querySelector('#error-value') as HTMLDivElement;
+const codeBlocks = document.querySelectorAll<HTMLElement>('pre');
 
-const openByButton = document.querySelector('.open-by-button') as HTMLDivElement;
+codeBlocks.forEach(async (block) => {
+  const lang = block.dataset.lang || 'js';
+  const rawCode = block.innerText.trim();
 
-const openByButtonInit = new TimepickerUI(openByButton, {
-  clockType: '12h',
-  editable: true,
-  focusInputAfterCloseModal: true,
+  const html = await codeToHtml(rawCode, {
+    lang,
+    theme: 'github-dark',
+  });
+
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = html;
+  const highlightedBlock = wrapper.firstElementChild!;
+
+  highlightedBlock.classList.add(
+    'w-full',
+    'overflow-x-auto',
+    'overflow-y-hidden',
+    'px-4',
+    'py-3',
+    'rounded-md',
+    'bg-[#0d1117]',
+  );
+
+  const copyBtn = document.createElement('button');
+  copyBtn.innerText = 'Copy';
+  copyBtn.className =
+    'absolute top-2 right-2 text-xs px-2 py-1 bg-gray-800 text-white rounded hover:bg-gray-700 transition';
+  copyBtn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(rawCode);
+    copyBtn.innerText = 'Copied!';
+    setTimeout(() => (copyBtn.innerText = 'Copy'), 1500);
+  });
+
+  const wrapperDiv = document.createElement('div');
+  wrapperDiv.className = 'relative mb-6';
+  wrapperDiv.appendChild(copyBtn);
+  wrapperDiv.appendChild(highlightedBlock);
+
+  block.replaceWith(wrapperDiv);
 });
 
-openByButtonInit.create();
+const basicTimePicker = new TimepickerUI('#basic-picker');
+basicTimePicker.create();
 
-openByButton.addEventListener('geterror', (e) => {
-  console.log(e);
-
-  // @ts-ignore
-  errorValueDiv.innerHTML = `Error: ${e.detail.error}`;
+const format24hPicker = new TimepickerUI('#format-24h-picker', {
+  clockType: '24h',
+  enableSwitchIcon: true,
 });
+format24hPicker.create();
 
-openByButton.addEventListener('update', (e) => {
-  console.log(e);
-});
-
-const mobiles24 = document.querySelector('.mobile-24') as HTMLDivElement;
-
-const mobilePicker24 = new TimepickerUI(mobiles24, {
+const mobilePicker = new TimepickerUI('#mobile-picker', {
   mobile: true,
   clockType: '24h',
+  enableSwitchIcon: true,
+});
+mobilePicker.create();
+
+const themeBasicPicker = new TimepickerUI('#theme-basic', {
+  theme: 'basic',
+});
+themeBasicPicker.create();
+
+const themeCraneStraightPicker = new TimepickerUI('#theme-crane-straight', {
+  theme: 'crane-straight',
+});
+themeCraneStraightPicker.create();
+
+const themeCraneRadiusPicker = new TimepickerUI('#theme-crane-radius', {
+  theme: 'crane-radius',
+});
+themeCraneRadiusPicker.create();
+
+const themeM3Picker = new TimepickerUI('#theme-m3', {
+  theme: 'm3',
+});
+themeM3Picker.create();
+
+const themeDarkPicker = new TimepickerUI('#theme-dark', {
+  theme: 'dark',
+});
+themeDarkPicker.create();
+
+const themeGlassmorphicPicker = new TimepickerUI('#theme-glassmorphic', {
+  theme: 'glassmorphic',
+});
+themeGlassmorphicPicker.create();
+
+const themePastelPicker = new TimepickerUI('#theme-pastel', {
+  theme: 'pastel',
+});
+themePastelPicker.create();
+
+const themeAIPicker = new TimepickerUI('#theme-ai', {
+  theme: 'ai',
+});
+themeAIPicker.create();
+
+const themeCyberpunkPicker = new TimepickerUI('#theme-cyberpunk', {
+  theme: 'cyberpunk',
+});
+themeCyberpunkPicker.create();
+
+const disabledHoursPicker = new TimepickerUI('#disabled-hours', {
+  disabledTime: { hours: [1, 2, 3, 22, 23] },
+  clockType: '24h',
+});
+disabledHoursPicker.create();
+
+const disabledMinutesPicker = new TimepickerUI('#disabled-minutes', {
+  disabledTime: { minutes: [15, 30, 45] },
+  clockType: '12h',
+});
+disabledMinutesPicker.create();
+
+const disabledIntervalPicker = new TimepickerUI('#disabled-interval', {
+  disabledTime: { interval: '12:00 - 18:00' },
+  clockType: '24h',
+});
+disabledIntervalPicker.create();
+
+const editablePicker = new TimepickerUI('#editable-picker', {
   editable: true,
+  focusInputAfterCloseModal: true,
+  enableSwitchIcon: true,
+});
+editablePicker.create();
+
+const inlinePicker = new TimepickerUI('#inline-picker', {
+  inline: {
+    enabled: true,
+    containerId: 'inline-container',
+    showButtons: false,
+    autoUpdate: true,
+  },
+  clockType: '24h',
+});
+inlinePicker.create();
+
+const eventPicker = new TimepickerUI('#event-picker');
+eventPicker.create();
+const eventPickerElement = eventPicker.getElement();
+
+const eventLog = document.querySelector('#event-log');
+
+if (eventPickerElement && eventLog) {
+  eventPickerElement.addEventListener('accept', (e: any) => {
+    console.log(e);
+    const timestamp = new Date().toLocaleTimeString();
+    eventLog.innerHTML += `<p class="text-green-600 dark:text-green-400 text-sm">[${timestamp}] Accept: ${e.detail.hour}:${e.detail.minutes} ${e.detail.type || ''}</p>`;
+    eventLog.scrollTop = eventLog.scrollHeight;
+  });
+
+  eventPickerElement.addEventListener('cancel', (e: any) => {
+    console.log(e);
+
+    const timestamp = new Date().toLocaleTimeString();
+    eventLog.innerHTML += `<p class="text-red-600 dark:text-red-400 text-sm">[${timestamp}] Cancel event fired</p>`;
+    eventLog.scrollTop = eventLog.scrollHeight;
+  });
+
+  eventPickerElement.addEventListener('show', (e: any) => {
+    const timestamp = new Date().toLocaleTimeString();
+    console.log(e);
+
+    eventLog.innerHTML += `<p class="text-blue-600 dark:text-blue-400 text-sm">[${timestamp}] Picker opened</p>`;
+    eventLog.scrollTop = eventLog.scrollHeight;
+  });
+}
+const customLabelsPicker = new TimepickerUI('#custom-labels-picker', {
+  timeLabel: 'Select Time',
+  okLabel: 'It is ok',
+  cancelLabel: 'Nope',
+  amLabel: 'AM',
+  pmLabel: 'PM',
+  mobileTimeLabel: 'Enter Time',
+  hourMobileLabel: 'Hour',
+  minuteMobileLabel: 'Minute',
+});
+customLabelsPicker.create();
+
+const multiPicker1 = new TimepickerUI('#multi-picker-1', {
+  clockType: '24h',
+  theme: 'basic',
+});
+multiPicker1.create();
+
+const multiPicker2 = new TimepickerUI('#multi-picker-2', {
+  clockType: '12h',
+  theme: 'm3',
+});
+multiPicker2.create();
+
+const multiPicker3 = new TimepickerUI('#multi-picker-3', {
+  clockType: '24h',
+  theme: 'crane-radius',
+});
+multiPicker3.create();
+
+const advancedPicker = new TimepickerUI('#advanced-picker', {
+  clockType: '12h',
+  theme: 'm3',
+  enableSwitchIcon: true,
+  focusTrap: true,
+  editable: true,
+  focusInputAfterCloseModal: true,
+  delayHandler: 500,
+  incrementHours: 1,
+  incrementMinutes: 15,
+  currentTime: {
+    time: new Date(),
+    updateInput: false,
+    preventClockType: true,
+  },
+  disabledTime: {
+    interval: '22:00 - 06:00',
+  },
+  cssClass: 'my-custom-picker',
+});
+advancedPicker.create();
+
+const newEventsAndCallbacksPicker = new TimepickerUI('#new-events-and-callbacks-picker', {
+  onOpen: (data) => {
+    console.log('Picker opened v3!', data);
+  },
+  onCancel: (data) => {
+    console.log('Picker cancelled v3!', data);
+  },
+  onConfirm: (data) => {
+    console.log('Time confirmed v3!', data);
+  },
+  onUpdate: (data) => {
+    console.log('Time updated v3!', data);
+  },
+  onSelectHour: (data) => {
+    console.log('Hour mode selected v3!', data);
+  },
+  onSelectMinute: (data) => {
+    console.log('Minute mode selected v3!', data);
+  },
+  onSelectAM: (data) => {
+    console.log('AM selected v3!', data);
+  },
+  onSelectPM: (data) => {
+    console.log('PM selected v3!', data);
+  },
+  onError: (data) => {
+    console.log('Error occurred v3!', data.error);
+  },
+});
+newEventsAndCallbacksPicker.create();
+
+const pickerElement = newEventsAndCallbacksPicker.getElement();
+
+if (pickerElement) {
+  pickerElement.addEventListener('timepicker:open', (data) => {
+    console.log({ data });
+    console.log('Picker opened with addEvent v3!', data);
+  });
+  pickerElement.addEventListener('timepicker:cancel', (data) => {
+    console.log('Picker cancelled with addEvent v3!', data);
+  });
+  pickerElement.addEventListener('timepicker:confirm', (data) => {
+    console.log('Time confirmed with addEvent v3!', data);
+  });
+  pickerElement.addEventListener('timepicker:update', (data) => {
+    console.log('Time updated with addEvent v3!', data);
+  });
+  pickerElement.addEventListener('timepicker:select-hour', (data) => {
+    console.log('Hour mode selected with addEvent v3!', data);
+  });
+  pickerElement.addEventListener('timepicker:select-minute', (data) => {
+    console.log('Minute mode selected with addEvent v3!', data);
+  });
+}
+
+const version3Example = new TimepickerUI('#version3-example', {
+  theme: 'm3',
+  clockType: '24h',
+  focusTrap: false,
+  delayHandler: 200,
+  onOpen: (data) => {
+    console.log('Version 3.0 picker opened!', data);
+  },
 });
 
-mobilePicker24.create();
+const elementExists = document.querySelector('#version3-example');
+if (elementExists) {
+  version3Example.create();
+}
 
-const errorPicker = document.querySelector('.error') as HTMLDivElement;
+const destroyExample = new TimepickerUI('#destroy-example', {
+  theme: 'm3',
+  clockType: '24h',
+  focusTrap: false,
+  delayHandler: 200,
+});
+destroyExample.create();
 
-const errorPickerInit = new TimepickerUI(errorPicker, { clockType: '12h', theme: 'm3', mobile: false });
+const button = document.querySelector('#destroy-button');
 
-errorPickerInit.create();
+if (button) {
+  button.addEventListener('click', () => {
+    destroyExample.destroy();
+  });
+}

@@ -1,0 +1,82 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  &-wrapper.pastel {
+    background-color: #fdf6f0;
+    border-radius: 1.25rem;
+    color: #3b3b3b;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  }
+
+  &-select-time.pastel {
+    color: #a58f86;
+  }
+
+  &-clock-face.pastel {
+    background-color: #fff5ee;
+    border: 1px solid #f0e1db;
+  }
+
+  &-dot.pastel,
+  &-clock-hand.pastel,
+  &-circle-hand.pastel {
+    background-color: #ffb6b9 !important;
+  }
+
+  &-hour.pastel,
+  &-minutes.pastel {
+    background-color: #fae3d9;
+    border-radius: 1rem;
+    color: #3b3b3b;
+
+    &:hover,
+    &.active {
+      background-color: #ffb6b9;
+      color: white;
+    }
+  }
+
+  &-wrapper-type-time.pastel,
+  &-dots.pastel {
+    color: #a58f86;
+  }
+
+  &-am.pastel,
+  &-pm.pastel {
+    border: 1px solid #efdcd2;
+    background-color: #fef0e8;
+    color: #3b3b3b;
+
+    &:hover,
+    &.active {
+      background-color: #ffb6b9;
+      color: white;
+    }
+  }
+
+  &-cancel-btn.pastel,
+  &-ok-btn.pastel {
+    color: #3b3b3b;
+    background-color: #fef0e8;
+    border-radius: 0.75rem;
+
+    &:hover {
+      background-color: #ffb6b9;
+      color: white;
+    }
+  }
+
+  &-keyboard-icon-wrapper.pastel {
+    color: #a58f86;
+
+    &:hover .timepicker-ui-keyboard-icon.pastel {
+      background-color: #ffb6b9;
+      color: white;
+    }
+  }
+
+  &-value-tips.pastel {
+    color: #3b3b3b;
+  }
+}
+

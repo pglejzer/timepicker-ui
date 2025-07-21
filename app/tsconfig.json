@@ -3,11 +3,12 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "declaration": true,
+    "declarationDir": "./dist/types",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "ESNext", "dom.iterable"],
-    "module": "commonjs",
+    "module": "ESNext",
     "moduleResolution": "node",
     "noErrorTruncation": true,
     "noImplicitAny": true,
@@ -26,9 +27,9 @@
   "exclude": [
     "./dist",
     "node_modules",
-    "./src/timepicker/styles",
+    "src/styles",
     "./webpack.config.js",
-    "./rollup.config.js",
+    "rollup.config.cjs",
     "./.eslintignore",
     "./typings"
   ]

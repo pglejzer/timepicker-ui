@@ -1,0 +1,83 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  &-wrapper.dark {
+    background-color: $dark-bg;
+    color: $dark-text;
+  }
+
+  &-hour.dark,
+  &-minutes.dark {
+    background-color: $dark-surface;
+    color: $dark-text;
+
+    &:hover {
+      background-color: $dark-surface-hover;
+      color: $white;
+    }
+  }
+
+  &-clock-face.dark {
+    background-color: $dark-surface;
+  }
+
+  &-dots.dark,
+  &-dots.mobile.dark {
+    span {
+      background-color: $white;
+    }
+  }
+
+  &-clock-hand.dark,
+  &-dot.dark,
+  &-circle-hand.dark {
+    background-color: $dark-primary !important;
+  }
+
+  &-hour.active.dark,
+  &-minutes.active.dark {
+    background-color: $dark-primary;
+    color: $dark-on-primary;
+  }
+
+  &-cancel-btn.dark,
+  &-ok-btn.dark {
+    color: $dark-primary;
+  }
+
+  &-cancel-btn:hover.dark,
+  &-ok-btn:hover.dark {
+    background-color: $dark-surface-hover;
+  }
+
+  &-wrapper-type-time.dark {
+    color: $dark-secondary-text;
+  }
+
+  &-am.dark,
+  &-pm.dark {
+    border-color: $dark-primary;
+    background-color: $dark-surface;
+    color: $dark-text;
+
+    &:hover,
+    &.active {
+      background-color: $dark-primary;
+      color: $dark-on-primary;
+    }
+  }
+
+  &-keyboard-icon-wrapper.dark {
+    color: $dark-text;
+
+    &:hover .timepicker-ui-keyboard-icon.dark {
+      background-color: $dark-primary;
+      color: $dark-on-primary;
+    }
+  }
+
+  &-value-tips.dark {
+    color: $white;
+  }
+}
+

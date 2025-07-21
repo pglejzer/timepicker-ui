@@ -7,6 +7,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.0.0] - 2025-07-25
+
+### Added
+
+- **New `OptionTypes`**:
+
+  - `inline` mode (`inline.enabled`, `containerId`, `showButtons`, `autoUpdate`)
+  - `cssClass` – allows adding custom class to wrapper
+  - New themes: `ai`, `cyberpunk`, `glassmorphic`, `pastel`, `dark`, `m3`
+
+- **New Callback API**:
+
+  - `onConfirm`, `onCancel`, `onOpen`, `onUpdate`, `onSelectHour`, `onSelectMinute`, `onSelectAM`, `onSelectPM`, `onError`
+
+- **New DOM events** (replacing old ones):
+
+  - `timepicker:open`, `timepicker:confirm`, `timepicker:cancel`, `timepicker:update`, `timepicker:error`, `timepicker:select-hour`, etc.
+
+- **TypeScript types**: Full typings via `OptionTypes`, `TimepickerUI`, event payloads
+- **Public API methods**: `.create()`, `.open()`, `.close()`, `.update()`, `.destroy()`, `.getValue()`, `.setValue()`
+
+### Changed
+
+- **Event system rewritten** – legacy DOM events (e.g. `confirm`, `cancel`) have been replaced with namespaced events (`timepicker:*`)
+- **Cleaner destroy()** – no more DOM cloning or breaking React/Vue refs
+- **Improved mobile/desktop switch UX**
+- **New modular class structure** under the hood
+
+### Fixed
+
+- `destroy()` no longer removes original input element (breaking change fix)
+- Fixed incorrect disabled hour rendering in some edge cases
+- Fixed scrollbar issues with backdrop
+- Improved focus trap logic
+
+### Removed
+
+- Old unnamed DOM events (`confirm`, `cancel`, `update`, etc.)
+- Implicit theme logic – now explicit via `theme` option
+- Legacy error handler structures
+
+---
+
 ## [2.6.1] - 2022-11-17
 
 ### Add

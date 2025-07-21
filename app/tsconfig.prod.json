@@ -3,7 +3,10 @@
   "compilerOptions": {
     "outDir": "../dist/types",
     "module": "ESNext",
-    "declaration": true
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "stripInternal": true,
+    "noEmit": false
   },
   "exclude": ["dist", "node_modules", "__tests__", "docs"]
 }
