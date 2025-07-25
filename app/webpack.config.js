@@ -1,55 +1,73 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-module.exports = {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default {
   mode: 'development',
-  entry: './docs/index.ts',
+  entry: {
+    main: './docs/index.ts',
+    styles: './src/styles/index.scss',
+  },
   output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
     publicPath: '/',
   },
+  devtool: 'source-map',
   resolve: {
     alias: {
-      'timepicker-ui': path.resolve('./src/index.ts'),
+      'timepicker-ui': path.resolve(__dirname, './src/index.ts'),
     },
-    extensions: ['.tsx', '.ts', '.js', '.d.ts'],
+    extensions: ['.tsx', '.ts', '.js'],
   },
   devServer: {
+    static: false,
+    port: 8005,
     open: true,
     compress: true,
-    port: 8005,
     hot: true,
-    static: './docs',
+    watchFiles: ['./docs/**/*.{html,js,ts,css}', './src/**/*.{ts,js,tsx,css,scss}'],
+
+    devMiddleware: {
+      writeToDisk: true,
+    },
   },
   module: {
     rules: [
       {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.s[ac]ss$/i,
-        exclude: /\.module\.scss$/,
+        test: /\.module\.s[ac]ss$/i,
         use: [
-          { loader: 'style-loader' },
-          { loader: 'css-modules-typescript-loader' },
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1,
-              modules: {
-                compileType: 'icss',
-              },
+              modules: true,
             },
           },
-          { loader: 'sass-loader' },
+          'sass-loader',
         ],
       },
       {
-        test: /\.js$/,
+        test: /\.s[ac]ss$/i,
+        exclude: /\.module\.s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+      },
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+      },
+      {
+        test: /\.(js|mjs)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
+            cacheDirectory: true,
             presets: ['@babel/preset-env'],
             plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime'],
           },
@@ -57,15 +75,27 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
-        loader: 'ts-loader',
         exclude: /node_modules/,
+        use: 'ts-loader',
+      },
+      {
+        test: /\.(svg|png|jpg|gif|woff2?|eot|ttf|otf)$/,
+        type: 'asset',
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './docs/index.html',
-      filename: 'index.html',
+      inject: 'body', // Wstrzykuje JS na końcu body
+      minify: false,
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
     }),
   ],
+  performance: {
+    hints: false,
+  },
+  stats: 'minimal',
 };

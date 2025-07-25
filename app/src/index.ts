@@ -1,4 +1,4 @@
 import TimepickerUI from './timepicker';
-import { OptionTypes } from './timepicker/utils/types';
+import type { OptionTypes } from './types/types';
 
 export { TimepickerUI, OptionTypes };
