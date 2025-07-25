@@ -1,12 +1,17 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../dist/types",
+    "target": "ESNext",
     "module": "ESNext",
     "declaration": true,
     "emitDeclarationOnly": true,
-    "stripInternal": true,
-    "noEmit": false
+    "declarationDir": "./dist/types",
+    "outDir": "./dist/types",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
+  "include": ["src"],
   "exclude": ["dist", "node_modules", "__tests__", "docs"]
 }
