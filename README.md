@@ -31,6 +31,17 @@ Curious how it works in practice?
 - 🌐 **SSR Compatible** — Works with Next.js, Nuxt, and other SSR frameworks
 - 📦 **Lightweight** — Minimal footprint with tree-shaking support
 
+## 🧭 Roadmap & Known Limitations
+
+This project is actively maintained and evolving. Some areas are planned for future improvements:
+
+- ❌ No formal tests (unit/integration) — **planned for future releases**
+- ❌ Some files are too large — **will be split/refactored**
+- ❌ A few `any` types in the codebase — **will be replaced with strict typings**
+- ❌ No performance monitoring — **planned metrics/logging in dev mode**
+
+If you're interested in contributing to any of these areas, feel free to [open an issue or pull request](https://github.com/pglejzer/timepicker-ui/issues)!
+
 ---
 
 ## 🚀 Installation
