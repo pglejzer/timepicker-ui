@@ -15,7 +15,7 @@ A modern, lightweight, and fully customizable time picker library built with Typ
 ## 📦 Live Demo
 
 Curious how it works in practice?  
-👉 [Click here to see live examples](https://pglejzer.github.io/timepicker-ui/)
+👉 [Click here to see live examples](https://timepicker-ui.vercel.app/)
 
 ---
 
