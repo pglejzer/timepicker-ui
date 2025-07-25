@@ -18,9 +18,7 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts",
-      "style": "./dist/css/index.css"
+      "require": "./dist/index.js"
     },
     "./main.css": "./dist/css/main.css",
     "./index.css": "./dist/css/index.css",
