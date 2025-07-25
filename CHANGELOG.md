@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.0.1] - 2025-07-25
+
+### Fixed
+
+- Fixed all incorrect paths to CSS, JS, and TypeScript declaration files across all environments (Angular, React, Vanilla, etc.)
+- Improved Angular integration example for clarity
+
+---
+
 ## [3.0.0] - 2025-07-25
 
 ### Added

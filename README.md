@@ -54,6 +54,22 @@ yarn add timepicker-ui
 
 ---
 
+## 📐 Global CSS Required
+
+For correct styling, make sure your app includes this global CSS rule:
+
+```css
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+```
+
+This is a common default in most projects and is required by `timepicker-ui` to avoid layout issues.
+
+---
+
 ## 📖 Quick Start
 
 ### Basic Usage
@@ -519,98 +535,118 @@ import "timepicker-ui/theme-dark.css"; // Or any other theme
 ```tsx
 import { useEffect, useRef } from "react";
 import { TimepickerUI } from "timepicker-ui";
+import "timepicker-ui/main.css";
+import "timepicker-ui/theme-cyberpunk.css";
 
-function TimePicker({ onChange }) {
-  const inputRef = useRef(null);
-  const pickerRef = useRef(null);
+function App() {
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (inputRef.current) {
-      pickerRef.current = new TimepickerUI(inputRef.current, {
-        theme: "dark",
-        onConfirm: (data) => {
-          onChange?.(data);
-        },
-      });
-      pickerRef.current.create();
-    }
-
+    if (!inputRef.current) return;
+    const picker = new TimepickerUI(inputRef.current, {
+      theme: "cyberpunk",
+    });
+    picker.create();
     return () => {
-      pickerRef.current?.destroy();
+      picker.destroy();
     };
-  }, [onChange]);
+  }, []);
 
-  return <input ref={inputRef} type="text" />;
+  return (
+    <div style={{ padding: "2rem" }}>
+      <h1>Timepicker UI React Demo</h1>
+      <input ref={inputRef} placeholder="Click me..." />
+    </div>
+  );
 }
+
+export default App;
 ```
+
+> ℹ️ **Note:** Don't forget to include global `box-sizing` rule in your `styles.css` (see [Global CSS Required](#global-css-required)).
 
 ### Vue 3
 
 ```vue
 <template>
-  <input ref="inputRef" type="text" />
+  <div style="padding: 2rem">
+    <h1>Timepicker UI – Vue Demo</h1>
+    <input ref="pickerInput" placeholder="Pick a time..." />
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { onMounted, ref } from "vue";
 import { TimepickerUI } from "timepicker-ui";
+import "timepicker-ui/main.css";
+import "timepicker-ui/theme-glassmorphic.css";
 
-const inputRef = ref(null);
-let picker = null;
-
-const emit = defineEmits(["time-selected"]);
+const pickerInput = ref(null);
 
 onMounted(() => {
-  picker = new TimepickerUI(inputRef.value, {
+  if (!pickerInput.value) return;
+
+  const picker = new TimepickerUI(pickerInput.value, {
     theme: "glassmorphic",
-    onConfirm: (data) => {
-      emit("time-selected", data);
-    },
   });
   picker.create();
-});
-
-onUnmounted(() => {
-  picker?.destroy();
 });
 </script>
 ```
 
-### Angular
+> ℹ️ **Note:** Don't forget to include global `box-sizing` rule in your `styles.css` (see [Global CSS Required](#global-css-required)).
 
-```typescript
+## Angular
+
+### `app.ts`
+
+```ts
 import {
   Component,
   ElementRef,
-  ViewChild,
   AfterViewInit,
-  OnDestroy,
+  ViewChild,
+  signal,
 } from "@angular/core";
 import { TimepickerUI } from "timepicker-ui";
 
 @Component({
-  selector: "app-timepicker",
-  template: '<input #timepickerInput type="text" />',
+  selector: "app-root",
+  standalone: true,
+  templateUrl: "./app.html",
+  styleUrl: "./app.css",
 })
-export class TimepickerComponent implements AfterViewInit, OnDestroy {
-  @ViewChild("timepickerInput") inputRef!: ElementRef;
-  private picker!: TimepickerUI;
+export class App implements AfterViewInit {
+  protected readonly title = signal("timepicker-ui-demo");
 
-  ngAfterViewInit() {
-    this.picker = new TimepickerUI(this.inputRef.nativeElement, {
-      theme: "ai",
-      onConfirm: (data) => {
-        console.log("Time selected:", data);
-      },
+  @ViewChild("timepickerInput", { static: true })
+  inputRef!: ElementRef<HTMLInputElement>;
+
+  ngAfterViewInit(): void {
+    const picker = new TimepickerUI(this.inputRef.nativeElement, {
+      theme: "glassmorphic",
     });
-    this.picker.create();
-  }
-
-  ngOnDestroy() {
-    this.picker?.destroy();
+    picker.create();
   }
 }
 ```
+
+### `app.html`
+
+```html
+<input #timepickerInput placeholder="Select time..." />
+```
+
+### `angular.json` – styles section
+
+```json
+"styles": [
+  "src/styles.css",
+  "timepicker-ui/main.css"
+]
+```
+
+> ℹ️ **Note:** Don't forget to include global `box-sizing` rule in your `styles.css` (see [Global CSS Required](#global-css-required)).
 
 ---
 
