@@ -11,3 +11,4 @@ timepicker-ui-*
 .vscode
 tsconfig*
 lib*
+docs-app

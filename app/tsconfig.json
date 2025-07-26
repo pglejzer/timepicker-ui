@@ -18,12 +18,12 @@
     "target": "es6",
     "downlevelIteration": true,
     "typeRoots": ["./src/index.d.ts", "./node_modules/@types", "./typings", "./dist/types", "./types"],
-    "types": ["node"],
+    "types": ["node", "jest"],
     "paths": {
       "timepicker-ui": ["./src/index.d.ts"]
     }
   },
-  "include": ["./.eslintrc.js", "src", "docs/index.ts"],
+  "include": ["./.eslintrc.js", "src", "docs/index.ts", "tests"],
   "exclude": [
     "./dist",
     "node_modules",

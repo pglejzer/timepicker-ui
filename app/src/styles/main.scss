@@ -46,9 +46,9 @@
     top: $tm50percent;
     left: $tm50percent;
     transform: $tmtranslatetransform;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: $tmwrapperboxshadow;
+    background-color: var(--timepicker-bg);
+    border-radius: var(--timepicker-border-radius);
+    box-shadow: var(--timepicker-shadow);
     display: flex;
     flex-direction: column;
     outline: none;
@@ -108,7 +108,7 @@
     top: calc(28px - 12px);
     left: 24px;
     font-size: 12px;
-    color: #a9a9a9;
+    color: var(--timepicker-secondary-text);
   }
 
   &-body {
@@ -155,7 +155,7 @@
   }
 
   &-clock-face {
-    background-color: #e0e0e0;
+    background-color: var(--timepicker-surface);
     height: 100%;
     width: 100%;
     border-radius: 100%;
@@ -175,7 +175,7 @@
     user-select: none;
     touch-action: none;
     transform: $tmtranslatetransform;
-    background-color: $purple;
+    background-color: var(--timepicker-primary);
     height: 8px;
     width: 8px;
     border-radius: 100%;
@@ -262,7 +262,7 @@
     align-items: center;
     font-size: 51.2px;
     height: 80px;
-    background-color: #e4e4e4;
+    background-color: var(--timepicker-input-bg);
     border-radius: 7px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -278,8 +278,8 @@
 
     &:hover,
     &.active {
-      color: $purple;
-      background-color: #ece0fd;
+      color: var(--timepicker-primary);
+      background-color: var(--timepicker-surface-hover);
     }
 
     &::-webkit-outer-spin-button,
@@ -293,10 +293,11 @@
   &-minutes {
     outline: none;
     border: 2px solid transparent;
+
     &[contenteditable='true']:focus,
     &[contenteditable='true']:active {
-      border: 2px solid $purple;
-      outline-color: $purple;
+      border: 2px solid var(--timepicker-primary);
+      outline-color: var(--timepicker-primary);
       user-select: all;
     }
   }
@@ -308,8 +309,8 @@
     border: 2px solid transparent;
     &[contenteditable='true']:focus,
     &[contenteditable='true']:active {
-      border: 2px solid $purple;
-      outline-color: $purple;
+      border: 2px solid var(--timepicker-primary);
+      outline-color: var(--timepicker-primary);
       user-select: all;
     }
   }
@@ -329,7 +330,7 @@
     span {
       width: 6px;
       height: 6px;
-      background-color: #000;
+      background-color: var(--timepicker-text);
       border-radius: 50%;
       display: block;
     }
@@ -343,7 +344,7 @@
     align-self: stretch;
     font-size: 16px;
     font-weight: 500;
-    color: #787878;
+    color: var(--timepicker-type-time-text);
   }
 
   &-wrapper-type-time {
@@ -364,7 +365,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid #d6d6d6;
+    border: 2px solid var(--timepicker-border);
     transition: all 0.3s ease;
     cursor: pointer;
     width: 100%;
@@ -372,8 +373,8 @@
 
     &:hover,
     &.active {
-      color: $purple;
-      background-color: #ece0fd;
+      color: var(--timepicker-primary);
+      background-color: var(--timepicker-surface-hover);
     }
 
     &.active {
@@ -438,32 +439,29 @@
   &-ok-btn,
   &-cancel-btn.mobile,
   &-ok.btn-mobile {
-    color: $purple;
+    color: var(--timepicker-primary);
     text-transform: uppercase;
     border-radius: 7px;
     background-color: transparent;
     text-align: center;
     font-size: 15.2px;
-    padding-top: 9px;
-    padding-bottom: 9px;
+    padding: 9px;
     font-weight: 500;
     transition: all 0.3s ease;
     cursor: pointer;
 
     &:hover {
-      background-color: #d6d6d6;
+      background-color: var(--timepicker-hover-bg);
     }
   }
 
   &-cancel-btn,
   &-cancel-btn.mobile {
-    width: 72px;
     margin-right: 4px;
   }
 
   &-ok-btn,
   &-ok-btn.mobile {
-    width: 64px;
     margin-left: 4px;
   }
 
@@ -487,7 +485,7 @@
 
     &:hover .timepicker-ui-keyboard-icon,
     &:hover .timepicker-ui-keyboard-icon.mobile {
-      background-color: #d6d6d6;
+      background-color: var(--timepicker-hover-bg);
       border-radius: 7px;
     }
   }
@@ -501,12 +499,12 @@
     padding: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    color: #4e545a;
+    color: var(--timepicker-icon-text);
     height: 44px;
     width: 44px;
 
     &:hover {
-      color: $purple;
+      color: var(--timepicker-primary);
     }
   }
 
@@ -532,7 +530,7 @@
     position: absolute;
     bottom: 6px;
     font-size: 12.8px;
-    color: #a9a9a9;
+    color: var(--timepicker-secondary-text);
     left: 0;
   }
 
@@ -543,7 +541,7 @@
 
   &-clock-hand {
     position: absolute;
-    background-color: $purple;
+    background-color: var(--timepicker-primary);
     bottom: $tm50percent;
     height: 31%;
     left: calc(50% - 1px);
@@ -563,7 +561,7 @@
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    background-color: $purple;
+    background-color: var(--timepicker-primary);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -595,13 +593,8 @@
     line-height: 1;
     transition: 0.3s ease color;
 
-    &:focus {
-      background: rgba(143, 143, 143, 0.315);
-      box-shadow: $tmwrapperboxshadow;
-    }
-
     &.active {
-      color: #fff;
+      color: var(--timepicker-on-primary);
       transition: none;
     }
   }
@@ -625,7 +618,7 @@
   }
 
   &-tips-disabled {
-    color: rgba(156, 155, 155, 0.6);
+    color: var(--timepicker-disabled-text);
     pointer-events: none;
   }
 }
@@ -711,6 +704,87 @@
       display: flex !important;
       justify-content: flex-end !important;
       gap: 8px !important;
+    }
+  }
+}
+
+.sr-only,
+.timepicker-ui .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.timepicker-announcer {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.timepicker-ui {
+  &-hour-time-12:focus-visible,
+  &-minutes-time:focus-visible,
+  &-hour-time-24:focus-visible,
+  &-am:focus-visible,
+  &-pm:focus-visible,
+  &-cancel-btn:focus-visible,
+  &-ok-btn:focus-visible,
+  &-keyboard-icon-wrapper:focus-visible {
+    outline: 3px solid var(--timepicker-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(98, 0, 238, 0.2);
+  }
+
+  @media (prefers-contrast: high) {
+    &-hour-time-12:focus-visible,
+    &-minutes-time:focus-visible,
+    &-hour-time-24:focus-visible,
+    &-am:focus-visible,
+    &-pm:focus-visible,
+    &-cancel-btn:focus-visible,
+    &-ok-btn:focus-visible {
+      outline-width: 4px;
+      font-weight: 700;
+    }
+
+    &-wrapper {
+      border: 2px solid currentColor;
+    }
+
+    &-clock-face {
+      border: 2px solid currentColor;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &-clock-animation {
+      animation: none !important;
+    }
+
+    &-tips-animation {
+      transition: none !important;
+    }
+
+    &-modal {
+      transition: none !important;
+    }
+
+    &-clock-hand {
+      transition: none !important;
+    }
+
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
     }
   }
 }

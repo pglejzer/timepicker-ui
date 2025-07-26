@@ -6,3 +6,5 @@ app/dist
 timepicker-ui-*
 lib*
 dist
+coverage/
+OPTIMIZATION_*.md

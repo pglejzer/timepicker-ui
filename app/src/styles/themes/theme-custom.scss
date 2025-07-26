@@ -1,0 +1,79 @@
+.timepicker-ui {
+  &-hour.custom,
+  &-minutes.custom {
+    background-color: var(--timepicker-surface);
+    color: var(--timepicker-text);
+
+    &:hover,
+    &.active {
+      background-color: var(--timepicker-surface-hover);
+      color: var(--timepicker-primary);
+    }
+  }
+
+  &-clock-face.custom {
+    background-color: var(--timepicker-surface);
+  }
+
+  &-clock-hand.custom,
+  &-dot.custom,
+  &-circle-hand.custom {
+    background-color: var(--timepicker-primary) !important;
+  }
+
+  &-cancel-btn.custom,
+  &-ok-btn.custom {
+    color: var(--timepicker-primary);
+
+    &:hover {
+      background-color: var(--timepicker-border);
+    }
+  }
+
+  &-wrapper-type-time.custom {
+    color: var(--timepicker-secondary-text);
+  }
+
+  &-am.custom,
+  &-pm.custom {
+    border-color: var(--timepicker-border);
+    background-color: var(--timepicker-bg);
+    color: var(--timepicker-text);
+
+    &:hover,
+    &.active {
+      background-color: var(--timepicker-surface-hover);
+      color: var(--timepicker-primary);
+    }
+
+    &.active {
+      background-color: var(--timepicker-primary);
+      color: var(--timepicker-on-primary);
+    }
+  }
+
+  &-keyboard-icon.custom {
+    color: var(--timepicker-text);
+
+    &:hover {
+      color: var(--timepicker-primary);
+    }
+  }
+
+  &-keyboard-icon-wrapper.custom {
+    &:hover .timepicker-ui-keyboard-icon.custom {
+      background-color: var(--timepicker-border);
+    }
+  }
+
+  &-tips-disabled.custom {
+    color: var(--timepicker-disabled-text);
+  }
+
+  &-value-tips.custom {
+    &.active {
+      color: var(--timepicker-on-primary);
+    }
+  }
+}
+

@@ -28,7 +28,7 @@
       rel="stylesheet"
     />
 
-    <title>Timepicker UI - Modern Time Picker Library</title>
+    <title>Timepicker-UI - Modern Time Picker Library</title>
 
     <script>
       if (
@@ -47,11 +47,11 @@
       <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center py-4">
           <div class="flex items-center">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Timepicker UI</h1>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Timepicker-UI</h1>
             <span
               class="ml-2 px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full"
             >
-              v3.0.0
+              v3.0.2
             </span>
           </div>
 
@@ -405,7 +405,7 @@ new TimepickerUI('#theme-cyberpunk', { theme: 'cyberpunk' }).create();</code></p
                   <input
                     id="disabled-interval"
                     class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
-                    value="16:00 PM"
+                    value="11:00 PM"
                   />
                 </div>
               </div>
@@ -429,6 +429,63 @@ new TimepickerUI('#disabled-minutes', {
 
 new TimepickerUI('#disabled-interval', {
   disabledTime: { interval: '12:00 - 18:00' }
+}).create();</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="multiple-intervals"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Multiple Intervals</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Block specific hours, minutes, or time intervals
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Disabled Intervals 12h</label
+                  >
+                  <input
+                    id="disabled-intervals-12h"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="11:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Disabled Intervals 24h</label
+                  >
+                  <input
+                    id="disabled-intervals-24h"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="11:00"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="disabled-intervals-12h"  value="11:00 PM" /&gt;
+&lt;input id="disabled-intervals-24h"  value="11:00" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">new TimepickerUI('#disabled-intervals-12h', {
+disabledTime: { interval: ['12:00 AM - 4:00 AM', '5:30 PM - 8:00 PM'] }
+}).create();
+
+
+new TimepickerUI('#disabled-intervals-24h', {
+clockType: '24h',
+disabledTime: { interval: ['04:33 - 12:12', '16:34 - 20:22'] }
 }).create();</code></pre>
               </div>
             </div>
@@ -704,15 +761,134 @@ new TimepickerUI('#multi-picker-3', {
         </section>
 
         <section
+          id="event-emitter-api"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div class="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">EventEmitter API (v3.1+)</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Modern event handling with on(), once(), and off() methods
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex flex-col items-center space-y-4">
+                <input
+                  id="event-emitter-picker"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-colors"
+                  value="02:30 PM"
+                />
+                <div class="text-center">
+                  <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Event Log:</h4>
+                  <div
+                    id="emitter-event-log"
+                    class="w-full max-w-md h-48 overflow-y-auto bg-gray-800 dark:bg-gray-900 rounded-lg p-4 text-left font-mono text-xs"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="event-emitter-picker" value="02:30 PM" /&gt;
+&lt;div id="emitter-event-log"&gt;&lt;/div&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const picker = new TimepickerUI('#event-emitter-picker');
+picker.create();
+
+// Subscribe to events
+picker.on('confirm', (data) => {
+  console.log('Confirmed:', data.hour, data.minutes);
+});
+
+picker.on('cancel', (data) => {
+  console.log('Cancelled');
+});
+
+picker.on('update', (data) => {
+  console.log('Updated:', data);
+});
+
+picker.on('select:hour', (data) => {
+  console.log('Hour selected:', data.hour);
+});
+
+picker.on('select:minute', (data) => {
+  console.log('Minute selected:', data.minutes);
+});
+
+// One-time event
+picker.once('open', () => {
+  console.log('Opened for the first time!');
+});
+
+// Unsubscribe
+const handler = (data) => console.log(data);
+picker.on('confirm', handler);
+picker.off('confirm', handler);</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="custom-theme"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-fuchsia-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Custom Theme</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Override default styles with your custom theme
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="custom-theme-picker"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                  value="03:45 PM"
+                />
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="custom-theme-picker" value="03:45 PM" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const customThemePicker = new TimepickerUI('#custom-theme-picker');
+customThemePicker.create();
+
+// Override theme with custom styles
+customThemePicker.setTheme({
+  primaryColor: '#9333ea',
+  backgroundColor: '#1f2937',
+  surfaceColor: '#374151',
+  surfaceHoverColor: '#4b5563',
+  textColor: '#f3f4f6',
+  borderRadius: '12px'
+});</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
           id="new-events-and-callbacks"
           class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
         >
           <div
             class="bg-gradient-to-r from-slate-50 to-gray-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6"
           >
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">New Events and Callbacks</h3>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Callback Options</h3>
             <p class="text-gray-600 dark:text-gray-300 mt-2">
-              New events and callbacks for more control over timepicker behavior
+              Alternative way to handle events using callback options
             </p>
           </div>
           <div class="p-8">
@@ -937,7 +1113,7 @@ if (pickerElement) {
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Timepicker UI</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Timepicker-UI</h3>
             <p class="text-gray-600 dark:text-gray-300 text-sm">
               A modern, lightweight time picker component built with pure JavaScript and Material Design
               principles.
@@ -981,7 +1157,7 @@ if (pickerElement) {
         </div>
         <div class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-8">
           <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
-            Made with ❤️ by the Timepicker UI team
+            Made with ❤️ by the Timepicker-UI team
           </p>
         </div>
       </div>

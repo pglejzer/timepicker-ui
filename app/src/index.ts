@@ -1,4 +1,6 @@
 import TimepickerUI from './timepicker';
-import type { OptionTypes } from './types/types';
+import type { OptionTypes, CallbackData } from './types/types';
+import { EventEmitter } from './utils/EventEmitter';
 
-export { TimepickerUI, OptionTypes };
+export { TimepickerUI, OptionTypes, CallbackData, EventEmitter };
+export default TimepickerUI;

@@ -1,83 +1,93 @@
 @use '../variables.scss' as *;
 
+.timepicker-ui-wrapper.glassmorphic {
+  --timepicker-bg: rgba(255, 255, 255, 0.05);
+  --timepicker-surface: rgba(255, 255, 255, 0.1);
+  --timepicker-surface-hover: rgba(255, 255, 255, 0.15);
+  --timepicker-text: #ffffff;
+  --timepicker-secondary-text: rgba(255, 255, 255, 0.7);
+  --timepicker-primary: rgba(255, 255, 255, 0.6);
+  --timepicker-on-primary: #000000;
+  --timepicker-border: rgba(255, 255, 255, 0.3);
+}
+
 .timepicker-ui {
   &-wrapper.glassmorphic {
-    background-color: $glass-bg;
+    background-color: var(--timepicker-bg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 1.25rem;
-    color: $glass-text;
+    color: var(--timepicker-text);
   }
 
   &-select-time.glassmorphic {
-    color: $glass-text;
+    color: var(--timepicker-text);
   }
 
   &-clock-face.glassmorphic {
-    background-color: $glass-surface;
+    background-color: var(--timepicker-surface);
     backdrop-filter: blur(8px);
   }
 
   &-dot.glassmorphic,
   &-clock-hand.glassmorphic,
   &-circle-hand.glassmorphic {
-    background-color: $glass-primary !important;
+    background-color: var(--timepicker-primary) !important;
   }
 
   &-hour.glassmorphic,
   &-minutes.glassmorphic {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: var(--timepicker-surface-hover);
     border-radius: 1rem;
-    color: $glass-text;
+    color: var(--timepicker-text);
 
     &:hover,
     &.active {
-      background-color: $glass-primary;
-      color: $glass-on-primary;
+      background-color: var(--timepicker-primary);
+      color: var(--timepicker-on-primary);
     }
   }
 
   &-wrapper-type-time.glassmorphic,
   &-dots.glassmorphic {
-    color: $glass-text;
+    color: var(--timepicker-text);
   }
 
   &-am.glassmorphic,
   &-pm.glassmorphic {
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background-color: rgba(255, 255, 255, 0.1);
-    color: $glass-text;
+    border: 1px solid var(--timepicker-border);
+    background-color: var(--timepicker-surface);
+    color: var(--timepicker-text);
 
     &:hover,
     &.active {
-      background-color: $glass-primary;
-      color: $glass-on-primary;
+      background-color: var(--timepicker-primary);
+      color: var(--timepicker-on-primary);
     }
   }
 
   &-cancel-btn.glassmorphic,
   &-ok-btn.glassmorphic {
-    color: $glass-text;
-    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--timepicker-text);
+    background-color: var(--timepicker-surface);
     border-radius: 0.75rem;
 
     &:hover {
-      background-color: $glass-primary;
-      color: $glass-on-primary;
+      background-color: var(--timepicker-primary);
+      color: var(--timepicker-on-primary);
     }
   }
 
   &-keyboard-icon-wrapper.glassmorphic {
-    color: $glass-text;
+    color: var(--timepicker-text);
 
     &:hover .timepicker-ui-keyboard-icon.glassmorphic {
-      background-color: $glass-primary;
-      color: $glass-on-primary;
+      background-color: var(--timepicker-primary);
+      color: var(--timepicker-on-primary);
     }
   }
 
   &-value-tips.glassmorphic {
-    color: $glass-text;
+    color: var(--timepicker-text);
   }
 }
-

@@ -1,24 +1,20 @@
-import { getRadians, hasClass } from '../utils/config';
+import { getRadians } from '../utils/config';
+import { checkedDisabledValuesInterval } from '../utils/time/disable';
 
 export default class ClockFaceManager {
-  private array: string[] | undefined;
-
-  private classToAdd: string | undefined;
-
-  private clockFace: HTMLElement | undefined;
-
-  private tipsWrapper: HTMLElement | undefined;
-
-  private theme: string | undefined;
-
-  private clockType: string | undefined;
-
-  private disabledTime: any;
-
-  private hour: any;
+  private array?: string[];
+  private classToAdd?: string;
+  private clockFace?: HTMLElement;
+  private tipsWrapper?: HTMLElement;
+  private theme?: string;
+  private clockType?: string;
+  private disabledTime?: { isInterval?: boolean; intervals?: any[]; clockType?: string } | string[];
+  private hour?: string;
+  private activeTypeMode?: string;
+  private _tipsCache = new Map<string, { wrapper: HTMLElement; tip: HTMLElement }>();
 
   constructor(obj?: {
-    array?: Array<string>;
+    array?: string[];
     classToAdd?: string;
     clockFace?: HTMLElement;
     tipsWrapper?: HTMLElement;
@@ -26,22 +22,15 @@ export default class ClockFaceManager {
     clockType?: string;
     disabledTime?: any;
     hour?: any;
+    activeTypeMode?: string;
   }) {
-    this.array = obj?.array;
-    this.classToAdd = obj?.classToAdd;
-    this.clockFace = obj?.clockFace;
-    this.tipsWrapper = obj?.tipsWrapper;
-    this.theme = obj?.theme;
-    this.clockType = obj?.clockType;
-    this.disabledTime = obj?.disabledTime;
-    this.hour = obj?.hour;
+    Object.assign(this, obj);
   }
 
   /** @internal */
   clean = () => {
     const spanHours = this.tipsWrapper?.querySelectorAll('span.timepicker-ui-hour-time-12');
     const spanMinutes = this.tipsWrapper?.querySelectorAll('span.timepicker-ui-minutes-time');
-
     this._removeClasses(spanHours);
     this._removeClasses(spanMinutes);
   };
@@ -54,230 +43,201 @@ export default class ClockFaceManager {
     const clockHeight = (this.clockFace.offsetHeight - 32) / 2;
     const radius = clockWidth - 9;
 
-    this.tipsWrapper.innerHTML = '';
+    const existingTips = new Set(this._tipsCache.keys());
+    const fragment = document.createDocumentFragment();
 
-    this.array?.forEach((num: string, index: number) => {
-      // @ts-ignore
-      const angle = getRadians(index * (360 / this.array.length));
-      const span = document.createElement('span');
-      const spanTips = document.createElement('span');
+    this.array.forEach((num, index, arr) => {
+      const cacheKey = `${this.classToAdd}-${num}-${this.theme || 'default'}`;
+      existingTips.delete(cacheKey);
 
-      spanTips.innerHTML = num;
-
-      if (this.disabledTime) {
-        if (Array.isArray(this.disabledTime) && this.disabledTime?.includes(num)) {
-          spanTips.classList.add('timepicker-ui-tips-disabled');
-          span.classList.add('timepicker-ui-tips-disabled');
-        }
-
-        if (
-          this.hour === this.disabledTime.removedStartedHour &&
-          this.disabledTime?.startMinutes?.includes(num)
-        ) {
-          spanTips.classList.add('timepicker-ui-tips-disabled');
-          span.classList.add('timepicker-ui-tips-disabled');
-          spanTips.tabIndex = -1;
-        }
-
-        if (this.hour === this.disabledTime.removedEndHour && this.disabledTime?.endMinutes?.includes(num)) {
-          spanTips.classList.add('timepicker-ui-tips-disabled');
-          span.classList.add('timepicker-ui-tips-disabled');
-          spanTips.tabIndex = -1;
-        }
+      let cached = this._tipsCache.get(cacheKey);
+      if (!cached) {
+        cached = this._createTip(num);
+        this._tipsCache.set(cacheKey, cached);
       }
 
-      if (this.clockType === '24h') {
-        spanTips.classList.add('timepicker-ui-value-tips-24h');
+      const { wrapper: span, tip: spanTips } = cached;
+      this._updateTipState(span, spanTips, num);
 
-        if (!hasClass(spanTips, 'timepicker-ui-tips-disabled')) {
-          spanTips.tabIndex = 0;
-        }
-      } else {
-        spanTips.classList.add('timepicker-ui-value-tips');
-        if (!hasClass(spanTips, 'timepicker-ui-tips-disabled')) {
-          spanTips.tabIndex = 0;
-        }
-      }
+      const angle = getRadians(index * (360 / arr.length));
+      span.style.left = `${clockWidth + Math.sin(angle) * radius}px`;
+      span.style.bottom = `${clockHeight + Math.cos(angle) * radius}px`;
 
-      span.classList.add(this.classToAdd as string);
-
-      if (this.theme === 'crane-straight') {
-        span.classList.add('crane-straight');
-        spanTips.classList.add('crane-straight');
-      }
-
-      if (this.theme === 'm3') {
-        span.classList.add('m3');
-        spanTips.classList.add('m3');
-      }
-
-      if (this.theme === 'dark') {
-        span.classList.add('dark');
-        spanTips.classList.add('dark');
-      }
-
-      if (this.theme === 'glassmorphic') {
-        span.classList.add('glassmorphic');
-        spanTips.classList.add('glassmorphic');
-      }
-
-      if (this.theme === 'pastel') {
-        span.classList.add('pastel');
-        spanTips.classList.add('pastel');
-      }
-
-      if (this.theme === 'ai') {
-        span.classList.add('ai');
-        spanTips.classList.add('ai');
-      }
-
-      if (this.theme === 'cyberpunk') {
-        span.classList.add('cyberpunk');
-        spanTips.classList.add('cyberpunk');
-      }
-
-      span.style.left = `${clockWidth + Math.sin(angle) * radius - span.offsetWidth}px`;
-      span.style.bottom = `${clockHeight + Math.cos(angle) * radius - span.offsetHeight}px`;
-
-      span.appendChild(spanTips);
-      this.tipsWrapper?.appendChild(span);
+      fragment.appendChild(span);
     });
+
+    existingTips.forEach((key) => this._tipsCache.delete(key));
+    this.tipsWrapper.innerHTML = '';
+    this.tipsWrapper.appendChild(fragment);
   };
 
+  private _createTip(num: string): { wrapper: HTMLElement; tip: HTMLElement } {
+    const span = document.createElement('span');
+    const spanTips = document.createElement('span');
+
+    spanTips.innerHTML = num;
+    spanTips.setAttribute('role', 'option');
+    spanTips.setAttribute('aria-selected', 'false');
+    spanTips.tabIndex = 0;
+
+    const tipsClass = this.clockType === '24h' ? 'timepicker-ui-value-tips-24h' : 'timepicker-ui-value-tips';
+    spanTips.classList.add(tipsClass);
+
+    span.classList.add(this.classToAdd || '');
+    if (this.theme) {
+      span.classList.add(this.theme);
+      spanTips.classList.add(this.theme);
+    }
+
+    span.appendChild(spanTips);
+    return { wrapper: span, tip: spanTips };
+  }
+
+  private _updateTipState(span: HTMLElement, spanTips: HTMLElement, num: string): void {
+    span.classList.remove('timepicker-ui-tips-disabled');
+    spanTips.classList.remove('timepicker-ui-tips-disabled');
+    spanTips.removeAttribute('aria-disabled');
+    spanTips.tabIndex = 0;
+
+    if (this.disabledTime) {
+      if (Array.isArray(this.disabledTime) && this.disabledTime.includes(num)) {
+        spanTips.classList.add('timepicker-ui-tips-disabled');
+        span.classList.add('timepicker-ui-tips-disabled');
+        spanTips.setAttribute('aria-disabled', 'true');
+      }
+
+      if ((this.disabledTime as any).isInterval && (this.disabledTime as any).clockType) {
+        const isMinuteTip = this.classToAdd?.includes('minutes');
+        const isHourTip = this.classToAdd?.includes('hour');
+
+        if (isMinuteTip && this.hour) {
+          const isDisabled = !checkedDisabledValuesInterval(
+            this.hour,
+            num,
+            this.activeTypeMode || '',
+            (this.disabledTime as { intervals: string[] }).intervals || [],
+            (this.disabledTime as { clockType: '12h' | '24h' }).clockType,
+          );
+          if (isDisabled) {
+            spanTips.classList.add('timepicker-ui-tips-disabled');
+            span.classList.add('timepicker-ui-tips-disabled');
+            spanTips.tabIndex = -1;
+            spanTips.setAttribute('aria-disabled', 'true');
+          }
+        } else if (isHourTip) {
+          let allMinutesDisabled = true;
+          for (let m = 0; m < 60; m++) {
+            const minuteStr = m.toString().padStart(2, '0');
+            const isEnabled = checkedDisabledValuesInterval(
+              num,
+              minuteStr,
+              this.activeTypeMode || '',
+              (this.disabledTime as any).intervals || [],
+              (this.disabledTime as any).clockType,
+            );
+            if (isEnabled) {
+              allMinutesDisabled = false;
+              break;
+            }
+          }
+
+          if (allMinutesDisabled) {
+            spanTips.classList.add('timepicker-ui-tips-disabled');
+            span.classList.add('timepicker-ui-tips-disabled');
+            spanTips.tabIndex = -1;
+            spanTips.setAttribute('aria-disabled', 'true');
+          }
+        }
+      }
+    }
+  }
+
   /** @internal */
-  updateDisable = (obj?: any): void => {
+  updateDisable = (hour?: string, activeTypeMode?: string): void => {
     const spanHours = this.tipsWrapper?.querySelectorAll('span.timepicker-ui-hour-time-12');
     const spanMinutes = this.tipsWrapper?.querySelectorAll('span.timepicker-ui-minutes-time');
 
     this._removeClasses(spanHours);
     this._removeClasses(spanMinutes);
 
-    if (obj?.hoursToUpdate && spanHours) {
-      this._addClassesWithIncludes(spanHours, obj.hoursToUpdate);
-    }
+    if (!(this.disabledTime as any)?.isInterval || !(this.disabledTime as any)?.intervals) return;
 
-    if (obj?.minutesToUpdate && spanMinutes) {
-      const { actualHour, removedEndHour, removedStartedHour, startMinutes, endMinutes } =
-        obj.minutesToUpdate;
+    const intervals = (this.disabledTime as any).intervals;
+    const clockType = (this.disabledTime as any).clockType;
+    const currentActiveTypeMode = activeTypeMode || this.activeTypeMode || '';
 
-      if (removedEndHour === actualHour && endMinutes.length > 0) {
-        this._addClassesWithIncludes(spanMinutes, endMinutes);
-      } else if (
-        Number(actualHour) > Number(removedStartedHour) &&
-        Number(actualHour) < Number(removedEndHour)
-      ) {
-        this._addClasses(spanMinutes);
-      }
+    spanHours?.forEach((span) => {
+      const spanTips = span.querySelector('.timepicker-ui-value-tips');
+      if (!spanTips) return;
+      const hourValue = spanTips.innerHTML;
 
-      if (removedStartedHour === actualHour && startMinutes.length > 0) {
-        this._addClassesWithIncludes(spanMinutes, startMinutes);
-      } else if (
-        Number(actualHour) > Number(removedStartedHour) &&
-        Number(actualHour) < Number(removedEndHour)
-      ) {
-        this._addClasses(spanMinutes);
-      }
-    }
-
-    if (obj) {
-      const {
-        amHours,
-        pmHours,
-        activeMode,
-        startMinutes,
-        endMinutes,
-        removedAmHour,
-        removedPmHour,
-        actualHour,
-      } = obj.minutesToUpdate;
-
-      if (!amHours || !pmHours) return;
-
-      if (spanHours) {
-        if (amHours && activeMode === 'AM') {
-          this._addClassesWithIncludes(spanHours, amHours);
-        }
-
-        if (pmHours && activeMode === 'PM') {
-          this._addClassesWithIncludes(spanHours, pmHours);
+      let allMinutesDisabled = true;
+      for (let m = 0; m < 60; m++) {
+        const minuteStr = m.toString().padStart(2, '0');
+        const isEnabled = checkedDisabledValuesInterval(
+          hourValue,
+          minuteStr,
+          currentActiveTypeMode,
+          intervals,
+          clockType,
+        );
+        if (isEnabled) {
+          allMinutesDisabled = false;
+          break;
         }
       }
 
-      if (spanMinutes && startMinutes && endMinutes) {
-        if (activeMode === 'AM') {
-          if (endMinutes[0] === '00' && endMinutes.length === 1 && startMinutes.length === 0) {
-            if (Number(actualHour) >= Number(amHours[0])) {
-              this._addClasses(spanMinutes);
-            }
-          }
-
-          if (startMinutes.length === 0 && endMinutes.length > 1) {
-            if (Number(actualHour) >= Number(removedAmHour)) {
-              this._addClasses(spanMinutes);
-            }
-          }
-
-          if (startMinutes.length > 0 && endMinutes.length > 1 && endMinutes[0] === '00') {
-            if (Number(removedAmHour) === Number(actualHour)) {
-              this._addClassesWithIncludes(spanMinutes, startMinutes);
-            } else if (Number(actualHour) > Number(removedAmHour)) {
-              this._addClasses(spanMinutes);
-            }
-          }
-
-          if (endMinutes[0] === '00' && endMinutes.length === 1 && startMinutes.length > 0) {
-            if (Number(removedAmHour) === Number(actualHour)) {
-              this._addClassesWithIncludes(spanMinutes, startMinutes);
-            } else if (Number(actualHour) > Number(removedAmHour)) {
-              this._addClasses(spanMinutes);
-            }
-          }
-        }
-
-        if (activeMode === 'PM') {
-          if (actualHour < Number(removedPmHour)) {
-            this._addClasses(spanMinutes);
-          }
-
-          if (actualHour === removedPmHour) {
-            this._addClassesWithIncludes(spanMinutes, endMinutes);
-          }
-
-          if (endMinutes.length > 0 && Number(actualHour) === removedPmHour - 1) {
-            this._addClassesWithIncludes(spanMinutes, endMinutes);
-          }
-        }
+      if (allMinutesDisabled) {
+        span.classList.add('timepicker-ui-tips-disabled');
+        spanTips.classList.add('timepicker-ui-tips-disabled');
+        spanTips.setAttribute('aria-disabled', 'true');
+        (spanTips as HTMLElement).tabIndex = -1;
       }
+    });
+
+    if (spanMinutes && hour) {
+      spanMinutes.forEach((span) => {
+        const spanTips = span.querySelector('.timepicker-ui-value-tips');
+        if (!spanTips) return;
+        const minuteValue = spanTips.innerHTML;
+
+        const isDisabled = !checkedDisabledValuesInterval(
+          hour,
+          minuteValue,
+          currentActiveTypeMode,
+          intervals,
+          clockType,
+        );
+
+        if (isDisabled) {
+          span.classList.add('timepicker-ui-tips-disabled');
+          spanTips.classList.add('timepicker-ui-tips-disabled');
+          spanTips.setAttribute('aria-disabled', 'true');
+          (spanTips as HTMLElement).tabIndex = -1;
+        }
+      });
     }
   };
 
   /** @internal */
   private _removeClasses = (list?: NodeListOf<Element>) => {
-    list?.forEach(({ classList, children }) => {
-      classList.remove('timepicker-ui-tips-disabled');
-      children[0].classList.remove('timepicker-ui-tips-disabled');
-      (children[0] as HTMLDivElement).tabIndex = 0;
-    });
-  };
-
-  /** @internal */
-  private _addClasses = (nodeList?: NodeListOf<Element>) => {
-    nodeList?.forEach(({ classList, children }) => {
-      classList.add('timepicker-ui-tips-disabled');
-      children[0].classList.add('timepicker-ui-tips-disabled');
-      (children[0] as HTMLDivElement).tabIndex = -1;
-    });
-  };
-
-  /** @internal */
-  private _addClassesWithIncludes = (nodeList?: NodeListOf<Element>, includesArr?: any) => {
-    nodeList?.forEach(({ classList, children, textContent }) => {
-      if (includesArr?.includes(textContent)) {
-        classList.add('timepicker-ui-tips-disabled');
-        children[0].classList.add('timepicker-ui-tips-disabled');
-        (children[0] as HTMLDivElement).tabIndex = -1;
+    list?.forEach((el) => {
+      const first = el.children[0] as HTMLElement | undefined;
+      el.classList.remove('timepicker-ui-tips-disabled');
+      if (first) {
+        first.classList.remove('timepicker-ui-tips-disabled');
+        first.removeAttribute('aria-disabled');
+        first.tabIndex = 0;
       }
     });
   };
-}
 
+  /** Cleanup */
+  destroy() {
+    if (this.tipsWrapper) this.tipsWrapper.innerHTML = '';
+    this._tipsCache.clear();
+    this.array = this.classToAdd = this.theme = this.clockType = undefined;
+    this.disabledTime = this.hour = this.activeTypeMode = undefined;
+    this.clockFace = this.tipsWrapper = undefined;
+  }
+}

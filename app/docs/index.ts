@@ -1,4 +1,4 @@
-import { TimepickerUI } from 'timepicker-ui';
+import { TimepickerUI, CallbackData } from 'timepicker-ui';
 import { codeToHtml } from 'shiki';
 
 console.log(
@@ -218,6 +218,64 @@ const multiPicker3 = new TimepickerUI('#multi-picker-3', {
 });
 multiPicker3.create();
 
+const eventEmitterPicker = new TimepickerUI('#event-emitter-picker', {
+  theme: 'm3',
+});
+eventEmitterPicker.create();
+
+const emitterEventLog = document.querySelector('#emitter-event-log');
+
+if (emitterEventLog) {
+  const logEvent = (eventName: string, data?: any) => {
+    const timestamp = new Date().toLocaleTimeString();
+    const dataStr = data ? `: ${JSON.stringify(data, null, 2)}` : '';
+    emitterEventLog.innerHTML += `<p class="text-cyan-400 text-xs mb-1">[${timestamp}] <span class="text-white font-semibold">${eventName}</span>${dataStr}</p>`;
+    emitterEventLog.scrollTop = emitterEventLog.scrollHeight;
+  };
+
+  eventEmitterPicker.on('confirm', (data: CallbackData) => {
+    logEvent('confirm', { hour: data.hour, minutes: data.minutes, type: data.type });
+  });
+
+  eventEmitterPicker.on('cancel', (data: CallbackData) => {
+    logEvent('cancel');
+  });
+
+  eventEmitterPicker.on('open', () => {
+    logEvent('open');
+  });
+
+  eventEmitterPicker.on('update', (data: CallbackData) => {
+    logEvent('update', { hour: data.hour, minutes: data.minutes });
+  });
+
+  eventEmitterPicker.on('select:hour', (data: CallbackData) => {
+    logEvent('select:hour', { hour: data.hour });
+  });
+
+  eventEmitterPicker.on('select:minute', (data: CallbackData) => {
+    logEvent('select:minute', { minutes: data.minutes });
+  });
+
+  eventEmitterPicker.on('select:am', () => {
+    logEvent('select:am');
+  });
+
+  eventEmitterPicker.on('select:pm', () => {
+    logEvent('select:pm');
+  });
+
+  eventEmitterPicker.once('open', () => {
+    logEvent('once:open', 'This runs only once!');
+  });
+}
+
+const customThemePicker = new TimepickerUI('#custom-theme-picker', {
+  cssClass: 'dupa',
+  theme: 'custom',
+});
+customThemePicker.create();
+
 const advancedPicker = new TimepickerUI('#advanced-picker', {
   clockType: '12h',
   theme: 'm3',
@@ -325,3 +383,19 @@ if (button) {
     destroyExample.destroy();
   });
 }
+
+const multipleIntervalsPicker = new TimepickerUI('#disabled-intervals-12h', {
+  disabledTime: {
+    interval: ['12:00 AM - 4:00 AM', '5:30 PM - 8:00 PM'],
+  },
+  clockType: '12h',
+});
+multipleIntervalsPicker.create();
+
+const multipleIntervalsPicker24h = new TimepickerUI('#disabled-intervals-24h', {
+  disabledTime: {
+    interval: ['04:33 - 12:12', '16:34 - 20:22', '21:37 - 23:23'],
+  },
+  clockType: '24h',
+});
+multipleIntervalsPicker24h.create();
