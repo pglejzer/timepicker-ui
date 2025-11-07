@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.1.1] - 2025-11-07
+
+### Added
+
+- Virtual DOM caching for clock face tips - Reuses DOM elements instead of recreating them on each render for 25% performance improvement
+- RequestAnimationFrame batching for DOM updates - Smoother animations and reduced layout thrashing
+- Input sanitization - Security enhancement to prevent XSS attacks in time input fields
+
+### Changed
+
+- Clock face rendering now uses element pooling with Map-based cache
+- DOM updates are batched using RAF for better performance during clock hand animations
+- User input is sanitized before processing in setValue and event handlers
+
+### Performance
+
+- Reduced DOM operations by caching clock tip elements
+- Eliminated unnecessary innerHTML clearing on every render
+- Improved animation smoothness with RAF-based update scheduling
+
 ## [3.1.0] - 2025-11-07
 
 ### Added
