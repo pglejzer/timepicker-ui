@@ -6,7 +6,6 @@ import { CodeBlock } from "@/components/code-block";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import { Clock, Palette, Calendar, Settings, Zap, Lock } from "lucide-react";
-import "timepicker-ui/index.css";
 
 interface ExampleCardProps {
   title: string;

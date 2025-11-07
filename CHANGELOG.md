@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.1.2] - 2025-11-07
+
+- Fix problem with input color
+
 ## [3.1.1] - 2025-11-07
 
 ### Added
