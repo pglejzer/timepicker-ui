@@ -271,7 +271,7 @@ if (emitterEventLog) {
 }
 
 const customThemePicker = new TimepickerUI('#custom-theme-picker', {
-  cssClass: 'dupa',
+  cssClass: 'test',
   theme: 'custom',
 });
 customThemePicker.create();

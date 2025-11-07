@@ -1,4 +1,4 @@
-.timepicker-ui-wrapper.dupa {
+.timepicker-ui-wrapper.test {
   --timepicker-bg: #0f172a;
   --timepicker-surface: #1e293b;
   --timepicker-surface-hover: #334155;
@@ -20,4 +20,3 @@
   --timepicker-border-radius: 16px;
   --timepicker-font-family: 'Inter', -apple-system, sans-serif;
 }
-
