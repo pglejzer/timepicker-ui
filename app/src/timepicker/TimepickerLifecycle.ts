@@ -1,0 +1,338 @@
+import { initCallback } from '../utils/config';
+import { debounce } from '../utils/debounce';
+import { allEvents } from '../utils/variables';
+import { getNumberOfHours12, getNumberOfHours24 } from '../utils/template';
+import TimepickerCore from './TimepickerCore';
+
+type TypeFunction = () => void;
+
+export default class TimepickerLifecycle extends TimepickerCore {
+  public create = (): void => {
+    if (this._isDestroyed) {
+      console.warn('TimepickerUI: Cannot create - instance failed to initialize');
+      return;
+    }
+
+    if (this._isInitialized) {
+      console.warn('TimepickerUI: Instance is already initialized');
+      return;
+    }
+
+    this.configManager.updateInputValueWithCurrentTimeOnStart();
+    this.validationManager.checkDisabledValuesOnStart();
+    this.themeManager.setTimepickerClassToElement();
+    this.themeManager.setInputClassToInputElement();
+    this.themeManager.setDataOpenToInputIfDoesntExistInWrapper();
+    this.themeManager.setClassTopOpenElement();
+
+    if (this._options.inline?.enabled) {
+      this.eventManager.handleOpenOnEnterFocus();
+      this._eventsBundle();
+    } else {
+      this.eventManager.handleOpenOnEnterFocus();
+      this.eventManager.handleOpenOnClick();
+    }
+
+    this.configManager.getDisableTime();
+    this._isInitialized = true;
+  };
+
+  public open = (callback?: () => void): void => {
+    if (this._isDestroyed) {
+      console.warn('TimepickerUI: Cannot open - instance failed to initialize');
+      return;
+    }
+
+    if (!this._isInitialized) {
+      this.create();
+    }
+
+    this._eventsBundle();
+
+    initCallback(callback);
+  };
+
+  public close = () =>
+    debounce((...args: Array<boolean | TypeFunction>): void => {
+      if (args.length > 2 || !this.modalElement) return;
+
+      const [update] = args.filter((e) => typeof e === 'boolean');
+      const [callback] = args.filter((e) => typeof e === 'function');
+
+      if (update) {
+        this.eventManager.handleOkButton();
+        this.okButton?.click();
+      }
+
+      this._isTouchMouseMove = false;
+
+      document.removeEventListener('mousedown', this.eventManager._onDragStart, false);
+      document.removeEventListener('touchstart', this.eventManager._onDragStart);
+      document.removeEventListener('mousemove', this.eventManager._onDragMove, false);
+      document.removeEventListener('mouseup', this.eventManager._onDragEnd, false);
+      document.removeEventListener('touchmove', this.eventManager._onDragMove);
+      document.removeEventListener('touchend', this.eventManager._onDragEnd, false);
+      document.removeEventListener('mouseleave', this.eventManager._onDragEnd, false);
+
+      document.removeEventListener('mousedown', this._eventsClickMobileHandler);
+      document.removeEventListener('touchstart', this._eventsClickMobileHandler);
+      document.removeEventListener('keypress', this.eventManager.handleEscClick);
+      this.wrapper.removeEventListener('keydown', this.eventManager.focusTrapHandler);
+
+      if (this._options.enableSwitchIcon) {
+        this.keyboardClockIcon.removeEventListener('touchstart', this.configManager.handlerViewChange());
+        this.keyboardClockIcon.removeEventListener('mousedown', this.configManager.handlerViewChange());
+      }
+
+      this.animationManager.removeAnimationToClose();
+
+      this.openElement.forEach((openEl) => openEl?.classList.remove('disabled'));
+
+      setTimeout(() => {
+        document.body.style.overflowY = '';
+        document.body.style.paddingRight = '';
+      }, 400);
+
+      this.openElement.forEach((openEl) => openEl?.classList.remove('disabled'));
+
+      setTimeout(() => {
+        if (this._options.focusInputAfterCloseModal) this.input?.focus();
+
+        if (this.modalElement === null) return;
+
+        this.modalElement.remove();
+
+        this._isModalRemove = true;
+      }, 300);
+
+      initCallback(callback as TypeFunction);
+    }, this._options.delayHandler || 300);
+
+  public destroy = (options?: { keepInputValue?: boolean; callback?: TypeFunction } | TypeFunction): void => {
+    if (this._isDestroyed) {
+      console.warn('TimepickerUI: Instance is already destroyed');
+      return;
+    }
+
+    const config = typeof options === 'function' ? { callback: options } : options || {};
+    const { keepInputValue = false, callback } = config;
+
+    const inputValue = keepInputValue ? this.input?.value : null;
+
+    this.clockFacePool.clear();
+    this.domBatcher.destroy();
+
+    allEvents.split(' ').forEach((event) => {
+      document.removeEventListener(event, this._mutliEventsMoveHandler, false);
+    });
+
+    document.removeEventListener('mousedown', this.eventManager._onDragStart, false);
+    document.removeEventListener('touchstart', this.eventManager._onDragStart);
+    document.removeEventListener('mousemove', this.eventManager._onDragMove, false);
+    document.removeEventListener('mouseup', this.eventManager._onDragEnd, false);
+    document.removeEventListener('touchmove', this.eventManager._onDragMove);
+    document.removeEventListener('touchend', this.eventManager._onDragEnd, false);
+    document.removeEventListener('mouseleave', this.eventManager._onDragEnd, false);
+
+    document.removeEventListener('mousedown', this._eventsClickMobileHandler);
+    document.removeEventListener('touchstart', this._eventsClickMobileHandler);
+
+    this.modalElement?.remove();
+
+    this.openElement?.forEach((el) => {
+      if (el) {
+        el.classList.remove('disabled', 'active', 'timepicker-ui-open-element');
+        el.classList.remove('basic', 'crane-straight', 'crane-radius', 'm3');
+      }
+    });
+
+    if (this.input) {
+      this.input.classList.remove(
+        'timepicker-ui-invalid-format',
+        'invalid-value',
+        'error',
+        'active',
+        'timepicker-ui-input',
+      );
+
+      this.input.removeAttribute('data-open');
+      this.input.removeAttribute('data-owner-id');
+
+      if (keepInputValue && inputValue !== null) {
+        this.input.value = inputValue;
+      }
+    }
+
+    if (this._element) {
+      this._element.classList.remove('basic', 'crane-straight', 'crane-radius', 'm3');
+
+      this._element.classList.remove('error', 'active', 'disabled');
+
+      this._element.removeAttribute('data-owner-id');
+      this._element.removeAttribute('data-open');
+
+      if (this._options.cssClass) {
+        this._element.classList.remove(this._options.cssClass);
+      }
+    }
+
+    const invalidTextElements = this._element?.querySelectorAll('.timepicker-ui-invalid-text');
+    invalidTextElements?.forEach((el) => el.remove());
+
+    this._mutliEventsMoveHandler = (() => {}) as EventListenerOrEventListenerObject;
+    this._eventsClickMobileHandler = (() => {}) as EventListenerOrEventListenerObject;
+    this._mutliEventsMove = () => {};
+    this._eventsClickMobile = () => Promise.resolve();
+
+    this._isModalRemove = true;
+    this._isTouchMouseMove = false;
+    this._disabledTime = null;
+    this._cloned = null;
+    this._degreesHours = null;
+    this._degreesMinutes = null;
+    this._isInitialized = false;
+    this._isDestroyed = true;
+
+    if (typeof document !== 'undefined') {
+      document.body.style.overflowY = '';
+      document.body.style.paddingRight = '';
+    }
+
+    this.onDestroy?.();
+
+    initCallback(callback);
+  };
+
+  protected onDestroy?: () => void;
+
+  _eventsBundle = (): void => {
+    if (this._isDestroyed) {
+      console.warn('TimepickerUI: Instance is destroyed');
+      return;
+    }
+
+    if (!this._isModalRemove) {
+      return;
+    }
+
+    if (!this._options.inline?.enabled) {
+      this.eventManager.handleEscClick();
+    }
+
+    this.validationManager.setErrorHandler();
+    this.validationManager.removeErrorHandler();
+
+    if (!this._options.inline?.enabled) {
+      this.openElement.forEach((openEl) => openEl?.classList.add('disabled'));
+      this.input?.blur();
+    }
+
+    this.modalManager.setScrollbarOrNot();
+    this.modalManager.setModalTemplate();
+    this.modalManager.setNormalizeClass();
+    this.modalManager.removeBackdrop();
+    this.clockManager.setOnStartCSSClassesIfClockType24h();
+    this.clockManager.setClassActiveToHourOnOpen();
+
+    if (this.clockFace !== null) {
+      const initClockFace = this.clockFacePool.acquire({
+        array: getNumberOfHours12,
+        classToAdd: 'timepicker-ui-hour-time-12',
+        clockFace: this.clockFace,
+        tipsWrapper: this.tipsWrapper,
+        theme: this._options.theme,
+        disabledTime: this._disabledTime?.value?.isInterval
+          ? this._disabledTime?.value
+          : this._disabledTime?.value?.hours,
+        clockType: this._options.clockType,
+        hour: this.hour.value,
+        activeTypeMode: this.activeTypeMode?.textContent || '',
+      });
+
+      initClockFace.create();
+
+      if (this._options.clockType === '24h') {
+        const initClockFace24h = this.clockFacePool.acquire({
+          array: getNumberOfHours24,
+          classToAdd: 'timepicker-ui-hour-time-24',
+          clockFace: this.tipsWrapperFor24h,
+          tipsWrapper: this.tipsWrapperFor24h,
+          theme: this._options.theme,
+          clockType: '24h',
+          disabledTime: this._disabledTime?.value?.isInterval
+            ? this._disabledTime?.value
+            : this._disabledTime?.value?.hours,
+          hour: this.hour.value,
+        });
+
+        initClockFace24h.create();
+        this.clockFacePool.release(initClockFace24h);
+      } else if (this._options.clockType === '12h' && this._disabledTime?.value?.isInterval) {
+        setTimeout(() => {
+          initClockFace.updateDisable(this.hour.value, this.activeTypeMode?.textContent || '');
+        }, 300);
+      }
+
+      this.clockFacePool.release(initClockFace);
+    }
+
+    this.modalManager.setFlexEndToFooterIfNoKeyboardIcon();
+
+    setTimeout(() => {
+      this.themeManager.setTheme();
+
+      const wrapper = this.modalElement?.querySelector('.timepicker-ui-wrapper');
+      if (wrapper) {
+        if (this._options.cssClass) {
+          wrapper.classList.add(this._options.cssClass);
+        }
+
+        if (this._pendingThemeConfig) {
+          this._applyThemeToWrapper(wrapper as HTMLElement);
+        }
+      }
+    }, 0);
+
+    this.animationManager.setAnimationToOpen();
+    this.configManager.getInputValueOnOpenAndSet();
+    this.clockManager.toggleClassActiveToValueTips(this.hour.value);
+
+    if (!this._isMobileView) {
+      this.clockManager.setTransformToCircleWithSwitchesHour(this.hour.value);
+      this.animationManager.handleAnimationClock();
+    }
+
+    this.eventManager.handleMinutesEvents();
+    this.eventManager.handleHourEvents();
+
+    if (this._options.clockType !== '24h') {
+      this.eventManager.handleAmClick();
+      this.eventManager.handlePmClick();
+    }
+
+    if (this.clockFace) {
+      this.eventManager.handleMoveHand();
+    }
+
+    this.eventManager.handleCancelButton();
+    this.eventManager.handleOkButton();
+
+    if (this.modalElement) {
+      this.modalManager.setShowClassToBackdrop();
+      if (!this._options.inline?.enabled) {
+        this.eventManager.handleBackdropClick();
+      }
+    }
+
+    this.eventManager.handleIconChangeView();
+    this.eventManager.handleClickOnHourMobile();
+
+    if (this._options.focusTrap) {
+      this.eventManager.focusTrapHandler();
+    }
+
+    if (this._options.inline?.enabled && this._options.inline.autoUpdate !== false) {
+      this.eventManager.handleInlineAutoUpdate();
+    }
+  };
+}

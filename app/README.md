@@ -1,4 +1,4 @@
-# Timepicker UI — Build System
+# Timepicker-UI — Build System
 
 This directory contains the build configuration for the `timepicker-ui` library. It supports multiple build tools including Webpack, Rollup, and Tsup, covering development and production workflows.
 
@@ -89,4 +89,3 @@ Created by [@pglejzer](https://github.com/pglejzer)
 ## 📄 License
 
 [MIT](../LICENSE)
-

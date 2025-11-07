@@ -1,8 +1,8 @@
 declare module 'timepicker-ui' {
   /**
-   * @description Callback function type for timepicker events
+   * @description Callback data type for timepicker events
    */
-  type TimepickerEventCallback = (eventData: {
+  export type CallbackData = {
     hour?: string | null;
     minutes?: string | null;
     type?: string | null;
@@ -10,13 +10,18 @@ declare module 'timepicker-ui' {
     degreesMinutes?: number | null;
     hourNotAccepted?: string | null;
     minutesNotAccepted?: string | null;
-    eventType?: any;
+    eventType?: 'accept' | 'cancel' | 'click' | 'change' | null;
     error?: string;
     currentHour?: string | number;
     currentMin?: string | number;
     currentType?: string;
     currentLength?: string | number;
-  }) => void;
+  };
+
+  /**
+   * @description Callback function type for timepicker events
+   */
+  type TimepickerEventCallback = (eventData: CallbackData) => void;
 
   export type OptionTypes = {
     /**
@@ -130,7 +135,9 @@ declare module 'timepicker-ui' {
      */
     switchToMinutesAfterSelectHour?: boolean;
     /**
-     * @description Set theme to timepicker. Available options: `basic`, `crane-straight`, `crane-radius`
+     * @description Set theme to timepicker. Available options: `basic`, `crane-straight`, `crane-radius`, `m3`, `dark`, `glassmorphic`, `pastel`, `ai`, `cyberpunk`, `custom`
+     *
+     * The `custom` theme allows you to create your own styling by overriding CSS variables.
      * @default "basic"
      */
     theme?:
@@ -142,7 +149,8 @@ declare module 'timepicker-ui' {
       | 'glassmorphic'
       | 'pastel'
       | 'ai'
-      | 'cyberpunk';
+      | 'cyberpunk'
+      | 'custom';
     /**
      * @description Set type of clock, it contains 2 versions: `12h` and `24h`.
      * @default false
@@ -150,7 +158,7 @@ declare module 'timepicker-ui' {
     clockType?: '12h' | '24h';
     /**
      * @description - The `hours` and `minutes` are arrays which accept strings and numbers to block select hours/minutes.
-     * - The `interval` key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType.
+     * - The `interval` key can accept string or string[] to block select time intervals.
      * - If the interval key is set, the hours/minutes keys are `ignored`.
      * @example
       disabledTime: {
@@ -163,7 +171,7 @@ declare module 'timepicker-ui' {
     disabledTime?: {
       minutes?: Array<string | number>;
       hours?: Array<string | number>;
-      interval?: string;
+      interval?: string | string[];
     };
     /**
      * @description Set current time to the input and timepicker.\
@@ -360,6 +368,23 @@ declare module 'timepicker-ui' {
       degreesMinutes: number | null;
     };
     setValue(time: string, updateInput?: boolean): void;
+    setTheme(themeConfig: {
+      primaryColor?: string;
+      backgroundColor?: string;
+      surfaceColor?: string;
+      surfaceHoverColor?: string;
+      textColor?: string;
+      secondaryTextColor?: string;
+      disabledTextColor?: string;
+      onPrimaryColor?: string;
+      borderColor?: string;
+      shadow?: string;
+      borderRadius?: string;
+      fontFamily?: string;
+    }): void;
+    on(event: string, handler: (data: CallbackData) => void): void;
+    once(event: string, handler: (data: CallbackData) => void): void;
+    off(event: string, handler?: (data: CallbackData) => void): void;
     private _checkDisabledValuesOnStart;
     private _checkMobileOption;
     private _getDisableTime;

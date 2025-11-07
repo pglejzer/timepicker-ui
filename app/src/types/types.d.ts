@@ -1,7 +1,7 @@
 /**
- * @description Callback function type for timepicker events
+ * @description Callback data type for timepicker events
  */
-export type TimepickerEventCallback = (eventData: {
+export type CallbackData = {
   hour?: string | null;
   minutes?: string | null;
   type?: string | null;
@@ -9,13 +9,18 @@ export type TimepickerEventCallback = (eventData: {
   degreesMinutes?: number | null;
   hourNotAccepted?: string | null;
   minutesNotAccepted?: string | null;
-  eventType?: any;
+  eventType?: 'accept' | 'cancel' | 'click' | 'change' | null;
   error?: string;
   currentHour?: string | number;
   currentMin?: string | number;
   currentType?: string;
   currentLength?: string | number;
-}) => void;
+};
+
+/**
+ * @description Callback function type for timepicker events
+ */
+export type TimepickerEventCallback = (eventData: CallbackData) => void;
 
 export type OptionTypes = {
   /**
@@ -124,8 +129,9 @@ export type OptionTypes = {
    */
   switchToMinutesAfterSelectHour?: boolean;
   /**
-   * @description Set theme to timepicker. Available options: `basic`, `crane-straight`, `crane-radius`, `m3`.
-
+   * @description Set theme to timepicker. Available options: `basic`, `crane-straight`, `crane-radius`, `m3`, `dark`, `glassmorphic`, `pastel`, `ai`, `cyberpunk`, `custom`.
+   *
+   * The `custom` theme allows you to create your own styling by overriding CSS variables.
    * The offical version of Material Design 3 is still not avaialbe for the WEB version.Theme `m3` has been added
    * based on the design what you can find [here](https://m3.material.io/components/time-pickers/overview).
    * If new version M3 will be released this design will get improve.
@@ -140,7 +146,8 @@ export type OptionTypes = {
     | 'glassmorphic'
     | 'pastel'
     | 'ai'
-    | 'cyberpunk';
+    | 'cyberpunk'
+    | 'custom';
   /**
    * @description Set type of clock, it contains 2 versions: `12h` and `24h`.
    * @default false
@@ -148,20 +155,20 @@ export type OptionTypes = {
   clockType?: '12h' | '24h';
   /**
    * @description - The `hours` and `minutes` are arrays which accept strings and numbers to block select hours/minutes.
-   * - The `interval` key allow only string with interval values i.e., if you have 24h clockType the string can be 03:00 - 15:00, 01:20 - 05:15, 02:03 - 06:55 etc.. On the other hand if you have 12h clockType the string can be i.e 01:30 PM - 6:30 PM, 02:00 AM - 10:00 AM, 02:30 AM - 10:30 PM. It is important to remember that first hour in the interval option should be less that the second value if you want to block values from AM to PM and if you are using interval with 24h clockType.
+   * - The `interval` key can accept string or string[] to block select time intervals.
    * - If the interval key is set, the hours/minutes keys are `ignored`.
    * @example
     disabledTime: {
       minutes: [1,2,4,5,55,23,"22","38"],
       hours: [1,"3","5", 8],
-      interval: "10:00 AM - 12:00 PM",
+      interval: "10:00 AM - 12:00 PM" | ["10:00 AM - 12:00 PM", "5:00 PM - 8:00 PM"],
     }
    * @default  undefined
    */
   disabledTime?: {
     minutes?: Array<string | number>;
     hours?: Array<string | number>;
-    interval?: string;
+    interval?: string | string[];
   };
   /**
    * @description Set current time to the input and timepicker.\

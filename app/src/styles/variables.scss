@@ -1,4 +1,29 @@
-$cranepurple800: #5c1349;
+:root {
+  --timepicker-bg: #ffffff;
+  --timepicker-surface: #e0e0e0;
+  --timepicker-surface-hover: #ece0fd;
+  --timepicker-input-bg: #e4e4e4;
+
+  --timepicker-text: #000000;
+  --timepicker-secondary-text: #a9a9a9;
+  --timepicker-disabled-text: rgba(156, 155, 155, 0.6);
+  --timepicker-type-time-text: #787878;
+  --timepicker-icon-text: #4e545a;
+
+  --timepicker-primary: #6200ee;
+  --timepicker-on-primary: #ffffff;
+
+  --timepicker-border: #d6d6d6;
+  --timepicker-hover-bg: #d6d6d6;
+
+  --timepicker-shadow:
+    0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+
+  --timepicker-font-family: 'Roboto', sans-serif;
+  --timepicker-border-radius: 4px;
+}
+
 $cranepurple900: #4e0d3a;
 $cranepurple700: #71135c;
 $cranered400: #f7363e;

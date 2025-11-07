@@ -1,89 +1,101 @@
 @use '../variables.scss' as *;
 
+.timepicker-ui-wrapper.cyberpunk {
+  --timepicker-bg: #0f0c29;
+  --timepicker-surface: #1a1a2e;
+  --timepicker-surface-hover: #1a1a2e;
+  --timepicker-text: #f8f8ff;
+  --timepicker-secondary-text: #00f0ff;
+  --timepicker-primary: #00f0ff;
+  --timepicker-on-primary: #0f0c29;
+  --timepicker-border: rgba(0, 240, 255, 0.3);
+  --timepicker-shadow: 0 0 12px #00f0ff;
+  --timepicker-border-radius: 1rem;
+}
+
 .timepicker-ui {
   &-wrapper.cyberpunk {
-    background-color: #0f0c29;
-    border-radius: 1rem;
-    color: #f8f8ff;
-    box-shadow: 0 0 12px #00f0ff;
+    background-color: var(--timepicker-bg);
+    border-radius: var(--timepicker-border-radius);
+    color: var(--timepicker-text);
+    box-shadow: var(--timepicker-shadow);
   }
 
   &-select-time.cyberpunk {
-    color: #00f0ff;
+    color: var(--timepicker-primary);
   }
 
   &-clock-face.cyberpunk {
     background: linear-gradient(135deg, #1a1a2e, #0f3460);
-    border: 1px solid rgba(0, 240, 255, 0.3);
+    border: 1px solid var(--timepicker-border);
   }
 
   &-dot.cyberpunk,
   &-clock-hand.cyberpunk,
   &-circle-hand.cyberpunk {
-    background-color: #00f0ff !important;
-    box-shadow: 0 0 6px #00f0ff;
+    background-color: var(--timepicker-primary) !important;
+    box-shadow: 0 0 6px var(--timepicker-primary);
   }
 
   &-hour.cyberpunk,
   &-minutes.cyberpunk {
-    background-color: #1a1a2e;
+    background-color: var(--timepicker-surface);
     border-radius: 0.75rem;
-    color: #f8f8ff;
+    color: var(--timepicker-text);
 
     &:hover,
     &.active {
-      background-color: #00f0ff;
-      color: #0f0c29;
-      box-shadow: 0 0 8px #00f0ff;
+      background-color: var(--timepicker-primary);
+      color: var(--timepicker-on-primary);
+      box-shadow: 0 0 8px var(--timepicker-primary);
     }
   }
 
   &-wrapper-type-time.cyberpunk,
   &-dots.cyberpunk {
-    color: #00f0ff;
+    color: var(--timepicker-primary);
   }
 
   &-am.cyberpunk,
   &-pm.cyberpunk {
-    border: 1px solid #00f0ff;
-    background-color: #1a1a2e;
-    color: #f8f8ff;
+    border: 1px solid var(--timepicker-primary);
+    background-color: var(--timepicker-surface);
+    color: var(--timepicker-text);
 
     &:hover,
     &.active {
-      background-color: #00f0ff;
-      color: #0f0c29;
+      background-color: var(--timepicker-primary);
+      color: var(--timepicker-on-primary);
     }
   }
 
   &-cancel-btn.cyberpunk,
   &-ok-btn.cyberpunk {
-    color: #00f0ff;
-    background-color: #1a1a2e;
+    color: var(--timepicker-primary);
+    background-color: var(--timepicker-surface);
     border-radius: 0.5rem;
 
     &:hover {
-      background-color: #00f0ff;
-      color: #0f0c29;
-      box-shadow: 0 0 6px #00f0ff;
+      background-color: var(--timepicker-primary);
+      color: var(--timepicker-on-primary);
+      box-shadow: 0 0 6px var(--timepicker-primary);
     }
   }
 
   &-keyboard-icon-wrapper.cyberpunk {
-    color: #00f0ff;
+    color: var(--timepicker-primary);
 
     &:hover .timepicker-ui-keyboard-icon.cyberpunk {
-      background-color: #00f0ff;
-      color: #0f0c29;
+      background-color: var(--timepicker-primary);
+      color: var(--timepicker-on-primary);
     }
   }
 
   &-value-tips.cyberpunk {
-    color: #00f0ff;
+    color: var(--timepicker-primary);
   }
 
   &-value-tips.cyberpunk.active {
-    color: #0f0c29;
+    color: var(--timepicker-on-primary);
   }
 }
-

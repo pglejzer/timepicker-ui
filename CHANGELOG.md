@@ -7,6 +7,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.1.0] - 2025-11-07
+
+### Added
+
+- **EventEmitter API** - Modern event handling system with `on()`, `once()`, and `off()` methods
+  - Subscribe to events: `picker.on('confirm', callback)`
+  - One-time events: `picker.once('open', callback)`
+  - Unsubscribe: `picker.off('confirm', callback)`
+  - Type-safe event handling with full TypeScript support
+- **New event names** for EventEmitter: `confirm`, `cancel`, `open`, `update`, `select:hour`, `select:minute`, `select:am`, `select:pm`, `error`
+- **Exported EventEmitter class** - Available for advanced users who want to use it separately
+- **Dual event system** - Both EventEmitter and DOM events fire simultaneously for backward compatibility
+
+### Changed
+
+- Event system refactored to use internal EventEmitter for better memory management
+- DOM events (`timepicker:*`) are now considered legacy and will be removed in v4.0.0
+
+### Deprecated
+
+- **DOM events** (e.g., `timepicker:confirm`, `timepicker:cancel`) - Use EventEmitter API instead
+- These events will be removed in v4.0.0
+
+### Fixed
+
+- Fixed TypeScript compilation errors in event managers
+- Fixed `undefined` checks for optional managers (`clockManager`, `animationManager`, `configManager`)
+- Fixed type safety issues with `_disabledTime` interface - added missing `minutes` property
+- Fixed event handler type mismatches in `openElement` iteration
+
+### Migration Guide
+
+```javascript
+// Old way (deprecated, will be removed in v4)
+input.addEventListener("timepicker:confirm", (e) => {
+  console.log(e.detail);
+});
+
+// New way (recommended)
+picker.on("confirm", (data) => {
+  console.log(data);
+});
+```
+
+---
+
+## [3.0.2] - 2025-07-25
+
+### Fixed
+
+- Fixed an issue where switching between desktop and mobile views caused the timepicker instance to stop working.
+  The `destroy()` method was incorrectly called during the transition, unintentionally removing the instance.
+
+---
+
 ## [3.0.1] - 2025-07-25
 
 ### Fixed

@@ -11,6 +11,7 @@ export default {
   entry: {
     main: './docs/index.ts',
     styles: './src/styles/index.scss',
+    'theme-custom': './docs/theme-custom.css',
   },
   output: {
     filename: '[name].js',
@@ -87,7 +88,7 @@ export default {
   plugins: [
     new HtmlWebpackPlugin({
       template: './docs/index.html',
-      inject: 'body', // Wstrzykuje JS na końcu body
+      inject: 'body',
       minify: false,
     }),
     new MiniCssExtractPlugin({

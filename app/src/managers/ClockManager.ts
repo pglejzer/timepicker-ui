@@ -1,5 +1,4 @@
 import ClockFaceManager from './ClockFaceManager';
-import { themeVariables } from '../constants/variables';
 import { selectorActive } from '../utils/variables';
 import { getNumberOfHours12, getNumberOfHours24, getNumberOfMinutes } from '../utils/template';
 import type { ITimepickerUI } from '../types/ITimepickerUI';
@@ -30,14 +29,15 @@ export default class ClockManager {
   /** @internal */
   setOnStartCSSClassesIfClockType24h() {
     if (this.timepicker._options.clockType === '24h') {
-      let { hour } = this.timepicker.configManager.getInputValue(
+      const inputValue = this.timepicker?.configManager?.getInputValue(
         this.timepicker.input as unknown as HTMLInputElement,
         this.timepicker._options.clockType,
         this.timepicker._options.currentTime,
       );
 
+      let hour = inputValue?.hour;
+
       if (this.timepicker.input.value.length > 0) {
-        // eslint-disable-next-line prefer-destructuring
         hour = this.timepicker.input.value.split(':')[0];
       }
 
@@ -48,29 +48,13 @@ export default class ClockManager {
   }
 
   /** @internal */
-  setBgColorToCirleWithHourTips = (): void => {
-    if (!this.timepicker._options) return;
-
-    const { mobile, theme } = this.timepicker._options;
-
-    if (mobile || this.timepicker.circle === null) return;
-
-    if (theme === 'crane-straight' || theme === 'crane-radius') {
-      this.timepicker.circle.style.backgroundColor = themeVariables.cranered400;
-    } else {
-      this.timepicker.circle.style.backgroundColor = themeVariables.purple;
-    }
-  };
-
-  /** @internal */
   setBgColorToCircleWithMinutesTips = (): void => {
-    const { theme } = this.timepicker._options;
-
     if (this.timepicker.minutes.value && getNumberOfMinutes.includes(this.timepicker.minutes.value)) {
-      if (theme === 'crane-straight' || theme === 'crane-radius') {
-        this.timepicker.circle.style.backgroundColor = themeVariables.cranered400;
-      } else {
-        this.timepicker.circle.style.backgroundColor = themeVariables.purple;
+      const primaryColor = getComputedStyle(this.timepicker.circle)
+        .getPropertyValue('--timepicker-primary')
+        .trim();
+      if (primaryColor) {
+        this.timepicker.circle.style.backgroundColor = primaryColor;
       }
       this.timepicker.circle.classList.remove('small-circle');
     }
@@ -96,17 +80,15 @@ export default class ClockManager {
     if (this.timepicker.clockFace !== null) this.setTransformToCircleWithSwitchesMinutes(value);
     this.removeBgColorToCirleWithMinutesTips();
 
-    const getDisabledMinutes = this.timepicker._disabledTime?.value?.minutes
-      ? this.timepicker._disabledTime?.value?.minutes
-      : this.timepicker._disabledTime?.value;
+    const disabledTimeData = this.timepicker._disabledTime?.value || null;
 
-    const initClockFace = new ClockFaceManager({
+    const initClockFace = this.timepicker.clockFacePool.acquire({
       array: getNumberOfMinutes,
       classToAdd: 'timepicker-ui-minutes-time',
       clockFace: this.timepicker.clockFace,
       tipsWrapper: this.timepicker.tipsWrapper,
       theme: this.timepicker._options.theme,
-      disabledTime: getDisabledMinutes,
+      disabledTime: disabledTimeData,
       hour: this.timepicker.hour.value,
       clockType: this.timepicker._options.clockType,
     });
@@ -116,6 +98,8 @@ export default class ClockManager {
     if (this.timepicker._options.clockType === '12h') {
       initClockFace.updateDisable();
     }
+
+    this.timepicker.clockFacePool.release(initClockFace);
 
     this.toggleClassActiveToValueTips(value);
 
@@ -128,19 +112,16 @@ export default class ClockManager {
   setHoursToClock = (value: string | null): void => {
     if (this.timepicker.clockFace !== null) {
       this.setTransformToCircleWithSwitchesHour(value);
-      this.setBgColorToCirleWithHourTips();
 
-      const disabledTime = this.timepicker._disabledTime?.value?.isInterval
-        ? this.timepicker._disabledTime?.value.rangeArrHour
-        : this.timepicker._disabledTime?.value?.hours;
+      const disabledTimeData = this.timepicker._disabledTime?.value || null;
 
-      const init12h = new ClockFaceManager({
+      const init12h = this.timepicker.clockFacePool.acquire({
         array: getNumberOfHours12,
         classToAdd: 'timepicker-ui-hour-time-12',
         clockFace: this.timepicker.clockFace,
         tipsWrapper: this.timepicker.tipsWrapper,
         theme: this.timepicker._options.theme,
-        disabledTime,
+        disabledTime: disabledTimeData,
         clockType: '12h',
         hour: this.timepicker.hour.value,
       });
@@ -148,27 +129,30 @@ export default class ClockManager {
       init12h.create();
 
       if (this.timepicker._options.clockType === '24h') {
-        new ClockFaceManager({
+        const init24h = this.timepicker.clockFacePool.acquire({
           array: getNumberOfHours24,
           classToAdd: 'timepicker-ui-hour-time-24',
           clockFace: this.timepicker.tipsWrapperFor24h,
           tipsWrapper: this.timepicker.tipsWrapperFor24h,
           theme: this.timepicker._options.theme,
           clockType: '24h',
-          disabledTime,
+          disabledTime: disabledTimeData,
           hour: this.timepicker.hour.value,
-        }).create();
+        });
+
+        init24h.create();
+        this.timepicker.clockFacePool.release(init24h);
       } else {
         init12h.updateDisable();
       }
 
+      this.timepicker.clockFacePool.release(init12h);
       this.toggleClassActiveToValueTips(value);
     }
   };
 
   /** @internal */
   setTransformToCircleWithSwitchesHour = (val: string | null): void => {
-    // Sprawdź czy clockHand istnieje (może być null w mobile mode)
     if (!this.timepicker.clockHand) return;
 
     const value = Number(val);
@@ -186,7 +170,6 @@ export default class ClockManager {
 
   /** @internal */
   setTransformToCircleWithSwitchesMinutes = (val: string | null): void => {
-    // Sprawdź czy clockHand istnieje (może być null w mobile mode)
     if (!this.timepicker.clockHand) return;
 
     const degrees = Number(val) * 6;
@@ -202,10 +185,14 @@ export default class ClockManager {
       (tip: HTMLElement) => Number(tip.innerText) === Number(value),
     );
 
-    this.timepicker.allValueTips.map((el: HTMLElement) => el.classList.remove(selectorActive));
+    this.timepicker.allValueTips.map((el: HTMLElement) => {
+      el.classList.remove(selectorActive);
+      el.setAttribute('aria-selected', 'false');
+    });
 
     if (element === undefined) return;
 
     element.classList.add(selectorActive);
+    element.setAttribute('aria-selected', 'true');
   };
 }

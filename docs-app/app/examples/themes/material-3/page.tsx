@@ -1,0 +1,63 @@
+"use client";
+
+import { Section } from "@/components/section";
+import { TimepickerExample } from "@/components/examples/timepicker-example";
+import { Palette } from "lucide-react";
+
+export default function Material3Page() {
+  return (
+    <div>
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold tracking-tight mb-4 text-foreground">
+          Material 3 Theme
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          Material Design 3 (Material You) theme
+        </p>
+      </div>
+
+      <Section icon={Palette} title="Material 3 Theme">
+        <p className="text-muted-foreground mb-4">
+          Latest Material Design 3 inspired theme:
+        </p>
+        <TimepickerExample
+          code={`const picker = new TimepickerUI(input, {
+  theme: 'm3'
+});
+picker.create();`}
+          options={{
+            theme: "m3",
+          }}
+        />
+      </Section>
+
+      <Section icon={Palette} title="M3 with 12h Format">
+        <TimepickerExample
+          code={`const picker = new TimepickerUI(input, {
+  theme: 'm3',
+  clockType: '12h'
+});
+picker.create();`}
+          options={{
+            theme: "m3",
+            clockType: "12h",
+          }}
+        />
+      </Section>
+
+      <Section icon={Palette} title="M3 with 24h Format">
+        <TimepickerExample
+          code={`const picker = new TimepickerUI(input, {
+  theme: 'm3',
+  clockType: '24h'
+});
+picker.create();`}
+          options={{
+            theme: "m3",
+            clockType: "24h",
+          }}
+        />
+      </Section>
+    </div>
+  );
+}

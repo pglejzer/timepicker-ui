@@ -1,4 +1,4 @@
-import { createEventWithCallback } from '../utils/config';
+import { createEventWithCallback, isOverlappingRangeArray } from '../utils/config';
 import { getInputValue } from '../utils/input';
 import { checkDisabledHoursAndMinutes } from '../utils/time/disable';
 import type { ITimepickerUI } from '../types/ITimepickerUI.d';
@@ -12,27 +12,30 @@ export default class ValidationManager {
 
   /** @internal */
   setErrorHandler() {
+    const input = this.timepicker.input as HTMLInputElement | null;
+    if (!input) return;
+
     const { error, currentHour, currentMin, currentType, currentLength } = getInputValue(
-      this.timepicker.input as unknown as HTMLInputElement,
+      input,
       this.timepicker._options.clockType,
     );
 
-    if (error) {
-      const newEl = document.createElement('div');
-      this.timepicker.input?.classList.add('timepicker-ui-invalid-format');
-      newEl.classList.add('timepicker-ui-invalid-text');
-      newEl.innerHTML = '<b>Invalid Time Format</b>';
+    this.removeErrorHandler();
 
-      if (
-        this.timepicker.input?.parentElement &&
-        this.timepicker.input?.parentElement.querySelector('.timepicker-ui-invalid-text') === null
-      ) {
-        this.timepicker.input?.after(newEl);
+    if (error) {
+      const errorEl = document.createElement('div');
+      errorEl.classList.add('timepicker-ui-invalid-text');
+      errorEl.innerHTML = '<b>Invalid Time Format</b>';
+
+      input.classList.add('timepicker-ui-invalid-format');
+
+      if (!input.nextElementSibling?.classList.contains('timepicker-ui-invalid-text')) {
+        input.after(errorEl);
       }
 
       createEventWithCallback(
         this.timepicker._element,
-        'geterror',
+        '',
         'timepicker:error',
         {
           error,
@@ -42,34 +45,54 @@ export default class ValidationManager {
           currentLength,
         },
         this.timepicker._options.onError,
+        this.timepicker,
       );
 
-      throw new Error(`Invalid Time Format: ${error}`);
+      console.error(`Invalid Time Format: ${error}`);
+      return false;
     }
 
-    // eslint-disable-next-line no-useless-return
-    return;
+    return true;
   }
 
   /** @internal */
   removeErrorHandler() {
-    this.timepicker.input?.classList.remove('timepicker-ui-invalid-format');
-    const divToRemove = this.timepicker._element?.querySelector(
-      '.timepicker-ui-invalid-text',
-    ) as HTMLDivElement;
-    if (divToRemove) {
-      divToRemove.remove();
+    const input = this.timepicker.input as HTMLInputElement | null;
+    if (!input) return;
+
+    input.classList.remove('timepicker-ui-invalid-format');
+
+    const next = input.nextElementSibling;
+    if (next?.classList.contains('timepicker-ui-invalid-text')) {
+      next.remove();
     }
   }
 
   /** @internal */
   checkDisabledValuesOnStart() {
-    if (!this.timepicker._options.disabledTime || this.timepicker._options.disabledTime.interval) return;
+    if (!this.timepicker._options.disabledTime) return;
 
-    const {
-      disabledTime: { hours, minutes },
-      clockType,
-    } = this.timepicker._options;
+    const { disabledTime, clockType } = this.timepicker._options;
+
+    if (disabledTime.interval) {
+      if (!clockType) {
+        throw new Error('clockType is required when using disabledTime.interval');
+      }
+
+      const intervals = Array.isArray(disabledTime.interval)
+        ? disabledTime.interval
+        : [disabledTime.interval];
+
+      try {
+        isOverlappingRangeArray(intervals, clockType);
+      } catch (error) {
+        throw new Error(`Invalid disabledTime.interval: ${(error as Error).message}`);
+      }
+
+      return;
+    }
+
+    const { hours, minutes } = disabledTime;
 
     const isValidHours = hours ? checkDisabledHoursAndMinutes(hours, 'hour', clockType) : true;
     const isValidMinutes = minutes ? checkDisabledHoursAndMinutes(minutes, 'minutes', clockType) : true;
@@ -77,5 +100,9 @@ export default class ValidationManager {
     if (!isValidHours || !isValidMinutes) {
       throw new Error('You set wrong hours or minutes in disabled option');
     }
+  }
+
+  destroy() {
+    this.removeErrorHandler();
   }
 }

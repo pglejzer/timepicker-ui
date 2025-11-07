@@ -83,7 +83,6 @@ export const getInputValue = (
     return { hour, minutes: rawRest, type: undefined };
   }
 
-  // manual input
   const [hourPart, type] = value.split(' ');
   const [hStr = '', mStr = ''] = hourPart.split(':');
 

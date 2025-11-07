@@ -1,24 +1,35 @@
 @use '../variables.scss' as *;
 
+.timepicker-ui-wrapper.dark {
+  --timepicker-bg: #1c1b1f;
+  --timepicker-surface: #2c2b30;
+  --timepicker-surface-hover: #3b3940;
+  --timepicker-text: #e5e5e5;
+  --timepicker-secondary-text: #a1a1a1;
+  --timepicker-primary: #bb86fc;
+  --timepicker-on-primary: #000000;
+  --timepicker-border: rgba(255, 255, 255, 0.12);
+}
+
 .timepicker-ui {
   &-wrapper.dark {
-    background-color: $dark-bg;
-    color: $dark-text;
+    background-color: var(--timepicker-bg);
+    color: var(--timepicker-text);
   }
 
   &-hour.dark,
   &-minutes.dark {
-    background-color: $dark-surface;
-    color: $dark-text;
+    background-color: var(--timepicker-surface);
+    color: var(--timepicker-text);
 
     &:hover {
-      background-color: $dark-surface-hover;
+      background-color: var(--timepicker-surface-hover);
       color: $white;
     }
   }
 
   &-clock-face.dark {
-    background-color: $dark-surface;
+    background-color: var(--timepicker-surface);
   }
 
   &-dots.dark,
@@ -31,48 +42,48 @@
   &-clock-hand.dark,
   &-dot.dark,
   &-circle-hand.dark {
-    background-color: $dark-primary !important;
+    background-color: var(--timepicker-primary) !important;
   }
 
   &-hour.active.dark,
   &-minutes.active.dark {
-    background-color: $dark-primary;
-    color: $dark-on-primary;
+    background-color: var(--timepicker-primary);
+    color: var(--timepicker-on-primary);
   }
 
   &-cancel-btn.dark,
   &-ok-btn.dark {
-    color: $dark-primary;
+    color: var(--timepicker-primary);
   }
 
   &-cancel-btn:hover.dark,
   &-ok-btn:hover.dark {
-    background-color: $dark-surface-hover;
+    background-color: var(--timepicker-surface-hover);
   }
 
   &-wrapper-type-time.dark {
-    color: $dark-secondary-text;
+    color: var(--timepicker-secondary-text);
   }
 
   &-am.dark,
   &-pm.dark {
-    border-color: $dark-primary;
-    background-color: $dark-surface;
-    color: $dark-text;
+    border-color: var(--timepicker-primary);
+    background-color: var(--timepicker-surface);
+    color: var(--timepicker-text);
 
     &:hover,
     &.active {
-      background-color: $dark-primary;
-      color: $dark-on-primary;
+      background-color: var(--timepicker-primary);
+      color: var(--timepicker-on-primary);
     }
   }
 
   &-keyboard-icon-wrapper.dark {
-    color: $dark-text;
+    color: var(--timepicker-text);
 
     &:hover .timepicker-ui-keyboard-icon.dark {
-      background-color: $dark-primary;
-      color: $dark-on-primary;
+      background-color: var(--timepicker-primary);
+      color: var(--timepicker-on-primary);
     }
   }
 
@@ -80,4 +91,3 @@
     color: $white;
   }
 }
-

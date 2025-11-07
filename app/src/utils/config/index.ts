@@ -1,7 +1,8 @@
 /* eslint-disable no-else-return */
-import type { OptionTypes } from '../../types/types';
+import type { OptionTypes, CallbackData } from '../../types/types';
+import type { ITimepickerUI } from '../../types/ITimepickerUI';
 
-export const toType = (obj: null | undefined | string | number): string => {
+export const toType = (obj: unknown): string => {
   if (obj === null || obj === undefined) {
     return `${obj}`;
   }
@@ -17,8 +18,8 @@ export const isElement = (obj: string | any[] | any): string => (obj[0] || obj).
 
 export const typeCheckConfig = (
   componentName: string,
-  config: { [x: string]: any },
-  configTypes: { [x: string]: any },
+  config: Record<string, unknown>,
+  configTypes: Record<string, string>,
 ): void => {
   Object.keys(configTypes).forEach((property) => {
     const expectedTypes = configTypes[property];
@@ -105,7 +106,7 @@ export const createNewEvent = (
     degreesMinutes?: number | null;
     hourNotAccepted?: string | null;
     minutesNotAccepted?: string | null;
-    eventType?: any;
+    eventType?: 'accept' | 'cancel' | 'click' | 'change' | null;
     test?: string;
     error?: string;
     currentHour?: string | number;
@@ -129,23 +130,9 @@ export const createEventWithCallback = (
   el: Element,
   eventName: string,
   newEventName: string,
-  value: {
-    hour?: string | null;
-    minutes?: string | null;
-    type?: string | null;
-    degreesHours?: number | null;
-    degreesMinutes?: number | null;
-    hourNotAccepted?: string | null;
-    minutesNotAccepted?: string | null;
-    eventType?: any;
-    test?: string;
-    error?: string;
-    currentHour?: string | number;
-    currentMin?: string | number;
-    currentType?: string;
-    currentLength?: string | number;
-  },
-  callback?: (eventData: typeof value) => void,
+  value: CallbackData,
+  callback?: (eventData: CallbackData) => void,
+  timepicker?: ITimepickerUI,
 ): void => {
   if (!el) return;
 
@@ -156,6 +143,7 @@ export const createEventWithCallback = (
   });
 
   try {
+    // Deprecated notice planned for v4
     const dispatched = el.dispatchEvent(namespacedEvent);
 
     if (dispatched && eventName !== newEventName) {
@@ -164,7 +152,17 @@ export const createEventWithCallback = (
         bubbles: true,
         cancelable: true,
       });
+      // Deprecated notice planned for v4
       el.dispatchEvent(legacyEvent);
+    }
+
+    if (
+      timepicker &&
+      'emit' in timepicker &&
+      typeof (timepicker as unknown as { emit: Function }).emit === 'function'
+    ) {
+      const eventKey = newEventName.replace('timepicker:', '').replace(/-/g, ':');
+      (timepicker as unknown as { emit: (event: string, data: CallbackData) => void }).emit(eventKey, value);
     }
   } catch (error) {
     console.warn(`TimepickerUI: Error dispatching event ${newEventName}:`, error);
@@ -182,21 +180,23 @@ export const createEventWithCallback = (
 export const getBrowser = (): boolean =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-export const getIncrementTimes = (degrees: number, type: any, count: number) =>
-  getMathDegIncrement(degrees, (type as never) * count);
+export const getIncrementTimes = (degrees: number, type: number, count: number) =>
+  getMathDegIncrement(degrees, type * count);
 
-export const createObjectFromData = (obj: OptionTypes): any => {
+export const createObjectFromData = (
+  obj: OptionTypes,
+): Record<string, string | number | boolean> | undefined => {
   if (!obj) return;
 
   const parse = JSON.parse(JSON.stringify(obj));
   const keys = Object.keys(parse);
 
-  return Object.values(parse).reduce((acc: any, curr, index) => {
+  return Object.values(parse).reduce((acc: Record<string, string | number | boolean>, curr, index) => {
     if (Number(curr)) {
       acc[keys[index]] = Number(curr);
     } else if (curr === 'true' || curr === 'false') {
       acc[keys[index]] = JSON.parse(curr);
-    } else {
+    } else if (typeof curr === 'string' || typeof curr === 'number' || typeof curr === 'boolean') {
       acc[keys[index]] = curr;
     }
 
@@ -223,6 +223,62 @@ export const timeConversion = (str = '') => {
   const mins = date.getMinutes().toString().padStart(2, '0');
 
   return `${hours}:${mins}`;
+};
+
+export const normalize24h = (str: string): string => {
+  const [h, m] = str.split(':');
+  const hour = Number(h);
+  const minute = Number(m);
+  return `${hour <= 9 ? '0' + hour : hour}:${minute <= 9 ? '0' + minute : minute}`;
+};
+
+export const isOverlappingRangeArray = (intervals: string[], clockType: '12h' | '24h'): boolean => {
+  if (intervals.length < 2) return false;
+
+  const normalizedIntervals = intervals.map((rangeStr) => {
+    const [first, second] = rangeStr.trim().split('-');
+
+    let startTime: string;
+    let endTime: string;
+
+    if (clockType === '12h') {
+      if (!/\s?(AM|PM|am|pm)\s?$/.test(first.trim()) || !/\s?(AM|PM|am|pm)\s?$/.test(second.trim())) {
+        throw new Error(
+          `Invalid 12h format in interval: "${rangeStr}". AM/PM is required for 12h clock type.`,
+        );
+      }
+      startTime = timeConversion(first.trim());
+      endTime = timeConversion(second.trim());
+    } else {
+      if (/\s?(AM|PM|am|pm)\s?/.test(first.trim()) || /\s?(AM|PM|am|pm)\s?/.test(second.trim())) {
+        throw new Error(
+          `Invalid 24h format in interval: "${rangeStr}". AM/PM is not allowed for 24h clock type.`,
+        );
+      }
+      startTime = normalize24h(first.trim());
+      endTime = normalize24h(second.trim());
+    }
+
+    return { start: startTime, end: endTime, original: rangeStr };
+  });
+
+  for (let i = 0; i < normalizedIntervals.length; i++) {
+    for (let j = i + 1; j < normalizedIntervals.length; j++) {
+      const interval1 = normalizedIntervals[i];
+      const interval2 = normalizedIntervals[j];
+
+      if (
+        (interval1.start <= interval2.end && interval1.end >= interval2.start) ||
+        (interval2.start <= interval1.end && interval2.end >= interval1.start)
+      ) {
+        throw new Error(
+          `Overlapping time intervals detected: "${interval1.original}" overlaps with "${interval2.original}"`,
+        );
+      }
+    }
+  }
+
+  return false;
 };
 
 /**

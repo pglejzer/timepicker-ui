@@ -2,7 +2,7 @@ import postcss from 'rollup-plugin-postcss';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import pkg from './package.json' with { type: 'json' };
 import nodeResolve from '@rollup/plugin-node-resolve';
 import babel from '@rollup/plugin-babel';
@@ -10,7 +10,6 @@ import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import replace from '@rollup/plugin-replace';
 
 const { dependencies } = Object.keys(pkg) || {};
-const tsconfigDefaults = { compilerOptions: { declaration: true } };
 
 const baseConfig = (input, outputFile) => ({
   input,
@@ -37,6 +36,7 @@ const scssConfigs = [
   baseConfig('./src/styles/themes/theme-pastel.scss', '../dist/css/themes/theme-pastel.css'),
   baseConfig('./src/styles/themes/theme-ai.scss', '../dist/css/themes/theme-ai.css'),
   baseConfig('./src/styles/themes/theme-cyberpunk.scss', '../dist/css/themes/theme-cyberpunk.css'),
+  baseConfig('./src/styles/themes/theme-custom.scss', '../dist/css/themes/theme-custom.css'),
 ];
 
 const umdConfig = {
