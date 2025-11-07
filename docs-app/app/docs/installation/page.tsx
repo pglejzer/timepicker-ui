@@ -61,8 +61,8 @@ pnpm add timepicker-ui`}
           For quick prototyping, use the CDN version:
         </p>
         <CodeBlock
-          code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker-ui@3.1.2/dist/css/main.css">
-<script src="https://cdn.jsdelivr.net/npm/timepicker-ui@3.1.2/dist/index.js"></script>`}
+          code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker-ui@3.1.3/dist/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/timepicker-ui@3.1.3/dist/index.js"></script>`}
           language="html"
         />
       </Section>
