@@ -1,0 +1,62 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  &-hour-time-12:focus-visible,
+  &-minutes-time:focus-visible,
+  &-hour-time-24:focus-visible,
+  &-am:focus-visible,
+  &-pm:focus-visible,
+  &-cancel-btn:focus-visible,
+  &-ok-btn:focus-visible,
+  &-keyboard-icon-wrapper:focus-visible {
+    outline: 3px solid var(--timepicker-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(98, 0, 238, 0.2);
+  }
+
+  @media (prefers-contrast: high) {
+    &-hour-time-12:focus-visible,
+    &-minutes-time:focus-visible,
+    &-hour-time-24:focus-visible,
+    &-am:focus-visible,
+    &-pm:focus-visible,
+    &-cancel-btn:focus-visible,
+    &-ok-btn:focus-visible {
+      outline-width: 4px;
+      font-weight: 700;
+    }
+
+    &-wrapper {
+      border: 2px solid currentColor;
+    }
+
+    &-clock-face {
+      border: 2px solid currentColor;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &-clock-animation {
+      animation: none !important;
+    }
+
+    &-tips-animation {
+      transition: none !important;
+    }
+
+    &-modal {
+      transition: none !important;
+    }
+
+    &-clock-hand {
+      transition: none !important;
+    }
+
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+

@@ -42,12 +42,12 @@
 
     &:hover,
     &.active {
-      background-color: var(--timepicker-surface-hover);
+      background-color: var(--timepicker-am-pm-active);
       color: var(--timepicker-primary);
     }
 
     &.active {
-      background-color: var(--timepicker-primary);
+      background-color: var(--timepicker-am-pm-active);
       color: var(--timepicker-on-primary);
     }
   }
@@ -76,4 +76,3 @@
     }
   }
 }
-

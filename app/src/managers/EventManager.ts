@@ -1,25 +1,19 @@
 import type { ITimepickerUI } from '../types/ITimepickerUI';
 import ButtonHandlers from './eventmanager/ButtonHandlers';
-import DragHandlers from './eventmanager/DragHandlers';
 import TypeModeHandlers from './eventmanager/TypeModeHandlers';
 import InputHandlers from './eventmanager/InputHandlers';
-import ClockHandPositionUpdater from './eventmanager/ClockHandPositionUpdater';
 import MiscHandlers from './eventmanager/MiscHandlers';
 import InlineHandlers from './eventmanager/InlineHandlers';
 
 export default class EventManager {
   private _cleanupHandlers: Array<() => void> = [];
   private buttonHandlers: ButtonHandlers;
-  private dragHandlers: DragHandlers;
   private typeModeHandlers: TypeModeHandlers;
   private inputHandlers: InputHandlers;
-  private clockHandPositionUpdater: ClockHandPositionUpdater;
   private miscHandlers: MiscHandlers;
   private inlineHandlers: InlineHandlers;
 
   constructor(timepicker: ITimepickerUI) {
-    this.clockHandPositionUpdater = new ClockHandPositionUpdater(timepicker);
-    this.dragHandlers = new DragHandlers(timepicker, this.clockHandPositionUpdater.updateHandPosition);
     this.buttonHandlers = new ButtonHandlers(timepicker, this._cleanupHandlers);
     this.typeModeHandlers = new TypeModeHandlers(timepicker, this._cleanupHandlers);
     this.inputHandlers = new InputHandlers(timepicker, this._cleanupHandlers);
@@ -28,16 +22,9 @@ export default class EventManager {
   }
 
   public destroy(): void {
-    this._cleanupHandlers.forEach((cleanup) => {
-      try {
-        cleanup();
-      } catch (error) {
-        console.error('EventManager cleanup error:', error);
-      }
-    });
-
+    this._cleanupHandlers.forEach((cleanup) => cleanup());
     this._cleanupHandlers = [];
-    this.dragHandlers.cleanup();
+    this.inputHandlers.destroy();
   }
 
   handleOpenOnClick = () => this.miscHandlers.handleOpenOnClick();
@@ -49,25 +36,24 @@ export default class EventManager {
   handlePmClick = () => this.typeModeHandlers.handlePmClick();
   handleHourEvents = () => this.inputHandlers.handleHourEvents();
   handleMinutesEvents = () => this.inputHandlers.handleMinutesEvents();
-  handleEventToMoveHand = (event: TouchEvent) => this.dragHandlers.handleEventToMoveHand(event);
-  handleMoveHand = () => this.dragHandlers.handleMoveHand();
   handleClickOnHourMobile = () => this.miscHandlers.handleClickOnHourMobile();
   handlerClickHourMinutes = (event: Event) => this.miscHandlers.handlerClickHourMinutes(event);
   handleIconChangeView = () => this.miscHandlers.handleIconChangeView();
   handleEscClick = () => this.miscHandlers.handleEscClick();
   focusTrapHandler = () => this.miscHandlers.focusTrapHandler();
   handleInlineAutoUpdate = () => this.inlineHandlers.handleInlineAutoUpdate();
+  handleMoveHand = () => {};
+  handleEventToMoveHand = (event: TouchEvent) => {};
 
   get _isDragging(): boolean {
-    return this.dragHandlers.isDragging;
+    return false;
   }
 
   get _animationFrameId(): number | null {
-    return this.dragHandlers.animationFrameId;
+    return null;
   }
 
-  public _onDragStart = (event: MouseEvent | TouchEvent) => this.dragHandlers._onDragStart(event);
-  public _onDragMove = (event: MouseEvent | TouchEvent) => this.dragHandlers._onDragMove(event);
-  public _onDragEnd = (event: MouseEvent | TouchEvent) => this.dragHandlers._onDragEnd(event);
+  public _onDragStart = (event: MouseEvent | TouchEvent) => {};
+  public _onDragMove = (event: MouseEvent | TouchEvent) => {};
+  public _onDragEnd = (event: MouseEvent | TouchEvent) => {};
 }
-

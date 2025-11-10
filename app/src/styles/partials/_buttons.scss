@@ -1,0 +1,74 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  &-cancel-btn,
+  &-ok-btn,
+  &-cancel-btn.mobile,
+  &-ok.btn-mobile {
+    position: relative;
+    color: var(--timepicker-primary);
+    border-radius: 20px;
+    background-color: transparent;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px 24px;
+    font-weight: 500;
+    cursor: pointer;
+    overflow: hidden;
+    user-select: none;
+
+    transition:
+      background-color 0.2s ease,
+      opacity 0.2s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: currentColor;
+      opacity: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    &:hover::after {
+      opacity: 0.08;
+    }
+
+    &:focus-visible {
+      outline: none;
+
+      &::after {
+        opacity: 0.12;
+      }
+    }
+
+    &:active::after {
+      opacity: 0.16;
+    }
+
+    &[disabled],
+    &[aria-disabled='true'] {
+      opacity: 0.38;
+      cursor: not-allowed;
+      pointer-events: none;
+
+      &::after {
+        opacity: 0;
+      }
+    }
+  }
+
+  &-wrapper-btn,
+  &-keyboard-icon,
+  &-wrapper-btn-mobile,
+  &-keyboard-icon-mobile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

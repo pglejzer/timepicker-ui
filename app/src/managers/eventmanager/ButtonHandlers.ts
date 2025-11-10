@@ -19,21 +19,23 @@ export default class ButtonHandlers {
         this.timepicker._options.clockType,
       );
 
+      const eventData = {
+        ...value,
+        hourNotAccepted: this.timepicker.hour.value,
+        minutesNotAccepted: this.timepicker.minutes.value,
+        type: this.timepicker.activeTypeMode?.dataset.type,
+        degreesHours: this.timepicker._degreesHours,
+        degreesMinutes: this.timepicker._degreesMinutes,
+      };
+
       createEventWithCallback(
         this.timepicker._element,
-        'cancel',
         'timepicker:cancel',
-        {
-          ...value,
-          hourNotAccepted: this.timepicker.hour.value,
-          minutesNotAccepted: this.timepicker.minutes.value,
-          type: this.timepicker.activeTypeMode?.dataset.type,
-          degreesHours: this.timepicker._degreesHours,
-          degreesMinutes: this.timepicker._degreesMinutes,
-        },
+        eventData,
         this.timepicker._options.onCancel,
-        this.timepicker,
       );
+
+      this.timepicker.emit?.('cancel', eventData);
 
       this.timepicker.close()();
     };
@@ -97,20 +99,22 @@ export default class ButtonHandlers {
         this.timepicker._options.clockType === '24h' ? '' : this.timepicker.activeTypeMode?.dataset.type
       }`.trimEnd();
 
+      const eventData = {
+        hour: this.timepicker.hour.value,
+        minutes: this.timepicker.minutes.value,
+        type: this.timepicker.activeTypeMode?.dataset.type,
+        degreesHours: this.timepicker._degreesHours,
+        degreesMinutes: this.timepicker._degreesMinutes,
+      };
+
       createEventWithCallback(
         this.timepicker._element,
-        '',
         'timepicker:confirm',
-        {
-          hour: this.timepicker.hour.value,
-          minutes: this.timepicker.minutes.value,
-          type: this.timepicker.activeTypeMode?.dataset.type,
-          degreesHours: this.timepicker._degreesHours,
-          degreesMinutes: this.timepicker._degreesMinutes,
-        },
+        eventData,
         this.timepicker._options.onConfirm,
-        this.timepicker,
       );
+
+      this.timepicker.emit?.('confirm', eventData);
 
       this.timepicker.close()();
     };
@@ -132,21 +136,23 @@ export default class ButtonHandlers {
         this.timepicker._options.clockType,
       );
 
+      const eventData = {
+        ...value,
+        hourNotAccepted: this.timepicker.hour.value,
+        minutesNotAccepted: this.timepicker.minutes.value,
+        type: this.timepicker.activeTypeMode?.dataset.type,
+        degreesHours: this.timepicker._degreesHours,
+        degreesMinutes: this.timepicker._degreesMinutes,
+      };
+
       createEventWithCallback(
         this.timepicker._element,
-        '',
         'timepicker:cancel',
-        {
-          ...value,
-          hourNotAccepted: this.timepicker.hour.value,
-          minutesNotAccepted: this.timepicker.minutes.value,
-          type: this.timepicker.activeTypeMode?.dataset.type,
-          degreesHours: this.timepicker._degreesHours,
-          degreesMinutes: this.timepicker._degreesMinutes,
-        },
+        eventData,
         this.timepicker._options.onCancel,
-        this.timepicker,
       );
+
+      this.timepicker.emit?.('cancel', eventData);
 
       this.timepicker.close()();
     };
@@ -157,4 +163,3 @@ export default class ButtonHandlers {
     });
   };
 }
-

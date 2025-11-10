@@ -30,9 +30,10 @@ const navigation: NavigationSection[] = [
     title: "Themes",
     links: [
       { title: "Basic Theme", href: "/examples/themes/basic" },
+      { title: "Crane", href: "/examples/themes/crane" },
       { title: "Crane Straight", href: "/examples/themes/crane-straight" },
-      { title: "Crane Radius", href: "/examples/themes/crane-radius" },
-      { title: "Material 3", href: "/examples/themes/material-3" },
+      { title: "Material 3 Green", href: "/examples/themes/material-3" },
+      { title: "Material 2", href: "/examples/themes/material-2" },
       { title: "Dark Theme", href: "/examples/themes/dark" },
       { title: "Glassmorphic", href: "/examples/themes/glassmorphic" },
       { title: "Pastel", href: "/examples/themes/pastel" },

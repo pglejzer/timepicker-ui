@@ -1,0 +1,66 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  * {
+    box-sizing: border-box !important;
+  }
+
+  &-open-element {
+    &.disabled {
+      pointer-events: none;
+      touch-action: none;
+      user-select: none;
+    }
+  }
+}
+
+.opacity {
+  transition: $tmopacity;
+
+  &.show {
+    opacity: 1;
+  }
+}
+
+.invalid-value {
+  border-color: $redtovalid !important;
+  color: $redtovalid !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: $redtovalid !important;
+    color: $redtovalid !important;
+  }
+}
+
+.timepicker-ui-invalid-format {
+  border: 2px solid red;
+  color: red;
+}
+
+.timepicker-ui-invalid-text {
+  color: red;
+}
+
+.sr-only,
+.timepicker-ui .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.timepicker-announcer {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+

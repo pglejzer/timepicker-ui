@@ -1,31 +1,21 @@
 import { defineConfig } from 'tsup';
 
-export default defineConfig([
-  {
-    entry: ['src/index.ts'],
-    format: ['esm'],
-    outDir: '../dist',
-    clean: true,
-    minify: true,
-    sourcemap: false,
-    dts: {
-      resolve: true,
-    },
-    tsconfig: './tsconfig.prod.json',
-    target: 'es2022',
+export default defineConfig({
+  entry: ['src/index.ts'],
+  format: ['esm', 'cjs'],
+  outDir: '../dist',
+  clean: true,
+  minify: true,
+  sourcemap: false,
+  dts: {
+    resolve: true,
   },
-  {
-    entry: ['src/index.ts'],
-    format: ['cjs'],
-    outDir: '../dist',
-    clean: false,
-    minify: true,
-    sourcemap: false,
-    dts: {
-      resolve: true,
-    },
-    tsconfig: './tsconfig.prod.json',
-    target: 'es2022',
+  target: 'es2022',
+  tsconfig: './tsconfig.prod.json',
+  loader: {
+    '.svg': 'text',
   },
-]);
-
+  esbuildOptions(options) {
+    options.assetNames = '[name].[ext]';
+  },
+});

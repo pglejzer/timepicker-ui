@@ -42,6 +42,13 @@ const navigation = [
       { title: "Accessibility", href: "/docs/advanced/accessibility" },
     ],
   },
+  {
+    title: "Project",
+    links: [
+      { title: "Changelog", href: "/docs/changelog" },
+      { title: "Roadmap", href: "/docs/roadmap" },
+    ],
+  },
 ];
 
 export function DocsSidebar() {

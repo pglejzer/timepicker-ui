@@ -44,11 +44,7 @@ export class EventEmitter<EventMap extends Record<string, any> = TimepickerEvent
 
   emit<K extends keyof EventMap>(event: K, data?: EventMap[K]): void {
     this.events.get(event)?.forEach((handler) => {
-      try {
-        handler(data as EventMap[K]);
-      } catch (error) {
-        console.error(`EventEmitter: Error in handler for "${String(event)}":`, error);
-      }
+      handler(data as EventMap[K]);
     });
   }
 
@@ -60,4 +56,3 @@ export class EventEmitter<EventMap extends Record<string, any> = TimepickerEvent
     return (this.events.get(event)?.size ?? 0) > 0;
   }
 }
-

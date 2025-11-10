@@ -6,8 +6,19 @@
   --timepicker-surface-hover: rgba(255, 255, 255, 0.15);
   --timepicker-text: #ffffff;
   --timepicker-secondary-text: rgba(255, 255, 255, 0.7);
+
+  --timepicker-am-pm-active: rgba(255, 255, 255, 0.6);
+  --timepicker-am-pm-text-selected: #000000;
+  --timepicker-am-pm-text-unselected: rgba(255, 255, 255, 0.7);
+
   --timepicker-primary: rgba(255, 255, 255, 0.6);
   --timepicker-on-primary: #000000;
+  --timepicker-primary-container: rgba(255, 255, 255, 0.6);
+  --timepicker-on-primary-container: #000000;
+
+  --timepicker-tertiary-container: rgba(255, 255, 255, 0.6);
+  --timepicker-on-tertiary-container: #000000;
+
   --timepicker-border: rgba(255, 255, 255, 0.3);
 }
 
@@ -61,7 +72,7 @@
 
     &:hover,
     &.active {
-      background-color: var(--timepicker-primary);
+      background-color: var(--timepicker-am-pm-active);
       color: var(--timepicker-on-primary);
     }
   }

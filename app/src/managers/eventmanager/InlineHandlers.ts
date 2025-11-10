@@ -39,20 +39,22 @@ export default class InlineHandlers {
           const changeEvent = new Event('change', { bubbles: true });
           this.timepicker.input.dispatchEvent(changeEvent);
 
+          const eventData = {
+            hour: currentHour,
+            minutes: currentMinutes,
+            type: currentType,
+            degreesHours: this.timepicker._degreesHours,
+            degreesMinutes: this.timepicker._degreesMinutes,
+          };
+
           createEventWithCallback(
             this.timepicker._element,
-            '',
             'timepicker:confirm',
-            {
-              hour: currentHour,
-              minutes: currentMinutes,
-              type: currentType,
-              degreesHours: this.timepicker._degreesHours,
-              degreesMinutes: this.timepicker._degreesMinutes,
-            },
+            eventData,
             this.timepicker._options.onConfirm,
-            this.timepicker,
           );
+
+          this.timepicker.emit?.('confirm', eventData);
         }
       }
     };
@@ -94,4 +96,3 @@ export default class InlineHandlers {
     });
   };
 }
-

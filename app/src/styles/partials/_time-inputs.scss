@@ -1,0 +1,196 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  &-input-wrapper {
+    position: relative;
+    display: flex;
+    border-radius: 8px;
+    overflow: visible;
+    width: 96px;
+
+    &.mobile {
+      input {
+        height: 72px;
+      }
+    }
+  }
+
+  &-input-wrapper.mobile {
+    flex-direction: column;
+  }
+
+  &-input-ripple-wrapper {
+    position: relative;
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    height: 80px;
+
+    &.mobile {
+      height: 72px;
+    }
+
+    &.expanded {
+      height: 80px;
+    }
+  }
+
+  &-input-ripple-wrapper.mobile {
+    height: 72px;
+    &.expanded {
+      height: 80px;
+    }
+  }
+
+  &-wrapper-time,
+  &-wrapper-time.mobile {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-wrapper-time.expanded {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+      margin-right: 0;
+      height: auto;
+      margin-bottom: 16px;
+    }
+  }
+
+  &-wrapper-time-24h {
+    margin-right: 0px;
+  }
+
+  &-wrapper-time.mobile {
+    position: relative;
+    width: 100%;
+    max-width: fit-content;
+    height: auto;
+  }
+
+  &-hour,
+  &-minutes,
+  &-hour.mobile,
+  &-minutes.mobile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 51.2px;
+    height: 80px;
+    background-color: var(--timepicker-input-bg);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    border: 2px solid transparent;
+    padding: 10px;
+    width: 96px;
+    text-align: center;
+    color: var(--timepicker-text);
+
+    &.mobile {
+      height: 72px;
+    }
+
+    &.expanded {
+      height: 80px;
+    }
+
+    &:focus-visible {
+      outline: auto;
+    }
+
+    &:hover {
+      color: var(--timepicker-text);
+      background-color: var(--timepicker-surface-hover);
+    }
+
+    &.active {
+      color: var(--timepicker-on-primary-container);
+      background-color: var(--timepicker-primary-container);
+
+      &:hover {
+        color: var(--timepicker-on-primary-container);
+      }
+    }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none !important;
+      margin: 0 !important;
+    }
+  }
+
+  &-hour,
+  &-minutes {
+    outline: none;
+    border: 2px solid transparent;
+
+    &[contenteditable='true']:focus,
+    &[contenteditable='true']:active {
+      border: 2px solid var(--timepicker-primary);
+      outline-color: var(--timepicker-primary);
+      user-select: all;
+    }
+  }
+
+  &-hour.mobile,
+  &-minutes.mobile {
+    outline: none;
+    border: 2px solid transparent;
+    &[contenteditable='true']:focus,
+    &[contenteditable='true']:active {
+      border: 2px solid var(--timepicker-primary);
+      outline-color: var(--timepicker-primary);
+      user-select: all;
+    }
+  }
+
+  &-dots,
+  &-dots.mobile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: transparent;
+    gap: 12px;
+
+    span {
+      width: 6px;
+      height: 6px;
+      background-color: var(--timepicker-text);
+      border-radius: 50%;
+      display: block;
+    }
+  }
+
+  &-dots.mobile {
+    justify-content: normal;
+  }
+
+  &-hour-text,
+  &-minute-text {
+    font-size: 12.8px;
+    color: var(--timepicker-secondary-text);
+    margin-top: 8px;
+    pointer-events: none;
+    display: none;
+
+    &.show {
+      display: block;
+    }
+
+    &.mobile {
+      display: block;
+
+      &.expanded {
+        display: none;
+      }
+    }
+  }
+}

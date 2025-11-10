@@ -46,7 +46,7 @@ declare module 'timepicker-ui' {
     backdrop?: boolean;
     /**
      * @description Set custom text to cancel button
-     * @default "CANCEL"
+     * @default "Cancel"
      */
     cancelLabel?: string;
     /**
@@ -126,25 +126,26 @@ declare module 'timepicker-ui' {
     preventDefault?: boolean;
     /**
      * @description Set custom text to time label on desktop version
-     * @default "Select Time"
+     * @default "Select time"
      */
     timeLabel?: string;
     /**
      * @description Turn on/off switch to minutes by select hour
      * @default true
      */
-    switchToMinutesAfterSelectHour?: boolean;
+    autoSwitchToMinutes?: boolean;
     /**
-     * @description Set theme to timepicker. Available options: `basic`, `crane-straight`, `crane-radius`, `m3`, `dark`, `glassmorphic`, `pastel`, `ai`, `cyberpunk`, `custom`
+     * @description Set theme to timepicker. Available options: `basic`, `crane`, `crane-straight`, `m3-green`, `m2`, `dark`, `glassmorphic`, `pastel`, `ai`, `cyberpunk`, `custom`
      *
      * The `custom` theme allows you to create your own styling by overriding CSS variables.
      * @default "basic"
      */
     theme?:
       | 'basic'
+      | 'crane'
       | 'crane-straight'
-      | 'crane-radius'
-      | 'm3'
+      | 'm2'
+      | 'm3-green'
       | 'dark'
       | 'glassmorphic'
       | 'pastel'
@@ -218,7 +219,7 @@ declare module 'timepicker-ui' {
      */
     focusTrap?: boolean;
     /**
-     * @description Set delay to clickable elements like button "OK", "CANCEL" etc. The value has to be set in milliseconds.
+     * @description Set delay to clickable elements like button "OK", "Cancel" etc. The value has to be set in milliseconds.
      * @default 300
      */
     delayHandler?: number;
@@ -290,7 +291,7 @@ declare module 'timepicker-ui' {
        */
       containerId: string;
       /**
-       * @description Show or hide OK/CANCEL buttons in inline mode
+       * @description Show or hide OK/Cancel buttons in inline mode
        * @default false
        */
       showButtons?: boolean;

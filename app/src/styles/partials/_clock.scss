@@ -1,0 +1,164 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  &-clock-face {
+    background-color: var(--timepicker-surface);
+    height: 100%;
+    width: 100%;
+    border-radius: 100%;
+    position: relative;
+    transform: scale(0);
+    opacity: 0;
+    will-change: transform, opacity;
+    transition:
+      transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.scale-in {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+      height: 256px;
+      width: 256px;
+    }
+  }
+
+  &-dot {
+    position: absolute;
+    top: $tm50percent;
+    left: $tm50percent;
+    user-select: none;
+    touch-action: none;
+    transform: $tmtranslatetransform;
+    background-color: var(--timepicker-primary);
+    height: 8px;
+    width: 8px;
+    border-radius: 100%;
+  }
+
+  &-tips-wrapper {
+    height: 100%;
+    width: 100%;
+  }
+
+  &-tips-wrapper-24h {
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    border-radius: 50%;
+
+    &-disabled {
+      pointer-events: none;
+      touch-action: none;
+      user-select: none;
+    }
+
+    &.none {
+      display: none;
+    }
+  }
+
+  &-hour-time-12,
+  &-minutes-time,
+  &-hour-time-24 {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 17.6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    touch-action: none;
+    user-select: none;
+
+    span {
+      touch-action: none;
+      user-select: none;
+    }
+  }
+
+  &-hour-time-12 {
+    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-clock-hand {
+    position: absolute;
+    background-color: var(--timepicker-primary);
+    bottom: $tm50percent;
+    height: 31%;
+    left: calc(50% - 1px);
+    transform-origin: center bottom 0;
+    width: 2px;
+  }
+
+  &-circle-hand {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-color: var(--timepicker-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+
+    &.small-circle {
+      height: 36px;
+      width: 36px;
+      box-sizing: border-box !important;
+    }
+  }
+
+  &-circle-hand-24h {
+    transform: translate(-50%, -50%);
+    top: 4px;
+    left: 1px;
+  }
+
+  &-value-tips,
+  &-value-tips-24h {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    line-height: 1;
+    transition: 0.3s ease color;
+    color: var(--timepicker-text);
+
+    &.active {
+      color: var(--timepicker-on-primary);
+      transition: none;
+    }
+  }
+
+  &-clock-animation {
+    animation: clockanimation 350ms linear;
+  }
+
+  &-tips-animation {
+    transition:
+      transform 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+      height 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+
+  &-tips-disabled {
+    color: var(--timepicker-disabled-text);
+    pointer-events: none;
+  }
+}

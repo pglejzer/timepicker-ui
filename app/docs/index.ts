@@ -72,8 +72,8 @@ format24hPicker.create();
 
 const mobilePicker = new TimepickerUI('#mobile-picker', {
   mobile: true,
-  clockType: '24h',
   enableSwitchIcon: true,
+  clockType: '24h',
 });
 mobilePicker.create();
 
@@ -88,12 +88,12 @@ const themeCraneStraightPicker = new TimepickerUI('#theme-crane-straight', {
 themeCraneStraightPicker.create();
 
 const themeCraneRadiusPicker = new TimepickerUI('#theme-crane-radius', {
-  theme: 'crane-radius',
+  theme: 'crane',
 });
 themeCraneRadiusPicker.create();
 
 const themeM3Picker = new TimepickerUI('#theme-m3', {
-  theme: 'm3',
+  theme: 'm3-green',
 });
 themeM3Picker.create();
 
@@ -101,6 +101,11 @@ const themeDarkPicker = new TimepickerUI('#theme-dark', {
   theme: 'dark',
 });
 themeDarkPicker.create();
+
+const themeM2Picker = new TimepickerUI('#theme-m2', {
+  theme: 'm2',
+});
+themeM2Picker.create();
 
 const themeGlassmorphicPicker = new TimepickerUI('#theme-glassmorphic', {
   theme: 'glassmorphic',
@@ -189,7 +194,7 @@ if (eventPickerElement && eventLog) {
   });
 }
 const customLabelsPicker = new TimepickerUI('#custom-labels-picker', {
-  timeLabel: 'Select Time',
+  timeLabel: 'Select time',
   okLabel: 'It is ok',
   cancelLabel: 'Nope',
   amLabel: 'AM',
@@ -208,18 +213,18 @@ multiPicker1.create();
 
 const multiPicker2 = new TimepickerUI('#multi-picker-2', {
   clockType: '12h',
-  theme: 'm3',
+  theme: 'm3-green',
 });
 multiPicker2.create();
 
 const multiPicker3 = new TimepickerUI('#multi-picker-3', {
   clockType: '24h',
-  theme: 'crane-radius',
+  theme: 'crane',
 });
 multiPicker3.create();
 
 const eventEmitterPicker = new TimepickerUI('#event-emitter-picker', {
-  theme: 'm3',
+  theme: 'm3-green',
 });
 eventEmitterPicker.create();
 
@@ -278,7 +283,7 @@ customThemePicker.create();
 
 const advancedPicker = new TimepickerUI('#advanced-picker', {
   clockType: '12h',
-  theme: 'm3',
+  theme: 'm3-green',
   enableSwitchIcon: true,
   focusTrap: true,
   editable: true,
@@ -354,7 +359,7 @@ if (pickerElement) {
 }
 
 const version3Example = new TimepickerUI('#version3-example', {
-  theme: 'm3',
+  theme: 'm3-green',
   clockType: '24h',
   focusTrap: false,
   delayHandler: 200,
@@ -369,7 +374,7 @@ if (elementExists) {
 }
 
 const destroyExample = new TimepickerUI('#destroy-example', {
-  theme: 'm3',
+  theme: 'm3-green',
   clockType: '24h',
   focusTrap: false,
   delayHandler: 200,

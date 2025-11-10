@@ -1,14 +1,10 @@
 import {
-  toType,
   isElement,
-  typeCheckConfig,
   getConfig,
   getScrollbarWidth,
-  getRadians,
   getClickTouchPosition,
   getMathDegIncrement,
   hasClass,
-  createNewEvent,
   createEventWithCallback,
   getBrowser,
   getIncrementTimes,
@@ -27,24 +23,6 @@ describe('utils/config', () => {
     document.body.innerHTML = '';
   });
 
-  describe('toType', () => {
-    it('should return "null" for null', () => {
-      expect(toType(null)).toBe('null');
-    });
-
-    it('should return "undefined" for undefined', () => {
-      expect(toType(undefined)).toBe('undefined');
-    });
-
-    it('should return "string" for string', () => {
-      expect(toType('test')).toBe('string');
-    });
-
-    it('should return "number" for number', () => {
-      expect(toType(42)).toBe('number');
-    });
-  });
-
   describe('isElement', () => {
     it('should return nodeType for HTMLElement', () => {
       const div = document.createElement('div');
@@ -54,36 +32,6 @@ describe('utils/config', () => {
     it('should return nodeType from array of elements', () => {
       const div = document.createElement('div');
       expect(isElement([div])).toBe(1);
-    });
-  });
-
-  describe('typeCheckConfig', () => {
-    it('should not throw for valid config', () => {
-      const config = { testProp: 'string' };
-      const configTypes = { testProp: 'string' };
-
-      expect(() => {
-        typeCheckConfig('TestComponent', config, configTypes);
-      }).not.toThrow();
-    });
-
-    it('should throw for invalid type', () => {
-      const config = { testProp: 123 };
-      const configTypes = { testProp: 'string' };
-
-      expect(() => {
-        typeCheckConfig('TestComponent', config, configTypes);
-      }).toThrow('TESTCOMPONENT');
-    });
-
-    it('should handle element type check', () => {
-      const div = document.createElement('div');
-      const config = { element: div };
-      const configTypes = { element: 'el' };
-
-      expect(() => {
-        typeCheckConfig('TestComponent', config, configTypes);
-      }).not.toThrow();
     });
   });
 
@@ -114,14 +62,6 @@ describe('utils/config', () => {
       const initialChildren = document.body.children.length;
       getScrollbarWidth();
       expect(document.body.children.length).toBe(initialChildren);
-    });
-  });
-
-  describe('getRadians', () => {
-    it('should convert degrees to radians', () => {
-      expect(getRadians(180)).toBeCloseTo(Math.PI);
-      expect(getRadians(90)).toBeCloseTo(Math.PI / 2);
-      expect(getRadians(0)).toBe(0);
     });
   });
 
@@ -205,34 +145,13 @@ describe('utils/config', () => {
     });
   });
 
-  describe('createNewEvent', () => {
-    it('should dispatch custom event with data', () => {
-      const div = document.createElement('div');
-      const eventData = { hour: '12', minutes: '30' };
-      let receivedData: typeof eventData | null = null;
-
-      div.addEventListener('test-event', (e: Event) => {
-        receivedData = (e as CustomEvent).detail;
-      });
-
-      createNewEvent(div, 'test-event', eventData);
-      expect(receivedData).toEqual(eventData);
-    });
-
-    it('should not throw for null element', () => {
-      expect(() => {
-        createNewEvent(null as unknown as Element, 'test', {});
-      }).not.toThrow();
-    });
-  });
-
   describe('createEventWithCallback', () => {
     it('should dispatch event and call callback', () => {
       const div = document.createElement('div');
       const eventData = { hour: '12', minutes: '30' };
       const callback = jest.fn();
 
-      createEventWithCallback(div, 'accept', 'timepicker:confirm', eventData, callback);
+      createEventWithCallback(div, 'timepicker:confirm', eventData, callback);
 
       expect(callback).toHaveBeenCalledWith(eventData);
     });
@@ -246,7 +165,7 @@ describe('utils/config', () => {
       div.addEventListener('accept', legacyHandler);
       div.addEventListener('timepicker:confirm', namespacedHandler);
 
-      createEventWithCallback(div, 'accept', 'timepicker:confirm', eventData);
+      createEventWithCallback(div, 'timepicker:confirm', eventData);
 
       expect(legacyHandler).toHaveBeenCalled();
       expect(namespacedHandler).toHaveBeenCalled();
@@ -256,7 +175,7 @@ describe('utils/config', () => {
       const div = document.createElement('div');
 
       expect(() => {
-        createEventWithCallback(div, 'test', 'timepicker:test', {}, undefined);
+        createEventWithCallback(div, 'timepicker:test', {}, undefined);
       }).not.toThrow();
     });
 
@@ -267,7 +186,7 @@ describe('utils/config', () => {
       };
       const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
 
-      createEventWithCallback(div, 'test', 'timepicker:test', {}, errorCallback);
+      createEventWithCallback(div, 'timepicker:test', {}, errorCallback);
 
       expect(consoleWarnSpy).toHaveBeenCalled();
       consoleWarnSpy.mockRestore();

@@ -389,7 +389,7 @@ input[type="time"]:valid {
             </h3>
             <CodeBlock
               code={`<div class="form-group">
-  <label for="timepicker">Select Time</label>
+  <label for="timepicker">Select time</label>
   <input 
     type="time" 
     id="timepicker"

@@ -1,0 +1,27 @@
+.timepicker-ui-ripple {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.timepicker-ui-ripple::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  background: currentColor;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.timepicker-ui-ripple-effect {
+  animation: ripple 600ms linear;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+

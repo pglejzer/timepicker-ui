@@ -28,6 +28,17 @@ export default class ClockHandPositionUpdater {
     const clockFaceRadius = this.timepicker.clockFace.offsetWidth / 2;
     const rtangens = obj && Math.atan2(obj.y - clockFaceRadius, obj.x - clockFaceRadius);
 
+    const touches = (event as TouchEvent).touches;
+    const myLocation = touches ? touches[0] : undefined;
+    const realTarget =
+      touches && myLocation
+        ? (document.elementFromPoint(myLocation.clientX, myLocation.clientY) as HTMLDivElement)
+        : null;
+
+    if (hasClass(realTarget || target, 'timepicker-ui-tips-disabled')) {
+      return;
+    }
+
     if (this.timepicker.minutesTips !== null) {
       this.timepicker.minutes.classList.add(selectorActive);
       let deg =
@@ -87,31 +98,26 @@ export default class ClockHandPositionUpdater {
 
       announceToScreenReader(this.timepicker.modalElement, `Minute ${this.timepicker.minutes.value}`);
 
+      const eventData = {
+        ...getInputValue(
+          this.timepicker.input as unknown as HTMLInputElement,
+          this.timepicker._options.clockType,
+        ),
+        degreesHours: this.timepicker._degreesHours,
+        degreesMinutes: this.timepicker._degreesMinutes,
+        eventType: type as 'click' | 'change',
+        type: this.timepicker.activeTypeMode?.dataset.type,
+      };
+
       createEventWithCallback(
         this.timepicker._element,
-        'update',
         'timepicker:update',
-        {
-          ...getInputValue(
-            this.timepicker.input as unknown as HTMLInputElement,
-            this.timepicker._options.clockType,
-          ),
-          degreesHours: this.timepicker._degreesHours,
-          degreesMinutes: this.timepicker._degreesMinutes,
-          eventType: type as 'click' | 'change',
-          type: this.timepicker.activeTypeMode?.dataset.type,
-        },
+        eventData,
         this.timepicker._options.onUpdate,
-        this.timepicker,
       );
-    }
 
-    const touches = (event as TouchEvent).touches;
-    const myLocation = touches ? touches[0] : undefined;
-    const realTarget =
-      touches && myLocation
-        ? (document.elementFromPoint(myLocation.clientX, myLocation.clientY) as HTMLDivElement)
-        : null;
+      this.timepicker.emit?.('update', eventData);
+    }
 
     if (this.timepicker.hourTips !== null) {
       this.timepicker.hour?.classList.add(selectorActive);
@@ -129,7 +135,6 @@ export default class ClockHandPositionUpdater {
       }
 
       if (
-        !hasClass(realTarget || target, 'timepicker-ui-tips-disabled') &&
         (!is24hMode || !isInnerCircle) &&
         (hasClass(realTarget || target, 'timepicker-ui-value-tips') ||
           hasClass(realTarget || target, 'timepicker-ui-tips-wrapper') ||
@@ -199,7 +204,6 @@ export default class ClockHandPositionUpdater {
 
       if (
         is24hMode &&
-        !hasClass(realTarget || target, 'timepicker-ui-tips-disabled') &&
         isInnerCircle &&
         (hasClass(realTarget || target, 'timepicker-ui-value-tips-24h') ||
           hasClass(realTarget || target, 'timepicker-ui-tips-wrapper-24h') ||
@@ -272,23 +276,25 @@ export default class ClockHandPositionUpdater {
         announceToScreenReader(this.timepicker.modalElement, `Hour ${this.timepicker.hour.value}`);
       }
 
+      const eventData = {
+        ...getInputValue(
+          this.timepicker.input as unknown as HTMLInputElement,
+          this.timepicker._options.clockType,
+        ),
+        degreesHours: this.timepicker._degreesHours,
+        degreesMinutes: this.timepicker._degreesMinutes,
+        eventType: type as 'click' | 'change',
+        type: this.timepicker.activeTypeMode?.dataset.type,
+      };
+
       createEventWithCallback(
         this.timepicker._element,
-        '',
         'timepicker:update',
-        {
-          ...getInputValue(
-            this.timepicker.input as unknown as HTMLInputElement,
-            this.timepicker._options.clockType,
-          ),
-          degreesHours: this.timepicker._degreesHours,
-          degreesMinutes: this.timepicker._degreesMinutes,
-          eventType: type as 'click' | 'change',
-          type: this.timepicker.activeTypeMode?.dataset.type,
-        },
+        eventData,
         this.timepicker._options.onUpdate,
-        this.timepicker,
       );
+
+      this.timepicker.emit?.('update', eventData);
     }
   };
 }

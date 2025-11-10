@@ -1,0 +1,60 @@
+@use '../variables.scss' as *;
+
+[data-md3-ripple] {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: var(--ripple-y, 50%);
+    left: var(--ripple-x, 50%);
+    width: var(--ripple-size, 0);
+    height: var(--ripple-size, 0);
+    border-radius: 50%;
+    background: var(--timepicker-primary);
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 1;
+  }
+
+  &.is-rippling::before {
+    animation: ripple-expand 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  &.ripple-hold::before {
+    animation: ripple-expand 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  &:not(.ripple-hold).is-rippling::before {
+    animation:
+      ripple-expand 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards,
+      ripple-fade 500ms 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+}
+
+.timepicker-ui-am,
+.timepicker-ui-pm,
+.timepicker-ui-input-wrapper {
+  overflow: hidden;
+}
+
+@keyframes ripple-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0.2;
+  }
+}
+
+@keyframes ripple-fade {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0;
+  }
+}

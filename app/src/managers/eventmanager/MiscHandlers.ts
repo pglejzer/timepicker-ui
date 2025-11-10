@@ -71,19 +71,20 @@ export default class MiscHandlers {
 
   handleIconChangeView = async (): Promise<void> => {
     if (this.timepicker._options.enableSwitchIcon && this.timepicker.configManager) {
-      const handler = this.timepicker.configManager.handlerViewChange();
+      const handler = (e: Event) => {
+        e.preventDefault();
+        if (this.timepicker.configManager) {
+          this.timepicker.configManager.toggleMobileClockFace();
+        }
+      };
 
-      if (getBrowser()) {
-        this.timepicker.keyboardClockIcon.addEventListener('touchstart', handler);
-        this.cleanupHandlers.push(() => {
-          this.timepicker.keyboardClockIcon?.removeEventListener('touchstart', handler);
-        });
-      } else {
-        this.timepicker.keyboardClockIcon.addEventListener('click', handler);
-        this.cleanupHandlers.push(() => {
-          this.timepicker.keyboardClockIcon?.removeEventListener('click', handler);
-        });
-      }
+      this.timepicker.keyboardClockIcon?.addEventListener('click', handler);
+      this.timepicker.keyboardClockIcon?.addEventListener('touchstart', handler, { passive: false });
+
+      this.cleanupHandlers.push(() => {
+        this.timepicker.keyboardClockIcon?.removeEventListener('click', handler);
+        this.timepicker.keyboardClockIcon?.removeEventListener('touchstart', handler);
+      });
     }
   };
 
@@ -94,21 +95,23 @@ export default class MiscHandlers {
         this.timepicker._options.clockType,
       );
 
+      const eventData = {
+        ...value,
+        hourNotAccepted: this.timepicker.hour.value,
+        minutesNotAccepted: this.timepicker.minutes.value,
+        type: this.timepicker.activeTypeMode?.dataset.type,
+        degreesHours: this.timepicker._degreesHours,
+        degreesMinutes: this.timepicker._degreesMinutes,
+      };
+
       createEventWithCallback(
         this.timepicker._element,
-        '',
         'timepicker:cancel',
-        {
-          ...value,
-          hourNotAccepted: this.timepicker.hour.value,
-          minutesNotAccepted: this.timepicker.minutes.value,
-          type: this.timepicker.activeTypeMode?.dataset.type,
-          degreesHours: this.timepicker._degreesHours,
-          degreesMinutes: this.timepicker._degreesMinutes,
-        },
+        eventData,
         this.timepicker._options.onCancel,
-        this.timepicker,
       );
+
+      this.timepicker.emit?.('cancel', eventData);
 
       this.timepicker.close()();
     }
@@ -332,4 +335,3 @@ export default class MiscHandlers {
     }, 100);
   };
 }
-

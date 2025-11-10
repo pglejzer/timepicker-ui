@@ -1,0 +1,37 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  &-modal {
+    font-family: 'Roboto', sans-serif;
+    position: fixed;
+    opacity: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(156, 155, 155, 0.6);
+    z-index: 5000;
+    pointer-events: none;
+
+    &.show {
+      pointer-events: auto;
+    }
+
+    &.removed {
+      top: auto;
+      bottom: auto;
+      left: auto;
+      right: auto;
+      background-color: transparent;
+    }
+  }
+
+  &-measure {
+    position: absolute;
+    top: -9999px;
+    width: $mesaruelength;
+    height: $mesaruelength;
+    overflow: scroll;
+  }
+}
+

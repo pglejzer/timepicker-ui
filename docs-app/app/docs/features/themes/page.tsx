@@ -5,7 +5,7 @@ import { Palette, Sparkles, Moon, Zap } from "lucide-react";
 
 export const metadata = {
   title: "Themes - Timepicker-UI",
-  description: "9 built-in themes for beautiful time pickers",
+  description: "11 built-in themes for beautiful time pickers",
 };
 
 const themes = [
@@ -15,18 +15,23 @@ const themes = [
     color: "from-gray-400 to-gray-600",
   },
   {
+    name: "crane",
+    description: "Google Crane theme with rounded corners",
+    color: "from-pink-400 to-red-400",
+  },
+  {
     name: "crane-straight",
     description: "Google Crane theme with straight edges and sharp corners",
     color: "from-pink-400 to-red-500",
   },
   {
-    name: "crane-radius",
-    description: "Google Crane theme with rounded edges",
-    color: "from-pink-400 to-red-400",
+    name: "m3-green",
+    description: "Material Design 3 with green color scheme",
+    color: "from-green-400 to-teal-500",
   },
   {
-    name: "m3",
-    description: "Material Design 3 (Material You) with dynamic colors",
+    name: "m2",
+    description: "Material Design 2 classic theme",
     color: "from-purple-400 to-blue-500",
   },
   {
@@ -184,7 +189,7 @@ picker.update({
 import 'timepicker-ui/theme-m3.css';
 
 const picker = new TimepickerUI(input, {
-  theme: 'm3',
+  theme: 'm3-green',
   clockType: '12h',
   animation: true
 });`}

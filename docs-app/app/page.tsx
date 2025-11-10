@@ -17,11 +17,47 @@ import {
   Paintbrush,
   Languages,
 } from "lucide-react";
+import { TimepickerExample } from "@/components/examples/timepicker-example";
+
+function BasicExample() {
+  return (
+    <TimepickerExample
+      code={`import { TimepickerUI } from 'timepicker-ui';
+
+const input = document.querySelector('#timepicker');
+const picker = new TimepickerUI(input);
+picker.create();`}
+      options={{}}
+      inputPlaceholder="Select time"
+      showCode={false}
+    />
+  );
+}
+
+function MobileExample() {
+  return (
+    <TimepickerExample
+      code={`import { TimepickerUI } from 'timepicker-ui';
+
+const input = document.querySelector('#timepicker');
+const picker = new TimepickerUI(input, {
+  mobile: true,
+});
+picker.create();`}
+      options={{
+        mobile: true,
+        enableSwitchIcon: true,
+      }}
+      inputPlaceholder="Select time"
+      showCode={false}
+    />
+  );
+}
 
 const features = [
   {
     icon: Palette,
-    title: "9 Built-in Themes",
+    title: "11 Built-in Themes",
     description: "Material, Crane, Dark, Glassmorphic, Cyberpunk, AI, and more",
   },
   {
@@ -177,6 +213,61 @@ export default function Home() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-border py-16 sm:py-24 bg-muted/30">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="mx-auto max-w-2xl text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+              See it in action
+            </h2>
+            <p className="mt-4 text-base sm:text-lg text-muted-foreground">
+              Try the timepicker right here with different configurations
+            </p>
+          </div>
+          <div className="mx-auto max-w-6xl grid gap-8 lg:grid-cols-2">
+            <div className="rounded-xl border border-border bg-card p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <Clock className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground">
+                    Basic Example
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Default configuration with 12-hour format
+                  </p>
+                </div>
+              </div>
+              <BasicExample />
+            </div>
+
+            <div className="rounded-xl border border-border bg-card p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 rounded-lg bg-purple-500/10">
+                  <Smartphone className="h-5 w-5 text-purple-500" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground">Mobile Mode</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Optimized for touch devices with mobile view
+                  </p>
+                </div>
+              </div>
+              <MobileExample />
+            </div>
+          </div>
+          <div className="mt-12 text-center">
+            <Link
+              href="/examples"
+              className="inline-flex items-center text-sm font-medium text-primary hover:underline"
+            >
+              Explore more examples
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>

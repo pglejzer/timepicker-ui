@@ -12,7 +12,7 @@ Modern time picker library built with TypeScript. Works with any framework or va
 
 ## Features
 
-- 9 built-in themes (Material, Crane, Dark, Glassmorphic, Cyberpunk, and more)
+- 11 built-in themes (Material, Crane, Dark, Glassmorphic, Cyberpunk, and more)
 - Mobile-first design with touch support
 - Framework agnostic - works with React, Vue, Angular, Svelte, or vanilla JS
 - Full TypeScript support
@@ -117,33 +117,51 @@ Full documentation available at [timepicker-ui.vercel.app/docs](https://timepick
 
 ### Key Options
 
-| Option                           | Type          | Default     | Description                       |
-| -------------------------------- | ------------- | ----------- | --------------------------------- |
-| `clockType`                      | `12h` / `24h` | `12h`       | Clock format                      |
-| `theme`                          | string        | `basic`     | UI theme (9 themes available)     |
-| `animation`                      | boolean       | `true`      | Enable animations                 |
-| `backdrop`                       | boolean       | `true`      | Show backdrop overlay             |
-| `editable`                       | boolean       | `false`     | Allow manual input editing        |
-| `mobile`                         | boolean       | `false`     | Force mobile version              |
-| `disabledTime`                   | object        | `undefined` | Disable specific hours/minutes    |
-| `incrementHours`                 | number        | `1`         | Hour increment step               |
-| `incrementMinutes`               | number        | `1`         | Minute increment step             |
-| `switchToMinutesAfterSelectHour` | boolean       | `true`      | Auto-switch to minutes after hour |
-| `okLabel`                        | string        | `OK`        | OK button text                    |
-| `cancelLabel`                    | string        | `CANCEL`    | Cancel button text                |
-| `onConfirm`                      | function      | `undefined` | Callback when time is confirmed   |
-| `onCancel`                       | function      | `undefined` | Callback when cancelled           |
-| `onOpen`                         | function      | `undefined` | Callback when picker opens        |
-| `onUpdate`                       | function      | `undefined` | Callback when time is updated     |
-| `onSelectHour`                   | function      | `undefined` | Callback when hour is selected    |
-| `onSelectMinute`                 | function      | `undefined` | Callback when minute is selected  |
-| `onSelectAM`                     | function      | `undefined` | Callback when AM is selected      |
-| `onSelectPM`                     | function      | `undefined` | Callback when PM is selected      |
-| `onError`                        | function      | `undefined` | Callback when error occurs        |
+| Option                      | Type           | Default        | Description                             |
+| --------------------------- | -------------- | -------------- | --------------------------------------- |
+| `clockType`                 | `12h` / `24h`  | `12h`          | Clock format                            |
+| `theme`                     | string         | `basic`        | UI theme (11 themes available)          |
+| `animation`                 | boolean        | `true`         | Enable animations                       |
+| `backdrop`                  | boolean        | `true`         | Show backdrop overlay                   |
+| `editable`                  | boolean        | `false`        | Allow manual input editing              |
+| `mobile`                    | boolean        | `false`        | Force mobile version                    |
+| `disabledTime`              | object         | `undefined`    | Disable specific hours/minutes          |
+| `incrementHours`            | number         | `1`            | Hour increment step                     |
+| `incrementMinutes`          | number         | `1`            | Minute increment step                   |
+| `autoSwitchToMinutes`       | boolean        | `true`         | Auto-switch to minutes after hour       |
+| `amLabel`                   | string         | `AM`           | Custom AM label text                    |
+| `pmLabel`                   | string         | `PM`           | Custom PM label text                    |
+| `okLabel`                   | string         | `OK`           | OK button text                          |
+| `cancelLabel`               | string         | `Cancel`       | Cancel button text                      |
+| `timeLabel`                 | string         | `Select time`  | Time label on desktop version           |
+| `mobileTimeLabel`           | string         | `Enter Time`   | Time label on mobile version            |
+| `hourMobileLabel`           | string         | `Hour`         | Hour label on mobile version            |
+| `minuteMobileLabel`         | string         | `Minute`       | Minute label on mobile version          |
+| `appendModalSelector`       | string         | `""`           | Append timepicker to custom selector    |
+| `enableScrollbar`           | boolean        | `false`        | Enable scroll if timepicker is open     |
+| `enableSwitchIcon`          | boolean        | `false`        | Show icon to switch desktop/mobile      |
+| `focusInputAfterCloseModal` | boolean        | `false`        | Focus input after close modal           |
+| `iconTemplate`              | string         | keyboard SVG   | Custom template for desktop switch icon |
+| `iconTemplateMobile`        | string         | schedule SVG   | Custom template for mobile switch icon  |
+| `currentTime`               | boolean/object | `undefined`    | Set current time to input/picker        |
+| `focusTrap`                 | boolean        | `true`         | Focus trap to modal elements            |
+| `delayHandler`              | number         | `300`          | Delay for clickable elements (ms)       |
+| `id`                        | string         | auto-generated | Custom ID for timepicker instance       |
+| `inline`                    | object         | `undefined`    | Inline mode configuration               |
+| `cssClass`                  | string         | `undefined`    | Additional custom CSS class             |
+| `onConfirm`                 | function       | `undefined`    | Callback when time is confirmed         |
+| `onCancel`                  | function       | `undefined`    | Callback when cancelled                 |
+| `onOpen`                    | function       | `undefined`    | Callback when picker opens              |
+| `onUpdate`                  | function       | `undefined`    | Callback when time is updated           |
+| `onSelectHour`              | function       | `undefined`    | Callback when hour is selected          |
+| `onSelectMinute`            | function       | `undefined`    | Callback when minute is selected        |
+| `onSelectAM`                | function       | `undefined`    | Callback when AM is selected            |
+| `onSelectPM`                | function       | `undefined`    | Callback when PM is selected            |
+| `onError`                   | function       | `undefined`    | Callback when error occurs              |
 
 ### Themes
 
-Available themes: `basic`, `crane-straight`, `crane-radius`, `m3`, `dark`, `glassmorphic`, `pastel`, `ai`, `cyberpunk`
+Available themes: `basic`, `crane`, `crane-straight`, `m3-green`, `m2`, `dark`, `glassmorphic`, `pastel`, `ai`, `cyberpunk`
 
 ```javascript
 import "timepicker-ui/main.css"; // Required base styles

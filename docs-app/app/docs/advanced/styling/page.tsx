@@ -49,6 +49,15 @@ export default function StylingPage() {
   --timepicker-primary: #6200ee;
   --timepicker-on-primary: #ffffff;
 
+  /* Material Design 3 colors */
+  --timepicker-primary-container: #eaddff;
+  --timepicker-on-primary-container: #21005d;
+  --timepicker-tertiary-container: #ffd8e4;
+  --timepicker-on-tertiary-container: #633b48;
+  --timepicker-am-pm-text-selected: #633b48;
+  --timepicker-am-pm-text-unselected: #49454f;
+  --timepicker-am-pm-active: #ece0fd;
+
   /* Borders and shadows */
   --timepicker-border: #d6d6d6;
   --timepicker-hover-bg: #d6d6d6;
@@ -67,6 +76,42 @@ export default function StylingPage() {
       </Section>
 
       <Section icon={Paintbrush} title="Creating Custom Themes">
+        <p className="text-muted-foreground mb-4">
+          Timepicker-UI comes with several built-in themes:
+        </p>
+        <div className="rounded-lg border border-border bg-card p-6 mb-6">
+          <h3 className="font-semibold mb-3 text-foreground">
+            Available Themes
+          </h3>
+          <CodeBlock
+            code={`import { TimepickerUI } from 'timepicker-ui';
+
+// Material Design 2 theme (purple/magenta)
+const picker1 = new TimepickerUI(input1, { theme: 'm2' });
+
+// Material Design 3 theme (green)
+const picker2 = new TimepickerUI(input2, { theme: 'm3-green' });
+
+// Dark theme
+const picker3 = new TimepickerUI(input3, { theme: 'dark' });
+
+// Crane theme with rounded corners
+const picker4 = new TimepickerUI(input4, { theme: 'crane' });
+
+// Crane-straight theme (sharp edges)
+const picker5 = new TimepickerUI(input5, { theme: 'crane-straight' });`}
+            language="typescript"
+          />
+          <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-950 rounded-md border border-blue-200 dark:border-blue-800">
+            <p className="text-sm text-blue-900 dark:text-blue-100">
+              <strong>Note:</strong> Version 3.2.0 introduced the Material
+              Design 2 theme ({`'m2'`}) and renamed the previous default
+              Material Design 3 theme from {`'m3'`} to {`'m3-green'`} for
+              clarity.
+            </p>
+          </div>
+        </div>
+
         <p className="text-muted-foreground mb-4">
           Create your own theme using the{" "}
           <code className="text-primary">custom</code> theme class and CSS
@@ -147,6 +192,101 @@ picker.setTheme({
           </div>
         </div>
       </Section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground flex items-center gap-2">
+          <Wand2 className="h-6 w-6" />
+          Material Design 3 Ripple Effect
+        </h2>
+        <p className="text-muted-foreground mb-4">
+          Version 3.2.0 added Material Design 3 ripple effects for enhanced
+          touch feedback on interactive elements. The ripple effect is
+          automatically applied to AM/PM buttons and time input fields.
+        </p>
+
+        <div className="rounded-lg border border-border bg-card p-6 mb-6">
+          <h3 className="font-semibold mb-3 text-foreground">
+            Ripple Effect Features
+          </h3>
+          <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+            <li>Material Design 3 compliant ripple animation</li>
+            <li>Automatic application to AM/PM toggle buttons</li>
+            <li>Applied to hour and minute input fields</li>
+            <li>Smooth circular ripple expansion from touch/click point</li>
+            <li>Customizable via CSS variables</li>
+          </ul>
+        </div>
+
+        <div className="rounded-lg border border-border bg-card p-6 mb-6">
+          <h3 className="font-semibold mb-3 text-foreground">
+            Customizing Ripple Effect
+          </h3>
+          <p className="text-muted-foreground mb-4">
+            You can customize the ripple effect appearance using CSS variables:
+          </p>
+          <CodeBlock
+            code={`/* Customize ripple in your custom theme */
+.timepicker-ui-wrapper.custom {
+  /* Ripple color (uses --timepicker-on-primary-container by default) */
+  --timepicker-on-primary-container: #21005d;
+  
+  /* Or override ripple directly */
+  [data-md3-ripple]::before {
+    background: radial-gradient(
+      circle,
+      rgba(98, 0, 238, 0.3) 0%,
+      rgba(98, 0, 238, 0) 70%
+    );
+  }
+}
+
+/* Adjust ripple animation duration */
+.timepicker-ui-wrapper.custom [data-md3-ripple].is-rippling::before {
+  animation: ripple-animation 0.4s ease-out;
+}
+
+/* Disable ripple effect if needed */
+.timepicker-ui-wrapper.no-ripple [data-md3-ripple]::before {
+  display: none;
+}`}
+            language="css"
+          />
+        </div>
+
+        <div className="rounded-lg border border-border bg-card p-6">
+          <h3 className="font-semibold mb-3 text-foreground">
+            Technical Implementation
+          </h3>
+          <p className="text-muted-foreground mb-4">
+            The ripple effect uses the{" "}
+            <code className="text-primary">data-md3-ripple</code> attribute and
+            CSS pseudo-elements. Elements with this attribute automatically
+            receive ripple animations on pointer events.
+          </p>
+          <CodeBlock
+            code={`/* Elements with ripple effect */
+- AM/PM toggle buttons: .timepicker-ui-am, .timepicker-ui-pm
+- Hour input wrapper: .timepicker-ui-input-wrapper (hour)
+- Minute input wrapper: .timepicker-ui-input-wrapper (minute)
+
+/* CSS pseudo-element approach */
+[data-md3-ripple] {
+  position: relative;
+  overflow: hidden;
+}
+
+[data-md3-ripple]::before {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ripple-color) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+}`}
+            language="css"
+          />
+        </div>
+      </section>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">

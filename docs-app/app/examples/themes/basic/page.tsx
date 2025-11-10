@@ -36,13 +36,13 @@ picker.create();`}
           code={`const picker = new TimepickerUI(input, {
   theme: 'basic',
   clockType: '12h',
-  switchToMinutesAfterSelectHour: true
+  autoSwitchToMinutes: true
 });
 picker.create();`}
           options={{
             theme: "basic",
             clockType: "12h",
-            switchToMinutesAfterSelectHour: true,
+            autoSwitchToMinutes: true,
           }}
         />
       </Section>

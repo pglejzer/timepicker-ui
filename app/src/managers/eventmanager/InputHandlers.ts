@@ -1,5 +1,4 @@
 import { createEventWithCallback } from '../../utils/config';
-import ClockFaceManager from '../ClockFaceManager';
 import { selectorActive } from '../../utils/variables';
 import type { ITimepickerUI } from '../../types/ITimepickerUI';
 import { sanitizeTimeInput } from '../../utils/validation';
@@ -7,6 +6,8 @@ import { sanitizeTimeInput } from '../../utils/validation';
 export default class InputHandlers {
   private timepicker: ITimepickerUI;
   private cleanupHandlers: Array<() => void>;
+  private hourEventHandlers = new Map<string, EventListener>();
+  private minuteEventHandlers = new Map<string, EventListener>();
 
   constructor(timepicker: ITimepickerUI, cleanupHandlers: Array<() => void>) {
     this.timepicker = timepicker;
@@ -30,7 +31,7 @@ export default class InputHandlers {
         }
 
         if (!this.timepicker._options.mobile) {
-          this.timepicker.tipsWrapperFor24h?.classList.remove('timepicker-ui-tips-wrapper-24h-disabled');
+          this.timepicker.tipsWrapperFor24h?.classList.remove('none');
         }
       }
     }
@@ -39,7 +40,6 @@ export default class InputHandlers {
 
     element.value = sanitizeTimeInput((target.value as string).replace(/\D+/g, ''));
 
-    // Don't click if blur is going to AM/PM buttons
     if (shouldClick && relatedTarget) {
       const isGoingToAMPM =
         relatedTarget.classList.contains('timepicker-ui-am') ||
@@ -53,6 +53,11 @@ export default class InputHandlers {
   };
 
   handleHourEvents = () => {
+    this.hourEventHandlers.forEach((handler, eventType) => {
+      this.timepicker.hour?.removeEventListener(eventType, handler);
+    });
+    this.hourEventHandlers.clear();
+
     this.timepicker._inputEvents.forEach((el: string) => {
       const handler = (ev: Event) => {
         const target = ev.target as HTMLInputElement;
@@ -73,7 +78,7 @@ export default class InputHandlers {
           }
 
           if (!this.timepicker._options.mobile) {
-            this.timepicker.tipsWrapperFor24h?.classList.remove('timepicker-ui-tips-wrapper-24h-disabled');
+            this.timepicker.tipsWrapperFor24h?.classList.remove('none');
           }
         }
 
@@ -83,45 +88,28 @@ export default class InputHandlers {
         this.timepicker.minutes.classList.remove(selectorActive);
         this.timepicker.hour.classList.add(selectorActive);
 
-        if (this.timepicker._options.clockType === '12h' && this.timepicker._options.disabledTime?.interval) {
-          setTimeout(() => {
-            const initClockFace = this.timepicker.clockFacePool.acquire({
-              clockFace: this.timepicker.clockFace,
-              tipsWrapper: this.timepicker.tipsWrapper,
-              disabledTime: this.timepicker._disabledTime?.value,
-              clockType: this.timepicker._options.clockType,
-              activeTypeMode: this.timepicker.activeTypeMode?.textContent || '',
-            });
-            initClockFace.updateDisable(
-              this.timepicker.hour.value,
-              this.timepicker.activeTypeMode?.textContent || '',
-            );
-            this.timepicker.clockFacePool.release(initClockFace);
-          }, 300);
-        }
+        const eventData = {
+          hour: this.timepicker.hour.value,
+          minutes: this.timepicker.minutes.value,
+          type: this.timepicker.activeTypeMode?.dataset.type,
+          degreesHours: this.timepicker._degreesHours,
+          degreesMinutes: this.timepicker._degreesMinutes,
+        };
 
         createEventWithCallback(
           this.timepicker._element,
-          '',
           'timepicker:select-hour',
-          {
-            hour: this.timepicker.hour.value,
-            minutes: this.timepicker.minutes.value,
-            type: this.timepicker.activeTypeMode?.dataset.type,
-            degreesHours: this.timepicker._degreesHours,
-            degreesMinutes: this.timepicker._degreesMinutes,
-          },
+          eventData,
           this.timepicker._options.onSelectHour,
-          this.timepicker,
         );
+
+        this.timepicker.emit?.('select:hour', eventData);
 
         if (this.timepicker.clockFace !== null) this.timepicker.circle.classList.remove('small-circle');
       };
 
       this.timepicker.hour?.addEventListener(el, handler);
-      this.cleanupHandlers.push(() => {
-        this.timepicker.hour?.removeEventListener(el, handler);
-      });
+      this.hourEventHandlers.set(el, handler);
     });
 
     const blurHandler = (e: Event) => this.handleClasses24h(e, this.timepicker.hour, true);
@@ -130,13 +118,16 @@ export default class InputHandlers {
     this.timepicker.hour?.addEventListener('blur', blurHandler);
     this.timepicker.hour?.addEventListener('focus', focusHandler);
 
-    this.cleanupHandlers.push(() => {
-      this.timepicker.hour?.removeEventListener('blur', blurHandler);
-      this.timepicker.hour?.removeEventListener('focus', focusHandler);
-    });
+    this.hourEventHandlers.set('blur', blurHandler);
+    this.hourEventHandlers.set('focus', focusHandler);
   };
 
   handleMinutesEvents = () => {
+    this.minuteEventHandlers.forEach((handler, eventType) => {
+      this.timepicker.minutes?.removeEventListener(eventType, handler);
+    });
+    this.minuteEventHandlers.clear();
+
     this.timepicker._inputEvents.forEach((el) => {
       const handler = (ev: Event) => {
         const target = ev.target as HTMLInputElement;
@@ -156,50 +147,33 @@ export default class InputHandlers {
           }
 
           if (!this.timepicker._options.mobile) {
-            this.timepicker.tipsWrapperFor24h?.classList.add('timepicker-ui-tips-wrapper-24h-disabled');
+            this.timepicker.tipsWrapperFor24h?.classList.add('none');
           }
         }
 
         this.timepicker.hour.classList.remove(selectorActive);
         this.timepicker.minutes.classList.add(selectorActive);
 
-        if (this.timepicker._options.clockType === '12h' && this.timepicker._options.disabledTime?.interval) {
-          setTimeout(() => {
-            const initClockFace = this.timepicker.clockFacePool.acquire({
-              clockFace: this.timepicker.clockFace,
-              tipsWrapper: this.timepicker.tipsWrapper,
-              disabledTime: this.timepicker._disabledTime?.value,
-              clockType: this.timepicker._options.clockType,
-              activeTypeMode: this.timepicker.activeTypeMode?.textContent || '',
-            });
-            initClockFace.updateDisable(
-              this.timepicker.hour.value,
-              this.timepicker.activeTypeMode?.textContent || '',
-            );
-            this.timepicker.clockFacePool.release(initClockFace);
-          }, 300);
-        }
+        const eventData = {
+          hour: this.timepicker.hour.value,
+          minutes: this.timepicker.minutes.value,
+          type: this.timepicker.activeTypeMode?.dataset.type,
+          degreesHours: this.timepicker._degreesHours,
+          degreesMinutes: this.timepicker._degreesMinutes,
+        };
 
         createEventWithCallback(
           this.timepicker._element,
-          '',
           'timepicker:select-minute',
-          {
-            hour: this.timepicker.hour.value,
-            minutes: this.timepicker.minutes.value,
-            type: this.timepicker.activeTypeMode?.dataset.type,
-            degreesHours: this.timepicker._degreesHours,
-            degreesMinutes: this.timepicker._degreesMinutes,
-          },
+          eventData,
           this.timepicker._options.onSelectMinute,
-          this.timepicker,
         );
+
+        this.timepicker.emit?.('select:minute', eventData);
       };
 
       this.timepicker.minutes.addEventListener(el, handler);
-      this.cleanupHandlers.push(() => {
-        this.timepicker.minutes?.removeEventListener(el, handler);
-      });
+      this.minuteEventHandlers.set(el, handler);
     });
 
     const blurHandler = (e: Event) => this.handleClasses24h(e, this.timepicker.minutes, true);
@@ -208,10 +182,19 @@ export default class InputHandlers {
     this.timepicker.minutes?.addEventListener('blur', blurHandler);
     this.timepicker.minutes?.addEventListener('focus', focusHandler);
 
-    this.cleanupHandlers.push(() => {
-      this.timepicker.minutes?.removeEventListener('blur', blurHandler);
-      this.timepicker.minutes?.removeEventListener('focus', focusHandler);
-    });
+    this.minuteEventHandlers.set('blur', blurHandler);
+    this.minuteEventHandlers.set('focus', focusHandler);
   };
-}
 
+  destroy(): void {
+    this.hourEventHandlers.forEach((handler, eventType) => {
+      this.timepicker.hour?.removeEventListener(eventType, handler);
+    });
+    this.hourEventHandlers.clear();
+
+    this.minuteEventHandlers.forEach((handler, eventType) => {
+      this.timepicker.minutes?.removeEventListener(eventType, handler);
+    });
+    this.minuteEventHandlers.clear();
+  }
+}
