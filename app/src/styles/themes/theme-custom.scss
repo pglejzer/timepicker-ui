@@ -52,17 +52,13 @@
     }
   }
 
-  &-keyboard-icon.custom {
-    color: var(--timepicker-text);
-
-    &:hover {
-      color: var(--timepicker-primary);
-    }
-  }
-
   &-keyboard-icon-wrapper.custom {
-    &:hover .timepicker-ui-keyboard-icon.custom {
-      background-color: var(--timepicker-border);
+    svg {
+      fill: var(--timepicker-text);
+    }
+
+    &:hover svg {
+      fill: var(--timepicker-primary);
     }
   }
 

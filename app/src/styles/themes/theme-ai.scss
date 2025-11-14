@@ -20,6 +20,7 @@
   --timepicker-on-tertiary-container: white;
 
   --timepicker-border: #d1d5db;
+  --timepicker-outline: #3b82f6;
   --timepicker-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   --timepicker-border-radius: 0.75rem;
 }
@@ -91,11 +92,12 @@
   }
 
   &-keyboard-icon-wrapper.ai {
-    fill: var(--timepicker-secondary-text);
+    svg {
+      fill: var(--timepicker-secondary-text);
+    }
 
-    &:hover .timepicker-ui-keyboard-icon.ai {
-      background-color: var(--timepicker-primary);
-      fill: var(--timepicker-on-primary);
+    &:hover svg {
+      fill: var(--timepicker-primary);
     }
   }
 

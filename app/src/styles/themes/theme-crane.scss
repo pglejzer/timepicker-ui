@@ -21,6 +21,7 @@
   --timepicker-on-tertiary-container: #{$white};
 
   --timepicker-border: transparent;
+  --timepicker-outline: #ff4c52;
   --timepicker-border-radius: 1.25rem;
 }
 
@@ -31,6 +32,12 @@
       border-radius: var(--timepicker-border-radius);
       background-color: var(--timepicker-bg);
       color: var(--timepicker-text);
+    }
+  }
+
+  &-input-ripple-wrapper {
+    &.crane {
+      border-radius: var(--timepicker-border-radius);
     }
   }
 
@@ -178,13 +185,12 @@
   &-keyboard-icon-wrapper,
   &-keyboard-icon-wrapper.mobile {
     &.crane {
-      color: var(--timepicker-text);
+      svg {
+        fill: var(--timepicker-text);
+      }
 
-      &:hover .timepicker-ui-keyboard-icon,
-      &:hover .timepicker-ui-keyboard-icon.mobile {
-        background-color: var(--timepicker-primary);
-        color: var(--timepicker-text);
-        border-radius: 0.875rem;
+      &:hover svg {
+        fill: var(--timepicker-primary);
       }
     }
   }
@@ -192,15 +198,6 @@
   &-input-wrapper {
     &.crane {
       border-radius: 0;
-    }
-  }
-
-  &-keyboard-icon,
-  &-keyboard-icon.mobile {
-    &.crane {
-      &:hover {
-        color: var(--timepicker-text);
-      }
     }
   }
 

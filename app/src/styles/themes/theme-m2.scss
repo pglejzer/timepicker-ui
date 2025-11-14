@@ -25,6 +25,7 @@
   --timepicker-on-tertiary-container: #6200ee;
 
   --timepicker-border: #d6d6d6;
+  --timepicker-outline: #8b5cf6;
   --timepicker-hover-bg: #d6d6d6;
 
   --timepicker-shadow:
@@ -106,9 +107,14 @@
     background-color: var(--timepicker-surface-hover);
   }
 
-  &-keyboard-icon:hover.m2 {
-    color: var(--timepicker-primary);
-    background-color: var(--timepicker-hover-bg);
+  &-keyboard-icon-wrapper.m2 {
+    svg {
+      fill: var(--timepicker-icon-text);
+    }
+
+    &:hover svg {
+      fill: var(--timepicker-primary);
+    }
   }
 
   &-select-time.m2 {
@@ -141,4 +147,3 @@
     color: var(--timepicker-icon-text);
   }
 }
-

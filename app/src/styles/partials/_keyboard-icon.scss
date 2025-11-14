@@ -7,6 +7,10 @@
     display: flex;
     cursor: pointer;
     z-index: 10;
+
+    &:hover svg {
+      fill: var(--timepicker-primary);
+    }
   }
 
   &-keyboard-icon svg,
@@ -15,9 +19,5 @@
     transition: all 0.3s ease;
     fill: var(--timepicker-icon-text);
     pointer-events: none;
-
-    &:hover {
-      fill: var(--timepicker-primary);
-    }
   }
 }

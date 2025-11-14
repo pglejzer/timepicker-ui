@@ -14,7 +14,7 @@ function startRipple(e: PointerEvent) {
 
   const rect = el.getBoundingClientRect();
   const maxDim = Math.max(rect.width, rect.height);
-  const size = maxDim * 2.5;
+  const size = maxDim * 2;
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
 

@@ -79,51 +79,62 @@ mobilePicker.create();
 
 const themeBasicPicker = new TimepickerUI('#theme-basic', {
   theme: 'basic',
+  enableSwitchIcon: true,
 });
 themeBasicPicker.create();
 
 const themeCraneStraightPicker = new TimepickerUI('#theme-crane-straight', {
   theme: 'crane-straight',
+  enableSwitchIcon: true,
 });
 themeCraneStraightPicker.create();
 
 const themeCraneRadiusPicker = new TimepickerUI('#theme-crane-radius', {
   theme: 'crane',
+  enableSwitchIcon: true,
 });
 themeCraneRadiusPicker.create();
 
 const themeM3Picker = new TimepickerUI('#theme-m3', {
   theme: 'm3-green',
+  enableSwitchIcon: true,
 });
 themeM3Picker.create();
 
 const themeDarkPicker = new TimepickerUI('#theme-dark', {
   theme: 'dark',
+  enableSwitchIcon: true,
 });
 themeDarkPicker.create();
 
 const themeM2Picker = new TimepickerUI('#theme-m2', {
   theme: 'm2',
+  enableSwitchIcon: true,
 });
 themeM2Picker.create();
 
 const themeGlassmorphicPicker = new TimepickerUI('#theme-glassmorphic', {
   theme: 'glassmorphic',
+  enableSwitchIcon: true,
 });
 themeGlassmorphicPicker.create();
 
 const themePastelPicker = new TimepickerUI('#theme-pastel', {
   theme: 'pastel',
+  enableSwitchIcon: true,
 });
 themePastelPicker.create();
 
 const themeAIPicker = new TimepickerUI('#theme-ai', {
   theme: 'ai',
+  enableSwitchIcon: true,
 });
+
 themeAIPicker.create();
 
 const themeCyberpunkPicker = new TimepickerUI('#theme-cyberpunk', {
   theme: 'cyberpunk',
+  enableSwitchIcon: true,
 });
 themeCyberpunkPicker.create();
 

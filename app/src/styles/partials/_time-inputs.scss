@@ -99,7 +99,8 @@
     }
 
     &:focus-visible {
-      outline: auto;
+      outline: none;
+      border: 2px solid var(--timepicker-outline);
     }
 
     &:hover {
@@ -130,8 +131,8 @@
 
     &[contenteditable='true']:focus,
     &[contenteditable='true']:active {
-      border: 2px solid var(--timepicker-primary);
-      outline-color: var(--timepicker-primary);
+      border: 2px solid var(--timepicker-outline);
+      outline-color: var(--timepicker-outline);
       user-select: all;
     }
   }
@@ -142,8 +143,8 @@
     border: 2px solid transparent;
     &[contenteditable='true']:focus,
     &[contenteditable='true']:active {
-      border: 2px solid var(--timepicker-primary);
-      outline-color: var(--timepicker-primary);
+      border: 2px solid var(--timepicker-outline);
+      outline-color: var(--timepicker-outline);
       user-select: all;
     }
   }

@@ -20,6 +20,7 @@
   --timepicker-on-tertiary-container: #0f0c29;
 
   --timepicker-border: rgba(0, 240, 255, 0.3);
+  --timepicker-outline: rgb(255, 255, 255);
   --timepicker-shadow: 0 0 12px #00f0ff;
   --timepicker-border-radius: 1rem;
 }
@@ -94,11 +95,8 @@
   }
 
   &-keyboard-icon-wrapper.cyberpunk {
-    color: var(--timepicker-primary);
-
-    &:hover .timepicker-ui-keyboard-icon.cyberpunk {
-      background-color: var(--timepicker-primary);
-      color: var(--timepicker-on-primary);
+    svg {
+      fill: var(--timepicker-primary);
     }
   }
 

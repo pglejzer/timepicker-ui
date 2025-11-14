@@ -27,9 +27,10 @@ export const getModalTemplate = (options: OptionTypes, instanceId: string): stri
   } = options;
 
   const mobileClass = !!mobile ? 'mobile' : '';
-  const keyboardIcon = `<i class="timepicker-ui-keyboard-icon">${iconTemplate || keyboardSvg}</i>`;
+  const keyboardIcon = `<button aria-label="Toggle keyboard" type="button" class="timepicker-ui-keyboard-icon">${iconTemplate || keyboardSvg}</button>`;
   const clockIcon =
-    iconTemplateMobile || `<i class="timepicker-ui-keyboard-icon">${iconTemplateMobile || scheduleSvg}</i>`;
+    iconTemplateMobile ||
+    `<button aria-label="Toggle clock" type="button" class="timepicker-ui-keyboard-icon">${iconTemplateMobile || scheduleSvg}</button>`;
 
   return `
 

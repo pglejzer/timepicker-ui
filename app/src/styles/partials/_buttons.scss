@@ -1,6 +1,10 @@
 @use '../variables.scss' as *;
 
 .timepicker-ui {
+  &-cancel-btn {
+    margin-right: 4px;
+  }
+
   &-cancel-btn,
   &-ok-btn,
   &-cancel-btn.mobile,
@@ -70,5 +74,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  &-keyboard-icon,
+  &-keyboard-icon-mobile {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    border-radius: inherit;
+    line-height: 0;
   }
 }

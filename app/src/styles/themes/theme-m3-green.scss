@@ -20,6 +20,7 @@
   --timepicker-on-tertiary-container: #002021;
 
   --timepicker-border: #74796e;
+  --timepicker-outline: #4ade80;
   --timepicker-shadow: unset;
   --timepicker-border-radius: 35px;
 }
@@ -100,5 +101,15 @@
   &-hour.mobile:hover.m3-green,
   &-minutes.mobile:hover.m3-green {
     background-color: var(--timepicker-surface);
+  }
+
+  &-keyboard-icon-wrapper.m3-green {
+    svg {
+      fill: var(--timepicker-secondary-text);
+    }
+
+    &:hover svg {
+      fill: var(--timepicker-primary);
+    }
   }
 }
