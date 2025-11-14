@@ -112,6 +112,29 @@ export class MobileClockFaceToggler {
   ) {
     this.isAnimating = true;
 
+    const isFirstTime = !wrapper.hasAttribute('data-clock-initialized');
+    if (isFirstTime) {
+      wrapper.setAttribute('data-clock-initialized', 'true');
+      this.timepicker.clockFace?.classList.remove('scale-in');
+    }
+
+    if (this.timepicker.clockManager) {
+      const minutesInput = this.timepicker.modalElement?.querySelector(
+        '.timepicker-ui-minutes',
+      ) as HTMLInputElement;
+      const isMinutesActive = minutesInput?.classList.contains('active');
+
+      if (isMinutesActive && minutesInput) {
+        this.timepicker.clockManager.setMinutesToClock(minutesInput.value);
+      } else if (hourInput) {
+        this.timepicker.clockManager.setHoursToClock(hourInput.value);
+      }
+
+      if (this.timepicker.eventManager) {
+        this.timepicker.eventManager.handleMoveHand();
+      }
+    }
+
     allElements?.forEach((el) => {
       if (el !== mobileClockWrapper && el !== wrapper && el !== selectTimeLabel) {
         el.classList.remove('mobile');
@@ -148,17 +171,6 @@ export class MobileClockFaceToggler {
 
     icon?.setAttribute('aria-label', 'Hide clock face');
     icon?.setAttribute('aria-pressed', 'true');
-
-    if (!wrapper.hasAttribute('data-clock-initialized')) {
-      wrapper.setAttribute('data-clock-initialized', 'true');
-      this.timeoutManager.runWithTimeout(() => {
-        this.initializeClockFaceFirstTime();
-      }, 450);
-    } else {
-      this.timeoutManager.runWithTimeout(() => {
-        this.updateClockFaceSubsequent();
-      }, 450);
-    }
   }
 
   toggle() {

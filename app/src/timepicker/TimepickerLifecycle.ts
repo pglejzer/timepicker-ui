@@ -1,7 +1,6 @@
 import { initCallback } from '../utils/config';
 import { debounce } from '../utils/debounce';
 import { allEvents } from '../utils/variables';
-import { HOURS_12, HOURS_24 } from '../utils/template';
 import { initMd3Ripple } from '../utils/ripple';
 import TimepickerCore from './TimepickerCore';
 
@@ -63,9 +62,7 @@ export default class TimepickerLifecycle extends TimepickerCore {
       const [update] = args.filter((e) => typeof e === 'boolean');
       const [callback] = args.filter((e) => typeof e === 'function');
 
-      if (!this._options.mobile) {
-        this._isMobileView = false;
-      }
+      this._isMobileView = !!this._options.mobile;
 
       if (update) {
         this.eventManager.handleOkButton();
@@ -258,7 +255,6 @@ export default class TimepickerLifecycle extends TimepickerCore {
         }
       });
     }
-
     this.modalManager.setFlexEndToFooterIfNoKeyboardIcon();
 
     setTimeout(() => {
