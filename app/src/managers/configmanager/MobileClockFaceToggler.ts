@@ -11,55 +11,6 @@ export class MobileClockFaceToggler {
     private viewSwitcher: ViewSwitcher,
   ) {}
 
-  private initializeClockFaceFirstTime() {
-    const mobileMinutesInput = this.timepicker.modalElement?.querySelector(
-      '.timepicker-ui-minutes',
-    ) as HTMLInputElement;
-    const isMinutesActive = mobileMinutesInput?.classList.contains('active');
-
-    if (this.timepicker.clockManager) {
-      if (isMinutesActive && mobileMinutesInput) {
-        this.timepicker.clockManager.setMinutesToClock(mobileMinutesInput.value);
-      } else {
-        this.timepicker.clockManager.setHoursToClock(this.timepicker.hour.value);
-      }
-
-      if (this.timepicker.eventManager) {
-        this.timepicker.eventManager.handleMoveHand();
-      }
-    }
-
-    if (this.timepicker.clockFace) {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          this.timepicker.clockFace?.classList.add('scale-in');
-        });
-      });
-    }
-  }
-
-  private updateClockFaceSubsequent() {
-    if (this.timepicker.clockManager) {
-      const minutesInput = this.timepicker.modalElement?.querySelector(
-        '.timepicker-ui-minutes',
-      ) as HTMLInputElement;
-      const hourInput = this.timepicker.modalElement?.querySelector(
-        '.timepicker-ui-hour',
-      ) as HTMLInputElement;
-      const isMinutesActive = minutesInput?.classList.contains('active');
-
-      if (isMinutesActive && minutesInput) {
-        this.timepicker.clockManager.setMinutesToClock(minutesInput.value);
-      } else if (hourInput) {
-        this.timepicker.clockManager.setHoursToClock(hourInput.value);
-      }
-
-      if (this.timepicker.eventManager) {
-        this.timepicker.eventManager.handleMoveHand();
-      }
-    }
-  }
-
   private collapseClockFace(
     wrapper: Element,
     mobileClockWrapper: Element | null,

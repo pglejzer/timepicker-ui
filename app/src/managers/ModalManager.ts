@@ -119,7 +119,6 @@ export default class ModalManager {
     }
   };
 
-  /** Cleanup to avoid leaks */
   destroy() {
     this.clearAllTimeouts();
 
