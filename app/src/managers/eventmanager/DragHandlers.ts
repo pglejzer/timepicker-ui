@@ -43,6 +43,14 @@ export default class DragHandlers {
     const target = event.target as Element;
 
     if (
+      hasClass(target, 'timepicker-ui-keyboard-icon-wrapper') ||
+      hasClass(target, 'timepicker-ui-keyboard-icon') ||
+      target.closest('.timepicker-ui-keyboard-icon-wrapper')
+    ) {
+      return;
+    }
+
+    if (
       (hasClass(target, 'timepicker-ui-clock-face') ||
         hasClass(target, 'timepicker-ui-circle-hand') ||
         hasClass(target, 'timepicker-ui-hour-time-12') ||
@@ -71,6 +79,16 @@ export default class DragHandlers {
   _onDragMove = (event: MouseEvent | TouchEvent) => {
     if (!this._isDragging) return;
 
+    const touches = (event as TouchEvent).touches;
+    const myLocation = touches ? touches[0] : undefined;
+    const target = myLocation
+      ? (document.elementFromPoint(myLocation.clientX, myLocation.clientY) as HTMLDivElement)
+      : (event.target as Element);
+
+    if (hasClass(target, 'timepicker-ui-tips-disabled')) {
+      return;
+    }
+
     event.preventDefault();
     this._scheduleUpdate(event);
   };
@@ -94,10 +112,10 @@ export default class DragHandlers {
     }
 
     const target = event.target as Element;
-    const { switchToMinutesAfterSelectHour } = this.timepicker._options;
+    const { autoSwitchToMinutes } = this.timepicker._options;
 
     if (
-      switchToMinutesAfterSelectHour &&
+      autoSwitchToMinutes &&
       (hasClass(target, 'timepicker-ui-value-tips') ||
         hasClass(target, 'timepicker-ui-value-tips-24h') ||
         hasClass(target, 'timepicker-ui-tips-wrapper'))
@@ -129,10 +147,7 @@ export default class DragHandlers {
   };
 
   handleMoveHand = () => {
-    if (this.timepicker._options.mobile || this.timepicker._isMobileView) return;
-
     document.addEventListener('mousedown', this._onDragStart, false);
     document.addEventListener('touchstart', this._onDragStart, { passive: false });
   };
 }
-

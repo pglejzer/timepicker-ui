@@ -44,5 +44,14 @@ module.exports = {
     'max-len': 'off',
     'no-confusing-arrow': 'off',
     'tree-shaking/no-side-effects-in-initialization': 2,
+    'no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        vars: 'all',
+        args: 'after-used',
+        ignoreRestSiblings: true,
+      },
+    ],
   },
 };

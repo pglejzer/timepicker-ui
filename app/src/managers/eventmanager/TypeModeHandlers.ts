@@ -1,5 +1,4 @@
 import { createEventWithCallback } from '../../utils/config';
-import ClockFaceManager from '../ClockFaceManager';
 import { selectorActive } from '../../utils/variables';
 import { announceToScreenReader, updateAriaPressed } from '../../utils/accessibility';
 import type { ITimepickerUI } from '../../types/ITimepickerUI';
@@ -26,34 +25,24 @@ export default class TypeModeHandlers {
 
         announceToScreenReader(this.timepicker.modalElement, 'AM selected');
 
-        if (this.timepicker._options.clockType === '12h' && this.timepicker._options.disabledTime?.interval) {
-          setTimeout(() => {
-            const initClockFace = this.timepicker.clockFacePool.acquire({
-              clockFace: this.timepicker.clockFace,
-              tipsWrapper: this.timepicker.tipsWrapper,
-              disabledTime: this.timepicker._disabledTime?.value,
-              clockType: this.timepicker._options.clockType,
-              activeTypeMode: 'AM',
-            });
-            initClockFace.updateDisable(this.timepicker.hour.value, 'AM');
-            this.timepicker.clockFacePool.release(initClockFace);
-          }, 300);
-        }
+        this.timepicker.clockManager?.updateAmPm();
+
+        const eventData = {
+          hour: this.timepicker.hour.value,
+          minutes: this.timepicker.minutes.value,
+          type: this.timepicker.activeTypeMode?.dataset.type,
+          degreesHours: this.timepicker._degreesHours,
+          degreesMinutes: this.timepicker._degreesMinutes,
+        };
 
         createEventWithCallback(
           this.timepicker._element,
-          '',
           'timepicker:select-am',
-          {
-            hour: this.timepicker.hour.value,
-            minutes: this.timepicker.minutes.value,
-            type: this.timepicker.activeTypeMode?.dataset.type,
-            degreesHours: this.timepicker._degreesHours,
-            degreesMinutes: this.timepicker._degreesMinutes,
-          },
+          eventData,
           this.timepicker._options.onSelectAM,
-          this.timepicker,
         );
+
+        this.timepicker.emit?.('select:am', eventData);
       };
 
       this.timepicker.AM.addEventListener(e, handler);
@@ -76,34 +65,24 @@ export default class TypeModeHandlers {
 
         announceToScreenReader(this.timepicker.modalElement, 'PM selected');
 
-        if (this.timepicker._options.clockType === '12h' && this.timepicker._options.disabledTime?.interval) {
-          setTimeout(() => {
-            const initClockFace = this.timepicker.clockFacePool.acquire({
-              clockFace: this.timepicker.clockFace,
-              tipsWrapper: this.timepicker.tipsWrapper,
-              disabledTime: this.timepicker._disabledTime?.value,
-              clockType: this.timepicker._options.clockType,
-              activeTypeMode: 'PM',
-            });
-            initClockFace.updateDisable(this.timepicker.hour.value, 'PM');
-            this.timepicker.clockFacePool.release(initClockFace);
-          }, 300);
-        }
+        this.timepicker.clockManager?.updateAmPm();
+
+        const eventData = {
+          hour: this.timepicker.hour.value,
+          minutes: this.timepicker.minutes.value,
+          type: this.timepicker.activeTypeMode?.dataset.type,
+          degreesHours: this.timepicker._degreesHours,
+          degreesMinutes: this.timepicker._degreesMinutes,
+        };
 
         createEventWithCallback(
           this.timepicker._element,
-          '',
           'timepicker:select-pm',
-          {
-            hour: this.timepicker.hour.value,
-            minutes: this.timepicker.minutes.value,
-            type: this.timepicker.activeTypeMode?.dataset.type,
-            degreesHours: this.timepicker._degreesHours,
-            degreesMinutes: this.timepicker._degreesMinutes,
-          },
+          eventData,
           this.timepicker._options.onSelectPM,
-          this.timepicker,
         );
+
+        this.timepicker.emit?.('select:pm', eventData);
       };
 
       this.timepicker.PM.addEventListener(el, handler);
@@ -113,4 +92,3 @@ export default class TypeModeHandlers {
     });
   };
 }
-

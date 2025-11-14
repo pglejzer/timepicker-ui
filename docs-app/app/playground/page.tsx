@@ -17,7 +17,7 @@ interface Config {
   focusTrap: boolean;
   enableScrollbar: boolean;
   enableSwitchIcon: boolean;
-  switchToMinutesAfterSelectHour: boolean;
+  autoSwitchToMinutes: boolean;
   focusInputAfterCloseModal: boolean;
   incrementHours: number;
   incrementMinutes: number;
@@ -65,9 +65,10 @@ const CLOCK_TYPES: SelectOption[] = [
 const THEMES: SelectOption[] = [
   { value: "basic", label: "Basic" },
   { value: "dark", label: "Dark" },
+  { value: "crane", label: "Crane" },
   { value: "crane-straight", label: "Crane Straight" },
-  { value: "crane-radius", label: "Crane Radius" },
-  { value: "m3", label: "Material 3" },
+  { value: "m3-green", label: "Material 3 Green" },
+  { value: "m2", label: "Material 2" },
   { value: "glassmorphic", label: "Glassmorphic" },
   { value: "cyberpunk", label: "Cyberpunk" },
   { value: "ai", label: "AI" },
@@ -111,7 +112,7 @@ const BEHAVIOR_CHECKBOXES: CheckboxConfig[] = [
     description: "Show mobile/desktop toggle",
   },
   {
-    key: "switchToMinutesAfterSelectHour",
+    key: "autoSwitchToMinutes",
     label: "Auto-switch Minutes",
     description: "After hour selection",
   },
@@ -142,8 +143,8 @@ const INLINE_CHECKBOXES: CheckboxConfig[] = [
 
 const LABEL_INPUTS: InputConfig[] = [
   { key: "okLabel", label: "OK Label", placeholder: "OK" },
-  { key: "cancelLabel", label: "Cancel Label", placeholder: "CANCEL" },
-  { key: "timeLabel", label: "Time Label", placeholder: "Select Time" },
+  { key: "cancelLabel", label: "Cancel Label", placeholder: "Cancel" },
+  { key: "timeLabel", label: "Time Label", placeholder: "Select time" },
   { key: "amLabel", label: "AM Label", placeholder: "AM" },
   { key: "pmLabel", label: "PM Label", placeholder: "PM" },
 ];
@@ -176,7 +177,7 @@ const DEFAULT_CONFIG: Config = {
   focusTrap: true,
   enableScrollbar: false,
   enableSwitchIcon: false,
-  switchToMinutesAfterSelectHour: true,
+  autoSwitchToMinutes: true,
   focusInputAfterCloseModal: false,
   incrementHours: 1,
   incrementMinutes: 1,
@@ -224,8 +225,8 @@ function generateCode(config: Config): string {
   if (config.enableSwitchIcon) {
     options.push(`enableSwitchIcon: true`);
   }
-  if (!config.switchToMinutesAfterSelectHour) {
-    options.push(`switchToMinutesAfterSelectHour: false`);
+  if (!config.autoSwitchToMinutes) {
+    options.push(`autoSwitchToMinutes: false`);
   }
   if (config.focusInputAfterCloseModal) {
     options.push(`focusInputAfterCloseModal: true`);

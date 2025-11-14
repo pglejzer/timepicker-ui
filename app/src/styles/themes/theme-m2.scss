@@ -1,0 +1,149 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui-wrapper.m2 {
+  --timepicker-bg: #ffffff;
+  --timepicker-surface: #e0e0e0;
+  --timepicker-surface-hover: #ece0fd;
+  --timepicker-input-bg: #e4e4e4;
+
+  --timepicker-text: #000000;
+  --timepicker-secondary-text: #a9a9a9;
+  --timepicker-disabled-text: rgba(156, 155, 155, 0.6);
+  --timepicker-type-time-text: #787878;
+  --timepicker-icon-text: #4e545a;
+
+  --timepicker-am-pm-active: #ece0fd;
+  --timepicker-am-pm-text-selected: #6200ee;
+  --timepicker-am-pm-text-unselected: #787878;
+
+  --timepicker-primary: #6200ee;
+  --timepicker-on-primary: #ffffff;
+  --timepicker-primary-container: #ece0fd;
+  --timepicker-on-primary-container: #6200ee;
+
+  --timepicker-tertiary-container: #ece0fd;
+  --timepicker-on-tertiary-container: #6200ee;
+
+  --timepicker-border: #d6d6d6;
+  --timepicker-outline: #8b5cf6;
+  --timepicker-hover-bg: #d6d6d6;
+
+  --timepicker-shadow:
+    0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+
+  --timepicker-border-radius: 4px;
+}
+
+.timepicker-ui {
+  &-hour-time-12.m2,
+  &-hour-time-24.m2 {
+    color: var(--timepicker-text);
+  }
+
+  &-wrapper.m2 {
+    border-radius: var(--timepicker-border-radius);
+    background-color: var(--timepicker-bg);
+    box-shadow: var(--timepicker-shadow);
+  }
+
+  &-hour.active.m2,
+  &-minutes.active.m2 {
+    color: var(--timepicker-primary);
+    background-color: var(--timepicker-surface-hover);
+  }
+
+  &-minutes.m2,
+  &-hour.m2 {
+    background-color: var(--timepicker-input-bg);
+  }
+
+  &-minutes:hover.m2,
+  &-hour:hover.m2 {
+    color: var(--timepicker-primary);
+    background-color: var(--timepicker-surface-hover);
+  }
+
+  &-clock-face.m2 {
+    background-color: var(--timepicker-surface);
+  }
+
+  &-clock-hand.m2,
+  &-dot.m2,
+  &-circle-hand.m2 {
+    background-color: var(--timepicker-primary) !important;
+  }
+
+  &-cancel-btn.m2,
+  &-ok-btn.m2 {
+    color: var(--timepicker-primary);
+  }
+
+  &-cancel-btn:hover.m2,
+  &-ok-btn:hover.m2 {
+    background-color: var(--timepicker-hover-bg);
+  }
+
+  &-wrapper-type-time.m2 {
+    color: var(--timepicker-type-time-text);
+  }
+
+  &-am.m2,
+  &-pm.m2 {
+    border-color: var(--timepicker-border);
+  }
+
+  &-am:hover.m2,
+  &-am.active.m2,
+  &-pm:hover.m2,
+  &-pm.active.m2 {
+    color: var(--timepicker-primary);
+    background-color: var(--timepicker-am-pm-active);
+  }
+
+  &-hour.mobile:hover.m2,
+  &-minutes.mobile:hover.m2 {
+    color: var(--timepicker-primary);
+    background-color: var(--timepicker-surface-hover);
+  }
+
+  &-keyboard-icon-wrapper.m2 {
+    svg {
+      fill: var(--timepicker-icon-text);
+    }
+
+    &:hover svg {
+      fill: var(--timepicker-primary);
+    }
+  }
+
+  &-select-time.m2 {
+    color: var(--timepicker-secondary-text);
+  }
+
+  &-dots.m2 span {
+    background-color: var(--timepicker-text);
+  }
+
+  &-value-tips.m2,
+  &-value-tips-24h.m2 {
+    color: var(--timepicker-text);
+
+    &.active {
+      color: var(--timepicker-on-primary);
+    }
+  }
+
+  &-tips-disabled.m2 {
+    color: var(--timepicker-disabled-text);
+  }
+
+  &-hour-text.m2,
+  &-minute-text.m2 {
+    color: var(--timepicker-secondary-text);
+  }
+
+  &-icon-text.m2 {
+    color: var(--timepicker-icon-text);
+  }
+}

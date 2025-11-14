@@ -1,0 +1,46 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui--inline {
+  position: static !important;
+  display: block !important;
+  opacity: 1 !important;
+  background-color: transparent !important;
+  transform: none !important;
+  top: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  z-index: auto !important;
+  pointer-events: auto !important;
+
+  .timepicker-ui-wrapper,
+  .timepicker-ui-wrapper.mobile {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 328px !important;
+    height: auto !important;
+    min-height: 500px !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 0 auto !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    border-radius: 8px !important;
+  }
+
+  .timepicker-ui-footer {
+    .timepicker-ui-wrapper-btn[style*='display: none'] ~ * {
+      justify-content: center !important;
+    }
+  }
+
+  .timepicker-ui-wrapper-btn {
+    &:not([style*='display: none']) {
+      display: flex !important;
+      justify-content: flex-end !important;
+      gap: 8px !important;
+    }
+  }
+}
+

@@ -118,7 +118,7 @@ export function TimepickerExample({
                 htmlFor={uniqueId}
                 className="mb-2 block text-sm font-medium text-foreground"
               >
-                Select Time
+                Select time
               </label>
               <input
                 ref={inputRef}

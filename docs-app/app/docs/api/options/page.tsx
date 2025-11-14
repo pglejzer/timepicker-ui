@@ -36,7 +36,7 @@ const basicOptions = [
   {
     name: "cancelLabel",
     type: "string",
-    default: '"CANCEL"',
+    default: '"Cancel"',
     description: "Text for cancel button",
   },
   {
@@ -142,7 +142,7 @@ const basicOptions = [
     description: "Custom text for PM label",
   },
   {
-    name: "switchToMinutesAfterSelectHour",
+    name: "autoSwitchToMinutes",
     type: "boolean",
     default: "true",
     description: "Auto-switch to minutes after hour selection",
@@ -156,7 +156,7 @@ const basicOptions = [
   {
     name: "timeLabel",
     type: "string",
-    default: '"Select Time"',
+    default: '"Select time"',
     description: "Time label for desktop version",
   },
 ];
@@ -164,14 +164,15 @@ const basicOptions = [
 const themes = [
   { name: "basic", description: "Default Material Design theme" },
   {
+    name: "crane",
+    description: "Google Crane theme with rounded corners",
+  },
+  {
     name: "crane-straight",
     description: "Google Crane theme with straight edges",
   },
-  {
-    name: "crane-radius",
-    description: "Google Crane theme with rounded edges",
-  },
-  { name: "m3", description: "Material Design 3 (Material You)" },
+  { name: "m3-green", description: "Material Design 3 (green variant)" },
+  { name: "m2", description: "Material Design 2 classic theme" },
   { name: "dark", description: "Dark mode theme" },
   { name: "glassmorphic", description: "Modern glass effect" },
   { name: "pastel", description: "Soft pastel colors" },
@@ -241,7 +242,7 @@ export default function OptionsPage() {
 
       <Section icon={Palette} title="Themes">
         <p className="text-muted-foreground mb-6">
-          Choose from 9 built-in themes:
+          Choose from 11 built-in themes:
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {themes.map((theme) => (
@@ -356,7 +357,7 @@ export default function OptionsPage() {
   editable: false,
   mobile: false,
   enableScrollbar: false,
-  switchToMinutesAfterSelectHour: true,
+  autoSwitchToMinutes: true,
   
   // Labels
   okLabel: 'Confirm',

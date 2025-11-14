@@ -1,22 +1,99 @@
-import ClockFaceManager from './ClockFaceManager';
 import { selectorActive } from '../utils/variables';
-import { getNumberOfHours12, getNumberOfHours24, getNumberOfMinutes } from '../utils/template';
+import { MINUTES_STEP_5 } from '../utils/template';
 import type { ITimepickerUI } from '../types/ITimepickerUI';
+import { ClockSystem, type ClockSystemConfig, type DisabledTimeConfig } from './clock';
 
 export default class ClockManager {
   private timepicker: ITimepickerUI;
+  private clockSystem: ClockSystem | null = null;
 
   constructor(timepicker: ITimepickerUI) {
     this.timepicker = timepicker;
   }
 
-  /** @internal */
+  initializeClockSystem(): void {
+    if (!this.timepicker.clockFace || !this.timepicker.clockHand || !this.timepicker.circle) {
+      return;
+    }
+
+    const is24h = this.timepicker._options.clockType === '24h';
+
+    if (!this.timepicker.tipsWrapper) {
+      return;
+    }
+
+    const config: ClockSystemConfig = {
+      clockFace: this.timepicker.clockFace,
+      tipsWrapper: this.timepicker.tipsWrapper,
+      tipsWrapperFor24h: is24h ? this.timepicker.tipsWrapperFor24h : undefined,
+      clockHand: this.timepicker.clockHand,
+      circle: this.timepicker.circle,
+      clockType: (this.timepicker._options.clockType || '12h') as '12h' | '24h',
+      disabledTime: this.convertDisabledTime(),
+      initialHour: this.timepicker.hour?.value || '12',
+      initialMinute: this.timepicker.minutes?.value || '00',
+      initialAmPm: this.getAmPmValue(),
+      theme: this.timepicker._options.theme,
+      incrementHours: this.timepicker._options.incrementHours || 1,
+      incrementMinutes: this.timepicker._options.incrementMinutes || 1,
+      timepicker: this.timepicker,
+      onHourChange: (hour: string) => {
+        if (this.timepicker.hour) {
+          this.timepicker.hour.value = hour;
+        }
+      },
+      onMinuteChange: (minute: string) => {
+        if (this.timepicker.minutes) {
+          this.timepicker.minutes.value = minute;
+        }
+      },
+    };
+
+    this.clockSystem = new ClockSystem(config);
+    this.clockSystem.initialize();
+  }
+
+  private convertDisabledTime(): DisabledTimeConfig | null {
+    if (!this.timepicker._disabledTime?.value) return null;
+
+    const oldValue = this.timepicker._disabledTime.value;
+
+    let intervals: string[] | undefined;
+    if (oldValue.intervals) {
+      intervals = Array.isArray(oldValue.intervals) ? oldValue.intervals : [oldValue.intervals];
+    }
+
+    return {
+      hours: oldValue.hours,
+      minutes: oldValue.minutes,
+      isInterval: oldValue.isInterval,
+      intervals,
+      clockType: oldValue.clockType as '12h' | '24h' | undefined,
+    };
+  }
+
+  private getAmPmValue(): '' | 'AM' | 'PM' {
+    if (this.timepicker._options.clockType === '24h') return '';
+    const activeMode = this.timepicker.activeTypeMode;
+    if (activeMode) {
+      const text = activeMode.textContent?.trim();
+      if (text === 'AM' || text === 'PM') return text;
+    }
+    return this.timepicker.AM?.classList.contains('active') ? 'AM' : 'PM';
+  }
+
+  destroyClockSystem(): void {
+    if (this.clockSystem) {
+      this.clockSystem.destroy();
+      this.clockSystem = null;
+    }
+  }
+
   removeCircleClockClasses24h() {
     this.timepicker.circle?.classList.remove('timepicker-ui-circle-hand-24h');
     this.timepicker.clockHand?.classList.remove('timepicker-ui-clock-hand-24h');
   }
 
-  /** @internal */
   setCircleClockClasses24h() {
     if (this.timepicker.circle) {
       this.timepicker.circle?.classList.add('timepicker-ui-circle-hand-24h');
@@ -26,7 +103,6 @@ export default class ClockManager {
     }
   }
 
-  /** @internal */
   setOnStartCSSClassesIfClockType24h() {
     if (this.timepicker._options.clockType === '24h') {
       const inputValue = this.timepicker?.configManager?.getInputValue(
@@ -47,9 +123,8 @@ export default class ClockManager {
     }
   }
 
-  /** @internal */
   setBgColorToCircleWithMinutesTips = (): void => {
-    if (this.timepicker.minutes.value && getNumberOfMinutes.includes(this.timepicker.minutes.value)) {
+    if (this.timepicker.minutes.value && MINUTES_STEP_5.includes(this.timepicker.minutes.value)) {
       const primaryColor = getComputedStyle(this.timepicker.circle)
         .getPropertyValue('--timepicker-primary')
         .trim();
@@ -60,127 +135,60 @@ export default class ClockManager {
     }
   };
 
-  /** @internal */
   removeBgColorToCirleWithMinutesTips = (): void => {
-    if (this.timepicker.minutes.value && getNumberOfMinutes.includes(this.timepicker.minutes.value)) return;
+    if (this.timepicker.minutes.value && MINUTES_STEP_5.includes(this.timepicker.minutes.value)) return;
 
     this.timepicker.circle.style.backgroundColor = '';
     this.timepicker.circle.classList.add('small-circle');
   };
 
-  /** @internal */
   setClassActiveToHourOnOpen = (): void => {
     if (this.timepicker._options.mobile || this.timepicker._isMobileView) return;
-
     this.timepicker.hour?.classList.add(selectorActive);
   };
 
-  /** @internal */
   setMinutesToClock = (value: string | null): void => {
-    if (this.timepicker.clockFace !== null) this.setTransformToCircleWithSwitchesMinutes(value);
+    if (!this.clockSystem) return;
+
     this.removeBgColorToCirleWithMinutesTips();
+    this.clockSystem.switchToMinutes();
 
-    const disabledTimeData = this.timepicker._disabledTime?.value || null;
-
-    const initClockFace = this.timepicker.clockFacePool.acquire({
-      array: getNumberOfMinutes,
-      classToAdd: 'timepicker-ui-minutes-time',
-      clockFace: this.timepicker.clockFace,
-      tipsWrapper: this.timepicker.tipsWrapper,
-      theme: this.timepicker._options.theme,
-      disabledTime: disabledTimeData,
-      hour: this.timepicker.hour.value,
-      clockType: this.timepicker._options.clockType,
-    });
-
-    initClockFace.create();
-
-    if (this.timepicker._options.clockType === '12h') {
-      initClockFace.updateDisable();
-    }
-
-    this.timepicker.clockFacePool.release(initClockFace);
-
-    this.toggleClassActiveToValueTips(value);
-
-    if (this.timepicker._options.clockType === '24h') {
-      this.timepicker.tipsWrapperFor24h.innerHTML = '';
+    if (value) {
+      this.clockSystem.setMinute(value);
     }
   };
 
-  /** @internal */
   setHoursToClock = (value: string | null): void => {
-    if (this.timepicker.clockFace !== null) {
-      this.setTransformToCircleWithSwitchesHour(value);
+    if (!this.clockSystem) return;
 
-      const disabledTimeData = this.timepicker._disabledTime?.value || null;
+    this.clockSystem.switchToHours();
 
-      const init12h = this.timepicker.clockFacePool.acquire({
-        array: getNumberOfHours12,
-        classToAdd: 'timepicker-ui-hour-time-12',
-        clockFace: this.timepicker.clockFace,
-        tipsWrapper: this.timepicker.tipsWrapper,
-        theme: this.timepicker._options.theme,
-        disabledTime: disabledTimeData,
-        clockType: '12h',
-        hour: this.timepicker.hour.value,
-      });
-
-      init12h.create();
-
-      if (this.timepicker._options.clockType === '24h') {
-        const init24h = this.timepicker.clockFacePool.acquire({
-          array: getNumberOfHours24,
-          classToAdd: 'timepicker-ui-hour-time-24',
-          clockFace: this.timepicker.tipsWrapperFor24h,
-          tipsWrapper: this.timepicker.tipsWrapperFor24h,
-          theme: this.timepicker._options.theme,
-          clockType: '24h',
-          disabledTime: disabledTimeData,
-          hour: this.timepicker.hour.value,
-        });
-
-        init24h.create();
-        this.timepicker.clockFacePool.release(init24h);
-      } else {
-        init12h.updateDisable();
-      }
-
-      this.timepicker.clockFacePool.release(init12h);
-      this.toggleClassActiveToValueTips(value);
+    if (value) {
+      this.clockSystem.setHour(value);
     }
   };
 
-  /** @internal */
   setTransformToCircleWithSwitchesHour = (val: string | null): void => {
-    if (!this.timepicker.clockHand) return;
-
-    const value = Number(val);
-
-    let degrees = value > 12 ? value * 30 - 360 : value * 30;
-
-    if (degrees === 360) {
-      degrees = 0;
-    }
-
-    if (degrees > 360) return;
-
-    this.timepicker.clockHand.style.transform = `rotateZ(${degrees}deg)`;
+    if (!this.clockSystem || !val) return;
+    this.clockSystem.setHour(val);
   };
 
-  /** @internal */
   setTransformToCircleWithSwitchesMinutes = (val: string | null): void => {
-    if (!this.timepicker.clockHand) return;
-
-    const degrees = Number(val) * 6;
-
-    if (degrees > 360) return;
-
-    this.timepicker.clockHand.style.transform = `rotateZ(${degrees}deg)`;
+    if (!this.clockSystem || !val) return;
+    this.clockSystem.setMinute(val);
   };
 
-  /** @internal */
+  updateAmPm = (): void => {
+    if (!this.clockSystem || this.timepicker._options.clockType === '24h') return;
+    const amPm = this.getAmPmValue();
+    if (amPm !== '') {
+      this.clockSystem.setAmPm(amPm);
+    }
+  };
+
   toggleClassActiveToValueTips = (value: string | number | null): void => {
+    if (this.clockSystem) return;
+
     const element = this.timepicker.allValueTips.find(
       (tip: HTMLElement) => Number(tip.innerText) === Number(value),
     );

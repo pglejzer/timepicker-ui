@@ -1,7 +1,7 @@
 import { initCallback } from '../utils/config';
 import { debounce } from '../utils/debounce';
 import { allEvents } from '../utils/variables';
-import { getNumberOfHours12, getNumberOfHours24 } from '../utils/template';
+import { initMd3Ripple } from '../utils/ripple';
 import TimepickerCore from './TimepickerCore';
 
 type TypeFunction = () => void;
@@ -9,17 +9,21 @@ type TypeFunction = () => void;
 export default class TimepickerLifecycle extends TimepickerCore {
   public create = (): void => {
     if (this._isDestroyed) {
-      console.warn('TimepickerUI: Cannot create - instance failed to initialize');
       return;
     }
 
     if (this._isInitialized) {
-      console.warn('TimepickerUI: Instance is already initialized');
       return;
     }
 
-    this.configManager.updateInputValueWithCurrentTimeOnStart();
-    this.validationManager.checkDisabledValuesOnStart();
+    try {
+      this.configManager.updateInputValueWithCurrentTimeOnStart();
+      this.validationManager.checkDisabledValuesOnStart();
+    } catch (error) {
+      this._isDestroyed = true;
+      return;
+    }
+
     this.themeManager.setTimepickerClassToElement();
     this.themeManager.setInputClassToInputElement();
     this.themeManager.setDataOpenToInputIfDoesntExistInWrapper();
@@ -39,7 +43,6 @@ export default class TimepickerLifecycle extends TimepickerCore {
 
   public open = (callback?: () => void): void => {
     if (this._isDestroyed) {
-      console.warn('TimepickerUI: Cannot open - instance failed to initialize');
       return;
     }
 
@@ -58,6 +61,8 @@ export default class TimepickerLifecycle extends TimepickerCore {
 
       const [update] = args.filter((e) => typeof e === 'boolean');
       const [callback] = args.filter((e) => typeof e === 'function');
+
+      this._isMobileView = !!this._options.mobile;
 
       if (update) {
         this.eventManager.handleOkButton();
@@ -79,11 +84,6 @@ export default class TimepickerLifecycle extends TimepickerCore {
       document.removeEventListener('keypress', this.eventManager.handleEscClick);
       this.wrapper.removeEventListener('keydown', this.eventManager.focusTrapHandler);
 
-      if (this._options.enableSwitchIcon) {
-        this.keyboardClockIcon.removeEventListener('touchstart', this.configManager.handlerViewChange());
-        this.keyboardClockIcon.removeEventListener('mousedown', this.configManager.handlerViewChange());
-      }
-
       this.animationManager.removeAnimationToClose();
 
       this.openElement.forEach((openEl) => openEl?.classList.remove('disabled'));
@@ -100,6 +100,8 @@ export default class TimepickerLifecycle extends TimepickerCore {
 
         if (this.modalElement === null) return;
 
+        this.clockManager.destroyClockSystem();
+
         this.modalElement.remove();
 
         this._isModalRemove = true;
@@ -110,7 +112,6 @@ export default class TimepickerLifecycle extends TimepickerCore {
 
   public destroy = (options?: { keepInputValue?: boolean; callback?: TypeFunction } | TypeFunction): void => {
     if (this._isDestroyed) {
-      console.warn('TimepickerUI: Instance is already destroyed');
       return;
     }
 
@@ -119,7 +120,6 @@ export default class TimepickerLifecycle extends TimepickerCore {
 
     const inputValue = keepInputValue ? this.input?.value : null;
 
-    this.clockFacePool.clear();
     this.domBatcher.destroy();
 
     allEvents.split(' ').forEach((event) => {
@@ -142,7 +142,7 @@ export default class TimepickerLifecycle extends TimepickerCore {
     this.openElement?.forEach((el) => {
       if (el) {
         el.classList.remove('disabled', 'active', 'timepicker-ui-open-element');
-        el.classList.remove('basic', 'crane-straight', 'crane-radius', 'm3');
+        el.classList.remove('basic', 'crane-straight', 'crane', 'm2', 'm3-green');
       }
     });
 
@@ -164,7 +164,7 @@ export default class TimepickerLifecycle extends TimepickerCore {
     }
 
     if (this._element) {
-      this._element.classList.remove('basic', 'crane-straight', 'crane-radius', 'm3');
+      this._element.classList.remove('basic', 'crane-straight', 'crane', 'm2', 'm3-green');
 
       this._element.classList.remove('error', 'active', 'disabled');
 
@@ -207,7 +207,6 @@ export default class TimepickerLifecycle extends TimepickerCore {
 
   _eventsBundle = (): void => {
     if (this._isDestroyed) {
-      console.warn('TimepickerUI: Instance is destroyed');
       return;
     }
 
@@ -231,51 +230,31 @@ export default class TimepickerLifecycle extends TimepickerCore {
     this.modalManager.setModalTemplate();
     this.modalManager.setNormalizeClass();
     this.modalManager.removeBackdrop();
+
     this.clockManager.setOnStartCSSClassesIfClockType24h();
     this.clockManager.setClassActiveToHourOnOpen();
 
-    if (this.clockFace !== null) {
-      const initClockFace = this.clockFacePool.acquire({
-        array: getNumberOfHours12,
-        classToAdd: 'timepicker-ui-hour-time-12',
-        clockFace: this.clockFace,
-        tipsWrapper: this.tipsWrapper,
-        theme: this._options.theme,
-        disabledTime: this._disabledTime?.value?.isInterval
-          ? this._disabledTime?.value
-          : this._disabledTime?.value?.hours,
-        clockType: this._options.clockType,
-        hour: this.hour.value,
-        activeTypeMode: this.activeTypeMode?.textContent || '',
-      });
-
-      initClockFace.create();
-
-      if (this._options.clockType === '24h') {
-        const initClockFace24h = this.clockFacePool.acquire({
-          array: getNumberOfHours24,
-          classToAdd: 'timepicker-ui-hour-time-24',
-          clockFace: this.tipsWrapperFor24h,
-          tipsWrapper: this.tipsWrapperFor24h,
-          theme: this._options.theme,
-          clockType: '24h',
-          disabledTime: this._disabledTime?.value?.isInterval
-            ? this._disabledTime?.value
-            : this._disabledTime?.value?.hours,
-          hour: this.hour.value,
-        });
-
-        initClockFace24h.create();
-        this.clockFacePool.release(initClockFace24h);
-      } else if (this._options.clockType === '12h' && this._disabledTime?.value?.isInterval) {
-        setTimeout(() => {
-          initClockFace.updateDisable(this.hour.value, this.activeTypeMode?.textContent || '');
-        }, 300);
-      }
-
-      this.clockFacePool.release(initClockFace);
+    if (this.modalElement) {
+      initMd3Ripple(this.modalElement);
     }
 
+    if (!this._isMobileView) {
+      const clockWrapper = this.modalElement?.querySelector('.timepicker-ui-mobile-clock-wrapper');
+      const wrapper = this.modalElement?.querySelector('.timepicker-ui-wrapper');
+      const allElements = this.modalElement?.querySelectorAll('*');
+
+      clockWrapper?.classList.add('expanded');
+      wrapper?.classList.add('expanded');
+      allElements?.forEach((el) => {
+        if (
+          !el.classList.contains('timepicker-ui-select-time') &&
+          !el.classList.contains('timepicker-ui-mobile-clock-wrapper') &&
+          !el.classList.contains('timepicker-ui-wrapper')
+        ) {
+          el.classList.add('expanded');
+        }
+      });
+    }
     this.modalManager.setFlexEndToFooterIfNoKeyboardIcon();
 
     setTimeout(() => {
@@ -295,6 +274,9 @@ export default class TimepickerLifecycle extends TimepickerCore {
 
     this.animationManager.setAnimationToOpen();
     this.configManager.getInputValueOnOpenAndSet();
+
+    this.clockManager.initializeClockSystem();
+
     this.clockManager.toggleClassActiveToValueTips(this.hour.value);
 
     if (!this._isMobileView) {
@@ -312,6 +294,12 @@ export default class TimepickerLifecycle extends TimepickerCore {
 
     if (this.clockFace) {
       this.eventManager.handleMoveHand();
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          this.clockFace?.classList.add('scale-in');
+        });
+      });
     }
 
     this.eventManager.handleCancelButton();
@@ -324,8 +312,8 @@ export default class TimepickerLifecycle extends TimepickerCore {
       }
     }
 
-    this.eventManager.handleIconChangeView();
     this.eventManager.handleClickOnHourMobile();
+    this.eventManager.handleIconChangeView();
 
     if (this._options.focusTrap) {
       this.eventManager.focusTrapHandler();

@@ -40,7 +40,7 @@ const mainInterfaces = [
   mobileTimeLabel?: string;
   okLabel?: string;
   pmLabel?: string;
-  switchToMinutesAfterSelectHour?: boolean;
+  autoSwitchToMinutes?: boolean;
   theme?: Theme;
   timeLabel?: string;
   
@@ -112,9 +112,10 @@ const typeAliases = [
     description: "Available theme names",
     code: `type Theme = 
   | 'basic'
+  | 'crane'
   | 'crane-straight'
-  | 'crane-radius'
-  | 'm3'
+  | 'm3-green'
+  | 'm2'
   | 'dark'
   | 'glassmorphic'
   | 'pastel'

@@ -3,7 +3,7 @@ import type { OptionTypes } from '../../src/types/types';
 export const mockOptions: OptionTypes = {
   amLabel: 'AM',
   pmLabel: 'PM',
-  cancelLabel: 'CANCEL',
+  cancelLabel: 'Cancel',
   okLabel: 'OK',
   enableSwitchIcon: false,
   animation: true,
@@ -16,11 +16,11 @@ export const mockOptions: OptionTypes = {
   incrementHours: 1,
   incrementMinutes: 1,
   mobile: false,
-  switchToMinutesAfterSelectHour: true,
+  autoSwitchToMinutes: true,
   theme: 'basic',
-  timeLabel: 'Select Time',
-  iconTemplate: '<i>keyboard</i>',
-  iconTemplateMobile: '<i>schedule</i>',
+  timeLabel: 'Select time',
+  iconTemplate: '',
+  iconTemplateMobile: '',
   mobileTimeLabel: 'Enter Time',
   hourMobileLabel: 'Hour',
   minuteMobileLabel: 'Minute',
@@ -61,4 +61,3 @@ export const mockIntervalDisabledOptions: OptionTypes = {
     interval: '10:00 AM - 12:00 PM',
   },
 };
-

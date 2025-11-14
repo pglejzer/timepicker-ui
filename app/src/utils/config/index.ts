@@ -2,39 +2,7 @@
 import type { OptionTypes, CallbackData } from '../../types/types';
 import type { ITimepickerUI } from '../../types/ITimepickerUI';
 
-export const toType = (obj: unknown): string => {
-  if (obj === null || obj === undefined) {
-    return `${obj}`;
-  }
-
-  // @ts-ignore
-  return {}.toString
-    .call(obj)
-    .match(/\s([a-z]+)/i)[1]
-    .toLowerCase();
-};
-
 export const isElement = (obj: string | any[] | any): string => (obj[0] || obj).nodeType;
-
-export const typeCheckConfig = (
-  componentName: string,
-  config: Record<string, unknown>,
-  configTypes: Record<string, string>,
-): void => {
-  Object.keys(configTypes).forEach((property) => {
-    const expectedTypes = configTypes[property];
-    const value = config[property];
-    const valueType = value && isElement(value) ? 'el' : toType(value);
-
-    if (!new RegExp(expectedTypes).test(valueType)) {
-      throw new Error(
-        `${componentName.toUpperCase()}: ` +
-          `Option "${property}" provided type "${valueType}" ` +
-          `but expected type "${expectedTypes}".`,
-      );
-    }
-  });
-};
 
 export const getConfig = (
   options?: OptionTypes,
@@ -57,8 +25,6 @@ export const getScrollbarWidth = (): number => {
   document.body.removeChild(scrollDiv);
   return scrollbarWidth;
 };
-
-export const getRadians = (el: number): number => el * (Math.PI / 180);
 
 export const getClickTouchPosition = (event: TouchEvent, object: HTMLElement) => {
   const { touches } = event;
@@ -95,84 +61,28 @@ export const getMathDegIncrement = (degrees: number, num: number): number => Mat
 export const hasClass = (el: HTMLElement | null | Element, selector: string): boolean =>
   el ? el.classList.contains(selector) : false;
 
-export const createNewEvent = (
-  el: Element,
-  eventName: string,
-  value: {
-    hour?: string | null;
-    minutes?: string | null;
-    type?: string | null;
-    degreesHours?: number | null;
-    degreesMinutes?: number | null;
-    hourNotAccepted?: string | null;
-    minutesNotAccepted?: string | null;
-    eventType?: 'accept' | 'cancel' | 'click' | 'change' | null;
-    test?: string;
-    error?: string;
-    currentHour?: string | number;
-    currentMin?: string | number;
-    currentType?: string;
-    currentLength?: string | number;
-  },
-): void => {
-  if (!el) return;
-
-  const ev = new CustomEvent(eventName, { detail: value });
-
-  el.dispatchEvent(ev);
-};
-
-/**
- * @description Creates a new event and triggers callback if provided
- * This function properly dispatches CustomEvents and handles callbacks
- */
 export const createEventWithCallback = (
   el: Element,
-  eventName: string,
-  newEventName: string,
+  legacyEventName: string,
   value: CallbackData,
   callback?: (eventData: CallbackData) => void,
-  timepicker?: ITimepickerUI,
 ): void => {
   if (!el) return;
 
-  const namespacedEvent = new CustomEvent(newEventName, {
-    detail: value,
-    bubbles: true,
-    cancelable: true,
-  });
-
-  try {
-    // Deprecated notice planned for v4
-    const dispatched = el.dispatchEvent(namespacedEvent);
-
-    if (dispatched && eventName !== newEventName) {
-      const legacyEvent = new CustomEvent(eventName, {
-        detail: value,
-        bubbles: true,
-        cancelable: true,
-      });
-      // Deprecated notice planned for v4
-      el.dispatchEvent(legacyEvent);
-    }
-
-    if (
-      timepicker &&
-      'emit' in timepicker &&
-      typeof (timepicker as unknown as { emit: Function }).emit === 'function'
-    ) {
-      const eventKey = newEventName.replace('timepicker:', '').replace(/-/g, ':');
-      (timepicker as unknown as { emit: (event: string, data: CallbackData) => void }).emit(eventKey, value);
-    }
-  } catch (error) {
-    console.warn(`TimepickerUI: Error dispatching event ${newEventName}:`, error);
+  if (legacyEventName) {
+    const legacyEvent = new CustomEvent(legacyEventName, {
+      detail: value,
+      bubbles: true,
+      cancelable: true,
+    });
+    el.dispatchEvent(legacyEvent);
   }
 
   if (callback && typeof callback === 'function') {
     try {
       callback(value);
     } catch (error) {
-      console.warn(`TimepickerUI: Error in ${newEventName} callback:`, error);
+      console.warn(`TimepickerUI: Error in callback:`, error);
     }
   }
 };

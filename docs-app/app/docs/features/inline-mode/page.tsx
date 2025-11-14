@@ -219,7 +219,7 @@ function InlineTimepicker() {
       const picker = new TimepickerUI(inputRef.current, {
         enableSwitchIcon: false,
         clockType: '12h',
-        theme: 'm3'
+        theme: 'm3-green'
       });
       
       picker.create();

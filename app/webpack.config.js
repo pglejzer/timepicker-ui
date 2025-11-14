@@ -80,7 +80,11 @@ export default {
         use: 'ts-loader',
       },
       {
-        test: /\.(svg|png|jpg|gif|woff2?|eot|ttf|otf)$/,
+        test: /\.svg$/,
+        type: 'asset/source',
+      },
+      {
+        test: /\.(png|jpg|gif|woff2?|eot|ttf|otf)$/,
         type: 'asset',
       },
     ],

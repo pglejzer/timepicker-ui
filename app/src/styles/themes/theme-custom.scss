@@ -42,27 +42,23 @@
 
     &:hover,
     &.active {
-      background-color: var(--timepicker-surface-hover);
+      background-color: var(--timepicker-am-pm-active);
       color: var(--timepicker-primary);
     }
 
     &.active {
-      background-color: var(--timepicker-primary);
+      background-color: var(--timepicker-am-pm-active);
       color: var(--timepicker-on-primary);
     }
   }
 
-  &-keyboard-icon.custom {
-    color: var(--timepicker-text);
-
-    &:hover {
-      color: var(--timepicker-primary);
-    }
-  }
-
   &-keyboard-icon-wrapper.custom {
-    &:hover .timepicker-ui-keyboard-icon.custom {
-      background-color: var(--timepicker-border);
+    svg {
+      fill: var(--timepicker-text);
+    }
+
+    &:hover svg {
+      fill: var(--timepicker-primary);
     }
   }
 
@@ -76,4 +72,3 @@
     }
   }
 }
-

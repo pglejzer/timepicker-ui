@@ -1,5 +1,4 @@
 import type { OptionTypes, CallbackData } from './types';
-import type ClockFaceManagerPool from '../managers/ClockFaceManagerPool';
 import type { TimepickerEventMap } from '../utils/EventEmitter';
 
 export interface ITimepickerUI {
@@ -31,8 +30,6 @@ export interface ITimepickerUI {
   _isInitialized: boolean;
   _customId?: string;
 
-  clockFacePool: ClockFaceManagerPool;
-
   readonly modalTemplate: string;
   readonly modalElement: HTMLDivElement;
   readonly clockFace: HTMLDivElement;
@@ -45,6 +42,11 @@ export interface ITimepickerUI {
   readonly hour: HTMLInputElement;
   readonly AM: HTMLDivElement;
   readonly PM: HTMLDivElement;
+  readonly hourText: HTMLDivElement;
+  readonly minutesText: HTMLDivElement;
+  readonly inputWrappers: NodeListOf<Element>;
+  readonly dots: HTMLDivElement;
+  readonly header: HTMLDivElement;
   readonly minutesTips: HTMLDivElement;
   readonly hourTips: HTMLDivElement;
   readonly allValueTips: readonly HTMLDivElement[];
@@ -90,6 +92,9 @@ export interface ITimepickerUI {
   on<K extends keyof TimepickerEventMap>(event: K, handler: (data: TimepickerEventMap[K]) => void): void;
   once<K extends keyof TimepickerEventMap>(event: K, handler: (data: TimepickerEventMap[K]) => void): void;
   off<K extends keyof TimepickerEventMap>(event: K, handler?: (data: TimepickerEventMap[K]) => void): void;
+
+  /** @internal */
+  emit?<K extends keyof TimepickerEventMap>(event: K, data?: TimepickerEventMap[K]): void;
 
   eventManager?: import('../managers/EventManager').default;
   modalManager?: import('../managers/ModalManager').default;

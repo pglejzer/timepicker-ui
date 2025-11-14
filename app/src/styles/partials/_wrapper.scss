@@ -1,0 +1,90 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  &-wrapper,
+  &-wrapper.mobile {
+    position: fixed;
+    z-index: 5001;
+    width: 328px;
+    top: $tm50percent;
+    left: $tm50percent;
+    transform: $tmtranslatetransform;
+    background-color: var(--timepicker-bg);
+    border-radius: var(--timepicker-border-radius);
+    box-shadow: var(--timepicker-shadow);
+    display: flex;
+    flex-direction: column;
+    outline: none;
+  }
+
+  &-wrapper.expanded {
+    will-change: width, height, flex-direction;
+
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+      flex-direction: row;
+      height: 360px;
+      width: 584px;
+      transition:
+        width 400ms cubic-bezier(0.4, 0, 0.2, 1),
+        height 400ms cubic-bezier(0.4, 0, 0.2, 1),
+        flex-direction 0ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @media screen and (max-width: 330px) and (orientation: portrait) {
+      width: 315px;
+    }
+  }
+
+  &-wrapper.mobile {
+    height: auto;
+    transition:
+      width 400ms cubic-bezier(0.4, 0, 0.2, 1),
+      height 400ms cubic-bezier(0.4, 0, 0.2, 1),
+      flex-direction 0ms cubic-bezier(0.4, 0, 0.2, 1) 400ms;
+
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+      width: 328px;
+      height: 258px;
+      transition:
+        width 400ms cubic-bezier(0.4, 0, 0.2, 1),
+        height 400ms cubic-bezier(0.4, 0, 0.2, 1),
+        flex-direction 0ms cubic-bezier(0.4, 0, 0.2, 1) 400ms;
+    }
+
+    @media screen and (max-width: 330px) {
+      width: 315px;
+    }
+  }
+
+  &-mobile-clock-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 0;
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: center;
+    overflow: hidden;
+    will-change: height, opacity, transform;
+    transition:
+      height 400ms cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 400ms cubic-bezier(0.4, 0, 0.2, 1),
+      transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.expanded {
+      height: 256px;
+      opacity: 1;
+      transform: scale(1);
+
+      @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+        height: 100%;
+        width: 100%;
+        transform-origin: left center;
+        transition:
+          height 400ms cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+          transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    }
+  }
+}

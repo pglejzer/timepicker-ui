@@ -21,7 +21,9 @@ export default function CustomStylingPage() {
       <InfoBox title="CSS Custom Properties" variant="blue" className="mb-8">
         Timepicker-UI uses CSS custom properties (CSS variables) that you can
         override to match your brand colors and design system. You can also use
-        the runtime <code>setTheme()</code> API for dynamic theming.
+        the runtime <code>setTheme()</code> API for dynamic theming. Version
+        3.2.0 added Material Design 3 ripple effects and expanded the color
+        system with container colors.
       </InfoBox>
 
       <Section icon={Paintbrush} title="Custom CSS Class">
@@ -140,6 +142,49 @@ picker.setTheme({
           The <code>setTheme()</code> method allows you to change the timepicker
           appearance dynamically without recreating the instance. Perfect for
           implementing theme switchers!
+        </InfoBox>
+      </Section>
+
+      <Section icon={Palette} title="Material Design 3 Features (v3.2.0+)">
+        <p className="text-muted-foreground mb-4">
+          Version 3.2.0 introduced full Material Design 3 support with ripple
+          effects and container colors:
+        </p>
+        <TimepickerExample
+          code={`import { TimepickerUI } from 'timepicker-ui';
+
+const input = document.querySelector('#timepicker');
+const picker = new TimepickerUI(input, {
+  theme: 'm3-green' // or 'm2' for Material Design 2
+});
+picker.create();
+
+// CSS variables for MD3 customization:
+.timepicker-ui-wrapper.custom {
+  /* Material Design 3 container colors */
+  --timepicker-primary-container: #eaddff;
+  --timepicker-on-primary-container: #21005d;
+  --timepicker-tertiary-container: #ffd8e4;
+  --timepicker-on-tertiary-container: #633b48;
+  
+  /* AM/PM specific colors */
+  --timepicker-am-pm-text-selected: #633b48;
+  --timepicker-am-pm-text-unselected: #49454f;
+  --timepicker-am-pm-active: #ece0fd;
+}
+
+// Ripple effect is automatically applied to:
+// - AM/PM buttons
+// - Hour and minute inputs`}
+          options={{
+            theme: "m3-green",
+          }}
+        />
+        <InfoBox title="Ripple Effect" variant="green" className="mt-4">
+          Material Design 3 ripple effects are automatically applied to AM/PM
+          buttons and time input fields. Customize the ripple color using{" "}
+          <code>--timepicker-on-primary-container</code> variable or override
+          the <code>[data-md3-ripple]::before</code> pseudo-element styles.
         </InfoBox>
       </Section>
 

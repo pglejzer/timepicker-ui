@@ -15,10 +15,10 @@ export default class TimepickerAPI extends TimepickerLifecycle {
     degreesMinutes: number | null;
   } => {
     if (this._isDestroyed) {
-      console.warn('TimepickerUI: Instance is destroyed');
       return {
         hour: '',
         minutes: '',
+        type: undefined,
         time: '',
         degreesHours: null,
         degreesMinutes: null,
@@ -49,12 +49,15 @@ export default class TimepickerAPI extends TimepickerLifecycle {
 
   public setValue = (time: string, updateInput: boolean = true): void => {
     if (this._isDestroyed) {
-      console.warn('TimepickerUI: Instance is destroyed');
       return;
     }
 
     if (!time || typeof time !== 'string') {
-      throw new Error('TimepickerUI: setValue requires a valid time string');
+      return;
+    }
+
+    if (!this._isInitialized) {
+      this.create();
     }
 
     const trimmedTime = sanitizeTimeInput(time.trim());
@@ -110,7 +113,7 @@ export default class TimepickerAPI extends TimepickerLifecycle {
         this.clockHand.style.transform = `rotateZ(${this._degreesHours || 0}deg)`;
       }
     } catch (error) {
-      throw new Error(`TimepickerUI: ${error instanceof Error ? error.message : 'Invalid time format'}`);
+      return;
     }
   };
 
@@ -122,7 +125,6 @@ export default class TimepickerAPI extends TimepickerLifecycle {
     callback?: TypeFunction,
   ): void => {
     if (this._isDestroyed) {
-      console.warn('TimepickerUI: Instance is destroyed');
       return;
     }
 
@@ -152,7 +154,6 @@ export default class TimepickerAPI extends TimepickerLifecycle {
     fontFamily?: string;
   }): void {
     if (this._isDestroyed) {
-      console.warn('TimepickerUI: Cannot set theme on destroyed instance');
       return;
     }
 
@@ -166,4 +167,3 @@ export default class TimepickerAPI extends TimepickerLifecycle {
     this._applyThemeToWrapper(wrapper as HTMLElement);
   }
 }
-

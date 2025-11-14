@@ -124,12 +124,12 @@ picker.create();`}
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   clockType: '12h',
-  switchToMinutesAfterSelectHour: true
+  autoSwitchToMinutes: true
 });
 picker.create();`}
           options={{
             clockType: "12h",
-            switchToMinutesAfterSelectHour: true,
+            autoSwitchToMinutes: true,
           }}
         />
       </Section>

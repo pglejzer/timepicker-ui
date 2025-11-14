@@ -1,0 +1,29 @@
+@use '../variables.scss' as *;
+
+.timepicker-ui {
+  &-footer,
+  &-footer-mobile {
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  &-footer.expanded {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+      justify-content: space-between;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+
+      .timepicker-ui-keyboard-icon-wrapper {
+        left: 0;
+      }
+    }
+  }
+
+  &-footer.mobile {
+    padding: 24px;
+  }
+}

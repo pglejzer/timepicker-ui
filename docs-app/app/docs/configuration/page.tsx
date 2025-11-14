@@ -121,8 +121,8 @@ export default function ConfigurationPage() {
   amLabel: 'AM',
   pmLabel: 'PM',
   okLabel: 'OK',
-  cancelLabel: 'CANCEL',
-  timeLabel: 'Select Time',
+  cancelLabel: 'Cancel',
+  timeLabel: 'Select time',
   hourMobileLabel: 'Hour',
   minuteMobileLabel: 'Minute'
 }`}

@@ -1,6 +1,7 @@
 import { createEventWithCallback, isOverlappingRangeArray } from '../utils/config';
 import { getInputValue } from '../utils/input';
 import { checkDisabledHoursAndMinutes } from '../utils/time/disable';
+import { TimepickerError, ERROR_CODES } from '../utils/errors';
 import type { ITimepickerUI } from '../types/ITimepickerUI.d';
 
 export default class ValidationManager {
@@ -33,22 +34,23 @@ export default class ValidationManager {
         input.after(errorEl);
       }
 
+      const eventData = {
+        error,
+        currentHour,
+        currentMin,
+        currentType,
+        currentLength,
+      };
+
       createEventWithCallback(
         this.timepicker._element,
-        '',
         'timepicker:error',
-        {
-          error,
-          currentHour,
-          currentMin,
-          currentType,
-          currentLength,
-        },
+        eventData,
         this.timepicker._options.onError,
-        this.timepicker,
       );
 
-      console.error(`Invalid Time Format: ${error}`);
+      this.timepicker.emit?.('error', eventData);
+
       return false;
     }
 
@@ -76,7 +78,10 @@ export default class ValidationManager {
 
     if (disabledTime.interval) {
       if (!clockType) {
-        throw new Error('clockType is required when using disabledTime.interval');
+        throw new TimepickerError(
+          'clockType is required when using disabledTime.interval',
+          ERROR_CODES.INVALID_PARAMETER,
+        );
       }
 
       const intervals = Array.isArray(disabledTime.interval)
@@ -86,7 +91,10 @@ export default class ValidationManager {
       try {
         isOverlappingRangeArray(intervals, clockType);
       } catch (error) {
-        throw new Error(`Invalid disabledTime.interval: ${(error as Error).message}`);
+        throw new TimepickerError(
+          `Invalid disabledTime.interval: ${(error as Error).message}`,
+          ERROR_CODES.INVALID_PARAMETER,
+        );
       }
 
       return;
@@ -98,7 +106,10 @@ export default class ValidationManager {
     const isValidMinutes = minutes ? checkDisabledHoursAndMinutes(minutes, 'minutes', clockType) : true;
 
     if (!isValidHours || !isValidMinutes) {
-      throw new Error('You set wrong hours or minutes in disabled option');
+      throw new TimepickerError(
+        'Invalid hours or minutes in disabledTime option',
+        ERROR_CODES.INVALID_PARAMETER,
+      );
     }
   }
 

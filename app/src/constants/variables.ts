@@ -1,7 +1,8 @@
 export const themeClasses: Record<string, string[]> = {
+  crane: ['crane'],
   'crane-straight': ['crane-straight'],
-  'crane-radius': ['crane-straight', 'radius'],
-  m3: ['m3'],
+  m2: ['m2'],
+  'm3-green': ['m3-green'],
   dark: ['dark'],
   glassmorphic: ['glassmorphic'],
   pastel: ['pastel'],

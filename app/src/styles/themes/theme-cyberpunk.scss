@@ -6,9 +6,21 @@
   --timepicker-surface-hover: #1a1a2e;
   --timepicker-text: #f8f8ff;
   --timepicker-secondary-text: #00f0ff;
+
+  --timepicker-am-pm-active: #00f0ff;
+  --timepicker-am-pm-text-selected: #0f0c29;
+  --timepicker-am-pm-text-unselected: #00f0ff;
+
   --timepicker-primary: #00f0ff;
   --timepicker-on-primary: #0f0c29;
+  --timepicker-primary-container: #00f0ff;
+  --timepicker-on-primary-container: #0f0c29;
+
+  --timepicker-tertiary-container: #00f0ff;
+  --timepicker-on-tertiary-container: #0f0c29;
+
   --timepicker-border: rgba(0, 240, 255, 0.3);
+  --timepicker-outline: rgb(255, 255, 255);
   --timepicker-shadow: 0 0 12px #00f0ff;
   --timepicker-border-radius: 1rem;
 }
@@ -64,7 +76,7 @@
 
     &:hover,
     &.active {
-      background-color: var(--timepicker-primary);
+      background-color: var(--timepicker-am-pm-active);
       color: var(--timepicker-on-primary);
     }
   }
@@ -83,11 +95,8 @@
   }
 
   &-keyboard-icon-wrapper.cyberpunk {
-    color: var(--timepicker-primary);
-
-    &:hover .timepicker-ui-keyboard-icon.cyberpunk {
-      background-color: var(--timepicker-primary);
-      color: var(--timepicker-on-primary);
+    svg {
+      fill: var(--timepicker-primary);
     }
   }
 

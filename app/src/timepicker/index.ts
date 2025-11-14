@@ -14,7 +14,6 @@ export default class TimepickerUI extends TimepickerAPI implements ITimepickerUI
 
     const customId = options?.id;
     if (customId && instanceRegistry.has(customId)) {
-      console.error(`TimepickerUI: Instance with ID "${customId}" already exists`);
       this._isDestroyed = true;
       return;
     }
@@ -51,4 +50,3 @@ export default class TimepickerUI extends TimepickerAPI implements ITimepickerUI
     instanceRegistry.clear();
   }
 }
-

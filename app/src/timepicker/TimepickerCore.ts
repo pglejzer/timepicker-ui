@@ -2,7 +2,6 @@ import { createObjectFromData, getConfig, generateUUID } from '../utils/config';
 import { getInputValue } from '../utils/input';
 import { options as optionsDefault } from '../utils/options';
 import type { OptionTypes } from '../types/types';
-import ClockFaceManagerPool from '../managers/ClockFaceManagerPool';
 import EventManager from '../managers/EventManager';
 import ModalManager from '../managers/ModalManager';
 import AnimationManager from '../managers/AnimationManager';
@@ -12,6 +11,8 @@ import ThemeManager from '../managers/ThemeManager';
 import ConfigManager from '../managers/ConfigManager';
 import { EventEmitter, type TimepickerEventMap } from '../utils/EventEmitter';
 import { DOMUpdateBatcher } from '../utils/DOMUpdateBatcher';
+import { getModalTemplate } from '../utils/template';
+import { ITimepickerUI } from '../types/ITimepickerUI';
 
 export default class TimepickerCore {
   _degreesHours: number | null = null;
@@ -23,7 +24,7 @@ export default class TimepickerCore {
   _mutliEventsMoveHandler!: EventListenerOrEventListenerObject;
   _clickTouchEvents!: string[];
   _element!: HTMLElement;
-  _instanceId: string;
+  _instanceId!: string;
   _isMobileView!: boolean | null;
   _isTouchMouseMove!: boolean | null;
   _disabledTime!: {
@@ -57,7 +58,6 @@ export default class TimepickerCore {
     fontFamily?: string;
   };
 
-  clockFacePool!: ClockFaceManagerPool;
   eventManager!: EventManager;
   modalManager!: ModalManager;
   animationManager!: AnimationManager;
@@ -67,11 +67,25 @@ export default class TimepickerCore {
   configManager!: ConfigManager;
   domBatcher!: DOMUpdateBatcher;
 
-  private _eventEmitter: EventEmitter<TimepickerEventMap>;
+  private _eventEmitter!: EventEmitter<TimepickerEventMap>;
 
   constructor(selectorOrElement: string | HTMLElement, options?: OptionTypes) {
     if (typeof window === 'undefined') {
-      throw new Error('TimepickerUI: Cannot initialize in non-browser environment (SSR/Node.js)');
+      this._isDestroyed = true;
+      return;
+    }
+
+    let targetInput: HTMLInputElement | null = null;
+    try {
+      targetInput = this._resolveInputElement(selectorOrElement);
+    } catch (error) {
+      this._isDestroyed = true;
+      return;
+    }
+
+    if (!targetInput) {
+      this._isDestroyed = true;
+      return;
     }
 
     this._eventEmitter = new EventEmitter<TimepickerEventMap>();
@@ -81,48 +95,7 @@ export default class TimepickerCore {
     this._customId = customId;
     this._instanceId = customId || `timepicker-ui-${generateUUID()}`;
 
-    let element: HTMLElement | null = null;
-    if (typeof selectorOrElement === 'string') {
-      element = document.querySelector(selectorOrElement);
-      if (!element) {
-        console.error(`TimepickerUI: Element with selector "${selectorOrElement}" not found`);
-        this._isDestroyed = true;
-        return;
-      }
-    } else if (selectorOrElement instanceof HTMLElement) {
-      element = selectorOrElement;
-    } else {
-      console.error('TimepickerUI: First parameter must be a string selector or HTMLElement');
-      this._isDestroyed = true;
-      return;
-    }
-
-    let targetInput: HTMLInputElement | null = null;
-    if (element.tagName === 'INPUT') {
-      targetInput = element as HTMLInputElement;
-    } else {
-      targetInput = element.querySelector('input');
-    }
-
-    if (!targetInput) {
-      const elementDesc =
-        typeof selectorOrElement === 'string' ? `selector "${selectorOrElement}"` : 'provided element';
-      throw new Error(`TimepickerUI: No input element found for ${elementDesc}`);
-    }
-
-    if (element.tagName === 'INPUT') {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'timepicker-ui';
-      element.parentNode?.insertBefore(wrapper, element);
-      wrapper.appendChild(element);
-      this._element = wrapper;
-    } else {
-      this._element = element as HTMLElement;
-      if (!this._element.classList.contains('timepicker-ui')) {
-        this._element.classList.add('timepicker-ui');
-      }
-    }
-
+    this._element = this._createWrapperElement(targetInput);
     this._cloned = null;
 
     const datasetOptions = createObjectFromData(this._element?.dataset);
@@ -147,25 +120,19 @@ export default class TimepickerCore {
       ) * 6;
 
     this._isMobileView = false;
-
     this._mutliEventsMove = (event) => this.eventManager.handleEventToMoveHand(event as TouchEvent);
     this._mutliEventsMoveHandler = this._mutliEventsMove.bind(this);
 
     this._eventsClickMobile = (event) => this.eventManager.handlerClickHourMinutes(event);
     this._eventsClickMobileHandler = this._eventsClickMobile.bind(this);
 
-    this.clockFacePool = new ClockFaceManagerPool();
-    this.eventManager = new EventManager(this as unknown as import('../types/ITimepickerUI').ITimepickerUI);
-    this.modalManager = new ModalManager(this as unknown as import('../types/ITimepickerUI').ITimepickerUI);
-    this.animationManager = new AnimationManager(
-      this as unknown as import('../types/ITimepickerUI').ITimepickerUI,
-    );
-    this.clockManager = new ClockManager(this as unknown as import('../types/ITimepickerUI').ITimepickerUI);
-    this.validationManager = new ValidationManager(
-      this as unknown as import('../types/ITimepickerUI').ITimepickerUI,
-    );
-    this.themeManager = new ThemeManager(this as unknown as import('../types/ITimepickerUI').ITimepickerUI);
-    this.configManager = new ConfigManager(this as unknown as import('../types/ITimepickerUI').ITimepickerUI);
+    this.eventManager = new EventManager(this as unknown as ITimepickerUI);
+    this.modalManager = new ModalManager(this as unknown as ITimepickerUI);
+    this.animationManager = new AnimationManager(this as unknown as ITimepickerUI);
+    this.clockManager = new ClockManager(this as unknown as ITimepickerUI);
+    this.validationManager = new ValidationManager(this as unknown as ITimepickerUI);
+    this.themeManager = new ThemeManager(this as unknown as ITimepickerUI);
+    this.configManager = new ConfigManager(this as unknown as ITimepickerUI);
 
     this.configManager.checkMobileOption();
 
@@ -181,28 +148,20 @@ export default class TimepickerCore {
 
     if (this._options.inline?.enabled) {
       if (!this._options.inline.containerId) {
-        console.error('TimepickerUI: containerId is required when inline mode is enabled');
-        throw new Error('TimepickerUI: containerId is required when inline mode is enabled');
+        this._isDestroyed = true;
+        return;
       }
 
       const containerElement = document.getElementById(this._options.inline.containerId);
       if (!containerElement) {
-        console.error(
-          `TimepickerUI: Container element with ID "${this._options.inline.containerId}" not found`,
-        );
-        throw new Error(
-          `TimepickerUI: Container element with ID "${this._options.inline.containerId}" not found`,
-        );
+        this._isDestroyed = true;
+        return;
       }
     }
   }
 
   get modalTemplate() {
-    const { getMobileModalTemplate, getModalTemplate } = require('../utils/template');
-    if (!this._options.mobile || !this._isMobileView) {
-      return getModalTemplate(this._options, this._instanceId);
-    }
-    return getMobileModalTemplate(this._options, this._instanceId);
+    return getModalTemplate(this._options, this._instanceId);
   }
 
   get modalElement() {
@@ -210,7 +169,10 @@ export default class TimepickerCore {
   }
 
   get clockFace() {
-    return this.modalElement?.querySelector('.timepicker-ui-clock-face') as HTMLDivElement;
+    if (this._isMobileView) {
+      return this.modalElement?.querySelector('.timepicker-ui-clock-face.mobile') as HTMLDivElement;
+    }
+    return this.modalElement?.querySelector('.timepicker-ui-clock-face:not(.mobile)') as HTMLDivElement;
   }
 
   get input() {
@@ -218,19 +180,39 @@ export default class TimepickerCore {
   }
 
   get clockHand() {
-    return this.modalElement?.querySelector('.timepicker-ui-clock-hand') as HTMLDivElement;
+    if (this._isMobileView) {
+      return this.modalElement?.querySelector(
+        '.timepicker-ui-mobile-clock-wrapper .timepicker-ui-clock-hand',
+      ) as HTMLDivElement;
+    }
+    return this.modalElement?.querySelector('.timepicker-ui-clock-hand:not(.mobile)') as HTMLDivElement;
   }
 
   get circle() {
-    return this.modalElement?.querySelector('.timepicker-ui-circle-hand') as HTMLDivElement;
+    if (this._isMobileView) {
+      return this.modalElement?.querySelector(
+        '.timepicker-ui-mobile-clock-wrapper .timepicker-ui-circle-hand',
+      ) as HTMLDivElement;
+    }
+    return this.modalElement?.querySelector('.timepicker-ui-circle-hand:not(.mobile)') as HTMLDivElement;
   }
 
   get tipsWrapper() {
-    return this.modalElement?.querySelector('.timepicker-ui-tips-wrapper') as HTMLDivElement;
+    if (this._isMobileView) {
+      return this.modalElement?.querySelector(
+        '.timepicker-ui-mobile-clock-wrapper .timepicker-ui-tips-wrapper',
+      ) as HTMLDivElement;
+    }
+    return this.modalElement?.querySelector('.timepicker-ui-tips-wrapper:not(.mobile)') as HTMLDivElement;
   }
 
   get tipsWrapperFor24h() {
-    return this.modalElement?.querySelector('.timepicker-ui-tips-wrapper-24h') as HTMLDivElement;
+    if (this._isMobileView) {
+      return this.modalElement?.querySelector(
+        '.timepicker-ui-mobile-clock-wrapper .timepicker-ui-tips-wrapper-24h',
+      ) as HTMLDivElement;
+    }
+    return this.modalElement?.querySelector('.timepicker-ui-tips-wrapper-24h:not(.mobile)') as HTMLDivElement;
   }
 
   get minutes() {
@@ -247,6 +229,26 @@ export default class TimepickerCore {
 
   get PM() {
     return this.modalElement?.querySelector('.timepicker-ui-pm') as HTMLDivElement;
+  }
+
+  get hourText() {
+    return this.modalElement?.querySelector('.timepicker-ui-hour-text') as HTMLDivElement;
+  }
+
+  get minutesText() {
+    return this.modalElement?.querySelector('.timepicker-ui-minute-text') as HTMLDivElement;
+  }
+
+  get header() {
+    return this.modalElement?.querySelector('.timepicker-ui-header') as HTMLDivElement;
+  }
+
+  get inputWrappers() {
+    return this.modalElement?.querySelectorAll('.timepicker-ui-input-wrapper');
+  }
+
+  get dots() {
+    return this.modalElement?.querySelector('.timepicker-ui-dots') as HTMLDivElement;
   }
 
   get minutesTips() {
@@ -325,7 +327,6 @@ export default class TimepickerCore {
     handler: (data: TimepickerEventMap[K]) => void,
   ): void {
     if (this._isDestroyed) {
-      console.warn('TimepickerUI: Cannot add event listener - instance failed to initialize');
       return;
     }
     this._eventEmitter.on(event, handler);
@@ -336,7 +337,6 @@ export default class TimepickerCore {
     handler: (data: TimepickerEventMap[K]) => void,
   ): void {
     if (this._isDestroyed) {
-      console.warn('TimepickerUI: Cannot add event listener - instance failed to initialize');
       return;
     }
     this._eventEmitter.once(event, handler);
@@ -347,13 +347,13 @@ export default class TimepickerCore {
     handler?: (data: TimepickerEventMap[K]) => void,
   ): void {
     if (this._isDestroyed) {
-      console.warn('TimepickerUI: Cannot remove event listener - instance failed to initialize');
       return;
     }
     this._eventEmitter.off(event, handler);
   }
 
-  protected emit<K extends keyof TimepickerEventMap>(event: K, data?: TimepickerEventMap[K]): void {
+  /** @internal */
+  public emit<K extends keyof TimepickerEventMap>(event: K, data?: TimepickerEventMap[K]): void {
     this._eventEmitter.emit(event, data);
   }
 
@@ -381,5 +381,44 @@ export default class TimepickerCore {
       }
     });
   }
-}
 
+  private _resolveInputElement(selectorOrElement: string | HTMLElement): HTMLInputElement | null {
+    let element: HTMLElement | null = null;
+
+    if (typeof selectorOrElement === 'string') {
+      element = document.querySelector(selectorOrElement);
+      if (!element) {
+        return null;
+      }
+    } else if (selectorOrElement instanceof HTMLElement) {
+      element = selectorOrElement;
+    } else {
+      return null;
+    }
+
+    if (element.tagName === 'INPUT') {
+      return element as HTMLInputElement;
+    }
+
+    const inputElement = element.querySelector('input');
+    return inputElement;
+  }
+
+  private _createWrapperElement(inputElement: HTMLInputElement): HTMLElement {
+    const parentElement = inputElement.parentElement;
+
+    if (inputElement.tagName === 'INPUT' && !parentElement?.classList.contains('timepicker-ui')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'timepicker-ui';
+      inputElement.parentNode?.insertBefore(wrapper, inputElement);
+      wrapper.appendChild(inputElement);
+      return wrapper;
+    }
+
+    if (parentElement && !parentElement.classList.contains('timepicker-ui')) {
+      parentElement.classList.add('timepicker-ui');
+    }
+
+    return parentElement || inputElement;
+  }
+}

@@ -8,3 +8,5 @@ lib*
 dist
 coverage/
 OPTIMIZATION_*.md
+readme_dev*.md
+CODE_REVIEW.md

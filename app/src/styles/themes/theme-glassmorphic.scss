@@ -6,9 +6,21 @@
   --timepicker-surface-hover: rgba(255, 255, 255, 0.15);
   --timepicker-text: #ffffff;
   --timepicker-secondary-text: rgba(255, 255, 255, 0.7);
+
+  --timepicker-am-pm-active: rgba(255, 255, 255, 0.6);
+  --timepicker-am-pm-text-selected: #000000;
+  --timepicker-am-pm-text-unselected: rgba(255, 255, 255, 0.7);
+
   --timepicker-primary: rgba(255, 255, 255, 0.6);
   --timepicker-on-primary: #000000;
+  --timepicker-primary-container: rgba(255, 255, 255, 0.6);
+  --timepicker-on-primary-container: #000000;
+
+  --timepicker-tertiary-container: rgba(255, 255, 255, 0.6);
+  --timepicker-on-tertiary-container: #000000;
+
   --timepicker-border: rgba(255, 255, 255, 0.3);
+  --timepicker-outline: rgba(255, 255, 255, 0.95);
 }
 
 .timepicker-ui {
@@ -18,6 +30,12 @@
     -webkit-backdrop-filter: blur(10px);
     border-radius: 1.25rem;
     color: var(--timepicker-text);
+  }
+
+  &-input-ripple-wrapper {
+    &.glassmorphic {
+      border-radius: 1rem;
+    }
   }
 
   &-select-time.glassmorphic {
@@ -61,7 +79,7 @@
 
     &:hover,
     &.active {
-      background-color: var(--timepicker-primary);
+      background-color: var(--timepicker-am-pm-active);
       color: var(--timepicker-on-primary);
     }
   }
@@ -79,11 +97,12 @@
   }
 
   &-keyboard-icon-wrapper.glassmorphic {
-    color: var(--timepicker-text);
+    svg {
+      fill: var(--timepicker-text);
+    }
 
-    &:hover .timepicker-ui-keyboard-icon.glassmorphic {
-      background-color: var(--timepicker-primary);
-      color: var(--timepicker-on-primary);
+    &:hover svg {
+      fill: var(--timepicker-primary);
     }
   }
 
