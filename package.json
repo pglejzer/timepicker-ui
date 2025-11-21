@@ -1,6 +1,6 @@
 {
   "name": "timepicker-ui",
-  "version": "3.2.0",
+  "version": "4.0.0",
   "description": "timepicker-ui is a customizable time picker library built with TypeScript, inspired by Google's Material Design. Lightweight, themeable, and easy to integrate.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -29,8 +29,7 @@
     "./theme-glassmorphic.css": "./dist/css/themes/theme-glassmorphic.css",
     "./theme-pastel.css": "./dist/css/themes/theme-pastel.css",
     "./theme-ai.css": "./dist/css/themes/theme-ai.css",
-    "./theme-cyberpunk.css": "./dist/css/themes/theme-cyberpunk.css",
-    "./theme-custom.css": "./dist/css/themes/theme-custom.css"
+    "./theme-cyberpunk.css": "./dist/css/themes/theme-cyberpunk.css"
   },
   "keywords": [
     "material-design",

@@ -22,14 +22,18 @@ export default function DisabledTimePage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  disabledTime: {
-    hours: [1, 3, 5, 8, 10, 12]
+  clock: {
+    disabledTime: {
+      hours: [1, 3, 5, 8, 10, 12]
+    }
   }
 });
 picker.create();`}
           options={{
-            disabledTime: {
-              hours: [1, 3, 5, 8, 10, 12],
+            clock: {
+              disabledTime: {
+                hours: [1, 3, 5, 8, 10, 12],
+              },
             },
           }}
         />
@@ -41,14 +45,18 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  disabledTime: {
-    minutes: [15, 30, 45]
+  clock: {
+    disabledTime: {
+      minutes: [15, 30, 45]
+    }
   }
 });
 picker.create();`}
           options={{
-            disabledTime: {
-              minutes: [15, 30, 45],
+            clock: {
+              disabledTime: {
+                minutes: [15, 30, 45],
+              },
             },
           }}
         />
@@ -61,16 +69,20 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  clockType: '12h',
-  disabledTime: {
-    interval: '10:00 AM - 2:00 PM'
+  clock: {
+    type: '12h',
+    disabledTime: {
+      interval: '10:00 AM - 2:00 PM'
+    }
   }
 });
 picker.create();`}
           options={{
-            clockType: "12h",
-            disabledTime: {
-              interval: "10:00 AM - 2:00 PM",
+            clock: {
+              type: "12h",
+              disabledTime: {
+                interval: "10:00 AM - 2:00 PM",
+              },
             },
           }}
         />
@@ -82,24 +94,28 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  clockType: '12h',
-  disabledTime: {
-    interval: [
-      '9:00 AM - 11:00 AM',
-      '1:00 PM - 3:00 PM',
-      '5:00 PM - 7:00 PM'
-    ]
+  clock: {
+    type: '12h',
+    disabledTime: {
+      interval: [
+        '9:00 AM - 11:00 AM',
+        '1:00 PM - 3:00 PM',
+        '5:00 PM - 7:00 PM'
+      ]
+    }
   }
 });
 picker.create();`}
           options={{
-            clockType: "12h",
-            disabledTime: {
-              interval: [
-                "9:00 AM - 11:00 AM",
-                "1:00 PM - 3:00 PM",
-                "5:00 PM - 7:00 PM",
-              ],
+            clock: {
+              type: "12h",
+              disabledTime: {
+                interval: [
+                  "9:00 AM - 11:00 AM",
+                  "1:00 PM - 3:00 PM",
+                  "5:00 PM - 7:00 PM",
+                ],
+              },
             },
           }}
         />
@@ -111,16 +127,20 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  clockType: '24h',
-  disabledTime: {
-    interval: '00:00 - 08:00'
+  clock: {
+    type: '24h',
+    disabledTime: {
+      interval: '00:00 - 08:00'
+    }
   }
 });
 picker.create();`}
           options={{
-            clockType: "24h",
-            disabledTime: {
-              interval: "00:00 - 08:00",
+            clock: {
+              type: "24h",
+              disabledTime: {
+                interval: "00:00 - 08:00",
+              },
             },
           }}
         />

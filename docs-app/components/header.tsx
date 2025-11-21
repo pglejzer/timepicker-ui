@@ -35,15 +35,6 @@ export function Header() {
       >
         Examples
       </Link>
-      {process.env.NODE_ENV === "development" && (
-        <Link
-          href="/playground"
-          className="transition-colors hover:text-primary"
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Playground
-        </Link>
-      )}
     </>
   );
 

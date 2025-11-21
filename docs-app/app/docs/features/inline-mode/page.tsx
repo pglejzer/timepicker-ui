@@ -102,9 +102,11 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  enableSwitchIcon: false,
-  clockType: '12h',
-  theme: 'basic'
+  ui: {
+    enableSwitchIcon: false,
+    theme: 'basic'
+  },
+  clock: { type: '12h' }
 });
 
 picker.create();`}
@@ -118,10 +120,12 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  enableSwitchIcon: false,
-  clockType: '24h',
-  theme: 'cyberpunk',
-  animation: true
+  ui: {
+    enableSwitchIcon: false,
+    theme: 'cyberpunk',
+    animation: true
+  },
+  clock: { type: '24h' }
 });
 
 picker.create();`}
@@ -135,10 +139,12 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  enableSwitchIcon: false,
-  disabledTime: {
-    hours: [0, 1, 2, 3, 4, 5, 22, 23],
-    minutes: [15, 30, 45]
+  ui: { enableSwitchIcon: false },
+  clock: {
+    disabledTime: {
+      hours: [0, 1, 2, 3, 4, 5, 22, 23],
+      minutes: [15, 30, 45]
+    }
   }
 });
 
@@ -217,9 +223,11 @@ function InlineTimepicker() {
   useEffect(() => {
     if (inputRef.current) {
       const picker = new TimepickerUI(inputRef.current, {
-        enableSwitchIcon: false,
-        clockType: '12h',
-        theme: 'm3-green'
+        ui: {
+          enableSwitchIcon: false,
+          theme: 'm3-green'
+        },
+        clock: { type: '12h' }
       });
       
       picker.create();

@@ -41,18 +41,26 @@ picker.create();`}
 
 const input = document.querySelector('#timepicker-input');
 const picker = new TimepickerUI(input, {
-  theme: 'dark',
-  clockType: '24h',
-  okLabel: 'Confirm',
-  cancelLabel: 'Close'
+  ui: {
+    theme: 'dark'
+  },
+  clock: {
+    type: '24h'
+  },
+  labels: {
+    ok: 'Confirm',
+    cancel: 'Close'
+  }
 });
 
 picker.create();`}
           options={{
-            theme: "dark",
-            clockType: "24h",
-            okLabel: "Confirm",
-            cancelLabel: "Close",
+            ui: { theme: "dark" },
+            clock: { type: "24h" },
+            labels: {
+              ok: "Confirm",
+              cancel: "Close",
+            },
           }}
         />
       </Section>
@@ -79,10 +87,12 @@ const picker = new TimepickerUI(input, {
 
 picker.create();`}
           options={{
-            onOpen: (data: TimepickerEventData) =>
-              console.log("Picker opened", data),
-            onCancel: (data: TimepickerEventData) =>
-              console.log("Picker cancelled", data),
+            callbacks: {
+              onOpen: (data: TimepickerEventData) =>
+                console.log("Picker opened", data),
+              onCancel: (data: TimepickerEventData) =>
+                console.log("Picker cancelled", data),
+            },
           }}
         />
       </Section>
@@ -101,8 +111,8 @@ function TimePickerComponent() {
 
   // Memoize options to prevent re-initialization on every render
   const options = useMemo(() => ({
-    theme: 'basic',
-    clockType: '12h'
+    ui: { theme: 'basic' },
+    clock: { type: '12h' }
   }), []);
 
   useEffect(() => {
@@ -149,7 +159,7 @@ let picker = null; // Store instance outside reactive state
 onMounted(() => {
   if (timepickerInput.value) {
     picker = new TimepickerUI(timepickerInput.value, {
-      theme: 'basic'
+      ui: { theme: 'basic' }
     });
     picker.create();
   }

@@ -22,11 +22,11 @@ export default function PastelPage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'pastel'
+  ui: { theme: 'pastel' }
 });
 picker.create();`}
           options={{
-            theme: "pastel",
+            ui: { theme: "pastel" },
           }}
         />
       </Section>
@@ -34,13 +34,13 @@ picker.create();`}
       <Section icon={Heart} title="Pastel with 12h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'pastel',
-  clockType: '12h'
+  ui: { theme: 'pastel' },
+  clock: { type: '12h' }
 });
 picker.create();`}
           options={{
-            theme: "pastel",
-            clockType: "12h",
+            ui: { theme: "pastel" },
+            clock: { type: "12h" },
           }}
         />
       </Section>
@@ -48,13 +48,13 @@ picker.create();`}
       <Section icon={Heart} title="Pastel with 24h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'pastel',
-  clockType: '24h'
+  ui: { theme: 'pastel' },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            theme: "pastel",
-            clockType: "24h",
+            ui: { theme: "pastel" },
+            clock: { type: "24h" },
           }}
         />
       </Section>

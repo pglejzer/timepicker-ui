@@ -205,10 +205,12 @@ import type { OptionTypes, CallbackData } from 'timepicker-ui';`}
 import type { OptionTypes, CallbackData } from 'timepicker-ui';
 
 const options: OptionTypes = {
-  theme: 'dark',
-  clockType: '24h',
-  onConfirm: (data: CallbackData) => {
-    console.log(\`Time: \${data.hour}:\${data.minutes}\`);
+  ui: { theme: 'dark' },
+  clock: { type: '24h' },
+  callbacks: {
+    onConfirm: (data: CallbackData) => {
+      console.log(\`Time: \${data.hour}:\${data.minutes}\`);
+    }
   }
 };
 
@@ -242,11 +244,13 @@ export function TimePicker({ onTimeSelect, theme = 'basic' }: TimePickerProps) {
     if (!inputRef.current) return;
 
     const options: OptionTypes = {
-      theme,
-      onConfirm: (data) => {
-        if (onTimeSelect && data.hour && data.minutes) {
-          const time = \`\${data.hour}:\${data.minutes}\`;
-          onTimeSelect(time);
+      ui: { theme },
+      callbacks: {
+        onConfirm: (data) => {
+          if (onTimeSelect && data.hour && data.minutes) {
+            const time = \`\${data.hour}:\${data.minutes}\`;
+            onTimeSelect(time);
+          }
         }
       }
     };
@@ -272,14 +276,16 @@ export function TimePicker({ onTimeSelect, theme = 'basic' }: TimePickerProps) {
 import { TimepickerUI } from 'timepicker-ui';
 
 const picker = new TimepickerUI('#timepicker', {
-  onError: (data: CallbackData) => {
-    if (data.error) {
-      console.error('Timepicker error:', data.error);
-      alert(\`Invalid time format: \${data.error}\`);
+  callbacks: {
+    onError: (data: CallbackData) => {
+      if (data.error) {
+        console.error('Timepicker error:', data.error);
+        alert(\`Invalid time format: \${data.error}\`);
+      }
+    },
+    onConfirm: (data: CallbackData) => {
+      console.log('Time confirmed:', \`\${data.hour}:\${data.minutes}\`);
     }
-  },
-  onConfirm: (data: CallbackData) => {
-    console.log('Time confirmed:', \`\${data.hour}:\${data.minutes}\`);
   }
 });`}
               language="typescript"
@@ -313,11 +319,14 @@ class CustomTimepicker {
     
     const pickerOptions: OptionTypes = {
       ...options,
-      onConfirm: (data: CallbackData) => {
-        if (this.analyticsEnabled) {
-          this.trackEvent('time_confirmed', data);
+      callbacks: {
+        ...options.callbacks,
+        onConfirm: (data: CallbackData) => {
+          if (this.analyticsEnabled) {
+            this.trackEvent('time_confirmed', data);
+          }
+          options.callbacks?.onConfirm?.(data);
         }
-        options.onConfirm?.(data);
       }
     };
 

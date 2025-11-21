@@ -102,11 +102,15 @@ function CallbackExample() {
   useEffect(() => {
     if (!inputRef.current) return;
     const picker = new TimepickerUI(inputRef.current, {
-      onConfirm: (data) => {
-        const time = `${data.hour}:${data.minutes}${
-          data.type ? " " + data.type : ""
-        }`;
-        setSelectedTime(time);
+      // @ts-ignore
+      callbacks: {
+        // @ts-ignore
+        onConfirm: (data) => {
+          const time = `${data.hour}:${data.minutes}${
+            data.type ? " " + data.type : ""
+          }`;
+          setSelectedTime(time);
+        },
       },
     });
     picker.create();
@@ -243,7 +247,7 @@ export default function Clock24Example() {
   useEffect(() => {
     if (!inputRef.current) return;
     const picker = new TimepickerUI(inputRef.current, {
-      clockType: "24h",
+      clock: { type: "24h" },
     });
     picker.create();
     return () => picker.destroy();
@@ -270,7 +274,7 @@ export default function DarkThemeExample() {
   useEffect(() => {
     if (!inputRef.current) return;
     const picker = new TimepickerUI(inputRef.current, {
-      theme: "dark",
+      ui: { theme: "dark" },
     });
     picker.create();
     return () => picker.destroy();
@@ -297,9 +301,11 @@ export default function CallbackExample() {
   useEffect(() => {
     if (!inputRef.current) return;
     const picker = new TimepickerUI(inputRef.current, {
-      onConfirm: (data) => {
-        const time = \`\${data.hour}:\${data.minutes}\${data.type ? " " + data.type : ""}\`;
-        setSelectedTime(time);
+      callbacks: {
+        onConfirm: (data) => {
+          const time = \`\${data.hour}:\${data.minutes}\${data.type ? " " + data.type : ""}\`;
+          setSelectedTime(time);
+        },
       },
     });
     picker.create();
@@ -331,7 +337,7 @@ export default function IncrementExample() {
   useEffect(() => {
     if (!inputRef.current) return;
     const picker = new TimepickerUI(inputRef.current, {
-      incrementMinutes: 15,
+      clock: { incrementMinutes: 15 },
     });
     picker.create();
     return () => picker.destroy();
@@ -357,8 +363,10 @@ export default function DisabledTimeExample() {
   useEffect(() => {
     if (!inputRef.current) return;
     const picker = new TimepickerUI(inputRef.current, {
-      disabledTime: {
-        interval: "12:00 PM - 1:00 PM",
+      clock: {
+        disabledTime: {
+          interval: "12:00 PM - 1:00 PM",
+        },
       },
     });
     picker.create();

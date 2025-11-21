@@ -33,10 +33,12 @@ export default function LocalizationPage() {
             <CodeBlock
               code={`// Default English labels
 {
-  okLabel: 'Ok',
-  cancelLabel: 'Cancel',
-  amLabel: 'AM',
-  pmLabel: 'PM'
+  labels: {
+    ok: 'Ok',
+    cancel: 'Cancel',
+    am: 'AM',
+    pm: 'PM'
+  }
 }`}
               language="typescript"
             />
@@ -48,10 +50,12 @@ export default function LocalizationPage() {
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  okLabel: 'Aceptar',
-  cancelLabel: 'Cancelar',
-  amLabel: 'AM',
-  pmLabel: 'PM'
+  labels: {
+    ok: 'Aceptar',
+    cancel: 'Cancelar',
+    am: 'AM',
+    pm: 'PM'
+  }
 });
 
 picker.create();`}
@@ -65,10 +69,12 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  okLabel: 'Valider',
-  cancelLabel: 'Annuler',
-  amLabel: 'AM',
-  pmLabel: 'PM'
+  labels: {
+    ok: 'Valider',
+    cancel: 'Annuler',
+    am: 'AM',
+    pm: 'PM'
+  }
 });
 
 picker.create();`}
@@ -82,10 +88,12 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  okLabel: 'OK',
-  cancelLabel: 'Abbrechen',
-  amLabel: 'AM',
-  pmLabel: 'PM'
+  labels: {
+    ok: 'OK',
+    cancel: 'Abbrechen',
+    am: 'AM',
+    pm: 'PM'
+  }
 });
 
 picker.create();`}
@@ -107,26 +115,32 @@ picker.create();`}
             <CodeBlock
               code={`// locales/es.ts
 export const esLocale = {
-  okLabel: 'Aceptar',
-  cancelLabel: 'Cancelar',
-  amLabel: 'AM',
-  pmLabel: 'PM'
+  labels: {
+    ok: 'Aceptar',
+    cancel: 'Cancelar',
+    am: 'AM',
+    pm: 'PM'
+  }
 };
 
 // locales/fr.ts
 export const frLocale = {
-  okLabel: 'Valider',
-  cancelLabel: 'Annuler',
-  amLabel: 'AM',
-  pmLabel: 'PM'
+  labels: {
+    ok: 'Valider',
+    cancel: 'Annuler',
+    am: 'AM',
+    pm: 'PM'
+  }
 };
 
 // locales/de.ts
 export const deLocale = {
-  okLabel: 'OK',
-  cancelLabel: 'Abbrechen',
-  amLabel: 'AM',
-  pmLabel: 'PM'
+  labels: {
+    ok: 'OK',
+    cancel: 'Abbrechen',
+    am: 'AM',
+    pm: 'PM'
+  }
 };
 
 // locales/ja.ts
@@ -158,7 +172,7 @@ import { esLocale } from './locales/es';
 
 const picker = new TimepickerUI(input, {
   ...esLocale,
-  clockType: '24h'
+  clock: { type: '24h' }
 });
 
 picker.create();`}
@@ -184,7 +198,7 @@ function createLocalizedPicker(language: string) {
   
   const picker = new TimepickerUI(input, {
     ...locale,
-    clockType: '24h'
+    clock: { type: '24h' }
   });
   
   return picker;
@@ -216,11 +230,13 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  clockType: '12h',
-  okLabel: 'OK',
-  cancelLabel: 'Cancel',
-  amLabel: 'AM',
-  pmLabel: 'PM'
+  clock: { type: '12h' },
+  labels: {
+    ok: 'OK',
+    cancel: 'Cancel',
+    am: 'AM',
+    pm: 'PM'
+  }
 });`}
               language="typescript"
             />
@@ -232,10 +248,12 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  clockType: '24h',
-  okLabel: 'OK',
-  cancelLabel: 'Annuler'
-  // No amLabel/pmLabel needed for 24h format
+  clock: { type: '24h' },
+  labels: {
+    ok: 'OK',
+    cancel: 'Annuler'
+  }
+  // No am/pm labels needed for 24h format
 });`}
               language="typescript"
             />
@@ -260,7 +278,7 @@ picker.create();`}
 // Usage
 const clockType = getLocaleTimeFormat();
 const picker = new TimepickerUI(input, {
-  clockType: clockType
+  clock: { type: clockType }
 });
 
 picker.create();`}
@@ -281,9 +299,11 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  clockType: '24h',
-  okLabel: '確認',
-  cancelLabel: 'キャンセル'
+  clock: { type: '24h' },
+  labels: {
+    ok: '確認',
+    cancel: 'キャンセル'
+  }
 });`}
               language="typescript"
             />
@@ -295,9 +315,11 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  clockType: '24h',
-  okLabel: '确定',
-  cancelLabel: '取消'
+  clock: { type: '24h' },
+  labels: {
+    ok: '确定',
+    cancel: '取消'
+  }
 });`}
               language="typescript"
             />
@@ -309,11 +331,13 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  clockType: '12h',
-  okLabel: 'موافق',
-  cancelLabel: 'إلغاء',
-  amLabel: 'ص',
-  pmLabel: 'م'
+  clock: { type: '12h' },
+  labels: {
+    ok: 'موافق',
+    cancel: 'إلغاء',
+    am: 'ص',
+    pm: 'م'
+  }
 });`}
               language="typescript"
             />
@@ -325,9 +349,11 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  clockType: '24h',
-  okLabel: 'ОК',
-  cancelLabel: 'Отмена'
+  clock: { type: '24h' },
+  labels: {
+    ok: 'ОК',
+    cancel: 'Отмена'
+  }
 });`}
               language="typescript"
             />
@@ -339,9 +365,11 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  clockType: '24h',
-  okLabel: 'Confirmar',
-  cancelLabel: 'Cancelar'
+  clock: { type: '24h' },
+  labels: {
+    ok: 'Confirmar',
+    cancel: 'Cancelar'
+  }
 });`}
               language="typescript"
             />
@@ -353,9 +381,11 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  clockType: '24h',
-  okLabel: 'OK',
-  cancelLabel: 'Annulla'
+  clock: { type: '24h' },
+  labels: {
+    ok: 'OK',
+    cancel: 'Annulla'
+  }
 });`}
               language="typescript"
             />
@@ -388,11 +418,15 @@ function LocalizedTimePicker() {
   useEffect(() => {
     if (inputRef.current) {
       pickerRef.current = new TimepickerUI(inputRef.current, {
-        clockType: i18n.language.includes('en') ? '12h' : '24h',
-        okLabel: t('timepicker.ok'),
-        cancelLabel: t('timepicker.cancel'),
-        amLabel: t('timepicker.am'),
-        pmLabel: t('timepicker.pm')
+        clock: {
+          type: i18n.language.includes('en') ? '12h' : '24h'
+        },
+        labels: {
+          ok: t('timepicker.ok'),
+          cancel: t('timepicker.cancel'),
+          am: t('timepicker.am'),
+          pm: t('timepicker.pm')
+        }
       });
       
       pickerRef.current.create();
@@ -469,11 +503,13 @@ function LocalizedTimePicker() {
 
 // JavaScript
 const picker = new TimepickerUI(input, {
-  clockType: '12h',
-  okLabel: 'موافق',
-  cancelLabel: 'إلغاء',
-  amLabel: 'ص',
-  pmLabel: 'م'
+  clock: { type: '12h' },
+  labels: {
+    ok: 'موافق',
+    cancel: 'إلغاء',
+    am: 'ص',
+    pm: 'م'
+  }
 });
 
 picker.create();

@@ -23,23 +23,27 @@ export default function InlineModePage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  inline: {
-    enabled: true,
-    containerId: 'timepicker-container',
-    autoUpdate: true
+  ui: {
+    inline: {
+      enabled: true,
+      containerId: 'timepicker-container',
+      autoUpdate: true
+    },
+    theme: 'dark'
   },
-  theme: 'dark',
-  clockType: '24h'
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            inline: {
-              enabled: true,
-              containerId: "timepicker-container-inline",
-              autoUpdate: true,
+            ui: {
+              inline: {
+                enabled: true,
+                containerId: "timepicker-container-inline",
+                autoUpdate: true,
+              },
+              theme: "dark",
             },
-            theme: "dark",
-            clockType: "24h",
+            clock: { type: "24h" },
           }}
         />
       </Section>

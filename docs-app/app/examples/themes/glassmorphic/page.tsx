@@ -22,11 +22,11 @@ export default function GlassmorphicPage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'glassmorphic'
+  ui: { theme: 'glassmorphic' }
 });
 picker.create();`}
           options={{
-            theme: "glassmorphic",
+            ui: { theme: "glassmorphic" },
           }}
         />
       </Section>
@@ -34,13 +34,13 @@ picker.create();`}
       <Section icon={Sparkles} title="Glassmorphic with 12h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'glassmorphic',
-  clockType: '12h'
+  ui: { theme: 'glassmorphic' },
+  clock: { type: '12h' }
 });
 picker.create();`}
           options={{
-            theme: "glassmorphic",
-            clockType: "12h",
+            ui: { theme: "glassmorphic" },
+            clock: { type: "12h" },
           }}
         />
       </Section>
@@ -48,13 +48,13 @@ picker.create();`}
       <Section icon={Sparkles} title="Glassmorphic with 24h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'glassmorphic',
-  clockType: '24h'
+  ui: { theme: 'glassmorphic' },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            theme: "glassmorphic",
-            clockType: "24h",
+            ui: { theme: "glassmorphic" },
+            clock: { type: "24h" },
           }}
         />
       </Section>

@@ -1,19 +1,67 @@
 import { CodeBlock } from "@/components/code-block";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
-import { Settings, Layout, Lock, Clock, Type, Palette } from "lucide-react";
+import {
+  Settings,
+  Layout,
+  Lock,
+  Clock,
+  Type,
+  Palette,
+  Sliders,
+  Bell,
+} from "lucide-react";
 
 export const metadata = {
   title: "Options - Timepicker-UI",
   description: "Complete configuration options reference",
 };
 
-const basicOptions = [
+const clockOptions = [
   {
-    name: "amLabel",
-    type: "string",
-    default: '"AM"',
-    description: "Custom text for AM label",
+    name: "type",
+    type: '"12h" | "24h"',
+    default: '"12h"',
+    description: "Clock format type",
+  },
+  {
+    name: "incrementHours",
+    type: "number",
+    default: "1",
+    description: "Hour increment step (1, 2, 3, etc.)",
+  },
+  {
+    name: "incrementMinutes",
+    type: "number",
+    default: "1",
+    description: "Minute increment step (1, 5, 10, 15, etc.)",
+  },
+  {
+    name: "autoSwitchToMinutes",
+    type: "boolean",
+    default: "true",
+    description: "Auto-switch to minutes after hour selection",
+  },
+  {
+    name: "disabledTime",
+    type: "DisabledTime",
+    default: "undefined",
+    description: "Disable specific hours, minutes, or intervals",
+  },
+  {
+    name: "currentTime",
+    type: "CurrentTime",
+    default: "undefined",
+    description: "Set current time configuration",
+  },
+];
+
+const uiOptions = [
+  {
+    name: "theme",
+    type: "Theme",
+    default: '"basic"',
+    description: "UI theme (basic, dark, m3-green, cyberpunk, etc.)",
   },
   {
     name: "animation",
@@ -22,40 +70,22 @@ const basicOptions = [
     description: "Enable/disable open/close animations",
   },
   {
-    name: "appendModalSelector",
-    type: "string",
-    default: '""',
-    description: "DOM selector to append timepicker (defaults to body)",
-  },
-  {
     name: "backdrop",
     type: "boolean",
     default: "true",
     description: "Show/hide backdrop overlay",
   },
   {
-    name: "cancelLabel",
-    type: "string",
-    default: '"Cancel"',
-    description: "Text for cancel button",
+    name: "mobile",
+    type: "boolean",
+    default: "false",
+    description: "Force mobile version",
   },
   {
-    name: "clockType",
-    type: '"12h" | "24h"',
-    default: '"12h"',
-    description: "Clock format type",
-  },
-  {
-    name: "cssClass",
-    type: "string",
-    default: "undefined",
-    description: "Additional CSS class for timepicker wrapper",
-  },
-  {
-    name: "delayHandler",
-    type: "number",
-    default: "300",
-    description: "Debounce delay for buttons (ms)",
+    name: "enableSwitchIcon",
+    type: "boolean",
+    default: "false",
+    description: "Show desktop/mobile switch icon",
   },
   {
     name: "editable",
@@ -70,13 +100,91 @@ const basicOptions = [
     description: "Keep page scroll when picker is open",
   },
   {
-    name: "enableSwitchIcon",
-    type: "boolean",
-    default: "false",
-    description: "Show desktop/mobile switch icon",
+    name: "cssClass",
+    type: "string",
+    default: "undefined",
+    description: "Additional CSS class for timepicker wrapper",
   },
   {
-    name: "focusInputAfterCloseModal",
+    name: "appendModalSelector",
+    type: "string",
+    default: '""',
+    description: "DOM selector to append timepicker (defaults to body)",
+  },
+  {
+    name: "iconTemplate",
+    type: "string",
+    default: "undefined",
+    description: "Custom HTML template for desktop icon",
+  },
+  {
+    name: "iconTemplateMobile",
+    type: "string",
+    default: "undefined",
+    description: "Custom HTML template for mobile icon",
+  },
+  {
+    name: "inline",
+    type: "InlineOptions",
+    default: "undefined",
+    description: "Inline mode configuration",
+  },
+];
+
+const labelsOptions = [
+  {
+    name: "am",
+    type: "string",
+    default: '"AM"',
+    description: "Custom text for AM label",
+  },
+  {
+    name: "pm",
+    type: "string",
+    default: '"PM"',
+    description: "Custom text for PM label",
+  },
+  {
+    name: "ok",
+    type: "string",
+    default: '"OK"',
+    description: "Text for OK button",
+  },
+  {
+    name: "cancel",
+    type: "string",
+    default: '"Cancel"',
+    description: "Text for cancel button",
+  },
+  {
+    name: "time",
+    type: "string",
+    default: '"Select time"',
+    description: "Time label for desktop version",
+  },
+  {
+    name: "mobileTime",
+    type: "string",
+    default: '"Enter Time"',
+    description: "Time label for mobile version",
+  },
+  {
+    name: "mobileHour",
+    type: "string",
+    default: '"Hour"',
+    description: "Hour label for mobile version",
+  },
+  {
+    name: "mobileMinute",
+    type: "string",
+    default: '"Minute"',
+    description: "Minute label for mobile version",
+  },
+];
+
+const behaviorOptions = [
+  {
+    name: "focusInputAfterClose",
     type: "boolean",
     default: "false",
     description: "Focus input after closing modal",
@@ -85,13 +193,13 @@ const basicOptions = [
     name: "focusTrap",
     type: "boolean",
     default: "true",
-    description: "Trap focus within modal",
+    description: "Trap focus within modal for accessibility",
   },
   {
-    name: "hourMobileLabel",
-    type: "string",
-    default: '"Hour"',
-    description: "Hour label for mobile version",
+    name: "delayHandler",
+    type: "number",
+    default: "300",
+    description: "Debounce delay for buttons (ms)",
   },
   {
     name: "id",
@@ -99,74 +207,113 @@ const basicOptions = [
     default: "undefined",
     description: "Custom ID for timepicker instance",
   },
+];
+
+const callbacksOptions = [
   {
-    name: "incrementHours",
-    type: "number",
-    default: "1",
-    description: "Hour increment step (1, 2, 3)",
+    name: "onConfirm",
+    type: "(data: CallbackData) => void",
+    default: "undefined",
+    description: "Triggered when user confirms time selection",
   },
   {
-    name: "incrementMinutes",
-    type: "number",
-    default: "1",
-    description: "Minute increment step (1, 5, 10, 15)",
+    name: "onCancel",
+    type: "(data: CallbackData) => void",
+    default: "undefined",
+    description: "Triggered when user cancels",
   },
   {
-    name: "minuteMobileLabel",
-    type: "string",
-    default: '"Minute"',
-    description: "Minute label for mobile version",
+    name: "onOpen",
+    type: "() => void",
+    default: "undefined",
+    description: "Triggered when picker opens",
   },
   {
-    name: "mobile",
-    type: "boolean",
-    default: "false",
-    description: "Force mobile version",
+    name: "onUpdate",
+    type: "(data: CallbackData) => void",
+    default: "undefined",
+    description: "Triggered during time changes",
   },
   {
-    name: "mobileTimeLabel",
-    type: "string",
-    default: '"Enter Time"',
-    description: "Time label for mobile version",
+    name: "onSelectHour",
+    type: "(data: CallbackData) => void",
+    default: "undefined",
+    description: "Triggered when hour is selected",
   },
   {
-    name: "okLabel",
-    type: "string",
-    default: '"OK"',
-    description: "Text for OK button",
+    name: "onSelectMinute",
+    type: "(data: CallbackData) => void",
+    default: "undefined",
+    description: "Triggered when minute is selected",
   },
   {
-    name: "pmLabel",
-    type: "string",
-    default: '"PM"',
-    description: "Custom text for PM label",
+    name: "onSelectAM",
+    type: "() => void",
+    default: "undefined",
+    description: "Triggered when AM is selected",
   },
   {
-    name: "autoSwitchToMinutes",
-    type: "boolean",
-    default: "true",
-    description: "Auto-switch to minutes after hour selection",
+    name: "onSelectPM",
+    type: "() => void",
+    default: "undefined",
+    description: "Triggered when PM is selected",
   },
   {
-    name: "theme",
-    type: "Theme",
-    default: '"basic"',
-    description: "UI theme (see themes section)",
-  },
-  {
-    name: "timeLabel",
-    type: "string",
-    default: '"Select time"',
-    description: "Time label for desktop version",
+    name: "onError",
+    type: "(data: CallbackData) => void",
+    default: "undefined",
+    description: "Triggered when validation error occurs",
   },
 ];
 
+const OptionsTable = ({ options }: { options: typeof clockOptions }) => (
+  <div className="overflow-x-auto rounded-lg border border-border">
+    <table className="w-full text-sm">
+      <thead className="bg-muted/50">
+        <tr className="border-b border-border">
+          <th className="px-4 py-3 text-left font-semibold text-foreground">
+            Option
+          </th>
+          <th className="px-4 py-3 text-left font-semibold text-foreground">
+            Type
+          </th>
+          <th className="px-4 py-3 text-left font-semibold text-foreground">
+            Default
+          </th>
+          <th className="px-4 py-3 text-left font-semibold text-foreground">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-border">
+        {options.map((option) => (
+          <tr key={option.name} className="hover:bg-muted/30 transition-colors">
+            <td className="px-4 py-3">
+              <code className="text-primary bg-primary/10 px-2 py-1 rounded text-xs font-mono">
+                {option.name}
+              </code>
+            </td>
+            <td className="px-4 py-3 text-muted-foreground">
+              <code className="text-xs">{option.type}</code>
+            </td>
+            <td className="px-4 py-3">
+              <code className="text-xs text-muted-foreground">
+                {option.default}
+              </code>
+            </td>
+            <td className="px-4 py-3 text-muted-foreground">
+              {option.description}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
 const themes = [
   { name: "basic", description: "Default Material Design theme" },
-  {
-    name: "crane",
-    description: "Google Crane theme with rounded corners",
-  },
+  { name: "crane", description: "Google Crane theme with rounded corners" },
   {
     name: "crane-straight",
     description: "Google Crane theme with straight edges",
@@ -185,64 +332,65 @@ export default function OptionsPage() {
     <div>
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight mb-4 text-foreground">
-          Options
+          Options API Reference
         </h1>
         <p className="text-lg text-muted-foreground">
-          Complete configuration options reference
+          Complete v4.0.0 configuration options reference with grouped structure
         </p>
       </div>
 
-      <Section icon={Settings} title="Basic Options">
-        <div className="overflow-x-auto rounded-lg border border-border">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/50">
-              <tr className="border-b border-border">
-                <th className="px-4 py-3 text-left font-semibold text-foreground">
-                  Option
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-foreground">
-                  Type
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-foreground">
-                  Default
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-foreground">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {basicOptions.map((option) => (
-                <tr
-                  key={option.name}
-                  className="hover:bg-muted/30 transition-colors"
-                >
-                  <td className="px-4 py-3">
-                    <code className="text-primary bg-primary/10 px-2 py-1 rounded text-xs font-mono">
-                      {option.name}
-                    </code>
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    <code className="text-xs">{option.type}</code>
-                  </td>
-                  <td className="px-4 py-3">
-                    <code className="text-xs text-muted-foreground">
-                      {option.default}
-                    </code>
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    {option.description}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <InfoBox title="Important notice" variant="emerald" className="mb-8">
+        <strong>v4.0.0 Breaking Change:</strong> Options are now organized into
+        5 logical groups:
+        <code className="mx-1">clock</code>, <code className="mx-1">ui</code>,{" "}
+        <code className="mx-1">labels</code>,
+        <code className="mx-1">behavior</code>, and{" "}
+        <code className="mx-1">callbacks</code>. See the{" "}
+        <a href="/docs/changelog" className="text-primary underline">
+          changelog
+        </a>{" "}
+        for migration guide.
+      </InfoBox>
+
+      <Section icon={Clock} title="Clock Options">
+        <p className="text-muted-foreground mb-4">
+          Clock behavior and time configuration options:
+        </p>
+        <OptionsTable options={clockOptions} />
       </Section>
 
-      <Section icon={Palette} title="Themes">
+      <Section icon={Palette} title="UI Options">
+        <p className="text-muted-foreground mb-4">
+          Visual appearance and display options:
+        </p>
+        <OptionsTable options={uiOptions} />
+      </Section>
+
+      <Section icon={Type} title="Labels Options">
+        <p className="text-muted-foreground mb-4">
+          Customize all text labels for localization:
+        </p>
+        <OptionsTable options={labelsOptions} />
+      </Section>
+
+      <Section icon={Sliders} title="Behavior Options">
+        <p className="text-muted-foreground mb-4">
+          Interaction and accessibility behavior:
+        </p>
+        <OptionsTable options={behaviorOptions} />
+      </Section>
+
+      <Section icon={Bell} title="Callbacks Options">
+        <p className="text-muted-foreground mb-4">
+          Event handlers and lifecycle callbacks:
+        </p>
+        <OptionsTable options={callbacksOptions} />
+      </Section>
+
+      <Section icon={Palette} title="Available Themes">
         <p className="text-muted-foreground mb-6">
-          Choose from 11 built-in themes:
+          Choose from 10 built-in themes via{" "}
+          <code className="text-primary">ui.theme</code>:
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {themes.map((theme) => (
@@ -265,76 +413,66 @@ export default function OptionsPage() {
         <div className="mt-6">
           <CodeBlock
             code={`const picker = new TimepickerUI(input, {
-  theme: 'cyberpunk'
+  ui: { theme: 'cyberpunk' }
 });`}
             language="typescript"
           />
         </div>
       </Section>
 
-      <Section icon={Layout} title="Inline Mode">
+      <Section icon={Layout} title="Inline Mode Configuration">
         <p className="text-muted-foreground mb-4">
-          Display timepicker without modal overlay:
+          Configure inline mode via{" "}
+          <code className="text-primary">ui.inline</code>:
         </p>
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
-  inline: {
-    enabled: true,
-    containerId: 'timepicker-container',
-    showButtons: false,  // Hide OK/Cancel buttons
-    autoUpdate: true     // Auto-update input on change
+  ui: {
+    inline: {
+      enabled: true,
+      containerId: 'timepicker-container',
+      showButtons: false,  // Hide OK/Cancel buttons
+      autoUpdate: true     // Auto-update input on change
+    }
   }
 });`}
           language="typescript"
         />
       </Section>
 
-      <Section icon={Lock} title="Disabled Time">
+      <Section icon={Lock} title="Disabled Time Configuration">
         <p className="text-muted-foreground mb-4">
-          Disable specific hours, minutes, or time ranges:
+          Disable specific hours, minutes, or intervals via{" "}
+          <code className="text-primary">clock.disabledTime</code>:
         </p>
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
-  disabledTime: {
-    hours: [1, 3, 5, 8],              // Disable specific hours
-    minutes: [15, 30, 45],            // Disable specific minutes
-    interval: '10:00 AM - 2:00 PM'    // Disable time range
-    // Or multiple ranges:
-    // interval: ['10:00 AM - 2:00 PM', '5:00 PM - 8:00 PM']
+  clock: {
+    disabledTime: {
+      hours: [1, 3, 5, 8],              // Disable specific hours
+      minutes: [15, 30, 45],            // Disable specific minutes
+      interval: 15                      // Or use interval shorthand (15, 30, etc.)
+    }
   }
 });`}
           language="typescript"
         />
       </Section>
 
-      <Section icon={Clock} title="Current Time">
+      <Section icon={Clock} title="Current Time Configuration">
         <p className="text-muted-foreground mb-4">
-          Set current time to input and picker:
+          Set current time via{" "}
+          <code className="text-primary">clock.currentTime</code>:
         </p>
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
-  currentTime: {
-    updateInput: true,
-    locales: 'en-US',
-    time: new Date()
+  clock: {
+    currentTime: {
+      updateInput: true,
+      locales: 'en-US',
+      time: new Date()
+    }
   }
-});`}
-          language="typescript"
-        />
-      </Section>
-
-      <Section icon={Type} title="Custom Labels">
-        <p className="text-muted-foreground mb-4">Customize all text labels:</p>
-        <CodeBlock
-          code={`const picker = new TimepickerUI(input, {
-  amLabel: 'AM',
-  pmLabel: 'PM',
-  okLabel: 'Confirm',
-  cancelLabel: 'Close',
-  timeLabel: 'Choose Time',
-  hourMobileLabel: 'Hour',
-  minuteMobileLabel: 'Minute',
-  mobileTimeLabel: 'Enter Time'
 });`}
           language="typescript"
         />
@@ -342,49 +480,69 @@ export default function OptionsPage() {
 
       <div className="mt-12 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-purple-500/5 p-8">
         <h2 className="text-2xl font-bold tracking-tight mb-4 text-foreground">
-          Complete Example
+          Complete v4.0.0 Example
         </h2>
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
-  // Display
-  theme: 'dark',
-  clockType: '24h',
-  animation: true,
-  backdrop: true,
-  
-  // Behavior
-  focusTrap: true,
-  editable: false,
-  mobile: false,
-  enableScrollbar: false,
-  autoSwitchToMinutes: true,
-  
-  // Labels
-  okLabel: 'Confirm',
-  cancelLabel: 'Close',
-  timeLabel: 'Choose Time',
-  
-  // Increments
-  incrementHours: 1,
-  incrementMinutes: 5,
-  
-  // Restrictions
-  disabledTime: {
-    hours: [0, 1, 2, 3],
-    interval: '12:00 PM - 1:00 PM'
+  // Clock options
+  clock: {
+    type: '24h',
+    incrementHours: 1,
+    incrementMinutes: 5,
+    autoSwitchToMinutes: true,
+    disabledTime: {
+      hours: [0, 1, 2, 3],
+      interval: 15
+    },
+    currentTime: {
+      updateInput: true,
+      time: new Date()
+    }
   },
   
-  // Current time
-  currentTime: {
-    updateInput: true,
-    time: new Date()
+  // UI options
+  ui: {
+    theme: 'dark',
+    animation: true,
+    backdrop: true,
+    mobile: false,
+    enableScrollbar: false,
+    enableSwitchIcon: false,
+    editable: false,
+    cssClass: 'custom-picker',
+    appendModalSelector: '#timepicker-container'
   },
   
-  // Custom ID
-  id: 'my-timepicker',
+  // Labels options
+  labels: {
+    ok: 'Confirm',
+    cancel: 'Close',
+    time: 'Choose Time',
+    am: 'AM',
+    pm: 'PM',
+    mobileTime: 'Enter Time',
+    mobileHour: 'Hour',
+    mobileMinute: 'Minute'
+  },
   
-  // Custom class
-  cssClass: 'custom-picker'
+  // Behavior options
+  behavior: {
+    focusTrap: true,
+    focusInputAfterClose: false,
+    delayHandler: 300,
+    id: 'my-timepicker'
+  },
+  
+  // Callbacks options
+  callbacks: {
+    onConfirm: (data) => console.log('Confirmed:', data),
+    onCancel: () => console.log('Cancelled'),
+    onOpen: () => console.log('Opened'),
+    onUpdate: (data) => console.log('Updated:', data),
+    onSelectHour: (data) => console.log('Hour selected:', data.hour),
+    onSelectMinute: (data) => console.log('Minute selected:', data.minutes),
+    onError: (data) => console.error('Error:', data.error)
+  }
 });`}
           language="typescript"
         />

@@ -16,23 +16,24 @@ export default function MultiplePickers() {
 
   const options1 = useMemo(
     () => ({
-      theme: "basic" as const,
+      ui: { theme: "basic" as const },
     }),
     []
   );
 
   const options2 = useMemo(
     () => ({
-      theme: "crane-straight" as const,
+      ui: { theme: "crane-straight" as const },
     }),
     []
   );
 
   useEffect(() => {
     if (startTimeRef.current && endTimeRef.current) {
+      // @ts-ignore
       picker1Ref.current = new TimepickerUI(startTimeRef.current, options1);
       picker1Ref.current.create();
-
+      // @ts-ignore
       picker2Ref.current = new TimepickerUI(endTimeRef.current, options2);
       picker2Ref.current.create();
     }
@@ -100,11 +101,11 @@ function MultipleTimepickers() {
   const picker2Ref = useRef<TimepickerUI | null>(null);
 
   const options1 = useMemo(() => ({
-    theme: 'basic',
+    ui: { theme: 'basic' },
   }), []);
 
   const options2 = useMemo(() => ({
-    theme: 'crane-straight',
+    ui: { theme: 'crane-straight' },
   }), []);
 
   useEffect(() => {
@@ -156,7 +157,7 @@ function MultiplePickersArray() {
     inputRefs.current.forEach((input, index) => {
       if (input) {
         const picker = new TimepickerUI(input, {
-          theme: index % 2 === 0 ? 'basic' : 'dark',
+          ui: { theme: index % 2 === 0 ? 'basic' : 'dark' },
         });
         picker.create();
         pickersRef.current.push(picker);
@@ -203,8 +204,8 @@ const pickers = [];
 // Initialize each picker
 inputs.forEach((input, index) => {
   const picker = new TimepickerUI(input, {
-    theme: index % 2 === 0 ? 'basic' : 'dark',
-    clockType: '24h'
+    ui: { theme: index % 2 === 0 ? 'basic' : 'dark' },
+    clock: { type: '24h' }
   });
   
   picker.create();

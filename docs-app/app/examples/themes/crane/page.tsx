@@ -23,11 +23,11 @@ export default function CranePage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'crane'
+  ui: { theme: 'crane' }
 });
 picker.create();`}
           options={{
-            theme: "crane",
+            ui: { theme: "crane" },
           }}
         />
       </Section>
@@ -35,13 +35,13 @@ picker.create();`}
       <Section icon={Palette} title="With 12h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'crane',
-  clockType: '12h'
+  ui: { theme: 'crane' },
+  clock: { type: '12h' }
 });
 picker.create();`}
           options={{
-            theme: "crane",
-            clockType: "12h",
+            ui: { theme: "crane" },
+            clock: { type: "12h" },
           }}
         />
       </Section>
@@ -49,13 +49,13 @@ picker.create();`}
       <Section icon={Palette} title="With 24h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'crane',
-  clockType: '24h'
+  ui: { theme: 'crane' },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            theme: "crane",
-            clockType: "24h",
+            ui: { theme: "crane" },
+            clock: { type: "24h" },
           }}
         />
       </Section>

@@ -22,11 +22,11 @@ export default function BasicThemePage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'basic'
+  ui: { theme: 'basic' }
 });
 picker.create();`}
           options={{
-            theme: "basic",
+            ui: { theme: "basic" },
           }}
         />
       </Section>
@@ -34,15 +34,19 @@ picker.create();`}
       <Section icon={Palette} title="Basic Theme with 12h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'basic',
-  clockType: '12h',
-  autoSwitchToMinutes: true
+  ui: { theme: 'basic' },
+  clock: {
+    type: '12h',
+    autoSwitchToMinutes: true
+  }
 });
 picker.create();`}
           options={{
-            theme: "basic",
-            clockType: "12h",
-            autoSwitchToMinutes: true,
+            ui: { theme: "basic" },
+            clock: {
+              type: "12h",
+              autoSwitchToMinutes: true,
+            },
           }}
         />
       </Section>
@@ -50,13 +54,13 @@ picker.create();`}
       <Section icon={Palette} title="Basic Theme with 24h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'basic',
-  clockType: '24h'
+  ui: { theme: 'basic' },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            theme: "basic",
-            clockType: "24h",
+            ui: { theme: "basic" },
+            clock: { type: "24h" },
           }}
         />
       </Section>
@@ -64,17 +68,21 @@ picker.create();`}
       <Section icon={Palette} title="Basic with Custom Labels">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'basic',
-  okLabel: 'Confirm',
-  cancelLabel: 'Close',
-  timeLabel: 'Choose Your Time'
+  ui: { theme: 'basic' },
+  labels: {
+    ok: 'Confirm',
+    cancel: 'Close',
+    time: 'Choose Your Time'
+  }
 });
 picker.create();`}
           options={{
-            theme: "basic",
-            okLabel: "Confirm",
-            cancelLabel: "Close",
-            timeLabel: "Choose Your Time",
+            ui: { theme: "basic" },
+            labels: {
+              ok: "Confirm",
+              cancel: "Close",
+              time: "Choose Your Time",
+            },
           }}
         />
       </Section>

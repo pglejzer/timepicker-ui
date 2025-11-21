@@ -22,11 +22,11 @@ export default function CraneStraightPage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'crane-straight'
+  ui: { theme: 'crane-straight' }
 });
 picker.create();`}
           options={{
-            theme: "crane-straight",
+            ui: { theme: "crane-straight" },
           }}
         />
       </Section>
@@ -34,13 +34,13 @@ picker.create();`}
       <Section icon={Palette} title="With 12h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'crane-straight',
-  clockType: '12h'
+  ui: { theme: 'crane-straight' },
+  clock: { type: '12h' }
 });
 picker.create();`}
           options={{
-            theme: "crane-straight",
-            clockType: "12h",
+            ui: { theme: "crane-straight" },
+            clock: { type: "12h" },
           }}
         />
       </Section>
@@ -48,13 +48,13 @@ picker.create();`}
       <Section icon={Palette} title="With 24h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'crane-straight',
-  clockType: '24h'
+  ui: { theme: 'crane-straight' },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            theme: "crane-straight",
-            clockType: "24h",
+            ui: { theme: "crane-straight" },
+            clock: { type: "24h" },
           }}
         />
       </Section>

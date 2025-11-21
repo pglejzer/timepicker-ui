@@ -8,11 +8,12 @@ Modern time picker library built with TypeScript. Works with any framework or va
 
 [Live Demo](https://timepicker-ui.vercel.app/) • [Documentation](https://timepicker-ui.vercel.app/docs) • [Changelog](./CHANGELOG.md)
 
-**Upgrading from v2?** Check the [upgrade guide](#upgrade-guide-v2--v3) below.
+**Upgrading from v3?** Check the [upgrade guide](#upgrade-guide-v3--v4) below.
+**Upgrading from v2?** Check the [v2 → v3 upgrade guide](#upgrade-guide-v2--v3).
 
 ## Features
 
-- 11 built-in themes (Material, Crane, Dark, Glassmorphic, Cyberpunk, and more)
+- 10 built-in themes (Material, Crane, Dark, Glassmorphic, Cyberpunk, and more)
 - Mobile-first design with touch support
 - Framework agnostic - works with React, Vue, Angular, Svelte, or vanilla JS
 - Full TypeScript support
@@ -25,10 +26,9 @@ Modern time picker library built with TypeScript. Works with any framework or va
 
 This project is actively maintained. Some areas planned for improvement:
 
-- No unit/integration tests yet
-- Some files need refactoring
-- A few `any` types remain in the codebase
-- No performance monitoring
+- Unit/integration test coverage could be expanded
+- Performance monitoring tooling
+- Further TypeScript strictness improvements
 
 Contributions welcome! Feel free to [open an issue or PR](https://github.com/pglejzer/timepicker-ui/issues).
 
@@ -73,12 +73,18 @@ picker.create();
 
 ```javascript
 const picker = new TimepickerUI(input, {
-  theme: "dark",
-  clockType: "24h",
-  animation: true,
-  backdrop: true,
-  onConfirm: (data) => {
-    console.log("Selected time:", data);
+  ui: {
+    theme: "dark",
+    animation: true,
+    backdrop: true,
+  },
+  clock: {
+    type: "24h",
+  },
+  callbacks: {
+    onConfirm: (data) => {
+      console.log("Selected time:", data);
+    },
   },
 });
 picker.create();
@@ -97,8 +103,9 @@ function TimePickerComponent() {
   useEffect(() => {
     if (inputRef.current) {
       const picker = new TimepickerUI(inputRef.current, {
-        onConfirm: (data) => {
-          console.log("Time selected:", data);
+        callbacks: {
+          onConfirm: (data) => {
+            console.log("Time selected:", data);
         },
       });
       picker.create();
@@ -115,49 +122,161 @@ function TimePickerComponent() {
 
 Full documentation available at [timepicker-ui.vercel.app/docs](https://timepicker-ui.vercel.app/docs)
 
-### Key Options
+### Options Structure (v4.0.0 Breaking Change)
 
-| Option                      | Type           | Default        | Description                             |
-| --------------------------- | -------------- | -------------- | --------------------------------------- |
-| `clockType`                 | `12h` / `24h`  | `12h`          | Clock format                            |
-| `theme`                     | string         | `basic`        | UI theme (11 themes available)          |
-| `animation`                 | boolean        | `true`         | Enable animations                       |
-| `backdrop`                  | boolean        | `true`         | Show backdrop overlay                   |
-| `editable`                  | boolean        | `false`        | Allow manual input editing              |
-| `mobile`                    | boolean        | `false`        | Force mobile version                    |
-| `disabledTime`              | object         | `undefined`    | Disable specific hours/minutes          |
-| `incrementHours`            | number         | `1`            | Hour increment step                     |
-| `incrementMinutes`          | number         | `1`            | Minute increment step                   |
-| `autoSwitchToMinutes`       | boolean        | `true`         | Auto-switch to minutes after hour       |
-| `amLabel`                   | string         | `AM`           | Custom AM label text                    |
-| `pmLabel`                   | string         | `PM`           | Custom PM label text                    |
-| `okLabel`                   | string         | `OK`           | OK button text                          |
-| `cancelLabel`               | string         | `Cancel`       | Cancel button text                      |
-| `timeLabel`                 | string         | `Select time`  | Time label on desktop version           |
-| `mobileTimeLabel`           | string         | `Enter Time`   | Time label on mobile version            |
-| `hourMobileLabel`           | string         | `Hour`         | Hour label on mobile version            |
-| `minuteMobileLabel`         | string         | `Minute`       | Minute label on mobile version          |
-| `appendModalSelector`       | string         | `""`           | Append timepicker to custom selector    |
-| `enableScrollbar`           | boolean        | `false`        | Enable scroll if timepicker is open     |
-| `enableSwitchIcon`          | boolean        | `false`        | Show icon to switch desktop/mobile      |
-| `focusInputAfterCloseModal` | boolean        | `false`        | Focus input after close modal           |
-| `iconTemplate`              | string         | keyboard SVG   | Custom template for desktop switch icon |
-| `iconTemplateMobile`        | string         | schedule SVG   | Custom template for mobile switch icon  |
-| `currentTime`               | boolean/object | `undefined`    | Set current time to input/picker        |
-| `focusTrap`                 | boolean        | `true`         | Focus trap to modal elements            |
-| `delayHandler`              | number         | `300`          | Delay for clickable elements (ms)       |
-| `id`                        | string         | auto-generated | Custom ID for timepicker instance       |
-| `inline`                    | object         | `undefined`    | Inline mode configuration               |
-| `cssClass`                  | string         | `undefined`    | Additional custom CSS class             |
-| `onConfirm`                 | function       | `undefined`    | Callback when time is confirmed         |
-| `onCancel`                  | function       | `undefined`    | Callback when cancelled                 |
-| `onOpen`                    | function       | `undefined`    | Callback when picker opens              |
-| `onUpdate`                  | function       | `undefined`    | Callback when time is updated           |
-| `onSelectHour`              | function       | `undefined`    | Callback when hour is selected          |
-| `onSelectMinute`            | function       | `undefined`    | Callback when minute is selected        |
-| `onSelectAM`                | function       | `undefined`    | Callback when AM is selected            |
-| `onSelectPM`                | function       | `undefined`    | Callback when PM is selected            |
-| `onError`                   | function       | `undefined`    | Callback when error occurs              |
+**Options are now organized into 5 logical groups:**
+
+```typescript
+const picker = new TimepickerUI(input, {
+  clock: ClockOptions, // Clock behavior (type, increments, disabled time)
+  ui: UIOptions, // Appearance (theme, animation, mobile, inline)
+  labels: LabelsOptions, // Text labels (AM/PM, buttons, headers)
+  behavior: BehaviorOptions, // Behavior (focus, delays, ID)
+  callbacks: CallbacksOptions, // Event handlers
+});
+```
+
+### Clock Options
+
+| Property              | Type           | Default     | Description                     |
+| --------------------- | -------------- | ----------- | ------------------------------- |
+| `type`                | `12h` / `24h`  | `12h`       | Clock format                    |
+| `incrementHours`      | number         | `1`         | Hour increment step             |
+| `incrementMinutes`    | number         | `1`         | Minute increment step           |
+| `autoSwitchToMinutes` | boolean        | `false`     | Auto-switch after hour selected |
+| `disabledTime`        | object         | `undefined` | Disable specific hours/minutes  |
+| `currentTime`         | boolean/object | `undefined` | Set current time to input       |
+
+### UI Options
+
+| Property              | Type    | Default     | Description                     |
+| --------------------- | ------- | ----------- | ------------------------------- |
+| `theme`               | string  | `basic`     | Theme (11 themes available)     |
+| `animation`           | boolean | `true`      | Enable animations               |
+| `backdrop`            | boolean | `true`      | Show backdrop overlay           |
+| `mobile`              | boolean | `false`     | Force mobile version            |
+| `enableSwitchIcon`    | boolean | `false`     | Show desktop/mobile switch icon |
+| `editable`            | boolean | `false`     | Allow manual input editing      |
+| `enableScrollbar`     | boolean | `false`     | Enable scroll when picker open  |
+| `cssClass`            | string  | `undefined` | Additional CSS class            |
+| `appendModalSelector` | string  | `""`        | Custom container selector       |
+| `iconTemplate`        | string  | SVG         | Desktop switch icon template    |
+| `iconTemplateMobile`  | string  | SVG         | Mobile switch icon template     |
+| `inline`              | object  | `undefined` | Inline mode configuration       |
+
+### Labels Options
+
+| Property       | Type   | Default       | Description         |
+| -------------- | ------ | ------------- | ------------------- |
+| `am`           | string | `AM`          | AM label text       |
+| `pm`           | string | `PM`          | PM label text       |
+| `ok`           | string | `OK`          | OK button text      |
+| `cancel`       | string | `Cancel`      | Cancel button text  |
+| `time`         | string | `Select time` | Desktop time label  |
+| `mobileTime`   | string | `Enter Time`  | Mobile time label   |
+| `mobileHour`   | string | `Hour`        | Mobile hour label   |
+| `mobileMinute` | string | `Minute`      | Mobile minute label |
+
+### Behavior Options
+
+| Property               | Type    | Default        | Description             |
+| ---------------------- | ------- | -------------- | ----------------------- |
+| `focusInputAfterClose` | boolean | `false`        | Focus input after close |
+| `focusTrap`            | boolean | `true`         | Trap focus in modal     |
+| `delayHandler`         | number  | `300`          | Click delay (ms)        |
+| `id`                   | string  | auto-generated | Custom instance ID      |
+
+### Callbacks Options
+
+| Property         | Type     | Description              |
+| ---------------- | -------- | ------------------------ |
+| `onConfirm`      | function | Time confirmed           |
+| `onCancel`       | function | Cancelled                |
+| `onOpen`         | function | Picker opened            |
+| `onUpdate`       | function | Time updated (real-time) |
+| `onSelectHour`   | function | Hour selected            |
+| `onSelectMinute` | function | Minute selected          |
+| `onSelectAM`     | function | AM selected              |
+| `onSelectPM`     | function | PM selected              |
+| `onError`        | function | Error occurred           |
+
+### Migration from v3.x to v4.0.0
+
+**All options must be moved into groups:**
+
+```diff
+// v3.x (DEPRECATED)
+-const picker = new TimepickerUI(input, {
+-  clockType: '24h',
+-  theme: 'dark',
+-  animation: true,
+-  incrementMinutes: 5,
+-  amLabel: 'AM',
+-  onConfirm: (data) => {}
+-});
+
+// v4.0.0 (NEW)
++const picker = new TimepickerUI(input, {
++  clock: {
++    type: '24h',
++    incrementMinutes: 5
++  },
++  ui: {
++    theme: 'dark',
++    animation: true
++  },
++  labels: {
++    am: 'AM'
++  },
++  callbacks: {
++    onConfirm: (data) => {}
++  }
++});
+```
+
+**Full migration table:**
+
+| v3.x (flat)                 | v4.0.0 (grouped)                |
+| --------------------------- | ------------------------------- |
+| `clockType`                 | `clock.type`                    |
+| `incrementHours`            | `clock.incrementHours`          |
+| `incrementMinutes`          | `clock.incrementMinutes`        |
+| `autoSwitchToMinutes`       | `clock.autoSwitchToMinutes`     |
+| `disabledTime`              | `clock.disabledTime`            |
+| `currentTime`               | `clock.currentTime`             |
+| `theme`                     | `ui.theme`                      |
+| `animation`                 | `ui.animation`                  |
+| `backdrop`                  | `ui.backdrop`                   |
+| `mobile`                    | `ui.mobile`                     |
+| `enableSwitchIcon`          | `ui.enableSwitchIcon`           |
+| `editable`                  | `ui.editable`                   |
+| `enableScrollbar`           | `ui.enableScrollbar`            |
+| `cssClass`                  | `ui.cssClass`                   |
+| `appendModalSelector`       | `ui.appendModalSelector`        |
+| `iconTemplate`              | `ui.iconTemplate`               |
+| `iconTemplateMobile`        | `ui.iconTemplateMobile`         |
+| `inline`                    | `ui.inline`                     |
+| `amLabel`                   | `labels.am`                     |
+| `pmLabel`                   | `labels.pm`                     |
+| `okLabel`                   | `labels.ok`                     |
+| `cancelLabel`               | `labels.cancel`                 |
+| `timeLabel`                 | `labels.time`                   |
+| `mobileTimeLabel`           | `labels.mobileTime`             |
+| `hourMobileLabel`           | `labels.mobileHour`             |
+| `minuteMobileLabel`         | `labels.mobileMinute`           |
+| `focusInputAfterCloseModal` | `behavior.focusInputAfterClose` |
+| `focusTrap`                 | `behavior.focusTrap`            |
+| `delayHandler`              | `behavior.delayHandler`         |
+| `id`                        | `behavior.id`                   |
+| `onConfirm`                 | `callbacks.onConfirm`           |
+| `onCancel`                  | `callbacks.onCancel`            |
+| `onOpen`                    | `callbacks.onOpen`              |
+| `onUpdate`                  | `callbacks.onUpdate`            |
+| `onSelectHour`              | `callbacks.onSelectHour`        |
+| `onSelectMinute`            | `callbacks.onSelectMinute`      |
+| `onSelectAM`                | `callbacks.onSelectAM`          |
+| `onSelectPM`                | `callbacks.onSelectPM`          |
+| `onError`                   | `callbacks.onError`             |
 
 ### Themes
 
@@ -168,7 +287,9 @@ import "timepicker-ui/main.css"; // Required base styles
 import "timepicker-ui/theme-dark.css"; // Specific theme
 
 const picker = new TimepickerUI(input, {
-  theme: "dark",
+  ui: {
+    theme: "dark",
+  },
 });
 ```
 
@@ -176,10 +297,12 @@ const picker = new TimepickerUI(input, {
 
 ```javascript
 const picker = new TimepickerUI(input, {
-  disabledTime: {
-    hours: [1, 3, 5, 8],
-    minutes: [15, 30, 45],
-    interval: "10:00 AM - 2:00 PM",
+  clock: {
+    disabledTime: {
+      hours: [1, 3, 5, 8],
+      minutes: [15, 30, 45],
+      interval: "10:00 AM - 2:00 PM",
+    },
   },
 });
 ```
@@ -188,11 +311,13 @@ const picker = new TimepickerUI(input, {
 
 ```javascript
 const picker = new TimepickerUI(input, {
-  inline: {
-    enabled: true,
-    containerId: "timepicker-container",
-    showButtons: false,
-    autoUpdate: true,
+  ui: {
+    inline: {
+      enabled: true,
+      containerId: "timepicker-container",
+      showButtons: false,
+      autoUpdate: true,
+    },
   },
 });
 ```
@@ -223,7 +348,7 @@ TimepickerUI.destroyAll(); // Destroy all instances
 
 ## Events
 
-Listen to timepicker events using the new **EventEmitter API** (recommended) or the legacy DOM events (deprecated, will be removed in v4):
+Listen to timepicker events using the **EventEmitter API** (v4+) or callback options:
 
 ### EventEmitter API (Recommended)
 
@@ -274,21 +399,224 @@ picker.once("confirm", (data) => {
 picker.off("confirm", handler);
 ```
 
-### Legacy DOM Events (Deprecated)
+### Legacy DOM Events (v3.x Only)
 
-**Note:** DOM events (e.g., `timepicker:confirm`) are deprecated and will be removed in v4. Please migrate to the new EventEmitter API shown above.
+⚠️ **Only Available in v3.x - Completely Removed in v4.0.0**
+
+DOM events (e.g., `timepicker:confirm`) were removed in v4.0.0. Use the **EventEmitter API** shown above or **callback options** instead.
+
+**v3.x code (no longer works in v4):**
 
 ```javascript
 input.addEventListener("timepicker:confirm", (e) => {
   console.log("Time:", e.detail);
 });
+```
 
-input.addEventListener("timepicker:cancel", (e) => {
-  console.log("Cancelled");
+**v4.0.0 alternatives:**
+
+```javascript
+// Option 1: EventEmitter API
+picker.on("confirm", (data) => {
+  console.log("Time:", data);
+});
+
+// Option 2: Callback options
+const picker = new TimepickerUI(input, {
+  callbacks: {
+    onConfirm: (data) => {
+      console.log("Time:", data);
+    },
+  },
 });
 ```
 
-Available legacy events: `timepicker:open`, `timepicker:cancel`, `timepicker:confirm`, `timepicker:update`, `timepicker:select-hour`, `timepicker:select-minute`, `timepicker:select-am`, `timepicker:select-pm`, `timepicker:error`
+Removed events: `timepicker:open`, `timepicker:cancel`, `timepicker:confirm`, `timepicker:update`, `timepicker:select-hour`, `timepicker:select-minute`, `timepicker:select-am`, `timepicker:select-pm`, `timepicker:error`
+
+## Upgrade Guide: v3 → v4
+
+### Breaking Changes
+
+**1. CSS Class Names Renamed**
+
+All CSS classes have been shortened from `timepicker-ui-*` to `tp-ui-*`:
+
+```css
+/* v3 */
+.timepicker-ui-wrapper {
+}
+.timepicker-ui-modal {
+}
+.timepicker-ui-clock-face {
+}
+.timepicker-ui-hour {
+}
+.timepicker-ui-minutes {
+}
+.timepicker-ui-am {
+}
+.timepicker-ui-pm {
+}
+
+/* v4 */
+.tp-ui-wrapper {
+}
+.tp-ui-modal {
+}
+.tp-ui-clock-face {
+}
+.tp-ui-hour {
+}
+.tp-ui-minutes {
+}
+.tp-ui-am {
+}
+.tp-ui-pm {
+}
+```
+
+**Impact:** If you have custom CSS targeting timepicker elements, update all class selectors.
+
+**2. Grouped Options Structure**
+
+All options are now organized into logical groups for better maintainability:
+
+```javascript
+// v3
+const picker = new TimepickerUI(input, {
+  clockType: "12h",
+  theme: "dark",
+  enableSwitchIcon: true,
+  mobile: true,
+  animation: true,
+  backdrop: true,
+  focusTrap: true,
+  editable: true,
+  onConfirm: (data) => console.log(data),
+});
+
+// v4 - Grouped options
+const picker = new TimepickerUI(input, {
+  clock: {
+    type: "12h",
+    incrementHours: 1,
+    incrementMinutes: 1,
+    currentTime: { time: new Date(), updateInput: true },
+    disabledTime: { hours: [1, 2, 3] },
+    autoSwitchToMinutes: false,
+  },
+  ui: {
+    theme: "dark",
+    enableSwitchIcon: true,
+    mobile: true,
+    animation: true,
+    backdrop: true,
+    editable: true,
+    cssClass: "my-custom-class",
+    inline: { enabled: false },
+  },
+  labels: {
+    time: "Select Time",
+    am: "AM",
+    pm: "PM",
+    ok: "OK",
+    cancel: "Cancel",
+  },
+  behavior: {
+    focusTrap: true,
+    focusInputAfterClose: false,
+    delayHandler: 300,
+  },
+  callbacks: {
+    onConfirm: (data) => console.log(data),
+    onCancel: (data) => console.log(data),
+    onOpen: (data) => console.log(data),
+    onUpdate: (data) => console.log(data),
+    onSelectHour: (data) => console.log(data),
+    onSelectMinute: (data) => console.log(data),
+    onSelectAM: (data) => console.log(data),
+    onSelectPM: (data) => console.log(data),
+    onError: (data) => console.log(data),
+  },
+});
+```
+
+**2. Legacy DOM Events Removed**
+
+DOM events have been completely removed. Use EventEmitter API or callback options:
+
+```javascript
+// v3 - Deprecated (removed in v4)
+input.addEventListener("timepicker:confirm", (e) => {
+  console.log(e.detail);
+});
+
+// v4 - EventEmitter API (recommended)
+picker.on("confirm", (data) => {
+  console.log(data);
+});
+
+// v4 - Or use callback options
+const picker = new TimepickerUI(input, {
+  callbacks: {
+    onConfirm: (data) => console.log(data),
+  },
+});
+```
+
+**3. setTheme() Method Removed**
+
+Programmatic theme setting via `setTheme()` has been removed. Use CSS classes instead:
+
+```javascript
+// v3 - Removed in v4
+picker.setTheme({
+  primaryColor: "#ff0000",
+  backgroundColor: "#000000",
+});
+
+// v4 - Use CSS classes with CSS variables
+const picker = new TimepickerUI(input, {
+  ui: { cssClass: "my-custom-theme" },
+});
+```
+
+```css
+/* Define custom theme in CSS */
+.tp-ui-wrapper.my-custom-theme {
+  --tp-primary: #ff0000;
+  --tp-bg: #000000;
+  --tp-surface: #f0f0f0;
+}
+```
+
+**4. SSR-Safe Architecture**
+
+All modules are now SSR-safe and can be imported in Node.js environments without crashing.
+
+### Migration Steps
+
+1. **Update option structure** - Move options into `clock`, `ui`, `labels`, `behavior`, `callbacks` groups
+2. **Replace DOM events** - Switch to `picker.on()` EventEmitter API or callback options
+3. **Remove setTheme() calls** - Use CSS classes with CSS variable overrides
+4. **Test SSR compatibility** - If using Next.js/Nuxt/Remix, verify hydration works correctly
+
+### New in v4
+
+- **Composition-based architecture** - No inheritance, pure composition with managers
+- **EventEmitter API** - Type-safe event handling with `on()`, `off()`, `once()`
+- **Callback bridge** - Callbacks automatically connected to EventEmitter
+- **SSR compatibility** - All modules can be imported in Node.js
+- **Better TypeScript types** - Fully typed event payloads and options
+- **Smaller bundle** - Removed unused code, optimized build (63.3 KB ESM)
+- **Focus improvements** - Auto-focus on modal open, auto-focus on minute switch
+
+### Bundle Size Comparison
+
+- v3: 80 KB ESM
+- v4: 63.3 KB ESM (-20.9%)
+
+---
 
 ## Upgrade Guide: v2 → v3
 

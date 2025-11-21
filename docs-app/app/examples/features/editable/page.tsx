@@ -22,11 +22,11 @@ export default function EditablePage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  editable: true
+  ui: { editable: true }
 });
 picker.create();`}
           options={{
-            editable: true,
+            ui: { editable: true },
           }}
         />
       </Section>
@@ -34,13 +34,13 @@ picker.create();`}
       <Section icon={Edit} title="Editable with 24h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  editable: true,
-  clockType: '24h'
+  ui: { editable: true },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            editable: true,
-            clockType: "24h",
+            ui: { editable: true },
+            clock: { type: "24h" },
           }}
         />
       </Section>
@@ -51,16 +51,20 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  editable: true,
-  onError: (data) => {
-    console.log('Invalid time:', data.error);
+  ui: { editable: true },
+  callbacks: {
+    onError: (data) => {
+      console.log('Invalid time:', data.error);
+    }
   }
 });
 picker.create();`}
           options={{
-            editable: true,
-            onError: (data: { error?: string }) =>
-              console.log("Invalid time:", data.error),
+            ui: { editable: true },
+            callbacks: {
+              onError: (data: { error?: string }) =>
+                console.log("Invalid time:", data.error),
+            },
           }}
         />
       </Section>

@@ -29,18 +29,22 @@ export default function LocalizationPage() {
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  okLabel: 'OK',
-  cancelLabel: 'Anuluj',
-  amLabel: 'AM',
-  pmLabel: 'PM'
+  labels: {
+    ok: 'OK',
+    cancel: 'Anuluj',
+    am: 'AM',
+    pm: 'PM'
+  }
 });
 
 picker.create();`}
           options={{
-            okLabel: "OK",
-            cancelLabel: "Anuluj",
-            amLabel: "AM",
-            pmLabel: "PM",
+            labels: {
+              ok: "OK",
+              cancel: "Anuluj",
+              am: "AM",
+              pm: "PM",
+            },
           }}
         />
       </Section>
@@ -52,18 +56,22 @@ picker.create();`}
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  okLabel: 'Aceptar',
-  cancelLabel: 'Cancelar',
-  amLabel: 'AM',
-  pmLabel: 'PM'
+  labels: {
+    ok: 'Aceptar',
+    cancel: 'Cancelar',
+    am: 'AM',
+    pm: 'PM'
+  }
 });
 
 picker.create();`}
           options={{
-            okLabel: "Aceptar",
-            cancelLabel: "Cancelar",
-            amLabel: "AM",
-            pmLabel: "PM",
+            labels: {
+              ok: "Aceptar",
+              cancel: "Cancelar",
+              am: "AM",
+              pm: "PM",
+            },
           }}
         />
       </Section>
@@ -75,18 +83,22 @@ picker.create();`}
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  okLabel: 'OK',
-  cancelLabel: 'Abbrechen',
-  amLabel: 'Vormittag',
-  pmLabel: 'Nachmittag'
+  labels: {
+    ok: 'OK',
+    cancel: 'Abbrechen',
+    am: 'Vormittag',
+    pm: 'Nachmittag'
+  }
 });
 
 picker.create();`}
           options={{
-            okLabel: "OK",
-            cancelLabel: "Abbrechen",
-            amLabel: "Vormittag",
-            pmLabel: "Nachmittag",
+            labels: {
+              ok: "OK",
+              cancel: "Abbrechen",
+              am: "Vormittag",
+              pm: "Nachmittag",
+            },
           }}
         />
       </Section>
@@ -98,18 +110,22 @@ picker.create();`}
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  okLabel: 'OK',
-  cancelLabel: 'Annuler',
-  amLabel: 'Matin',
-  pmLabel: 'Après-midi'
+  labels: {
+    ok: 'OK',
+    cancel: 'Annuler',
+    am: 'Matin',
+    pm: 'Après-midi'
+  }
 });
 
 picker.create();`}
           options={{
-            okLabel: "OK",
-            cancelLabel: "Annuler",
-            amLabel: "Matin",
-            pmLabel: "Après-midi",
+            labels: {
+              ok: "OK",
+              cancel: "Annuler",
+              am: "Matin",
+              pm: "Après-midi",
+            },
           }}
         />
       </Section>
@@ -121,18 +137,22 @@ picker.create();`}
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  okLabel: '確定',
-  cancelLabel: 'キャンセル',
-  amLabel: '午前',
-  pmLabel: '午後'
+  labels: {
+    ok: '確定',
+    cancel: 'キャンセル',
+    am: '午前',
+    pm: '午後'
+  }
 });
 
 picker.create();`}
           options={{
-            okLabel: "確定",
-            cancelLabel: "キャンセル",
-            amLabel: "午前",
-            pmLabel: "午後",
+            labels: {
+              ok: "確定",
+              cancel: "キャンセル",
+              am: "午前",
+              pm: "午後",
+            },
           }}
         />
       </Section>
@@ -159,10 +179,12 @@ function changeLanguage(lang: string) {
   const t = translations[lang];
   picker.update({
     options: {
-      okLabel: t.ok,
-      cancelLabel: t.cancel,
-      amLabel: t.am,
-      pmLabel: t.pm
+      labels: {
+        ok: t.ok,
+        cancel: t.cancel,
+        am: t.am,
+        pm: t.pm
+      }
     }
   });
 }
@@ -187,10 +209,12 @@ function LocalizedTimepicker() {
   const { t } = useTranslation();
 
   const options = useMemo(() => ({
-    okLabel: t('timepicker.ok'),
-    cancelLabel: t('timepicker.cancel'),
-    amLabel: t('timepicker.am'),
-    pmLabel: t('timepicker.pm')
+    labels: {
+      ok: t('timepicker.ok'),
+      cancel: t('timepicker.cancel'),
+      am: t('timepicker.am'),
+      pm: t('timepicker.pm')
+    }
   }), [t]);
 
   useEffect(() => {

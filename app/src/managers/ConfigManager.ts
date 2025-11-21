@@ -333,17 +333,30 @@ export default class ConfigManager {
     const clockFace = this.core.getClockFace();
     if (!clockFace) return;
 
-    const focusableElements = clockFace.querySelectorAll<HTMLElement>('[tabindex]:not([tabindex="-1"])');
+    // Zarządzaj całym clockface i jego elementami
+    const tipsWrapper = clockFace.querySelector('.tp-ui-tips-wrapper');
+    const tipsWrapper24h = clockFace.querySelector('.tp-ui-tips-wrapper-24h');
+    const allTips = clockFace.querySelectorAll<HTMLElement>('.tp-ui-tip');
 
-    focusableElements.forEach((el) => {
-      if (isHidden) {
-        el.setAttribute('tabindex', '-1');
-        el.setAttribute('aria-hidden', 'true');
-      } else {
-        el.setAttribute('tabindex', '0');
-        el.removeAttribute('aria-hidden');
-      }
-    });
+    if (isHidden) {
+      // Ukryj clock-face dla keyboard mode
+      clockFace.setAttribute('aria-hidden', 'true');
+      tipsWrapper?.setAttribute('aria-hidden', 'true');
+      tipsWrapper24h?.setAttribute('aria-hidden', 'true');
+      allTips.forEach((tip) => {
+        tip.setAttribute('tabindex', '-1');
+        tip.setAttribute('aria-hidden', 'true');
+      });
+    } else {
+      // Pokaż clock-face dla desktop mode
+      clockFace.removeAttribute('aria-hidden');
+      tipsWrapper?.removeAttribute('aria-hidden');
+      tipsWrapper24h?.removeAttribute('aria-hidden');
+      allTips.forEach((tip) => {
+        tip.setAttribute('tabindex', '0');
+        tip.removeAttribute('aria-hidden');
+      });
+    }
   }
 
   destroy(): void {

@@ -198,12 +198,25 @@ export default class EventManager {
         const currentValue = parseInt(hour.value) || 0;
         const max = parseInt(hour.getAttribute('max') || '23');
         const min = parseInt(hour.getAttribute('min') || '0');
+        const is12h = this.core.options.clock.type === '12h';
 
         let newValue: number;
         if (e.key === 'ArrowUp') {
-          newValue = currentValue >= max ? min : currentValue + 1;
+          if (is12h) {
+            // Tryb 12h: 1-12, po 12 wraca do 1
+            newValue = currentValue >= 12 ? 1 : currentValue + 1;
+          } else {
+            // Tryb 24h: 0-23, po 23 wraca do 0
+            newValue = currentValue >= max ? 0 : currentValue + 1;
+          }
         } else {
-          newValue = currentValue <= min ? max : currentValue - 1;
+          if (is12h) {
+            // Tryb 12h: po 1 wraca do 12
+            newValue = currentValue <= 1 ? 12 : currentValue - 1;
+          } else {
+            // Tryb 24h: po 0 wraca do 23
+            newValue = currentValue <= 0 ? max : currentValue - 1;
+          }
         }
 
         hour.value = newValue.toString().padStart(2, '0');

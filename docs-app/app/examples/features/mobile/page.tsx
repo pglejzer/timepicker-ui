@@ -22,11 +22,11 @@ export default function MobilePage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  mobile: true
+  ui: { mobile: true }
 });
 picker.create();`}
           options={{
-            mobile: true,
+            ui: { mobile: true },
           }}
         />
       </Section>
@@ -37,17 +37,21 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  mobile: true,
-  hourMobileLabel: 'Hour',
-  minuteMobileLabel: 'Minute',
-  mobileTimeLabel: 'Enter Time'
+  ui: { mobile: true },
+  labels: {
+    mobileHour: 'Hour',
+    mobileMinute: 'Minute',
+    mobileTime: 'Enter Time'
+  }
 });
 picker.create();`}
           options={{
-            mobile: true,
-            hourMobileLabel: "Hour",
-            minuteMobileLabel: "Minute",
-            mobileTimeLabel: "Enter Time",
+            ui: { mobile: true },
+            labels: {
+              mobileHour: "Hour",
+              mobileMinute: "Minute",
+              mobileTime: "Enter Time",
+            },
           }}
         />
       </Section>
@@ -58,13 +62,17 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  mobile: true,
-  enableSwitchIcon: true
+  ui: {
+    mobile: true,
+    enableSwitchIcon: true
+  }
 });
 picker.create();`}
           options={{
-            mobile: true,
-            enableSwitchIcon: true,
+            ui: {
+              mobile: true,
+              enableSwitchIcon: true,
+            },
           }}
         />
       </Section>
@@ -72,13 +80,13 @@ picker.create();`}
       <Section icon={Smartphone} title="Mobile with 24h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  mobile: true,
-  clockType: '24h'
+  ui: { mobile: true },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            mobile: true,
-            clockType: "24h",
+            ui: { mobile: true },
+            clock: { type: "24h" },
           }}
         />
       </Section>

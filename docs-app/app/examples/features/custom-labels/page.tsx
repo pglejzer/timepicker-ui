@@ -22,13 +22,17 @@ export default function CustomLabelsPage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  okLabel: 'Confirm',
-  cancelLabel: 'Close'
+  labels: {
+    ok: 'Confirm',
+    cancel: 'Close'
+  }
 });
 picker.create();`}
           options={{
-            okLabel: "Confirm",
-            cancelLabel: "Close",
+            labels: {
+              ok: "Confirm",
+              cancel: "Close",
+            },
           }}
         />
       </Section>
@@ -39,15 +43,19 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  clockType: '12h',
-  amLabel: 'Morning',
-  pmLabel: 'Evening'
+  clock: { type: '12h' },
+  labels: {
+    am: 'Morning',
+    pm: 'Evening'
+  }
 });
 picker.create();`}
           options={{
-            clockType: "12h",
-            amLabel: "Morning",
-            pmLabel: "Evening",
+            clock: { type: "12h" },
+            labels: {
+              am: "Morning",
+              pm: "Evening",
+            },
           }}
         />
       </Section>
@@ -58,11 +66,11 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  timeLabel: 'Choose Your Time'
+  labels: { time: 'Choose Your Time' }
 });
 picker.create();`}
           options={{
-            timeLabel: "Choose Your Time",
+            labels: { time: "Choose Your Time" },
           }}
         />
       </Section>
@@ -73,17 +81,21 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  mobile: true,
-  hourMobileLabel: 'H',
-  minuteMobileLabel: 'M',
-  mobileTimeLabel: 'Set Time'
+  ui: { mobile: true },
+  labels: {
+    mobileHour: 'H',
+    mobileMinute: 'M',
+    mobileTime: 'Set Time'
+  }
 });
 picker.create();`}
           options={{
-            mobile: true,
-            hourMobileLabel: "H",
-            minuteMobileLabel: "M",
-            mobileTimeLabel: "Set Time",
+            ui: { mobile: true },
+            labels: {
+              mobileHour: "H",
+              mobileMinute: "M",
+              mobileTime: "Set Time",
+            },
           }}
         />
       </Section>
@@ -94,15 +106,19 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  okLabel: 'Zatwierdź',
-  cancelLabel: 'Anuluj',
-  timeLabel: 'Wybierz godzinę'
+  labels: {
+    ok: 'Zatwierdź',
+    cancel: 'Anuluj',
+    time: 'Wybierz godzinę'
+  }
 });
 picker.create();`}
           options={{
-            okLabel: "Zatwierdź",
-            cancelLabel: "Anuluj",
-            timeLabel: "Wybierz godzinę",
+            labels: {
+              ok: "Zatwierdź",
+              cancel: "Anuluj",
+              time: "Wybierz godzinę",
+            },
           }}
         />
       </Section>

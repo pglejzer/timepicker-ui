@@ -22,11 +22,11 @@ export default function BackdropPage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  backdrop: true // This is the default
+  ui: { backdrop: true } // This is the default
 });
 picker.create();`}
           options={{
-            backdrop: true,
+            ui: { backdrop: true },
           }}
         />
       </Section>
@@ -37,11 +37,11 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  backdrop: false
+  ui: { backdrop: false }
 });
 picker.create();`}
           options={{
-            backdrop: false,
+            ui: { backdrop: false },
           }}
         />
       </Section>
@@ -52,13 +52,17 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  backdrop: true,
-  enableScrollbar: true
+  ui: {
+    backdrop: true,
+    enableScrollbar: true
+  }
 });
 picker.create();`}
           options={{
-            backdrop: true,
-            enableScrollbar: true,
+            ui: {
+              backdrop: true,
+              enableScrollbar: true,
+            },
           }}
         />
       </Section>
@@ -69,15 +73,21 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  backdrop: true,
-  focusTrap: true,
-  focusInputAfterCloseModal: true
+  ui: {
+    backdrop: true
+  },
+  behavior: {
+    focusTrap: true,
+    focusInputAfterClose: true
+  }
 });
 picker.create();`}
           options={{
-            backdrop: true,
-            focusTrap: true,
-            focusInputAfterCloseModal: true,
+            ui: { backdrop: true },
+            behavior: {
+              focusTrap: true,
+              focusInputAfterClose: true,
+            },
           }}
         />
       </Section>
@@ -88,13 +98,17 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  backdrop: false,
-  animation: false
+  ui: {
+    backdrop: false,
+    animation: false
+  }
 });
 picker.create();`}
           options={{
-            backdrop: false,
-            animation: false,
+            ui: {
+              backdrop: false,
+              animation: false,
+            },
           }}
         />
       </Section>

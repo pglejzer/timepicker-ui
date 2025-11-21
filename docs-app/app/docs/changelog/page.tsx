@@ -180,10 +180,283 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v3.2.0</strong> - Released November 14, 2025
+        <strong>v4.0.0</strong> - Released November 21, 2024
       </InfoBox>
 
-      <Section icon={Package} title="Version 3.2.0 - November 13, 2025">
+      <Section icon={Package} title="Version 4.0.0 - November 21, 2024">
+        <div className="space-y-6">
+          <div className="bg-gradient-to-br from-red-500/5 to-orange-500/5 rounded-lg p-4 border border-red-500/20 mb-6">
+            <h4 className="font-semibold mb-2 text-foreground flex items-center gap-2">
+              <Code className="h-4 w-4 text-red-500" />
+              ⚠️ BREAKING CHANGES - Migration Required
+            </h4>
+
+            <p className="text-sm text-muted-foreground mb-3">
+              <strong className="text-red-600 dark:text-red-400">
+                All CSS class names and CSS variable names have been renamed:
+              </strong>
+            </p>
+
+            <CodeBlock
+              code={`// CSS Class Names (ALL classes changed)
+- .timepicker-ui-*
++ .tp-ui-*
+
+Examples:
+- .timepicker-ui-wrapper       → .tp-ui-wrapper
+- .timepicker-ui-modal         → .tp-ui-modal
+- .timepicker-ui-clock-face    → .tp-ui-clock-face
+- .timepicker-ui-hour          → .tp-ui-hour
+- .timepicker-ui-minutes       → .tp-ui-minutes
+- .timepicker-ui-am            → .tp-ui-am
+- .timepicker-ui-pm            → .tp-ui-pm
+- .timepicker-ui-ok-btn        → .tp-ui-ok-btn
+- .timepicker-ui-cancel-btn    → .tp-ui-cancel-btn
+
+// CSS Variables (ALL variables changed)
+- --timepicker-*
++ --tp-*
+
+Examples:
+- --timepicker-bg              → --tp-bg
+- --timepicker-primary         → --tp-primary
+- --timepicker-text            → --tp-text
+- --timepicker-surface         → --tp-surface
+- --timepicker-border          → --tp-border
+- --timepicker-shadow          → --tp-shadow
+- --timepicker-border-radius   → --tp-border-radius
+- --timepicker-font-family     → --tp-font-family
+
+// Options Structure (GROUPED)
+// v3.x (flat - DEPRECATED):
+-{
+-  clockType: '24h',
+-  theme: 'dark',
+-  animation: true,
+-  amLabel: 'AM',
+-  onConfirm: (data) => {}
+-}
+
+// v4.0.0 (grouped - NEW):
++{
++  clock: {
++    type: '24h'
++  },
++  ui: {
++    theme: 'dark',
++    animation: true
++  },
++  labels: {
++    am: 'AM'
++  },
++  callbacks: {
++    onConfirm: (data) => {}
++  }
++}
+
+// Migration Steps:
+1. Find & replace all CSS class names in your stylesheets
+2. Find & replace all CSS variable names in your custom themes
+3. Reorganize options into groups: clock, ui, labels, behavior, callbacks
+4. Update clockType → clock.type, theme → ui.theme, onConfirm → callbacks.onConfirm
+5. Test all customizations and themes thoroughly`}
+              language="diff"
+            />
+
+            <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-950 rounded border border-amber-200 dark:border-amber-800">
+              <p className="text-sm text-amber-900 dark:text-amber-100">
+                <strong>Important:</strong> The NPM package name remains{" "}
+                <code className="bg-amber-100 dark:bg-amber-900 px-1 py-0.5 rounded">
+                  timepicker-ui
+                </code>
+                . Only CSS classes and variables changed.
+              </p>
+            </div>
+          </div>
+
+          <ChangeSection
+            icon={Wrench}
+            label="Changed (Breaking)"
+            color="red-500"
+            items={[
+              {
+                title: "CSS Class Renaming",
+                description: "All .timepicker-ui-* classes renamed to .tp-ui-*",
+              },
+              {
+                title: "CSS Variable Renaming",
+                description: "All --timepicker-* variables renamed to --tp-*",
+              },
+              {
+                title: "Options Structure Reorganization",
+                description:
+                  "Options now grouped into: clock, ui, labels, behavior, callbacks",
+              },
+              {
+                title: "Legacy DOM Events Removed",
+                description:
+                  "timepicker:* custom events completely removed - use EventEmitter API or callbacks",
+              },
+              {
+                title: "setTheme() Method Removed",
+                description:
+                  "Programmatic theming removed - use CSS classes with CSS variables instead",
+              },
+            ]}
+          />
+
+          <ChangeSection
+            icon={Sparkles}
+            label="Added"
+            color="green-500"
+            items={[
+              {
+                title: "EventEmitter API with Callback Bridge",
+                description:
+                  "All 9 callback options automatically bridge to EventEmitter with on(), off(), once() methods",
+              },
+              {
+                title: "SSR-Safe Architecture",
+                description:
+                  "All modules can be imported in Node.js (Next.js, Nuxt, Remix, Astro compatible)",
+              },
+              {
+                title: "Composition-Based Architecture",
+                description:
+                  "Pure composition with CoreState, Managers, Lifecycle - no inheritance, fully testable",
+              },
+              {
+                title: "Auto-Focus Improvements",
+                description:
+                  "Modal auto-focuses on open, minutes auto-focus with autoSwitchToMinutes",
+              },
+              {
+                title: "TypeScript Enhancements",
+                description:
+                  "No any types, fully typed event payloads, grouped options types, stricter type safety",
+              },
+            ]}
+          />
+
+          <ChangeSection
+            icon={Wrench}
+            label="Changed"
+            color="blue-500"
+            items={[
+              {
+                title: "Architecture Refactored",
+                description:
+                  "Composition-only pattern - removed all extends, pure dependency injection",
+              },
+              {
+                title: "Bundle Size Reduced",
+                description: "80 KB → 63.3 KB ESM (-20.9%)",
+              },
+              {
+                title: "Theme Count",
+                description:
+                  "11 → 10 themes (removed theme-custom from production)",
+              },
+              {
+                title: "Event System Unified",
+                description:
+                  "Single source of truth - callbacks bridge to EventEmitter automatically",
+              },
+              {
+                title: "Options API Restructured",
+                description: "40+ flat options → 5 logical groups",
+              },
+            ]}
+          />
+
+          <ChangeSection
+            icon={Package}
+            label="Removed"
+            color="orange-500"
+            items={[
+              {
+                title: "Legacy DOM Events",
+                description:
+                  "timepicker:open, timepicker:confirm, timepicker:cancel, etc. - use picker.on() instead",
+              },
+              {
+                title: "setTheme() Method",
+                description:
+                  "Programmatic theme setting removed - use CSS classes instead",
+              },
+              {
+                title: "theme-custom",
+                description:
+                  "Removed from production bundle - users create custom themes via CSS variables",
+              },
+            ]}
+          />
+
+          <ChangeSection
+            icon={Bug}
+            label="Fixed"
+            color="red-500"
+            items={[
+              {
+                title: "Focus Trap Auto-Focus",
+                description:
+                  "Modal wrapper auto-focuses on open (no Tab press needed)",
+              },
+              {
+                title: "Auto-Switch Focus",
+                description:
+                  "Minute input receives focus when autoSwitchToMinutes enabled",
+              },
+              {
+                title: "SSR Compatibility",
+                description:
+                  "No DOM globals during initialization - safe for server rendering",
+              },
+              {
+                title: "currentTime Parsing",
+                description: "Simplified time parsing for better reliability",
+              },
+              {
+                title: "Dynamic Updates",
+                description:
+                  "Fixed React useEffect patterns to prevent infinite loops",
+              },
+            ]}
+          />
+
+          <ChangeSection
+            icon={Zap}
+            label="Benefits"
+            color="green-500"
+            items={[
+              {
+                title: "Shorter class names",
+                description: "Reduced HTML size and improved readability",
+              },
+              {
+                title: "Smaller bundle",
+                description: "-20.9% bundle size reduction (80 KB → 63.3 KB)",
+              },
+              {
+                title: "Better DX",
+                description:
+                  "Cleaner API with grouped options and EventEmitter",
+              },
+              {
+                title: "SSR Compatible",
+                description:
+                  "Works seamlessly with Next.js, Nuxt, Remix, Astro",
+              },
+              {
+                title: "Type Safety",
+                description: "No any types, fully typed events and options",
+              },
+            ]}
+          />
+        </div>
+      </Section>
+
+      <Section icon={Package} title="Version 3.2.0 - November 14, 2025">
         <div className="space-y-6">
           <ChangeSection
             icon={Sparkles}

@@ -68,6 +68,10 @@ const navigation: NavigationSection[] = [
         title: "Custom Container",
         href: "/examples/advanced/custom-container",
       },
+      {
+        title: "External API",
+        href: "/examples/advanced/external-api",
+      },
     ],
   },
 ];

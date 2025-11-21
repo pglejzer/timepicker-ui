@@ -43,16 +43,22 @@ picker.create();`}
 
       <Section icon={Code2} title="With Options">
         <p className="text-muted-foreground mb-4">
-          Customize the picker with options:
+          Customize the picker with options (v4.0.0 grouped structure):
         </p>
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
-  theme: 'dark',
-  clockType: '24h',
-  animation: true,
-  backdrop: true,
-  onConfirm: (data) => {
-    console.log('Selected time:', data);
+  ui: {
+    theme: 'dark',
+    animation: true,
+    backdrop: true
+  },
+  clock: {
+    type: '24h'
+  },
+  callbacks: {
+    onConfirm: (data) => {
+      console.log('Selected time:', data);
+    }
   }
 });
 picker.create();`}
@@ -84,7 +90,9 @@ export default function TimePicker() {
 
   // Memoize options to prevent re-initialization
   const options = useMemo(() => ({
-    onConfirm: (data) => console.log('Time:', data)
+    callbacks: {
+      onConfirm: (data) => console.log('Time:', data)
+    }
   }), []);
 
   useEffect(() => {

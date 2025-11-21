@@ -57,7 +57,7 @@ picker.create();`}
 const features = [
   {
     icon: Palette,
-    title: "11 Built-in Themes",
+    title: "10 Built-in Themes",
     description: "Material, Crane, Dark, Glassmorphic, Cyberpunk, AI, and more",
   },
   {
@@ -171,14 +171,6 @@ export default function Home() {
                 Get Started
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
-              {process.env.NODE_ENV === "development" && (
-                <Link
-                  href="/playground"
-                  className="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-background px-8 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full sm:w-auto"
-                >
-                  Try Playground
-                </Link>
-              )}
             </div>
           </div>
         </div>

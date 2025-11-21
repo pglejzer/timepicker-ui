@@ -22,11 +22,11 @@ export default function Material3Page() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'm3-green'
+  ui: { theme: 'm3-green' }
 });
 picker.create();`}
           options={{
-            theme: "m3-green",
+            ui: { theme: "m3-green" },
           }}
         />
       </Section>
@@ -34,13 +34,13 @@ picker.create();`}
       <Section icon={Palette} title="M3 Green with 12h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'm3-green',
-  clockType: '12h'
+  ui: { theme: 'm3-green' },
+  clock: { type: '12h' }
 });
 picker.create();`}
           options={{
-            theme: "m3-green",
-            clockType: "12h",
+            ui: { theme: "m3-green" },
+            clock: { type: "12h" },
           }}
         />
       </Section>
@@ -48,13 +48,13 @@ picker.create();`}
       <Section icon={Palette} title="M3 Green with 24h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'm3-green',
-  clockType: '24h'
+  ui: { theme: 'm3-green' },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            theme: "m3-green",
-            clockType: "24h",
+            ui: { theme: "m3-green" },
+            clock: { type: "24h" },
           }}
         />
       </Section>
