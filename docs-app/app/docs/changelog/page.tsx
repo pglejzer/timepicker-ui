@@ -180,8 +180,67 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.0.0</strong> - Released November 21, 2024
+        <strong>v4.0.1</strong> - Released November 21, 2024
       </InfoBox>
+
+      <Section icon={Bug} title="Version 4.0.1 - November 21, 2024">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={[
+              {
+                title: "TypeScript Callback Types",
+                description:
+                  "All callback functions now have proper generic types instead of unknown",
+              },
+              {
+                title: "Type-safe Event Payloads",
+                description:
+                  "onConfirm, onOpen, onUpdate, and other callbacks now correctly infer event data types",
+              },
+              {
+                title: "Improved IntelliSense",
+                description:
+                  "Full autocomplete for event data properties without requiring manual type annotations",
+              },
+            ]}
+          />
+
+          <div className="rounded-lg border border-border bg-card p-6 mt-6">
+            <h4 className="font-semibold mb-3 text-foreground">
+              Before (4.0.0)
+            </h4>
+            <CodeBlock
+              code={`// Callbacks had unknown types
+callbacks: {
+  onConfirm: (data) => {
+    // data: unknown - no autocomplete ❌
+    console.log(data.hour); // TypeScript error
+  }
+}`}
+              language="typescript"
+            />
+
+            <h4 className="font-semibold mb-3 mt-6 text-foreground">
+              After (4.0.1)
+            </h4>
+            <CodeBlock
+              code={`// Callbacks are now properly typed
+callbacks: {
+  onConfirm: (data) => {
+    // data: ConfirmEventData - full autocomplete ✅
+    console.log(data.hour); // string | undefined
+    console.log(data.minutes); // string | undefined
+    console.log(data.type); // string | undefined
+  }
+}`}
+              language="typescript"
+            />
+          </div>
+        </div>
+      </Section>
 
       <Section icon={Package} title="Version 4.0.0 - November 21, 2024">
         <div className="space-y-6">
