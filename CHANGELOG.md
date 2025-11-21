@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.0.1] - 2024-11-21
+
+### Fixed
+
+#### TypeScript Callback Types
+
+- **Fixed generic types for callbacks** - All callback functions in `CallbacksOptions` now have proper generic types instead of `unknown`
+- **Type-safe event payloads** - `onConfirm`, `onOpen`, `onUpdate`, and other callbacks now correctly infer event data types
+- **Improved IntelliSense** - Full autocomplete for event data properties without requiring manual type annotations
+
+**Before (4.0.0):**
+
+```typescript
+// Callbacks had unknown types
+onConfirm?: TimepickerEventCallback; // eventData: unknown
+```
+
+**After (4.0.1):**
+
+```typescript
+// Callbacks are now properly typed
+onConfirm?: TimepickerEventCallback<ConfirmEventData>; // eventData: { hour?: string, minutes?: string, type?: string }
+```
+
+**Impact:** Developers now get full type safety and IntelliSense for callback parameters without needing manual type assertions.
+
+---
+
 ## [4.0.0] - 2024-11-21
 
 ### Breaking Changes
