@@ -171,6 +171,16 @@ export default function Home() {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </div>
+            <Link
+              href="/docs/whats-new"
+              className="mt-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm text-primary hover:bg-primary/10 transition-colors max-w-2xl mx-auto text-center"
+            >
+              <Sparkles className="h-4 w-4 flex-shrink-0" />
+              <span>
+                <span className="font-medium">New:</span> Version 4.0.0 is here
+                with grouped options & better TypeScript!
+              </span>
+            </Link>
           </div>
         </div>
       </section>
