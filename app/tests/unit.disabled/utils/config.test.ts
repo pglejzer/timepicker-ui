@@ -1,14 +1,7 @@
 import {
-  isElement,
-  getConfig,
   getScrollbarWidth,
   getClickTouchPosition,
-  getMathDegIncrement,
   hasClass,
-  createEventWithCallback,
-  getBrowser,
-  getIncrementTimes,
-  createObjectFromData,
   range,
   reverseRange,
   initCallback,
@@ -23,34 +16,6 @@ describe('utils/config', () => {
     document.body.innerHTML = '';
   });
 
-  describe('isElement', () => {
-    it('should return nodeType for HTMLElement', () => {
-      const div = document.createElement('div');
-      expect(isElement(div)).toBe(1);
-    });
-
-    it('should return nodeType from array of elements', () => {
-      const div = document.createElement('div');
-      expect(isElement([div])).toBe(1);
-    });
-  });
-
-  describe('getConfig', () => {
-    it('should merge options with defaults', () => {
-      const defaults = { a: 1, b: 2 };
-      const options = { b: 3, c: 4 } as Record<string, unknown>;
-      const result = getConfig(options, defaults);
-
-      expect(result).toEqual({ a: 1, b: 3, c: 4 });
-    });
-
-    it('should return defaults when no options provided', () => {
-      const defaults = { a: 1, b: 2 };
-      const result = getConfig(undefined, defaults);
-
-      expect(result).toEqual(defaults);
-    });
-  });
   describe('getScrollbarWidth', () => {
     it('should return a number', () => {
       const width = getScrollbarWidth();
@@ -120,14 +85,6 @@ describe('utils/config', () => {
     });
   });
 
-  describe('getMathDegIncrement', () => {
-    it('should round to nearest increment', () => {
-      expect(getMathDegIncrement(37, 30)).toBe(30);
-      expect(getMathDegIncrement(45, 30)).toBe(60);
-      expect(getMathDegIncrement(14, 5)).toBe(15);
-    });
-  });
-
   describe('hasClass', () => {
     it('should return true when element has class', () => {
       const div = document.createElement('div');
@@ -142,104 +99,6 @@ describe('utils/config', () => {
 
     it('should return false for null element', () => {
       expect(hasClass(null, 'test-class')).toBe(false);
-    });
-  });
-
-  describe('createEventWithCallback', () => {
-    it('should dispatch event and call callback', () => {
-      const div = document.createElement('div');
-      const eventData = { hour: '12', minutes: '30' };
-      const callback = jest.fn();
-
-      createEventWithCallback(div, 'timepicker:confirm', eventData, callback);
-
-      expect(callback).toHaveBeenCalledWith(eventData);
-    });
-
-    it('should dispatch both legacy and namespaced events', () => {
-      const div = document.createElement('div');
-      const eventData = { hour: '12' };
-      const legacyHandler = jest.fn();
-      const namespacedHandler = jest.fn();
-
-      div.addEventListener('accept', legacyHandler);
-      div.addEventListener('timepicker:confirm', namespacedHandler);
-
-      createEventWithCallback(div, 'timepicker:confirm', eventData);
-
-      expect(legacyHandler).toHaveBeenCalled();
-      expect(namespacedHandler).toHaveBeenCalled();
-    });
-
-    it('should not throw when callback is undefined', () => {
-      const div = document.createElement('div');
-
-      expect(() => {
-        createEventWithCallback(div, 'timepicker:test', {}, undefined);
-      }).not.toThrow();
-    });
-
-    it('should handle callback errors gracefully', () => {
-      const div = document.createElement('div');
-      const errorCallback = () => {
-        throw new Error('Callback error');
-      };
-      const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
-
-      createEventWithCallback(div, 'timepicker:test', {}, errorCallback);
-
-      expect(consoleWarnSpy).toHaveBeenCalled();
-      consoleWarnSpy.mockRestore();
-    });
-  });
-
-  describe('getBrowser', () => {
-    it('should detect mobile browser', () => {
-      Object.defineProperty(window.navigator, 'userAgent', {
-        value: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)',
-        writable: true,
-      });
-
-      expect(getBrowser()).toBe(true);
-    });
-
-    it('should detect desktop browser', () => {
-      Object.defineProperty(window.navigator, 'userAgent', {
-        value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-        writable: true,
-      });
-
-      expect(getBrowser()).toBe(false);
-    });
-  });
-
-  describe('getIncrementTimes', () => {
-    it('should calculate increment correctly', () => {
-      expect(getIncrementTimes(37, 5, 6)).toBe(30);
-      expect(getIncrementTimes(95, 1, 30)).toBe(90);
-    });
-  });
-
-  describe('createObjectFromData', () => {
-    it('should parse numeric strings to numbers', () => {
-      const input = { value1: '123', value2: 'text' };
-      const result = createObjectFromData(input as unknown as Record<string, string>);
-
-      expect(result?.value1).toBe(123);
-      expect(result?.value2).toBe('text');
-    });
-
-    it('should parse boolean strings', () => {
-      const input = { flag1: 'true', flag2: 'false' };
-      const result = createObjectFromData(input as unknown as Record<string, string>);
-
-      expect(result?.flag1).toBe(true);
-      expect(result?.flag2).toBe(false);
-    });
-
-    it('should return undefined for falsy input', () => {
-      expect(createObjectFromData(null as unknown as Record<string, string>)).toBeUndefined();
-      expect(createObjectFromData(undefined as unknown as Record<string, string>)).toBeUndefined();
     });
   });
 

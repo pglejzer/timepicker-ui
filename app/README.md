@@ -1,4 +1,4 @@
-# Timepicker-UI — Build System
+# Timepicker-UI - Build System
 
 This directory contains the build configuration for the `timepicker-ui` library. It supports multiple build tools including Webpack, Rollup, and Tsup, covering development and production workflows.
 
@@ -56,15 +56,15 @@ SCSS themes compiled to CSS in `../dist/css/themes/`:
 
 ## 🔧 Tools Used
 
-- [**Tsup**](https://tsup.egoist.dev/) — Bundles JS (ESM + CJS) and types
-- [**Rollup**](https://rollupjs.org/) — Stylesheet compilation, UMD bundle
-- [**Webpack**](https://webpack.js.org/) — Dev server and docs bundler
-- [**TypeScript**](https://www.typescriptlang.org/) — Typed library code
-- [**Sass**](https://sass-lang.com/) — Modular styling with themes
-- [**PostCSS**](https://postcss.org/) — Autoprefixing, CSS minification
-- [**Jest**](https://jestjs.io/) — Unit testing
-- [**ESLint**](https://eslint.org/), [**Prettier**](https://prettier.io/) — Linting & formatting
-- [**Husky**](https://typicode.github.io/husky/), **lint-staged** — Git pre-commit hooks
+- [**Tsup**](https://tsup.egoist.dev/) - Bundles JS (ESM + CJS) and types
+- [**Rollup**](https://rollupjs.org/) - Stylesheet compilation, UMD bundle
+- [**Webpack**](https://webpack.js.org/) - Dev server and docs bundler
+- [**TypeScript**](https://www.typescriptlang.org/) - Typed library code
+- [**Sass**](https://sass-lang.com/) - Modular styling with themes
+- [**PostCSS**](https://postcss.org/) - Autoprefixing, CSS minification
+- [**Jest**](https://jestjs.io/) - Unit testing
+- [**ESLint**](https://eslint.org/), [**Prettier**](https://prettier.io/) - Linting & formatting
+- [**Husky**](https://typicode.github.io/husky/), **lint-staged** - Git pre-commit hooks
 
 ---
 

@@ -1,14 +1,28 @@
 import type { RenderConfig, ClockMode, DisabledTimeConfig, ClockType, AmPmType } from '../types';
 import { HourEngine } from '../engine/HourEngine';
 import { MinuteEngine } from '../engine/MinuteEngine';
+import { isDocument } from '../../../utils/node';
 
 export class ClockRenderer {
   private config: RenderConfig;
   private currentAngle: number = 0;
   private tipsCache = new Map<string, { wrapper: HTMLElement; tip: HTMLElement }>();
+  private cachedDimensions: Map<HTMLElement, { width: number; height: number; radius: number }> = new Map();
 
   constructor(config: RenderConfig) {
     this.config = config;
+  }
+
+  private getCachedDimensions(wrapper: HTMLElement): { width: number; height: number; radius: number } {
+    let cached = this.cachedDimensions.get(wrapper);
+    if (!cached) {
+      const wrapperWidth = (wrapper.offsetWidth - 32) / 2;
+      const wrapperHeight = (wrapper.offsetHeight - 32) / 2;
+      const radius = wrapperWidth - 9;
+      cached = { width: wrapperWidth, height: wrapperHeight, radius };
+      this.cachedDimensions.set(wrapper, cached);
+    }
+    return cached;
   }
 
   setHandAngle(angle: number): void {
@@ -25,7 +39,7 @@ export class ClockRenderer {
     }
 
     wrappers.forEach((wrapper) => {
-      const tips = wrapper.querySelectorAll('.timepicker-ui-value-tips, .timepicker-ui-value-tips-24h');
+      const tips = wrapper.querySelectorAll('.tp-ui-value-tips, .tp-ui-value-tips-24h');
 
       tips.forEach((tip) => {
         const htmlTip = tip as HTMLElement;
@@ -53,6 +67,10 @@ export class ClockRenderer {
     amPm: AmPmType = '',
     currentHour: string = '12',
   ): void {
+    if (isDocument() === false) {
+      return;
+    }
+
     const wrapper = targetWrapper || this.config.tipsWrapper;
 
     if (clearBefore) {
@@ -60,9 +78,7 @@ export class ClockRenderer {
       this.tipsCache.clear();
     }
 
-    const wrapperWidth = (wrapper.offsetWidth - 32) / 2;
-    const wrapperHeight = (wrapper.offsetHeight - 32) / 2;
-    const radius = wrapperWidth - 9;
+    const { width: wrapperWidth, height: wrapperHeight, radius } = this.getCachedDimensions(wrapper);
 
     const fragment = document.createDocumentFragment();
     const cacheKey = `${className}-${this.config.theme || 'default'}`;
@@ -94,6 +110,11 @@ export class ClockRenderer {
     className: string,
     clockType: ClockType,
   ): { wrapper: HTMLElement; tip: HTMLElement } {
+    if (isDocument() === false) {
+      const dummy = {} as HTMLElement;
+      return { wrapper: dummy, tip: dummy };
+    }
+
     const span = document.createElement('span');
     const spanTip = document.createElement('span');
 
@@ -103,9 +124,7 @@ export class ClockRenderer {
     spanTip.tabIndex = 0;
 
     const tipClass =
-      clockType === '24h' && className.includes('24')
-        ? 'timepicker-ui-value-tips-24h'
-        : 'timepicker-ui-value-tips';
+      clockType === '24h' && className.includes('24') ? 'tp-ui-value-tips-24h' : 'tp-ui-value-tips';
 
     spanTip.classList.add(tipClass);
     span.classList.add(className);
@@ -129,16 +148,16 @@ export class ClockRenderer {
     amPm: AmPmType,
     currentHour: string,
   ): void {
-    span.classList.remove('timepicker-ui-tips-disabled');
-    spanTip.classList.remove('timepicker-ui-tips-disabled');
+    span.classList.remove('tp-ui-tips-disabled');
+    spanTip.classList.remove('tp-ui-tips-disabled');
     spanTip.removeAttribute('aria-disabled');
     spanTip.tabIndex = 0;
 
     const isDisabled = this.checkIfDisabled(value, mode, disabledTime, clockType, amPm, currentHour);
 
     if (isDisabled) {
-      span.classList.add('timepicker-ui-tips-disabled');
-      spanTip.classList.add('timepicker-ui-tips-disabled');
+      span.classList.add('tp-ui-tips-disabled');
+      spanTip.classList.add('tp-ui-tips-disabled');
       spanTip.setAttribute('aria-disabled', 'true');
       spanTip.tabIndex = -1;
     }
@@ -175,17 +194,17 @@ export class ClockRenderer {
 
   setCircle24hMode(is24h: boolean): void {
     if (is24h) {
-      this.config.circle.classList.add('timepicker-ui-circle-hand-24h');
-      this.config.clockHand.classList.add('timepicker-ui-clock-hand-24h');
+      this.config.circle.classList.add('tp-ui-circle-hand-24h');
+      this.config.clockHand.classList.add('tp-ui-clock-hand-24h');
     } else {
-      this.config.circle.classList.remove('timepicker-ui-circle-hand-24h');
-      this.config.clockHand.classList.remove('timepicker-ui-clock-hand-24h');
+      this.config.circle.classList.remove('tp-ui-circle-hand-24h');
+      this.config.clockHand.classList.remove('tp-ui-clock-hand-24h');
     }
   }
 
   destroy(): void {
     this.tipsCache.clear();
+    this.cachedDimensions.clear();
     this.config.tipsWrapper.innerHTML = '';
   }
 }
-

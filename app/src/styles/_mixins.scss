@@ -5,7 +5,7 @@
 }
 
 @mixin focus-ring {
-  outline: 3px solid var(--timepicker-primary);
+  outline: 3px solid var(--tp-primary);
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(98, 0, 238, 0.2);
 }
@@ -21,4 +21,3 @@
   white-space: nowrap;
   border-width: 0;
 }
-

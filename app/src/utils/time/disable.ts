@@ -1,15 +1,13 @@
 import { range, reverseRange, timeConversion, normalize24h, isOverlappingRangeArray } from '../config';
 import { getInputValue, handleValueAndCheck } from '../input';
-import type { OptionTypes } from '../../types/types';
+import type { TimepickerOptions } from '../../types/options';
 
 /* eslint-disable no-else-return */
-export const createDisabledTime = (options: OptionTypes) => {
+export const createDisabledTime = (options: Required<TimepickerOptions>) => {
   if (!options) return;
-  const { disabledTime, clockType } = options;
+  const { disabledTime, type: clockType } = options.clock;
 
-  if (!disabledTime || Object.keys(disabledTime).length <= 0 || disabledTime.constructor.name !== 'Object') {
-    return;
-  }
+  if (!disabledTime || !Object.keys(disabledTime).length) return;
 
   const { hours, minutes, interval } = disabledTime;
 
@@ -20,14 +18,10 @@ export const createDisabledTime = (options: OptionTypes) => {
     const intervals = Array.isArray(interval) ? interval : [interval];
 
     if (!clockType) {
-      throw new Error('clockType is required when using disabledTime.interval');
+      throw new Error('clockType required for interval');
     }
 
-    try {
-      isOverlappingRangeArray(intervals, clockType);
-    } catch (error) {
-      throw error;
-    }
+    isOverlappingRangeArray(intervals, clockType);
 
     const results = intervals.map((rangeStr) => {
       const [first, second] = rangeStr.trim().split('-');
@@ -36,16 +30,16 @@ export const createDisabledTime = (options: OptionTypes) => {
         hour: startHour,
         minutes: startMinutes,
         type: startType,
-      } = getInputValue({ value: first.trim() } as any, clockType);
+      } = getInputValue({ value: first.trim() } as HTMLInputElement, clockType);
 
       const {
         hour: endHour,
         minutes: endMinutes,
         type: endType,
-      } = getInputValue({ value: second.trim() } as any, clockType);
+      } = getInputValue({ value: second.trim() } as HTMLInputElement, clockType);
 
       let rangeArrHour = range(startHour, endHour).map((e: number | string) =>
-        e === '00' || Number(e) === 0 ? `0${Number(e)}` : `${Number(e)}`,
+        Number(e) === 0 ? '00' : String(Number(e)),
       );
 
       const removedHours: (string | undefined)[] = [];
@@ -148,7 +142,7 @@ export const createDisabledTime = (options: OptionTypes) => {
         isInterval: true,
         clockType,
         intervals: intervals,
-      } as any,
+      } as Record<string, unknown>,
     );
 
     return { value: merged };
@@ -182,7 +176,7 @@ export const createDisabledTime = (options: OptionTypes) => {
 export const checkDisabledHoursAndMinutes = (
   value: (string | number)[] | string | number | undefined,
   type: 'hour' | 'minutes',
-  clockType?: OptionTypes['clockType'],
+  clockType?: '12h' | '24h',
   arrValue?: (string | number)[],
 ) => {
   if (!value) return;
@@ -235,7 +229,6 @@ export const checkedDisabledValuesInterval = (
       const secondTrimmed = second.trim();
 
       if (!/\s?(AM|PM|am|pm)\s?$/.test(firstTrimmed) || !/\s?(AM|PM|am|pm)\s?$/.test(secondTrimmed)) {
-        console.warn(`Invalid 12h format in interval: "${rangeStr}". AM/PM is required for 12h clock type.`);
         continue;
       }
 
@@ -246,9 +239,6 @@ export const checkedDisabledValuesInterval = (
       const secondTrimmed = second.trim();
 
       if (/\s?(AM|PM|am|pm)\s?/.test(firstTrimmed) || /\s?(AM|PM|am|pm)\s?/.test(secondTrimmed)) {
-        console.warn(
-          `Invalid 24h format in interval: "${rangeStr}". AM/PM is not allowed for 24h clock type.`,
-        );
         continue;
       }
 

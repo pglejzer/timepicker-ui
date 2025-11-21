@@ -1,72 +1,88 @@
 import { getScrollbarWidth } from '../utils/config';
-import type { ITimepickerUI } from '../types/ITimepickerUI';
+import { getModalTemplate } from '../utils/template';
+import type { CoreState } from '../timepicker/CoreState';
+import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
+import { isDocument, isNode } from '../utils/node';
+import { TIMINGS } from '../constants/timings';
 
 export default class ModalManager {
-  private timepicker: ITimepickerUI;
+  private core: CoreState;
+  private emitter: EventEmitter<TimepickerEventMap>;
   private timeouts: NodeJS.Timeout[] = [];
   private originalOverflow?: string;
   private originalPaddingRight?: string;
 
-  constructor(timepicker: ITimepickerUI) {
-    this.timepicker = timepicker;
+  constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
+    this.core = core;
+    this.emitter = emitter;
   }
 
-  private runWithTimeout(cb: () => void, delay = 300) {
+  private runWithTimeout(cb: () => void, delay: number = TIMINGS.DEFAULT_DELAY): void {
     const t = setTimeout(cb, delay);
     this.timeouts.push(t);
   }
 
-  private clearAllTimeouts() {
+  private clearAllTimeouts(): void {
     this.timeouts.forEach(clearTimeout);
     this.timeouts = [];
   }
 
-  private clearExistingModal() {
-    const existing = document.querySelector('.timepicker-ui-modal');
+  private clearExistingModal(): void {
+    if (isDocument() === false) {
+      return;
+    }
+
+    const existing = document.querySelector('.tp-ui-modal');
     if (existing) existing.remove();
   }
 
-  /** @internal */
-  setModalTemplate = (): void => {
-    if (!this.timepicker._options) return;
+  setModalTemplate(): void {
+    if (isDocument() === false) {
+      return;
+    }
 
     this.clearExistingModal();
 
-    if (this.timepicker._options.inline?.enabled) {
-      const containerElement = document.getElementById(this.timepicker._options.inline.containerId);
+    const modalTemplate = getModalTemplate(this.core.options, this.core.instanceId);
+
+    if (this.core.options.ui.inline?.enabled) {
+      const containerElement = document.getElementById(this.core.options.ui.inline.containerId);
       if (!containerElement) return;
 
       containerElement.innerHTML = '';
-      containerElement.insertAdjacentHTML('beforeend', this.timepicker.modalTemplate);
+      containerElement.insertAdjacentHTML('beforeend', modalTemplate);
 
-      const modalElement = containerElement.querySelector('.timepicker-ui-modal') as HTMLDivElement;
+      const modalElement = containerElement.querySelector('.tp-ui-modal') as HTMLDivElement;
       if (modalElement) {
-        modalElement.classList.add('timepicker-ui--inline');
+        modalElement.classList.add('tp-ui--inline');
 
-        const { showButtons } = this.timepicker._options.inline;
+        const { showButtons } = this.core.options.ui.inline;
         if (showButtons === false || showButtons === undefined) {
           modalElement
-            .querySelectorAll('.timepicker-ui-wrapper-btn, .timepicker-ui-wrapper-btn.mobile')
+            .querySelectorAll('.tp-ui-wrapper-btn, .tp-ui-wrapper-btn.mobile')
             .forEach((btn) => ((btn as HTMLElement).style.display = 'none'));
         }
       }
       return;
     }
 
-    const { appendModalSelector } = this.timepicker._options;
+    const { appendModalSelector } = this.core.options.ui;
     if (!appendModalSelector) {
-      document.body.insertAdjacentHTML('beforeend', this.timepicker.modalTemplate);
+      document.body.insertAdjacentHTML('beforeend', modalTemplate);
     } else {
       const element = document.querySelector(appendModalSelector);
-      element?.insertAdjacentHTML('beforeend', this.timepicker.modalTemplate);
+      element?.insertAdjacentHTML('beforeend', modalTemplate);
     }
-  };
+  }
 
-  /** @internal */
-  setScrollbarOrNot = (): void => {
-    if (this.timepicker._options.inline?.enabled) return;
+  setScrollbarOrNot(): void {
+    if (isDocument() === false) {
+      return;
+    }
 
-    if (!this.timepicker._options.enableScrollbar) {
+    if (this.core.options.ui.inline?.enabled) return;
+
+    if (!this.core.options.ui.enableScrollbar) {
       this.originalOverflow = document.body.style.overflowY;
       this.originalPaddingRight = document.body.style.paddingRight;
 
@@ -74,55 +90,74 @@ export default class ModalManager {
       document.body.style.overflowY = 'hidden';
     } else {
       this.runWithTimeout(() => {
-        document.body.style.overflowY = this.originalOverflow || '';
-        document.body.style.paddingRight = this.originalPaddingRight || '';
+        if (!isNode()) {
+          this.runWithTimeout(() => {
+            if (typeof document !== 'undefined') {
+              document.body.style.overflowY = this.originalOverflow || '';
+              document.body.style.paddingRight = this.originalPaddingRight || '';
+            }
+          }, TIMINGS.SCROLLBAR_RESTORE);
+        }
       }, 400);
     }
-  };
+  }
 
-  /** @internal */
-  removeBackdrop = (): void => {
-    if (this.timepicker._options.inline?.enabled || this.timepicker._options.backdrop) return;
+  removeBackdrop(): void {
+    if (this.core.options.ui.inline?.enabled || this.core.options.ui.backdrop) return;
 
-    this.timepicker.modalElement?.classList.add('removed');
-    this.timepicker.openElement.forEach((openEl: Element) => openEl?.classList.add('disabled'));
-  };
+    const modal = this.core.getModalElement();
+    const openElements = this.core.getOpenElement();
 
-  /** @internal */
-  setNormalizeClass = (): void => {
-    const modal = this.timepicker.modalElement;
+    modal?.classList.add('removed');
+    openElements.forEach((openEl: Element) => openEl?.classList.add('disabled'));
+  }
+
+  setNormalizeClass(): void {
+    const modal = this.core.getModalElement();
     if (!modal) return;
 
-    modal.classList.add('timepicker-ui-normalize');
+    modal.classList.add('tp-ui-normalize');
     const divs = modal.querySelectorAll(':scope > div') as NodeListOf<HTMLDivElement>;
-    divs.forEach((div: HTMLDivElement) => div.classList.add('timepicker-ui-normalize'));
-  };
+    divs.forEach((div: HTMLDivElement) => div.classList.add('tp-ui-normalize'));
+  }
 
-  /** @internal */
-  setShowClassToBackdrop = (): void => {
-    if (this.timepicker._options.inline?.enabled) {
-      this.timepicker.modalElement?.classList.add('show');
+  setShowClassToBackdrop(): void {
+    if (this.core.options.ui.inline?.enabled) {
+      this.core.getModalElement()?.classList.add('show');
+      this.setInitialFocus();
       return;
     }
 
-    if (this.timepicker._options.backdrop) {
+    if (this.core.options.ui.backdrop) {
       this.runWithTimeout(() => {
-        this.timepicker.modalElement?.classList.add('show');
-      }, 300);
+        this.core.getModalElement()?.classList.add('show');
+        this.setInitialFocus();
+      }, TIMINGS.MODAL_ANIMATION);
     }
-  };
+  }
 
-  /** @internal */
-  setFlexEndToFooterIfNoKeyboardIcon = (): void => {
-    if (!this.timepicker._options.enableSwitchIcon && this.timepicker.footer) {
-      this.timepicker.footer.style.justifyContent = 'flex-end';
+  private setInitialFocus(): void {
+    if (!this.core.options.behavior.focusTrap) return;
+
+    const wrapper = this.core.getWrapper();
+    if (wrapper && typeof requestAnimationFrame !== 'undefined') {
+      requestAnimationFrame(() => {
+        wrapper.focus();
+      });
     }
-  };
+  }
 
-  destroy() {
+  setFlexEndToFooterIfNoKeyboardIcon(): void {
+    const footer = this.core.getFooter();
+    if (!this.core.options.ui.enableSwitchIcon && footer) {
+      footer.style.justifyContent = 'flex-end';
+    }
+  }
+
+  destroy(): void {
     this.clearAllTimeouts();
 
-    if (!this.timepicker._options.inline?.enabled) {
+    if (!isNode() && !this.core.options.ui.inline?.enabled) {
       document.body.style.overflowY = this.originalOverflow || '';
       document.body.style.paddingRight = this.originalPaddingRight || '';
     }
@@ -130,3 +165,4 @@ export default class ModalManager {
     this.clearExistingModal();
   }
 }
+

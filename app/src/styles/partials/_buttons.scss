@@ -1,8 +1,8 @@
 @use '../variables.scss' as *;
 
-.timepicker-ui {
+.tp-ui {
   &-cancel-btn {
-    margin-right: 4px;
+    margin-right: var(--tp-spacing-xs);
   }
 
   &-cancel-btn,
@@ -10,7 +10,7 @@
   &-cancel-btn.mobile,
   &-ok.btn-mobile {
     position: relative;
-    color: var(--timepicker-primary);
+    color: var(--tp-primary);
     border-radius: 20px;
     background-color: transparent;
     text-align: center;

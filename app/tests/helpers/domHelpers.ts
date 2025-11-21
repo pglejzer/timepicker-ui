@@ -2,13 +2,13 @@ export const createTimepickerInput = (value = ''): HTMLInputElement => {
   const input = document.createElement('input');
   input.type = 'text';
   input.value = value;
-  input.classList.add('timepicker-input');
+  input.classList.add('tp-input');
   return input;
 };
 
 export const createTimepickerWrapper = (input?: HTMLInputElement): HTMLDivElement => {
   const wrapper = document.createElement('div');
-  wrapper.classList.add('timepicker-ui');
+  wrapper.classList.add('tp-ui');
   if (input) {
     wrapper.appendChild(input);
   }
@@ -27,7 +27,7 @@ export const cleanupDOM = (): void => {
   const modals = document.querySelectorAll('[data-owner-id]');
   modals.forEach((modal) => modal.remove());
 
-  const backdrops = document.querySelectorAll('.timepicker-ui-backdrop');
+  const backdrops = document.querySelectorAll('.tp-ui-backdrop');
   backdrops.forEach((backdrop) => backdrop.remove());
 
   document.body.innerHTML = '';
@@ -158,4 +158,3 @@ export const mockBoundingClientRect = (element: HTMLElement, rect: Partial<DOMRe
     ...rect,
   })) as () => DOMRect;
 };
-

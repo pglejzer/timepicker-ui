@@ -1,4 +1,4 @@
-import type { OptionTypes } from '../../types/types';
+import type { ClockOptions } from '../../types/options';
 
 export type InputValueResult = {
   hour: string;
@@ -14,31 +14,22 @@ export type InputValueResult = {
 export const getInputValue = (
   el: HTMLInputElement,
   clockType?: string,
-  currentTime?: OptionTypes['currentTime'],
+  currentTime?: ClockOptions['currentTime'],
   updateOptions?: boolean,
 ): InputValueResult => {
-  const defaultReturn = {
-    hour: '12',
-    minutes: '00',
-    type: clockType === '24h' ? undefined : 'PM',
-  };
-
+  const defaultReturn = { hour: '12', minutes: '00', type: clockType === '24h' ? undefined : 'PM' };
   if (!el) return defaultReturn;
-
   const value = el.value.trim();
-
-  if (!currentTime && value === '') return defaultReturn;
+  if (!currentTime && !value) return defaultReturn;
 
   if (typeof currentTime === 'boolean' && currentTime) {
     const date = new Date();
     const [rawHour, rawRest] = date.toLocaleTimeString().split(':');
-    const hour = Number(rawHour) <= 9 ? `0${Number(rawHour)}` : rawHour;
-
+    const hour = rawHour.padStart(2, '0');
     if (/[a-z]/i.test(rawRest) && clockType === '12h') {
       const [minutes, type] = rawRest.split(' ');
       return { hour, minutes, type };
     }
-
     return { hour, minutes: rawRest, type: undefined };
   }
 
@@ -48,39 +39,29 @@ export const getInputValue = (
 
     if (preventClockType && updateOptions) {
       const [h, rest] = new Date(cTime).toLocaleTimeString().split(':');
-
       if (/[a-z]/i.test(rest)) {
         const [minutes, type] = rest.split(' ');
         return { hour: h, minutes, type };
       }
-
-      const hour = Number(h) <= 9 ? `0${Number(h)}` : h;
-      return { hour, minutes: rest, type: undefined };
+      return { hour: h.padStart(2, '0'), minutes: rest, type: undefined };
     }
 
-    const [rawHour, rawRest] = new Date(cTime).toLocaleTimeString(locales, { timeStyle: 'short' }).split(':');
-    const hour = Number(rawHour) <= 9 ? `0${Number(rawHour)}` : rawHour;
+    const timeString = new Date(cTime).toLocaleTimeString(locales || 'en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: clockType === '12h',
+    });
 
-    if (/[a-z]/i.test(rawRest) && clockType === '12h') {
-      const [minutes, type] = rawRest.split(' ');
-      return { hour, minutes, type };
+    const [rawHour, rawRest] = timeString.split(':');
+
+    if (clockType === '12h' && /[a-z]/i.test(rawRest)) {
+      const parts = rawRest.trim().split(' ');
+      const minutes = parts[0];
+      const type = parts[1] || 'AM';
+      return { hour: rawHour, minutes, type };
     }
 
-    if (clockType === '12h') {
-      const [h, mWithType] = new Date(`1970-01-01T${rawHour}:${rawRest}Z`)
-        .toLocaleTimeString('en-US', {
-          timeZone: 'UTC',
-          hour12: true,
-          hour: 'numeric',
-          minute: 'numeric',
-        })
-        .split(':');
-
-      const [nm, t] = mWithType.split(' ');
-      return { hour: Number(h) <= 9 ? `0${Number(h)}` : h, minutes: nm, type: t };
-    }
-
-    return { hour, minutes: rawRest, type: undefined };
+    return { hour: rawHour, minutes: rawRest.replace(/\D/g, ''), type: undefined };
   }
 
   const [hourPart, type] = value.split(' ');
@@ -152,7 +133,7 @@ export const getInputValue = (
 export const handleValueAndCheck = (
   val: string | number | null,
   type: 'hour' | 'minutes',
-  clockType?: OptionTypes['clockType'],
+  clockType?: '12h' | '24h',
 ): boolean | undefined => {
   const value = Number(val);
 

@@ -90,7 +90,7 @@ export class ClockController {
   }
 
   switchMode(mode: ClockMode): void {
-    if (this.state.mode === mode) return;
+    const isFirstTime = this.state.mode === mode;
 
     this.state.mode = mode;
 
@@ -99,7 +99,7 @@ export class ClockController {
 
     if (mode === 'hours' && this.clockType === '24h') {
       const hourValue = parseInt(value, 10);
-      const isInner = hourValue < 12;
+      const isInner = hourValue === 0 || hourValue >= 13;
       this.renderer.setCircleSize(true);
       this.renderer.setCircle24hMode(isInner);
     } else {

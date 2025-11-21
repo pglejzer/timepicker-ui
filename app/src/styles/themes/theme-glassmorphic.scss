@@ -1,112 +1,41 @@
-@use '../variables.scss' as *;
+[data-theme='glassmorphic'] {
+  /* Tło i powierzchnie */
+  --tp-bg: rgba(255, 255, 255, 0.12);
+  --tp-surface: rgba(255, 255, 255, 0.18);
+  --tp-surface-hover: rgba(255, 255, 255, 0.22);
+  --tp-input-bg: rgba(255, 255, 255, 0.16);
 
-.timepicker-ui-wrapper.glassmorphic {
-  --timepicker-bg: rgba(255, 255, 255, 0.05);
-  --timepicker-surface: rgba(255, 255, 255, 0.1);
-  --timepicker-surface-hover: rgba(255, 255, 255, 0.15);
-  --timepicker-text: #ffffff;
-  --timepicker-secondary-text: rgba(255, 255, 255, 0.7);
+  /* Tekst */
+  --tp-text: rgba(255, 255, 255, 0.95);
+  --tp-text-secondary: rgba(255, 255, 255, 0.75);
+  --tp-text-disabled: rgba(255, 255, 255, 0.45);
+  --tp-text-type-time: #ffffff;
+  --tp-text-icon: #ffffff;
 
-  --timepicker-am-pm-active: rgba(255, 255, 255, 0.6);
-  --timepicker-am-pm-text-selected: #000000;
-  --timepicker-am-pm-text-unselected: rgba(255, 255, 255, 0.7);
+  /* AM/PM */
+  --tp-am-pm-active: rgba(255, 255, 255, 0.75);
+  --tp-am-pm-text-selected: #000000;
+  --tp-am-pm-text-unselected: rgba(255, 255, 255, 0.75);
 
-  --timepicker-primary: rgba(255, 255, 255, 0.6);
-  --timepicker-on-primary: #000000;
-  --timepicker-primary-container: rgba(255, 255, 255, 0.6);
-  --timepicker-on-primary-container: #000000;
+  /* Primary */
+  --tp-primary: rgba(255, 255, 255, 0.75);
+  --tp-on-primary: #000000;
+  --tp-primary-container: rgba(255, 255, 255, 0.6);
+  --tp-on-primary-container: #000000;
 
-  --timepicker-tertiary-container: rgba(255, 255, 255, 0.6);
-  --timepicker-on-tertiary-container: #000000;
+  --tp-tertiary-container: rgba(255, 255, 255, 0.55);
+  --tp-on-tertiary-container: #000000;
 
-  --timepicker-border: rgba(255, 255, 255, 0.3);
-  --timepicker-outline: rgba(255, 255, 255, 0.95);
-}
+  /* Obrys i border */
+  --tp-border: rgba(255, 255, 255, 0.35);
+  --tp-outline: rgba(255, 255, 255, 0.9);
 
-.timepicker-ui {
-  &-wrapper.glassmorphic {
-    background-color: var(--timepicker-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 1.25rem;
-    color: var(--timepicker-text);
-  }
+  /* Glass shadow – poprawiony */
+  --tp-shadow: 0 10px 32px rgba(15, 15, 15, 0.25), 0 4px 8px rgba(0, 0, 0, 0.12);
 
-  &-input-ripple-wrapper {
-    &.glassmorphic {
-      border-radius: 1rem;
-    }
-  }
+  /* Radius */
+  --tp-radius: 1.25rem;
 
-  &-select-time.glassmorphic {
-    color: var(--timepicker-text);
-  }
-
-  &-clock-face.glassmorphic {
-    background-color: var(--timepicker-surface);
-    backdrop-filter: blur(8px);
-  }
-
-  &-dot.glassmorphic,
-  &-clock-hand.glassmorphic,
-  &-circle-hand.glassmorphic {
-    background-color: var(--timepicker-primary) !important;
-  }
-
-  &-hour.glassmorphic,
-  &-minutes.glassmorphic {
-    background-color: var(--timepicker-surface-hover);
-    border-radius: 1rem;
-    color: var(--timepicker-text);
-
-    &:hover,
-    &.active {
-      background-color: var(--timepicker-primary);
-      color: var(--timepicker-on-primary);
-    }
-  }
-
-  &-wrapper-type-time.glassmorphic,
-  &-dots.glassmorphic {
-    color: var(--timepicker-text);
-  }
-
-  &-am.glassmorphic,
-  &-pm.glassmorphic {
-    border: 1px solid var(--timepicker-border);
-    background-color: var(--timepicker-surface);
-    color: var(--timepicker-text);
-
-    &:hover,
-    &.active {
-      background-color: var(--timepicker-am-pm-active);
-      color: var(--timepicker-on-primary);
-    }
-  }
-
-  &-cancel-btn.glassmorphic,
-  &-ok-btn.glassmorphic {
-    color: var(--timepicker-text);
-    background-color: var(--timepicker-surface);
-    border-radius: 0.75rem;
-
-    &:hover {
-      background-color: var(--timepicker-primary);
-      color: var(--timepicker-on-primary);
-    }
-  }
-
-  &-keyboard-icon-wrapper.glassmorphic {
-    svg {
-      fill: var(--timepicker-text);
-    }
-
-    &:hover svg {
-      fill: var(--timepicker-primary);
-    }
-  }
-
-  &-value-tips.glassmorphic {
-    color: var(--timepicker-text);
-  }
+  /* Opcjonalnie dla prawdziwego glass (jeśli używasz backdrop-filter) */
+  /* backdrop-filter: blur(12px) saturate(180%); */
 }

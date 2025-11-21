@@ -1,6 +1,6 @@
 @use '../variables.scss' as *;
 
-.timepicker-ui {
+.tp-ui {
   &-modal {
     font-family: 'Roboto', sans-serif;
     position: fixed;
@@ -34,4 +34,3 @@
     overflow: scroll;
   }
 }
-

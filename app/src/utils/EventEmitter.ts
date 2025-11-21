@@ -1,29 +1,45 @@
-import type { CallbackData } from '../types/types';
+import type {
+  OpenEventData,
+  CancelEventData,
+  ConfirmEventData,
+  ShowEventData,
+  HideEventData,
+  UpdateEventData,
+  SelectHourEventData,
+  SelectMinuteEventData,
+  SelectAMEventData,
+  SelectPMEventData,
+  SwitchViewEventData,
+  ErrorEventData,
+} from '../types/types';
 
-type EventHandler<T = CallbackData> = (data: T) => void;
+type EventHandler<T = unknown> = (data: T) => void;
 
 export interface TimepickerEventMap {
-  open: CallbackData;
-  cancel: CallbackData;
-  confirm: CallbackData;
-  show: CallbackData;
-  hide: CallbackData;
-  update: CallbackData;
-  'select:hour': CallbackData;
-  'select:minute': CallbackData;
-  'select:am': CallbackData;
-  'select:pm': CallbackData;
-  error: CallbackData;
+  open: OpenEventData;
+  cancel: CancelEventData;
+  confirm: ConfirmEventData;
+  show: ShowEventData;
+  hide: HideEventData;
+  update: UpdateEventData;
+  'select:hour': SelectHourEventData;
+  'select:minute': SelectMinuteEventData;
+  'select:am': SelectAMEventData;
+  'select:pm': SelectPMEventData;
+  'switch:view': SwitchViewEventData;
+  'animation:clock': Record<string, never>;
+  error: ErrorEventData;
+  [key: string]: unknown;
 }
 
-export class EventEmitter<EventMap extends Record<string, any> = TimepickerEventMap> {
-  private events = new Map<keyof EventMap, Set<EventHandler<any>>>();
+export class EventEmitter<EventMap extends Record<string, unknown> = TimepickerEventMap> {
+  private events = new Map<keyof EventMap, Set<EventHandler<unknown>>>();
 
   on<K extends keyof EventMap>(event: K, handler: EventHandler<EventMap[K]>): void {
     if (!this.events.has(event)) {
       this.events.set(event, new Set());
     }
-    this.events.get(event)!.add(handler as EventHandler<any>);
+    this.events.get(event)!.add(handler as EventHandler<unknown>);
   }
 
   once<K extends keyof EventMap>(event: K, handler: EventHandler<EventMap[K]>): void {
@@ -38,7 +54,7 @@ export class EventEmitter<EventMap extends Record<string, any> = TimepickerEvent
     if (!handler) {
       this.events.delete(event);
     } else {
-      this.events.get(event)?.delete(handler as EventHandler<any>);
+      this.events.get(event)?.delete(handler as EventHandler<unknown>);
     }
   }
 

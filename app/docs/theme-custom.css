@@ -1,22 +1,22 @@
-.timepicker-ui-wrapper.test {
-  --timepicker-bg: #0f172a;
-  --timepicker-surface: #1e293b;
-  --timepicker-surface-hover: #334155;
-  --timepicker-input-bg: #1e293b;
+.tp-ui-wrapper.test {
+  --tp-bg: #0f172a;
+  --tp-surface: #1e293b;
+  --tp-surface-hover: #334155;
+  --tp-input-bg: #1e293b;
 
-  --timepicker-text: #f1f5f9;
-  --timepicker-secondary-text: #94a3b8;
-  --timepicker-type-time-text: #cbd5e1;
-  --timepicker-icon-text: #94a3b8;
-  --timepicker-disabled-text: #475569;
+  --tp-text: #f1f5f9;
+  --tp-secondary-text: #94a3b8;
+  --tp-type-time-text: #cbd5e1;
+  --tp-icon-text: #94a3b8;
+  --tp-disabled-text: #475569;
 
-  --timepicker-primary: #ec4899;
-  --timepicker-on-primary: #ffffff;
+  --tp-primary: #ec4899;
+  --tp-on-primary: #ffffff;
 
-  --timepicker-border: rgba(236, 72, 153, 0.3);
-  --timepicker-hover-bg: rgba(236, 72, 153, 0.1);
+  --tp-border: rgba(236, 72, 153, 0.3);
+  --tp-hover-bg: rgba(236, 72, 153, 0.1);
 
-  --timepicker-shadow: 0 20px 25px -5px rgba(236, 72, 153, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
-  --timepicker-border-radius: 16px;
-  --timepicker-font-family: 'Inter', -apple-system, sans-serif;
+  --tp-shadow: 0 20px 25px -5px rgba(236, 72, 153, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  --tp-border-radius: 16px;
+  --tp-font-family: 'Inter', -apple-system, sans-serif;
 }

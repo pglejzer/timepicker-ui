@@ -1,55 +1,57 @@
-import { createEventWithCallback, isOverlappingRangeArray } from '../utils/config';
 import { getInputValue } from '../utils/input';
 import { checkDisabledHoursAndMinutes } from '../utils/time/disable';
 import { TimepickerError, ERROR_CODES } from '../utils/errors';
-import type { ITimepickerUI } from '../types/ITimepickerUI.d';
+import { isOverlappingRangeArray } from '../utils/config';
+import type { CoreState } from '../timepicker/CoreState';
+import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
+import { isDocument } from '../utils/node';
 
 export default class ValidationManager {
-  private timepicker: ITimepickerUI;
+  private core: CoreState;
+  private emitter: EventEmitter<TimepickerEventMap>;
 
-  constructor(timepicker: ITimepickerUI) {
-    this.timepicker = timepicker;
+  constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
+    this.core = core;
+    this.emitter = emitter;
   }
 
-  /** @internal */
-  setErrorHandler() {
-    const input = this.timepicker.input as HTMLInputElement | null;
-    if (!input) return;
+  setErrorHandler(): boolean {
+    const input = this.core.getInput();
+    if (!input) return true;
 
     const { error, currentHour, currentMin, currentType, currentLength } = getInputValue(
       input,
-      this.timepicker._options.clockType,
+      this.core.options.clock.type,
     );
 
     this.removeErrorHandler();
 
     if (error) {
+      if (isDocument() === false) {
+        return false;
+      }
+
       const errorEl = document.createElement('div');
-      errorEl.classList.add('timepicker-ui-invalid-text');
+      errorEl.classList.add('tp-ui-invalid-text');
       errorEl.innerHTML = '<b>Invalid Time Format</b>';
 
-      input.classList.add('timepicker-ui-invalid-format');
+      input.classList.add('tp-ui-invalid-format');
 
-      if (!input.nextElementSibling?.classList.contains('timepicker-ui-invalid-text')) {
+      if (!input.nextElementSibling?.classList.contains('tp-ui-invalid-text')) {
         input.after(errorEl);
       }
 
       const eventData = {
         error,
-        currentHour,
-        currentMin,
-        currentType,
-        currentLength,
+        rejectedHour: undefined,
+        rejectedMinute: undefined,
+        inputHour: currentHour,
+        inputMinute: currentMin,
+        inputType: currentType,
+        inputLength: currentLength,
       };
 
-      createEventWithCallback(
-        this.timepicker._element,
-        'timepicker:error',
-        eventData,
-        this.timepicker._options.onError,
-      );
-
-      this.timepicker.emit?.('error', eventData);
+      this.emitter.emit('error', eventData);
 
       return false;
     }
@@ -57,24 +59,22 @@ export default class ValidationManager {
     return true;
   }
 
-  /** @internal */
-  removeErrorHandler() {
-    const input = this.timepicker.input as HTMLInputElement | null;
+  removeErrorHandler(): void {
+    const input = this.core.getInput();
     if (!input) return;
 
-    input.classList.remove('timepicker-ui-invalid-format');
+    input.classList.remove('tp-ui-invalid-format');
 
     const next = input.nextElementSibling;
-    if (next?.classList.contains('timepicker-ui-invalid-text')) {
+    if (next?.classList.contains('tp-ui-invalid-text')) {
       next.remove();
     }
   }
 
-  /** @internal */
-  checkDisabledValuesOnStart() {
-    if (!this.timepicker._options.disabledTime) return;
+  checkDisabledValuesOnStart(): void {
+    if (!this.core.options.clock.disabledTime) return;
 
-    const { disabledTime, clockType } = this.timepicker._options;
+    const { disabledTime, type: clockType } = this.core.options.clock;
 
     if (disabledTime.interval) {
       if (!clockType) {
@@ -113,7 +113,8 @@ export default class ValidationManager {
     }
   }
 
-  destroy() {
+  destroy(): void {
     this.removeErrorHandler();
   }
 }
+

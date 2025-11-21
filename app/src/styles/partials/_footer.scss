@@ -1,6 +1,6 @@
 @use '../variables.scss' as *;
 
-.timepicker-ui {
+.tp-ui {
   &-footer,
   &-footer-mobile {
     padding: 24px;
@@ -17,7 +17,7 @@
       right: 0;
       left: 0;
 
-      .timepicker-ui-keyboard-icon-wrapper {
+      .tp-ui-keyboard-icon-wrapper {
         left: 0;
       }
     }

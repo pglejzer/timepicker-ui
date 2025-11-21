@@ -1,75 +1,69 @@
 import { hasClass } from '../utils/config';
-import type { ITimepickerUI } from '../types/ITimepickerUI';
 import { name } from '../utils/variables';
-import { themeClasses } from '../constants/variables';
+import type { CoreState } from '../timepicker/CoreState';
+import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 
 export default class ThemeManager {
-  private timepicker: ITimepickerUI;
+  private core: CoreState;
+  private emitter: EventEmitter<TimepickerEventMap>;
 
-  constructor(timepicker: ITimepickerUI) {
-    this.timepicker = timepicker;
+  constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
+    this.core = core;
+    this.emitter = emitter;
   }
 
-  /** @internal */
-  setTheme = (): void => {
-    const modal = this.timepicker.modalElement;
-    if (!modal || !this.timepicker._options) return;
+  setTheme(): void {
+    const modal = this.core.getModalElement();
+    if (!modal) return;
 
-    const { theme } = this.timepicker._options;
-    if (!theme || !themeClasses[theme]) return;
+    const { theme } = this.core.options.ui;
+    if (!theme) return;
 
-    const elements = modal.querySelectorAll<HTMLInputElement | HTMLDivElement>('input, div');
+    modal.setAttribute('data-theme', theme);
+  }
 
-    elements.forEach((el) => {
-      Object.values(themeClasses).forEach((clsArr) => el.classList.remove(...clsArr));
-      el.classList.add(...themeClasses[theme]);
-    });
-  };
-
-  /** @internal */
-  setInputClassToInputElement = (): void => {
-    const input = this.timepicker.input as HTMLInputElement | null;
+  setInputClassToInputElement(): void {
+    const input = this.core.getInput();
     if (!input) return;
 
-    if (!hasClass(input, 'timepicker-ui-input')) {
-      input.classList.add('timepicker-ui-input');
+    if (!hasClass(input, 'tp-ui-input')) {
+      input.classList.add('tp-ui-input');
     }
-  };
+  }
 
-  /** @internal */
-  setDataOpenToInputIfDoesntExistInWrapper = (): void => {
-    if (this.timepicker.openElementData === null && this.timepicker.input) {
-      this.timepicker.input.setAttribute('data-open', 'timepicker-ui-input');
+  setDataOpenToInputIfDoesntExistInWrapper(): void {
+    const openData = this.core.getOpenElementData();
+    const input = this.core.getInput();
+
+    if (openData === null && input) {
+      input.setAttribute('data-open', 'tp-ui-input');
     }
-  };
+  }
 
-  /** @internal */
-  setClassTopOpenElement = (): void => {
-    for (const el of this.timepicker.openElement) {
-      if (el) el.classList.add('timepicker-ui-open-element');
+  setClassTopOpenElement(): void {
+    const openElements = this.core.getOpenElement();
+    for (const el of openElements) {
+      if (el) el.classList.add('tp-ui-open-element');
     }
-  };
+  }
 
-  /** @internal */
-  setTimepickerClassToElement = (): void => {
-    const root = this.timepicker._element;
+  setTimepickerClassToElement(): void {
+    const root = this.core.element;
     if (!root) return;
 
     root.classList.add(name);
 
-    const customClass = this.timepicker._options?.cssClass;
+    const customClass = this.core.options.ui.cssClass;
     if (customClass && customClass !== name) {
       root.classList.add(customClass);
     }
-  };
+  }
 
-  destroy() {
-    const modal = this.timepicker.modalElement;
+  destroy(): void {
+    const modal = this.core.getModalElement();
     if (!modal) return;
 
-    const elements = modal.querySelectorAll('input, div');
-    elements.forEach((el) => {
-      Object.values(themeClasses).forEach((clsArr) => el.classList.remove(...clsArr));
-    });
+    modal.removeAttribute('data-theme');
   }
 }
+

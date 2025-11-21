@@ -1,6 +1,6 @@
 @use '../variables.scss' as *;
 
-.timepicker-ui--inline {
+.tp-ui--inline {
   position: static !important;
   display: block !important;
   opacity: 1 !important;
@@ -13,8 +13,8 @@
   z-index: auto !important;
   pointer-events: auto !important;
 
-  .timepicker-ui-wrapper,
-  .timepicker-ui-wrapper.mobile {
+  .tp-ui-wrapper,
+  .tp-ui-wrapper.mobile {
     position: static !important;
     display: block !important;
     width: 100% !important;
@@ -29,13 +29,13 @@
     border-radius: 8px !important;
   }
 
-  .timepicker-ui-footer {
-    .timepicker-ui-wrapper-btn[style*='display: none'] ~ * {
+  .tp-ui-footer {
+    .tp-ui-wrapper-btn[style*='display: none'] ~ * {
       justify-content: center !important;
     }
   }
 
-  .timepicker-ui-wrapper-btn {
+  .tp-ui-wrapper-btn {
     &:not([style*='display: none']) {
       display: flex !important;
       justify-content: flex-end !important;
@@ -43,4 +43,3 @@
     }
   }
 }
-

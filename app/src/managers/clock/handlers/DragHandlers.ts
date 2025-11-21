@@ -1,17 +1,27 @@
 import type { Point } from '../types';
 import type { ClockController } from '../controller/ClockController';
-import type { ITimepickerUI } from '../../../types/ITimepickerUI';
+import { isDocument, isNode } from '../../../utils/node';
+
+export interface DragHandlersConfig {
+  autoSwitchToMinutes?: boolean;
+  isMobileView?: boolean;
+  hourElement?: HTMLInputElement | null;
+  minutesElement?: HTMLInputElement | null;
+}
 
 export class DragHandlers {
   private controller: ClockController;
   private clockFace: HTMLElement;
   private isActive: boolean = false;
-  private timepicker: ITimepickerUI;
+  private config: DragHandlersConfig;
+  private cachedRect: DOMRect | null = null;
+  private cachedCenter: Point | null = null;
+  private cachedRadius: number | null = null;
 
-  constructor(controller: ClockController, clockFace: HTMLElement, timepicker: ITimepickerUI) {
+  constructor(controller: ClockController, clockFace: HTMLElement, config: DragHandlersConfig = {}) {
     this.controller = controller;
     this.clockFace = clockFace;
-    this.timepicker = timepicker;
+    this.config = config;
   }
 
   attach(): void {
@@ -26,14 +36,22 @@ export class DragHandlers {
   }
 
   private handlePointerDown = (event: MouseEvent | TouchEvent): void => {
+    if (isNode()) {
+      return;
+    }
+
     const target = event.target as Element;
 
-    if (target && target.classList && target.classList.contains('timepicker-ui-tips-disabled')) {
+    if (target && target.classList && target.classList.contains('tp-ui-tips-disabled')) {
       return;
     }
 
     event.preventDefault();
     this.isActive = true;
+
+    this.cachedRect = this.clockFace.getBoundingClientRect();
+    this.cachedCenter = this.getClockCenter();
+    this.cachedRadius = this.getClockRadius();
 
     this.processPointerEvent(event);
 
@@ -47,7 +65,7 @@ export class DragHandlers {
     if (!this.isActive) return;
 
     const target = this.getTargetElement(event);
-    if (target && target.classList && target.classList.contains('timepicker-ui-tips-disabled')) {
+    if (target && target.classList && target.classList.contains('tp-ui-tips-disabled')) {
       return;
     }
 
@@ -59,28 +77,30 @@ export class DragHandlers {
     if (!this.isActive) return;
 
     this.isActive = false;
+    this.cachedRect = null;
+    this.cachedCenter = null;
+    this.cachedRadius = null;
     this.controller.handlePointerUp();
     this.removeGlobalListeners();
 
-    const { autoSwitchToMinutes } = this.timepicker._options;
-    const hourInput = this.timepicker.hour;
-    const minutesInput = this.timepicker.minutes;
+    const { autoSwitchToMinutes, isMobileView, hourElement, minutesElement } = this.config;
 
-    if (autoSwitchToMinutes && hourInput?.classList.contains('active') && !this.timepicker._isMobileView) {
-      minutesInput?.click();
+    if (autoSwitchToMinutes && hourElement?.classList.contains('active') && !isMobileView) {
+      minutesElement?.click();
+      minutesElement?.focus();
     }
   };
 
   private processPointerEvent(event: MouseEvent | TouchEvent): void {
     const point = this.getPointerPosition(event);
-    const center = this.getClockCenter();
-    const radius = this.getClockRadius();
+    const center = this.cachedCenter || this.getClockCenter();
+    const radius = this.cachedRadius || this.getClockRadius();
 
     this.controller.handlePointerMove(point, center, radius);
   }
 
   private getPointerPosition(event: MouseEvent | TouchEvent): Point {
-    const rect = this.clockFace.getBoundingClientRect();
+    const rect = this.cachedRect || this.clockFace.getBoundingClientRect();
 
     if (event instanceof TouchEvent) {
       const touch = event.touches[0] || event.changedTouches[0];
@@ -99,7 +119,7 @@ export class DragHandlers {
   private getTargetElement(event: MouseEvent | TouchEvent): Element | null {
     if (event instanceof TouchEvent) {
       const touch = event.touches[0] || event.changedTouches[0];
-      if (touch) {
+      if (touch && !isNode()) {
         return document.elementFromPoint(touch.clientX, touch.clientY);
       }
     }
@@ -121,6 +141,10 @@ export class DragHandlers {
   }
 
   private removeGlobalListeners(): void {
+    if (isDocument() === false) {
+      return;
+    }
+
     document.removeEventListener('mousemove', this.handlePointerMove);
     document.removeEventListener('touchmove', this.handlePointerMove);
     document.removeEventListener('mouseup', this.handlePointerUp);

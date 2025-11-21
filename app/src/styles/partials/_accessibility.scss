@@ -1,6 +1,6 @@
 @use '../variables.scss' as *;
 
-.timepicker-ui {
+.tp-ui {
   &-hour-time-12:focus-visible,
   &-minutes-time:focus-visible,
   &-hour-time-24:focus-visible,
@@ -9,9 +9,9 @@
   &-cancel-btn:focus-visible,
   &-ok-btn:focus-visible,
   &-keyboard-icon-wrapper:focus-visible {
-    outline: 3px solid var(--timepicker-primary);
-    outline-offset: 2px;
-    box-shadow: 0 0 0 4px rgba(98, 0, 238, 0.2);
+    outline: var(--tp-outline-width-thick) solid var(--tp-primary);
+    outline-offset: var(--tp-outline-offset);
+    box-shadow: var(--tp-shadow-focus);
   }
 
   @media (prefers-contrast: high) {
@@ -22,16 +22,8 @@
     &-pm:focus-visible,
     &-cancel-btn:focus-visible,
     &-ok-btn:focus-visible {
-      outline-width: 4px;
+      outline-width: var(--tp-outline-width-contrast);
       font-weight: 700;
-    }
-
-    &-wrapper {
-      border: 2px solid currentColor;
-    }
-
-    &-clock-face {
-      border: 2px solid currentColor;
     }
   }
 
@@ -53,10 +45,19 @@
     }
 
     * {
-      animation-duration: 0.01ms !important;
+      animation-duration: var(--tp-duration-reduced) !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition-duration: var(--tp-duration-reduced) !important;
     }
   }
 }
 
+@media (prefers-contrast: high) {
+  .tp-ui-wrapper {
+    border: var(--tp-border-width-thick) solid currentColor;
+  }
+
+  .tp-ui-clock-face {
+    border: var(--tp-border-width-thick) solid currentColor;
+  }
+}

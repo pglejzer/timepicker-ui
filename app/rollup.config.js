@@ -39,7 +39,6 @@ const scssConfigs = [
   baseConfig('./src/styles/themes/theme-pastel.scss', '../dist/css/themes/theme-pastel.css'),
   baseConfig('./src/styles/themes/theme-ai.scss', '../dist/css/themes/theme-ai.css'),
   baseConfig('./src/styles/themes/theme-cyberpunk.scss', '../dist/css/themes/theme-cyberpunk.css'),
-  baseConfig('./src/styles/themes/theme-custom.scss', '../dist/css/themes/theme-custom.css'),
 ];
 
 const umdConfig = {

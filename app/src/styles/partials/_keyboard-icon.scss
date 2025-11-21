@@ -1,6 +1,6 @@
 @use '../variables.scss' as *;
 
-.timepicker-ui {
+.tp-ui {
   &-keyboard-icon-wrapper,
   &-keyboard-icon-wrapper.mobile {
     transition: all 0.3s ease;
@@ -9,7 +9,7 @@
     z-index: 10;
 
     &:hover svg {
-      fill: var(--timepicker-primary);
+      fill: var(--tp-primary);
     }
   }
 
@@ -17,7 +17,7 @@
   &-keyboard-icon.mobile svg {
     cursor: pointer;
     transition: all 0.3s ease;
-    fill: var(--timepicker-icon-text);
+    fill: var(--tp-text-icon);
     pointer-events: none;
   }
 }

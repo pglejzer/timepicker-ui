@@ -1,4 +1,4 @@
-import { TimepickerUI, CallbackData } from 'timepicker-ui';
+import { TimepickerUI } from 'timepicker-ui';
 import { codeToHtml } from 'shiki';
 
 console.log(
@@ -61,116 +61,107 @@ codeBlocks.forEach(async (block) => {
   block.replaceWith(wrapperDiv);
 });
 
-const basicTimePicker = new TimepickerUI('#basic-picker');
+const basicTimePicker = new TimepickerUI('#basic-picker', {
+  clock: {
+    autoSwitchToMinutes: true,
+  },
+});
 basicTimePicker.create();
 
 const format24hPicker = new TimepickerUI('#format-24h-picker', {
-  clockType: '24h',
-  enableSwitchIcon: true,
+  clock: { type: '24h' },
+  ui: { enableSwitchIcon: true },
 });
 format24hPicker.create();
 
 const mobilePicker = new TimepickerUI('#mobile-picker', {
-  mobile: true,
-  enableSwitchIcon: true,
-  clockType: '24h',
+  clock: { type: '24h' },
+  ui: { mobile: true, enableSwitchIcon: true },
 });
 mobilePicker.create();
 
 const themeBasicPicker = new TimepickerUI('#theme-basic', {
-  theme: 'basic',
-  enableSwitchIcon: true,
+  ui: { theme: 'basic', enableSwitchIcon: true },
 });
 themeBasicPicker.create();
 
 const themeCraneStraightPicker = new TimepickerUI('#theme-crane-straight', {
-  theme: 'crane-straight',
-  enableSwitchIcon: true,
+  ui: { theme: 'crane-straight', enableSwitchIcon: true },
 });
 themeCraneStraightPicker.create();
 
 const themeCraneRadiusPicker = new TimepickerUI('#theme-crane-radius', {
-  theme: 'crane',
-  enableSwitchIcon: true,
+  ui: { theme: 'crane', enableSwitchIcon: true },
 });
 themeCraneRadiusPicker.create();
 
 const themeM3Picker = new TimepickerUI('#theme-m3', {
-  theme: 'm3-green',
-  enableSwitchIcon: true,
+  ui: { theme: 'm3-green', enableSwitchIcon: true },
 });
 themeM3Picker.create();
 
 const themeDarkPicker = new TimepickerUI('#theme-dark', {
-  theme: 'dark',
-  enableSwitchIcon: true,
+  ui: { theme: 'dark', enableSwitchIcon: true },
 });
 themeDarkPicker.create();
 
 const themeM2Picker = new TimepickerUI('#theme-m2', {
-  theme: 'm2',
-  enableSwitchIcon: true,
+  ui: { theme: 'm2', enableSwitchIcon: true },
 });
 themeM2Picker.create();
 
 const themeGlassmorphicPicker = new TimepickerUI('#theme-glassmorphic', {
-  theme: 'glassmorphic',
-  enableSwitchIcon: true,
+  ui: { theme: 'glassmorphic', enableSwitchIcon: true },
 });
 themeGlassmorphicPicker.create();
 
 const themePastelPicker = new TimepickerUI('#theme-pastel', {
-  theme: 'pastel',
-  enableSwitchIcon: true,
+  ui: { theme: 'pastel', enableSwitchIcon: true },
 });
 themePastelPicker.create();
 
 const themeAIPicker = new TimepickerUI('#theme-ai', {
-  theme: 'ai',
-  enableSwitchIcon: true,
+  ui: { theme: 'ai', enableSwitchIcon: true },
 });
 
 themeAIPicker.create();
 
 const themeCyberpunkPicker = new TimepickerUI('#theme-cyberpunk', {
-  theme: 'cyberpunk',
-  enableSwitchIcon: true,
+  ui: { theme: 'cyberpunk', enableSwitchIcon: true },
 });
 themeCyberpunkPicker.create();
 
 const disabledHoursPicker = new TimepickerUI('#disabled-hours', {
-  disabledTime: { hours: [1, 2, 3, 22, 23] },
-  clockType: '24h',
+  clock: { type: '24h', disabledTime: { hours: [1, 2, 3, 22, 23] } },
 });
 disabledHoursPicker.create();
 
 const disabledMinutesPicker = new TimepickerUI('#disabled-minutes', {
-  disabledTime: { minutes: [15, 30, 45] },
-  clockType: '12h',
+  clock: { type: '12h', disabledTime: { minutes: [15, 30, 45] } },
 });
 disabledMinutesPicker.create();
 
 const disabledIntervalPicker = new TimepickerUI('#disabled-interval', {
-  disabledTime: { interval: '12:00 - 18:00' },
-  clockType: '24h',
+  clock: { type: '24h', disabledTime: { interval: '12:00 - 18:00' } },
 });
 disabledIntervalPicker.create();
 
 const editablePicker = new TimepickerUI('#editable-picker', {
-  editable: true,
-  focusInputAfterCloseModal: true,
-  enableSwitchIcon: true,
+  ui: { editable: true, enableSwitchIcon: true },
+  behavior: { focusInputAfterClose: true },
 });
 editablePicker.create();
 
 const inlinePicker = new TimepickerUI('#inline-picker', {
-  inline: {
-    enabled: true,
-    containerId: 'inline-container',
-    showButtons: false,
-    autoUpdate: true,
+  clock: { type: '24h' },
+  ui: {
+    inline: {
+      enabled: true,
+      containerId: 'inline-container',
+      showButtons: false,
+      autoUpdate: true,
+    },
   },
-  clockType: '24h',
 });
 inlinePicker.create();
 
@@ -205,37 +196,39 @@ if (eventPickerElement && eventLog) {
   });
 }
 const customLabelsPicker = new TimepickerUI('#custom-labels-picker', {
-  timeLabel: 'Select time',
-  okLabel: 'It is ok',
-  cancelLabel: 'Nope',
-  amLabel: 'AM',
-  pmLabel: 'PM',
-  mobileTimeLabel: 'Enter Time',
-  hourMobileLabel: 'Hour',
-  minuteMobileLabel: 'Minute',
+  labels: {
+    time: 'Select time',
+    ok: 'It is ok',
+    cancel: 'Nope',
+    am: 'AM',
+    pm: 'PM',
+    mobileTime: 'Enter Time',
+    mobileHour: 'Hour',
+    mobileMinute: 'Minute',
+  },
 });
 customLabelsPicker.create();
 
 const multiPicker1 = new TimepickerUI('#multi-picker-1', {
-  clockType: '24h',
-  theme: 'basic',
+  clock: { type: '24h' },
+  ui: { theme: 'basic' },
 });
 multiPicker1.create();
 
 const multiPicker2 = new TimepickerUI('#multi-picker-2', {
-  clockType: '12h',
-  theme: 'm3-green',
+  clock: { type: '12h' },
+  ui: { theme: 'm3-green' },
 });
 multiPicker2.create();
 
 const multiPicker3 = new TimepickerUI('#multi-picker-3', {
-  clockType: '24h',
-  theme: 'crane',
+  clock: { type: '24h' },
+  ui: { theme: 'crane' },
 });
 multiPicker3.create();
 
 const eventEmitterPicker = new TimepickerUI('#event-emitter-picker', {
-  theme: 'm3-green',
+  ui: { theme: 'm3-green' },
 });
 eventEmitterPicker.create();
 
@@ -249,11 +242,11 @@ if (emitterEventLog) {
     emitterEventLog.scrollTop = emitterEventLog.scrollHeight;
   };
 
-  eventEmitterPicker.on('confirm', (data: CallbackData) => {
+  eventEmitterPicker.on('confirm', (data) => {
     logEvent('confirm', { hour: data.hour, minutes: data.minutes, type: data.type });
   });
 
-  eventEmitterPicker.on('cancel', (data: CallbackData) => {
+  eventEmitterPicker.on('cancel', () => {
     logEvent('cancel');
   });
 
@@ -261,15 +254,15 @@ if (emitterEventLog) {
     logEvent('open');
   });
 
-  eventEmitterPicker.on('update', (data: CallbackData) => {
+  eventEmitterPicker.on('update', (data) => {
     logEvent('update', { hour: data.hour, minutes: data.minutes });
   });
 
-  eventEmitterPicker.on('select:hour', (data: CallbackData) => {
+  eventEmitterPicker.on('select:hour', (data) => {
     logEvent('select:hour', { hour: data.hour });
   });
 
-  eventEmitterPicker.on('select:minute', (data: CallbackData) => {
+  eventEmitterPicker.on('select:minute', (data) => {
     logEvent('select:minute', { minutes: data.minutes });
   });
 
@@ -287,60 +280,67 @@ if (emitterEventLog) {
 }
 
 const customThemePicker = new TimepickerUI('#custom-theme-picker', {
-  cssClass: 'test',
-  theme: 'custom',
+  ui: { cssClass: 'test' },
 });
 customThemePicker.create();
 
 const advancedPicker = new TimepickerUI('#advanced-picker', {
-  clockType: '12h',
-  theme: 'm3-green',
-  enableSwitchIcon: true,
-  focusTrap: true,
-  editable: true,
-  focusInputAfterCloseModal: true,
-  delayHandler: 500,
-  incrementHours: 1,
-  incrementMinutes: 15,
-  currentTime: {
-    time: new Date(),
-    updateInput: false,
-    preventClockType: true,
+  clock: {
+    type: '12h',
+    incrementHours: 1,
+    incrementMinutes: 15,
+    currentTime: {
+      time: new Date(),
+      updateInput: false,
+      preventClockType: true,
+    },
+    disabledTime: {
+      interval: '22:00 - 06:00',
+    },
   },
-  disabledTime: {
-    interval: '22:00 - 06:00',
+  ui: {
+    theme: 'm3-green',
+    enableSwitchIcon: true,
+    editable: true,
+    cssClass: 'my-custom-picker',
   },
-  cssClass: 'my-custom-picker',
+  behavior: {
+    focusTrap: true,
+    focusInputAfterClose: true,
+    delayHandler: 500,
+  },
 });
 advancedPicker.create();
 
 const newEventsAndCallbacksPicker = new TimepickerUI('#new-events-and-callbacks-picker', {
-  onOpen: (data) => {
-    console.log('Picker opened v3!', data);
-  },
-  onCancel: (data) => {
-    console.log('Picker cancelled v3!', data);
-  },
-  onConfirm: (data) => {
-    console.log('Time confirmed v3!', data);
-  },
-  onUpdate: (data) => {
-    console.log('Time updated v3!', data);
-  },
-  onSelectHour: (data) => {
-    console.log('Hour mode selected v3!', data);
-  },
-  onSelectMinute: (data) => {
-    console.log('Minute mode selected v3!', data);
-  },
-  onSelectAM: (data) => {
-    console.log('AM selected v3!', data);
-  },
-  onSelectPM: (data) => {
-    console.log('PM selected v3!', data);
-  },
-  onError: (data) => {
-    console.log('Error occurred v3!', data.error);
+  callbacks: {
+    onOpen: (data) => {
+      console.log('Picker opened v4!', data);
+    },
+    onCancel: () => {
+      console.log('Picker cancelled v4!');
+    },
+    onConfirm: (data) => {
+      console.log('Time confirmed v4!', data);
+    },
+    onUpdate: (data) => {
+      console.log('Time updated v4!', data);
+    },
+    onSelectHour: (data) => {
+      console.log('Hour mode selected v4!', data);
+    },
+    onSelectMinute: (data) => {
+      console.log('Minute mode selected v4!', data);
+    },
+    onSelectAM: () => {
+      console.log('AM selected v4!');
+    },
+    onSelectPM: () => {
+      console.log('PM selected v4!');
+    },
+    onError: (data) => {
+      console.log('Error occurred v4!', data.error);
+    },
   },
 });
 newEventsAndCallbacksPicker.create();
@@ -370,12 +370,13 @@ if (pickerElement) {
 }
 
 const version3Example = new TimepickerUI('#version3-example', {
-  theme: 'm3-green',
-  clockType: '24h',
-  focusTrap: false,
-  delayHandler: 200,
-  onOpen: (data) => {
-    console.log('Version 3.0 picker opened!', data);
+  clock: { type: '24h' },
+  ui: { theme: 'm3-green' },
+  behavior: { focusTrap: false, delayHandler: 200 },
+  callbacks: {
+    onOpen: (data) => {
+      console.log('Version 4.0 picker opened!', data);
+    },
   },
 });
 
@@ -385,10 +386,9 @@ if (elementExists) {
 }
 
 const destroyExample = new TimepickerUI('#destroy-example', {
-  theme: 'm3-green',
-  clockType: '24h',
-  focusTrap: false,
-  delayHandler: 200,
+  clock: { type: '24h' },
+  ui: { theme: 'm3-green' },
+  behavior: { focusTrap: false, delayHandler: 200 },
 });
 destroyExample.create();
 
@@ -401,17 +401,21 @@ if (button) {
 }
 
 const multipleIntervalsPicker = new TimepickerUI('#disabled-intervals-12h', {
-  disabledTime: {
-    interval: ['12:00 AM - 4:00 AM', '5:30 PM - 8:00 PM'],
+  clock: {
+    type: '12h',
+    disabledTime: {
+      interval: ['12:00 AM - 4:00 AM', '5:30 PM - 8:00 PM'],
+    },
   },
-  clockType: '12h',
 });
 multipleIntervalsPicker.create();
 
 const multipleIntervalsPicker24h = new TimepickerUI('#disabled-intervals-24h', {
-  disabledTime: {
-    interval: ['04:33 - 12:12', '16:34 - 20:22', '21:37 - 23:23'],
+  clock: {
+    type: '24h',
+    disabledTime: {
+      interval: ['04:33 - 12:12', '16:34 - 20:22', '21:37 - 23:23'],
+    },
   },
-  clockType: '24h',
 });
 multipleIntervalsPicker24h.create();

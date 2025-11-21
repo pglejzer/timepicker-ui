@@ -1,112 +1,29 @@
-@use '../variables.scss' as *;
+[data-theme='dark'] {
+  --tp-bg: #1c1b1f;
+  --tp-surface: #2c2b30;
+  --tp-surface-hover: #3b3940;
+  --tp-input-bg: #2c2b30;
 
-.timepicker-ui-wrapper.dark {
-  --timepicker-bg: #1c1b1f;
-  --timepicker-surface: #2c2b30;
-  --timepicker-surface-hover: #3b3940;
-  --timepicker-text: #e5e5e5;
-  --timepicker-secondary-text: #a1a1a1;
+  --tp-text: #e5e5e5;
+  --tp-text-secondary: #a1a1a1;
+  --tp-text-disabled: rgba(161, 161, 161, 0.6);
+  --tp-text-type-time: #a1a1a1;
+  --tp-text-icon: #a1a1a1;
 
-  --timepicker-am-pm-active: #bb86fc;
-  --timepicker-am-pm-text-selected: #000000;
-  --timepicker-am-pm-text-unselected: #a1a1a1;
+  --tp-am-pm-active: #bb86fc;
+  --tp-am-pm-text-selected: #000000;
+  --tp-am-pm-text-unselected: #a1a1a1;
 
-  --timepicker-primary: #bb86fc;
-  --timepicker-on-primary: #000000;
-  --timepicker-primary-container: #bb86fc;
-  --timepicker-on-primary-container: #000000;
+  --tp-primary: #bb86fc;
+  --tp-on-primary: #000000;
+  --tp-primary-container: #bb86fc;
+  --tp-on-primary-container: #000000;
 
-  --timepicker-tertiary-container: #bb86fc;
-  --timepicker-on-tertiary-container: #000000;
+  --tp-tertiary-container: #bb86fc;
+  --tp-on-tertiary-container: #000000;
 
-  --timepicker-border: rgba(255, 255, 255, 0.12);
-  --timepicker-outline: #d8b4fe;
-}
-
-.timepicker-ui {
-  &-wrapper.dark {
-    background-color: var(--timepicker-bg);
-    color: var(--timepicker-text);
-  }
-
-  &-input-ripple-wrapper {
-    &.dark {
-      border-radius: 8px;
-    }
-  }
-
-  &-hour.dark,
-  &-minutes.dark {
-    background-color: var(--timepicker-surface);
-    color: var(--timepicker-text);
-
-    &:hover {
-      background-color: var(--timepicker-surface-hover);
-      color: $white;
-    }
-  }
-
-  &-clock-face.dark {
-    background-color: var(--timepicker-surface);
-  }
-
-  &-dots.dark,
-  &-dots.mobile.dark {
-    span {
-      background-color: $white;
-    }
-  }
-
-  &-clock-hand.dark,
-  &-dot.dark,
-  &-circle-hand.dark {
-    background-color: var(--timepicker-primary) !important;
-  }
-
-  &-hour.active.dark,
-  &-minutes.active.dark {
-    background-color: var(--timepicker-primary);
-    color: var(--timepicker-on-primary);
-  }
-
-  &-cancel-btn.dark,
-  &-ok-btn.dark {
-    color: var(--timepicker-primary);
-  }
-
-  &-cancel-btn:hover.dark,
-  &-ok-btn:hover.dark {
-    background-color: var(--timepicker-surface-hover);
-  }
-
-  &-wrapper-type-time.dark {
-    color: var(--timepicker-secondary-text);
-  }
-
-  &-am.dark,
-  &-pm.dark {
-    border-color: var(--timepicker-primary);
-    background-color: var(--timepicker-surface);
-    color: var(--timepicker-text);
-
-    &:hover,
-    &.active {
-      background-color: var(--timepicker-am-pm-active);
-      color: var(--timepicker-on-primary);
-    }
-  }
-
-  &-keyboard-icon-wrapper.dark {
-    svg {
-      fill: var(--timepicker-text);
-    }
-
-    &:hover svg {
-      fill: var(--timepicker-primary);
-    }
-  }
-
-  &-value-tips.dark {
-    color: $white;
-  }
+  --tp-border: rgba(255, 255, 255, 0.12);
+  --tp-outline: #d8b4fe;
+  --tp-hover-bg: #3b3940;
+  --tp-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6);
 }
