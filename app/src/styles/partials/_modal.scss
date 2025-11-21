@@ -10,6 +10,7 @@
     left: 0;
     right: 0;
     background-color: rgba(156, 155, 155, 0.6);
+    backdrop-filter: var(--tp-backdrop-filter);
     z-index: 5000;
     pointer-events: none;
 

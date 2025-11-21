@@ -1,23 +1,19 @@
 [data-theme='glassmorphic'] {
-  /* Tło i powierzchnie */
   --tp-bg: rgba(255, 255, 255, 0.12);
   --tp-surface: rgba(255, 255, 255, 0.18);
   --tp-surface-hover: rgba(255, 255, 255, 0.22);
   --tp-input-bg: rgba(255, 255, 255, 0.16);
 
-  /* Tekst */
   --tp-text: rgba(255, 255, 255, 0.95);
   --tp-text-secondary: rgba(255, 255, 255, 0.75);
   --tp-text-disabled: rgba(255, 255, 255, 0.45);
   --tp-text-type-time: #ffffff;
   --tp-text-icon: #ffffff;
 
-  /* AM/PM */
   --tp-am-pm-active: rgba(255, 255, 255, 0.75);
   --tp-am-pm-text-selected: #000000;
   --tp-am-pm-text-unselected: rgba(255, 255, 255, 0.75);
 
-  /* Primary */
   --tp-primary: rgba(255, 255, 255, 0.75);
   --tp-on-primary: #000000;
   --tp-primary-container: rgba(255, 255, 255, 0.6);
@@ -26,16 +22,11 @@
   --tp-tertiary-container: rgba(255, 255, 255, 0.55);
   --tp-on-tertiary-container: #000000;
 
-  /* Obrys i border */
   --tp-border: rgba(255, 255, 255, 0.35);
   --tp-outline: rgba(255, 255, 255, 0.9);
 
-  /* Glass shadow – poprawiony */
   --tp-shadow: 0 10px 32px rgba(15, 15, 15, 0.25), 0 4px 8px rgba(0, 0, 0, 0.12);
+  --tp-backdrop-filter: blur(12px) saturate(180%);
 
-  /* Radius */
   --tp-radius: 1.25rem;
-
-  /* Opcjonalnie dla prawdziwego glass (jeśli używasz backdrop-filter) */
-  /* backdrop-filter: blur(12px) saturate(180%); */
 }
