@@ -5,6 +5,12 @@ import { CodeBlock } from "@/components/code-block";
 import { Eye, Code } from "lucide-react";
 import { TimepickerUI } from "timepicker-ui";
 
+interface ConfirmEventData {
+  hour?: string;
+  minutes?: string;
+  type?: string;
+}
+
 interface TimepickerExampleProps {
   code: string;
   options?: Record<string, unknown>;
@@ -45,20 +51,25 @@ export function TimepickerExample({
 
         const picker = new TimepickerUI(inputRef.current, {
           ...memoizedOptions,
-          onConfirm: (data) => {
-            const time =
-              data.hour && data.minutes
-                ? `${data.hour}:${data.minutes}${
-                    data.type ? ` ${data.type}` : ""
-                  }`
-                : "";
-            setCurrentValue(time);
-            if (
-              memoizedOptions.onConfirm &&
-              typeof memoizedOptions.onConfirm === "function"
-            ) {
-              (memoizedOptions.onConfirm as (data: unknown) => void)(data);
-            }
+          callbacks: {
+            ...(memoizedOptions.callbacks as
+              | Record<string, unknown>
+              | undefined),
+            onConfirm: (data: ConfirmEventData) => {
+              const time =
+                data.hour && data.minutes
+                  ? `${data.hour}:${data.minutes}${
+                      data.type ? ` ${data.type}` : ""
+                    }`
+                  : "";
+              setCurrentValue(time);
+              const originalCallback = (
+                memoizedOptions.callbacks as Record<string, unknown> | undefined
+              )?.onConfirm;
+              if (typeof originalCallback === "function") {
+                (originalCallback as (data: ConfirmEventData) => void)(data);
+              }
+            },
           },
         });
 
