@@ -22,11 +22,11 @@ export default function DarkThemePage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'dark'
+  ui: { theme: 'dark' }
 });
 picker.create();`}
           options={{
-            theme: "dark",
+            ui: { theme: "dark" },
           }}
         />
       </Section>
@@ -34,13 +34,13 @@ picker.create();`}
       <Section icon={Moon} title="Dark with 12h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'dark',
-  clockType: '12h'
+  ui: { theme: 'dark' },
+  clock: { type: '12h' }
 });
 picker.create();`}
           options={{
-            theme: "dark",
-            clockType: "12h",
+            ui: { theme: "dark" },
+            clock: { type: "12h" },
           }}
         />
       </Section>
@@ -48,13 +48,13 @@ picker.create();`}
       <Section icon={Moon} title="Dark with 24h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'dark',
-  clockType: '24h'
+  ui: { theme: 'dark' },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            theme: "dark",
-            clockType: "24h",
+            ui: { theme: "dark" },
+            clock: { type: "24h" },
           }}
         />
       </Section>

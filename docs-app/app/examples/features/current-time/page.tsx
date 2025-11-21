@@ -22,11 +22,11 @@ export default function CurrentTimePage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  currentTime: true
+  clock: { currentTime: true }
 });
 picker.create();`}
           options={{
-            currentTime: true,
+            clock: { currentTime: true },
           }}
         />
       </Section>
@@ -37,16 +37,20 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  currentTime: {
-    updateInput: true,
-    time: new Date()
+  clock: {
+    currentTime: {
+      updateInput: true,
+      time: new Date()
+    }
   }
 });
 picker.create();`}
           options={{
-            currentTime: {
-              updateInput: true,
-              time: new Date(),
+            clock: {
+              currentTime: {
+                updateInput: true,
+                time: new Date(),
+              },
             },
           }}
         />
@@ -58,18 +62,22 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  currentTime: {
-    updateInput: true,
-    time: new Date(),
-    locales: 'en-US'
+  clock: {
+    currentTime: {
+      updateInput: true,
+      time: new Date(),
+      locales: 'en-US'
+    }
   }
 });
 picker.create();`}
           options={{
-            currentTime: {
-              updateInput: true,
-              time: new Date(),
-              locales: "en-US",
+            clock: {
+              currentTime: {
+                updateInput: true,
+                time: new Date(),
+                locales: "en-US",
+              },
             },
           }}
         />
@@ -81,18 +89,22 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  currentTime: {
-    updateInput: true,
-    time: new Date(),
-    preventClockType: true
+  clock: {
+    currentTime: {
+      updateInput: true,
+      time: new Date(),
+      preventClockType: true
+    }
   }
 });
 picker.create();`}
           options={{
-            currentTime: {
-              updateInput: true,
-              time: new Date(),
-              preventClockType: true,
+            clock: {
+              currentTime: {
+                updateInput: true,
+                time: new Date(),
+                preventClockType: true,
+              },
             },
           }}
         />
@@ -107,20 +119,24 @@ picker.create();`}
 customTime.setHours(14, 30, 0);
 
 const picker = new TimepickerUI(input, {
-  currentTime: {
-    updateInput: true,
-    time: customTime
+  clock: {
+    currentTime: {
+      updateInput: true,
+      time: customTime
+    }
   }
 });
 picker.create();`}
           options={{
-            currentTime: {
-              updateInput: true,
-              time: (() => {
-                const customTime = new Date();
-                customTime.setHours(14, 30, 0);
-                return customTime;
-              })(),
+            clock: {
+              currentTime: {
+                updateInput: true,
+                time: (() => {
+                  const customTime = new Date();
+                  customTime.setHours(14, 30, 0);
+                  return customTime;
+                })(),
+              },
             },
           }}
         />

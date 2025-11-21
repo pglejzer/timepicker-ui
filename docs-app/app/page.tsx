@@ -41,12 +41,11 @@ function MobileExample() {
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  mobile: true,
+  ui: { mobile: true },
 });
 picker.create();`}
       options={{
-        mobile: true,
-        enableSwitchIcon: true,
+        ui: { mobile: true, enableSwitchIcon: true },
       }}
       inputPlaceholder="Select time"
       showCode={false}
@@ -57,7 +56,7 @@ picker.create();`}
 const features = [
   {
     icon: Palette,
-    title: "11 Built-in Themes",
+    title: "10 Built-in Themes",
     description: "Material, Crane, Dark, Glassmorphic, Cyberpunk, AI, and more",
   },
   {
@@ -171,15 +170,17 @@ export default function Home() {
                 Get Started
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
-              {process.env.NODE_ENV === "development" && (
-                <Link
-                  href="/playground"
-                  className="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-background px-8 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full sm:w-auto"
-                >
-                  Try Playground
-                </Link>
-              )}
             </div>
+            <Link
+              href="/docs/whats-new"
+              className="mt-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm text-primary hover:bg-primary/10 transition-colors max-w-2xl mx-auto text-center"
+            >
+              <Sparkles className="h-4 w-4 flex-shrink-0" />
+              <span>
+                <span className="font-medium">New:</span> Version 4.0.0 is here
+                with grouped options & better TypeScript!
+              </span>
+            </Link>
           </div>
         </div>
       </section>

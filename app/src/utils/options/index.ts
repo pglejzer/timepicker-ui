@@ -1,35 +1,10 @@
-import type { OptionTypes } from '../../types/types';
+export { DEFAULT_OPTIONS, mergeOptions } from './defaults';
 
-const options: OptionTypes = {
-  amLabel: 'AM',
-  animation: true,
-  appendModalSelector: '',
-  backdrop: true,
-  cancelLabel: 'Cancel',
-  editable: false,
-  enableScrollbar: false,
-  enableSwitchIcon: false,
-  mobileTimeLabel: 'Enter Time',
-  focusInputAfterCloseModal: false,
-  hourMobileLabel: 'Hour',
-  iconTemplate: '',
-  iconTemplateMobile: '',
-  incrementHours: 1,
-  incrementMinutes: 1,
-  minuteMobileLabel: 'Minute',
-  mobile: false,
-  okLabel: 'OK',
-  pmLabel: 'PM',
-  timeLabel: 'Select time',
-  autoSwitchToMinutes: false,
-  theme: 'basic',
-  clockType: '12h',
-  disabledTime: undefined,
-  currentTime: undefined,
-  focusTrap: true,
-  delayHandler: 300,
-  inline: undefined,
-  cssClass: undefined,
-};
-
-export { options };
+export type {
+  TimepickerOptions,
+  ClockOptions,
+  UIOptions,
+  LabelsOptions,
+  BehaviorOptions,
+  CallbacksOptions,
+} from '../../types/options';

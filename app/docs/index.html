@@ -917,32 +917,34 @@ customThemePicker.setTheme({
               <div>
                 <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
                 <pre><code class="language-javascript">const newEventsAndCallbacksPicker = new TimepickerUI('#new-events-and-callbacks-picker', {
-  onOpen: (data) => {
-    console.log('Picker opened!', data);
-  },
-  onCancel: (data) => {
-    console.log('Picker cancelled', data);
-  },
-  onConfirm: (data) => {
-    console.log('Time confirmed', data);
-  },
-  onUpdate: (data) => {
-    console.log('Time updated', data);
-  },
-  onSelectHour: (data) => {
-    console.log('Hour mode selected', data);
-  },
-  onSelectMinute: (data) => {
-    console.log('Minute mode selected', data);
-  },
-  onSelectAM: (data) => {
-    console.log('AM selected', data);
-  },
-  onSelectPM: (data) => {
-    console.log('PM selected', data);
-  },
-  onError: (data) => {
-    console.log('Error occurred', data.error);
+  callbacks: {
+    onOpen: (data) => {
+      console.log('Picker opened!', data);
+    },
+    onCancel: (data) => {
+      console.log('Picker cancelled', data);
+    },
+    onConfirm: (data) => {
+      console.log('Time confirmed', data);
+    },
+    onUpdate: (data) => {
+      console.log('Time updated', data);
+    },
+    onSelectHour: (data) => {
+      console.log('Hour mode selected', data);
+    },
+    onSelectMinute: (data) => {
+      console.log('Minute mode selected', data);
+    },
+    onSelectAM: (data) => {
+      console.log('AM selected', data);
+    },
+    onSelectPM: (data) => {
+      console.log('PM selected', data);
+    },
+    onError: (data) => {
+      console.log('Error occurred', data.error);
+    }
   }
 });
 newEventsAndCallbacksPicker.create();

@@ -22,11 +22,11 @@ export default function Material2Page() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'm2'
+  ui: { theme: 'm2' }
 });
 picker.create();`}
           options={{
-            theme: "m2",
+            ui: { theme: "m2" },
           }}
         />
       </Section>
@@ -34,13 +34,13 @@ picker.create();`}
       <Section icon={Palette} title="M2 with 12h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'm2',
-  clockType: '12h'
+  ui: { theme: 'm2' },
+  clock: { type: '12h' }
 });
 picker.create();`}
           options={{
-            theme: "m2",
-            clockType: "12h",
+            ui: { theme: "m2" },
+            clock: { type: "12h" },
           }}
         />
       </Section>
@@ -48,13 +48,13 @@ picker.create();`}
       <Section icon={Palette} title="M2 with 24h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'm2',
-  clockType: '24h'
+  ui: { theme: 'm2' },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            theme: "m2",
-            clockType: "24h",
+            ui: { theme: "m2" },
+            clock: { type: "24h" },
           }}
         />
       </Section>

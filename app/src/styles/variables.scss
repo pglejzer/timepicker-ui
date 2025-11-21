@@ -1,67 +1,143 @@
 :root {
-  --timepicker-bg: #ece6ee;
-  --timepicker-surface: #e6e0e9;
-  --timepicker-surface-hover: #c8b3fd;
-  --timepicker-input-bg: #e6e0e9;
+  --tp-bg: #ece6ee;
+  --tp-surface: #e6e0e9;
+  --tp-surface-hover: #c8b3fd;
+  --tp-input-bg: #e6e0e9;
 
-  --timepicker-text: #1d1b20;
-  --timepicker-secondary-text: #49454f;
-  --timepicker-disabled-text: rgba(156, 155, 155, 0.6);
-  --timepicker-type-time-text: #49454f;
-  --timepicker-icon-text: #4e545a;
+  --tp-text: #1d1b20;
+  --tp-text-secondary: #49454f;
+  --tp-text-disabled: rgba(156, 155, 155, 0.6);
+  --tp-text-type-time: #49454f;
+  --tp-text-icon: #4e545a;
 
-  --timepicker-am-pm-active: #ffd8e4;
-  --timepicker-am-pm-text-selected: #633b48;
-  --timepicker-am-pm-text-unselected: #49454f;
+  --tp-am-pm-active: #ffd8e4;
+  --tp-am-pm-text-selected: #633b48;
+  --tp-am-pm-text-unselected: #49454f;
 
-  --timepicker-primary: #6750a4;
-  --timepicker-on-primary: #ffffff;
-  --timepicker-primary-container: #eaddff;
-  --timepicker-on-primary-container: #21005d;
+  --tp-primary: #6750a4;
+  --tp-on-primary: #ffffff;
+  --tp-primary-container: #eaddff;
+  --tp-on-primary-container: #21005d;
 
-  --timepicker-tertiary-container: #ffd8e4;
-  --timepicker-on-tertiary-container: #633b48;
+  --tp-tertiary-container: #ffd8e4;
+  --tp-on-tertiary-container: #633b48;
 
-  --timepicker-border: #000;
-  --timepicker-outline: #6750a4;
-  --timepicker-hover-bg: #d6d6d6;
+  --tp-border: #000;
+  --tp-outline: #6750a4;
+  --tp-hover-bg: #d6d6d6;
+  --tp-backdrop: rgba(0, 0, 0, 0.5);
+  --tp-backdrop-filter: unset;
 
-  --timepicker-shadow:
-    0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14),
-    0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+  --tp-shadow: unset;
 
-  --timepicker-font-family: 'Roboto', sans-serif;
-  --timepicker-border-radius: 28px;
+  --tp-border-radius: 28px;
+
+  --tp-spacing-xs: 4px;
+  --tp-spacing-sm: 8px;
+  --tp-spacing-md: 12px;
+  --tp-spacing-lg: 16px;
+  --tp-spacing-xl: 24px;
+  --tp-spacing-2xl: 36px;
+  --tp-spacing-3xl: 48px;
+
+  --tp-border-width: 1px;
+  --tp-border-width-thick: 2px;
+  --tp-border-width-half: calc(0.7504px / 2);
+  --tp-border-width-pm: 1.5008px;
+
+  --tp-outline-width: 2px;
+  --tp-outline-width-thick: 3px;
+  --tp-outline-width-contrast: 4px;
+  --tp-outline-offset: 2px;
+
+  --tp-font-size-xs: 12px;
+  --tp-font-size-sm: 12.8px;
+  --tp-font-size-base: 14px;
+  --tp-font-size-lg: 16px;
+  --tp-font-size-number: 17.6px;
+  --tp-font-size-xl: 51.2px;
+
+  --tp-radius-sm: 7px;
+  --tp-radius-md: 8px;
+  --tp-radius-lg: 20px;
+  --tp-radius-circle: 50%;
+  --tp-radius-full: 100%;
+
+  --tp-size-clock: 256px;
+  --tp-size-wrapper: 328px;
+  --tp-size-wrapper-expanded: 584px;
+  --tp-size-wrapper-portrait: 315px;
+  --tp-size-wrapper-landscape-height: 360px;
+  --tp-size-wrapper-mobile-height: 258px;
+  --tp-size-input: 96px;
+  --tp-size-input-height: 80px;
+  --tp-size-input-mobile: 72px;
+  --tp-size-hand-circle: 46px;
+  --tp-size-hand-circle-small: 36px;
+  --tp-size-hand-width: 2px;
+  --tp-size-hand-offset: calc(50% - 1px);
+  --tp-size-hand-top: 4px;
+  --tp-size-hand-left: 1px;
+  --tp-size-button-min: 44px;
+  --tp-size-dot: 6px;
+  --tp-size-dot-center: 8px;
+  --tp-size-am-pm-width: 54px;
+  --tp-size-am-pm-height: 40px;
+  --tp-size-am-pm-height-landscape: 44px;
+  --tp-size-icon: 24px;
+  --tp-size-colon-width: 24px;
+  --tp-size-colon-height: 48px;
+  --tp-size-number: 32px;
+  --tp-size-inner-circle: 200px;
+  --tp-size-inline-min-height: 500px;
+  --tp-size-padding: 10px;
+
+  --tp-duration-fast: 150ms;
+  --tp-duration-base: 200ms;
+  --tp-duration-slow: 300ms;
+  --tp-duration-slower: 400ms;
+  --tp-duration-slowest: 450ms;
+  --tp-duration-animation: 350ms;
+  --tp-duration-ripple: 700ms;
+  --tp-duration-ripple-fade: 500ms;
+  --tp-duration-reduced: 0.01ms;
+
+  --tp-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --tp-easing-ease: ease;
+  --tp-easing-linear: linear;
+
+  --tp-z-backdrop: 5000;
+  --tp-z-modal: 5001;
+  --tp-z-keyboard-icon: 10;
+  --tp-z-hidden: -9999;
+
+  --tp-opacity-hover: 0.08;
+  --tp-opacity-focus: 0.12;
+  --tp-opacity-active: 0.16;
+  --tp-opacity-disabled: 0.38;
+  --tp-opacity-backdrop: 0.6;
+
+  --tp-shadow-inline: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --tp-shadow-focus: 0 0 0 4px rgba(98, 0, 238, 0.2);
+
+  --tp-gap-sm: 8px;
+  --tp-gap-md: 12px;
+
+  --tp-position-hidden: -10000px;
 }
 
-$cranepurple900: #4e0d3a;
-$cranepurple700: #71135c;
-$cranered400: #f7363e;
-$white: #fff;
-$purple: #6200ee;
+$red-invalid: #d50000;
 $redtovalid: #d50000;
-
-$dark-bg: #1c1b1f;
-$dark-surface: #2c2b30;
-$dark-surface-hover: #3b3940;
-$dark-primary: #bb86fc;
-$dark-text: #e5e5e5;
-$dark-secondary-text: #a1a1a1;
-$dark-on-primary: #000000;
-
-$glass-bg: rgba(255, 255, 255, 0.05);
-$glass-surface: rgba(255, 255, 255, 0.1);
-$glass-primary: rgba(255, 255, 255, 0.6);
-$glass-text: #ffffff;
-$glass-on-primary: #000000;
-
-$tmwrapperboxshadow:
+$tmopacity: opacity 0.15s linear;
+$mesaruelength: 3.125rem;
+$tm50percent: 50%;
+$tmtranslatetransform: translate(-50%, -50%);
+$shadow-default:
   0px 3px 5px -1px rgba(0, 0, 0, 0.2),
   0px 5px 8px 0px rgba(0, 0, 0, 0.14),
   0px 1px 14px 0px rgba(0, 0, 0, 0.12);
 
-$tm50percent: 50%;
-$tmtranslatetransform: translate(-50%, -50%);
-$mesaruelength: 3.125rem;
-$tmopacity: opacity 0.15s linear;
-$paddingsrlheader: 1.5rem;
+$bp-mobile: 320px;
+$bp-mobile-max: 330px;
+$bp-tablet: 768px;
+$bp-landscape-max: 825px;

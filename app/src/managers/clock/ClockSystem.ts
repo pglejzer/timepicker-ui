@@ -1,8 +1,7 @@
 import type { ClockType, ClockMode, DisabledTimeConfig, ClockState, RenderConfig } from './types';
 import { ClockRenderer } from './renderer/ClockRenderer';
 import { ClockController, type ClockControllerCallbacks } from './controller/ClockController';
-import { DragHandlers } from './handlers/DragHandlers';
-import type { ITimepickerUI } from '../../types/ITimepickerUI';
+import { DragHandlers, type DragHandlersConfig } from './handlers/DragHandlers';
 import { HOURS_12, HOURS_24, MINUTES_STEP_5 } from '../../utils/template';
 
 export interface ClockSystemConfig {
@@ -21,7 +20,8 @@ export interface ClockSystemConfig {
   incrementMinutes?: number;
   onHourChange?: (hour: string) => void;
   onMinuteChange?: (minute: string) => void;
-  timepicker: ITimepickerUI;
+  timepicker: unknown;
+  dragConfig?: DragHandlersConfig;
 }
 
 export class ClockSystem {
@@ -74,7 +74,7 @@ export class ClockSystem {
       callbacks,
     );
 
-    this.dragHandlers = new DragHandlers(this.controller, config.clockFace, config.timepicker);
+    this.dragHandlers = new DragHandlers(this.controller, config.clockFace, config.dragConfig || {});
   }
 
   initialize(): void {
@@ -90,6 +90,9 @@ export class ClockSystem {
     }
 
     this.renderHourTips();
+
+    const state = this.controller.getState();
+    this.renderer.setActiveValue(state.hour);
   }
 
   switchToMinutes(): void {
@@ -100,6 +103,9 @@ export class ClockSystem {
     }
 
     this.renderMinuteTips();
+
+    const state = this.controller.getState();
+    this.renderer.setActiveValue(state.minute);
   }
 
   setHour(value: string): void {
@@ -154,7 +160,7 @@ export class ClockSystem {
     if (this.clockType === '24h') {
       this.renderer.renderTips(
         HOURS_12,
-        'timepicker-ui-hour-time-12',
+        'tp-ui-hour-time-12',
         'hours',
         this.disabledTime,
         this.clockType,
@@ -166,7 +172,7 @@ export class ClockSystem {
       if (this.tipsWrapperFor24h) {
         this.renderer.renderTips(
           HOURS_24,
-          'timepicker-ui-hour-time-24',
+          'tp-ui-hour-time-24',
           'hours',
           this.disabledTime,
           this.clockType,
@@ -178,7 +184,7 @@ export class ClockSystem {
     } else {
       this.renderer.renderTips(
         HOURS_12,
-        'timepicker-ui-hour-time-12',
+        'tp-ui-hour-time-12',
         'hours',
         this.disabledTime,
         this.clockType,
@@ -196,7 +202,7 @@ export class ClockSystem {
 
     this.renderer.renderTips(
       MINUTES_STEP_5,
-      'timepicker-ui-minutes-time',
+      'tp-ui-minutes-time',
       'minutes',
       this.disabledTime,
       this.clockType,

@@ -20,11 +20,11 @@ export default function IncrementPage() {
         <p className="text-muted-foreground mb-4">Jump by 5 minutes:</p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  incrementMinutes: 5
+  clock: { incrementMinutes: 5 }
 });
 picker.create();`}
           options={{
-            incrementMinutes: 5,
+            clock: { incrementMinutes: 5 },
           }}
         />
       </Section>
@@ -35,11 +35,11 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  incrementMinutes: 15
+  clock: { incrementMinutes: 15 }
 });
 picker.create();`}
           options={{
-            incrementMinutes: 15,
+            clock: { incrementMinutes: 15 },
           }}
         />
       </Section>
@@ -48,11 +48,11 @@ picker.create();`}
         <p className="text-muted-foreground mb-4">Jump by 2 hours:</p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  incrementHours: 2
+  clock: { incrementHours: 2 }
 });
 picker.create();`}
           options={{
-            incrementHours: 2,
+            clock: { incrementHours: 2 },
           }}
         />
       </Section>
@@ -63,13 +63,17 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  incrementHours: 2,
-  incrementMinutes: 10
+  clock: {
+    incrementHours: 2,
+    incrementMinutes: 10
+  }
 });
 picker.create();`}
           options={{
-            incrementHours: 2,
-            incrementMinutes: 10,
+            clock: {
+              incrementHours: 2,
+              incrementMinutes: 10,
+            },
           }}
         />
       </Section>
@@ -77,15 +81,19 @@ picker.create();`}
       <Section icon={FastForward} title="With 24h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  clockType: '24h',
-  incrementHours: 3,
-  incrementMinutes: 15
+  clock: {
+    type: '24h',
+    incrementHours: 3,
+    incrementMinutes: 15
+  }
 });
 picker.create();`}
           options={{
-            clockType: "24h",
-            incrementHours: 3,
-            incrementMinutes: 15,
+            clock: {
+              type: "24h",
+              incrementHours: 3,
+              incrementMinutes: 15,
+            },
           }}
         />
       </Section>

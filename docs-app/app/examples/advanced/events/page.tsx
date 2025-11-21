@@ -76,69 +76,82 @@ picker.off('confirm', handler);`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  onOpen: (data) => {
-    console.log('Opened:', data);
-  },
-  onConfirm: (data) => {
-    console.log('Confirmed:', data.hour, data.minutes, data.type);
-  },
-  onCancel: (data) => {
-    console.log('Cancelled:', data);
-  },
-  onUpdate: (data) => {
-    console.log('Updated:', data);
-  },
-  onSelectHour: (data) => {
-    console.log('Hour selected:', data.hour);
-  },
-  onSelectMinute: (data) => {
-    console.log('Minute selected:', data.minutes);
-  },
-  onSelectAM: (data) => {
-    console.log('AM selected:', data);
-  },
-  onSelectPM: (data) => {
-    console.log('PM selected:', data);
-  },
-  onError: (data) => {
-    console.error('Error:', data.error);
+  callbacks: {
+    onOpen: (data) => {
+      console.log('Opened:', data);
+    },
+    onConfirm: (data) => {
+      console.log('Confirmed:', data.hour, data.minutes, data.type);
+    },
+    onCancel: (data) => {
+      console.log('Cancelled:', data);
+    },
+    onUpdate: (data) => {
+      console.log('Updated:', data);
+    },
+    onSelectHour: (data) => {
+      console.log('Hour selected:', data.hour);
+    },
+    onSelectMinute: (data) => {
+      console.log('Minute selected:', data.minutes);
+    },
+    onSelectAM: (data) => {
+      console.log('AM selected:', data);
+    },
+    onSelectPM: (data) => {
+      console.log('PM selected:', data);
+    },
+    onError: (data) => {
+      console.error('Error:', data.error);
+    }
   }
 });
 picker.create();`}
           options={{
-            onOpen: (data: TimepickerEventData) => console.log("Opened:", data),
-            onCancel: (data: TimepickerEventData) =>
-              console.log("Cancelled:", data),
-            onUpdate: (data: TimepickerEventData) =>
-              console.log("Updated:", data),
-            onSelectHour: (data: TimepickerEventData) =>
-              console.log("Hour selected:", data.hour),
-            onSelectMinute: (data: TimepickerEventData) =>
-              console.log("Minute selected:", data.minutes),
-            onSelectAM: (data: TimepickerEventData) =>
-              console.log("AM selected:", data),
-            onSelectPM: (data: TimepickerEventData) =>
-              console.log("PM selected:", data),
-            onError: (data: TimepickerEventData) =>
-              console.error("Error:", data.error),
+            callbacks: {
+              onOpen: (data: TimepickerEventData) =>
+                console.log("Opened:", data),
+              onCancel: (data: TimepickerEventData) =>
+                console.log("Cancelled:", data),
+              onUpdate: (data: TimepickerEventData) =>
+                console.log("Updated:", data),
+              onSelectHour: (data: TimepickerEventData) =>
+                console.log("Hour selected:", data.hour),
+              onSelectMinute: (data: TimepickerEventData) =>
+                console.log("Minute selected:", data.minutes),
+              onSelectAM: (data: TimepickerEventData) =>
+                console.log("AM selected:", data),
+              onSelectPM: (data: TimepickerEventData) =>
+                console.log("PM selected:", data),
+              onError: (data: TimepickerEventData) =>
+                console.error("Error:", data.error),
+            },
           }}
         />
       </Section>
 
-      <Section icon={Zap} title="Legacy DOM Events (Deprecated)">
+      <Section icon={Zap} title="Legacy DOM Events (Removed in v4.0.0)">
         <p className="text-muted-foreground mb-4">
-          DOM events are deprecated and will be removed in v4. Please migrate to
-          EventEmitter API:
+          DOM events have been removed in v4.0.0. Use EventEmitter API or callback options instead:
         </p>
         <CodeBlock
-          code={`// ❌ Deprecated (will be removed in v4)
+          code={`// ❌ Removed in v4.0.0 - No longer supported
 input.addEventListener('timepicker:confirm', (e) => {
   console.log(e.detail);
 });
 
-// ✅ Recommended
+// ✅ Use EventEmitter API
 picker.on('confirm', (data) => {
   console.log(data);
+});
+
+// ✅ Or use callback options
+const picker = new TimepickerUI(input, {
+  callbacks: {
+    onConfirm: (data) => {
+      console.log(data);
+    }
+  }
 });`}
           language="javascript"
         />

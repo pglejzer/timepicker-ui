@@ -22,11 +22,11 @@ export default function NoAnimationPage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  animation: false
+  ui: { animation: false }
 });
 picker.create();`}
           options={{
-            animation: false,
+            ui: { animation: false },
           }}
         />
       </Section>
@@ -37,15 +37,23 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  animation: false,
-  backdrop: false,
-  delayHandler: 0
+  ui: {
+    animation: false,
+    backdrop: false
+  },
+  behavior: {
+    delayHandler: 0
+  }
 });
 picker.create();`}
           options={{
-            animation: false,
-            backdrop: false,
-            delayHandler: 0,
+            ui: {
+              animation: false,
+              backdrop: false,
+            },
+            behavior: {
+              delayHandler: 0,
+            },
           }}
         />
       </Section>

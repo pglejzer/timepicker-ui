@@ -1,21 +1,26 @@
-import type { ITimepickerUI } from '../types/ITimepickerUI';
-
-const ANIMATION_DELAYS = {
-  MODAL: 150,
-  CLOCK: 600,
-  TIPS: 401,
-} as const;
+import type { CoreState } from '../timepicker/CoreState';
+import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
+import { TIMINGS } from '../constants/timings';
 
 export default class AnimationManager {
-  private timepicker: ITimepickerUI;
+  private core: CoreState;
+  private emitter: EventEmitter<TimepickerEventMap>;
   private timeouts: NodeJS.Timeout[] = [];
 
-  constructor(timepicker: ITimepickerUI) {
-    this.timepicker = timepicker;
+  constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
+    this.core = core;
+    this.emitter = emitter;
+    this.setupEventListeners();
   }
 
-  private runWithAnimation(callback: () => void, delay = ANIMATION_DELAYS.MODAL) {
-    if (this.timepicker._options.animation) {
+  private setupEventListeners(): void {
+    this.emitter.on('animation:clock', () => {
+      this.handleAnimationSwitchTipsMode();
+    });
+  }
+
+  private runWithAnimation(callback: () => void, delay = TIMINGS.MODAL_ANIMATION): void {
+    if (this.core.options.ui.animation) {
       const t = setTimeout(callback, delay);
       this.timeouts.push(t);
     } else {
@@ -23,64 +28,64 @@ export default class AnimationManager {
     }
   }
 
-  private clearAllTimeouts() {
+  private clearAllTimeouts(): void {
     this.timeouts.forEach(clearTimeout);
     this.timeouts = [];
   }
 
-  /** @internal */
-  setAnimationToOpen() {
+  setAnimationToOpen(): void {
     this.clearAllTimeouts();
-    this.timepicker.modalElement?.classList.add('opacity');
+    const modalElement = this.core.getModalElement();
+    modalElement?.classList.add('opacity');
 
     this.runWithAnimation(() => {
-      this.timepicker.modalElement?.classList.add('show');
+      this.core.getModalElement()?.classList.add('show');
     });
   }
 
-  /** @internal */
-  removeAnimationToClose() {
+  removeAnimationToClose(): void {
     this.clearAllTimeouts();
 
-    if (!this.timepicker.modalElement) return;
+    const modalElement = this.core.getModalElement();
+    if (!modalElement) return;
 
     this.runWithAnimation(() => {
-      this.timepicker.modalElement?.classList.remove('show');
-      this.timepicker.modalElement?.classList.remove('opacity');
+      const modal = this.core.getModalElement();
+      modal?.classList.remove('show');
+      modal?.classList.remove('opacity');
     });
   }
 
-  /** @internal */
-  handleAnimationClock() {
-    if (!this.timepicker._options.animation) return;
+  handleAnimationClock(): void {
+    if (!this.core.options.ui.animation) return;
 
     this.runWithAnimation(() => {
-      this.timepicker.clockFace?.classList.add('timepicker-ui-clock-animation');
+      const clockFace = this.core.getClockFace();
+      clockFace?.classList.add('tp-ui-clock-animation');
 
       const t = setTimeout(() => {
-        this.timepicker.clockFace?.classList.remove('timepicker-ui-clock-animation');
-      }, ANIMATION_DELAYS.CLOCK);
+        this.core.getClockFace()?.classList.remove('tp-ui-clock-animation');
+      }, TIMINGS.CLOCK_ANIMATION);
 
       this.timeouts.push(t);
     });
   }
 
-  /** @internal */
-  handleAnimationSwitchTipsMode() {
-    const { clockHand } = this.timepicker;
+  handleAnimationSwitchTipsMode(): void {
+    const clockHand = this.core.getClockHand();
     if (!clockHand) return;
 
-    clockHand.classList.add('timepicker-ui-tips-animation');
+    clockHand.classList.add('tp-ui-tips-animation');
 
     const t = setTimeout(() => {
-      clockHand.classList.remove('timepicker-ui-tips-animation');
-    }, ANIMATION_DELAYS.TIPS);
+      this.core.getClockHand()?.classList.remove('tp-ui-tips-animation');
+    }, TIMINGS.TIPS_ANIMATION);
 
     this.timeouts.push(t);
   }
 
-  /** @internal */
-  destroy() {
+  destroy(): void {
     this.clearAllTimeouts();
   }
 }
+

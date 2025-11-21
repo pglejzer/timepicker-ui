@@ -1,6 +1,6 @@
 @use '../variables.scss' as *;
 
-.timepicker-ui {
+.tp-ui {
   * {
     box-sizing: border-box !important;
   }
@@ -34,17 +34,17 @@
   }
 }
 
-.timepicker-ui-invalid-format {
+.tp-ui-invalid-format {
   border: 2px solid red;
   color: red;
 }
 
-.timepicker-ui-invalid-text {
+.tp-ui-invalid-text {
   color: red;
 }
 
 .sr-only,
-.timepicker-ui .sr-only {
+.tp-ui .sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -63,4 +63,3 @@
   height: 1px;
   overflow: hidden;
 }
-

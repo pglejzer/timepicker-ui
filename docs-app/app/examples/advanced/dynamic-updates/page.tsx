@@ -16,8 +16,8 @@ export default function DynamicUpdatesPage() {
 
   const options = useMemo(
     () => ({
-      clockType,
-      theme,
+      clock: { type: clockType },
+      ui: { theme },
     }),
     [clockType, theme]
   );
@@ -25,18 +25,24 @@ export default function DynamicUpdatesPage() {
   useEffect(() => {
     if (!inputRef.current) return;
 
-    if (pickerRef.current) {
-      // Update existing picker instead of recreating
-      pickerRef.current.update({ options });
-    } else {
-      // Create initial picker
+    if (!pickerRef.current) {
+      // Create initial picker only once
       pickerRef.current = new TimepickerUI(inputRef.current, options);
       pickerRef.current.create();
     }
 
     return () => {
+      // Cleanup only on component unmount
       pickerRef.current?.destroy();
+      pickerRef.current = null;
     };
+  }, []); // Empty deps - run only once
+
+  // Separate effect for updates
+  useEffect(() => {
+    if (pickerRef.current) {
+      pickerRef.current.update({ options });
+    }
   }, [options]);
 
   return (
@@ -99,25 +105,31 @@ function DynamicTimepicker() {
   const [theme, setTheme] = useState<'basic' | 'dark'>('basic');
 
   const options = useMemo(() => ({
-    clockType,
-    theme,
+    clock: { type: clockType },
+    ui: { theme },
   }), [clockType, theme]);
 
   useEffect(() => {
     if (!inputRef.current) return;
 
-    if (pickerRef.current) {
-      // Update existing picker
-      pickerRef.current.update({ options });
-    } else {
-      // Create initial picker
+    if (!pickerRef.current) {
+      // Create picker only once
       pickerRef.current = new TimepickerUI(inputRef.current, options);
       pickerRef.current.create();
     }
 
     return () => {
+      // Cleanup on unmount
       pickerRef.current?.destroy();
+      pickerRef.current = null;
     };
+  }, []); // Empty deps - run only once
+
+  // Update picker when options change
+  useEffect(() => {
+    if (pickerRef.current) {
+      pickerRef.current.update({ options });
+    }
   }, [options]);
 
   return (
@@ -145,8 +157,8 @@ function DynamicTimepicker() {
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  clockType: '12h',
-  theme: 'basic'
+  clock: { type: '12h' },
+  ui: { theme: 'basic' }
 });
 
 picker.create();
@@ -154,15 +166,15 @@ picker.create();
 // Later, update options
 picker.update({
   options: {
-    clockType: '24h',
-    theme: 'dark'
+    clock: { type: '24h' },
+    ui: { theme: 'dark' }
   }
 });
 
 // Or with create option to reinitialize
 picker.update({
   options: {
-    clockType: '12h'
+    clock: { type: '12h' }
   },
   create: true
 });`}
@@ -184,11 +196,13 @@ picker.create();
 // Update with new callbacks
 picker.update({
   options: {
-    onConfirm: (data) => {
-      console.log('New time selected:', data);
-    },
-    onCancel: () => {
-      console.log('Selection cancelled');
+    callbacks: {
+      onConfirm: (data) => {
+        console.log('New time selected:', data);
+      },
+      onCancel: () => {
+        console.log('Selection cancelled');
+      }
     }
   }
 });`}
@@ -211,7 +225,7 @@ picker.create();
 function updatePickerTheme(isDarkMode: boolean) {
   picker.update({
     options: {
-      theme: isDarkMode ? 'dark' : 'basic'
+      ui: { theme: isDarkMode ? 'dark' : 'basic' }
     }
   });
 }
@@ -220,8 +234,10 @@ function updatePickerTheme(isDarkMode: boolean) {
 function updateForMobile(isMobile: boolean) {
   picker.update({
     options: {
-      mobile: isMobile,
-      animation: !isMobile // Disable animation on mobile
+      ui: {
+        mobile: isMobile,
+        animation: !isMobile // Disable animation on mobile
+      }
     }
   });
 }

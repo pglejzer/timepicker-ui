@@ -1,3 +1,5 @@
+import { isDocument } from './node';
+
 type RippleTarget = HTMLElement & { _rippleHold?: boolean };
 const RIPPLE_CLASS = 'is-rippling';
 const HOLD_CLASS = 'ripple-hold';
@@ -62,12 +64,17 @@ function handleMouseLeave(e: MouseEvent) {
   }, 1000);
 }
 
-export function initMd3Ripple(root: Document | HTMLElement = document) {
-  root.addEventListener('pointerdown', startRipple as EventListener);
-  root.addEventListener('pointerup', endRipple as EventListener);
-  root.addEventListener('pointercancel', endRipple as EventListener);
+export function initMd3Ripple(root?: Document | HTMLElement) {
+  if (isDocument() === false) {
+    return;
+  }
 
-  const rippleElements = root.querySelectorAll('[data-md3-ripple]');
+  const target = root || document;
+  target.addEventListener('pointerdown', startRipple as EventListener);
+  target.addEventListener('pointerup', endRipple as EventListener);
+  target.addEventListener('pointercancel', endRipple as EventListener);
+
+  const rippleElements = target.querySelectorAll('[data-md3-ripple]');
   rippleElements.forEach((el) => {
     el.addEventListener('mouseleave', handleMouseLeave as EventListener);
   });

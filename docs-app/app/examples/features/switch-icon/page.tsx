@@ -22,11 +22,11 @@ export default function SwitchIconPage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  enableSwitchIcon: true
+  ui: { enableSwitchIcon: true }
 });
 picker.create();`}
           options={{
-            enableSwitchIcon: true,
+            ui: { enableSwitchIcon: true },
           }}
         />
       </Section>
@@ -37,13 +37,17 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  mobile: true,
-  enableSwitchIcon: true
+  ui: {
+    mobile: true,
+    enableSwitchIcon: true
+  }
 });
 picker.create();`}
           options={{
-            mobile: true,
-            enableSwitchIcon: true,
+            ui: {
+              mobile: true,
+              enableSwitchIcon: true,
+            },
           }}
         />
       </Section>
@@ -51,13 +55,17 @@ picker.create();`}
       <Section icon={ArrowLeftRight} title="With Theme">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  enableSwitchIcon: true,
-  theme: 'dark'
+  ui: {
+    enableSwitchIcon: true,
+    theme: 'dark'
+  }
 });
 picker.create();`}
           options={{
-            enableSwitchIcon: true,
-            theme: "dark",
+            ui: {
+              enableSwitchIcon: true,
+              theme: "dark",
+            },
           }}
         />
       </Section>

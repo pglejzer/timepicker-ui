@@ -1,11 +1,11 @@
 @use '../variables.scss' as *;
 
-.timepicker-ui {
+.tp-ui {
   &-header,
   &-header.mobile {
-    padding-bottom: 36px;
-    padding-right: 24px;
-    padding-left: 24px;
+    padding-bottom: var(--tp-spacing-2xl);
+    padding-right: var(--tp-spacing-xl);
+    padding-left: var(--tp-spacing-xl);
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -22,9 +22,9 @@
     &.expanded {
       align-items: unset;
       height: auto;
-      padding-bottom: 36px;
+      padding-bottom: var(--tp-spacing-2xl);
 
-      & .timepicker-ui-wrapper-time.mobile {
+      & .tp-ui-wrapper-time.mobile {
         align-items: unset;
 
         &.expanded {
@@ -57,8 +57,8 @@
 
   &-select-time,
   &-select-time.mobile {
-    padding: 24px;
-    font-size: 12px;
-    color: var(--timepicker-secondary-text);
+    padding: var(--tp-spacing-xl);
+    font-size: var(--tp-font-size-xs);
+    color: var(--tp-text-secondary);
   }
 }

@@ -7,6 +7,199 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.0.0] - 2024-11-21
+
+### Breaking Changes
+
+#### CSS Class Names Renamed
+
+All CSS classes have been renamed from `timepicker-ui-*` to `tp-ui-*` for shorter, cleaner class names.
+
+**Migration:**
+
+```css
+/* v3 */
+.timepicker-ui-wrapper {
+}
+.timepicker-ui-modal {
+}
+.timepicker-ui-clock-face {
+}
+.timepicker-ui-hour {
+}
+.timepicker-ui-minutes {
+}
+
+/* v4 */
+.tp-ui-wrapper {
+}
+.tp-ui-modal {
+}
+.tp-ui-clock-face {
+}
+.tp-ui-hour {
+}
+.tp-ui-minutes {
+}
+```
+
+**Impact:** If you have custom CSS targeting timepicker classes, you must update all class names.
+
+#### Grouped Options Structure
+
+All options are now organized into logical groups (`clock`, `ui`, `labels`, `behavior`, `callbacks`) for better maintainability and clarity.
+
+**Migration:**
+
+```javascript
+// v3
+new TimepickerUI(input, {
+  clockType: "12h",
+  theme: "dark",
+  enableSwitchIcon: true,
+  onConfirm: (data) => console.log(data),
+});
+
+// v4
+new TimepickerUI(input, {
+  clock: { type: "12h" },
+  ui: { theme: "dark", enableSwitchIcon: true },
+  callbacks: { onConfirm: (data) => console.log(data) },
+});
+```
+
+#### Legacy DOM Events Removed
+
+Custom DOM events (`timepicker:confirm`, `timepicker:open`, etc.) have been completely removed. Use EventEmitter API or callback options instead.
+
+**Migration:**
+
+```javascript
+// v3 - Removed
+input.addEventListener("timepicker:confirm", (e) => console.log(e.detail));
+
+// v4 - EventEmitter API
+picker.on("confirm", (data) => console.log(data));
+
+// v4 - Or callback options
+new TimepickerUI(input, {
+  callbacks: { onConfirm: (data) => console.log(data) },
+});
+```
+
+#### setTheme() Method Removed
+
+Programmatic theme customization via `setTheme()` has been removed. Use CSS classes with CSS variable overrides instead.
+
+**Migration:**
+
+```javascript
+// v3 - Removed
+picker.setTheme({ primaryColor: "#ff0000" });
+
+// v4 - Use CSS classes
+new TimepickerUI(input, { ui: { cssClass: "my-theme" } });
+```
+
+```css
+/* Define theme in CSS */
+.tp-ui-wrapper.my-theme {
+  --tp-primary: #ff0000;
+  --tp-bg: #000000;
+}
+```
+
+### Added
+
+- **EventEmitter API with Callback Bridge** - Callbacks automatically connected to EventEmitter for unified event handling
+  - All 9 callback options (`onOpen`, `onCancel`, `onConfirm`, `onUpdate`, `onSelectHour`, `onSelectMinute`, `onSelectAM`, `onSelectPM`, `onError`) automatically bridge to EventEmitter
+  - Type-safe event handling with `on()`, `off()`, `once()` methods
+  - Automatic cleanup on destroy - no memory leaks
+  - Better TypeScript support with typed event payloads
+- **SSR-Safe Architecture** - All modules can be imported in Node.js environments (Next.js, Nuxt, Remix compatible)
+  - No DOM globals accessed during module initialization
+  - All browser-only code guarded with `typeof window !== "undefined"`
+  - Safe to import in server-side rendering environments
+  - Tested compatibility with Next.js, Nuxt, Remix, Astro
+- **Composition-Based Architecture** - Pure composition with managers, no inheritance, follows SOLID principles
+  - CoreState - pure state container (no logic)
+  - EventEmitter - event system
+  - Managers - ModalManager, ClockManager, AnimationManager, ConfigManager, ThemeManager, ValidationManager
+  - Lifecycle - mount/unmount orchestration
+  - No `extends`, no class hierarchies, fully testable
+- **Auto-Focus Improvements** - Modal auto-focuses on open, minutes auto-focus when switching with `autoSwitchToMinutes`
+  - Focus trap now auto-focuses wrapper element when modal opens (no Tab press needed)
+  - When `autoSwitchToMinutes` enabled, minute input receives focus automatically
+  - Improved keyboard accessibility and navigation
+- **TypeScript Enhancements** - Fully typed event payloads, grouped options types, stricter type safety
+  - No `any` types in codebase (strict TypeScript)
+  - Grouped options interfaces: `ClockOptions`, `UIOptions`, `LabelsOptions`, `BehaviorOptions`, `CallbacksOptions`
+  - Typed event payloads for all 9 events
+  - Better IDE autocomplete and type checking
+
+### Changed
+
+- **Architecture** - Refactored to composition-only pattern with CoreState, Managers, Lifecycle, EventEmitter
+  - Removed all inheritance and `extends` usage
+  - Pure composition with dependency injection through constructors
+  - Managers receive only `core: CoreState` and `emitter: EventEmitter`
+  - Fully independent, testable managers
+- **Bundle Size** - Reduced from 80 KB to 63.3 KB ESM (-20.9%)
+  - Removed setTheme() method and programmatic theming (-1.43 KB)
+  - Removed theme-custom from production bundle
+  - Optimized manager implementations
+  - Tree-shaking friendly architecture
+- **Theme Count** - Reduced from 11 to 10 themes (removed redundant custom theme)
+  - Removed `theme-custom` from production (users create custom themes via CSS variables)
+  - Available themes: `basic`, `crane`, `crane-straight`, `m3-green`, `m2`, `dark`, `glassmorphic`, `pastel`, `ai`, `cyberpunk`
+- **Event System** - Unified under EventEmitter, callbacks bridge to events automatically
+  - Single source of truth for all events
+  - Callbacks automatically emit EventEmitter events via `setupCallbackBridge()`
+  - No more dual event systems (DOM events removed)
+- **Options API** - Complete restructure into logical groups
+  - 40+ flat options → 5 groups: `clock`, `ui`, `labels`, `behavior`, `callbacks`
+  - Better organization and discoverability
+  - Easier to understand and maintain
+
+### Removed
+
+- **Legacy DOM Events** - `timepicker:*` custom events no longer dispatched
+  - Removed: `timepicker:open`, `timepicker:cancel`, `timepicker:confirm`, `timepicker:update`
+  - Removed: `timepicker:select-hour`, `timepicker:select-minute`, `timepicker:select-am`, `timepicker:select-pm`, `timepicker:error`
+  - Migration: Use `picker.on()` EventEmitter API or callback options
+- **setTheme() Method** - Programmatic theme setting removed, use CSS instead
+  - Removed: `picker.setTheme({ primaryColor, backgroundColor, ... })`
+  - Removed: `applyThemeToWrapper()` private method
+  - Removed: `pendingThemeConfig` state property
+  - Migration: Use CSS classes with CSS variable overrides
+- **theme-custom** - Removed from production bundle (users can create custom themes via CSS)
+  - No longer compiled into main.css
+  - Still available in dev mode (webpack.config.js)
+  - Users create custom themes using CSS variables
+
+### Fixed
+
+- **Focus Trap** - Now auto-focuses wrapper on modal open (no longer requires Tab press)
+  - Modal wrapper receives focus immediately when opened
+  - Improved keyboard accessibility
+  - No need to press Tab to start navigating
+- **Auto-Switch Focus** - `autoSwitchToMinutes` now properly focuses minute input
+  - When hour is selected and `autoSwitchToMinutes: true`, minute input receives focus
+  - Added `minutesElement?.focus()` after `minutesElement?.click()`
+  - Better UX for keyboard-only users
+- **SSR Compatibility** - No DOM globals accessed during module initialization
+  - All DOM access guarded with `typeof window !== "undefined"`
+  - Safe to import in Next.js, Nuxt, Remix, Astro
+  - No crashes during server-side rendering
+- **currentTime Parsing** - Simplified time parsing logic
+  - Removed complex Date parsing that caused issues
+  - Direct time string handling for better reliability
+- **Dynamic Updates** - Fixed useEffect pattern in React examples
+  - Proper dependency arrays to prevent infinite loops
+  - Correct cleanup in return statement
+
+---
+
 ## [3.2.0] - 2025-11-14
 
 ### Added

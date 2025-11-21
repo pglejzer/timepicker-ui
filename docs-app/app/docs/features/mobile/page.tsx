@@ -97,9 +97,11 @@ export default function MobilePage() {
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  mobile: true,           // Enable mobile optimizations
-  animation: true,        // Smooth animations
-  backdrop: true          // Full backdrop on small screens
+  ui: {
+    mobile: true,       // Enable mobile optimizations
+    animation: true,    // Smooth animations
+    backdrop: true      // Full backdrop on small screens
+  }
 });
 
 picker.create();`}
@@ -277,8 +279,10 @@ export class TimePickerComponent implements OnInit {
 
   ngOnInit() {
     const picker = new TimepickerUI(this.input.nativeElement, {
-      mobile: true,
-      theme: 'basic'
+      ui: {
+        mobile: true,
+        theme: 'basic'
+      }
     });
     picker.create();
   }

@@ -1,4 +1,4 @@
-export const debounce = <T extends (...args: any[]) => ReturnType<T>>(
+export const debounce = <T extends (...args: unknown[]) => ReturnType<T>>(
   callback: T,
   timeout: number,
 ): ((...args: Parameters<T>) => void) => {

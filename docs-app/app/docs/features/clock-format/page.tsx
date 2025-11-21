@@ -27,7 +27,9 @@ export default function ClockFormatPage() {
         </p>
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
-  clockType: '12h'
+  clock: {
+    type: '12h'
+  }
 });
 picker.create();`}
           language="typescript"
@@ -57,7 +59,9 @@ picker.create();`}
         </p>
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
-  clockType: '24h'
+  clock: {
+    type: '24h'
+  }
 });
 picker.create();`}
           language="typescript"
@@ -88,13 +92,15 @@ picker.create();`}
         <CodeBlock
           code={`// Start with 12h format
 const picker = new TimepickerUI(input, {
-  clockType: '12h'
+  clock: {
+    type: '12h'
+  }
 });
 picker.create();
 
 // Switch to 24h format
 picker.update({
-  options: { clockType: '24h' },
+  options: { clock: { type: '24h' } },
   create: true
 });`}
           language="typescript"

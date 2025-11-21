@@ -1,0 +1,13 @@
+export const TIMINGS = {
+  DEFAULT_DELAY: 300,
+  MODAL_ANIMATION: 150,
+  SCROLLBAR_RESTORE: 400,
+  MODAL_REMOVE: 300,
+  CLOCK_ANIMATION: 600,
+  TIPS_ANIMATION: 401,
+  MOBILE_TOGGLE: 450,
+  CLOCK_SCALE_DELAY: 150,
+} as const;
+
+export type TimingsKey = keyof typeof TIMINGS;
+

@@ -22,11 +22,11 @@ export default function AIThemePage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'ai'
+  ui: { theme: 'ai' }
 });
 picker.create();`}
           options={{
-            theme: "ai",
+            ui: { theme: "ai" },
           }}
         />
       </Section>
@@ -34,13 +34,13 @@ picker.create();`}
       <Section icon={Bot} title="AI with 12h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'ai',
-  clockType: '12h'
+  ui: { theme: 'ai' },
+  clock: { type: '12h' }
 });
 picker.create();`}
           options={{
-            theme: "ai",
-            clockType: "12h",
+            ui: { theme: "ai" },
+            clock: { type: "12h" },
           }}
         />
       </Section>
@@ -48,13 +48,13 @@ picker.create();`}
       <Section icon={Bot} title="AI with 24h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'ai',
-  clockType: '24h'
+  ui: { theme: 'ai' },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            theme: "ai",
-            clockType: "24h",
+            ui: { theme: "ai" },
+            clock: { type: "24h" },
           }}
         />
       </Section>

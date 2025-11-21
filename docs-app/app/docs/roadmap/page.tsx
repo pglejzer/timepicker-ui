@@ -170,20 +170,20 @@ export default function RoadmapPage() {
 
           <div>
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-foreground">
-              <Shield className="h-5 w-5 text-yellow-500" />
-              Breaking Changes
+              <Shield className="h-5 w-5 text-green-500" />
+              Breaking Changes (Completed ✅)
             </h3>
             <div className="grid gap-4">
-              <div className="rounded-lg border border-orange-500/20 bg-orange-500/5 p-5">
+              <div className="rounded-lg border border-green-500/20 bg-green-500/5 p-5">
                 <strong className="text-foreground text-base block mb-2">
-                  Remove deprecated DOM events
+                  ✅ Removed deprecated DOM events
                 </strong>
                 <p className="text-sm text-muted-foreground mb-3">
                   Complete removal of{" "}
                   <code className="text-xs bg-muted px-1 py-0.5 rounded">
                     timepicker:*
                   </code>{" "}
-                  DOM events introduced in v3.1.0
+                  DOM events. All users must migrate to EventEmitter API.
                 </p>
                 <div className="bg-background/50 rounded p-3 border border-border">
                   <p className="text-xs text-muted-foreground">

@@ -5,7 +5,7 @@ import { Palette, Sparkles, Moon, Zap } from "lucide-react";
 
 export const metadata = {
   title: "Themes - Timepicker-UI",
-  description: "11 built-in themes for beautiful time pickers",
+  description: "10 built-in themes for beautiful time pickers",
 };
 
 const themes = [
@@ -104,7 +104,9 @@ export default function ThemesPage() {
         </p>
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
-  theme: 'cyberpunk'
+  ui: {
+    theme: 'cyberpunk'
+  }
 });
 picker.create();`}
           language="typescript"
@@ -156,19 +158,21 @@ import 'timepicker-ui/theme-cyberpunk.css';`}
         <CodeBlock
           code={`// Initialize with basic theme
 const picker = new TimepickerUI(input, {
-  theme: 'basic'
+  ui: {
+    theme: 'basic'
+  }
 });
 picker.create();
 
 // Switch to dark theme
 picker.update({
-  options: { theme: 'dark' },
+  options: { ui: { theme: 'dark' } },
   create: true
 });
 
 // Switch to cyberpunk theme
 picker.update({
-  options: { theme: 'cyberpunk' },
+  options: { ui: { theme: 'cyberpunk' } },
   create: true
 });`}
           language="typescript"
@@ -189,9 +193,13 @@ picker.update({
 import 'timepicker-ui/theme-m3.css';
 
 const picker = new TimepickerUI(input, {
-  theme: 'm3-green',
-  clockType: '12h',
-  animation: true
+  ui: {
+    theme: 'm3-green',
+    animation: true
+  },
+  clock: {
+    type: '12h'
+  }
 });`}
               language="typescript"
             />
@@ -204,9 +212,11 @@ const picker = new TimepickerUI(input, {
 import 'timepicker-ui/theme-glassmorphic.css';
 
 const picker = new TimepickerUI(input, {
-  theme: 'glassmorphic',
-  backdrop: true,
-  animation: true
+  ui: {
+    theme: 'glassmorphic',
+    backdrop: true,
+    animation: true
+  }
 });`}
               language="typescript"
             />
@@ -219,10 +229,14 @@ const picker = new TimepickerUI(input, {
 import 'timepicker-ui/theme-cyberpunk.css';
 
 const picker = new TimepickerUI(input, {
-  theme: 'cyberpunk',
-  clockType: '24h',
-  animation: true,
-  backdrop: true
+  ui: {
+    theme: 'cyberpunk',
+    animation: true,
+    backdrop: true
+  },
+  clock: {
+    type: '24h'
+  }
 });`}
               language="typescript"
             />

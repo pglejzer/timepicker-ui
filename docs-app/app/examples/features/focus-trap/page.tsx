@@ -22,11 +22,11 @@ export default function FocusTrapPage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  focusTrap: true // This is the default
+  behavior: { focusTrap: true } // This is the default
 });
 picker.create();`}
           options={{
-            focusTrap: true,
+            behavior: { focusTrap: true },
           }}
         />
       </Section>
@@ -37,11 +37,11 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  focusTrap: false
+  behavior: { focusTrap: false }
 });
 picker.create();`}
           options={{
-            focusTrap: false,
+            behavior: { focusTrap: false },
           }}
         />
       </Section>
@@ -52,13 +52,17 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  focusTrap: true,
-  focusInputAfterCloseModal: true
+  behavior: {
+    focusTrap: true,
+    focusInputAfterClose: true
+  }
 });
 picker.create();`}
           options={{
-            focusTrap: true,
-            focusInputAfterCloseModal: true,
+            behavior: {
+              focusTrap: true,
+              focusInputAfterClose: true,
+            },
           }}
         />
       </Section>
@@ -69,17 +73,25 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  focusTrap: true,
-  focusInputAfterCloseModal: true,
-  backdrop: true,
-  animation: true
+  behavior: {
+    focusTrap: true,
+    focusInputAfterClose: true
+  },
+  ui: {
+    backdrop: true,
+    animation: true
+  }
 });
 picker.create();`}
           options={{
-            focusTrap: true,
-            focusInputAfterCloseModal: true,
-            backdrop: true,
-            animation: true,
+            behavior: {
+              focusTrap: true,
+              focusInputAfterClose: true,
+            },
+            ui: {
+              backdrop: true,
+              animation: true,
+            },
           }}
         />
       </Section>

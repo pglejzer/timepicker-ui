@@ -34,14 +34,16 @@ export default function ValidationPage() {
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  onConfirm: (data) => {
-    console.log('Valid time:', data);
+  callbacks: {
+    onConfirm: (data) => {
+      console.log('Valid time:', data);
+    }
   }
 });
 
 picker.create();
 
-// Invalid format will add 'timepicker-ui-invalid-format' class
+// Invalid format will add 'tp-ui-invalid-format' class
 // and show error message`}
           options={{}}
         />
@@ -56,29 +58,33 @@ picker.create();
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  onConfirm: (data) => {
-    const hour = parseInt(data.hour);
-    
-    // Custom rule: Only allow working hours (9 AM - 5 PM)
-    if (hour < 9 || hour > 17) {
-      alert('Please select time between 9 AM and 5 PM');
-      input.classList.add('error');
-      return;
+  callbacks: {
+    onConfirm: (data) => {
+      const hour = parseInt(data.hour);
+      
+      // Custom rule: Only allow working hours (9 AM - 5 PM)
+      if (hour < 9 || hour > 17) {
+        alert('Please select time between 9 AM and 5 PM');
+        input.classList.add('error');
+        return;
+      }
+      
+      input.classList.remove('error');
+      console.log('Valid time:', data);
     }
-    
-    input.classList.remove('error');
-    console.log('Valid time:', data);
   }
 });
 
 picker.create();`}
           options={{
-            onConfirm: (data: TimepickerEventData) => {
-              if (!data.hour) return;
-              const hour = parseInt(data.hour);
-              if (hour < 9 || hour > 17) {
-                alert("Please select time between 9 AM and 5 PM");
-              }
+            callbacks: {
+              onConfirm: (data: TimepickerEventData) => {
+                if (!data.hour) return;
+                const hour = parseInt(data.hour);
+                if (hour < 9 || hour > 17) {
+                  alert("Please select time between 9 AM and 5 PM");
+                }
+              },
             },
           }}
         />
@@ -141,16 +147,18 @@ function validateTimeRange(time: string, min: string, max: string): boolean {
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  onConfirm: (data) => {
-    const time = \`\${data.hour}:\${data.minutes}\`;
-    
-    if (!validateTimeRange(time, '08:00', '18:00')) {
-      alert('Time must be between 8:00 AM and 6:00 PM');
-      input.classList.add('error');
-      return;
+  callbacks: {
+    onConfirm: (data) => {
+      const time = \`\${data.hour}:\${data.minutes}\`;
+      
+      if (!validateTimeRange(time, '08:00', '18:00')) {
+        alert('Time must be between 8:00 AM and 6:00 PM');
+        input.classList.add('error');
+        return;
+      }
+      
+      input.classList.remove('error');
     }
-    
-    input.classList.remove('error');
   }
 });
 
@@ -180,9 +188,11 @@ function TimePickerForm() {
   } = useForm();
 
   const options = useMemo(() => ({
-    onConfirm: (data) => {
-      const time = \`\${data.hour}:\${data.minutes}\${data.type ? ' ' + data.type : ''}\`;
-      setValue('time', time, { shouldValidate: true });
+    callbacks: {
+      onConfirm: (data) => {
+        const time = \`\${data.hour}:\${data.minutes}\${data.type ? ' ' + data.type : ''}\`;
+        setValue('time', time, { shouldValidate: true });
+      }
     }
   }), [setValue]);
 

@@ -66,8 +66,10 @@ export default function DisabledTimePage() {
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  disabledTime: {
-    hours: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  clock: {
+    disabledTime: {
+      hours: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    }
   }
 });
 
@@ -85,9 +87,11 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  clockType: '24h',
-  disabledTime: {
-    hours: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+  clock: {
+    type: '24h',
+    disabledTime: {
+      hours: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+    }
   }
 });
 
@@ -112,9 +116,11 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  disabledTime: {
-    minutes: Array.from({ length: 60 }, (_, i) => i)
-      .filter(m => ![0, 15, 30, 45].includes(m))
+  clock: {
+    disabledTime: {
+      minutes: Array.from({ length: 60 }, (_, i) => i)
+        .filter(m => ![0, 15, 30, 45].includes(m))
+    }
   }
 });
 
@@ -132,8 +138,10 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  disabledTime: {
-    interval: 15  // Only show minutes in 15-minute intervals
+  clock: {
+    disabledTime: {
+      interval: 15  // Only show minutes in 15-minute intervals
+    }
   }
 });
 
@@ -151,8 +159,10 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  disabledTime: {
-    interval: 5  // Show minutes in 5-minute intervals
+  clock: {
+    disabledTime: {
+      interval: 5  // Show minutes in 5-minute intervals
+    }
   }
 });
 
@@ -180,9 +190,11 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  disabledTime: {
-    hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23],
-    interval: 30  // 30-minute intervals
+  clock: {
+    disabledTime: {
+      hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23],
+      interval: 30  // 30-minute intervals
+    }
   }
 });
 
@@ -199,9 +211,11 @@ picker.create();
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  disabledTime: {
-    hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 20, 21, 22, 23],
-    minutes: [5, 10, 20, 25, 35, 40, 50, 55]
+  clock: {
+    disabledTime: {
+      hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 20, 21, 22, 23],
+      minutes: [5, 10, 20, 25, 35, 40, 50, 55]
+    }
   }
 });
 
@@ -237,7 +251,9 @@ function updateTimeRestrictions(selectedDate) {
 
   picker.update({
     options: {
-      disabledTime: restrictions
+      clock: {
+        disabledTime: restrictions
+      }
     },
     create: true
   });

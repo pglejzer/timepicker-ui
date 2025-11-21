@@ -22,11 +22,11 @@ export default function CyberpunkPage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'cyberpunk'
+  ui: { theme: 'cyberpunk' }
 });
 picker.create();`}
           options={{
-            theme: "cyberpunk",
+            ui: { theme: "cyberpunk" },
           }}
         />
       </Section>
@@ -34,13 +34,13 @@ picker.create();`}
       <Section icon={Zap} title="Cyberpunk with 12h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'cyberpunk',
-  clockType: '12h'
+  ui: { theme: 'cyberpunk' },
+  clock: { type: '12h' }
 });
 picker.create();`}
           options={{
-            theme: "cyberpunk",
-            clockType: "12h",
+            ui: { theme: "cyberpunk" },
+            clock: { type: "12h" },
           }}
         />
       </Section>
@@ -48,13 +48,13 @@ picker.create();`}
       <Section icon={Zap} title="Cyberpunk with 24h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  theme: 'cyberpunk',
-  clockType: '24h'
+  ui: { theme: 'cyberpunk' },
+  clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            theme: "cyberpunk",
-            clockType: "24h",
+            ui: { theme: "cyberpunk" },
+            clock: { type: "24h" },
           }}
         />
       </Section>

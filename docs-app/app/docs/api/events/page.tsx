@@ -110,8 +110,10 @@ const callbacks = [
     name: "onConfirm",
     description: "Alternative: pass callback in options.",
     code: `new TimepickerUI(input, {
-  onConfirm: (data) => {
-    console.log('Confirmed:', data);
+  callbacks: {
+    onConfirm: (data) => {
+      console.log('Confirmed:', data);
+    }
   }
 });`,
   },
@@ -119,8 +121,10 @@ const callbacks = [
     name: "onCancel",
     description: "Triggered when user cancels.",
     code: `new TimepickerUI(input, {
-  onCancel: (data) => {
-    console.log('Cancelled');
+  callbacks: {
+    onCancel: (data) => {
+      console.log('Cancelled');
+    }
   }
 });`,
   },
@@ -128,8 +132,10 @@ const callbacks = [
     name: "onOpen",
     description: "Triggered when picker opens.",
     code: `new TimepickerUI(input, {
-  onOpen: () => {
-    console.log('Opened');
+  callbacks: {
+    onOpen: () => {
+      console.log('Opened');
+    }
   }
 });`,
   },
@@ -137,8 +143,10 @@ const callbacks = [
     name: "onUpdate",
     description: "Triggered during time changes.",
     code: `new TimepickerUI(input, {
-  onUpdate: (data) => {
-    console.log('Updated:', data);
+  callbacks: {
+    onUpdate: (data) => {
+      console.log('Updated:', data);
+    }
   }
 });`,
   },
@@ -146,8 +154,9 @@ const callbacks = [
     name: "onSelectHour",
     description: "Triggered when hour is selected.",
     code: `new TimepickerUI(input, {
-  onSelectHour: (data) => {
-    console.log('Hour:', data.hour);
+  callbacks: {
+    onSelectHour: (data) => {
+      console.log('Hour:', data.hour);
   }
 });`,
   },
@@ -255,24 +264,29 @@ export default function EventsPage() {
         </div>
       </Section>
 
-      <Section icon={AlertCircle} title="Legacy DOM Events (Deprecated)">
-        <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/10 p-6 mb-6">
-          <p className="text-yellow-600 dark:text-yellow-400 font-semibold mb-2">
-            ⚠️ Deprecated - Will be removed in v4.0.0
+      <Section icon={AlertCircle} title="Legacy DOM Events (Removed)">
+        <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-6 mb-6">
+          <p className="text-red-600 dark:text-red-400 font-semibold mb-2">
+            ❌ Removed in v4.0.0
+          </p>
+          <p className="text-muted-foreground mb-4">
+            DOM events (e.g.,{" "}
+            <code className="text-sm">timepicker:confirm</code>) have been
+            removed in v4.0.0. If you're upgrading from v3.x, you must migrate
+            to the EventEmitter API.
           </p>
           <p className="text-muted-foreground">
-            DOM events (e.g.,{" "}
-            <code className="text-sm">timepicker:confirm</code>) are deprecated.
-            Please migrate to the EventEmitter API shown above.
+            The EventEmitter API provides better type safety, error handling,
+            and performance.
           </p>
         </div>
         <CodeBlock
-          code={`// ❌ Deprecated (will be removed in v4)
+          code={`// ❌ No longer works in v4.0.0
 input.addEventListener('timepicker:confirm', (e) => {
   console.log(e.detail);
 });
 
-// ✅ Recommended
+// ✅ Use EventEmitter API instead
 picker.on('confirm', (data) => {
   console.log(data);
 });`}
@@ -310,8 +324,8 @@ picker.on('confirm', (data) => {
         </h2>
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
-  clockType: '12h',
-  theme: 'dark'
+  ui: { theme: 'dark' },
+  clock: { type: '12h' }
 });
 picker.create();
 

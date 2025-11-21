@@ -1,10 +1,10 @@
-.timepicker-ui-ripple {
+.tp-ui-ripple {
   position: relative;
   overflow: hidden;
   isolation: isolate;
 }
 
-.timepicker-ui-ripple::after {
+.tp-ui-ripple::after {
   content: '';
   position: absolute;
   border-radius: 50%;
@@ -14,7 +14,7 @@
   pointer-events: none;
 }
 
-.timepicker-ui-ripple-effect {
+.tp-ui-ripple-effect {
   animation: ripple 600ms linear;
 }
 
@@ -24,4 +24,3 @@
     opacity: 0;
   }
 }
-

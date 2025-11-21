@@ -56,8 +56,12 @@ picker.setValue('15:45', false);`,
     description: "Update picker options dynamically.",
     code: `picker.update({
   options: {
-    theme: 'dark',
-    clockType: '24h'
+    ui: {
+      theme: 'dark'
+    },
+    clock: {
+      type: '24h'
+    }
   },
   create: true
 }, () => {

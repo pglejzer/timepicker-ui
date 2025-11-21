@@ -33,41 +33,41 @@ export default function StylingPage() {
             <CodeBlock
               code={`:root {
   /* Background colors */
-  --timepicker-bg: #ffffff;
-  --timepicker-surface: #e0e0e0;
-  --timepicker-surface-hover: #ece0fd;
-  --timepicker-input-bg: #e4e4e4;
+  --tp-bg: #ffffff;
+  --tp-surface: #e0e0e0;
+  --tp-surface-hover: #ece0fd;
+  --tp-input-bg: #e4e4e4;
 
   /* Text colors */
-  --timepicker-text: #000000;
-  --timepicker-secondary-text: #a9a9a9;
-  --timepicker-disabled-text: rgba(156, 155, 155, 0.6);
-  --timepicker-type-time-text: #787878;
-  --timepicker-icon-text: #4e545a;
+  --tp-text: #000000;
+  --tp-text-secondary: #a9a9a9;
+  --tp-text-disabled: rgba(156, 155, 155, 0.6);
+  --tp-text-type-time: #787878;
+  --tp-text-icon: #4e545a;
 
   /* Primary colors */
-  --timepicker-primary: #6200ee;
-  --timepicker-on-primary: #ffffff;
+  --tp-primary: #6200ee;
+  --tp-on-primary: #ffffff;
 
   /* Material Design 3 colors */
-  --timepicker-primary-container: #eaddff;
-  --timepicker-on-primary-container: #21005d;
-  --timepicker-tertiary-container: #ffd8e4;
-  --timepicker-on-tertiary-container: #633b48;
-  --timepicker-am-pm-text-selected: #633b48;
-  --timepicker-am-pm-text-unselected: #49454f;
-  --timepicker-am-pm-active: #ece0fd;
+  --tp-primary-container: #eaddff;
+  --tp-on-primary-container: #21005d;
+  --tp-tertiary-container: #ffd8e4;
+  --tp-on-tertiary-container: #633b48;
+  --tp-am-pm-text-selected: #633b48;
+  --tp-am-pm-text-unselected: #49454f;
+  --tp-am-pm-active: #ece0fd;
 
   /* Borders and shadows */
-  --timepicker-border: #d6d6d6;
-  --timepicker-hover-bg: #d6d6d6;
-  --timepicker-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 
-                       0px 5px 8px 0px rgba(0, 0, 0, 0.14),
-                       0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+  --tp-border: #d6d6d6;
+  --tp-hover-bg: #d6d6d6;
+  --tp-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 
+               0px 5px 8px 0px rgba(0, 0, 0, 0.14),
+               0px 1px 14px 0px rgba(0, 0, 0, 0.12);
 
   /* Typography and spacing */
-  --timepicker-font-family: 'Roboto', sans-serif;
-  --timepicker-border-radius: 4px;
+  --tp-font-family: 'Roboto', sans-serif;
+  --tp-border-radius: 4px;
 }`}
               language="css"
             />
@@ -87,19 +87,19 @@ export default function StylingPage() {
             code={`import { TimepickerUI } from 'timepicker-ui';
 
 // Material Design 2 theme (purple/magenta)
-const picker1 = new TimepickerUI(input1, { theme: 'm2' });
+const picker1 = new TimepickerUI(input1, { ui: { theme: 'm2' } });
 
 // Material Design 3 theme (green)
-const picker2 = new TimepickerUI(input2, { theme: 'm3-green' });
+const picker2 = new TimepickerUI(input2, { ui: { theme: 'm3-green' } });
 
 // Dark theme
-const picker3 = new TimepickerUI(input3, { theme: 'dark' });
+const picker3 = new TimepickerUI(input3, { ui: { theme: 'dark' } });
 
 // Crane theme with rounded corners
-const picker4 = new TimepickerUI(input4, { theme: 'crane' });
+const picker4 = new TimepickerUI(input4, { ui: { theme: 'crane' } });
 
 // Crane-straight theme (sharp edges)
-const picker5 = new TimepickerUI(input5, { theme: 'crane-straight' });`}
+const picker5 = new TimepickerUI(input5, { ui: { theme: 'crane-straight' } });`}
             language="typescript"
           />
           <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-950 rounded-md border border-blue-200 dark:border-blue-800">
@@ -124,23 +124,23 @@ const picker5 = new TimepickerUI(input5, { theme: 'crane-straight' });`}
             </h3>
             <CodeBlock
               code={`/* Override CSS variables in the custom theme wrapper */
-.timepicker-ui-wrapper.custom {
-  --timepicker-bg: #ffffff;
-  --timepicker-text: #000000;
-  --timepicker-primary: #6200ee;
-  --timepicker-on-primary: #ffffff;
-  --timepicker-surface: #e0e0e0;
-  --timepicker-surface-hover: #ece0fd;
-  --timepicker-input-bg: #e4e4e4;
-  --timepicker-border: #d6d6d6;
-  --timepicker-hover-bg: #d6d6d6;
-  --timepicker-secondary-text: #a9a9a9;
-  --timepicker-type-time-text: #787878;
-  --timepicker-icon-text: #4e545a;
-  --timepicker-disabled-text: rgba(156, 155, 155, 0.6);
-  --timepicker-shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.25);
-  --timepicker-border-radius: 4px;
-  --timepicker-font-family: 'Roboto', sans-serif;
+.tp-ui-wrapper.custom {
+  --tp-bg: #ffffff;
+  --tp-text: #000000;
+  --tp-primary: #6200ee;
+  --tp-on-primary: #ffffff;
+  --tp-surface: #e0e0e0;
+  --tp-surface-hover: #ece0fd;
+  --tp-input-bg: #e4e4e4;
+  --tp-border: #d6d6d6;
+  --tp-hover-bg: #d6d6d6;
+  --tp-text-secondary: #a9a9a9;
+  --tp-text-type-time: #787878;
+  --tp-text-icon: #4e545a;
+  --tp-text-disabled: rgba(156, 155, 155, 0.6);
+  --tp-shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.25);
+  --tp-border-radius: 4px;
+  --tp-font-family: 'Roboto', sans-serif;
 }`}
               language="css"
             />
@@ -154,7 +154,7 @@ const picker5 = new TimepickerUI(input5, { theme: 'crane-straight' });`}
               code={`import { TimepickerUI } from 'timepicker-ui';
 
 const picker = new TimepickerUI('#timepicker', {
-  theme: 'custom'
+  ui: { theme: 'custom' }
 });
 
 picker.create();`}
@@ -172,7 +172,7 @@ picker.create();`}
             </p>
             <CodeBlock
               code={`const picker = new TimepickerUI('#timepicker', {
-  theme: 'custom'
+  ui: { theme: 'custom' }
 });
 
 picker.create();
@@ -226,9 +226,9 @@ picker.setTheme({
           </p>
           <CodeBlock
             code={`/* Customize ripple in your custom theme */
-.timepicker-ui-wrapper.custom {
-  /* Ripple color (uses --timepicker-on-primary-container by default) */
-  --timepicker-on-primary-container: #21005d;
+.tp-ui-wrapper.custom {
+  /* Ripple color (uses --tp-on-primary-container by default) */
+  --tp-on-primary-container: #21005d;
   
   /* Or override ripple directly */
   [data-md3-ripple]::before {
@@ -241,12 +241,12 @@ picker.setTheme({
 }
 
 /* Adjust ripple animation duration */
-.timepicker-ui-wrapper.custom [data-md3-ripple].is-rippling::before {
+.tp-ui-wrapper.custom [data-md3-ripple].is-rippling::before {
   animation: ripple-animation 0.4s ease-out;
 }
 
 /* Disable ripple effect if needed */
-.timepicker-ui-wrapper.no-ripple [data-md3-ripple]::before {
+.tp-ui-wrapper.no-ripple [data-md3-ripple]::before {
   display: none;
 }`}
             language="css"
@@ -265,11 +265,9 @@ picker.setTheme({
           </p>
           <CodeBlock
             code={`/* Elements with ripple effect */
-- AM/PM toggle buttons: .timepicker-ui-am, .timepicker-ui-pm
-- Hour input wrapper: .timepicker-ui-input-wrapper (hour)
-- Minute input wrapper: .timepicker-ui-input-wrapper (minute)
-
-/* CSS pseudo-element approach */
+- AM/PM toggle buttons: .tp-ui-am, .tp-ui-pm
+- Hour input wrapper: .tp-ui-input-wrapper (hour)
+- Minute input wrapper: .tp-ui-input-wrapper (minute)/* CSS pseudo-element approach */
 [data-md3-ripple] {
   position: relative;
   overflow: hidden;
@@ -297,23 +295,23 @@ picker.setTheme({
         </p>
         <CodeBlock
           code={`/* theme-purple.css */
-.timepicker-ui-wrapper.custom {
-  --timepicker-bg: #faf5ff;
-  --timepicker-text: #1e1b4b;
-  --timepicker-primary: #8b5cf6;
-  --timepicker-on-primary: #ffffff;
-  --timepicker-surface: #ede9fe;
-  --timepicker-surface-hover: #ddd6fe;
-  --timepicker-input-bg: #f3e8ff;
-  --timepicker-border: #c4b5fd;
-  --timepicker-hover-bg: #ddd6fe;
-  --timepicker-secondary-text: #7c3aed;
-  --timepicker-type-time-text: #6d28d9;
-  --timepicker-icon-text: #7c3aed;
-  --timepicker-disabled-text: #a78bfa;
-  --timepicker-shadow: 0 10px 35px 0 rgba(139, 92, 246, 0.3);
-  --timepicker-border-radius: 16px;
-  --timepicker-font-family: 'Inter', system-ui, sans-serif;
+.tp-ui-wrapper.custom {
+  --tp-bg: #faf5ff;
+  --tp-text: #1e1b4b;
+  --tp-primary: #8b5cf6;
+  --tp-on-primary: #ffffff;
+  --tp-surface: #ede9fe;
+  --tp-surface-hover: #ddd6fe;
+  --tp-input-bg: #f3e8ff;
+  --tp-border: #c4b5fd;
+  --tp-hover-bg: #ddd6fe;
+  --tp-text-secondary: #7c3aed;
+  --tp-text-type-time: #6d28d9;
+  --tp-text-icon: #7c3aed;
+  --tp-text-disabled: #a78bfa;
+  --tp-shadow: 0 10px 35px 0 rgba(139, 92, 246, 0.3);
+  --tp-border-radius: 16px;
+  --tp-font-family: 'Inter', system-ui, sans-serif;
 }
 
 /* Usage in JavaScript */
@@ -321,63 +319,12 @@ import { TimepickerUI } from 'timepicker-ui';
 import './theme-purple.css';
 
 const picker = new TimepickerUI('#timepicker', {
-  theme: 'custom'
+  ui: { theme: 'custom' }
 });
 
-picker.create();
-
-// Or customize at runtime:
-picker.open();
-picker.setTheme({
-  primaryColor: '#8b5cf6',
-  backgroundColor: '#faf5ff',
-  surfaceColor: '#ede9fe',
-  textColor: '#1e1b4b',
-  borderRadius: '16px'
-});`}
+picker.create();`}
           language="css"
         />
-      </section>
-
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          setTheme() API Reference
-        </h2>
-        <p className="text-muted-foreground mb-4">
-          The <code className="text-primary">setTheme()</code> method allows you
-          to customize theme colors at runtime:
-        </p>
-        <div className="rounded-lg border border-border bg-card p-6">
-          <CodeBlock
-            code={`picker.setTheme({
-  primaryColor?: string;           // Primary color (e.g., '#6200ee')
-  backgroundColor?: string;         // Background color
-  surfaceColor?: string;           // Surface color (clock face)
-  surfaceHoverColor?: string;      // Surface hover color
-  inputBgColor?: string;           // Input background color
-  textColor?: string;              // Text color
-  secondaryTextColor?: string;     // Secondary text color
-  typeTimeTextColor?: string;      // AM/PM text color
-  iconTextColor?: string;          // Icon text color
-  disabledTextColor?: string;      // Disabled text color
-  onPrimaryColor?: string;         // Text color on primary background
-  borderColor?: string;            // Border color
-  hoverBgColor?: string;           // Hover background color
-  shadow?: string;                 // Box shadow
-  borderRadius?: string;           // Border radius (e.g., '12px')
-  fontFamily?: string;             // Font family
-});
-
-// Example:
-picker.setTheme({
-  primaryColor: '#ff0000',
-  backgroundColor: '#ffffff',
-  surfaceColor: '#f0f0f0',
-  borderRadius: '20px'
-});`}
-            language="typescript"
-          />
-        </div>
       </section>
 
       <LinkCard

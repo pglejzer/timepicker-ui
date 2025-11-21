@@ -1,4 +1,4 @@
-import type { OptionTypes, CallbackData } from './types';
+import type { OptionTypes } from './types';
 import type { TimepickerEventMap } from '../utils/EventEmitter';
 
 export interface ITimepickerUI {
@@ -74,20 +74,6 @@ export interface ITimepickerUI {
     degreesMinutes: number | null;
   };
   setValue(time: string, updateInput?: boolean): void;
-  setTheme(themeConfig: {
-    primaryColor?: string;
-    backgroundColor?: string;
-    surfaceColor?: string;
-    surfaceHoverColor?: string;
-    textColor?: string;
-    secondaryTextColor?: string;
-    disabledTextColor?: string;
-    onPrimaryColor?: string;
-    borderColor?: string;
-    shadow?: string;
-    borderRadius?: string;
-    fontFamily?: string;
-  }): void;
 
   on<K extends keyof TimepickerEventMap>(event: K, handler: (data: TimepickerEventMap[K]) => void): void;
   once<K extends keyof TimepickerEventMap>(event: K, handler: (data: TimepickerEventMap[K]) => void): void;
@@ -103,5 +89,4 @@ export interface ITimepickerUI {
   validationManager?: import('../managers/ValidationManager').default;
   themeManager?: import('../managers/ThemeManager').default;
   configManager?: import('../managers/ConfigManager').default;
-  domBatcher: import('../utils/DOMUpdateBatcher').DOMUpdateBatcher;
 }

@@ -20,10 +20,9 @@ export default function CustomStylingPage() {
 
       <InfoBox title="CSS Custom Properties" variant="blue" className="mb-8">
         Timepicker-UI uses CSS custom properties (CSS variables) that you can
-        override to match your brand colors and design system. You can also use
-        the runtime <code>setTheme()</code> API for dynamic theming. Version
-        3.2.0 added Material Design 3 ripple effects and expanded the color
-        system with container colors.
+        override to match your brand colors and design system. Version 3.2.0
+        added Material Design 3 ripple effects and expanded the color system
+        with container colors.
       </InfoBox>
 
       <Section icon={Paintbrush} title="Custom CSS Class">
@@ -36,18 +35,20 @@ export default function CustomStylingPage() {
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  cssClass: 'my-custom-picker'
+  ui: { cssClass: 'my-custom-picker' }
 });
 picker.create();
 
 // CSS:
-.timepicker-ui-wrapper.my-custom-picker {
-  --timepicker-bg: #fce4ec;
-  --timepicker-primary: #e91e63;
-  --timepicker-surface-hover: #f8bbd0;
+.tp-ui-wrapper.my-custom-picker {
+  --tp-bg: #fce4ec;
+  --tp-primary: #e91e63;
+  --tp-surface-hover: #f8bbd0;
+  --tp-input-bg: #f48fb1;
+  --tp-primary-container: #f8bbd0;
 }`}
           options={{
-            cssClass: "custom-pink-picker",
+            ui: { cssClass: "custom-pink-picker" },
           }}
         />
       </Section>
@@ -61,25 +62,25 @@ picker.create();
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  cssClass: 'purple-dark-theme'
+  ui: { cssClass: 'purple-dark-theme' }
 });
 picker.create();
 
 // CSS:
-.timepicker-ui-wrapper.purple-dark-theme {
-  --timepicker-bg: #0f172a;
-  --timepicker-surface: #1e293b;
-  --timepicker-surface-hover: #334155;
-  --timepicker-text: #f1f5f9;
-  --timepicker-secondary-text: #94a3b8;
-  --timepicker-primary: #a855f7;
-  --timepicker-on-primary: #ffffff;
-  --timepicker-border: rgba(168, 85, 247, 0.3);
-  --timepicker-shadow: 0 20px 25px -5px rgba(168, 85, 247, 0.2);
-  --timepicker-border-radius: 16px;
+.tp-ui-wrapper.purple-dark-theme {
+  --tp-bg: #0f172a;
+  --tp-surface: #1e293b;
+  --tp-surface-hover: #334155;
+  --tp-text: #f1f5f9;
+  --tp-text-secondary: #94a3b8;
+  --tp-primary: #a855f7;
+  --tp-on-primary: #ffffff;
+  --tp-border: rgba(168, 85, 247, 0.3);
+  --tp-shadow: 0 20px 25px -5px rgba(168, 85, 247, 0.2);
+  --tp-border-radius: 16px;
 }`}
           options={{
-            cssClass: "custom-purple-dark",
+            ui: { cssClass: "custom-purple-dark" },
           }}
         />
       </Section>
@@ -93,56 +94,21 @@ picker.create();
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  cssClass: 'custom-rounded-picker'
+  ui: { cssClass: 'custom-rounded-picker' }
 });
 picker.create();
 
 // CSS:
-.timepicker-ui-wrapper.custom-rounded-picker {
-  --timepicker-font-family: 'Inter', -apple-system, sans-serif;
-  --timepicker-border-radius: 24px;
-  --timepicker-primary: #10b981;
-  --timepicker-surface-hover: #d1fae5;
+.tp-ui-wrapper.custom-rounded-picker {
+  --tp-font-family: 'Inter', -apple-system, sans-serif;
+  --tp-border-radius: 24px;
+  --tp-primary: #10b981;
+  --tp-surface-hover: #d1fae5;
 }`}
           options={{
-            cssClass: "custom-rounded-picker",
+            ui: { cssClass: "custom-rounded-picker" },
           }}
         />
-      </Section>
-
-      <Section icon={Zap} title="Runtime Theme API">
-        <p className="text-muted-foreground mb-4">
-          Use <code>setTheme()</code> method to change colors dynamically at
-          runtime:
-        </p>
-        <TimepickerExample
-          code={`import { TimepickerUI } from 'timepicker-ui';
-
-const input = document.querySelector('#timepicker');
-const picker = new TimepickerUI(input);
-picker.create();
-
-// Change theme at runtime
-picker.setTheme({
-  primaryColor: '#ff5722',
-  backgroundColor: '#fff3e0',
-  surfaceColor: '#ffe0b2',
-  surfaceHoverColor: '#ffcc80',
-  textColor: '#212121',
-  secondaryTextColor: '#757575',
-  onPrimaryColor: '#ffffff',
-  borderColor: 'rgba(255, 87, 34, 0.3)',
-  shadow: '0 4px 6px rgba(255, 87, 34, 0.1)',
-  borderRadius: '12px',
-  fontFamily: 'Arial, sans-serif'
-});`}
-          options={{}}
-        />
-        <InfoBox title="Runtime API" variant="orange" className="mt-4">
-          The <code>setTheme()</code> method allows you to change the timepicker
-          appearance dynamically without recreating the instance. Perfect for
-          implementing theme switchers!
-        </InfoBox>
       </Section>
 
       <Section icon={Palette} title="Material Design 3 Features (v3.2.0+)">
@@ -155,29 +121,29 @@ picker.setTheme({
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  theme: 'm3-green' // or 'm2' for Material Design 2
+  ui: { theme: 'm3-green' } // or 'm2' for Material Design 2
 });
 picker.create();
 
 // CSS variables for MD3 customization:
-.timepicker-ui-wrapper.custom {
+.tp-ui-wrapper.custom {
   /* Material Design 3 container colors */
-  --timepicker-primary-container: #eaddff;
-  --timepicker-on-primary-container: #21005d;
-  --timepicker-tertiary-container: #ffd8e4;
-  --timepicker-on-tertiary-container: #633b48;
+  --tp-primary-container: #eaddff;
+  --tp-on-primary-container: #21005d;
+  --tp-tertiary-container: #ffd8e4;
+  --tp-on-tertiary-container: #633b48;
   
   /* AM/PM specific colors */
-  --timepicker-am-pm-text-selected: #633b48;
-  --timepicker-am-pm-text-unselected: #49454f;
-  --timepicker-am-pm-active: #ece0fd;
+  --tp-am-pm-text-selected: #633b48;
+  --tp-am-pm-text-unselected: #49454f;
+  --tp-am-pm-active: #ece0fd;
 }
 
 // Ripple effect is automatically applied to:
 // - AM/PM buttons
 // - Hour and minute inputs`}
           options={{
-            theme: "m3-green",
+            ui: { theme: "m3-green" },
           }}
         />
         <InfoBox title="Ripple Effect" variant="green" className="mt-4">
@@ -189,35 +155,37 @@ picker.create();
       </Section>
 
       <style jsx global>{`
-        .timepicker-ui-wrapper.custom-pink-picker {
-          --timepicker-bg: #fce4ec;
-          --timepicker-primary: #e91e63;
-          --timepicker-surface: #f8bbd0;
-          --timepicker-surface-hover: #f48fb1;
+        .tp-ui-wrapper.custom-pink-picker {
+          --tp-bg: #fce4ec;
+          --tp-primary: #e91e63;
+          --tp-surface: #f8bbd0;
+          --tp-surface-hover: #f48fb1;
+          --tp-input-bg: #f48fb1;
+          --tp-primary-container: #f8bbd0;
         }
 
-        .timepicker-ui-wrapper.custom-purple-dark {
-          --timepicker-bg: #0f172a;
-          --timepicker-surface: #1e293b;
-          --timepicker-surface-hover: #334155;
-          --timepicker-input-bg: #1e293b;
-          --timepicker-text: #f1f5f9;
-          --timepicker-secondary-text: #94a3b8;
-          --timepicker-primary: #a855f7;
-          --timepicker-on-primary: #ffffff;
-          --timepicker-border: rgba(168, 85, 247, 0.3);
-          --timepicker-hover-bg: rgba(168, 85, 247, 0.1);
-          --timepicker-shadow: 0 20px 25px -5px rgba(168, 85, 247, 0.2);
-          --timepicker-border-radius: 16px;
+        .tp-ui-wrapper.custom-purple-dark {
+          --tp-bg: #0f172a;
+          --tp-surface: #1e293b;
+          --tp-surface-hover: #334155;
+          --tp-input-bg: #1e293b;
+          --tp-text: #f1f5f9;
+          --tp-text-secondary: #94a3b8;
+          --tp-primary: #a855f7;
+          --tp-on-primary: #ffffff;
+          --tp-border: rgba(168, 85, 247, 0.3);
+          --tp-hover-bg: rgba(168, 85, 247, 0.1);
+          --tp-shadow: 0 20px 25px -5px rgba(168, 85, 247, 0.2);
+          --tp-border-radius: 16px;
         }
 
-        .timepicker-ui-wrapper.custom-rounded-picker {
-          --timepicker-font-family: "Inter", -apple-system, sans-serif;
-          --timepicker-border-radius: 24px;
-          --timepicker-primary: #10b981;
-          --timepicker-surface-hover: #d1fae5;
-          --timepicker-bg: #ecfdf5;
-          --timepicker-surface: #d1fae5;
+        .tp-ui-wrapper.custom-rounded-picker {
+          --tp-font-family: "Inter", -apple-system, sans-serif;
+          --tp-border-radius: 24px;
+          --tp-primary: #10b981;
+          --tp-surface-hover: #d1fae5;
+          --tp-bg: #ecfdf5;
+          --tp-surface: #d1fae5;
         }
       `}</style>
     </div>
