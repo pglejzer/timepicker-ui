@@ -72,7 +72,7 @@ const uiOptions = [
     description: "Force mobile mode",
   },
   {
-    name: "enableSwitchIcon",
+    name: "ui.enableSwitchIcon",
     type: "boolean",
     default: "false",
     description: "Show mode switch icon",

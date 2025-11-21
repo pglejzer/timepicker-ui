@@ -81,7 +81,7 @@ export default function InlineModePage() {
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  enableSwitchIcon: false
+  ui: { enableSwitchIcon: false }
 });
 
 picker.create();`}
@@ -102,10 +102,7 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  ui: {
-    enableSwitchIcon: false,
-    theme: 'basic'
-  },
+  ui: { enableSwitchIcon: false, theme: 'basic' },
   clock: { type: '12h' }
 });
 

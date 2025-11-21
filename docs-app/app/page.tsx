@@ -41,12 +41,11 @@ function MobileExample() {
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  mobile: true,
+  ui: { mobile: true },
 });
 picker.create();`}
       options={{
-        mobile: true,
-        enableSwitchIcon: true,
+        ui: { mobile: true, enableSwitchIcon: true },
       }}
       inputPlaceholder="Select time"
       showCode={false}
