@@ -323,4 +323,3 @@ export class Lifecycle {
     document.removeEventListener('mousedown', this.eventsClickMobileHandler);
   }
 }
-

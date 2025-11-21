@@ -1,6 +1,7 @@
 import type { RenderConfig, ClockMode, DisabledTimeConfig, ClockType, AmPmType } from '../types';
 import { HourEngine } from '../engine/HourEngine';
 import { MinuteEngine } from '../engine/MinuteEngine';
+import { AngleEngine } from '../engine/AngleEngine';
 import { isDocument } from '../../../utils/node';
 
 export class ClockRenderer {
@@ -28,8 +29,9 @@ export class ClockRenderer {
   setHandAngle(angle: number): void {
     if (Math.abs(this.currentAngle - angle) < 0.1) return;
 
-    this.currentAngle = angle;
-    this.config.clockHand.style.transform = `rotateZ(${angle}deg)`;
+    const targetAngle = AngleEngine.calculateShortestPath(this.currentAngle, angle);
+    this.currentAngle = targetAngle;
+    this.config.clockHand.style.transform = `rotateZ(${targetAngle}deg)`;
   }
 
   setActiveValue(value: string): void {

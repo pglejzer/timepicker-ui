@@ -29,5 +29,16 @@ export class AngleEngine {
   static isInnerCircle(distance: number, radius: number): boolean {
     return distance < radius * 0.6;
   }
-}
 
+  static calculateShortestPath(currentAngle: number, targetAngle: number): number {
+    const currentNormalized = this.normalizeAngle(currentAngle);
+    const targetNormalized = this.normalizeAngle(targetAngle);
+
+    const diff = targetNormalized - currentNormalized;
+    const diffCW = diff >= 0 ? diff : diff + 360;
+    const diffCCW = diff <= 0 ? diff : diff - 360;
+
+    const shortestDiff = Math.abs(diffCW) < Math.abs(diffCCW) ? diffCW : diffCCW;
+    return currentAngle + shortestDiff;
+  }
+}
