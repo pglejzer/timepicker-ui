@@ -5,7 +5,18 @@
  * Options are now organized into logical groups for better clarity and maintainability.
  */
 
-import type { TimepickerEventCallback } from './types';
+import type {
+  TimepickerEventCallback,
+  OpenEventData,
+  CancelEventData,
+  ConfirmEventData,
+  UpdateEventData,
+  SelectHourEventData,
+  SelectMinuteEventData,
+  SelectAMEventData,
+  SelectPMEventData,
+  ErrorEventData,
+} from './types';
 
 /**
  * Clock behavior configuration
@@ -258,47 +269,47 @@ export interface CallbacksOptions {
   /**
    * @description Triggered when timepicker opens
    */
-  onOpen?: TimepickerEventCallback;
+  onOpen?: TimepickerEventCallback<OpenEventData>;
 
   /**
    * @description Triggered when user cancels
    */
-  onCancel?: TimepickerEventCallback;
+  onCancel?: TimepickerEventCallback<CancelEventData>;
 
   /**
    * @description Triggered when user confirms time
    */
-  onConfirm?: TimepickerEventCallback;
+  onConfirm?: TimepickerEventCallback<ConfirmEventData>;
 
   /**
    * @description Triggered during interaction (real-time)
    */
-  onUpdate?: TimepickerEventCallback;
+  onUpdate?: TimepickerEventCallback<UpdateEventData>;
 
   /**
    * @description Triggered when hour mode is selected
    */
-  onSelectHour?: TimepickerEventCallback;
+  onSelectHour?: TimepickerEventCallback<SelectHourEventData>;
 
   /**
    * @description Triggered when minute mode is selected
    */
-  onSelectMinute?: TimepickerEventCallback;
+  onSelectMinute?: TimepickerEventCallback<SelectMinuteEventData>;
 
   /**
    * @description Triggered when AM is selected
    */
-  onSelectAM?: TimepickerEventCallback;
+  onSelectAM?: TimepickerEventCallback<SelectAMEventData>;
 
   /**
    * @description Triggered when PM is selected
    */
-  onSelectPM?: TimepickerEventCallback;
+  onSelectPM?: TimepickerEventCallback<SelectPMEventData>;
 
   /**
    * @description Triggered on invalid time format
    */
-  onError?: TimepickerEventCallback;
+  onError?: TimepickerEventCallback<ErrorEventData>;
 }
 
 /**
@@ -311,4 +322,3 @@ export interface TimepickerOptions {
   behavior?: BehaviorOptions;
   callbacks?: CallbacksOptions;
 }
-
