@@ -116,6 +116,14 @@ export default class EventManager {
       AM.classList.add('active');
       PM?.classList.remove('active');
       this.emitter.emit('select:am', {});
+
+      const hour = this.core.getHour();
+      const minutes = this.core.getMinutes();
+      this.emitter.emit('update', {
+        hour: hour?.value,
+        minutes: minutes?.value,
+        type: 'AM',
+      });
     };
 
     AM.addEventListener('click', handler);
@@ -132,6 +140,14 @@ export default class EventManager {
       PM.classList.add('active');
       AM?.classList.remove('active');
       this.emitter.emit('select:pm', {});
+
+      const hour = this.core.getHour();
+      const minutes = this.core.getMinutes();
+      this.emitter.emit('update', {
+        hour: hour?.value,
+        minutes: minutes?.value,
+        type: 'PM',
+      });
     };
 
     PM.addEventListener('click', handler);
@@ -148,6 +164,13 @@ export default class EventManager {
       const minutes = this.core.getMinutes();
       minutes?.classList.remove('active');
       this.emitter.emit('select:hour', { hour: hour.value });
+
+      const activeTypeMode = this.core.getActiveTypeMode();
+      this.emitter.emit('update', {
+        hour: hour.value,
+        minutes: minutes?.value,
+        type: activeTypeMode?.textContent || undefined,
+      });
     };
 
     hour.addEventListener('click', handler);
@@ -161,6 +184,14 @@ export default class EventManager {
           previousValue = hour.value;
           this.emitter.emit('animation:clock', {});
           this.emitter.emit('select:hour', { hour: hour.value });
+
+          const minutes = this.core.getMinutes();
+          const activeTypeMode = this.core.getActiveTypeMode();
+          this.emitter.emit('update', {
+            hour: hour.value,
+            minutes: minutes?.value,
+            type: activeTypeMode?.textContent || undefined,
+          });
         }
       };
 
@@ -179,6 +210,13 @@ export default class EventManager {
       const hour = this.core.getHour();
       hour?.classList.remove('active');
       this.emitter.emit('select:minute', { minutes: minutes.value });
+
+      const activeTypeMode = this.core.getActiveTypeMode();
+      this.emitter.emit('update', {
+        hour: hour?.value,
+        minutes: minutes.value,
+        type: activeTypeMode?.textContent || undefined,
+      });
     };
 
     minutes.addEventListener('click', handler);
@@ -222,6 +260,14 @@ export default class EventManager {
         hour.value = newValue.toString().padStart(2, '0');
         this.emitter.emit('animation:clock', {});
         this.emitter.emit('select:hour', { hour: hour.value });
+
+        const minutes = this.core.getMinutes();
+        const activeTypeMode = this.core.getActiveTypeMode();
+        this.emitter.emit('update', {
+          hour: hour.value,
+          minutes: minutes?.value,
+          type: activeTypeMode?.textContent || undefined,
+        });
       };
 
       hour.addEventListener('keydown', hourKeyHandler);
@@ -248,6 +294,14 @@ export default class EventManager {
         minutes.value = newValue.toString().padStart(2, '0');
         this.emitter.emit('animation:clock', {});
         this.emitter.emit('select:minute', { minutes: minutes.value });
+
+        const hour = this.core.getHour();
+        const activeTypeMode = this.core.getActiveTypeMode();
+        this.emitter.emit('update', {
+          hour: hour?.value,
+          minutes: minutes.value,
+          type: activeTypeMode?.textContent || undefined,
+        });
       };
 
       minutes.addEventListener('keydown', minutesKeyHandler);

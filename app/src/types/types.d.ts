@@ -25,8 +25,8 @@ export type HideEventData = Record<string, never>;
 
 /** Payload for real-time updates */
 export type UpdateEventData = {
-  hour: string;
-  minutes: string;
+  hour?: string;
+  minutes?: string;
   type?: string;
 };
 

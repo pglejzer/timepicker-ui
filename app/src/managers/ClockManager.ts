@@ -80,12 +80,28 @@ export default class ClockManager {
         if (h) {
           h.value = hourValue;
         }
+
+        const minutes = this.core.getMinutes();
+        const activeTypeMode = this.core.getActiveTypeMode();
+        this.emitter.emit('update', {
+          hour: hourValue,
+          minutes: minutes?.value,
+          type: activeTypeMode?.textContent || undefined,
+        });
       },
       onMinuteChange: (minuteValue: string) => {
         const m = this.core.getMinutes();
         if (m) {
           m.value = minuteValue;
         }
+
+        const hour = this.core.getHour();
+        const activeTypeMode = this.core.getActiveTypeMode();
+        this.emitter.emit('update', {
+          hour: hour?.value,
+          minutes: minuteValue,
+          type: activeTypeMode?.textContent || undefined,
+        });
       },
     };
 

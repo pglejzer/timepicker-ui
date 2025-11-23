@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.0.2] - 2024-11-23
+
+### Fixed
+
+- **Firefox compatibility** - Fixed `TouchEvent is not defined` error in `DragHandlers`. Changed from `instanceof TouchEvent` to `'touches' in event` check for cross-browser compatibility
+
+### Added
+
+- **Exported grouped option types** - Added exports for `TimepickerOptions`, `ClockOptions`, `UIOptions`, `LabelsOptions`, `BehaviorOptions`, `CallbacksOptions` to support type-safe option composition
+- **onUpdate event emissions** - Added missing `onUpdate` event emissions in `EventManager` and `ClockManager` for real-time value synchronization
+
+---
+
 ## [4.0.1] - 2024-11-21
 
 ### Fixed

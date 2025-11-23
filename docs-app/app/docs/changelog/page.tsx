@@ -180,8 +180,61 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.0.1</strong> - Released November 21, 2024
+        <strong>v4.0.2</strong> - Released November 23, 2024
       </InfoBox>
+
+      <Section icon={Bug} title="Version 4.0.2 - November 23, 2024">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={[
+              {
+                title: "Firefox Compatibility",
+                description:
+                  "Fixed 'TouchEvent is not defined' error in DragHandlers - changed from instanceof TouchEvent to 'touches' in event check",
+              },
+            ]}
+          />
+
+          <ChangeSection
+            icon={Sparkles}
+            label="Added"
+            color="green-500"
+            items={[
+              {
+                title: "Exported Grouped Option Types",
+                description:
+                  "Added exports for TimepickerOptions, ClockOptions, UIOptions, LabelsOptions, BehaviorOptions, CallbacksOptions to support type-safe option composition",
+              },
+              {
+                title: "onUpdate Event Emissions",
+                description:
+                  "Added missing onUpdate event emissions in EventManager and ClockManager for real-time value synchronization",
+              },
+            ]}
+          />
+
+          <div className="rounded-lg border border-border bg-card p-6 mt-6">
+            <h4 className="font-semibold mb-3 text-foreground">
+              Firefox Fix Details
+            </h4>
+            <CodeBlock
+              code={`// Before (causing error on Firefox)
+if (event instanceof TouchEvent) { // ❌ TouchEvent not defined
+  const touch = event.touches[0];
+}
+
+// After (cross-browser compatible)
+if ('touches' in event) { // ✅ Works everywhere
+  const touch = event.touches[0];
+}`}
+              language="typescript"
+            />
+          </div>
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.0.1 - November 21, 2024">
         <div className="space-y-4">
