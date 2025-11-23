@@ -3,8 +3,9 @@
 Modern time picker library built with TypeScript. Works with any framework or vanilla JavaScript.
 
 [![npm version](https://badge.fury.io/js/timepicker-ui.svg)](https://badge.fury.io/js/timepicker-ui)
-[![downloads](https://img.shields.io/npm/dw/timepicker-ui)](https://npmcharts.com/compare/timepicker-ui?minimal=true)
+[![downloads](https://img.shields.io/npm/dm/timepicker-ui)](https://npmcharts.com/compare/timepicker-ui?minimal=true)
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://img.shields.io/npm/l/timepicker-ui)
+[![size](https://img.shields.io/bundlephobia/minzip/timepicker-ui)](https://bundlephobia.com/package/timepicker-ui)
 
 [Live Demo](https://timepicker-ui.vercel.app/) • [Documentation](https://timepicker-ui.vercel.app/docs) • [React Wrapper](https://github.com/pglejzer/timepicker-ui-react) • [Changelog](./CHANGELOG.md)
 
