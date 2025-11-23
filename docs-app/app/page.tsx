@@ -162,6 +162,16 @@ export default function Home() {
               A lightweight, accessible, and highly customizable time picker
               component with beautiful themes and mobile-first design.
             </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm text-muted-foreground">
+              <Link
+                href="/react"
+                className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-colors"
+              >
+                <Code2 className="h-4 w-4" />
+                <span className="font-medium">React wrapper available</span>
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/docs/installation"

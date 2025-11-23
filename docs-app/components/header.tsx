@@ -35,6 +35,13 @@ export function Header() {
       >
         Examples
       </Link>
+      <Link
+        href="/react"
+        className="transition-colors hover:text-primary"
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        React
+      </Link>
     </>
   );
 
