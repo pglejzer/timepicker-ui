@@ -102,7 +102,7 @@ export class DragHandlers {
   private getPointerPosition(event: MouseEvent | TouchEvent): Point {
     const rect = this.cachedRect || this.clockFace.getBoundingClientRect();
 
-    if (event instanceof TouchEvent) {
+    if ('touches' in event) {
       const touch = event.touches[0] || event.changedTouches[0];
       return {
         x: touch.clientX - rect.left,
@@ -117,7 +117,7 @@ export class DragHandlers {
   }
 
   private getTargetElement(event: MouseEvent | TouchEvent): Element | null {
-    if (event instanceof TouchEvent) {
+    if ('touches' in event) {
       const touch = event.touches[0] || event.changedTouches[0];
       if (touch && !isNode()) {
         return document.elementFromPoint(touch.clientX, touch.clientY);
