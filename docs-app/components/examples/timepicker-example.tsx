@@ -55,6 +55,8 @@ export function TimepickerExample({
             ...(memoizedOptions.callbacks as
               | Record<string, unknown>
               | undefined),
+            // Pass updateOn through if it exists
+            updateOn: (memoizedOptions as Record<string, unknown>)?.updateOn,
             onConfirm: (data: ConfirmEventData) => {
               const time =
                 data.hour && data.minutes

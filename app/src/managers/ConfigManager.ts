@@ -333,13 +333,11 @@ export default class ConfigManager {
     const clockFace = this.core.getClockFace();
     if (!clockFace) return;
 
-    // Zarządzaj całym clockface i jego elementami
     const tipsWrapper = clockFace.querySelector('.tp-ui-tips-wrapper');
     const tipsWrapper24h = clockFace.querySelector('.tp-ui-tips-wrapper-24h');
     const allTips = clockFace.querySelectorAll<HTMLElement>('.tp-ui-tip');
 
     if (isHidden) {
-      // Ukryj clock-face dla keyboard mode
       clockFace.setAttribute('aria-hidden', 'true');
       tipsWrapper?.setAttribute('aria-hidden', 'true');
       tipsWrapper24h?.setAttribute('aria-hidden', 'true');
@@ -348,7 +346,6 @@ export default class ConfigManager {
         tip.setAttribute('aria-hidden', 'true');
       });
     } else {
-      // Pokaż clock-face dla desktop mode
       clockFace.removeAttribute('aria-hidden');
       tipsWrapper?.removeAttribute('aria-hidden');
       tipsWrapper24h?.removeAttribute('aria-hidden');

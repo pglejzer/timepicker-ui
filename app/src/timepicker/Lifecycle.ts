@@ -1,6 +1,7 @@
 import type { CoreState } from './CoreState';
 import type { Managers } from './Managers';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
+import type { UpdateInfo } from '../types/types';
 import { initMd3Ripple } from '../utils/ripple';
 import { debounce } from '../utils/debounce';
 import { allEvents } from '../utils/variables';
@@ -63,7 +64,47 @@ export class Lifecycle {
       this.emitter.on('confirm', callbacks.onConfirm);
     }
     if (callbacks.onUpdate) {
-      this.emitter.on('update', callbacks.onUpdate);
+      // Attach onUpdate to all events with eventType info
+      const events: Array<{
+        name: string;
+        type:
+          | 'update'
+          | 'confirm'
+          | 'cancel'
+          | 'open'
+          | 'select:hour'
+          | 'select:minute'
+          | 'select:am'
+          | 'select:pm';
+      }> = [
+        { name: 'update', type: 'update' },
+        { name: 'confirm', type: 'confirm' },
+        { name: 'cancel', type: 'cancel' },
+        { name: 'open', type: 'open' },
+        { name: 'select:hour', type: 'select:hour' },
+        { name: 'select:minute', type: 'select:minute' },
+        { name: 'select:am', type: 'select:am' },
+        { name: 'select:pm', type: 'select:pm' },
+      ];
+
+      events.forEach(({ name, type }) => {
+        this.emitter.on(name, () => {
+          const hour = this.core.getHour();
+          const minutes = this.core.getMinutes();
+          const activeTypeMode = this.core.getActiveTypeMode();
+
+          callbacks.onUpdate!(
+            {
+              hour: hour?.value,
+              minutes: minutes?.value,
+              type: activeTypeMode?.textContent || undefined,
+            },
+            {
+              event: type,
+            },
+          );
+        });
+      });
     }
     if (callbacks.onSelectHour) {
       this.emitter.on('select:hour', callbacks.onSelectHour);
@@ -245,7 +286,6 @@ export class Lifecycle {
         }
       });
     } else {
-      // Ukryj clock-face dla mobile view (keyboard mode)
       this.managers.config.updateClockFaceAccessibility(true);
     }
 

@@ -20,9 +20,21 @@ declare module 'timepicker-ui' {
   export type HideEventData = Record<string, never>;
 
   export type UpdateEventData = {
-    hour: string;
-    minutes: string;
+    hour?: string;
+    minutes?: string;
     type?: string;
+  };
+
+  export type UpdateInfo = {
+    event:
+      | 'update'
+      | 'confirm'
+      | 'cancel'
+      | 'open'
+      | 'select:hour'
+      | 'select:minute'
+      | 'select:am'
+      | 'select:pm';
   };
 
   export type SelectHourEventData = {

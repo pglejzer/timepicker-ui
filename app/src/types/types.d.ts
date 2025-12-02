@@ -30,6 +30,20 @@ export type UpdateEventData = {
   type?: string;
 };
 
+/** Information about update event source */
+export type UpdateInfo = {
+  /** Event that triggered the update */
+  event:
+    | 'update'
+    | 'confirm'
+    | 'cancel'
+    | 'open'
+    | 'select:hour'
+    | 'select:minute'
+    | 'select:am'
+    | 'select:pm';
+};
+
 /** Payload when hour mode activated */
 export type SelectHourEventData = {
   hour: string;
@@ -179,7 +193,7 @@ export type OptionTypes = {
   /** Callback when user confirms */
   onConfirm?: TimepickerEventCallback<ConfirmEventData>;
   /** Callback during interaction */
-  onUpdate?: TimepickerEventCallback<UpdateEventData>;
+  onUpdate?: (data: UpdateEventData, info: UpdateInfo) => void;
   /** Callback when hour mode activated */
   onSelectHour?: TimepickerEventCallback<SelectHourEventData>;
   /** Callback when minute mode activated */

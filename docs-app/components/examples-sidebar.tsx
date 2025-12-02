@@ -59,6 +59,10 @@ const navigation: NavigationSection[] = [
     title: "Advanced",
     links: [
       { title: "Event Callbacks", href: "/examples/advanced/events" },
+      {
+        title: "Event-Selective Update",
+        href: "/examples/advanced/event-selective-update",
+      },
       { title: "Custom Styling", href: "/examples/advanced/custom-styling" },
       { title: "Multiple Pickers", href: "/examples/advanced/multiple" },
       { title: "Dynamic Updates", href: "/examples/advanced/dynamic-updates" },

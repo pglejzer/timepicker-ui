@@ -180,8 +180,41 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.0.2</strong> - Released November 23, 2024
+        <strong>v4.0.3</strong> - Released November 24, 2024
       </InfoBox>
+
+      <Section icon={Sparkles} title="Version 4.0.3 - November 24, 2024">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Sparkles}
+            label="Added"
+            color="green-500"
+            items={[
+              {
+                title: "Event-selective onUpdate callback",
+                description:
+                  "Added optional 'updateOn' field to filter which events trigger onUpdate - backward compatible, defaults to all events",
+              },
+            ]}
+          />
+
+          <div className="mt-4">
+            <CodeBlock
+              language="typescript"
+              code={`new TimepickerUI(input, {
+  callbacks: {
+    onUpdate: (data) => console.log('Updated:', data),
+    updateOn: ['confirm', 'cancel'] // Only on confirm/cancel
+  }
+});
+
+// Available events:
+// 'confirm', 'cancel', 'open', 'select:hour', 
+// 'select:minute', 'select:am', 'select:pm'`}
+            />
+          </div>
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.0.2 - November 23, 2024">
         <div className="space-y-4">

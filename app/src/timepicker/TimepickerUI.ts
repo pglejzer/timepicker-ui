@@ -33,15 +33,12 @@ export default class TimepickerUI {
     const instanceId = customId || `tp-ui-${generateUUID()}`;
     const element = this.createWrapperElement(targetInput);
 
-    // Merge with defaults
     const mergedOptions = mergeOptions(options || {});
 
-    // Handle inline mode defaults
     if (mergedOptions.ui.inline?.enabled && typeof options?.behavior?.focusTrap === 'undefined') {
       mergedOptions.behavior.focusTrap = false;
     }
 
-    // Validate inline container
     if (mergedOptions.ui.inline?.enabled) {
       if (!mergedOptions.ui.inline.containerId) {
         throw new Error('inline.containerId is required when inline mode is enabled');
@@ -395,4 +392,3 @@ export default class TimepickerUI {
     instanceRegistry.clear();
   }
 }
-

@@ -11,6 +11,7 @@ import type {
   CancelEventData,
   ConfirmEventData,
   UpdateEventData,
+  UpdateInfo,
   SelectHourEventData,
   SelectMinuteEventData,
   SelectAMEventData,
@@ -283,8 +284,23 @@ export interface CallbacksOptions {
 
   /**
    * @description Triggered during interaction (real-time)
+   * @param data - Event data with hour, minutes, and type
+   * @param info - Information about event source (event: 'update' | 'confirm' | 'cancel' | etc.)
+   *
+   * @example
+   * ```typescript
+   * onUpdate: (data, info) => {
+   *   console.log('Time:', data.hour, data.minutes);
+   *   console.log('Triggered by:', info.event);
+   *
+   *   // Filter by event type
+   *   if (info.event === 'confirm' || info.event === 'cancel') {
+   *     // Only process on confirm/cancel
+   *   }
+   * }
+   * ```
    */
-  onUpdate?: TimepickerEventCallback<UpdateEventData>;
+  onUpdate?: (data: UpdateEventData, info: UpdateInfo) => void;
 
   /**
    * @description Triggered when hour mode is selected

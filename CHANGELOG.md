@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.0.3] - 2024-11-24
+
+### Added
+
+- **Event-selective `onUpdate` callback** - `onUpdate` now receives second parameter `info` with event source information
+
+  - New signature: `onUpdate: (data, info) => void`
+  - `info.event` indicates which event triggered the update: `'update'`, `'confirm'`, `'cancel'`, `'open'`, `'select:hour'`, `'select:minute'`, `'select:am'`, `'select:pm'`
+  - Filter updates by checking `info.event` in callback body
+  - Backward compatible - second parameter is optional, existing code works without changes
+  - **Example:**
+
+    ```typescript
+    new TimepickerUI(input, {
+      callbacks: {
+        onUpdate: (data, info) => {
+          console.log("Time:", data.hour, data.minutes);
+          console.log("Triggered by:", info.event);
+
+          // Filter by event type
+          if (info.event === "confirm" || info.event === "cancel") {
+            // Only process on confirm/cancel
+            submitForm(data);
+          }
+        },
+      },
+    });
+    ```
+
+---
+
 ## [4.0.2] - 2024-11-23
 
 ### Fixed

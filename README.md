@@ -189,17 +189,17 @@ const picker = new TimepickerUI(input, {
 
 ### Callbacks Options
 
-| Property         | Type     | Description              |
-| ---------------- | -------- | ------------------------ |
-| `onConfirm`      | function | Time confirmed           |
-| `onCancel`       | function | Cancelled                |
-| `onOpen`         | function | Picker opened            |
-| `onUpdate`       | function | Time updated (real-time) |
-| `onSelectHour`   | function | Hour selected            |
-| `onSelectMinute` | function | Minute selected          |
-| `onSelectAM`     | function | AM selected              |
-| `onSelectPM`     | function | PM selected              |
-| `onError`        | function | Error occurred           |
+| Property         | Type     | Description                                                                                      |
+| ---------------- | -------- | ------------------------------------------------------------------------------------------------ |
+| `onConfirm`      | function | Time confirmed                                                                                   |
+| `onCancel`       | function | Cancelled                                                                                        |
+| `onOpen`         | function | Picker opened                                                                                    |
+| `onUpdate`       | function | Time updated (real-time) - receives `(data, info)` where `info.eventType` indicates event source |
+| `onSelectHour`   | function | Hour selected                                                                                    |
+| `onSelectMinute` | function | Minute selected                                                                                  |
+| `onSelectAM`     | function | AM selected                                                                                      |
+| `onSelectPM`     | function | PM selected                                                                                      |
+| `onError`        | function | Error occurred                                                                                   |
 
 ### Migration from v3.x to v4.0.0
 
@@ -371,6 +371,21 @@ picker.on("open", () => {
 
 picker.on("update", (data) => {
   console.log("Time updated:", data);
+});
+
+// Event-selective onUpdate with info parameter (v4.0.3+)
+const picker = new TimepickerUI(input, {
+  callbacks: {
+    onUpdate: (data, info) => {
+      console.log("Time:", data.hour, data.minutes);
+      console.log("Triggered by:", info.event);
+
+      // Filter by event type
+      if (info.event === "confirm" || info.event === "cancel") {
+        // Only process on confirm/cancel
+      }
+    },
+  },
 });
 
 picker.on("select:hour", (data) => {
