@@ -1,7 +1,6 @@
 import type { CoreState } from './CoreState';
 import type { Managers } from './Managers';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
-import type { UpdateInfo } from '../types/types';
 import { initMd3Ripple } from '../utils/ripple';
 import { debounce } from '../utils/debounce';
 import { allEvents } from '../utils/variables';
