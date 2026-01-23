@@ -6,6 +6,7 @@ import { CodeBlock } from "@/components/code-block";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import { Clock, Palette, Calendar, Settings, Zap, Lock } from "lucide-react";
+import Link from "next/link";
 
 interface ExampleCardProps {
   title: string;
@@ -201,12 +202,12 @@ export default function ExamplesPage() {
         <strong>TimepickerUI works with any JavaScript framework</strong> or
         vanilla JS. The same API is available in Vue, Angular, Svelte, or plain
         JavaScript. Check the{" "}
-        <a
+        <Link
           href="/docs/quick-start"
           className="text-primary hover:underline font-medium"
         >
           Quick Start
-        </a>{" "}
+        </Link>{" "}
         guide for framework-specific examples.
       </InfoBox>
 

@@ -59,6 +59,16 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_UNRELEASED = {
+  fixed: [
+    {
+      title: "Desktop/mobile view switching",
+      description:
+        "Fixed enableSwitchIcon toggle not updating label text (Select time ↔ Enter time), icon (keyboard ↔ schedule), and Hour/Minute label visibility",
+    },
+  ],
+};
+
 const CHANGELOG_320 = {
   added: [
     {
@@ -180,10 +190,21 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.0.2</strong> - Released November 23, 2024
+        <strong>v4.0.3</strong> - Released January 23, 2026
       </InfoBox>
 
-      <Section icon={Bug} title="Version 4.0.2 - November 23, 2024">
+      <Section icon={Bug} title="Version 4.0.3 - January 23, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_UNRELEASED.fixed}
+          />
+        </div>
+      </Section>
+
+      <Section icon={Bug} title="Version 4.0.2 - November 23, 2025">
         <div className="space-y-4">
           <ChangeSection
             icon={Wrench}
@@ -236,7 +257,7 @@ if ('touches' in event) { // ✅ Works everywhere
         </div>
       </Section>
 
-      <Section icon={Bug} title="Version 4.0.1 - November 21, 2024">
+      <Section icon={Bug} title="Version 4.0.1 - November 21, 2025">
         <div className="space-y-4">
           <ChangeSection
             icon={Wrench}
@@ -295,7 +316,7 @@ callbacks: {
         </div>
       </Section>
 
-      <Section icon={Package} title="Version 4.0.0 - November 21, 2024">
+      <Section icon={Package} title="Version 4.0.0 - November 21, 2025">
         <div className="space-y-6">
           <div className="bg-gradient-to-br from-red-500/5 to-orange-500/5 rounded-lg p-4 border border-red-500/20 mb-6">
             <h4 className="font-semibold mb-2 text-foreground flex items-center gap-2">

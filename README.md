@@ -23,13 +23,7 @@ Modern time picker library built with TypeScript. Works with any framework or va
 - SSR compatible
 - Lightweight with tree-shaking support
 
-## Known Limitations
-
-This project is actively maintained. Some areas planned for improvement:
-
-- Unit/integration test coverage could be expanded
-- Performance monitoring tooling
-- Further TypeScript strictness improvements
+## Contributions
 
 Contributions welcome! Feel free to [open an issue or PR](https://github.com/pglejzer/timepicker-ui/issues).
 

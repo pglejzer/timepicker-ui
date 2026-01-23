@@ -187,8 +187,8 @@ export default function Home() {
             >
               <Sparkles className="h-4 w-4 flex-shrink-0" />
               <span>
-                <span className="font-medium">New:</span> Version 4.0.0 is here
-                with grouped options & better TypeScript!
+                <span className="font-medium">New:</span> Version 4.0.3 is here
+                with desktop/mobile switch fixes!
               </span>
             </Link>
           </div>

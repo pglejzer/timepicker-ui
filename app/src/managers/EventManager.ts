@@ -241,18 +241,14 @@ export default class EventManager {
         let newValue: number;
         if (e.key === 'ArrowUp') {
           if (is12h) {
-            // Tryb 12h: 1-12, po 12 wraca do 1
             newValue = currentValue >= 12 ? 1 : currentValue + 1;
           } else {
-            // Tryb 24h: 0-23, po 23 wraca do 0
             newValue = currentValue >= max ? 0 : currentValue + 1;
           }
         } else {
           if (is12h) {
-            // Tryb 12h: po 1 wraca do 12
             newValue = currentValue <= 1 ? 12 : currentValue - 1;
           } else {
-            // Tryb 24h: po 0 wraca do 23
             newValue = currentValue <= 0 ? max : currentValue - 1;
           }
         }

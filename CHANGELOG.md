@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [4.0.2] - 2024-11-23
+## [4.0.3] - 2026-01-23
+
+### Fixed
+
+- **Desktop/mobile view switching** - Fixed `enableSwitchIcon` toggle not updating label text, icon, and Hour/Minute labels. Now correctly switches between "Select time" ↔ "Enter time", keyboard ↔ schedule icons, and shows/hides Hour/Minute labels when toggling views
+
+---
+
+## [4.0.2] - 2025-11-23
 
 ### Fixed
 
@@ -20,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [4.0.1] - 2024-11-21
+## [4.0.1] - 2025-11-21
 
 ### Fixed
 
@@ -48,7 +56,7 @@ onConfirm?: TimepickerEventCallback<ConfirmEventData>; // eventData: { hour?: st
 
 ---
 
-## [4.0.0] - 2024-11-21
+## [4.0.0] - 2025-11-21
 
 ### Breaking Changes
 
@@ -246,7 +254,6 @@ new TimepickerUI(input, { ui: { cssClass: "my-theme" } });
 ### Added
 
 - **Material Design 3 Ripple Effect** - Interactive ripple animation on buttons and inputs
-
   - Ripple effect on AM/PM buttons with Material Design 3 styling
   - Ripple effect on hour and minute input fields
   - CSS-based animation using `::before` pseudo-element
@@ -254,7 +261,6 @@ new TimepickerUI(input, { ui: { cssClass: "my-theme" } });
   - 500ms cubic-bezier animation with primary color gradient
 
 - **Material Design 3 Color System** - Complete M3 color token implementation
-
   - New CSS variables: `--timepicker-primary-container`, `--timepicker-on-primary-container`
   - New CSS variables: `--timepicker-tertiary-container`, `--timepicker-on-tertiary-container`
   - New CSS variables: `--timepicker-am-pm-text-selected`, `--timepicker-am-pm-text-unselected`
@@ -262,34 +268,29 @@ new TimepickerUI(input, { ui: { cssClass: "my-theme" } });
   - All 8 themes updated with complete M3 variable sets
 
 - **New Theme: M2 (Legacy)** - Material Design 2 theme with original color scheme
-
   - Preserves classic timepicker appearance
   - Available via `theme: 'm2'` option
   - Includes all M3 variables mapped to M2 equivalents
 
 - **Modular SCSS Architecture** - Better maintainability and organization
-
   - Split `main.scss` into 14 focused partial files
   - Partials: `_modal`, `_wrapper`, `_header`, `_body`, `_footer`, `_clock`, `_time-inputs`, `_am-pm`, `_buttons`, `_keyboard-icon`, `_utilities`, `_animations`, `_inline`, `_accessibility`, `_ripple`
   - Each partial has its own `@use '../variables.scss'` import
   - Easier to maintain and extend individual components
 
 - **Mobile Clock Face Toggle** - New interactive mobile view expansion feature
-
   - Click keyboard icon to expand/collapse clock face on mobile view
   - Smooth 3-phase RAF (RequestAnimationFrame) animations for expansion
   - 400ms cubic-bezier transitions for professional UX
   - Automatic state management with `isAnimating` flag to prevent animation conflicts
 
 - **Desktop to Mobile View Switching** - `enableSwitchIcon` functionality
-
   - Switch between desktop and mobile views dynamically
   - Click schedule/keyboard icon to toggle between view modes
   - Smooth animations with `.desktop-to-mobile` transition class
   - Synchronized state with `_isMobileView` flag for accurate rendering
 
 - **Local SVG Icon Assets** - No external dependencies required
-
   - Added `keyboard.svg` and `schedule.svg` to project assets
   - Default icons no longer require Material Icons from Google
   - Webpack configuration: `type: 'asset/source'` for inline SVG
@@ -297,7 +298,6 @@ new TimepickerUI(input, { ui: { cssClass: "my-theme" } });
   - TypeScript module declarations in `custom.d.ts` for SVG imports
 
 - **Dynamic Label and Icon Switching** - Context-aware UI updates
-
   - Label changes: `timeLabel` ↔ `mobileTimeLabel` based on active view
   - Icon changes: keyboard ↔ schedule SVG based on active view
   - Input readonly state: editable on mobile, readonly on desktop (unless `editable: true`)
@@ -327,53 +327,45 @@ new TimepickerUI(input, { ui: { cssClass: "my-theme" } });
 ### Changed
 
 - **Theme naming** - Renamed `m3` theme to `m3-green` for clarity
-
   - Breaking: Update `theme: 'm3'` to `theme: 'm3-green'` in your code
   - TypeScript types updated to reflect new theme names
   - All references in codebase updated
 
 - **Option naming** - Renamed `switchToMinutesAfterSelectHour` to `autoSwitchToMinutes` for consistency
-
   - Breaking: Update `switchToMinutesAfterSelectHour: true` to `autoSwitchToMinutes: true` in your code
   - Option controls automatic switch to minutes after selecting hour
   - TypeScript types updated to reflect new option name
 
 - **24-hour clock layout** - Improved spacing for inner ring numbers
-
   - Increased inner ring size from 160px to 200px (width and height)
   - Better tap targets for 13-24 hour values
   - Improved accessibility for touch devices
 
 - **AM/PM styling** - Enhanced visual feedback with M3 colors
-
   - Separate colors for selected (`--timepicker-am-pm-text-selected`: #633B48)
   - Separate colors for unselected (`--timepicker-am-pm-text-unselected`: #49454F)
   - Active state uses `--timepicker-am-pm-active` background color
   - Improved hover states for better UX
 
 - **Input wrapper structure** - Better ripple effect support
-
   - Hour and minute inputs wrapped in `.timepicker-ui-input-wrapper` div
   - Wrapper has `position: relative` for ripple positioning
   - Wrapper dimensions match input (96x80px desktop, 96x70px mobile)
   - Maintains all existing input functionality
 
 - **Template Unification** - Merged mobile and desktop templates
-
   - Single `getModalTemplate()` function with `mobileClass` conditional
   - Hour/minute text labels always rendered in DOM (CSS `display` controls visibility)
   - Removed `wrapper-landscape` class, unified to `mobile-clock-wrapper`
   - Simplified template logic while maintaining full functionality
 
 - **Clock Face Rendering** - Improved state synchronization
-
   - `_isMobileView` flag must be set before calling `setHoursToClock`/`setMinutesToClock`
   - Getters (`clockFace`, `tipsWrapper`, `clockHand`) branch on `_isMobileView`
   - Proper clock face rebuild using `setHoursToClock`/`setMinutesToClock` instead of just transform
   - Fixed tips rendering in correct clock face element (mobile vs desktop)
 
 - **ConfigManager Refactoring** - Modular architecture (KISS/DRY principles)
-
   - Split 433-line monolith into 4 focused modules (~87% reduction)
   - `TimeoutManager` (22 lines) - Timeout and RAF management
   - `ViewSwitcher` (58 lines) - Mobile ↔ desktop view switching logic
@@ -392,13 +384,11 @@ new TimepickerUI(input, { ui: { cssClass: "my-theme" } });
 ### Fixed
 
 - **Mobile landscape CSS selectors** - Fixed `:not()` pseudo-class usage
-
   - Changed from `:not(.timepicker-ui-wrapper + .mobile)` to `:not(.mobile)`
   - Corrected sibling combinator that was preventing proper mobile styling
   - Mobile landscape orientation now works correctly
 
 - **Clock Face State Bugs** - Synchronization and rendering issues
-
   - Fixed clock face not updating when switching mobile ↔ desktop
   - Fixed tips rendering outside clock face ("cyferki są po lewej na dole zamist w clockFACE")
   - Fixed state losing values after first toggle
@@ -406,19 +396,16 @@ new TimepickerUI(input, { ui: { cssClass: "my-theme" } });
   - Fixed getters returning wrong elements (desktop vs mobile clock face)
 
 - **Animation Performance** - Removed performance bottlenecks
-
   - Removed `will-change` CSS properties causing resize lag ("przy rezsie strasznie mi się tnie")
   - Optimized RAF animation timing for smooth 60fps transitions
   - Proper cleanup of animation frames on component destroy
 
 - **Template Rendering** - Edge cases and initialization
-
   - First initialization: `data-clock-initialized` attribute prevents re-initialization
   - Subsequent toggles: Proper state update with 100ms setTimeout for clock face rebuild
   - State reset on modal close: `_isMobileView` properly cleared
 
 - **ClockSystem Critical Bugs** - Complete fix of clock rendering issues
-
   - **Angle Jump Bug (15° → 00/12)**: Fixed incorrect `Math.atan2()` parameter order
     - Changed from `atan2(deltaX, deltaY)` to `atan2(deltaY, deltaX) + 90°`
     - Proper angle calculation prevents clock hand jumping at 15° positions
@@ -442,20 +429,17 @@ new TimepickerUI(input, { ui: { cssClass: "my-theme" } });
     - Consistent visual appearance regardless of inner/outer selection
 
 - **24h Click Area Overlap**: Fixed accidental selection of wrong hours
-
   - Reduced `isInnerCircle` threshold from `0.6` to `0.5` for precise detection
   - Decreased hour-time-24 elements from 32px to 28px to prevent overlap
   - Updated ClockRenderer calculations to use correct tip sizes
   - Clicking "00" no longer jumps to "12"
 
 - **ClockFace Disappears Before Modal Close**: Fixed poor UX during closing
-
   - Moved `destroyClockSystem()` to `setTimeout(300ms)` after animation
   - ClockSystem destroyed AFTER modal close animation completes
   - ClockFace remains visible throughout entire closing transition
 
 - **24h Wrapper Shows on Minutes**: Fixed mobile/desktop toggle bug
-
   - Added show/hide logic for `tipsWrapperFor24h` in `switchToHours/switchToMinutes`
   - `switchToMinutes()` always hides 24h wrapper (minutes don't need dual circles)
   - `switchToHours()` shows 24h wrapper only when `clockType === '24h'`
@@ -464,27 +448,23 @@ new TimepickerUI(input, { ui: { cssClass: "my-theme" } });
 ### Performance
 
 - **CSS organization** - Faster build times with modular SCSS
-
   - Clearer separation of concerns
   - Easier to tree-shake unused styles in the future
   - Better caching during development
 
 - **Modular Code Structure** - Better maintainability and testing
-
   - Single Responsibility Principle: Each manager has one clear purpose
   - Easier unit testing with isolated, focused modules
   - Improved debugging: Know exactly where to find logic
   - Consistent with EventManager folder structure pattern
 
 - **Animation Optimization** - Smooth 60fps transitions
-
   - Multi-phase RAF scheduling for smooth expand/collapse animations
   - Batched DOM updates to minimize layout thrashing
   - `isAnimating` flag prevents concurrent animation conflicts
   - Proper cleanup prevents memory leaks from abandoned animation frames
 
 - **ClockSystem Performance Gains** - 75-80% improvement in clock operations
-
   - **Rendering**: 15ms → 3ms (-80%) with Map-based caching and Fragment API
   - **Drag Operations**: 8ms → 2ms (-75%) with RAF batching and angle skip (<0.1°)
   - **Code Size**: ~1200 LOC → ~905 LOC (-25%) with better separation of concerns
@@ -495,19 +475,16 @@ new TimepickerUI(input, { ui: { cssClass: "my-theme" } });
 ### Developer Experience
 
 - **Better theming API** - More intuitive theme naming
-
   - Clear distinction between M2 (legacy) and M3 themes
   - Named variants (m3-green) make theme selection clearer
   - Easier to add custom theme variants
 
 - **Improved CSS maintainability** - Modular SCSS structure
-
   - Find styles faster with focused partial files
   - Easier to contribute to specific components
   - Better organization for future features
 
 - **Better Code Organization** - Folder structure for large managers
-
   - `configmanager/` subfolder following EventManager pattern
   - Clear separation: TimeoutManager, ViewSwitcher, MobileClockFaceToggler, InitializationManager
   - Index file for clean imports: `import { TimeoutManager } from './configmanager'`
@@ -666,17 +643,14 @@ picker.on("confirm", (data) => {
 ### Added
 
 - **New `OptionTypes`**:
-
   - `inline` mode (`inline.enabled`, `containerId`, `showButtons`, `autoUpdate`)
   - `cssClass` – allows adding custom class to wrapper
   - New themes: `ai`, `cyberpunk`, `glassmorphic`, `pastel`, `dark`, `m3`
 
 - **New Callback API**:
-
   - `onConfirm`, `onCancel`, `onOpen`, `onUpdate`, `onSelectHour`, `onSelectMinute`, `onSelectAM`, `onSelectPM`, `onError`
 
 - **New DOM events** (replacing old ones):
-
   - `timepicker:open`, `timepicker:confirm`, `timepicker:cancel`, `timepicker:update`, `timepicker:error`, `timepicker:select-hour`, etc.
 
 - **TypeScript types**: Full typings via `OptionTypes`, `TimepickerUI`, event payloads

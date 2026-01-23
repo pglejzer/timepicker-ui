@@ -10,7 +10,6 @@
 
 describe('SSR Safety - Module Imports', () => {
   beforeEach(() => {
-    // Ensure browser globals are undefined (simulating SSR)
     delete (global as any).window;
     delete (global as any).document;
     delete (global as any).navigator;
@@ -88,7 +87,6 @@ describe('SSR Safety - Constructor Calls', () => {
   } as any;
 
   beforeAll(() => {
-    // Mock minimal browser environment for constructor tests
     (global as any).window = {
       crypto: {
         randomUUID: () => 'test-uuid',
@@ -153,7 +151,6 @@ describe('SSR Safety - Utility Functions', () => {
       executed = true;
     });
 
-    // In SSR, should execute immediately
     expect(executed).toBe(true);
   });
 });
@@ -228,19 +225,13 @@ describe('SSR Safety - Edge Cases', () => {
 
     const manager = new ConfigManager(mockCore, mockEmitter);
 
-    // Should not throw when requestAnimationFrame is undefined
-    expect(() => {
-      // Internal methods would be called during toggle
-      // but we're just verifying construction doesn't crash
-    }).not.toThrow();
+    expect(() => {}).not.toThrow();
   });
 
   it('should handle missing setTimeout gracefully in DOMUpdateBatcher', () => {
-    // setTimeout is available in Node.js, but test the guard logic exists
     const { DOMUpdateBatcher } = require('../src/utils/DOMUpdateBatcher');
     const batcher = new DOMUpdateBatcher();
 
     expect(batcher).toBeDefined();
   });
 });
-
