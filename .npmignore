@@ -13,4 +13,3 @@ tsconfig*
 lib*
 docs-app
 CHANGELOG.md
-.npmrc
