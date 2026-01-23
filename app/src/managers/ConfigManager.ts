@@ -4,6 +4,8 @@ import { selectorActive } from '../utils/variables';
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 import { TIMINGS } from '../constants/timings';
+import keyboardSvg from '../../assets/keyboard.svg';
+import scheduleSvg from '../../assets/schedule.svg';
 
 export default class ConfigManager {
   private core: CoreState;
@@ -314,18 +316,58 @@ export default class ConfigManager {
     minuteInput: HTMLInputElement | null,
     isMobileView: boolean,
   ): void {
+    const modal = this.core.getModalElement();
+    const hourText = modal?.querySelector('.tp-ui-hour-text');
+    const minuteText = modal?.querySelector('.tp-ui-minute-text');
+    const iconButton = icon?.querySelector('.tp-ui-keyboard-icon');
+    const inputWrapper = this.core.getInputWrappers();
+    const header = this.core.getHeader();
+
+    const { iconTemplate, iconTemplateMobile } = this.core.options.ui;
+    const { time: timeLabel, mobileTime: mobileTimeLabel } = this.core.options.labels;
+
     if (isMobileView) {
-      selectTimeLabel?.classList.remove('mobile');
-      icon?.classList.remove('mobile');
-      hourInput?.classList.remove('mobile');
-      minuteInput?.classList.remove('mobile');
-      this.updateClockFaceAccessibility(false);
-    } else {
       selectTimeLabel?.classList.add('mobile');
       icon?.classList.add('mobile');
       hourInput?.classList.add('mobile');
       minuteInput?.classList.add('mobile');
+      hourText?.classList.add('mobile');
+      minuteText?.classList.add('mobile');
+      header?.classList.add('mobile');
+      inputWrapper?.forEach((wrapper) => {
+        wrapper.classList.add('mobile');
+      });
+
+      if (selectTimeLabel && mobileTimeLabel) {
+        selectTimeLabel.textContent = mobileTimeLabel;
+      }
+
+      if (iconButton) {
+        iconButton.innerHTML = iconTemplateMobile || scheduleSvg;
+      }
+
       this.updateClockFaceAccessibility(true);
+    } else {
+      selectTimeLabel?.classList.remove('mobile');
+      icon?.classList.remove('mobile');
+      hourInput?.classList.remove('mobile');
+      minuteInput?.classList.remove('mobile');
+      hourText?.classList.remove('mobile');
+      minuteText?.classList.remove('mobile');
+      header?.classList.remove('mobile');
+      inputWrapper?.forEach((wrapper) => {
+        wrapper.classList.remove('mobile');
+      });
+
+      if (selectTimeLabel && timeLabel) {
+        selectTimeLabel.textContent = timeLabel;
+      }
+
+      if (iconButton) {
+        iconButton.innerHTML = iconTemplate || keyboardSvg;
+      }
+
+      this.updateClockFaceAccessibility(false);
     }
   }
 
@@ -333,13 +375,11 @@ export default class ConfigManager {
     const clockFace = this.core.getClockFace();
     if (!clockFace) return;
 
-    // Zarządzaj całym clockface i jego elementami
     const tipsWrapper = clockFace.querySelector('.tp-ui-tips-wrapper');
     const tipsWrapper24h = clockFace.querySelector('.tp-ui-tips-wrapper-24h');
     const allTips = clockFace.querySelectorAll<HTMLElement>('.tp-ui-tip');
 
     if (isHidden) {
-      // Ukryj clock-face dla keyboard mode
       clockFace.setAttribute('aria-hidden', 'true');
       tipsWrapper?.setAttribute('aria-hidden', 'true');
       tipsWrapper24h?.setAttribute('aria-hidden', 'true');
@@ -348,7 +388,6 @@ export default class ConfigManager {
         tip.setAttribute('aria-hidden', 'true');
       });
     } else {
-      // Pokaż clock-face dla desktop mode
       clockFace.removeAttribute('aria-hidden');
       tipsWrapper?.removeAttribute('aria-hidden');
       tipsWrapper24h?.removeAttribute('aria-hidden');

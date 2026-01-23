@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
 import { ArrowRight, LucideIcon } from "lucide-react";
+import Link from "next/link";
 
 interface LinkCardProps {
   icon: LucideIcon;
@@ -9,6 +9,14 @@ interface LinkCardProps {
   linkHref: string;
   variant?: "blue" | "purple" | "green" | "red" | "orange" | "cyan";
 }
+
+const isExternalLink = (href?: string): boolean => {
+  if (!href) {
+    return false;
+  }
+
+  return href.startsWith("https://");
+};
 
 const variantStyles = {
   blue: {
@@ -60,13 +68,24 @@ export function LinkCard({
         <div>
           <p className="font-medium mb-2 text-foreground">{title}</p>
           <p className="text-sm text-muted-foreground mb-3">{description}</p>
-          <a
-            href={linkHref}
-            className="text-sm font-medium text-primary hover:underline"
-          >
-            {linkText}{" "}
-            <ArrowRight className="inline w-4 h-4 align-middle text-gray-500" />{" "}
-          </a>
+          {isExternalLink(linkHref) ? (
+            <a
+              href={linkHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-primary hover:underline"
+            >
+              {linkText}{" "}
+            </a>
+          ) : (
+            <Link
+              href={linkHref}
+              className="text-sm font-medium text-primary hover:underline"
+            >
+              {linkText}{" "}
+              <ArrowRight className="inline w-4 h-4 align-middle text-gray-500" />{" "}
+            </Link>
+          )}
         </div>
       </div>
     </div>

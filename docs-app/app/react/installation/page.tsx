@@ -83,7 +83,7 @@ export default function InstallationPage() {
             <li className="flex items-start gap-2">
               <span className="text-primary">•</span>
               <span>
-                <strong>timepicker-ui:</strong> Automatically installed (^4.0.2)
+                <strong>timepicker-ui:</strong> Automatically installed (^4.0.3)
               </span>
             </li>
           </ul>

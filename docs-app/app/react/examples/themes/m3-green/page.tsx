@@ -5,6 +5,7 @@ import { CodeBlock } from "@/components/code-block";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
 import { Palette } from "lucide-react";
+import Link from "next/link";
 
 export default function M3GreenPage() {
   return (
@@ -97,12 +98,12 @@ function App() {
             </li>
             <li>
               • Check{" "}
-              <a
+              <Link
                 href="/examples/themes"
                 className="text-primary hover:underline"
               >
                 vanilla examples
-              </a>{" "}
+              </Link>{" "}
               for more themes
             </li>
           </ul>

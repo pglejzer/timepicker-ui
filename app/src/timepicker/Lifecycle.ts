@@ -245,7 +245,6 @@ export class Lifecycle {
         }
       });
     } else {
-      // Ukryj clock-face dla mobile view (keyboard mode)
       this.managers.config.updateClockFaceAccessibility(true);
     }
 

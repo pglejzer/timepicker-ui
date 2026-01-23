@@ -10,29 +10,63 @@ import {
   CheckCircle2,
   AlertTriangle,
 } from "lucide-react";
+import Link from "next/link";
 
 export const metadata = {
-  title: "What's New in v4.0.0 - Timepicker-UI",
-  description:
-    "Major improvements in architecture, TypeScript support, and developer experience",
+  title: "What's New - Timepicker-UI",
+  description: "Latest updates and improvements to Timepicker-UI",
 };
 
 export default function WhatsNewPage() {
   return (
     <div>
       <div className="mb-12">
-        <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm text-primary mb-4">
+        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-4 py-2 text-sm text-emerald-600 dark:text-emerald-400 mb-4">
           <Sparkles className="h-4 w-4" />
-          <span className="font-medium">Version 4.0.0</span>
+          <span className="font-medium">Latest Release</span>
         </div>
         <h1 className="text-4xl font-bold tracking-tight mb-4 text-foreground">
-          What&apos;s New in v4.0.0
+          What&apos;s New
         </h1>
         <p className="text-lg text-muted-foreground">
-          A major release focused on better architecture, improved TypeScript
-          support, and enhanced developer experience
+          Stay up to date with the latest features and improvements
         </p>
       </div>
+
+      <InfoBox
+        title="Version 4.0.3 Released!"
+        variant="emerald"
+        className="mb-8"
+      >
+        <p className="mb-3">
+          <strong>January 23, 2026</strong> - New bugfix release with
+          desktop/mobile switching improvements
+        </p>
+        <p className="text-sm">
+          Fixed <code className="text-primary">enableSwitchIcon</code> toggle
+          not properly updating:
+        </p>
+        <ul className="mt-2 space-y-1 text-sm ml-4">
+          <li>
+            Label text now switches correctly: "Select time" and "Enter time"
+          </li>
+          <li>Icon updates properly: keyboard and schedule</li>
+          <li>Hour/Minute labels show/hide as expected</li>
+        </ul>
+        <Link
+          href="/docs/changelog"
+          className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-3"
+        >
+          View full changelog
+        </Link>
+      </InfoBox>
+
+      <Section icon={Layers} title="What's New in v4.0.0">
+        <p className="text-muted-foreground mb-4">
+          Version 4.0.0 brought major improvements in architecture, TypeScript
+          support, and developer experience.
+        </p>
+      </Section>
 
       <Section icon={Layers} title="Grouped Options Architecture">
         <p className="text-muted-foreground mb-4">
@@ -401,24 +435,24 @@ const picker = new TimepickerUI(input, {
           options.
         </p>
         <div className="flex flex-wrap gap-3">
-          <a
+          <Link
             href="/docs/installation"
             className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
             Installation Guide
-          </a>
-          <a
+          </Link>
+          <Link
             href="/docs/api/options"
             className="inline-flex items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
           >
             API Reference
-          </a>
-          <a
+          </Link>
+          <Link
             href="/docs/changelog"
             className="inline-flex items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
           >
             Full Changelog
-          </a>
+          </Link>
         </div>
       </div>
     </div>

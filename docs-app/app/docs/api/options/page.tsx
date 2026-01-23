@@ -11,6 +11,7 @@ import {
   Sliders,
   Bell,
 } from "lucide-react";
+import Link from "next/link";
 
 export const metadata = {
   title: "Options - Timepicker-UI",
@@ -346,9 +347,9 @@ export default function OptionsPage() {
         <code className="mx-1">labels</code>,
         <code className="mx-1">behavior</code>, and{" "}
         <code className="mx-1">callbacks</code>. See the{" "}
-        <a href="/docs/changelog" className="text-primary underline">
+        <Link href="/docs/changelog" className="text-primary underline">
           changelog
-        </a>{" "}
+        </Link>{" "}
         for migration guide.
       </InfoBox>
 

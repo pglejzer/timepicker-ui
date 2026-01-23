@@ -2,6 +2,7 @@ import { CodeBlock } from "@/components/code-block";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import { Terminal, Package, FileCode, Globe } from "lucide-react";
+import Link from "next/link";
 
 export const metadata = {
   title: "Installation - Timepicker-UI",
@@ -69,12 +70,12 @@ pnpm add timepicker-ui`}
 
       <InfoBox title="Ready for the next step?" emoji="✅" variant="purple">
         Check out the{" "}
-        <a
+        <Link
           href="/docs/quick-start"
           className="text-primary hover:underline font-medium"
         >
           Quick Start
-        </a>{" "}
+        </Link>{" "}
         guide to start building with Timepicker-UI
       </InfoBox>
     </div>

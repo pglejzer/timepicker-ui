@@ -202,7 +202,7 @@ export default function ReactExamplesIndexPage() {
             </div>
           </a>
 
-          <a
+          <Link
             href="/docs/configuration"
             className="flex items-center gap-3 rounded-lg border border-border p-4 transition-colors hover:border-primary/50 hover:bg-accent"
           >
@@ -213,7 +213,7 @@ export default function ReactExamplesIndexPage() {
                 All timepicker-ui options
               </div>
             </div>
-          </a>
+          </Link>
         </div>
       </div>
     </div>
