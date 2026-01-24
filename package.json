@@ -32,15 +32,23 @@
     "./theme-cyberpunk.css": "./dist/css/themes/theme-cyberpunk.css"
   },
   "keywords": [
+    "angular",
+    "css",
+    "customizable",
+    "design",
+    "javascript",
+    "lightweight",
     "material-design",
     "material",
-    "design",
+    "react",
+    "svelte",
+    "themeable",
+    "time-picker",
     "timepicker",
+    "typescript",
     "ui",
-    "css",
-    "javascript",
     "vanillajs",
-    "typescript"
+    "vue"
   ],
   "author": "Piotr Glejzer (@pglejzer)",
   "license": "MIT",
