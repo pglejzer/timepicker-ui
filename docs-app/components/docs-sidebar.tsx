@@ -12,6 +12,7 @@ const navigation = [
       { title: "Installation", href: "/docs/installation" },
       { title: "Quick Start", href: "/docs/quick-start" },
       { title: "Configuration", href: "/docs/configuration" },
+      { title: "Migration Guide v3 to v4", href: "/docs/migration-guide" },
     ],
   },
   {
@@ -49,12 +50,18 @@ const navigation = [
       { title: "Roadmap", href: "/docs/roadmap" },
     ],
   },
+  {
+    title: "Legacy",
+    links: [
+      { title: "Migration Guide v2 to v3", href: "/docs/legacy-migration" },
+    ],
+  },
 ];
 
 export function DocsSidebar() {
   const pathname = usePathname();
   const [openSections, setOpenSections] = useState<Record<string, boolean>>(
-    Object.fromEntries(navigation.map((s) => [s.title, true]))
+    Object.fromEntries(navigation.map((s) => [s.title, true])),
   );
 
   const toggleSection = (title: string) => {

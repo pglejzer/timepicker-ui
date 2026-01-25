@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 interface InfoBoxProps {
   emoji?: string;
-  title: string;
+  title?: string;
   children: ReactNode;
   variant?: "blue" | "emerald" | "purple" | "green" | "red" | "orange";
   className?: string;
@@ -55,7 +55,9 @@ export function InfoBox({
           <span className="text-xl">{emoji}</span>
         </div>
         <div>
-          <p className="font-medium mb-1 md:mb-2 text-foreground">{title}</p>
+          {title && (
+            <p className="font-medium mb-1 md:mb-2 text-foreground">{title}</p>
+          )}
           <div className="text-sm text-muted-foreground">{children}</div>
         </div>
       </div>
