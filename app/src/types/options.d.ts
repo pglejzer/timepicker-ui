@@ -16,6 +16,10 @@ import type {
   SelectAMEventData,
   SelectPMEventData,
   ErrorEventData,
+  TimezoneChangeEventData,
+  RangeConfirmEventData,
+  RangeSwitchEventData,
+  RangeValidationEventData,
 } from './types';
 
 /**
@@ -263,6 +267,71 @@ export interface BehaviorOptions {
 }
 
 /**
+ * Timezone configuration (opt-in, UI-only)
+ * @description Optional timezone selector for B2B/global use cases.
+ * This is a presentation layer only - no automatic time conversions.
+ */
+export interface TimezoneOptions {
+  /**
+   * @description Enable timezone selector UI
+   * @default false
+   */
+  enabled?: boolean;
+
+  /**
+   * @description Default timezone ID (e.g., 'America/New_York')
+   * Uses browser's local timezone if not specified.
+   */
+  default?: string;
+
+  /**
+   * @description Whitelist of allowed timezone IDs.
+   * If not provided, uses a curated list of common timezones.
+   * @example whitelist: ['UTC', 'America/New_York', 'Europe/London']
+   */
+  whitelist?: readonly string[];
+
+  /**
+   * @description Label for timezone selector
+   * @default "Timezone"
+   */
+  label?: string;
+}
+
+/**
+ * Range mode configuration (opt-in)
+ */
+export interface RangeOptions {
+  /**
+   * @description Enable range mode (from-to selection)
+   * @default false
+   */
+  enabled?: boolean;
+
+  /**
+   * @description Minimum duration in minutes
+   */
+  minDuration?: number;
+
+  /**
+   * @description Maximum duration in minutes
+   */
+  maxDuration?: number;
+
+  /**
+   * @description Label for "from" segment
+   * @default "From"
+   */
+  fromLabel?: string;
+
+  /**
+   * @description Label for "to" segment
+   * @default "To"
+   */
+  toLabel?: string;
+}
+
+/**
  * Event callbacks configuration
  */
 export interface CallbacksOptions {
@@ -310,6 +379,26 @@ export interface CallbacksOptions {
    * @description Triggered on invalid time format
    */
   onError?: TimepickerEventCallback<ErrorEventData>;
+
+  /**
+   * @description Triggered when timezone is changed (opt-in feature)
+   */
+  onTimezoneChange?: TimepickerEventCallback<TimezoneChangeEventData>;
+
+  /**
+   * @description Triggered when range is confirmed (range mode only)
+   */
+  onRangeConfirm?: TimepickerEventCallback<RangeConfirmEventData>;
+
+  /**
+   * @description Triggered when switching between from/to (range mode only)
+   */
+  onRangeSwitch?: TimepickerEventCallback<RangeSwitchEventData>;
+
+  /**
+   * @description Triggered on range validation (range mode only)
+   */
+  onRangeValidation?: TimepickerEventCallback<RangeValidationEventData>;
 }
 
 /**
@@ -321,4 +410,6 @@ export interface TimepickerOptions {
   labels?: LabelsOptions;
   behavior?: BehaviorOptions;
   callbacks?: CallbacksOptions;
+  timezone?: TimezoneOptions;
+  range?: RangeOptions;
 }

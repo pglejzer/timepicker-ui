@@ -7,6 +7,8 @@ import ThemeManager from '../managers/ThemeManager';
 import ValidationManager from '../managers/ValidationManager';
 import EventManager from '../managers/EventManager';
 import ClockManager from '../managers/ClockManager';
+import TimezoneManager from '../managers/TimezoneManager';
+import RangeManager from '../managers/RangeManager';
 
 export class Managers {
   public readonly animation: AnimationManager;
@@ -16,6 +18,8 @@ export class Managers {
   public readonly validation: ValidationManager;
   public readonly events: EventManager;
   public readonly clock: ClockManager;
+  public readonly timezone: TimezoneManager;
+  public readonly range: RangeManager;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.animation = new AnimationManager(core, emitter);
@@ -25,6 +29,8 @@ export class Managers {
     this.validation = new ValidationManager(core, emitter);
     this.events = new EventManager(core, emitter);
     this.clock = new ClockManager(core, emitter);
+    this.timezone = new TimezoneManager(core, emitter);
+    this.range = new RangeManager(core, emitter);
   }
 
   destroy(): void {
@@ -35,6 +41,7 @@ export class Managers {
     this.validation.destroy();
     this.events.destroy();
     this.clock.destroy();
+    this.timezone.destroy();
+    this.range.destroy();
   }
 }
-

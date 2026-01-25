@@ -49,6 +49,34 @@ export type SelectPMEventData = Record<string, never>;
 /** Payload when switching view */
 export type SwitchViewEventData = Record<string, never>;
 
+/** Payload when timezone is changed */
+export type TimezoneChangeEventData = {
+  timezone: string;
+};
+
+export type RangeConfirmEventData = {
+  from: string;
+  to: string;
+  duration: number;
+};
+
+export type RangeSwitchEventData = {
+  active: 'from' | 'to';
+};
+
+export type RangeValidationEventData = {
+  valid: boolean;
+  duration: number;
+  minDuration?: number;
+  maxDuration?: number;
+};
+
+export type RangeMinuteCommitEventData = {
+  hour: string;
+  minutes: string;
+  type?: string;
+};
+
 /** Payload when validation error occurs */
 export type ErrorEventData = {
   error: string;

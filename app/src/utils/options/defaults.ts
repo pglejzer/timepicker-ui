@@ -62,6 +62,25 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     onSelectAM: undefined,
     onSelectPM: undefined,
     onError: undefined,
+    onTimezoneChange: undefined,
+    onRangeConfirm: undefined,
+    onRangeSwitch: undefined,
+    onRangeValidation: undefined,
+  },
+
+  timezone: {
+    enabled: false,
+    default: undefined,
+    whitelist: undefined,
+    label: 'Timezone',
+  },
+
+  range: {
+    enabled: false,
+    minDuration: undefined,
+    maxDuration: undefined,
+    fromLabel: 'From',
+    toLabel: 'To',
   },
 };
 
@@ -90,6 +109,13 @@ export function mergeOptions(userOptions: TimepickerOptions = {}): Required<Time
       ...DEFAULT_OPTIONS.callbacks,
       ...(userOptions.callbacks || {}),
     },
+    timezone: {
+      ...DEFAULT_OPTIONS.timezone,
+      ...(userOptions.timezone || {}),
+    },
+    range: {
+      ...DEFAULT_OPTIONS.range,
+      ...(userOptions.range || {}),
+    },
   };
 }
-

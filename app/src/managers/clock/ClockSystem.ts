@@ -227,4 +227,12 @@ export class ClockSystem {
     this.dragHandlers.detach();
     this.controller.destroy();
   }
+
+  blockInteractions(): void {
+    this.dragHandlers.block();
+  }
+
+  unblockInteractions(): void {
+    this.dragHandlers.unblock();
+  }
 }

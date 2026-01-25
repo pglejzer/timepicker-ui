@@ -90,6 +90,9 @@ export default class TimepickerUI {
 
     this.emitter.on('confirm', (data) => {
       if (!this.core.isDestroyed) {
+        if (this.core.options.range?.enabled) {
+          return;
+        }
         const input = this.core.getInput();
         if (input && data.hour && data.minutes) {
           const type = data.type ? ` ${data.type}` : '';
@@ -97,6 +100,16 @@ export default class TimepickerUI {
         }
         this.lifecycle.unmount();
       }
+    });
+
+    this.emitter.on('range:confirm', (data) => {
+      if (this.core.isDestroyed) return;
+
+      const input = this.core.getInput();
+      if (input) {
+        input.value = `${data.from} - ${data.to}`;
+      }
+      this.lifecycle.unmount();
     });
   }
 

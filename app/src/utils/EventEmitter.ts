@@ -10,6 +10,11 @@ import type {
   SelectAMEventData,
   SelectPMEventData,
   SwitchViewEventData,
+  TimezoneChangeEventData,
+  RangeConfirmEventData,
+  RangeSwitchEventData,
+  RangeValidationEventData,
+  RangeMinuteCommitEventData,
   ErrorEventData,
 } from '../types/types';
 
@@ -27,7 +32,14 @@ export interface TimepickerEventMap {
   'select:am': SelectAMEventData;
   'select:pm': SelectPMEventData;
   'switch:view': SwitchViewEventData;
+  'timezone:change': TimezoneChangeEventData;
+  'range:confirm': RangeConfirmEventData;
+  'range:switch': RangeSwitchEventData;
+  'range:validation': RangeValidationEventData;
+  'range:minute:commit': RangeMinuteCommitEventData;
   'animation:clock': Record<string, never>;
+  'animation:start': Record<string, never>;
+  'animation:end': Record<string, never>;
   error: ErrorEventData;
   [key: string]: unknown;
 }

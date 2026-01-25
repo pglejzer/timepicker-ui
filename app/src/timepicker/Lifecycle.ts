@@ -80,6 +80,18 @@ export class Lifecycle {
     if (callbacks.onError) {
       this.emitter.on('error', callbacks.onError);
     }
+    if (callbacks.onTimezoneChange) {
+      this.emitter.on('timezone:change', callbacks.onTimezoneChange);
+    }
+    if (callbacks.onRangeConfirm) {
+      this.emitter.on('range:confirm', callbacks.onRangeConfirm);
+    }
+    if (callbacks.onRangeSwitch) {
+      this.emitter.on('range:switch', callbacks.onRangeSwitch);
+    }
+    if (callbacks.onRangeValidation) {
+      this.emitter.on('range:validation', callbacks.onRangeValidation);
+    }
   }
 
   mount(): void {
@@ -267,6 +279,9 @@ export class Lifecycle {
     this.managers.clock.initializeClockSystem();
     this.managers.clock.setOnStartCSSClassesIfClockType24h();
     this.managers.clock.setClassActiveToHourOnOpen();
+
+    this.managers.timezone.init();
+    this.managers.range.init();
 
     this.managers.events.handleCancelButton();
     this.managers.events.handleOkButton();

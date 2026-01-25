@@ -1,5 +1,6 @@
 import { selectorActive } from '../utils/variables';
 import { MINUTES_STEP_5 } from '../utils/template';
+import { announceToScreenReader } from '../utils/accessibility';
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 import { ClockSystem, type ClockSystemConfig, type DisabledTimeConfig } from './clock';
@@ -32,6 +33,14 @@ export default class ClockManager {
 
     this.emitter.on('select:pm', () => {
       this.updateAmPm();
+    });
+
+    this.emitter.on('animation:start', () => {
+      this.clockSystem?.blockInteractions();
+    });
+
+    this.emitter.on('animation:end', () => {
+      this.clockSystem?.unblockInteractions();
     });
   }
 
@@ -74,12 +83,26 @@ export default class ClockManager {
         isMobileView: this.core.isMobileView,
         hourElement: hour,
         minutesElement: minutes,
+        onMinuteCommit: () => {
+          const m = this.core.getMinutes();
+          const h = this.core.getHour();
+          const activeTypeMode = this.core.getActiveTypeMode();
+          this.emitter.emit('range:minute:commit', {
+            hour: h?.value ?? '12',
+            minutes: m?.value ?? '00',
+            type: activeTypeMode?.textContent ?? undefined,
+          });
+        },
       },
       onHourChange: (hourValue: string) => {
         const h = this.core.getHour();
         if (h) {
           h.value = hourValue;
+          h.setAttribute('aria-valuenow', hourValue);
         }
+
+        const modal = this.core.getModalElement();
+        announceToScreenReader(modal, `Hour: ${hourValue}`);
 
         const minutes = this.core.getMinutes();
         const activeTypeMode = this.core.getActiveTypeMode();
@@ -93,7 +116,11 @@ export default class ClockManager {
         const m = this.core.getMinutes();
         if (m) {
           m.value = minuteValue;
+          m.setAttribute('aria-valuenow', minuteValue);
         }
+
+        const modal = this.core.getModalElement();
+        announceToScreenReader(modal, `Minutes: ${minuteValue}`);
 
         const hour = this.core.getHour();
         const activeTypeMode = this.core.getActiveTypeMode();

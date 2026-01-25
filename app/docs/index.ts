@@ -419,3 +419,91 @@ const multipleIntervalsPicker24h = new TimepickerUI('#disabled-intervals-24h', {
   },
 });
 multipleIntervalsPicker24h.create();
+
+const timezonePicker = new TimepickerUI('#timezone-picker', {
+  clock: { type: '24h' },
+  timezone: {
+    enabled: true,
+    label: 'Timezone',
+  },
+  ui: { theme: 'dark', enableSwitchIcon: true },
+  callbacks: {
+    onTimezoneChange: (data) => {
+      console.log('Timezone changed:', data.timezone);
+      const tzDisplay = document.getElementById('tz-display');
+      if (tzDisplay) {
+        tzDisplay.textContent = data.timezone;
+      }
+    },
+  },
+});
+timezonePicker.create();
+
+// Range Mode Example
+const rangePicker = new TimepickerUI('#range-picker', {
+  clock: { type: '12h' },
+  ui: { enableSwitchIcon: true },
+  range: {
+    enabled: true,
+    minDuration: 30,
+    maxDuration: 480,
+    fromLabel: 'Start',
+    toLabel: 'End',
+  },
+  callbacks: {
+    onRangeConfirm: (data) => {
+      console.log('Range confirmed:', data.from, '–', data.to, 'Duration:', data.duration);
+      const rangeDisplay = document.getElementById('range-display');
+      const durationDisplay = document.getElementById('range-duration');
+      if (rangeDisplay) {
+        rangeDisplay.textContent = `${data.from} – ${data.to}`;
+      }
+      if (durationDisplay) {
+        durationDisplay.textContent = String(data.duration);
+      }
+    },
+    onRangeSwitch: (data) => {
+      console.log('Range part switched to:', data.active);
+    },
+    onRangeValidation: (data) => {
+      if (!data.valid) {
+        console.log('Invalid range duration. Expected:', data.minDuration, '-', data.maxDuration, 'minutes');
+      }
+    },
+  },
+});
+rangePicker.create();
+
+const range24hPicker = new TimepickerUI('#range-picker-24h', {
+  clock: { type: '24h' },
+  ui: { enableSwitchIcon: true },
+  range: {
+    enabled: true,
+    minDuration: 60,
+    maxDuration: 720,
+    fromLabel: 'Start',
+    toLabel: 'End',
+  },
+  callbacks: {
+    onRangeConfirm: (data) => {
+      console.log('Range 24h confirmed:', data.from, '–', data.to, 'Duration:', data.duration);
+      const rangeDisplay = document.getElementById('range-display-24h');
+      const durationDisplay = document.getElementById('range-duration-24h');
+      if (rangeDisplay) {
+        rangeDisplay.textContent = `${data.from} – ${data.to}`;
+      }
+      if (durationDisplay) {
+        durationDisplay.textContent = String(data.duration);
+      }
+    },
+    onRangeSwitch: (data) => {
+      console.log('Range 24h part switched to:', data.active);
+    },
+    onRangeValidation: (data) => {
+      if (!data.valid) {
+        console.log('Invalid range duration. Expected:', data.minDuration, '-', data.maxDuration, 'minutes');
+      }
+    },
+  },
+});
+range24hPicker.create();

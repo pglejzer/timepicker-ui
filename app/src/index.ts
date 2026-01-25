@@ -12,6 +12,7 @@ import type {
   SelectAMEventData,
   SelectPMEventData,
   SwitchViewEventData,
+  TimezoneChangeEventData,
   ErrorEventData,
 } from './types/types';
 import type {
@@ -21,6 +22,7 @@ import type {
   LabelsOptions,
   BehaviorOptions,
   CallbacksOptions,
+  TimezoneOptions,
 } from './types/options';
 import { EventEmitter } from './utils/EventEmitter';
 
@@ -33,6 +35,7 @@ export {
   LabelsOptions,
   BehaviorOptions,
   CallbacksOptions,
+  TimezoneOptions,
   OpenEventData,
   CancelEventData,
   ConfirmEventData,
@@ -44,6 +47,7 @@ export {
   SelectAMEventData,
   SelectPMEventData,
   SwitchViewEventData,
+  TimezoneChangeEventData,
   ErrorEventData,
   EventEmitter,
 };
