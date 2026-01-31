@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.1.0] - 2026-01-31
+
+### Added
+
+- **Range Plugin** - New! Select time ranges with start/end pickers, duration calculation, min/max validation, and automatic time blocking when "from" is selected
+
+  ```javascript
+  import { PluginRegistry } from "timepicker-ui";
+  import { RangePlugin } from "timepicker-ui/plugins/range";
+
+  PluginRegistry.register(RangePlugin);
+
+  const picker = new TimepickerUI(input, {
+    range: { enabled: true, minDuration: 30, maxDuration: 480 },
+  });
+  ```
+
+- **Timezone Plugin** - New! Timezone selector with searchable dropdown, UTC offset display, and CSS variable theming
+
+  ```javascript
+  import { PluginRegistry } from "timepicker-ui";
+  import { TimezonePlugin } from "timepicker-ui/plugins/timezone";
+
+  PluginRegistry.register(TimezonePlugin);
+
+  const picker = new TimepickerUI(input, {
+    timezone: { enabled: true, default: "America/New_York" },
+  });
+  ```
+
+- **Plugin architecture** - Tree-shakeable plugin system. Import only what you need for smaller bundles
+- **Smooth hour snapping** - New `smoothHourSnap` option (default: true) enables fluid hour dragging with animation. Clock hand moves continuously between hours and snaps to nearest hour on release
+
+### Changed
+
+- **Smooth hour dragging is now default** - `smoothHourSnap` defaults to true for better UX. Set to false for legacy discrete jump behavior
+
+---
+
 ## [4.0.3] - 2026-01-23
 
 ### Fixed

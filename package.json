@@ -1,6 +1,6 @@
 {
   "name": "timepicker-ui",
-  "version": "4.0.3",
+  "version": "4.1.0",
   "description": "timepicker-ui is a customizable time picker library built with TypeScript, inspired by Google's Material Design. Lightweight, themeable, and easy to integrate.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -17,8 +17,24 @@
   ],
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./plugins/range": {
+      "types": "./dist/plugins/range.d.ts",
+      "import": "./dist/plugins/range.js",
+      "require": "./dist/plugins/range.cjs"
+    },
+    "./plugins/timezone": {
+      "types": "./dist/plugins/timezone.d.ts",
+      "import": "./dist/plugins/timezone.js",
+      "require": "./dist/plugins/timezone.cjs"
+    },
+    "./plugins/*": {
+      "types": "./dist/plugins/*.d.ts",
+      "import": "./dist/plugins/*.js",
+      "require": "./dist/plugins/*.cjs"
     },
     "./main.css": "./dist/css/main.css",
     "./index.css": "./dist/css/index.css",
@@ -32,18 +48,31 @@
     "./theme-cyberpunk.css": "./dist/css/themes/theme-cyberpunk.css"
   },
   "keywords": [
+    "angular",
+    "css",
+    "customizable",
+    "design",
+    "javascript",
+    "lightweight",
     "material-design",
     "material",
-    "design",
+    "react",
+    "svelte",
+    "themeable",
+    "time-picker",
     "timepicker",
+    "typescript",
     "ui",
-    "css",
-    "javascript",
     "vanillajs",
-    "typescript"
+    "vue"
   ],
   "author": "Piotr Glejzer (@pglejzer)",
   "license": "MIT",
+  "sideEffects": [
+    "./dist/plugins/*.js",
+    "./dist/plugins/*.cjs",
+    "./dist/css/**/*.css"
+  ],
   "bugs": {
     "url": "https://github.com/pglejzer/timepicker-ui/issues"
   },

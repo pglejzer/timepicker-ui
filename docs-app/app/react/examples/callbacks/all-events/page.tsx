@@ -49,13 +49,13 @@ export default function AllEventsPage() {
                 onOpen={(data) => addLog(`📂 Opened: ${JSON.stringify(data)}`)}
                 onConfirm={(data) =>
                   addLog(
-                    `✅ Confirmed: ${data.hour}:${data.minutes} ${data.type}`
+                    `✅ Confirmed: ${data.hour}:${data.minutes} ${data.type}`,
                   )
                 }
                 onCancel={() => addLog("❌ Cancelled")}
                 onUpdate={(data) =>
                   addLog(
-                    `🔄 Updated: ${data.hour}:${data.minutes} ${data.type}`
+                    `🔄 Updated: ${data.hour}:${data.minutes} ${data.type}`,
                   )
                 }
                 onSelectHour={(data) =>
@@ -87,8 +87,8 @@ export default function AllEventsPage() {
                     </div>
                   ) : (
                     <div className="space-y-1">
-                      {logs.map((log, index) => (
-                        <div key={index} className="text-foreground">
+                      {logs.map((log) => (
+                        <div key={log} className="text-foreground">
                           {log}
                         </div>
                       ))}
