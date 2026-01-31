@@ -22,18 +22,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "yarn"
-
-      - name: Install root dependencies
-        run: yarn install --frozen-lockfile
 
       - name: Install app dependencies
         working-directory: ./app
-        run: yarn install --frozen-lockfile
+        run: npm ci
 
       - name: Run tests with coverage
         working-directory: ./app
-        run: yarn test --coverage --coverageReporters=lcov --coverageReporters=text
+        run: npm test -- --coverage --coverageReporters=lcov --coverageReporters=text
 
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@v2
