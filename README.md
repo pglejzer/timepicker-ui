@@ -6,6 +6,8 @@ Modern time picker library built with TypeScript. Works with any framework or va
 [![downloads](https://img.shields.io/npm/dm/timepicker-ui)](https://npmcharts.com/compare/timepicker-ui?minimal=true)
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://img.shields.io/npm/l/timepicker-ui)
 [![size](https://img.shields.io/bundlephobia/minzip/timepicker-ui)](https://bundlephobia.com/package/timepicker-ui)
+[![Coverage Status](https://coveralls.io/repos/github/pglejzer/timepicker-ui/badge.svg?branch=master)](https://coveralls.io/github/pglejzer/timepicker-ui?branch=master)
+[![Tests](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml/badge.svg)](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml)
 
 [Live Demo](https://timepicker-ui.vercel.app/) • [Documentation](https://timepicker-ui.vercel.app/docs) • [React Wrapper](https://github.com/pglejzer/timepicker-ui-react) • [Changelog](./CHANGELOG.md)
 
@@ -22,6 +24,33 @@ Modern time picker library built with TypeScript. Works with any framework or va
 - ARIA-compliant and keyboard accessible
 - SSR compatible
 - Lightweight with tree-shaking support
+
+## Plugins
+
+Optional features available as separate imports to reduce core bundle size:
+
+```javascript
+import { TimepickerUI, PluginRegistry } from "timepicker-ui";
+import { RangePlugin } from "timepicker-ui/plugins/range";
+import { TimezonePlugin } from "timepicker-ui/plugins/timezone";
+
+// Register plugins before creating instances
+PluginRegistry.register(RangePlugin);
+PluginRegistry.register(TimezonePlugin);
+```
+
+Register plugins once at app startup, then use features via options.
+
+```javascript
+import { TimepickerUI, PluginRegistry } from "timepicker-ui";
+import { RangePlugin } from "timepicker-ui/plugins/range";
+
+PluginRegistry.register(RangePlugin);
+
+const picker = new TimepickerUI(input, {
+  range: { enabled: true },
+});
+```
 
 ## Contributions
 
@@ -138,7 +167,8 @@ const picker = new TimepickerUI(input, {
 | `type`                | `12h` / `24h`  | `12h`       | Clock format                    |
 | `incrementHours`      | number         | `1`         | Hour increment step             |
 | `incrementMinutes`    | number         | `1`         | Minute increment step           |
-| `autoSwitchToMinutes` | boolean        | `false`     | Auto-switch after hour selected |
+| `smoothHourSnap`      | boolean        | `true`      | Smooth hour dragging with snap  |
+| `autoSwitchToMinutes` | boolean        | `true`      | Auto-switch after hour selected |
 | `disabledTime`        | object         | `undefined` | Disable specific hours/minutes  |
 | `currentTime`         | boolean/object | `undefined` | Set current time to input       |
 
@@ -236,7 +266,7 @@ const picker = new TimepickerUI(input, {
 | `clockType`                 | `clock.type`                    |
 | `incrementHours`            | `clock.incrementHours`          |
 | `incrementMinutes`          | `clock.incrementMinutes`        |
-| `autoSwitchToMinutes`       | `clock.autoSwitchToMinutes`     |
+| `manualMinuteSwitch`        | `clock.manualMinuteSwitch`      |
 | `disabledTime`              | `clock.disabledTime`            |
 | `currentTime`               | `clock.currentTime`             |
 | `theme`                     | `ui.theme`                      |
@@ -498,7 +528,7 @@ const picker = new TimepickerUI(input, {
     incrementMinutes: 1,
     currentTime: { time: new Date(), updateInput: true },
     disabledTime: { hours: [1, 2, 3] },
-    autoSwitchToMinutes: false,
+    manualMinuteSwitch: false,
   },
   ui: {
     theme: "dark",

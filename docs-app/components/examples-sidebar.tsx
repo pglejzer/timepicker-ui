@@ -74,12 +74,19 @@ const navigation: NavigationSection[] = [
       },
     ],
   },
+  {
+    title: "Plugins",
+    links: [
+      { title: "Range Mode", href: "/examples/plugins/range" },
+      { title: "Timezone Selector", href: "/examples/plugins/timezone" },
+    ],
+  },
 ];
 
 export function ExamplesSidebar() {
   const pathname = usePathname();
   const [openSections, setOpenSections] = useState<Record<string, boolean>>(
-    Object.fromEntries(navigation.map((s) => [s.title, true]))
+    Object.fromEntries(navigation.map((s) => [s.title, true])),
   );
 
   const toggleSection = (title: string) => {

@@ -59,7 +59,44 @@ function ChangeSection({
   );
 }
 
-const CHANGELOG_UNRELEASED = {
+const CHANGELOG_410 = {
+  added: [
+    {
+      title: "Plugin architecture",
+      description:
+        "Range and Timezone as optional plugins - import only what you need for smaller bundles",
+    },
+    {
+      title: "Smooth hour snapping",
+      description:
+        "New smoothHourSnap option (default: true) enables fluid hour dragging with animation",
+    },
+    {
+      title: "Range mode time blocking",
+      description:
+        "When from time is selected, to picker automatically disables earlier times with visual feedback",
+    },
+    {
+      title: "Timezone dropdown theming",
+      description:
+        "CSS variables --tp-dropdown-option-bg and --tp-dropdown-option-text for consistent styling",
+    },
+  ],
+  changed: [
+    {
+      title: "Modular bundle structure",
+      description:
+        "Core bundle no longer includes Range and Timezone code. Reduces default bundle size",
+    },
+    {
+      title: "Smooth hour dragging is now default",
+      description:
+        "smoothHourSnap defaults to true. Set to false for legacy discrete jump behavior",
+    },
+  ],
+};
+
+const CHANGELOG_403 = {
   fixed: [
     {
       title: "Desktop/mobile view switching",
@@ -190,8 +227,26 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.0.3</strong> - Released January 23, 2026
+        <strong>v4.1.0</strong> - Released January 31, 2026
       </InfoBox>
+
+      <Section icon={History} title="Version 4.1.0 - January 31, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Sparkles}
+            label="Added"
+            color="green-500"
+            items={CHANGELOG_410.added}
+          />
+
+          <ChangeSection
+            icon={Code}
+            label="Changed"
+            color="blue-500"
+            items={CHANGELOG_410.changed}
+          />
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.0.3 - January 23, 2026">
         <div className="space-y-4">
@@ -199,7 +254,7 @@ export default function ChangelogPage() {
             icon={Wrench}
             label="Fixed"
             color="orange-500"
-            items={CHANGELOG_UNRELEASED.fixed}
+            items={CHANGELOG_403.fixed}
           />
         </div>
       </Section>
