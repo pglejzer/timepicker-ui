@@ -323,6 +323,7 @@ export default class ConfigManager {
     const iconButton = icon?.querySelector('.tp-ui-keyboard-icon');
     const inputWrapper = this.core.getInputWrappers();
     const header = this.core.getHeader();
+    const dots = this.core.getDots();
 
     const { iconTemplate, iconTemplateMobile } = this.core.options.ui;
     const { time: timeLabel, mobileTime: mobileTimeLabel } = this.core.options.labels;
@@ -335,6 +336,7 @@ export default class ConfigManager {
       hourText?.classList.add('mobile');
       minuteText?.classList.add('mobile');
       header?.classList.add('mobile');
+      dots?.classList.add('mobile');
       inputWrapper?.forEach((wrapper) => {
         wrapper.classList.add('mobile');
       });
@@ -356,6 +358,7 @@ export default class ConfigManager {
       hourText?.classList.remove('mobile');
       minuteText?.classList.remove('mobile');
       header?.classList.remove('mobile');
+      dots?.classList.remove('mobile');
       inputWrapper?.forEach((wrapper) => {
         wrapper.classList.remove('mobile');
       });

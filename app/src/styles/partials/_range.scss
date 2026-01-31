@@ -7,6 +7,12 @@
   padding: var(--tp-spacing-lg) var(--tp-spacing-xl) 0;
   gap: var(--tp-spacing-md);
   margin-bottom: var(--tp-spacing-lg);
+
+  &.expanded {
+    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+      display: none;
+    }
+  }
 }
 
 .tp-ui-range-tab {
@@ -88,4 +94,3 @@
   opacity: var(--tp-opacity-disabled);
   pointer-events: none;
 }
-

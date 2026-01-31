@@ -158,7 +158,7 @@ const editablePicker = new TimepickerUI('#editable-picker', {
 editablePicker.create();
 
 const smoothHourPicker = new TimepickerUI('#smooth-hour-snap-picker', {
-  clock: { smoothHourSnap: true },
+  clock: { smoothHourSnap: false },
 });
 smoothHourPicker.create();
 

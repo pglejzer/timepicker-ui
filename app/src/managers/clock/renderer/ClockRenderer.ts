@@ -9,6 +9,8 @@ export class ClockRenderer {
   private currentAngle: number = 0;
   private tipsCache = new Map<string, { wrapper: HTMLElement; tip: HTMLElement }>();
   private cachedDimensions: Map<HTMLElement, { width: number; height: number; radius: number }> = new Map();
+  private currentActiveElement: HTMLElement | null = null;
+  private lastActiveValue: string = '';
 
   constructor(config: RenderConfig) {
     this.config = config;
@@ -26,20 +28,32 @@ export class ClockRenderer {
     return cached;
   }
 
-  setHandAngle(angle: number): void {
-    if (Math.abs(this.currentAngle - angle) < 0.1) return;
+  private normalizeAngle(angle: number): number {
+    let normalized = angle % 360;
+    if (normalized < 0) normalized += 360;
+    return normalized;
+  }
 
-    const targetAngle = AngleEngine.calculateShortestPath(this.currentAngle, angle);
-    this.currentAngle = targetAngle;
-    this.config.clockHand.style.transform = `rotateZ(${targetAngle}deg)`;
+  setHandAngle(angle: number): void {
+    const normalizedCurrent = this.normalizeAngle(this.currentAngle);
+    const normalizedTarget = this.normalizeAngle(angle);
+
+    if (Math.abs(normalizedCurrent - normalizedTarget) < 0.1) return;
+
+    const targetAngle = AngleEngine.calculateShortestPath(normalizedCurrent, normalizedTarget);
+    this.currentAngle = this.normalizeAngle(targetAngle);
+    this.config.clockHand.style.transform = `rotateZ(${this.currentAngle}deg)`;
   }
 
   animateToAngle(angle: number): void {
-    const targetAngle = AngleEngine.calculateShortestPath(this.currentAngle, angle);
-    this.currentAngle = targetAngle;
+    const normalizedCurrent = this.normalizeAngle(this.currentAngle);
+    const normalizedTarget = this.normalizeAngle(angle);
+
+    const targetAngle = AngleEngine.calculateShortestPath(normalizedCurrent, normalizedTarget);
+    this.currentAngle = this.normalizeAngle(targetAngle);
 
     this.config.tipsWrapper.classList.add('tp-ui-tips-animation');
-    this.config.clockHand.style.transform = `rotateZ(${targetAngle}deg)`;
+    this.config.clockHand.style.transform = `rotateZ(${this.currentAngle}deg)`;
 
     setTimeout(() => {
       this.config.tipsWrapper.classList.remove('tp-ui-tips-animation');
@@ -47,27 +61,35 @@ export class ClockRenderer {
   }
 
   setActiveValue(value: string): void {
+    if (value === this.lastActiveValue) {
+      return;
+    }
+    this.lastActiveValue = value;
+
+    if (this.currentActiveElement) {
+      this.currentActiveElement.classList.remove('active');
+      this.currentActiveElement.setAttribute('aria-selected', 'false');
+      this.currentActiveElement = null;
+    }
+
     const wrappers = [this.config.tipsWrapper];
     if (this.config.tipsWrapperFor24h) {
       wrappers.push(this.config.tipsWrapperFor24h);
     }
 
-    wrappers.forEach((wrapper) => {
+    for (const wrapper of wrappers) {
       const tips = wrapper.querySelectorAll('.tp-ui-value-tips, .tp-ui-value-tips-24h');
 
-      tips.forEach((tip) => {
-        const htmlTip = tip as HTMLElement;
-        const isActive = htmlTip.textContent === value || Number(htmlTip.textContent) === Number(value);
-
-        if (isActive) {
+      for (let i = 0; i < tips.length; i++) {
+        const htmlTip = tips[i] as HTMLElement;
+        if (htmlTip.textContent === value || Number(htmlTip.textContent) === Number(value)) {
           htmlTip.classList.add('active');
           htmlTip.setAttribute('aria-selected', 'true');
-        } else {
-          htmlTip.classList.remove('active');
-          htmlTip.setAttribute('aria-selected', 'false');
+          this.currentActiveElement = htmlTip;
+          return;
         }
-      });
-    });
+      }
+    }
   }
 
   renderTips(
@@ -90,6 +112,8 @@ export class ClockRenderer {
     if (clearBefore) {
       wrapper.innerHTML = '';
       this.tipsCache.clear();
+      this.currentActiveElement = null;
+      this.lastActiveValue = '';
     }
 
     const { width: wrapperWidth, height: wrapperHeight, radius } = this.getCachedDimensions(wrapper);
@@ -219,6 +243,8 @@ export class ClockRenderer {
   destroy(): void {
     this.tipsCache.clear();
     this.cachedDimensions.clear();
+    this.currentActiveElement = null;
+    this.lastActiveValue = '';
     this.config.tipsWrapper.innerHTML = '';
   }
 }

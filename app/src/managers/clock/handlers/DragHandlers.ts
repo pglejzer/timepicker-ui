@@ -94,14 +94,16 @@ export class DragHandlers {
     this.controller.handlePointerUp();
 
     const { autoSwitchToMinutes, isMobileView, smoothHourSnap, hourElement, minutesElement } = this.config;
+    const isOnHours = hourElement?.classList.contains('active');
+    const willSwitchToMinutes = autoSwitchToMinutes && isOnHours && !isMobileView;
 
-    if (smoothHourSnap && hourElement?.classList.contains('active')) {
+    if (smoothHourSnap && isOnHours && !willSwitchToMinutes) {
       this.controller.snapToNearestHour();
     }
 
     this.removeGlobalListeners();
 
-    if (autoSwitchToMinutes && hourElement?.classList.contains('active') && !isMobileView) {
+    if (willSwitchToMinutes) {
       minutesElement?.click();
       minutesElement?.focus();
     } else if (minutesElement?.classList.contains('active') && this.config.onMinuteCommit) {

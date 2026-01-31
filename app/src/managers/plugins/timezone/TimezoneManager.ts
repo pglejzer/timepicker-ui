@@ -1,7 +1,7 @@
 import type { CoreState } from '../../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitter';
 import { clearTimezoneCache } from '../../../utils/timezone';
-import { isDocument } from '../../../utils/node';
+import { isDocument, isNode } from '../../../utils/node';
 import { TIMINGS } from '../../../constants/timings';
 import { TimezoneDropdown } from './TimezoneDropdown';
 import { TimezoneKeyboard } from './TimezoneKeyboard';
@@ -67,12 +67,14 @@ export default class TimezoneManager {
 
       if (!isOpen) {
         this.dropdown.setOpen(true);
-        this.clickOutsideTimerId = window.setTimeout(() => {
-          if (isDocument()) {
-            document.addEventListener('click', clickOutsideHandler);
-          }
-          this.clickOutsideTimerId = null;
-        }, TIMINGS.DROPDOWN_CLICK_DELAY);
+        if (!isNode()) {
+          this.clickOutsideTimerId = window.setTimeout(() => {
+            if (isDocument()) {
+              document.addEventListener('click', clickOutsideHandler);
+            }
+            this.clickOutsideTimerId = null;
+          }, TIMINGS.DROPDOWN_CLICK_DELAY);
+        }
       } else {
         this.dropdown.setOpen(false);
         this.keyboard.reset();
@@ -204,4 +206,3 @@ export default class TimezoneManager {
     clearTimezoneCache();
   }
 }
-

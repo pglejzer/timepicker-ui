@@ -35,14 +35,6 @@ export default class ClockManager {
       this.updateAmPm();
     });
 
-    this.emitter.on('animation:start', () => {
-      this.clockSystem?.blockInteractions();
-    });
-
-    this.emitter.on('animation:end', () => {
-      this.clockSystem?.unblockInteractions();
-    });
-
     this.emitter.on('range:switch', (data) => {
       this.refreshDisabledTimeForRange(data.disabledTime);
     });
