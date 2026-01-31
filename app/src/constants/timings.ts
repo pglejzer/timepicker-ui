@@ -7,7 +7,7 @@ export const TIMINGS = {
   TIPS_ANIMATION: 401,
   MOBILE_TOGGLE: 450,
   CLOCK_SCALE_DELAY: 150,
+  DROPDOWN_CLICK_DELAY: 10,
 } as const;
 
 export type TimingsKey = keyof typeof TIMINGS;
-

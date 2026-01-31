@@ -12,6 +12,7 @@ import type {
   SelectAMEventData,
   SelectPMEventData,
   SwitchViewEventData,
+  TimezoneChangeEventData,
   ErrorEventData,
 } from './types/types';
 import type {
@@ -21,8 +22,13 @@ import type {
   LabelsOptions,
   BehaviorOptions,
   CallbacksOptions,
+  TimezoneOptions,
 } from './types/options';
 import { EventEmitter } from './utils/EventEmitter';
+import type { TimepickerEventMap } from './utils/EventEmitter';
+import { PluginRegistry } from './core/PluginRegistry';
+import type { Plugin, PluginManager, PluginFactory } from './core/PluginRegistry';
+import type { CoreState } from './timepicker/CoreState';
 
 export {
   TimepickerUI,
@@ -33,6 +39,7 @@ export {
   LabelsOptions,
   BehaviorOptions,
   CallbacksOptions,
+  TimezoneOptions,
   OpenEventData,
   CancelEventData,
   ConfirmEventData,
@@ -44,7 +51,14 @@ export {
   SelectAMEventData,
   SelectPMEventData,
   SwitchViewEventData,
+  TimezoneChangeEventData,
   ErrorEventData,
   EventEmitter,
+  PluginRegistry,
+  Plugin,
+  PluginManager,
+  PluginFactory,
+  CoreState,
+  TimepickerEventMap,
 };
 export default TimepickerUI;

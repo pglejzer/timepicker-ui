@@ -3,7 +3,7 @@
 .tp-ui {
   &-footer,
   &-footer-mobile {
-    padding: 24px;
+    padding: var(--tp-spacing-xl);
     display: flex;
     justify-content: space-between;
     margin-bottom: 4px;
@@ -24,6 +24,6 @@
   }
 
   &-footer.mobile {
-    padding: 24px;
+    padding: var(--tp-spacing-xl);
   }
 }

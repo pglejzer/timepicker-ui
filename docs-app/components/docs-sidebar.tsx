@@ -33,6 +33,7 @@ const navigation = [
       { title: "Mobile Support", href: "/docs/features/mobile" },
       { title: "Disabled Time", href: "/docs/features/disabled-time" },
       { title: "Validation", href: "/docs/features/validation" },
+      { title: "Plugins", href: "/docs/features/plugins" },
     ],
   },
   {

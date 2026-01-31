@@ -48,10 +48,56 @@ export class HourEngine {
       return this.isDisabledByInterval(value, amPm, disabledTime);
     }
 
+    if (disabledTime.rangeFromType !== undefined && disabledTime.rangeFromHour !== undefined) {
+      return this.isDisabledForRange12h(value, amPm, disabledTime);
+    }
+
     if (disabledTime.hours) {
       return disabledTime.hours.some(
         (h) => String(h) === value || Number(h) === Number(value) || h === value,
       );
+    }
+
+    return false;
+  }
+
+  private static isDisabledForRange12h(
+    value: string,
+    currentAmPm: AmPmType,
+    disabledTime: DisabledTimeConfig,
+  ): boolean {
+    const fromType = disabledTime.rangeFromType;
+    const fromHour = disabledTime.rangeFromHour;
+    const toHour = parseInt(value, 10);
+
+    if (fromType === null || fromHour === undefined) return false;
+
+    if (currentAmPm === 'AM' && fromType === 'PM') {
+      return true;
+    }
+
+    if (currentAmPm === 'AM' && fromType === 'AM') {
+      if (fromHour === 12) {
+        return false;
+      }
+      if (toHour === 12) {
+        return true;
+      }
+      return toHour < fromHour;
+    }
+
+    if (currentAmPm === 'PM' && fromType === 'AM') {
+      return false;
+    }
+
+    if (currentAmPm === 'PM' && fromType === 'PM') {
+      if (fromHour === 12) {
+        return false;
+      }
+      if (toHour === 12) {
+        return true;
+      }
+      return toHour < fromHour;
     }
 
     return false;
@@ -147,4 +193,3 @@ export class HourEngine {
     return index;
   }
 }
-

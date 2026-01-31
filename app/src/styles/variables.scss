@@ -18,6 +18,13 @@
   --tp-on-primary: #ffffff;
   --tp-primary-container: #eaddff;
   --tp-on-primary-container: #21005d;
+  --tp-primary-rgb: 103, 80, 164;
+
+  --tp-on-surface: #1d1b20;
+  --tp-on-surface-variant: #49454f;
+  --tp-on-surface-rgb: 29, 27, 32;
+  --tp-surface-container: #f3edf7;
+  --tp-outline-variant: #cac4d0;
 
   --tp-tertiary-container: #ffd8e4;
   --tp-on-tertiary-container: #633b48;
@@ -27,6 +34,9 @@
   --tp-hover-bg: #d6d6d6;
   --tp-backdrop: rgba(0, 0, 0, 0.5);
   --tp-backdrop-filter: unset;
+
+  --tp-dropdown-option-bg: #ffffff;
+  --tp-dropdown-option-text: #000000;
 
   --tp-shadow: unset;
 

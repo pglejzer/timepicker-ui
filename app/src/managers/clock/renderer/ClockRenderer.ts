@@ -34,6 +34,18 @@ export class ClockRenderer {
     this.config.clockHand.style.transform = `rotateZ(${targetAngle}deg)`;
   }
 
+  animateToAngle(angle: number): void {
+    const targetAngle = AngleEngine.calculateShortestPath(this.currentAngle, angle);
+    this.currentAngle = targetAngle;
+
+    this.config.tipsWrapper.classList.add('tp-ui-tips-animation');
+    this.config.clockHand.style.transform = `rotateZ(${targetAngle}deg)`;
+
+    setTimeout(() => {
+      this.config.tipsWrapper.classList.remove('tp-ui-tips-animation');
+    }, 401);
+  }
+
   setActiveValue(value: string): void {
     const wrappers = [this.config.tipsWrapper];
     if (this.config.tipsWrapperFor24h) {

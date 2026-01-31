@@ -5,14 +5,17 @@ import { isDocument, isNode } from '../../../utils/node';
 export interface DragHandlersConfig {
   autoSwitchToMinutes?: boolean;
   isMobileView?: boolean;
+  smoothHourSnap?: boolean;
   hourElement?: HTMLInputElement | null;
   minutesElement?: HTMLInputElement | null;
+  onMinuteCommit?: () => void;
 }
 
 export class DragHandlers {
   private controller: ClockController;
   private clockFace: HTMLElement;
   private isActive: boolean = false;
+  private isBlocked: boolean = false;
   private config: DragHandlersConfig;
   private cachedRect: DOMRect | null = null;
   private cachedCenter: Point | null = null;
@@ -35,8 +38,16 @@ export class DragHandlers {
     this.removeGlobalListeners();
   }
 
+  block(): void {
+    this.isBlocked = true;
+  }
+
+  unblock(): void {
+    this.isBlocked = false;
+  }
+
   private handlePointerDown = (event: MouseEvent | TouchEvent): void => {
-    if (isNode()) {
+    if (isNode() || this.isBlocked) {
       return;
     }
 
@@ -62,7 +73,7 @@ export class DragHandlers {
   };
 
   private handlePointerMove = (event: MouseEvent | TouchEvent): void => {
-    if (!this.isActive) return;
+    if (!this.isActive || this.isBlocked) return;
 
     const target = this.getTargetElement(event);
     if (target && target.classList && target.classList.contains('tp-ui-tips-disabled')) {
@@ -81,13 +92,20 @@ export class DragHandlers {
     this.cachedCenter = null;
     this.cachedRadius = null;
     this.controller.handlePointerUp();
-    this.removeGlobalListeners();
 
-    const { autoSwitchToMinutes, isMobileView, hourElement, minutesElement } = this.config;
+    const { autoSwitchToMinutes, isMobileView, smoothHourSnap, hourElement, minutesElement } = this.config;
+
+    if (smoothHourSnap && hourElement?.classList.contains('active')) {
+      this.controller.snapToNearestHour();
+    }
+
+    this.removeGlobalListeners();
 
     if (autoSwitchToMinutes && hourElement?.classList.contains('active') && !isMobileView) {
       minutesElement?.click();
       minutesElement?.focus();
+    } else if (minutesElement?.classList.contains('active') && this.config.onMinuteCommit) {
+      this.config.onMinuteCommit();
     }
   };
 

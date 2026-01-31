@@ -18,6 +18,7 @@ export interface ClockSystemConfig {
   theme?: string;
   incrementHours?: number;
   incrementMinutes?: number;
+  smoothHourSnap?: boolean;
   onHourChange?: (hour: string) => void;
   onMinuteChange?: (minute: string) => void;
   timepicker: unknown;
@@ -71,6 +72,7 @@ export class ClockSystem {
       config.disabledTime,
       config.incrementHours || 1,
       config.incrementMinutes || 1,
+      config.smoothHourSnap ?? true,
       callbacks,
     );
 
@@ -143,6 +145,7 @@ export class ClockSystem {
   }
 
   updateDisabledTime(disabledTime: DisabledTimeConfig | null): void {
+    this.disabledTime = disabledTime;
     this.controller.updateDisabledTime(disabledTime);
     const state = this.controller.getState();
 
@@ -226,5 +229,13 @@ export class ClockSystem {
   destroy(): void {
     this.dragHandlers.detach();
     this.controller.destroy();
+  }
+
+  blockInteractions(): void {
+    this.dragHandlers.block();
+  }
+
+  unblockInteractions(): void {
+    this.dragHandlers.unblock();
   }
 }

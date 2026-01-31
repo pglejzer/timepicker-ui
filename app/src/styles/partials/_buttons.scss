@@ -15,7 +15,7 @@
     background-color: transparent;
     text-align: center;
     font-size: 14px;
-    padding: 10px 24px;
+    padding: var(--tp-size-padding) var(--tp-spacing-xl);
     font-weight: 500;
     cursor: pointer;
     overflow: hidden;

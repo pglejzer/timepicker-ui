@@ -6,12 +6,28 @@
   "types": "../dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.umd.js"
+    },
+    "./plugins/range": {
+      "types": "./dist/plugins/range.d.ts",
+      "import": "./dist/plugins/range.js",
+      "require": "./dist/plugins/range.umd.js"
+    },
+    "./plugins/timezone": {
+      "types": "./dist/plugins/timezone.d.ts",
+      "import": "./dist/plugins/timezone.js",
+      "require": "./dist/plugins/timezone.umd.js"
     }
   },
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/plugins/range.ts",
+    "**/plugins/timezone.ts",
+    "**/plugins/range.js",
+    "**/plugins/timezone.js"
+  ],
   "files": [
     "dist/*"
   ],

@@ -75,10 +75,12 @@ export default class AnimationManager {
     const clockHand = this.core.getClockHand();
     if (!clockHand) return;
 
+    this.emitter.emit('animation:start', {});
     clockHand.classList.add('tp-ui-tips-animation');
 
     const t = setTimeout(() => {
       this.core.getClockHand()?.classList.remove('tp-ui-tips-animation');
+      this.emitter.emit('animation:end', {});
     }, TIMINGS.TIPS_ANIMATION);
 
     this.timeouts.push(t);
@@ -88,4 +90,3 @@ export default class AnimationManager {
     this.clearAllTimeouts();
   }
 }
-

@@ -6,15 +6,12 @@
 
 import type { TimepickerOptions } from '../../types/options';
 
-/**
- * Default options with grouped structure
- */
 export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
   clock: {
     type: '12h',
     incrementHours: 1,
     incrementMinutes: 1,
-    autoSwitchToMinutes: false,
+    autoSwitchToMinutes: true,
     disabledTime: undefined,
     currentTime: undefined,
   },
@@ -62,12 +59,28 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     onSelectAM: undefined,
     onSelectPM: undefined,
     onError: undefined,
+    onTimezoneChange: undefined,
+    onRangeConfirm: undefined,
+    onRangeSwitch: undefined,
+    onRangeValidation: undefined,
+  },
+
+  timezone: {
+    enabled: false,
+    default: undefined,
+    whitelist: undefined,
+    label: 'Timezone',
+  },
+
+  range: {
+    enabled: false,
+    minDuration: undefined,
+    maxDuration: undefined,
+    fromLabel: 'From',
+    toLabel: 'To',
   },
 };
 
-/**
- * Merge user options with defaults (deep merge for grouped structure)
- */
 export function mergeOptions(userOptions: TimepickerOptions = {}): Required<TimepickerOptions> {
   return {
     clock: {
@@ -90,6 +103,13 @@ export function mergeOptions(userOptions: TimepickerOptions = {}): Required<Time
       ...DEFAULT_OPTIONS.callbacks,
       ...(userOptions.callbacks || {}),
     },
+    timezone: {
+      ...DEFAULT_OPTIONS.timezone,
+      ...(userOptions.timezone || {}),
+    },
+    range: {
+      ...DEFAULT_OPTIONS.range,
+      ...(userOptions.range || {}),
+    },
   };
 }
-

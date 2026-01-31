@@ -9,6 +9,8 @@ import babel from '@rollup/plugin-babel';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import replace from '@rollup/plugin-replace';
 import { importAsString } from 'rollup-plugin-string-import';
+import dts from 'rollup-plugin-dts';
+import * as sass from 'sass';
 
 const { dependencies } = Object.keys(pkg) || {};
 
@@ -22,7 +24,7 @@ const baseConfig = (input, outputFile) => ({
       extract: true,
       minimize: true,
       modules: false,
-      use: ['sass'],
+      use: [['sass', { silenceDeprecations: ['legacy-js-api'] }]],
     }),
   ],
 });
@@ -80,4 +82,115 @@ const umdConfig = {
   ],
 };
 
-export default [...scssConfigs, umdConfig];
+const rangeUmdConfig = {
+  external: dependencies,
+  input: './src/range.ts',
+  output: {
+    file: '../dist/plugins/range.umd.js',
+    format: 'umd',
+    name: 'TimepickerUIRange',
+    sourcemap: false,
+  },
+  plugins: [
+    peerDepsExternal(),
+    replace({ 'process.env.NODE_ENV': JSON.stringify('production'), preventAssignment: true }),
+    resolve(),
+    commonjs({
+      include: 'node_modules/**',
+    }),
+    nodeResolve({
+      jsnext: true,
+      main: true,
+    }),
+    importAsString({
+      include: ['**/*.svg'],
+      exclude: ['**/*.test.*'],
+    }),
+    typescript({
+      tsconfig: './tsconfig.prod.json',
+      declaration: false,
+      declarationDir: undefined,
+      outDir: undefined,
+    }),
+    babel({
+      babelHelpers: 'runtime',
+      exclude: 'node_modules/**',
+    }),
+    terser(),
+  ],
+};
+
+const timezoneUmdConfig = {
+  external: dependencies,
+  input: './src/timezone.ts',
+  output: {
+    file: '../dist/plugins/timezone.umd.js',
+    format: 'umd',
+    name: 'TimepickerUITimezone',
+    sourcemap: false,
+  },
+  plugins: [
+    peerDepsExternal(),
+    replace({ 'process.env.NODE_ENV': JSON.stringify('production'), preventAssignment: true }),
+    resolve(),
+    commonjs({
+      include: 'node_modules/**',
+    }),
+    nodeResolve({
+      jsnext: true,
+      main: true,
+    }),
+    importAsString({
+      include: ['**/*.svg'],
+      exclude: ['**/*.test.*'],
+    }),
+    typescript({
+      tsconfig: './tsconfig.prod.json',
+      declaration: false,
+      declarationDir: undefined,
+      outDir: undefined,
+    }),
+    babel({
+      babelHelpers: 'runtime',
+      exclude: 'node_modules/**',
+    }),
+    terser(),
+  ],
+};
+
+const dtsConfig = {
+  input: './src/index.ts',
+  output: {
+    file: '../dist/index.d.ts',
+    format: 'es',
+  },
+  plugins: [dts()],
+};
+
+const dtsRangeConfig = {
+  input: './src/plugins/range.d.ts',
+  output: {
+    file: '../dist/plugins/range.d.ts',
+    format: 'es',
+  },
+  plugins: [dts()],
+};
+
+const dtsTimezoneConfig = {
+  input: './src/plugins/timezone.d.ts',
+  output: {
+    file: '../dist/plugins/timezone.d.ts',
+    format: 'es',
+  },
+  plugins: [dts()],
+};
+
+export default [
+  ...scssConfigs,
+  umdConfig,
+  rangeUmdConfig,
+  timezoneUmdConfig,
+  dtsConfig,
+  dtsRangeConfig,
+  dtsTimezoneConfig,
+];

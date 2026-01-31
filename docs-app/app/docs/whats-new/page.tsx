@@ -34,24 +34,31 @@ export default function WhatsNewPage() {
       </div>
 
       <InfoBox
-        title="Version 4.0.3 Released!"
+        title="Version 4.1.0 Released!"
         variant="emerald"
         className="mb-8"
       >
         <p className="mb-3">
-          <strong>January 23, 2026</strong> - New bugfix release with
-          desktop/mobile switching improvements
+          <strong>January 31, 2026</strong> - New features and UX improvements
         </p>
-        <p className="text-sm">
-          Fixed <code className="text-primary">enableSwitchIcon</code> toggle
-          not properly updating:
-        </p>
+        <p className="text-sm">What&apos;s new:</p>
         <ul className="mt-2 space-y-1 text-sm ml-4">
           <li>
-            Label text now switches correctly: "Select time" and "Enter time"
+            <strong>Range Plugin</strong> - New! Select time ranges with
+            start/end pickers, duration calculation, and validation
           </li>
-          <li>Icon updates properly: keyboard and schedule</li>
-          <li>Hour/Minute labels show/hide as expected</li>
+          <li>
+            <strong>Timezone Plugin</strong> - New! Timezone selector with
+            searchable dropdown and UTC offset display
+          </li>
+          <li>
+            <strong>Plugin architecture</strong> - Tree-shakeable plugins for
+            smaller core bundle size
+          </li>
+          <li>
+            <strong>Smooth hour snapping</strong> - Fluid hour dragging with
+            animation (new default)
+          </li>
         </ul>
         <Link
           href="/docs/changelog"

@@ -16,6 +16,7 @@ interface TimepickerExampleProps {
   options?: Record<string, unknown>;
   inputPlaceholder?: string;
   showCode?: boolean;
+  plugins?: Array<"range" | "timezone">;
 }
 
 export function TimepickerExample({
@@ -23,6 +24,7 @@ export function TimepickerExample({
   options = {},
   inputPlaceholder = "Select time",
   showCode = true,
+  plugins = [],
 }: TimepickerExampleProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const pickerRef = useRef<TimepickerUI | null>(null);
@@ -34,7 +36,18 @@ export function TimepickerExample({
 
   useEffect(() => {
     (async () => {
-      const { TimepickerUI } = await import("timepicker-ui");
+      const { TimepickerUI, PluginRegistry } = await import("timepicker-ui");
+
+      if (plugins.includes("range")) {
+        const { RangePlugin } = await import("timepicker-ui/plugins/range");
+        PluginRegistry.register(RangePlugin);
+      }
+      if (plugins.includes("timezone")) {
+        const { TimezonePlugin } =
+          await import("timepicker-ui/plugins/timezone");
+        PluginRegistry.register(TimezonePlugin);
+      }
+
       if (
         typeof window === "undefined" ||
         !inputRef.current ||

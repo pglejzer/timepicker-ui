@@ -23,14 +23,14 @@ const config: Config = {
   },
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': '<rootDir>/tests/__mocks__/styleMock.ts',
+    '\\.svg$': '<rootDir>/tests/__mocks__/svgMock.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts', '!src/types/**', '!src/styles/**'],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
-  // testPathIgnorePatterns: ['/node_modules/', '/dist/'],
-  testPathIgnorePatterns: ['.*'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   testTimeout: 10000,
 };
 

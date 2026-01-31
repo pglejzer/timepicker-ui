@@ -1,5 +1,4 @@
 import type { ClockType, AmPmType, DisabledTimeConfig } from '../types';
-import { AngleEngine } from './AngleEngine';
 
 export class MinuteEngine {
   static angleToIndex(angle: number): number {
@@ -27,10 +26,51 @@ export class MinuteEngine {
       return this.isDisabledByInterval(value, hour, amPm, disabledTime, clockType);
     }
 
+    if (disabledTime.rangeFromType !== undefined && disabledTime.rangeFromHour !== undefined) {
+      return this.isDisabledForRange12h(value, hour, amPm, disabledTime);
+    }
+
     if (disabledTime.minutes) {
       return disabledTime.minutes.some(
         (m) => String(m) === value || Number(m) === Number(value) || m === value,
       );
+    }
+
+    return false;
+  }
+
+  private static isDisabledForRange12h(
+    minute: string,
+    hour: string,
+    currentAmPm: AmPmType,
+    disabledTime: DisabledTimeConfig,
+  ): boolean {
+    const fromType = disabledTime.rangeFromType;
+    const fromHour = disabledTime.rangeFromHour;
+    const toHour = parseInt(hour, 10);
+    const toMinute = parseInt(minute, 10);
+
+    if (fromType === null || fromHour === undefined) return false;
+
+    const disabledMinutes = disabledTime.minutes || [];
+    const fromMinute =
+      disabledMinutes.length > 0 ? parseInt(disabledMinutes[disabledMinutes.length - 1], 10) + 1 : 0;
+
+    if (currentAmPm === 'AM' && fromType === 'PM') {
+      return true;
+    }
+
+    if (currentAmPm === 'PM' && fromType === 'AM') {
+      return false;
+    }
+
+    const isSameHour =
+      toHour === fromHour ||
+      (toHour === 12 && fromHour === 12) ||
+      (currentAmPm === fromType && toHour === fromHour);
+
+    if (isSameHour) {
+      return toMinute < fromMinute;
     }
 
     return false;
@@ -109,4 +149,3 @@ export class MinuteEngine {
     return index;
   }
 }
-

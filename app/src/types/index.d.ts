@@ -39,6 +39,27 @@ declare module 'timepicker-ui' {
 
   export type SwitchViewEventData = Record<string, never>;
 
+  export type TimezoneChangeEventData = {
+    timezone: string;
+  };
+
+  export type RangeConfirmEventData = {
+    from: string;
+    to: string;
+    duration: number;
+  };
+
+  export type RangeSwitchEventData = {
+    active: 'from' | 'to';
+  };
+
+  export type RangeValidationEventData = {
+    valid: boolean;
+    duration: number;
+    minDuration?: number;
+    maxDuration?: number;
+  };
+
   export type ErrorEventData = {
     error: string;
     rejectedHour?: string;
@@ -63,6 +84,10 @@ declare module 'timepicker-ui' {
     'select:am': SelectAMEventData;
     'select:pm': SelectPMEventData;
     'switch:view': SwitchViewEventData;
+    'timezone:change': TimezoneChangeEventData;
+    'range:confirm': RangeConfirmEventData;
+    'range:switch': RangeSwitchEventData;
+    'range:validation': RangeValidationEventData;
     error: ErrorEventData;
   }
 
@@ -75,6 +100,13 @@ declare module 'timepicker-ui' {
     incrementMinutes?: number;
     /** @default true */
     autoSwitchToMinutes?: boolean;
+    /**
+     * @description Enable smooth hour snapping with animation
+     * When enabled, clock hand moves continuously between hours (like minutes) and snaps with animation on release.
+     * In v5.0.0, this will become default behavior and option will be renamed to `discreteHourJump` (inverted logic).
+     * @default true
+     */
+    smoothHourSnap?: boolean;
     /**
      * @description Disable specific hours, minutes, or time intervals
      * @example
@@ -186,6 +218,30 @@ declare module 'timepicker-ui' {
     id?: string;
   }
 
+  export interface TimezoneOptions {
+    /** @default false */
+    enabled?: boolean;
+    /** Default timezone ID (e.g., 'America/New_York') */
+    default?: string;
+    /** Whitelist of allowed timezone IDs */
+    whitelist?: readonly string[];
+    /** @default "Timezone" */
+    label?: string;
+  }
+
+  export interface RangeOptions {
+    /** @default false */
+    enabled?: boolean;
+    /** Minimum duration in minutes */
+    minDuration?: number;
+    /** Maximum duration in minutes */
+    maxDuration?: number;
+    /** @default "From" */
+    fromLabel?: string;
+    /** @default "To" */
+    toLabel?: string;
+  }
+
   export interface CallbacksOptions {
     onOpen?: TimepickerEventCallback<OpenEventData>;
     onCancel?: TimepickerEventCallback<CancelEventData>;
@@ -196,6 +252,10 @@ declare module 'timepicker-ui' {
     onSelectAM?: TimepickerEventCallback<SelectAMEventData>;
     onSelectPM?: TimepickerEventCallback<SelectPMEventData>;
     onError?: TimepickerEventCallback<ErrorEventData>;
+    onTimezoneChange?: TimepickerEventCallback<TimezoneChangeEventData>;
+    onRangeConfirm?: TimepickerEventCallback<RangeConfirmEventData>;
+    onRangeSwitch?: TimepickerEventCallback<RangeSwitchEventData>;
+    onRangeValidation?: TimepickerEventCallback<RangeValidationEventData>;
   }
 
   export interface TimepickerOptions {
@@ -204,6 +264,8 @@ declare module 'timepicker-ui' {
     labels?: LabelsOptions;
     behavior?: BehaviorOptions;
     callbacks?: CallbacksOptions;
+    timezone?: TimezoneOptions;
+    range?: RangeOptions;
   }
 
   export type OptionTypes = TimepickerOptions;

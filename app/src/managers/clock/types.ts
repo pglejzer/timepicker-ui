@@ -13,6 +13,8 @@ export interface DisabledTimeConfig {
   isInterval?: boolean;
   intervals?: string[];
   clockType?: ClockType;
+  rangeFromType?: string | null;
+  rangeFromHour?: number;
 }
 
 export interface EngineInput {
@@ -27,6 +29,7 @@ export interface EngineInput {
   incrementMinutes: number;
   isInnerCircle?: boolean;
   currentHour?: string;
+  smoothHourSnap?: boolean;
 }
 
 export interface EngineOutput {
@@ -54,4 +57,3 @@ export interface RenderConfig {
   circle: HTMLElement;
   theme?: string;
 }
-

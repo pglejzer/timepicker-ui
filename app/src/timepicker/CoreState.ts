@@ -360,4 +360,3 @@ export class CoreState {
     return modal?.querySelector('.tp-ui-wrapper') || null;
   }
 }
-
