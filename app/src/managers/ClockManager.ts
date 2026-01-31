@@ -42,6 +42,38 @@ export default class ClockManager {
     this.emitter.on('animation:end', () => {
       this.clockSystem?.unblockInteractions();
     });
+
+    this.emitter.on('range:switch', (data) => {
+      this.refreshDisabledTimeForRange(data.disabledTime);
+    });
+  }
+
+  private refreshDisabledTimeForRange(
+    rangeDisabled:
+      | { hours: string[]; minutes: string[]; fromType?: string | null; fromHour?: number }
+      | null
+      | undefined,
+  ): void {
+    if (!this.clockSystem) return;
+
+    const baseDisabled = this.convertDisabledTime();
+
+    let mergedDisabled: DisabledTimeConfig | null = baseDisabled;
+
+    if (rangeDisabled) {
+      const hours = [...(baseDisabled?.hours || []), ...(rangeDisabled.hours || [])];
+      const minutes = [...(baseDisabled?.minutes || []), ...(rangeDisabled.minutes || [])];
+
+      mergedDisabled = {
+        ...baseDisabled,
+        hours: hours.length > 0 ? hours : undefined,
+        minutes: minutes.length > 0 ? minutes : undefined,
+        rangeFromType: rangeDisabled.fromType,
+        rangeFromHour: rangeDisabled.fromHour,
+      };
+    }
+
+    this.clockSystem.updateDisabledTime(mergedDisabled);
   }
 
   initializeClockSystem(): void {
@@ -77,10 +109,12 @@ export default class ClockManager {
       theme: this.core.options.ui.theme,
       incrementHours: this.core.options.clock.incrementHours || 1,
       incrementMinutes: this.core.options.clock.incrementMinutes || 1,
+      smoothHourSnap: this.core.options.clock.smoothHourSnap ?? true,
       timepicker: null,
       dragConfig: {
         autoSwitchToMinutes: this.core.options.clock.autoSwitchToMinutes,
         isMobileView: this.core.isMobileView,
+        smoothHourSnap: this.core.options.clock.smoothHourSnap ?? true,
         hourElement: hour,
         minutesElement: minutes,
         onMinuteCommit: () => {
@@ -164,6 +198,10 @@ export default class ClockManager {
       if (text === 'AM' || text === 'PM') return text;
     }
     const AM = this.core.getAM();
+    const isRangeMode = this.core.options.range?.enabled === true;
+    if (isRangeMode) {
+      return AM?.classList.contains('active') ? 'AM' : '';
+    }
     return AM?.classList.contains('active') ? 'AM' : 'PM';
   }
 

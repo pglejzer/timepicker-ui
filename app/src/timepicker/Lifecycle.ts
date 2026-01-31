@@ -128,7 +128,7 @@ export class Lifecycle {
       openElements.forEach((openEl) => openEl?.classList.remove('disabled'));
 
       setTimeout(() => {
-        if (typeof document !== 'undefined') {
+        if (isDocument()) {
           document.body.style.overflowY = '';
           document.body.style.paddingRight = '';
         }
@@ -280,8 +280,15 @@ export class Lifecycle {
     this.managers.clock.setOnStartCSSClassesIfClockType24h();
     this.managers.clock.setClassActiveToHourOnOpen();
 
-    this.managers.timezone.init();
-    this.managers.range.init();
+    const timezone = this.managers.getPlugin('timezone');
+    if (timezone) {
+      timezone.init();
+    }
+
+    const range = this.managers.getPlugin('range');
+    if (range) {
+      range.init();
+    }
 
     this.managers.events.handleCancelButton();
     this.managers.events.handleOkButton();

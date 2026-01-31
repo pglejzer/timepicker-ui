@@ -101,6 +101,13 @@ declare module 'timepicker-ui' {
     /** @default true */
     autoSwitchToMinutes?: boolean;
     /**
+     * @description Enable smooth hour snapping with animation
+     * When enabled, clock hand moves continuously between hours (like minutes) and snaps with animation on release.
+     * In v5.0.0, this will become default behavior and option will be renamed to `discreteHourJump` (inverted logic).
+     * @default true
+     */
+    smoothHourSnap?: boolean;
+    /**
      * @description Disable specific hours, minutes, or time intervals
      * @example
      * disabledTime: {

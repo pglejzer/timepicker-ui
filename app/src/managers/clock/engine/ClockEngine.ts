@@ -15,13 +15,20 @@ export class ClockEngine {
   }
 
   private static processHours(rawAngle: number, input: EngineInput): EngineOutput {
-    const increment = input.incrementHours * 30;
-    const snappedAngle = AngleEngine.snapToIncrement(rawAngle, increment);
+    const smoothSnap = input.smoothHourSnap ?? true;
+
+    let workingAngle: number;
+    if (smoothSnap) {
+      workingAngle = rawAngle;
+    } else {
+      const increment = input.incrementHours * 30;
+      workingAngle = AngleEngine.snapToIncrement(rawAngle, increment);
+    }
 
     const distance = AngleEngine.calculateDistance(input.pointerPosition, input.clockCenter);
     const isInner = input.clockType === '24h' && AngleEngine.isInnerCircle(distance, input.clockRadius);
 
-    let index = HourEngine.angleToIndex(snappedAngle, input.clockType, isInner);
+    let index = HourEngine.angleToIndex(workingAngle, input.clockType, isInner);
     const value = HourEngine.indexToValue(index, input.clockType, input.amPm);
 
     const isDisabled = HourEngine.isDisabled(value, input.amPm, input.disabledTime);
@@ -31,7 +38,13 @@ export class ClockEngine {
     }
 
     const finalValue = HourEngine.indexToValue(index, input.clockType, input.amPm);
-    const finalAngle = HourEngine.indexToAngle(index, input.clockType);
+
+    let finalAngle: number;
+    if (smoothSnap) {
+      finalAngle = rawAngle;
+    } else {
+      finalAngle = HourEngine.indexToAngle(index, input.clockType);
+    }
 
     return {
       angle: finalAngle,

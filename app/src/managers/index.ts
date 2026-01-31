@@ -5,5 +5,6 @@ export { default as ThemeManager } from './ThemeManager';
 export { default as ValidationManager } from './ValidationManager';
 export { default as EventManager } from './EventManager';
 export { default as ClockManager } from './ClockManager';
-export { default as TimezoneManager } from './TimezoneManager';
-export { default as RangeManager } from './RangeManager';
+
+export { TimezoneManager } from './plugins/timezone';
+export { RangeManager } from './plugins/range';

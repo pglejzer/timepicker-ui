@@ -95,7 +95,8 @@ export default class ConfigManager {
 
       this.emitter.emit('open', eventData);
 
-      if (this.core.options.clock.type !== '24h' && AM) {
+      const isRangeMode = this.core.options.range?.enabled === true;
+      if (this.core.options.clock.type !== '24h' && AM && !isRangeMode) {
         AM.classList.add(selectorActive);
       }
       return;

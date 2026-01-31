@@ -62,6 +62,7 @@ export type RangeConfirmEventData = {
 
 export type RangeSwitchEventData = {
   active: 'from' | 'to';
+  disabledTime?: { hours: string[]; minutes: string[] } | null;
 };
 
 export type RangeValidationEventData = {
@@ -74,8 +75,12 @@ export type RangeValidationEventData = {
 export type RangeMinuteCommitEventData = {
   hour: string;
   minutes: string;
-  type?: string;
+  type?: string | null;
 };
+
+export type RangeGetDisabledTimeEventData = Record<string, never>;
+
+export type RangeUpdateDisabledEventData = Record<string, never>;
 
 /** Payload when validation error occurs */
 export type ErrorEventData = {

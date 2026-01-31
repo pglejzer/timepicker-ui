@@ -25,6 +25,10 @@ import type {
   TimezoneOptions,
 } from './types/options';
 import { EventEmitter } from './utils/EventEmitter';
+import type { TimepickerEventMap } from './utils/EventEmitter';
+import { PluginRegistry } from './core/PluginRegistry';
+import type { Plugin, PluginManager, PluginFactory } from './core/PluginRegistry';
+import type { CoreState } from './timepicker/CoreState';
 
 export {
   TimepickerUI,
@@ -50,5 +54,11 @@ export {
   TimezoneChangeEventData,
   ErrorEventData,
   EventEmitter,
+  PluginRegistry,
+  Plugin,
+  PluginManager,
+  PluginFactory,
+  CoreState,
+  TimepickerEventMap,
 };
 export default TimepickerUI;

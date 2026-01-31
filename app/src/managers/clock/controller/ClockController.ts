@@ -14,6 +14,7 @@ export class ClockController {
   private disabledTime: DisabledTimeConfig | null;
   private incrementHours: number;
   private incrementMinutes: number;
+  private smoothHourSnap: boolean;
   private isDragging: boolean = false;
   private callbacks: ClockControllerCallbacks;
 
@@ -24,6 +25,7 @@ export class ClockController {
     disabledTime: DisabledTimeConfig | null,
     incrementHours: number = 1,
     incrementMinutes: number = 1,
+    smoothHourSnap: boolean = true,
     callbacks: ClockControllerCallbacks = {},
   ) {
     this.renderer = renderer;
@@ -32,6 +34,7 @@ export class ClockController {
     this.disabledTime = disabledTime;
     this.incrementHours = incrementHours;
     this.incrementMinutes = incrementMinutes;
+    this.smoothHourSnap = smoothHourSnap;
     this.callbacks = callbacks;
   }
 
@@ -48,6 +51,7 @@ export class ClockController {
       disabledTime: this.disabledTime,
       incrementHours: this.incrementHours,
       incrementMinutes: this.incrementMinutes,
+      smoothHourSnap: this.smoothHourSnap,
       currentHour: this.state.hour,
     };
 
@@ -89,9 +93,15 @@ export class ClockController {
     this.isDragging = false;
   }
 
-  switchMode(mode: ClockMode): void {
-    const isFirstTime = this.state.mode === mode;
+  snapToNearestHour(): void {
+    if (this.state.mode !== 'hours') return;
 
+    const targetAngle = ClockEngine.valueToAngle(this.state.hour, 'hours', this.clockType);
+    this.state.hourAngle = targetAngle;
+    this.renderer.animateToAngle(targetAngle);
+  }
+
+  switchMode(mode: ClockMode): void {
     this.state.mode = mode;
 
     const angle = mode === 'hours' ? this.state.hourAngle : this.state.minuteAngle;

@@ -5,6 +5,7 @@ import { isDocument, isNode } from '../../../utils/node';
 export interface DragHandlersConfig {
   autoSwitchToMinutes?: boolean;
   isMobileView?: boolean;
+  smoothHourSnap?: boolean;
   hourElement?: HTMLInputElement | null;
   minutesElement?: HTMLInputElement | null;
   onMinuteCommit?: () => void;
@@ -91,9 +92,14 @@ export class DragHandlers {
     this.cachedCenter = null;
     this.cachedRadius = null;
     this.controller.handlePointerUp();
-    this.removeGlobalListeners();
 
-    const { autoSwitchToMinutes, isMobileView, hourElement, minutesElement } = this.config;
+    const { autoSwitchToMinutes, isMobileView, smoothHourSnap, hourElement, minutesElement } = this.config;
+
+    if (smoothHourSnap && hourElement?.classList.contains('active')) {
+      this.controller.snapToNearestHour();
+    }
+
+    this.removeGlobalListeners();
 
     if (autoSwitchToMinutes && hourElement?.classList.contains('active') && !isMobileView) {
       minutesElement?.click();

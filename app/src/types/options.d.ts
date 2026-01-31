@@ -46,9 +46,16 @@ export interface ClockOptions {
 
   /**
    * @description Automatically switch to minutes after selecting hour
-   * @default false
+   * @default true
    */
   autoSwitchToMinutes?: boolean;
+
+  /**
+   * @description Enable smooth hour snapping with animation
+   * In v5.0.0, this will become default and option will be renamed to discreteHourJump (inverted)
+   * @default true
+   */
+  smoothHourSnap?: boolean;
 
   /**
    * @description Disable specific hours/minutes or time intervals

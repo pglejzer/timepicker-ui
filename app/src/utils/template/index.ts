@@ -31,7 +31,14 @@ export const getModalTemplate = (options: Required<TimepickerOptions>, instanceI
     `<button aria-label="Clock" type="button" class="tp-ui-keyboard-icon">${iconTemplateMobile || scheduleSvg}</button>`;
 
   const timezoneSelector = tzEnabled
-    ? `<div class="tp-ui-timezone ${mobileClass}"><label class="tp-ui-timezone-label" for="tp-tz-${instanceId}">${tzLabel}</label><select id="tp-tz-${instanceId}" class="tp-ui-timezone-select" aria-label="${tzLabel}"></select></div>`
+    ? `<div class="tp-ui-timezone ${mobileClass}">
+        <span class="tp-ui-timezone-label" id="tp-tz-label-${instanceId}">${tzLabel}</span>
+        <div class="tp-ui-timezone-dropdown" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="tp-tz-label-${instanceId}" tabindex="0" data-tz-id="${instanceId}">
+          <div class="tp-ui-timezone-selected" data-placeholder="${tzLabel}...">${tzLabel}...</div>
+          <svg class="tp-ui-timezone-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          <div class="tp-ui-timezone-menu" role="listbox" aria-labelledby="tp-tz-label-${instanceId}"></div>
+        </div>
+      </div>`
     : '';
 
   const rangeSelector = rangeEnabled

@@ -6,15 +6,12 @@
 
 import type { TimepickerOptions } from '../../types/options';
 
-/**
- * Default options with grouped structure
- */
 export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
   clock: {
     type: '12h',
     incrementHours: 1,
     incrementMinutes: 1,
-    autoSwitchToMinutes: false,
+    autoSwitchToMinutes: true,
     disabledTime: undefined,
     currentTime: undefined,
   },
@@ -84,9 +81,6 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
   },
 };
 
-/**
- * Merge user options with defaults (deep merge for grouped structure)
- */
 export function mergeOptions(userOptions: TimepickerOptions = {}): Required<TimepickerOptions> {
   return {
     clock: {
