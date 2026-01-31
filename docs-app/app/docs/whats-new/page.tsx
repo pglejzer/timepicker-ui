@@ -44,20 +44,20 @@ export default function WhatsNewPage() {
         <p className="text-sm">What&apos;s new:</p>
         <ul className="mt-2 space-y-1 text-sm ml-4">
           <li>
-            <strong>Plugin architecture</strong> - Range and Timezone as
-            optional imports for smaller bundles
+            <strong>Range Plugin</strong> - New! Select time ranges with
+            start/end pickers, duration calculation, and validation
+          </li>
+          <li>
+            <strong>Timezone Plugin</strong> - New! Timezone selector with
+            searchable dropdown and UTC offset display
+          </li>
+          <li>
+            <strong>Plugin architecture</strong> - Tree-shakeable plugins for
+            smaller core bundle size
           </li>
           <li>
             <strong>Smooth hour snapping</strong> - Fluid hour dragging with
             animation (new default)
-          </li>
-          <li>
-            <strong>Range mode time blocking</strong> - Automatically disables
-            earlier times when &quot;from&quot; is selected
-          </li>
-          <li>
-            <strong>Timezone theming</strong> - CSS variables for dropdown
-            styling
           </li>
         </ul>
         <Link
