@@ -388,7 +388,6 @@ describe('ConfigManager', () => {
 
       configManager.getInputValueOnOpenAndSet();
 
-      // When input is empty, values from getInputValue defaults are used
       expect(hourInput.value).toBe('12');
       expect(minutesInput.value).toBe('00');
     });
@@ -462,7 +461,6 @@ describe('ConfigManager', () => {
 
       configManager.toggleMobileClockFace();
 
-      // After toggleMobileClockFace, wrapper should have expanded class added
       jest.advanceTimersByTime(500);
 
       expect(wrapper.classList.contains('expanded')).toBe(true);
@@ -621,4 +619,3 @@ describe('ConfigManager', () => {
     });
   });
 });
-

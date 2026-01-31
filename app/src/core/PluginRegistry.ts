@@ -14,7 +14,6 @@ export interface Plugin {
   optionsExtender?: (options: Record<string, unknown>) => void;
 }
 
-/** Input type for external plugins - uses never for compatibility with separate .d.ts files */
 interface PluginInput {
   name: string;
   factory: (core: never, emitter: never) => PluginManager;
@@ -28,7 +27,6 @@ class PluginRegistryClass {
     if (this.plugins.has(plugin.name)) {
       return;
     }
-    // Safe cast: PluginInput's factory is structurally compatible at runtime
     this.plugins.set(plugin.name, plugin as Plugin);
   }
 
@@ -46,4 +44,3 @@ class PluginRegistryClass {
 }
 
 export const PluginRegistry = new PluginRegistryClass();
-

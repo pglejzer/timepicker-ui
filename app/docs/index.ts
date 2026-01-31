@@ -449,7 +449,6 @@ const timezonePicker = new TimepickerUI('#timezone-picker', {
 });
 timezonePicker.create();
 
-// World Cities Timezone Example
 const worldTimezonePicker = new TimepickerUI('#timezone-world-picker', {
   clock: { type: '24h' },
   ui: { theme: 'm3-green', enableSwitchIcon: true },
@@ -522,7 +521,6 @@ const worldTimezonePicker = new TimepickerUI('#timezone-world-picker', {
 });
 worldTimezonePicker.create();
 
-// Range Mode Example
 const rangePicker = new TimepickerUI('#range-picker', {
   clock: { type: '12h' },
   ui: { enableSwitchIcon: true },

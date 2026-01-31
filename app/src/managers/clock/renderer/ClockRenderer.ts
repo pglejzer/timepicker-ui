@@ -27,9 +27,10 @@ export class ClockRenderer {
   }
 
   setHandAngle(angle: number): void {
-    if (Math.abs(this.currentAngle - angle) < 0.1) return;
-
     const targetAngle = AngleEngine.calculateShortestPath(this.currentAngle, angle);
+
+    if (Math.abs(this.currentAngle - targetAngle) < 0.01) return;
+
     this.currentAngle = targetAngle;
     this.config.clockHand.style.transform = `rotateZ(${targetAngle}deg)`;
   }

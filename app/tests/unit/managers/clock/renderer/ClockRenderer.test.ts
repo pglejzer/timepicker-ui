@@ -67,7 +67,7 @@ describe('ClockRenderer', () => {
       renderer.setHandAngle(90);
       const initialTransform = clockHand.style.transform;
 
-      renderer.setHandAngle(90.05);
+      renderer.setHandAngle(90.005);
 
       expect(clockHand.style.transform).toBe(initialTransform);
     });
@@ -293,4 +293,3 @@ describe('ClockRenderer', () => {
     });
   });
 });
-

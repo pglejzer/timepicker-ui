@@ -17,6 +17,8 @@ export class ClockController {
   private smoothHourSnap: boolean;
   private isDragging: boolean = false;
   private callbacks: ClockControllerCallbacks;
+  private lastProcessedX: number | null = null;
+  private lastProcessedY: number | null = null;
 
   constructor(
     renderer: ClockRenderer,
@@ -41,6 +43,13 @@ export class ClockController {
   handlePointerMove(pointerPos: Point, clockCenter: Point, clockRadius: number): void {
     this.isDragging = true;
 
+    if (this.lastProcessedX === pointerPos.x && this.lastProcessedY === pointerPos.y) {
+      return;
+    }
+
+    this.lastProcessedX = pointerPos.x;
+    this.lastProcessedY = pointerPos.y;
+
     const input: EngineInput = {
       pointerPosition: pointerPos,
       clockCenter,
@@ -62,6 +71,7 @@ export class ClockController {
     }
 
     if (this.state.mode === 'hours') {
+      const prevHour = this.state.hour;
       this.state.hour = output.value;
       this.state.hourAngle = output.angle;
 
@@ -70,17 +80,18 @@ export class ClockController {
         this.renderer.setCircle24hMode(output.isInnerCircle);
       }
 
-      if (this.callbacks.onHourChange) {
+      if (this.callbacks.onHourChange && prevHour !== output.value) {
         this.callbacks.onHourChange(output.value);
       }
     } else {
+      const prevMinute = this.state.minute;
       this.state.minute = output.value;
       this.state.minuteAngle = output.angle;
 
       this.renderer.setCircleSize(true);
       this.renderer.setCircle24hMode(false);
 
-      if (this.callbacks.onMinuteChange) {
+      if (this.callbacks.onMinuteChange && prevMinute !== output.value) {
         this.callbacks.onMinuteChange(output.value);
       }
     }
@@ -91,6 +102,8 @@ export class ClockController {
 
   handlePointerUp(): void {
     this.isDragging = false;
+    this.lastProcessedX = null;
+    this.lastProcessedY = null;
   }
 
   snapToNearestHour(): void {

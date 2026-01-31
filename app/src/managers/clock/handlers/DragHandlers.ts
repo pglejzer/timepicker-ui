@@ -20,6 +20,7 @@ export class DragHandlers {
   private cachedRect: DOMRect | null = null;
   private cachedCenter: Point | null = null;
   private cachedRadius: number | null = null;
+  private rafId: number | null = null;
 
   constructor(controller: ClockController, clockFace: HTMLElement, config: DragHandlersConfig = {}) {
     this.controller = controller;
@@ -81,11 +82,24 @@ export class DragHandlers {
     }
 
     event.preventDefault();
-    this.processPointerEvent(event);
+
+    if (this.rafId !== null) {
+      return;
+    }
+
+    this.rafId = requestAnimationFrame(() => {
+      this.rafId = null;
+      this.processPointerEvent(event);
+    });
   };
 
   private handlePointerUp = (): void => {
     if (!this.isActive) return;
+
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
 
     this.isActive = false;
     this.cachedRect = null;
