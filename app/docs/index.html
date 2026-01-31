@@ -537,6 +537,46 @@ editablePicker.create();</code></pre>
         </section>
 
         <section
+          id="smooth-hour-snap"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Smooth Hour Snap</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Fluid hour dragging with smooth snapping animation
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="smooth-hour-snap-picker"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="10:30 PM"
+                />
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="smooth-hour-snap-picker"  value="10:30 PM" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const smoothHourPicker = new TimepickerUI('#smooth-hour-snap-picker', {
+  clock: {
+    smoothHourSnap: true
+  }
+});
+smoothHourPicker.create();</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
           id="inline-mode"
           class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
         >
@@ -1112,6 +1152,442 @@ if (pickerElement) {
   });
 }
 </code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="timezone-selector"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div class="bg-gradient-to-r from-cyan-50 to-sky-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Timezone Selector (Optional)</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Opt-in timezone selector for B2B/global use cases (UI-only, no conversions)
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="timezone-picker"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="14:30"
+                />
+              </div>
+              <div class="mt-4 text-center">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  Selected timezone:
+                  <span id="tz-display" class="font-semibold text-blue-600 dark:text-blue-400">-</span>
+                </p>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="timezone-picker" value="14:30" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const timezonePicker = new TimepickerUI('#timezone-picker', {
+  clock: {
+    type: '24h'
+  },
+  timezone: {
+    enabled: true,
+    label: 'Timezone',
+    whitelist: ['UTC', 'America/New_York', 'Europe/London', 'Europe/Warsaw', 'Asia/Tokyo']
+  },
+  callbacks: {
+    onTimezoneChange: (data) => {
+      console.log('Timezone changed:', data.timezone);
+      document.getElementById('tz-display').textContent = data.timezone;
+    }
+  }
+});
+timezonePicker.create();</code></pre>
+              </div>
+            </div>
+            <div
+              class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"
+            >
+              <p class="text-sm text-blue-800 dark:text-blue-300">
+                <strong>Note:</strong> The timezone feature is opt-in and presentation-only. It does not
+                perform automatic time conversions. Use it for collecting timezone metadata alongside time
+                input.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="timezone-world-cities"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Timezone Selector - World Cities</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Comprehensive timezone example with major cities around the world
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="space-y-6">
+                <div class="flex justify-center">
+                  <input
+                    id="timezone-world-picker"
+                    class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                    value="09:00"
+                  />
+                </div>
+                <div
+                  class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600"
+                >
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        📍 Selected Timezone:
+                      </p>
+                      <p id="tz-world-display" class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                        -
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        🕐 Selected Time:
+                      </p>
+                      <p id="tz-world-time" class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                        -
+                      </p>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">🌍 UTC Offset:</p>
+                    <p id="tz-world-offset" class="text-base font-semibold text-gray-900 dark:text-gray-100">
+                      -
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="mt-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800"
+                >
+                  <p class="text-sm text-blue-900 dark:text-blue-200 font-medium mb-2">
+                    🌏 Try switching between these cities:
+                  </p>
+                  <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs text-blue-800 dark:text-blue-300">
+                    <div>🗽 New York (EST/EDT)</div>
+                    <div>🌉 San Francisco</div>
+                    <div>🗼 Tokyo</div>
+                    <div>🏛️ London</div>
+                    <div>🥐 Paris</div>
+                    <div>🕌 Dubai</div>
+                    <div>🏖️ Sydney</div>
+                    <div>🇧🇷 São Paulo</div>
+                    <div>🌐 UTC</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="timezone-world-picker" value="09:00" /&gt;
+&lt;p id="tz-world-display"&gt;&lt;/p&gt;
+&lt;p id="tz-world-time"&gt;&lt;/p&gt;
+&lt;p id="tz-world-offset"&gt;&lt;/p&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const worldTimezonePicker = new TimepickerUI('#timezone-world-picker', {
+  clock: { type: '24h' },
+  ui: { theme: 'm3-green', enableSwitchIcon: true },
+  timezone: {
+    enabled: true,
+    label: 'Select City',
+    // No default - user must select a timezone
+    whitelist: [
+      'UTC',
+      'America/New_York',
+      'America/Los_Angeles',
+      'America/Chicago',
+      'America/Sao_Paulo',
+      'Europe/London',
+      'Europe/Paris',
+      'Europe/Berlin',
+      'Europe/Moscow',
+      'Asia/Dubai',
+      'Asia/Tokyo',
+      'Asia/Shanghai',
+      'Asia/Singapore',
+      'Australia/Sydney',
+      'Pacific/Auckland'
+    ]
+  },
+  callbacks: {
+    onTimezoneChange: (data) => {
+      document.getElementById('tz-world-display').textContent = data.timezone;
+      
+      // Get UTC offset for the selected timezone
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: data.timezone,
+        timeZoneName: 'shortOffset'
+      });
+      const parts = formatter.formatToParts(new Date());
+      const offset = parts.find(p => p.type === 'timeZoneName')?.value || 'UTC';
+      document.getElementById('tz-world-offset').textContent = offset;
+    },
+    onConfirm: (data) => {
+      const time = data.hour + ':' + data.minutes + (data.type ? ' ' + data.type : '');
+      document.getElementById('tz-world-time').textContent = time;
+    }
+  }
+});
+worldTimezonePicker.create();</code></pre>
+              </div>
+            </div>
+            <div
+              class="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg"
+            >
+              <p class="text-sm text-amber-800 dark:text-amber-300">
+                <strong>💡 Tip:</strong> The timezone selector automatically displays UTC offsets for each
+                city. This is a UI-only feature - no automatic time conversions happen. Perfect for scheduling
+                apps, booking systems, or any global application where users need to specify their timezone.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Timezone All Themes Section -->
+        <section class="mb-12">
+          <div
+            id="timezone-themes"
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Timezone - All Themes</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Preview timezone selector across all available themes
+            </p>
+
+            <div class="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Basic</label>
+                <input
+                  id="tz-theme-basic"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Select time"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Crane</label>
+                <input
+                  id="tz-theme-crane"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Select time"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Crane Straight</label>
+                <input
+                  id="tz-theme-crane-straight"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Select time"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">M3 Green</label>
+                <input
+                  id="tz-theme-m3-green"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Select time"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Dark</label>
+                <input
+                  id="tz-theme-dark"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Select time"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">M2</label>
+                <input
+                  id="tz-theme-m2"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Select time"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Glassmorphic</label>
+                <input
+                  id="tz-theme-glassmorphic"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Select time"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Pastel</label>
+                <input
+                  id="tz-theme-pastel"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Select time"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">AI</label>
+                <input
+                  id="tz-theme-ai"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Select time"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Cyberpunk</label>
+                <input
+                  id="tz-theme-cyberpunk"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Select time"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Range Mode Section -->
+        <section class="mb-12">
+          <div
+            id="range-mode"
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Range Mode (From–To)</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Select a time range for booking, scheduling, or reservation use cases.
+            </p>
+
+            <div class="mt-6 grid md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <input
+                  id="range-picker"
+                  type="text"
+                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  value=""
+                  placeholder="Select time range"
+                />
+                <div
+                  id="range-result"
+                  class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300"
+                >
+                  Selected range: <span id="range-display">--:-- – --:--</span>
+                  <br />
+                  Duration: <span id="range-duration">0</span> minutes
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <pre><code class="language-html">&lt;input id="range-picker" value="09:00" /&gt;</code></pre>
+                <pre><code class="language-javascript">const rangePicker = new TimepickerUI('#range-picker', {
+  clock: { type: '12h' },
+  range: {
+    enabled: true,
+    minDuration: 30,
+    maxDuration: 480,
+    fromLabel: 'Start',
+    toLabel: 'End',
+  },
+  callbacks: {
+    onRangeConfirm: (data) => {
+      console.log('Range confirmed:', data.from, '–', data.to);
+      document.getElementById('range-display').textContent = 
+        data.from + ' – ' + data.to;
+      document.getElementById('range-duration').textContent = data.duration;
+    },
+    onRangeValidation: (data) => {
+      if (!data.valid) {
+        console.log('Invalid range: duration must be', 
+          data.minDuration, '-', data.maxDuration, 'min');
+      }
+    },
+  },
+});
+rangePicker.create();</code></pre>
+              </div>
+            </div>
+            <div
+              class="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg"
+            >
+              <p class="text-sm text-amber-800 dark:text-amber-300">
+                <strong>Tip:</strong> Range mode uses a single clock face. After selecting the "From" time, it
+                automatically switches to "To" selection. Use minDuration/maxDuration for validation (e.g.,
+                minimum booking 30 minutes, max 8 hours).
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Range Mode 24h Section -->
+        <section class="mb-12">
+          <div
+            id="range-mode-24h"
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Range Mode (24h Format)</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Time range selection with 24-hour clock format.
+            </p>
+
+            <div class="mt-6 grid md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <input
+                  id="range-picker-24h"
+                  type="text"
+                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  value=""
+                  placeholder="Select time range"
+                />
+                <div
+                  id="range-result-24h"
+                  class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300"
+                >
+                  Selected range: <span id="range-display-24h">--:-- – --:--</span>
+                  <br />
+                  Duration: <span id="range-duration-24h">0</span> minutes
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <pre><code class="language-html">&lt;input id="range-picker-24h" /&gt;</code></pre>
+                <pre><code class="language-javascript">const range24hPicker = new TimepickerUI('#range-picker-24h', {
+  clock: { type: '24h' },
+  range: {
+    enabled: true,
+    minDuration: 60,
+    maxDuration: 720,
+    fromLabel: 'Start',
+    toLabel: 'End',
+  },
+  callbacks: {
+    onRangeConfirm: (data) => {
+      console.log(data.from, '–', data.to);
+      document.getElementById('range-display-24h').textContent = 
+        data.from + ' – ' + data.to;
+      document.getElementById('range-duration-24h').textContent = data.duration;
+    },
+  },
+});
+range24hPicker.create();</code></pre>
               </div>
             </div>
           </div>

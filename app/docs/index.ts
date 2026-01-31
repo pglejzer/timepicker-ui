@@ -1,5 +1,10 @@
-import { TimepickerUI } from 'timepicker-ui';
+import { TimepickerUI, PluginRegistry } from '../src/index';
+import { RangePlugin } from '../src/plugins/range';
+import { TimezonePlugin } from '../src/plugins/timezone';
 import { codeToHtml } from 'shiki';
+
+PluginRegistry.register(RangePlugin);
+PluginRegistry.register(TimezonePlugin);
 
 console.log(
   `%c
@@ -151,6 +156,11 @@ const editablePicker = new TimepickerUI('#editable-picker', {
   behavior: { focusInputAfterClose: true },
 });
 editablePicker.create();
+
+const smoothHourPicker = new TimepickerUI('#smooth-hour-snap-picker', {
+  clock: { smoothHourSnap: true },
+});
+smoothHourPicker.create();
 
 const inlinePicker = new TimepickerUI('#inline-picker', {
   clock: { type: '24h' },
@@ -419,3 +429,188 @@ const multipleIntervalsPicker24h = new TimepickerUI('#disabled-intervals-24h', {
   },
 });
 multipleIntervalsPicker24h.create();
+
+const timezonePicker = new TimepickerUI('#timezone-picker', {
+  clock: { type: '24h' },
+  timezone: {
+    enabled: true,
+    label: 'Timezone',
+  },
+  ui: { theme: 'dark', enableSwitchIcon: true },
+  callbacks: {
+    onTimezoneChange: (data) => {
+      console.log('Timezone changed:', data.timezone);
+      const tzDisplay = document.getElementById('tz-display');
+      if (tzDisplay) {
+        tzDisplay.textContent = data.timezone;
+      }
+    },
+  },
+});
+timezonePicker.create();
+
+const worldTimezonePicker = new TimepickerUI('#timezone-world-picker', {
+  clock: { type: '24h' },
+  ui: { theme: 'm3-green', enableSwitchIcon: true },
+  timezone: {
+    enabled: true,
+    label: 'Select City',
+    whitelist: [
+      'UTC',
+      'America/New_York',
+      'America/Los_Angeles',
+      'America/Chicago',
+      'America/Sao_Paulo',
+      'Europe/London',
+      'Europe/Paris',
+      'Europe/Berlin',
+      'Europe/Moscow',
+      'Asia/Dubai',
+      'Asia/Tokyo',
+      'Asia/Shanghai',
+      'Asia/Singapore',
+      'Australia/Sydney',
+      'Pacific/Auckland',
+    ],
+  },
+  callbacks: {
+    onTimezoneChange: (data) => {
+      console.log('🌍 Timezone changed to:', data.timezone);
+
+      const tzWorldDisplay = document.getElementById('tz-world-display');
+      const tzWorldOffset = document.getElementById('tz-world-offset');
+
+      if (tzWorldDisplay) {
+        tzWorldDisplay.textContent = data.timezone;
+      }
+
+      if (tzWorldOffset) {
+        try {
+          const formatter = new Intl.DateTimeFormat('en-US', {
+            timeZone: data.timezone,
+            timeZoneName: 'shortOffset',
+          });
+          const parts = formatter.formatToParts(new Date());
+          const offsetPart = parts.find((p) => p.type === 'timeZoneName');
+          const offset = offsetPart?.value || 'UTC';
+          tzWorldOffset.textContent = offset;
+
+          console.log(`📍 ${data.timezone} → ${offset}`);
+        } catch (error) {
+          console.error('Error getting timezone offset:', error);
+          tzWorldOffset.textContent = 'N/A';
+        }
+      }
+    },
+    onConfirm: (data) => {
+      const tzWorldTime = document.getElementById('tz-world-time');
+      if (tzWorldTime) {
+        const time = `${data.hour}:${data.minutes}${data.type ? ' ' + data.type : ''}`;
+        tzWorldTime.textContent = time;
+        console.log('✅ Time confirmed:', time);
+      }
+    },
+    onUpdate: (data) => {
+      const tzWorldTime = document.getElementById('tz-world-time');
+      if (tzWorldTime) {
+        const time = `${data.hour}:${data.minutes}${data.type ? ' ' + data.type : ''}`;
+        tzWorldTime.textContent = time;
+      }
+    },
+  },
+});
+worldTimezonePicker.create();
+
+const rangePicker = new TimepickerUI('#range-picker', {
+  clock: { type: '12h' },
+  ui: { enableSwitchIcon: true },
+  range: {
+    enabled: true,
+    minDuration: 30,
+    maxDuration: 480,
+    fromLabel: 'Start',
+    toLabel: 'End',
+  },
+  callbacks: {
+    onRangeConfirm: (data) => {
+      console.log('Range confirmed:', data.from, '–', data.to, 'Duration:', data.duration);
+      const rangeDisplay = document.getElementById('range-display');
+      const durationDisplay = document.getElementById('range-duration');
+      if (rangeDisplay) {
+        rangeDisplay.textContent = `${data.from} – ${data.to}`;
+      }
+      if (durationDisplay) {
+        durationDisplay.textContent = String(data.duration);
+      }
+    },
+    onRangeSwitch: (data) => {
+      console.log('Range part switched to:', data.active);
+    },
+    onRangeValidation: (data) => {
+      if (!data.valid) {
+        console.log('Invalid range duration. Expected:', data.minDuration, '-', data.maxDuration, 'minutes');
+      }
+    },
+  },
+});
+rangePicker.create();
+
+const range24hPicker = new TimepickerUI('#range-picker-24h', {
+  clock: { type: '24h' },
+  ui: { enableSwitchIcon: true },
+  range: {
+    enabled: true,
+    minDuration: 60,
+    maxDuration: 720,
+    fromLabel: 'Start',
+    toLabel: 'End',
+  },
+  callbacks: {
+    onRangeConfirm: (data) => {
+      console.log('Range 24h confirmed:', data.from, '–', data.to, 'Duration:', data.duration);
+      const rangeDisplay = document.getElementById('range-display-24h');
+      const durationDisplay = document.getElementById('range-duration-24h');
+      if (rangeDisplay) {
+        rangeDisplay.textContent = `${data.from} – ${data.to}`;
+      }
+      if (durationDisplay) {
+        durationDisplay.textContent = String(data.duration);
+      }
+    },
+    onRangeSwitch: (data) => {
+      console.log('Range 24h part switched to:', data.active);
+    },
+    onRangeValidation: (data) => {
+      if (!data.valid) {
+        console.log('Invalid range duration. Expected:', data.minDuration, '-', data.maxDuration, 'minutes');
+      }
+    },
+  },
+});
+range24hPicker.create();
+
+const themes = [
+  'basic',
+  'crane',
+  'crane-straight',
+  'm3-green',
+  'dark',
+  'm2',
+  'glassmorphic',
+  'pastel',
+  'ai',
+  'cyberpunk',
+] as const;
+
+themes.forEach((theme) => {
+  const picker = new TimepickerUI(`#tz-theme-${theme}`, {
+    clock: { type: '24h' },
+    ui: { theme, enableSwitchIcon: true },
+    timezone: {
+      enabled: true,
+      label: 'Timezone',
+      whitelist: ['UTC', 'America/New_York', 'Europe/London', 'Europe/Warsaw', 'Asia/Tokyo'],
+    },
+  });
+  picker.create();
+});

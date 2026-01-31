@@ -1,4 +1,5 @@
 import { isDocument } from '../utils/node';
+import { announceToScreenReader, updateAriaPressed } from '../utils/accessibility';
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 
@@ -115,6 +116,13 @@ export default class EventManager {
       const PM = this.core.getPM();
       AM.classList.add('active');
       PM?.classList.remove('active');
+
+      updateAriaPressed(AM, true);
+      updateAriaPressed(PM, false);
+
+      const modal = this.core.getModalElement();
+      announceToScreenReader(modal, 'AM selected');
+
       this.emitter.emit('select:am', {});
 
       const hour = this.core.getHour();
@@ -139,6 +147,13 @@ export default class EventManager {
       const AM = this.core.getAM();
       PM.classList.add('active');
       AM?.classList.remove('active');
+
+      updateAriaPressed(PM, true);
+      updateAriaPressed(AM, false);
+
+      const modal = this.core.getModalElement();
+      announceToScreenReader(modal, 'PM selected');
+
       this.emitter.emit('select:pm', {});
 
       const hour = this.core.getHour();
@@ -254,14 +269,19 @@ export default class EventManager {
         }
 
         hour.value = newValue.toString().padStart(2, '0');
+        hour.setAttribute('aria-valuenow', hour.value);
+
+        const modal = this.core.getModalElement();
+        announceToScreenReader(modal, `Hour: ${hour.value}`);
+
         this.emitter.emit('animation:clock', {});
         this.emitter.emit('select:hour', { hour: hour.value });
 
-        const minutes = this.core.getMinutes();
+        const mins = this.core.getMinutes();
         const activeTypeMode = this.core.getActiveTypeMode();
         this.emitter.emit('update', {
           hour: hour.value,
-          minutes: minutes?.value,
+          minutes: mins?.value,
           type: activeTypeMode?.textContent || undefined,
         });
       };
@@ -288,13 +308,18 @@ export default class EventManager {
         }
 
         minutes.value = newValue.toString().padStart(2, '0');
+        minutes.setAttribute('aria-valuenow', minutes.value);
+
+        const modal = this.core.getModalElement();
+        announceToScreenReader(modal, `Minutes: ${minutes.value}`);
+
         this.emitter.emit('animation:clock', {});
         this.emitter.emit('select:minute', { minutes: minutes.value });
 
-        const hour = this.core.getHour();
+        const hr = this.core.getHour();
         const activeTypeMode = this.core.getActiveTypeMode();
         this.emitter.emit('update', {
-          hour: hour?.value,
+          hour: hr?.value,
           minutes: minutes.value,
           type: activeTypeMode?.textContent || undefined,
         });

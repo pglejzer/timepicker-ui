@@ -27,7 +27,7 @@ export class AngleEngine {
   }
 
   static isInnerCircle(distance: number, radius: number): boolean {
-    return distance < radius * 0.6;
+    return distance < radius * 0.75;
   }
 
   static calculateShortestPath(currentAngle: number, targetAngle: number): number {

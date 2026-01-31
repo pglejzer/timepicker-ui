@@ -1,15 +1,18 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: {
+    index: 'src/index.ts',
+    'plugins/range': 'src/range.ts',
+    'plugins/timezone': 'src/timezone.ts',
+  },
   format: ['esm', 'cjs'],
   outDir: '../dist',
   clean: true,
   minify: true,
   sourcemap: false,
-  dts: {
-    resolve: true,
-  },
+  splitting: false,
+  dts: false,
   target: 'es2022',
   tsconfig: './tsconfig.prod.json',
   loader: {

@@ -1,5 +1,6 @@
 import { selectorActive } from '../utils/variables';
 import { MINUTES_STEP_5 } from '../utils/template';
+import { announceToScreenReader } from '../utils/accessibility';
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 import { ClockSystem, type ClockSystemConfig, type DisabledTimeConfig } from './clock';
@@ -33,6 +34,46 @@ export default class ClockManager {
     this.emitter.on('select:pm', () => {
       this.updateAmPm();
     });
+
+    this.emitter.on('animation:start', () => {
+      this.clockSystem?.blockInteractions();
+    });
+
+    this.emitter.on('animation:end', () => {
+      this.clockSystem?.unblockInteractions();
+    });
+
+    this.emitter.on('range:switch', (data) => {
+      this.refreshDisabledTimeForRange(data.disabledTime);
+    });
+  }
+
+  private refreshDisabledTimeForRange(
+    rangeDisabled:
+      | { hours: string[]; minutes: string[]; fromType?: string | null; fromHour?: number }
+      | null
+      | undefined,
+  ): void {
+    if (!this.clockSystem) return;
+
+    const baseDisabled = this.convertDisabledTime();
+
+    let mergedDisabled: DisabledTimeConfig | null = baseDisabled;
+
+    if (rangeDisabled) {
+      const hours = [...(baseDisabled?.hours || []), ...(rangeDisabled.hours || [])];
+      const minutes = [...(baseDisabled?.minutes || []), ...(rangeDisabled.minutes || [])];
+
+      mergedDisabled = {
+        ...baseDisabled,
+        hours: hours.length > 0 ? hours : undefined,
+        minutes: minutes.length > 0 ? minutes : undefined,
+        rangeFromType: rangeDisabled.fromType,
+        rangeFromHour: rangeDisabled.fromHour,
+      };
+    }
+
+    this.clockSystem.updateDisabledTime(mergedDisabled);
   }
 
   initializeClockSystem(): void {
@@ -68,18 +109,34 @@ export default class ClockManager {
       theme: this.core.options.ui.theme,
       incrementHours: this.core.options.clock.incrementHours || 1,
       incrementMinutes: this.core.options.clock.incrementMinutes || 1,
+      smoothHourSnap: this.core.options.clock.smoothHourSnap ?? true,
       timepicker: null,
       dragConfig: {
         autoSwitchToMinutes: this.core.options.clock.autoSwitchToMinutes,
         isMobileView: this.core.isMobileView,
+        smoothHourSnap: this.core.options.clock.smoothHourSnap ?? true,
         hourElement: hour,
         minutesElement: minutes,
+        onMinuteCommit: () => {
+          const m = this.core.getMinutes();
+          const h = this.core.getHour();
+          const activeTypeMode = this.core.getActiveTypeMode();
+          this.emitter.emit('range:minute:commit', {
+            hour: h?.value ?? '12',
+            minutes: m?.value ?? '00',
+            type: activeTypeMode?.textContent ?? undefined,
+          });
+        },
       },
       onHourChange: (hourValue: string) => {
         const h = this.core.getHour();
         if (h) {
           h.value = hourValue;
+          h.setAttribute('aria-valuenow', hourValue);
         }
+
+        const modal = this.core.getModalElement();
+        announceToScreenReader(modal, `Hour: ${hourValue}`);
 
         const minutes = this.core.getMinutes();
         const activeTypeMode = this.core.getActiveTypeMode();
@@ -93,7 +150,11 @@ export default class ClockManager {
         const m = this.core.getMinutes();
         if (m) {
           m.value = minuteValue;
+          m.setAttribute('aria-valuenow', minuteValue);
         }
+
+        const modal = this.core.getModalElement();
+        announceToScreenReader(modal, `Minutes: ${minuteValue}`);
 
         const hour = this.core.getHour();
         const activeTypeMode = this.core.getActiveTypeMode();
@@ -137,6 +198,10 @@ export default class ClockManager {
       if (text === 'AM' || text === 'PM') return text;
     }
     const AM = this.core.getAM();
+    const isRangeMode = this.core.options.range?.enabled === true;
+    if (isRangeMode) {
+      return AM?.classList.contains('active') ? 'AM' : '';
+    }
     return AM?.classList.contains('active') ? 'AM' : 'PM';
   }
 
