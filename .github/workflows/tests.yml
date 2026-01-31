@@ -25,7 +25,7 @@ jobs:
 
       - name: Install app dependencies
         working-directory: ./app
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Run tests with coverage
         working-directory: ./app
