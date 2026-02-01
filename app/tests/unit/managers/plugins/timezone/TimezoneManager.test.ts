@@ -274,5 +274,88 @@ describe('TimezoneManager', () => {
       expect(() => manager.destroy()).not.toThrow();
     });
   });
-});
 
+  describe('keyboard selection', () => {
+    it('should select option on Enter when focused', () => {
+      const manager = new TimezoneManager(mockCore as never, emitter);
+      manager.init();
+
+      dom.dropdown.setAttribute('aria-expanded', 'true');
+
+      const downEvent = new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true });
+      dom.dropdown.dispatchEvent(downEvent);
+
+      const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
+      dom.dropdown.dispatchEvent(enterEvent);
+
+      expect(dom.dropdown.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('should select option on Space when focused', () => {
+      const manager = new TimezoneManager(mockCore as never, emitter);
+      manager.init();
+
+      dom.dropdown.setAttribute('aria-expanded', 'true');
+
+      const downEvent = new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true });
+      dom.dropdown.dispatchEvent(downEvent);
+
+      const spaceEvent = new KeyboardEvent('keydown', { key: ' ', bubbles: true });
+      dom.dropdown.dispatchEvent(spaceEvent);
+
+      expect(dom.dropdown.getAttribute('aria-expanded')).toBe('false');
+    });
+  });
+
+  describe('click outside', () => {
+    it('should close dropdown when clicking outside', () => {
+      jest.useFakeTimers();
+      const manager = new TimezoneManager(mockCore as never, emitter);
+      manager.init();
+
+      const clickEvent = new MouseEvent('click', { bubbles: true });
+      dom.dropdown.dispatchEvent(clickEvent);
+
+      expect(dom.dropdown.getAttribute('aria-expanded')).toBe('true');
+
+      jest.advanceTimersByTime(100);
+
+      const outsideClick = new MouseEvent('click', { bubbles: true });
+      document.dispatchEvent(outsideClick);
+
+      expect(dom.dropdown.getAttribute('aria-expanded')).toBe('false');
+      jest.useRealTimers();
+    });
+  });
+
+  describe('option click with target validation', () => {
+    it('should not select when target is not HTMLElement', () => {
+      const manager = new TimezoneManager(mockCore as never, emitter);
+      manager.init();
+
+      dom.dropdown.setAttribute('aria-expanded', 'true');
+
+      const event = new MouseEvent('click', { bubbles: true });
+      Object.defineProperty(event, 'target', { value: null });
+      dom.menu.dispatchEvent(event);
+
+      expect(manager.getSelectedTimezone()).toBeNull();
+    });
+
+    it('should not select when clicking on non-option element', () => {
+      const manager = new TimezoneManager(mockCore as never, emitter);
+      manager.init();
+
+      dom.dropdown.setAttribute('aria-expanded', 'true');
+
+      const nonOption = document.createElement('div');
+      dom.menu.appendChild(nonOption);
+
+      const event = new MouseEvent('click', { bubbles: true });
+      Object.defineProperty(event, 'target', { value: nonOption });
+      nonOption.dispatchEvent(event);
+
+      expect(dom.dropdown.getAttribute('aria-expanded')).toBe('true');
+    });
+  });
+});

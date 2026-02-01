@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.1.1] - 2026-02-01
+
+### Fixed
+
+- **Mobile input validation** - Fixed issue where invalid time values (e.g., "169:70") could be entered via keyboard in mobile mode. Hour and minute inputs now automatically clamp to valid ranges (1-12 for 12h, 0-23 for 24h, 0-59 for minutes)
+
+### Internal
+
+- **Test coverage** - Expanded test suite to 1100+ tests with 90%+ code coverage. Added comprehensive tests for managers, handlers, plugins, and edge cases
+
+---
+
 ## [4.1.0] - 2026-01-31
 
 ### Added

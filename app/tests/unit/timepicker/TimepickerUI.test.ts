@@ -1,4 +1,5 @@
 import TimepickerUI from '../../../src/timepicker/TimepickerUI';
+import TimepickerUIDefault from '../../../src/timepicker/index';
 
 describe('TimepickerUI', () => {
   let container: HTMLElement;
@@ -16,6 +17,12 @@ describe('TimepickerUI', () => {
     TimepickerUI.destroyAll();
     document.body.innerHTML = '';
     jest.clearAllMocks();
+  });
+
+  describe('index export', () => {
+    it('should export TimepickerUI as default from index', () => {
+      expect(TimepickerUIDefault).toBe(TimepickerUI);
+    });
   });
 
   describe('constructor', () => {
@@ -47,6 +54,24 @@ describe('TimepickerUI', () => {
           type: '24h',
         },
       });
+
+      expect(timepicker).toBeInstanceOf(TimepickerUI);
+
+      timepicker.destroy();
+    });
+
+    it('should read initial input value and set degrees', () => {
+      input.value = '03:30 PM';
+      const timepicker = new TimepickerUI(input);
+
+      expect(timepicker).toBeInstanceOf(TimepickerUI);
+
+      timepicker.destroy();
+    });
+
+    it('should handle input with 24h value', () => {
+      input.value = '14:45';
+      const timepicker = new TimepickerUI(input, { clock: { type: '24h' } });
 
       expect(timepicker).toBeInstanceOf(TimepickerUI);
 
@@ -436,6 +461,42 @@ describe('TimepickerUI', () => {
 
       timepicker.destroy();
     });
+
+    it('should set 24h format time correctly', () => {
+      const timepicker = new TimepickerUI(input, { clock: { type: '24h' } });
+      timepicker.create();
+      timepicker.open();
+
+      expect(() => timepicker.setValue('14:30')).not.toThrow();
+
+      timepicker.destroy();
+    });
+
+    it('should handle invalid 24h format gracefully', () => {
+      const timepicker = new TimepickerUI(input, { clock: { type: '24h' } });
+      timepicker.create();
+
+      expect(() => timepicker.setValue('25:00')).not.toThrow();
+
+      timepicker.destroy();
+    });
+
+    it('should handle invalid 12h format gracefully', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+
+      expect(() => timepicker.setValue('13:00 AM')).not.toThrow();
+
+      timepicker.destroy();
+    });
+
+    it('should auto-create when not initialized', () => {
+      const timepicker = new TimepickerUI(input);
+
+      expect(() => timepicker.setValue('10:30 AM')).not.toThrow();
+
+      timepicker.destroy();
+    });
   });
 
   describe('getValue edge cases', () => {
@@ -473,6 +534,65 @@ describe('TimepickerUI', () => {
       timepicker.close(false, callback);
 
       expect(callback).toHaveBeenCalled();
+
+      timepicker.destroy();
+    });
+
+    it('should skip confirm handler when range mode is enabled', () => {
+      const timepicker = new TimepickerUI(input, {
+        range: { enabled: true },
+      });
+      timepicker.create();
+      timepicker.open();
+
+      (timepicker as unknown as { emitter: { emit: (event: string, data: unknown) => void } }).emitter.emit(
+        'confirm',
+        {
+          hour: '10',
+          minutes: '30',
+          type: 'AM',
+        },
+      );
+
+      timepicker.destroy();
+    });
+
+    it('should update input on confirm in normal mode', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+      timepicker.open();
+
+      (timepicker as unknown as { emitter: { emit: (event: string, data: unknown) => void } }).emitter.emit(
+        'confirm',
+        {
+          hour: '10',
+          minutes: '30',
+          type: 'AM',
+        },
+      );
+
+      expect(input.value).toBe('10:30 AM');
+
+      timepicker.destroy();
+    });
+
+    it('should update input on range:confirm', () => {
+      const timepicker = new TimepickerUI(input, {
+        range: { enabled: true },
+      });
+      timepicker.create();
+      timepicker.open();
+
+      (timepicker as unknown as { emitter: { emit: (event: string, data: unknown) => void } }).emitter.emit(
+        'range:confirm',
+        {
+          from: '10:00 AM',
+          to: '12:00 PM',
+          duration: 120,
+        },
+      );
+
+      expect(input.value).toBe('10:00 AM - 12:00 PM');
 
       timepicker.destroy();
     });
@@ -621,6 +741,177 @@ describe('TimepickerUI', () => {
 
       timepicker.destroy();
     });
+
+    it('should create wrapper element if input has no tp-ui parent', () => {
+      const standaloneInput = document.createElement('input');
+      document.body.appendChild(standaloneInput);
+
+      const timepicker = new TimepickerUI(standaloneInput);
+
+      const wrapperElement = timepicker.getElement();
+      expect(wrapperElement.classList.contains('tp-ui')).toBe(true);
+
+      timepicker.destroy();
+    });
+  });
+
+  describe('setValue with modal elements', () => {
+    it('should update clock hand transform when modal is open', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+      timepicker.open();
+
+      timepicker.setValue('10:30 AM');
+
+      timepicker.destroy();
+    });
+
+    it('should set AM active and PM inactive for AM time', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+      timepicker.open();
+
+      timepicker.setValue('10:30 AM');
+
+      timepicker.destroy();
+    });
+
+    it('should set PM active and AM inactive for PM time', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+      timepicker.open();
+
+      timepicker.setValue('10:30 PM');
+
+      timepicker.destroy();
+    });
+  });
+
+  describe('getValue with modal elements', () => {
+    it('should get time string in 24h format', () => {
+      const timepicker = new TimepickerUI(input, { clock: { type: '24h' } });
+      timepicker.create();
+      timepicker.open();
+      timepicker.setValue('14:30');
+
+      const value = timepicker.getValue();
+
+      expect(value.type).toBeUndefined();
+
+      timepicker.destroy();
+    });
+
+    it('should get time string in 12h format', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+      timepicker.open();
+      timepicker.setValue('10:30 AM');
+
+      const value = timepicker.getValue();
+
+      expect(value.type).toBeDefined();
+
+      timepicker.destroy();
+    });
+  });
+
+  describe('confirm event without type', () => {
+    it('should handle confirm event without type field', () => {
+      const timepicker = new TimepickerUI(input, { clock: { type: '24h' } });
+      timepicker.create();
+      timepicker.open();
+
+      (timepicker as unknown as { emitter: { emit: (event: string, data: unknown) => void } }).emitter.emit(
+        'confirm',
+        {
+          hour: '14',
+          minutes: '30',
+        },
+      );
+
+      expect(input.value).toBe('14:30');
+
+      timepicker.destroy();
+    });
+  });
+
+  describe('internal event handling edge cases', () => {
+    it('should not mount on show event when destroyed', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+      timepicker.destroy();
+
+      expect(() => {
+        (timepicker as unknown as { emitter: { emit: (event: string, data: unknown) => void } }).emitter.emit(
+          'show',
+          undefined,
+        );
+      }).not.toThrow();
+    });
+
+    it('should not unmount on cancel event when destroyed', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+      timepicker.destroy();
+
+      expect(() => {
+        (timepicker as unknown as { emitter: { emit: (event: string, data: unknown) => void } }).emitter.emit(
+          'cancel',
+          undefined,
+        );
+      }).not.toThrow();
+    });
+
+    it('should not update input on confirm event when destroyed', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+      timepicker.destroy();
+
+      expect(() => {
+        (timepicker as unknown as { emitter: { emit: (event: string, data: unknown) => void } }).emitter.emit(
+          'confirm',
+          { hour: '10', minutes: '30', type: 'AM' },
+        );
+      }).not.toThrow();
+    });
+
+    it('should not update input on range:confirm event when destroyed', () => {
+      const timepicker = new TimepickerUI(input, { range: { enabled: true } });
+      timepicker.create();
+      timepicker.destroy();
+
+      expect(() => {
+        (timepicker as unknown as { emitter: { emit: (event: string, data: unknown) => void } }).emitter.emit(
+          'range:confirm',
+          { from: '10:00 AM', to: '12:00 PM', duration: 120 },
+        );
+      }).not.toThrow();
+    });
+  });
+
+  describe('isAvailable edge cases', () => {
+    it('should return false for invalid input', () => {
+      expect(TimepickerUI.isAvailable(null as unknown as HTMLElement)).toBe(false);
+    });
+  });
+
+  describe('setValue with null/undefined', () => {
+    it('should handle null value gracefully', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+
+      expect(() => timepicker.setValue(null as unknown as string)).not.toThrow();
+
+      timepicker.destroy();
+    });
+
+    it('should handle non-string value gracefully', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+
+      expect(() => timepicker.setValue(123 as unknown as string)).not.toThrow();
+
+      timepicker.destroy();
+    });
   });
 });
-

@@ -11,6 +11,12 @@ interface ConfirmEventData {
   type?: string;
 }
 
+interface RangeConfirmEventData {
+  from: string;
+  to: string;
+  duration: number;
+}
+
 interface TimepickerExampleProps {
   code: string;
   options?: Record<string, unknown>;
@@ -30,6 +36,10 @@ export function TimepickerExample({
   const pickerRef = useRef<TimepickerUI | null>(null);
   const [viewMode, setViewMode] = useState<"preview" | "code">("preview");
   const [currentValue, setCurrentValue] = useState<string>("");
+  const [rangeValue, setRangeValue] = useState<{
+    from: string;
+    to: string;
+  } | null>(null);
   const uniqueId = useId();
 
   const memoizedOptions = useMemo(() => options, [JSON.stringify(options)]);
@@ -62,6 +72,11 @@ export function TimepickerExample({
           pickerRef.current = null;
         }
 
+        const rangeEnabled =
+          plugins.includes("range") ||
+          (memoizedOptions.range as { enabled?: boolean } | undefined)
+            ?.enabled === true;
+
         const picker = new TimepickerUI(inputRef.current, {
           ...memoizedOptions,
           callbacks: {
@@ -69,6 +84,7 @@ export function TimepickerExample({
               | Record<string, unknown>
               | undefined),
             onConfirm: (data: ConfirmEventData) => {
+              if (rangeEnabled) return;
               const time =
                 data.hour && data.minutes
                   ? `${data.hour}:${data.minutes}${
@@ -81,6 +97,18 @@ export function TimepickerExample({
               )?.onConfirm;
               if (typeof originalCallback === "function") {
                 (originalCallback as (data: ConfirmEventData) => void)(data);
+              }
+            },
+            onRangeConfirm: (data: RangeConfirmEventData) => {
+              setRangeValue({ from: data.from, to: data.to });
+              setCurrentValue("");
+              const originalCallback = (
+                memoizedOptions.callbacks as Record<string, unknown> | undefined
+              )?.onRangeConfirm;
+              if (typeof originalCallback === "function") {
+                (originalCallback as (data: RangeConfirmEventData) => void)(
+                  data,
+                );
               }
             },
           },
@@ -152,7 +180,17 @@ export function TimepickerExample({
                 className="w-full rounded-lg border border-border bg-background px-4 py-2 text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
-            {currentValue && (
+            {rangeValue && (
+              <div className="rounded-lg bg-emerald-500/10 p-3 text-sm">
+                <span className="font-medium text-emerald-600 dark:text-emerald-400">
+                  Range:{" "}
+                </span>
+                <span className="text-foreground">
+                  {rangeValue.from} → {rangeValue.to}
+                </span>
+              </div>
+            )}
+            {currentValue && !rangeValue && (
               <div className="rounded-lg bg-primary/10 p-3 text-sm">
                 <span className="font-medium text-primary">Selected: </span>
                 <span className="text-foreground">{currentValue}</span>

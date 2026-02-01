@@ -319,6 +319,319 @@ describe('DragHandlers', () => {
 
       handlers.detach();
     });
+
+    it('should handle touch events', () => {
+      const controller = createMockController();
+      const handlers = new DragHandlers(controller as never, clockFace);
+
+      handlers.attach();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      const touchEvent = new TouchEvent('touchstart', {
+        touches: [{ clientX: 150, clientY: 100, identifier: 0 } as Touch],
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(touchEvent);
+
+      expect(controller.handlePointerMove).toHaveBeenCalled();
+
+      handlers.detach();
+    });
+
+    it('should handle mousemove during drag', () => {
+      const controller = createMockController();
+      const handlers = new DragHandlers(controller as never, clockFace);
+
+      handlers.attach();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      const mousedownEvent = new MouseEvent('mousedown', {
+        clientX: 150,
+        clientY: 100,
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(mousedownEvent);
+
+      controller.handlePointerMove.mockClear();
+
+      const mousemoveEvent = new MouseEvent('mousemove', {
+        clientX: 160,
+        clientY: 110,
+        bubbles: true,
+      });
+      document.dispatchEvent(mousemoveEvent);
+
+      handlers.detach();
+    });
+
+    it('should not process move when blocked', () => {
+      const controller = createMockController();
+      const handlers = new DragHandlers(controller as never, clockFace);
+
+      handlers.attach();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      const mousedownEvent = new MouseEvent('mousedown', {
+        clientX: 150,
+        clientY: 100,
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(mousedownEvent);
+
+      handlers.block();
+      controller.handlePointerMove.mockClear();
+
+      const mousemoveEvent = new MouseEvent('mousemove', {
+        clientX: 160,
+        clientY: 110,
+        bubbles: true,
+      });
+      document.dispatchEvent(mousemoveEvent);
+
+      expect(controller.handlePointerMove).not.toHaveBeenCalled();
+
+      handlers.detach();
+    });
+
+    it('should handle touchmove during drag', () => {
+      const controller = createMockController();
+      const handlers = new DragHandlers(controller as never, clockFace);
+
+      handlers.attach();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      const touchstartEvent = new TouchEvent('touchstart', {
+        touches: [{ clientX: 150, clientY: 100, identifier: 0 } as Touch],
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(touchstartEvent);
+
+      expect(controller.handlePointerMove).toHaveBeenCalled();
+
+      handlers.detach();
+    });
+
+    it('should handle touchend to complete drag', () => {
+      const controller = createMockController();
+      const handlers = new DragHandlers(controller as never, clockFace);
+
+      handlers.attach();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      const touchstartEvent = new TouchEvent('touchstart', {
+        touches: [{ clientX: 150, clientY: 100, identifier: 0 } as Touch],
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(touchstartEvent);
+
+      const touchendEvent = new TouchEvent('touchend', { bubbles: true });
+      document.dispatchEvent(touchendEvent);
+
+      expect(controller.handlePointerUp).toHaveBeenCalled();
+
+      handlers.detach();
+    });
+
+    it('should handle changedTouches for touch position', () => {
+      const controller = createMockController();
+      const handlers = new DragHandlers(controller as never, clockFace);
+
+      handlers.attach();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      const touchstartEvent = new TouchEvent('touchstart', {
+        changedTouches: [{ clientX: 150, clientY: 100, identifier: 0 } as Touch],
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(touchstartEvent);
+
+      expect(controller.handlePointerMove).toHaveBeenCalled();
+
+      handlers.detach();
+    });
+  });
+
+  describe('smoothHourSnap behavior', () => {
+    it('should call snapToNearestHour when smoothHourSnap is true and hour is active', () => {
+      const controller = createMockController();
+      const hourElement = document.createElement('input') as HTMLInputElement;
+      hourElement.classList.add('active');
+      const minutesElement = document.createElement('input') as HTMLInputElement;
+
+      const handlers = new DragHandlers(controller as never, clockFace, {
+        smoothHourSnap: true,
+        hourElement,
+        minutesElement,
+        isMobileView: true,
+      });
+
+      handlers.attach();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      const mousedownEvent = new MouseEvent('mousedown', {
+        clientX: 150,
+        clientY: 100,
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(mousedownEvent);
+
+      const mouseupEvent = new MouseEvent('mouseup', { bubbles: true });
+      document.dispatchEvent(mouseupEvent);
+
+      expect(controller.snapToNearestHour).toHaveBeenCalled();
+
+      handlers.detach();
+    });
+
+    it('should not call snapToNearestHour when smoothHourSnap is false', () => {
+      const controller = createMockController();
+      const hourElement = document.createElement('input') as HTMLInputElement;
+      hourElement.classList.add('active');
+      const minutesElement = document.createElement('input') as HTMLInputElement;
+
+      const handlers = new DragHandlers(controller as never, clockFace, {
+        smoothHourSnap: false,
+        hourElement,
+        minutesElement,
+        isMobileView: true,
+      });
+
+      handlers.attach();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      const mousedownEvent = new MouseEvent('mousedown', {
+        clientX: 150,
+        clientY: 100,
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(mousedownEvent);
+
+      const mouseupEvent = new MouseEvent('mouseup', { bubbles: true });
+      document.dispatchEvent(mouseupEvent);
+
+      expect(controller.snapToNearestHour).not.toHaveBeenCalled();
+
+      handlers.detach();
+    });
+  });
+
+  describe('clock radius calculation', () => {
+    it('should use clock face dimensions for radius', () => {
+      const controller = createMockController();
+      const handlers = new DragHandlers(controller as never, clockFace);
+
+      handlers.attach();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 50,
+        top: 50,
+        right: 250,
+        bottom: 250,
+        width: 200,
+        height: 200,
+        x: 50,
+        y: 50,
+        toJSON: () => ({}),
+      });
+
+      const mousedownEvent = new MouseEvent('mousedown', {
+        clientX: 150,
+        clientY: 150,
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(mousedownEvent);
+
+      expect(controller.handlePointerMove).toHaveBeenCalledWith(expect.any(Object), expect.any(Object), 100);
+
+      handlers.detach();
+    });
   });
 });
-

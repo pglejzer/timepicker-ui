@@ -51,6 +51,12 @@ declare module 'timepicker-ui' {
 
   export type RangeSwitchEventData = {
     active: 'from' | 'to';
+    disabledTime?: {
+      hours: string[];
+      minutes: string[];
+      fromType?: string;
+      fromHour?: number;
+    } | null;
   };
 
   export type RangeValidationEventData = {

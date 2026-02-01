@@ -34,10 +34,33 @@ export default function WhatsNewPage() {
       </div>
 
       <InfoBox
-        title="Version 4.1.0 Released!"
+        title="Version 4.1.1 Released!"
         variant="emerald"
         className="mb-8"
       >
+        <p className="mb-3">
+          <strong>February 1, 2026</strong> - Bug fix and quality improvements
+        </p>
+        <p className="text-sm">What&apos;s new:</p>
+        <ul className="mt-2 space-y-1 text-sm ml-4">
+          <li>
+            <strong>Mobile input validation fix</strong> - Invalid time values
+            (e.g., 169:70) now auto-clamp to valid ranges when typing
+          </li>
+          <li>
+            <strong>Test coverage</strong> - Expanded to 1100+ tests with 90%+
+            code coverage
+          </li>
+        </ul>
+        <Link
+          href="/docs/changelog"
+          className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-3"
+        >
+          View full changelog
+        </Link>
+      </InfoBox>
+
+      <InfoBox title="Version 4.1.0" variant="blue" className="mb-8">
         <p className="mb-3">
           <strong>January 31, 2026</strong> - New features and UX improvements
         </p>
