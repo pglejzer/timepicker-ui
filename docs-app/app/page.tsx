@@ -16,6 +16,7 @@ import {
   Settings,
   Paintbrush,
   Languages,
+  Timer,
 } from "lucide-react";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
 
@@ -48,6 +49,27 @@ picker.create();`}
         ui: { mobile: true, enableSwitchIcon: true },
       }}
       inputPlaceholder="Select time"
+      showCode={false}
+    />
+  );
+}
+
+function RangeExample() {
+  return (
+    <TimepickerExample
+      code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+import { RangePlugin } from 'timepicker-ui/plugins/range';
+
+PluginRegistry.register(RangePlugin);
+
+const picker = new TimepickerUI(input, {
+  range: { enabled: true, minDuration: 30 },
+});`}
+      options={{
+        range: { enabled: true, minDuration: 30 },
+      }}
+      plugins={["range"]}
+      inputPlaceholder="Select time range"
       showCode={false}
     />
   );
@@ -187,8 +209,8 @@ export default function Home() {
             >
               <Sparkles className="h-4 w-4 flex-shrink-0" />
               <span>
-                <span className="font-medium">New:</span> Version 4.1.0 with
-                plugin architecture and smooth hour snapping!
+                <span className="font-medium">New:</span> Version 4.1.1 with
+                Range Plugin and improved input validation!
               </span>
             </Link>
           </div>
@@ -238,7 +260,7 @@ export default function Home() {
               Try the timepicker right here with different configurations
             </p>
           </div>
-          <div className="mx-auto max-w-6xl grid gap-8 lg:grid-cols-2">
+          <div className="mx-auto max-w-6xl grid gap-8 lg:grid-cols-3">
             <div className="rounded-xl border border-border bg-card p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 rounded-lg bg-primary/10">
@@ -249,7 +271,7 @@ export default function Home() {
                     Basic Example
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Default configuration with 12-hour format
+                    Default 12-hour format
                   </p>
                 </div>
               </div>
@@ -264,11 +286,31 @@ export default function Home() {
                 <div>
                   <h3 className="font-semibold text-foreground">Mobile Mode</h3>
                   <p className="text-sm text-muted-foreground">
-                    Optimized for touch devices with mobile view
+                    Touch-optimized view
                   </p>
                 </div>
               </div>
               <MobileExample />
+            </div>
+
+            <div className="rounded-xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/5 to-transparent p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 rounded-lg bg-emerald-500/10">
+                  <Timer className="h-5 w-5 text-emerald-500" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground flex items-center gap-2">
+                    Range Plugin
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                      NEW
+                    </span>
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Select start &amp; end times
+                  </p>
+                </div>
+              </div>
+              <RangeExample />
             </div>
           </div>
           <div className="mt-12 text-center">

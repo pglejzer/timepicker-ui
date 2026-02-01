@@ -7,10 +7,9 @@ import {
   TrendingUp,
   Code,
   Sparkles,
-  Zap,
   Package,
   Globe,
-  Shield,
+  CheckCircle2,
 } from "lucide-react";
 
 export const metadata = {
@@ -94,145 +93,72 @@ export default function RoadmapPage() {
         </a>
       </InfoBox>
 
-      <Section icon={Code} title="v3.3.0 - Q1 2026">
+      <Section icon={CheckCircle2} title="v4.0.0 - v4.1.0 (Released ✅)">
         <div className="mb-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-500/10 border border-purple-500/20 rounded-full">
-            <Sparkles className="h-4 w-4 text-purple-500" />
-            <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
-              Code Quality Focus
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full">
+            <CheckCircle2 className="h-4 w-4 text-green-500" />
+            <span className="text-sm font-medium text-green-600 dark:text-green-400">
+              Shipped
             </span>
           </div>
         </div>
 
         <div className="grid gap-4 mt-6">
           <FeatureCard
-            title="Remove all `any` types"
-            description="Replace 17 identified `any` usages with proper TypeScript interfaces and type guards for 100% type safety"
-            status="planned"
+            title="Plugin System"
+            description="Tree-shakeable plugin architecture with Range and Timezone plugins"
+            status="completed"
           />
           <FeatureCard
-            title="Remove @internal comments"
-            description="Clean up codebase by removing 56 @internal JSDoc comments that are no longer needed"
-            status="planned"
+            title="Range Plugin"
+            description="Time range selection with start/end times, min/max duration validation"
+            status="completed"
           />
           <FeatureCard
-            title="Modular refactoring"
-            description="Continue splitting large manager classes following ConfigManager pattern - extract EventManager, ClockManager, and ValidationManager into focused modules"
-            status="planned"
+            title="Timezone Plugin"
+            description="Timezone selector dropdown with whitelist support"
+            status="completed"
           />
           <FeatureCard
-            title="Constants extraction"
-            description="Move magic numbers and strings to dedicated constants files for better maintainability"
-            status="planned"
+            title="Manager Architecture"
+            description="Modular manager classes: EventManager, ClockManager, ValidationManager, AnimationManager, ThemeManager, ConfigManager, ModalManager"
+            status="completed"
+          />
+          <FeatureCard
+            title="100% Type Safety"
+            description="Removed all any types - full TypeScript strict mode compliance"
+            status="completed"
+          />
+          <FeatureCard
+            title="SSR Safety"
+            description="Full server-side rendering support for Next.js, Nuxt, Remix, Astro"
+            status="completed"
+          />
+          <FeatureCard
+            title="New Themes"
+            description="Added Glassmorphic, Pastel, AI, and Cyberpunk themes"
+            status="completed"
+          />
+          <FeatureCard
+            title="EventEmitter API"
+            description="Modern event system replacing deprecated DOM events"
+            status="completed"
+          />
+          <FeatureCard
+            title="Keyboard Navigation"
+            description="Full keyboard control: arrow keys for time adjustment, Tab/Shift+Tab, Enter/Escape"
+            status="completed"
+          />
+          <FeatureCard
+            title="Time Intervals"
+            description="Configure minute step intervals via minuteInterval option"
+            status="completed"
           />
         </div>
       </Section>
 
-      <Section icon={Rocket} title="v4.0.0 - Q2 2026">
-        <div className="mb-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-500/10 border border-red-500/20 rounded-full">
-            <Zap className="h-4 w-4 text-red-500" />
-            <span className="text-sm font-medium text-red-600 dark:text-red-400">
-              Major Release - Breaking Changes
-            </span>
-          </div>
-        </div>
-
-        <div className="space-y-8 mt-6">
-          <div>
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-foreground">
-              <Package className="h-5 w-5 text-green-500" />
-              New Features
-            </h3>
-            <div className="grid gap-4">
-              <FeatureCard
-                title="Seconds picker"
-                description="Add optional seconds selection with HH:MM:SS format support"
-                status="planned"
-              />
-              <FeatureCard
-                title="Time range selection"
-                description="Select start and end times with validation and conflict detection"
-                status="planned"
-              />
-              <FeatureCard
-                title="Enhanced keyboard navigation"
-                description="Full keyboard control: arrow keys for time adjustment, Tab/Shift+Tab navigation, Enter/Escape shortcuts"
-                status="planned"
-              />
-              <FeatureCard
-                title="Custom time intervals"
-                description="Configure minute/second step intervals (e.g., 15-minute increments)"
-                status="planned"
-              />
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-foreground">
-              <Shield className="h-5 w-5 text-green-500" />
-              Breaking Changes (Completed ✅)
-            </h3>
-            <div className="grid gap-4">
-              <div className="rounded-lg border border-green-500/20 bg-green-500/5 p-5">
-                <strong className="text-foreground text-base block mb-2">
-                  ✅ Removed deprecated DOM events
-                </strong>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Complete removal of{" "}
-                  <code className="text-xs bg-muted px-1 py-0.5 rounded">
-                    timepicker:*
-                  </code>{" "}
-                  DOM events. All users must migrate to EventEmitter API.
-                </p>
-                <div className="bg-background/50 rounded p-3 border border-border">
-                  <p className="text-xs text-muted-foreground">
-                    ❌{" "}
-                    <code className="text-xs">
-                      document.addEventListener('timepicker:open', ...)
-                    </code>
-                    <br />✅{" "}
-                    <code className="text-xs">picker.on('open', ...)</code>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      <Section icon={Target} title="Future Plans (v4.1+)">
+      <Section icon={Rocket} title="Future Plans (v5.0+)">
         <div className="grid gap-6">
-          <div className="rounded-lg border border-border bg-gradient-to-br from-blue-500/5 to-purple-500/5 p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <Code className="h-5 w-5 text-blue-500" />
-              </div>
-              <h3 className="text-lg font-semibold text-foreground">
-                Framework Integrations
-              </h3>
-            </div>
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">
-                Official wrapper libraries for popular frameworks:
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1.5 bg-background/70 rounded-md text-sm font-medium border border-border">
-                  React
-                </span>
-                <span className="px-3 py-1.5 bg-background/70 rounded-md text-sm font-medium border border-border">
-                  Vue
-                </span>
-                <span className="px-3 py-1.5 bg-background/70 rounded-md text-sm font-medium border border-border">
-                  Angular
-                </span>
-                <span className="px-3 py-1.5 bg-background/70 rounded-md text-sm font-medium border border-border">
-                  Svelte
-                </span>
-              </div>
-            </div>
-          </div>
-
           <div className="rounded-lg border border-border bg-gradient-to-br from-green-500/5 to-teal-500/5 p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 rounded-lg bg-green-500/10">
@@ -246,11 +172,6 @@ export default function RoadmapPage() {
               <FeatureCard
                 title="RTL Support"
                 description="Full right-to-left layout support for Arabic, Hebrew, and other RTL languages"
-                status="planned"
-              />
-              <FeatureCard
-                title="Timezone Support"
-                description="Handle different timezones with automatic conversion and display"
                 status="planned"
               />
               <FeatureCard
@@ -302,7 +223,7 @@ export default function RoadmapPage() {
                 <h3 className="font-semibold text-foreground">
                   Patch Releases
                 </h3>
-                <p className="text-sm text-muted-foreground">v3.x.x</p>
+                <p className="text-sm text-muted-foreground">v4.1.x</p>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -319,7 +240,7 @@ export default function RoadmapPage() {
                 <h3 className="font-semibold text-foreground">
                   Minor Releases
                 </h3>
-                <p className="text-sm text-muted-foreground">v3.3.0</p>
+                <p className="text-sm text-muted-foreground">v4.2.0</p>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -336,7 +257,7 @@ export default function RoadmapPage() {
                 <h3 className="font-semibold text-foreground">
                   Major Releases
                 </h3>
-                <p className="text-sm text-muted-foreground">v4.0.0</p>
+                <p className="text-sm text-muted-foreground">v5.0.0</p>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -351,7 +272,7 @@ export default function RoadmapPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-foreground">Beta Releases</h3>
-                <p className="text-sm text-muted-foreground">v4.0.0-beta.x</p>
+                <p className="text-sm text-muted-foreground">v5.0.0-beta.x</p>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">

@@ -19,7 +19,7 @@
     "prism-react-renderer": "^2.4.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "timepicker-ui": "4.1.0",
+    "timepicker-ui": "4.1.1",
     "timepicker-ui-react": "1.0.1"
   },
   "devDependencies": {

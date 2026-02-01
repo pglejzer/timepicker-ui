@@ -59,6 +59,22 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_411 = {
+  fixed: [
+    {
+      title: "Mobile input validation",
+      description:
+        "Fixed issue where invalid time values (e.g., 169:70) could be entered via keyboard in mobile mode. Inputs now auto-clamp to valid ranges",
+    },
+  ],
+  internal: [
+    {
+      title: "Test coverage",
+      description: "Expanded test suite to 1100+ tests with 90%+ code coverage",
+    },
+  ],
+};
+
 const CHANGELOG_410 = {
   added: [
     {
@@ -227,8 +243,26 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.1.0</strong> - Released January 31, 2026
+        <strong>v4.1.1</strong> - Released February 1, 2026
       </InfoBox>
+
+      <Section icon={Bug} title="Version 4.1.1 - February 1, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_411.fixed}
+          />
+
+          <ChangeSection
+            icon={Code}
+            label="Internal"
+            color="slate-500"
+            items={CHANGELOG_411.internal}
+          />
+        </div>
+      </Section>
 
       <Section icon={History} title="Version 4.1.0 - January 31, 2026">
         <div className="space-y-4">
