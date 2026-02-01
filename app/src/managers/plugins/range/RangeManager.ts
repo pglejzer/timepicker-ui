@@ -158,7 +158,8 @@ export default class RangeManager {
     const currentValue = this.state.getSavedValue();
     const hasMinutesSelected = currentValue?.minutes && currentValue.minutes !== '--';
     const minutes = hasMinutesSelected ? (minutesInput?.value ?? '--') : '--';
-    const type = this.core.options.clock.type === '12h' ? activeTypeMode?.textContent : undefined;
+    const type =
+      this.core.options.clock.type === '12h' ? (activeTypeMode?.textContent ?? undefined) : undefined;
 
     this.state.setPreviewValue({ hour, minutes, type });
     this.ui.updateAll();
@@ -167,7 +168,7 @@ export default class RangeManager {
   private handleMinuteCommit(data: RangeMinuteCommitEventData): void {
     if (!this.isEnabled) return;
 
-    const value: RangeValue = { hour: data.hour, minutes: data.minutes, type: data.type };
+    const value: RangeValue = { hour: data.hour, minutes: data.minutes, type: data.type ?? undefined };
     const activePart = this.state.getActivePart();
 
     if (activePart === 'from') {
@@ -256,4 +257,3 @@ export default class RangeManager {
     this.reset();
   }
 }
-

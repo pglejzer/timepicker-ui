@@ -3,7 +3,7 @@ export type RangePart = 'from' | 'to';
 export interface RangeValue {
   hour: string;
   minutes: string;
-  type?: string | null;
+  type?: string;
 }
 
 export interface RangeValidationResult {
@@ -19,7 +19,6 @@ export interface FormattedRange {
 export interface DisabledTimeConfig {
   hours: string[];
   minutes: string[];
-  fromType?: string | null;
+  fromType?: string;
   fromHour?: number;
 }
-
