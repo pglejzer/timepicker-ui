@@ -240,6 +240,107 @@ describe('Lifecycle', () => {
 
       expect(onError).toHaveBeenCalled();
     });
+
+    it('should setup onSelectAM callback', () => {
+      const onSelectAM = jest.fn();
+      const optionsWithCallback = {
+        ...DEFAULT_OPTIONS,
+        callbacks: { onSelectAM },
+      };
+      const core = new CoreState(mockElement, optionsWithCallback, 'test-id');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      lc.init();
+      em.emit('select:am', {});
+
+      expect(onSelectAM).toHaveBeenCalled();
+    });
+
+    it('should setup onSelectPM callback', () => {
+      const onSelectPM = jest.fn();
+      const optionsWithCallback = {
+        ...DEFAULT_OPTIONS,
+        callbacks: { onSelectPM },
+      };
+      const core = new CoreState(mockElement, optionsWithCallback, 'test-id');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      lc.init();
+      em.emit('select:pm', {});
+
+      expect(onSelectPM).toHaveBeenCalled();
+    });
+
+    it('should setup onTimezoneChange callback', () => {
+      const onTimezoneChange = jest.fn();
+      const optionsWithCallback = {
+        ...DEFAULT_OPTIONS,
+        callbacks: { onTimezoneChange },
+      };
+      const core = new CoreState(mockElement, optionsWithCallback, 'test-id');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      lc.init();
+      em.emit('timezone:change', { timezone: 'UTC', offset: 0 });
+
+      expect(onTimezoneChange).toHaveBeenCalled();
+    });
+
+    it('should setup onRangeConfirm callback', () => {
+      const onRangeConfirm = jest.fn();
+      const optionsWithCallback = {
+        ...DEFAULT_OPTIONS,
+        callbacks: { onRangeConfirm },
+      };
+      const core = new CoreState(mockElement, optionsWithCallback, 'test-id');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      lc.init();
+      em.emit('range:confirm', { from: '10:00 AM', to: '12:00 PM', duration: 120 });
+
+      expect(onRangeConfirm).toHaveBeenCalled();
+    });
+
+    it('should setup onRangeSwitch callback', () => {
+      const onRangeSwitch = jest.fn();
+      const optionsWithCallback = {
+        ...DEFAULT_OPTIONS,
+        callbacks: { onRangeSwitch },
+      };
+      const core = new CoreState(mockElement, optionsWithCallback, 'test-id');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      lc.init();
+      em.emit('range:switch', { active: 'to' });
+
+      expect(onRangeSwitch).toHaveBeenCalled();
+    });
+
+    it('should setup onRangeValidation callback', () => {
+      const onRangeValidation = jest.fn();
+      const optionsWithCallback = {
+        ...DEFAULT_OPTIONS,
+        callbacks: { onRangeValidation },
+      };
+      const core = new CoreState(mockElement, optionsWithCallback, 'test-id');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      lc.init();
+      em.emit('range:validation', { valid: true, duration: 120 });
+
+      expect(onRangeValidation).toHaveBeenCalled();
+    });
   });
 });
-

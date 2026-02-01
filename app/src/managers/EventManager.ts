@@ -1,401 +1,83 @@
-import { isDocument } from '../utils/node';
-import { announceToScreenReader, updateAriaPressed } from '../utils/accessibility';
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
+import { ButtonHandlers } from './events/ButtonHandlers';
+import { InputHandlers } from './events/InputHandlers';
+import { KeyboardHandlers } from './events/KeyboardHandlers';
+import { ModalHandlers } from './events/ModalHandlers';
 
 export default class EventManager {
-  private core: CoreState;
-  private emitter: EventEmitter<TimepickerEventMap>;
-  private cleanupHandlers: Array<() => void> = [];
+  private buttonHandlers: ButtonHandlers;
+  private inputHandlers: InputHandlers;
+  private keyboardHandlers: KeyboardHandlers;
+  private modalHandlers: ModalHandlers;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
-    this.core = core;
-    this.emitter = emitter;
+    this.buttonHandlers = new ButtonHandlers(core, emitter);
+    this.inputHandlers = new InputHandlers(core, emitter);
+    this.keyboardHandlers = new KeyboardHandlers(core, emitter);
+    this.modalHandlers = new ModalHandlers(core, emitter);
   }
 
   handleOpenOnClick(): void {
-    const openElements = this.core.getOpenElement();
-    if (!openElements) return;
-
-    const handler = (): void => {
-      if (this.core.isDestroyed) return;
-      this.emitter.emit('show', {});
-    };
-
-    openElements.forEach((el) => {
-      el.addEventListener('click', handler);
-      this.cleanupHandlers.push(() => el.removeEventListener('click', handler));
-    });
+    this.buttonHandlers.handleOpenOnClick();
   }
 
   handleOpenOnEnterFocus(): void {
-    const input = this.core.getInput();
-    if (!input) return;
-
-    const handler = (e: KeyboardEvent): void => {
-      if (e.key === 'Enter' && !this.core.isDestroyed) {
-        this.emitter.emit('show', {});
-      }
-    };
-
-    input.addEventListener('keydown', handler);
-    this.cleanupHandlers.push(() => input.removeEventListener('keydown', handler));
+    this.keyboardHandlers.handleOpenOnEnterFocus();
   }
 
   handleCancelButton(): void {
-    const cancelButton = this.core.getCancelButton();
-    if (!cancelButton) return;
-
-    const handler = (): void => {
-      if (this.core.isDestroyed) return;
-      this.emitter.emit('cancel', {});
-    };
-
-    cancelButton.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => cancelButton.removeEventListener('click', handler));
+    this.buttonHandlers.handleCancelButton();
   }
 
   handleOkButton(): void {
-    const okButton = this.core.getOkButton();
-    if (!okButton) return;
-
-    const handler = (): void => {
-      if (this.core.isDestroyed) return;
-      const hour = this.core.getHour();
-      const minutes = this.core.getMinutes();
-      const activeTypeMode = this.core.getActiveTypeMode();
-
-      this.emitter.emit('confirm', {
-        hour: hour?.value,
-        minutes: minutes?.value,
-        type: activeTypeMode?.textContent || undefined,
-      });
-    };
-
-    okButton.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => okButton.removeEventListener('click', handler));
+    this.buttonHandlers.handleOkButton();
   }
 
   handleBackdropClick(): void {
-    const modal = this.core.getModalElement();
-    if (!modal) return;
-
-    const handler = (e: MouseEvent): void => {
-      if (this.core.isDestroyed) return;
-      if (e.target === modal) {
-        this.emitter.emit('cancel', {});
-      }
-    };
-
-    modal.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => modal.removeEventListener('click', handler));
+    this.modalHandlers.handleBackdropClick();
   }
 
   handleEscClick(): void {
-    if (isDocument() === false) {
-      return;
-    }
-
-    const handler = (e: KeyboardEvent): void => {
-      if (this.core.isDestroyed) return;
-      if (e.key === 'Escape') {
-        this.emitter.emit('cancel', {});
-      }
-    };
-
-    document.addEventListener('keydown', handler);
-    this.cleanupHandlers.push(() => document.removeEventListener('keydown', handler));
+    this.keyboardHandlers.handleEscClick();
   }
 
   handleAmClick(): void {
-    const AM = this.core.getAM();
-    if (!AM) return;
-
-    const handler = (): void => {
-      if (this.core.isDestroyed) return;
-      const PM = this.core.getPM();
-      AM.classList.add('active');
-      PM?.classList.remove('active');
-
-      updateAriaPressed(AM, true);
-      updateAriaPressed(PM, false);
-
-      const modal = this.core.getModalElement();
-      announceToScreenReader(modal, 'AM selected');
-
-      this.emitter.emit('select:am', {});
-
-      const hour = this.core.getHour();
-      const minutes = this.core.getMinutes();
-      this.emitter.emit('update', {
-        hour: hour?.value,
-        minutes: minutes?.value,
-        type: 'AM',
-      });
-    };
-
-    AM.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => AM.removeEventListener('click', handler));
+    this.buttonHandlers.handleAmClick();
   }
 
   handlePmClick(): void {
-    const PM = this.core.getPM();
-    if (!PM) return;
-
-    const handler = (): void => {
-      if (this.core.isDestroyed) return;
-      const AM = this.core.getAM();
-      PM.classList.add('active');
-      AM?.classList.remove('active');
-
-      updateAriaPressed(PM, true);
-      updateAriaPressed(AM, false);
-
-      const modal = this.core.getModalElement();
-      announceToScreenReader(modal, 'PM selected');
-
-      this.emitter.emit('select:pm', {});
-
-      const hour = this.core.getHour();
-      const minutes = this.core.getMinutes();
-      this.emitter.emit('update', {
-        hour: hour?.value,
-        minutes: minutes?.value,
-        type: 'PM',
-      });
-    };
-
-    PM.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => PM.removeEventListener('click', handler));
+    this.buttonHandlers.handlePmClick();
   }
 
   handleHourEvents(): void {
-    const hour = this.core.getHour();
-    if (!hour) return;
-
-    const handler = (): void => {
-      if (this.core.isDestroyed) return;
-      hour.classList.add('active');
-      const minutes = this.core.getMinutes();
-      minutes?.classList.remove('active');
-      this.emitter.emit('select:hour', { hour: hour.value });
-
-      const activeTypeMode = this.core.getActiveTypeMode();
-      this.emitter.emit('update', {
-        hour: hour.value,
-        minutes: minutes?.value,
-        type: activeTypeMode?.textContent || undefined,
-      });
-    };
-
-    hour.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => hour.removeEventListener('click', handler));
-
-    if (this.core.options.ui.editable) {
-      let previousValue = hour.value;
-      const blurHandler = (): void => {
-        if (this.core.isDestroyed) return;
-        if (hour.value !== previousValue) {
-          previousValue = hour.value;
-          this.emitter.emit('animation:clock', {});
-          this.emitter.emit('select:hour', { hour: hour.value });
-
-          const minutes = this.core.getMinutes();
-          const activeTypeMode = this.core.getActiveTypeMode();
-          this.emitter.emit('update', {
-            hour: hour.value,
-            minutes: minutes?.value,
-            type: activeTypeMode?.textContent || undefined,
-          });
-        }
-      };
-
-      hour.addEventListener('blur', blurHandler);
-      this.cleanupHandlers.push(() => hour.removeEventListener('blur', blurHandler));
-    }
+    this.inputHandlers.handleHourEvents();
   }
 
   handleMinutesEvents(): void {
-    const minutes = this.core.getMinutes();
-    if (!minutes) return;
-
-    const handler = (): void => {
-      if (this.core.isDestroyed) return;
-      minutes.classList.add('active');
-      const hour = this.core.getHour();
-      hour?.classList.remove('active');
-      this.emitter.emit('select:minute', { minutes: minutes.value });
-
-      const activeTypeMode = this.core.getActiveTypeMode();
-      this.emitter.emit('update', {
-        hour: hour?.value,
-        minutes: minutes.value,
-        type: activeTypeMode?.textContent || undefined,
-      });
-    };
-
-    minutes.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => minutes.removeEventListener('click', handler));
+    this.inputHandlers.handleMinutesEvents();
   }
 
   handleKeyboardInput(): void {
-    const hour = this.core.getHour();
-    const minutes = this.core.getMinutes();
-
-    if (hour) {
-      const hourKeyHandler = (e: KeyboardEvent): void => {
-        if (this.core.isDestroyed) return;
-        if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
-
-        e.preventDefault();
-        const currentValue = parseInt(hour.value) || 0;
-        const max = parseInt(hour.getAttribute('max') || '23');
-        const min = parseInt(hour.getAttribute('min') || '0');
-        const is12h = this.core.options.clock.type === '12h';
-
-        let newValue: number;
-        if (e.key === 'ArrowUp') {
-          if (is12h) {
-            newValue = currentValue >= 12 ? 1 : currentValue + 1;
-          } else {
-            newValue = currentValue >= max ? 0 : currentValue + 1;
-          }
-        } else {
-          if (is12h) {
-            newValue = currentValue <= 1 ? 12 : currentValue - 1;
-          } else {
-            newValue = currentValue <= 0 ? max : currentValue - 1;
-          }
-        }
-
-        hour.value = newValue.toString().padStart(2, '0');
-        hour.setAttribute('aria-valuenow', hour.value);
-
-        const modal = this.core.getModalElement();
-        announceToScreenReader(modal, `Hour: ${hour.value}`);
-
-        this.emitter.emit('animation:clock', {});
-        this.emitter.emit('select:hour', { hour: hour.value });
-
-        const mins = this.core.getMinutes();
-        const activeTypeMode = this.core.getActiveTypeMode();
-        this.emitter.emit('update', {
-          hour: hour.value,
-          minutes: mins?.value,
-          type: activeTypeMode?.textContent || undefined,
-        });
-      };
-
-      hour.addEventListener('keydown', hourKeyHandler);
-      this.cleanupHandlers.push(() => hour.removeEventListener('keydown', hourKeyHandler));
-    }
-
-    if (minutes) {
-      const minutesKeyHandler = (e: KeyboardEvent): void => {
-        if (this.core.isDestroyed) return;
-        if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
-
-        e.preventDefault();
-        const currentValue = parseInt(minutes.value) || 0;
-        const max = 59;
-        const min = 0;
-
-        let newValue: number;
-        if (e.key === 'ArrowUp') {
-          newValue = currentValue >= max ? min : currentValue + 1;
-        } else {
-          newValue = currentValue <= min ? max : currentValue - 1;
-        }
-
-        minutes.value = newValue.toString().padStart(2, '0');
-        minutes.setAttribute('aria-valuenow', minutes.value);
-
-        const modal = this.core.getModalElement();
-        announceToScreenReader(modal, `Minutes: ${minutes.value}`);
-
-        this.emitter.emit('animation:clock', {});
-        this.emitter.emit('select:minute', { minutes: minutes.value });
-
-        const hr = this.core.getHour();
-        const activeTypeMode = this.core.getActiveTypeMode();
-        this.emitter.emit('update', {
-          hour: hr?.value,
-          minutes: minutes.value,
-          type: activeTypeMode?.textContent || undefined,
-        });
-      };
-
-      minutes.addEventListener('keydown', minutesKeyHandler);
-      this.cleanupHandlers.push(() => minutes.removeEventListener('keydown', minutesKeyHandler));
-    }
+    this.keyboardHandlers.handleKeyboardInput();
   }
 
   focusTrapHandler(): void {
-    if (isDocument() === false) {
-      return;
-    }
-
-    const wrapper = this.core.getWrapper();
-    if (!wrapper) return;
-
-    const handler = (e: KeyboardEvent): void => {
-      if (this.core.isDestroyed) return;
-      if (e.key !== 'Tab') return;
-
-      const focusableElements = wrapper.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-
-      if (e.shiftKey && document.activeElement === firstElement) {
-        lastElement?.focus();
-        e.preventDefault();
-      } else if (!e.shiftKey && document.activeElement === lastElement) {
-        firstElement?.focus();
-        e.preventDefault();
-      }
-    };
-
-    wrapper.addEventListener('keydown', handler);
-    this.cleanupHandlers.push(() => wrapper.removeEventListener('keydown', handler));
+    this.keyboardHandlers.focusTrapHandler();
   }
 
   handleMoveHand(): void {
-    if (isDocument() === false) {
-      return;
-    }
-
-    const onDragStart = (e: MouseEvent | TouchEvent): void => {
-      if (this.core.isDestroyed) return;
-      e.preventDefault();
-    };
-
-    document.addEventListener('mousedown', onDragStart, false);
-    document.addEventListener('touchstart', onDragStart, { passive: false });
-
-    this.cleanupHandlers.push(() => {
-      document.removeEventListener('mousedown', onDragStart);
-      document.removeEventListener('touchstart', onDragStart);
-    });
+    this.modalHandlers.handleMoveHand();
   }
 
   handleSwitchViewButton(): void {
-    const switchButton = this.core.getKeyboardClockIcon();
-    if (!switchButton) return;
-
-    const handler = (): void => {
-      if (this.core.isDestroyed) return;
-      this.emitter.emit('switch:view', {});
-    };
-
-    switchButton.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => switchButton.removeEventListener('click', handler));
+    this.buttonHandlers.handleSwitchViewButton();
   }
 
   destroy(): void {
-    this.cleanupHandlers.forEach((cleanup) => cleanup());
-    this.cleanupHandlers = [];
+    this.buttonHandlers.destroy();
+    this.inputHandlers.destroy();
+    this.keyboardHandlers.destroy();
+    this.modalHandlers.destroy();
   }
 }

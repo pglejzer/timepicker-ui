@@ -255,5 +255,129 @@ describe('CoreState', () => {
       expect(coreState.getWrapper()).toBeInstanceOf(HTMLDivElement);
     });
   });
-});
 
+  describe('DOM element getters in mobile view', () => {
+    let modalEl: HTMLDivElement;
+
+    beforeEach(() => {
+      modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+      modalEl.innerHTML = `
+        <div class="tp-ui-clock-face mobile"></div>
+        <div class="tp-ui-mobile-clock-wrapper">
+          <div class="tp-ui-clock-hand"></div>
+          <div class="tp-ui-circle-hand"></div>
+          <div class="tp-ui-tips-wrapper"></div>
+          <div class="tp-ui-tips-wrapper-24h"></div>
+        </div>
+      `;
+      document.body.appendChild(modalEl);
+      coreState.setIsMobileView(true);
+    });
+
+    it('should get mobile clock face when isMobileView is true', () => {
+      const clockFace = coreState.getClockFace();
+      expect(clockFace).toBeInstanceOf(HTMLDivElement);
+      expect(clockFace?.classList.contains('mobile')).toBe(true);
+    });
+
+    it('should get mobile clock hand when isMobileView is true', () => {
+      const clockHand = coreState.getClockHand();
+      expect(clockHand).toBeInstanceOf(HTMLDivElement);
+    });
+
+    it('should get mobile circle when isMobileView is true', () => {
+      const circle = coreState.getCircle();
+      expect(circle).toBeInstanceOf(HTMLDivElement);
+    });
+
+    it('should get mobile tips wrapper when isMobileView is true', () => {
+      const tips = coreState.getTipsWrapper();
+      expect(tips).toBeInstanceOf(HTMLDivElement);
+    });
+
+    it('should get mobile tips wrapper for 24h when isMobileView is true', () => {
+      const tips = coreState.getTipsWrapperFor24h();
+      expect(tips).toBeInstanceOf(HTMLDivElement);
+    });
+  });
+
+  describe('element getters return null when modal missing', () => {
+    it('should return null for getClockFace when no modal', () => {
+      expect(coreState.getClockFace()).toBeNull();
+    });
+
+    it('should return null for getClockHand when no modal', () => {
+      expect(coreState.getClockHand()).toBeNull();
+    });
+
+    it('should return null for getCircle when no modal', () => {
+      expect(coreState.getCircle()).toBeNull();
+    });
+
+    it('should return null for getTipsWrapper when no modal', () => {
+      expect(coreState.getTipsWrapper()).toBeNull();
+    });
+
+    it('should return null for getHour when no modal', () => {
+      expect(coreState.getHour()).toBeNull();
+    });
+
+    it('should return null for getMinutes when no modal', () => {
+      expect(coreState.getMinutes()).toBeNull();
+    });
+
+    it('should return null for getAM when no modal', () => {
+      expect(coreState.getAM()).toBeNull();
+    });
+
+    it('should return null for getPM when no modal', () => {
+      expect(coreState.getPM()).toBeNull();
+    });
+
+    it('should return null for getCancelButton when no modal', () => {
+      expect(coreState.getCancelButton()).toBeNull();
+    });
+
+    it('should return null for getOkButton when no modal', () => {
+      expect(coreState.getOkButton()).toBeNull();
+    });
+
+    it('should return null for getHeader when no modal', () => {
+      expect(coreState.getHeader()).toBeNull();
+    });
+
+    it('should return null for getFooter when no modal', () => {
+      expect(coreState.getFooter()).toBeNull();
+    });
+
+    it('should return null for getWrapper when no modal', () => {
+      expect(coreState.getWrapper()).toBeNull();
+    });
+  });
+
+  describe('getActiveTypeMode', () => {
+    it('should return null when no modal', () => {
+      expect(coreState.getActiveTypeMode()).toBeNull();
+    });
+
+    it('should return null when no active type mode element', () => {
+      const modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+      document.body.appendChild(modalEl);
+      expect(coreState.getActiveTypeMode()).toBeNull();
+    });
+
+    it('should return active type mode element when present', () => {
+      const modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+      const typeMode = document.createElement('button');
+      typeMode.className = 'tp-ui-type-mode active';
+      typeMode.textContent = 'AM';
+      modalEl.appendChild(typeMode);
+      document.body.appendChild(modalEl);
+
+      expect(coreState.getActiveTypeMode()).toBe(typeMode);
+    });
+  });
+});

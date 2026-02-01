@@ -62,7 +62,12 @@ export type RangeConfirmEventData = {
 
 export type RangeSwitchEventData = {
   active: 'from' | 'to';
-  disabledTime?: { hours: string[]; minutes: string[] } | null;
+  disabledTime?: {
+    hours: string[];
+    minutes: string[];
+    fromType?: string;
+    fromHour?: number;
+  } | null;
 };
 
 export type RangeValidationEventData = {

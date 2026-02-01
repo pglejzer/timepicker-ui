@@ -399,7 +399,5 @@ export default class ConfigManager {
     }
   }
 
-  destroy(): void {
-    // No resources to clean up in ConfigManager}
-  }
+  destroy(): void {}
 }
