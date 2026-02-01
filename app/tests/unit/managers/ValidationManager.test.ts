@@ -184,6 +184,114 @@ describe('ValidationManager', () => {
 
       managerWithInvalid.destroy();
     });
+
+    it('should throw error for invalid disabled minutes', () => {
+      const optionsWithInvalidMinutes = {
+        ...DEFAULT_OPTIONS,
+        clock: {
+          ...DEFAULT_OPTIONS.clock,
+          type: '12h' as const,
+          disabledTime: {
+            minutes: ['99', '100'],
+          },
+        },
+      };
+
+      const coreWithInvalidMinutes = new CoreState(
+        mockElement,
+        optionsWithInvalidMinutes,
+        'test-invalid-minutes',
+      );
+      const managerWithInvalidMinutes = new ValidationManager(coreWithInvalidMinutes, emitter);
+
+      expect(() => managerWithInvalidMinutes.checkDisabledValuesOnStart()).toThrow(TimepickerError);
+
+      managerWithInvalidMinutes.destroy();
+    });
+
+    it('should validate only hours when minutes not provided', () => {
+      const optionsOnlyHours = {
+        ...DEFAULT_OPTIONS,
+        clock: {
+          ...DEFAULT_OPTIONS.clock,
+          type: '12h' as const,
+          disabledTime: {
+            hours: ['01', '02'],
+          },
+        },
+      };
+
+      const coreOnlyHours = new CoreState(mockElement, optionsOnlyHours, 'test-only-hours');
+      const managerOnlyHours = new ValidationManager(coreOnlyHours, emitter);
+
+      expect(() => managerOnlyHours.checkDisabledValuesOnStart()).not.toThrow();
+
+      managerOnlyHours.destroy();
+    });
+
+    it('should validate only minutes when hours not provided', () => {
+      const optionsOnlyMinutes = {
+        ...DEFAULT_OPTIONS,
+        clock: {
+          ...DEFAULT_OPTIONS.clock,
+          type: '12h' as const,
+          disabledTime: {
+            minutes: ['00', '30'],
+          },
+        },
+      };
+
+      const coreOnlyMinutes = new CoreState(mockElement, optionsOnlyMinutes, 'test-only-minutes');
+      const managerOnlyMinutes = new ValidationManager(coreOnlyMinutes, emitter);
+
+      expect(() => managerOnlyMinutes.checkDisabledValuesOnStart()).not.toThrow();
+
+      managerOnlyMinutes.destroy();
+    });
+
+    it('should handle array of intervals', () => {
+      const optionsMultipleIntervals = {
+        ...DEFAULT_OPTIONS,
+        clock: {
+          ...DEFAULT_OPTIONS.clock,
+          type: '12h' as const,
+          disabledTime: {
+            interval: ['09:00 AM - 10:00 AM', '02:00 PM - 03:00 PM'],
+          },
+        },
+      };
+
+      const coreMultipleIntervals = new CoreState(
+        mockElement,
+        optionsMultipleIntervals,
+        'test-multi-intervals',
+      );
+      const managerMultipleIntervals = new ValidationManager(coreMultipleIntervals, emitter);
+
+      expect(() => managerMultipleIntervals.checkDisabledValuesOnStart()).not.toThrow();
+
+      managerMultipleIntervals.destroy();
+    });
+
+    it('should throw error for overlapping intervals', () => {
+      const optionsOverlapping = {
+        ...DEFAULT_OPTIONS,
+        clock: {
+          ...DEFAULT_OPTIONS.clock,
+          type: '12h' as const,
+          disabledTime: {
+            interval: ['09:00 AM - 11:00 AM', '10:00 AM - 12:00 PM'],
+          },
+        },
+      };
+
+      const coreOverlapping = new CoreState(mockElement, optionsOverlapping, 'test-overlapping');
+      const managerOverlapping = new ValidationManager(coreOverlapping, emitter);
+
+      expect(() => managerOverlapping.checkDisabledValuesOnStart()).toThrow(TimepickerError);
+
+      managerOverlapping.destroy();
+    });
   });
 
   describe('destroy', () => {
@@ -196,4 +304,3 @@ describe('ValidationManager', () => {
     });
   });
 });
-

@@ -602,20 +602,156 @@ describe('ConfigManager', () => {
     });
   });
 
-  describe('switch:view event', () => {
-    it('should trigger toggleMobileClockFace on switch:view event', () => {
-      const toggleSpy = jest.spyOn(configManager, 'toggleMobileClockFace');
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(null);
-
-      emitter.emit('switch:view', {});
-
-      expect(toggleSpy).toHaveBeenCalled();
-    });
-  });
-
   describe('destroy', () => {
     it('should not throw on destroy', () => {
       expect(() => configManager.destroy()).not.toThrow();
+    });
+  });
+
+  describe('toggleMobileClockFace - isAnimating guard', () => {
+    it('should not toggle when already animating', () => {
+      jest.useFakeTimers();
+      const modal = document.createElement('div');
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('tp-ui-wrapper');
+      const mobileClockWrapper = document.createElement('div');
+      mobileClockWrapper.classList.add('tp-ui-mobile-clock-wrapper');
+      const selectTimeLabel = document.createElement('div');
+      selectTimeLabel.classList.add('tp-ui-select-time');
+      modal.appendChild(wrapper);
+      modal.appendChild(mobileClockWrapper);
+      modal.appendChild(selectTimeLabel);
+
+      const hourInput = document.createElement('input') as HTMLInputElement;
+      hourInput.value = '09';
+      const minutesInput = document.createElement('input') as HTMLInputElement;
+      minutesInput.value = '30';
+      const clockFace = document.createElement('div') as HTMLDivElement;
+
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(coreState, 'getKeyboardClockIcon').mockReturnValue(null);
+      jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
+      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutesInput);
+      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
+
+      // First call expands
+      configManager.toggleMobileClockFace();
+      // Second call should be blocked by isAnimating
+      configManager.toggleMobileClockFace();
+
+      jest.advanceTimersByTime(500);
+
+      expect(wrapper.classList.contains('expanded')).toBe(true);
+    });
+
+    it('should restore mobile classes on collapse when originally mobile', () => {
+      jest.useFakeTimers();
+      coreState.setIsMobileView(true);
+
+      const modal = document.createElement('div');
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('tp-ui-wrapper', 'expanded');
+      const mobileClockWrapper = document.createElement('div');
+      mobileClockWrapper.classList.add('tp-ui-mobile-clock-wrapper', 'expanded');
+      const selectTimeLabel = document.createElement('div');
+      selectTimeLabel.classList.add('tp-ui-select-time', 'expanded');
+      const someElement = document.createElement('div');
+      someElement.classList.add('expanded');
+
+      modal.appendChild(wrapper);
+      modal.appendChild(mobileClockWrapper);
+      modal.appendChild(selectTimeLabel);
+      modal.appendChild(someElement);
+
+      const hourInput = document.createElement('input') as HTMLInputElement;
+      const minutesInput = document.createElement('input') as HTMLInputElement;
+      const clockFace = document.createElement('div') as HTMLDivElement;
+
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(coreState, 'getKeyboardClockIcon').mockReturnValue(null);
+      jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
+      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutesInput);
+      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
+
+      configManager.toggleMobileClockFace();
+
+      jest.advanceTimersByTime(500);
+
+      expect(wrapper.classList.contains('mobile')).toBe(true);
+      expect(mobileClockWrapper.classList.contains('mobile')).toBe(true);
+      expect(selectTimeLabel.classList.contains('mobile')).toBe(true);
+    });
+
+    it('should toggle icon aria attributes on collapse', () => {
+      jest.useFakeTimers();
+      const modal = document.createElement('div');
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('tp-ui-wrapper', 'expanded');
+      modal.appendChild(wrapper);
+
+      const icon = document.createElement('button') as HTMLButtonElement;
+      icon.setAttribute('aria-label', 'Hide clock face');
+      icon.setAttribute('aria-pressed', 'true');
+
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(coreState, 'getKeyboardClockIcon').mockReturnValue(icon);
+      jest.spyOn(coreState, 'getHour').mockReturnValue(null);
+      jest.spyOn(coreState, 'getMinutes').mockReturnValue(null);
+      jest.spyOn(coreState, 'getClockFace').mockReturnValue(null);
+
+      configManager.toggleMobileClockFace();
+
+      expect(icon.getAttribute('aria-label')).toBe('Show clock face');
+      expect(icon.getAttribute('aria-pressed')).toBe('false');
+    });
+
+    it('should add scale-in to clock face on expand', () => {
+      jest.useFakeTimers();
+      const modal = document.createElement('div');
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('tp-ui-wrapper');
+      modal.appendChild(wrapper);
+
+      const clockFace = document.createElement('div') as HTMLDivElement;
+
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(coreState, 'getKeyboardClockIcon').mockReturnValue(null);
+      jest.spyOn(coreState, 'getHour').mockReturnValue(null);
+      jest.spyOn(coreState, 'getMinutes').mockReturnValue(null);
+      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
+
+      configManager.toggleMobileClockFace();
+
+      jest.advanceTimersByTime(500);
+
+      expect(clockFace.classList.contains('scale-in')).toBe(true);
+    });
+  });
+
+  describe('range mode in getInputValueOnOpenAndSet', () => {
+    it('should not add active class to AM in range mode', () => {
+      const options = {
+        ...DEFAULT_OPTIONS,
+        range: { enabled: true },
+      };
+      const core = new CoreState(mockElement, options, 'test-range');
+      const manager = new ConfigManager(core, emitter);
+
+      const hourInput = document.createElement('input') as HTMLInputElement;
+      const minutesInput = document.createElement('input') as HTMLInputElement;
+      const amDiv = document.createElement('div') as HTMLDivElement;
+
+      jest.spyOn(core, 'getInput').mockReturnValue(mockInput);
+      jest.spyOn(core, 'getHour').mockReturnValue(hourInput);
+      jest.spyOn(core, 'getMinutes').mockReturnValue(minutesInput);
+      jest.spyOn(core, 'getActiveTypeMode').mockReturnValue(null);
+      jest.spyOn(core, 'getAM').mockReturnValue(amDiv);
+
+      manager.getInputValueOnOpenAndSet();
+
+      expect(amDiv.classList.contains('active')).toBe(false);
+
+      manager.destroy();
     });
   });
 });

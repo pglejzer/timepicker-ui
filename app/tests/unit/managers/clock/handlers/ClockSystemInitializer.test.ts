@@ -236,5 +236,279 @@ describe('ClockSystemInitializer', () => {
       expect(() => initializer.destroy()).not.toThrow();
     });
   });
+
+  describe('initialize with full DOM', () => {
+    let clockFace: HTMLDivElement;
+    let clockHand: HTMLDivElement;
+    let circle: HTMLDivElement;
+    let tipsWrapper: HTMLDivElement;
+    let hourInput: HTMLInputElement;
+    let minutesInput: HTMLInputElement;
+
+    beforeEach(() => {
+      clockFace = document.createElement('div');
+      clockFace.className = 'tp-ui-clock-face';
+      clockHand = document.createElement('div');
+      clockHand.className = 'tp-ui-clock-hand';
+      circle = document.createElement('div');
+      circle.className = 'tp-ui-circle';
+      tipsWrapper = document.createElement('div');
+      tipsWrapper.className = 'tp-ui-tips-wrapper';
+      hourInput = document.createElement('input');
+      hourInput.value = '10';
+      minutesInput = document.createElement('input');
+      minutesInput.value = '30';
+
+      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
+      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
+      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
+      jest.spyOn(coreState, 'getTipsWrapper').mockReturnValue(tipsWrapper);
+      jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
+      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutesInput);
+    });
+
+    it('should create ClockSystem when all elements are present', () => {
+      initializer.initialize();
+
+      expect(initializer.getClockSystem()).not.toBeNull();
+    });
+
+    it('should destroy ClockSystem on destroy', () => {
+      initializer.initialize();
+      const clockSystem = initializer.getClockSystem();
+      expect(clockSystem).not.toBeNull();
+
+      initializer.destroy();
+
+      expect(initializer.getClockSystem()).toBeNull();
+    });
+  });
+
+  describe('initialize with 24h clock', () => {
+    it('should include tipsWrapperFor24h in config', () => {
+      const options24h = {
+        ...DEFAULT_OPTIONS,
+        clock: { ...DEFAULT_OPTIONS.clock, type: '24h' as const },
+      };
+      const core24h = new CoreState(mockElement, options24h, 'test-24h-init');
+      const init24h = new ClockSystemInitializer(core24h, emitter);
+
+      const clockFace = document.createElement('div');
+      const clockHand = document.createElement('div');
+      const circle = document.createElement('div');
+      const tipsWrapper = document.createElement('div');
+      const tipsWrapper24h = document.createElement('div');
+
+      jest.spyOn(core24h, 'getClockFace').mockReturnValue(clockFace);
+      jest.spyOn(core24h, 'getClockHand').mockReturnValue(clockHand);
+      jest.spyOn(core24h, 'getCircle').mockReturnValue(circle);
+      jest.spyOn(core24h, 'getTipsWrapper').mockReturnValue(tipsWrapper);
+      jest.spyOn(core24h, 'getTipsWrapperFor24h').mockReturnValue(tipsWrapper24h);
+      jest.spyOn(core24h, 'getHour').mockReturnValue(document.createElement('input') as HTMLInputElement);
+      jest.spyOn(core24h, 'getMinutes').mockReturnValue(document.createElement('input') as HTMLInputElement);
+
+      init24h.initialize();
+
+      expect(init24h.getClockSystem()).not.toBeNull();
+      init24h.destroy();
+    });
+  });
+
+  describe('callbacks in initialize', () => {
+    let clockFace: HTMLDivElement;
+    let clockHand: HTMLDivElement;
+    let circle: HTMLDivElement;
+    let tipsWrapper: HTMLDivElement;
+    let hourInput: HTMLInputElement;
+    let minutesInput: HTMLInputElement;
+    let modal: HTMLDivElement;
+
+    beforeEach(() => {
+      clockFace = document.createElement('div');
+      clockHand = document.createElement('div');
+      circle = document.createElement('div');
+      tipsWrapper = document.createElement('div');
+      hourInput = document.createElement('input');
+      hourInput.value = '10';
+      minutesInput = document.createElement('input');
+      minutesInput.value = '30';
+      modal = document.createElement('div');
+      modal.setAttribute('role', 'dialog');
+
+      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
+      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
+      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
+      jest.spyOn(coreState, 'getTipsWrapper').mockReturnValue(tipsWrapper);
+      jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
+      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutesInput);
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(coreState, 'getActiveTypeMode').mockReturnValue(null);
+    });
+
+    it('should update hourInput value when setHour is called', () => {
+      initializer.initialize();
+
+      const clockSystem = initializer.getClockSystem();
+      expect(clockSystem).not.toBeNull();
+
+      clockSystem?.setHour('11');
+      expect(clockSystem?.getHour()).toBe('11');
+    });
+
+    it('should update minuteInput value when setMinute is called', () => {
+      initializer.initialize();
+
+      const clockSystem = initializer.getClockSystem();
+      expect(clockSystem).not.toBeNull();
+
+      clockSystem?.setMinute('45');
+      expect(clockSystem?.getMinute()).toBe('45');
+    });
+
+    it('should switch between hours and minutes modes', () => {
+      initializer.initialize();
+
+      const clockSystem = initializer.getClockSystem();
+      expect(clockSystem).not.toBeNull();
+
+      expect(() => clockSystem?.switchToMinutes()).not.toThrow();
+      expect(() => clockSystem?.switchToHours()).not.toThrow();
+    });
+
+    it('should set AM/PM value', () => {
+      initializer.initialize();
+
+      const clockSystem = initializer.getClockSystem();
+      expect(clockSystem).not.toBeNull();
+
+      clockSystem?.setAmPm('PM');
+      expect(clockSystem?.getAmPm()).toBe('PM');
+    });
+
+    it('should block and unblock interactions', () => {
+      initializer.initialize();
+
+      const clockSystem = initializer.getClockSystem();
+      expect(clockSystem).not.toBeNull();
+
+      expect(() => clockSystem?.blockInteractions()).not.toThrow();
+      expect(() => clockSystem?.unblockInteractions()).not.toThrow();
+    });
+
+    it('should update disabled time', () => {
+      initializer.initialize();
+
+      const clockSystem = initializer.getClockSystem();
+      expect(clockSystem).not.toBeNull();
+
+      expect(() =>
+        clockSystem?.updateDisabledTime({
+          hours: ['13', '14'],
+          minutes: undefined,
+        }),
+      ).not.toThrow();
+    });
+
+    it('should emit update when drag changes hour', () => {
+      const emitSpy = jest.spyOn(emitter, 'emit');
+      initializer.initialize();
+
+      const clockSystem = initializer.getClockSystem();
+      expect(clockSystem).not.toBeNull();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      clockSystem?.switchToHours();
+
+      const mousedownEvent = new MouseEvent('mousedown', {
+        clientX: 100,
+        clientY: 20,
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(mousedownEvent);
+
+      const mouseupEvent = new MouseEvent('mouseup', { bubbles: true });
+      document.dispatchEvent(mouseupEvent);
+
+      expect(emitSpy).toHaveBeenCalledWith('update', expect.any(Object));
+    });
+
+    it('should emit update when drag changes minute', () => {
+      const emitSpy = jest.spyOn(emitter, 'emit');
+      initializer.initialize();
+
+      const clockSystem = initializer.getClockSystem();
+      expect(clockSystem).not.toBeNull();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      clockSystem?.switchToMinutes();
+
+      const mousedownEvent = new MouseEvent('mousedown', {
+        clientX: 100,
+        clientY: 20,
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(mousedownEvent);
+
+      expect(emitSpy).toHaveBeenCalledWith('update', expect.any(Object));
+    });
+
+    it('should emit range:minute:commit on mouseup in minutes mode', () => {
+      const emitSpy = jest.spyOn(emitter, 'emit');
+      initializer.initialize();
+
+      const clockSystem = initializer.getClockSystem();
+      expect(clockSystem).not.toBeNull();
+
+      minutesInput.classList.add('active');
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      clockSystem?.switchToMinutes();
+
+      const mousedownEvent = new MouseEvent('mousedown', {
+        clientX: 100,
+        clientY: 20,
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(mousedownEvent);
+
+      const mouseupEvent = new MouseEvent('mouseup', { bubbles: true });
+      document.dispatchEvent(mouseupEvent);
+
+      expect(emitSpy).toHaveBeenCalledWith('range:minute:commit', expect.any(Object));
+    });
+  });
 });
 

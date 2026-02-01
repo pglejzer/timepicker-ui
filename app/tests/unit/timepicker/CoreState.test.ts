@@ -380,4 +380,221 @@ describe('CoreState', () => {
       expect(coreState.getActiveTypeMode()).toBe(typeMode);
     });
   });
+
+  describe('getOpenElementData', () => {
+    it('should return null when no data-open attributes', () => {
+      expect(coreState.getOpenElementData()).toBeNull();
+    });
+
+    it('should return array of data-open values', () => {
+      const input = element.querySelector('input');
+      input?.setAttribute('data-open', 'test-opener');
+
+      const result = coreState.getOpenElementData();
+
+      expect(result).toEqual(['test-opener']);
+    });
+
+    it('should return unique values when duplicates exist', () => {
+      const input = element.querySelector('input');
+      input?.setAttribute('data-open', 'opener');
+
+      const button = document.createElement('button');
+      button.setAttribute('data-open', 'opener');
+      element.appendChild(button);
+
+      const result = coreState.getOpenElementData();
+
+      expect(result).toEqual(['opener']);
+    });
+  });
+
+  describe('getOpenElement', () => {
+    it('should set data-open on input and return it when no open elements exist', () => {
+      const result = coreState.getOpenElement();
+
+      expect(result.length).toBe(1);
+      const input = coreState.getInput();
+      expect(input?.getAttribute('data-open')).toBe('tp-ui-input');
+    });
+
+    it('should return elements with data-open attribute', () => {
+      const input = element.querySelector('input');
+      input?.setAttribute('data-open', 'my-opener');
+
+      const result = coreState.getOpenElement();
+
+      expect(result.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  describe('getAllValueTips', () => {
+    it('should return empty array when no modal', () => {
+      expect(coreState.getAllValueTips()).toEqual([]);
+    });
+
+    it('should return all value tips elements', () => {
+      const modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+
+      const tip1 = document.createElement('div');
+      tip1.className = 'tp-ui-value-tips';
+      const tip2 = document.createElement('div');
+      tip2.className = 'tp-ui-value-tips-24h';
+
+      modalEl.appendChild(tip1);
+      modalEl.appendChild(tip2);
+      document.body.appendChild(modalEl);
+
+      const tips = coreState.getAllValueTips();
+
+      expect(tips.length).toBe(2);
+    });
+  });
+
+  describe('getKeyboardClockIcon', () => {
+    it('should return null when no modal', () => {
+      expect(coreState.getKeyboardClockIcon()).toBeNull();
+    });
+
+    it('should return keyboard icon element', () => {
+      const modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+
+      const icon = document.createElement('button');
+      icon.className = 'tp-ui-keyboard-icon-wrapper';
+      modalEl.appendChild(icon);
+      document.body.appendChild(modalEl);
+
+      expect(coreState.getKeyboardClockIcon()).toBe(icon);
+    });
+  });
+
+  describe('getHourText and getMinutesText', () => {
+    it('should return null for hour text when no modal', () => {
+      expect(coreState.getHourText()).toBeNull();
+    });
+
+    it('should return null for minutes text when no modal', () => {
+      expect(coreState.getMinutesText()).toBeNull();
+    });
+
+    it('should return hour text element', () => {
+      const modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+
+      const hourText = document.createElement('div');
+      hourText.className = 'tp-ui-hour-text';
+      modalEl.appendChild(hourText);
+      document.body.appendChild(modalEl);
+
+      expect(coreState.getHourText()).toBe(hourText);
+    });
+
+    it('should return minutes text element', () => {
+      const modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+
+      const minuteText = document.createElement('div');
+      minuteText.className = 'tp-ui-minute-text';
+      modalEl.appendChild(minuteText);
+      document.body.appendChild(modalEl);
+
+      expect(coreState.getMinutesText()).toBe(minuteText);
+    });
+  });
+
+  describe('getInputWrappers', () => {
+    it('should return null when no modal', () => {
+      expect(coreState.getInputWrappers()).toBeNull();
+    });
+
+    it('should return input wrappers', () => {
+      const modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+
+      const wrapper1 = document.createElement('div');
+      wrapper1.className = 'tp-ui-input-wrapper';
+      const wrapper2 = document.createElement('div');
+      wrapper2.className = 'tp-ui-input-wrapper';
+
+      modalEl.appendChild(wrapper1);
+      modalEl.appendChild(wrapper2);
+      document.body.appendChild(modalEl);
+
+      const wrappers = coreState.getInputWrappers();
+
+      expect(wrappers?.length).toBe(2);
+    });
+  });
+
+  describe('getDots', () => {
+    it('should return null when no modal', () => {
+      expect(coreState.getDots()).toBeNull();
+    });
+
+    it('should return dots element', () => {
+      const modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+
+      const dots = document.createElement('div');
+      dots.className = 'tp-ui-dots';
+      modalEl.appendChild(dots);
+      document.body.appendChild(modalEl);
+
+      expect(coreState.getDots()).toBe(dots);
+    });
+  });
+
+  describe('getMinutesTips and getHourTips', () => {
+    it('should return null for minutes tips when no modal', () => {
+      expect(coreState.getMinutesTips()).toBeNull();
+    });
+
+    it('should return null for hour tips when no modal', () => {
+      expect(coreState.getHourTips()).toBeNull();
+    });
+
+    it('should return minutes tips element', () => {
+      const modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+
+      const minutesTips = document.createElement('div');
+      minutesTips.className = 'tp-ui-minutes-time';
+      modalEl.appendChild(minutesTips);
+      document.body.appendChild(modalEl);
+
+      expect(coreState.getMinutesTips()).toBe(minutesTips);
+    });
+
+    it('should return hour tips element', () => {
+      const modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+
+      const hourTips = document.createElement('div');
+      hourTips.className = 'tp-ui-hour-time-12';
+      modalEl.appendChild(hourTips);
+      document.body.appendChild(modalEl);
+
+      expect(coreState.getHourTips()).toBe(hourTips);
+    });
+  });
+
+  describe('getTipsWrapperFor24h', () => {
+    it('should return null when no modal', () => {
+      expect(coreState.getTipsWrapperFor24h()).toBeNull();
+    });
+
+    it('should return 24h tips wrapper for desktop view', () => {
+      const modalEl = document.createElement('div');
+      modalEl.setAttribute('data-owner-id', 'test-instance-id');
+
+      const tips24h = document.createElement('div');
+      tips24h.className = 'tp-ui-tips-wrapper-24h';
+      modalEl.appendChild(tips24h);
+      document.body.appendChild(modalEl);
+
+      expect(coreState.getTipsWrapperFor24h()).toBe(tips24h);
+    });
+  });
 });

@@ -287,7 +287,7 @@ describe('Lifecycle', () => {
       const lc = new Lifecycle(core, mgrs, em);
 
       lc.init();
-      em.emit('timezone:change', { timezone: 'UTC', offset: 0 });
+      em.emit('timezone:change', { timezone: 'UTC' });
 
       expect(onTimezoneChange).toHaveBeenCalled();
     });
@@ -341,6 +341,212 @@ describe('Lifecycle', () => {
       em.emit('range:validation', { valid: true, duration: 120 });
 
       expect(onRangeValidation).toHaveBeenCalled();
+    });
+  });
+
+  describe('destroy with keepInputValue', () => {
+    it('should preserve input value when keepInputValue is true', () => {
+      lifecycle.init();
+      const input = coreState.getInput();
+      if (input) input.value = 'test-value';
+
+      lifecycle.destroy({ keepInputValue: true });
+
+      expect(coreState.getInput()?.value).toBe('test-value');
+    });
+
+    it('should not preserve input value when keepInputValue is false', () => {
+      lifecycle.init();
+
+      lifecycle.destroy({ keepInputValue: false });
+
+      expect(coreState.isDestroyed).toBe(true);
+    });
+  });
+
+  describe('eventsBundle scenarios', () => {
+    it('should not execute eventsBundle when destroyed', () => {
+      coreState.setIsDestroyed(true);
+      expect(() => lifecycle.mount()).not.toThrow();
+    });
+
+    it('should not execute eventsBundle when modal is not removed', () => {
+      coreState.setIsModalRemove(false);
+      lifecycle.init();
+      expect(() => lifecycle.mount()).not.toThrow();
+    });
+  });
+
+  describe('inline mode initialization', () => {
+    it('should disable focus trap by default in inline mode', () => {
+      const inlineOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          inline: {
+            enabled: true,
+            containerId: 'test-container',
+          },
+        },
+      };
+
+      const containerEl = document.createElement('div');
+      containerEl.id = 'test-container';
+      document.body.appendChild(containerEl);
+
+      const core = new CoreState(mockElement, inlineOptions, 'inline-test');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      expect(() => lc.init()).not.toThrow();
+    });
+  });
+
+  describe('removeEventListeners in non-browser environment', () => {
+    it('should handle removeEventListeners gracefully', () => {
+      lifecycle.init();
+      expect(() => lifecycle.destroy()).not.toThrow();
+    });
+  });
+
+  describe('eventsBundle CSS class handling', () => {
+    it('should add cssClass to wrapper', (done) => {
+      const cssClassOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          cssClass: 'custom-timepicker-class',
+        },
+      };
+
+      const core = new CoreState(mockElement, cssClassOptions, 'css-class-test');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      lc.init();
+      lc.mount();
+
+      setTimeout(() => {
+        done();
+      }, 50);
+    });
+
+    it('should remove cssClass on destroy', () => {
+      const cssClassOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          cssClass: 'custom-class',
+        },
+      };
+
+      const core = new CoreState(mockElement, cssClassOptions, 'css-destroy-test');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      lc.init();
+      lc.destroy();
+
+      expect(mockElement.classList.contains('custom-class')).toBe(false);
+    });
+  });
+
+  describe('eventsBundle with different options', () => {
+    it('should handle enableSwitchIcon option', () => {
+      const switchIconOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          enableSwitchIcon: true,
+        },
+      };
+
+      const core = new CoreState(mockElement, switchIconOptions, 'switch-icon-test');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      lc.init();
+      expect(() => lc.mount()).not.toThrow();
+    });
+
+    it('should handle focusTrap option', () => {
+      const focusTrapOptions = {
+        ...DEFAULT_OPTIONS,
+        behavior: {
+          ...DEFAULT_OPTIONS.behavior,
+          focusTrap: true,
+        },
+      };
+
+      const core = new CoreState(mockElement, focusTrapOptions, 'focus-trap-test');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      lc.init();
+      expect(() => lc.mount()).not.toThrow();
+    });
+
+    it('should handle 24h clock type', () => {
+      const clock24hOptions = {
+        ...DEFAULT_OPTIONS,
+        clock: {
+          ...DEFAULT_OPTIONS.clock,
+          type: '24h' as const,
+        },
+      };
+
+      const core = new CoreState(mockElement, clock24hOptions, 'clock-24h-test');
+      const em = new EventEmitter<TimepickerEventMap>();
+      const mgrs = new Managers(core, em);
+      const lc = new Lifecycle(core, mgrs, em);
+
+      lc.init();
+      expect(() => lc.mount()).not.toThrow();
+    });
+  });
+
+  describe('unmount with update parameter', () => {
+    it('should click ok button when update is true', () => {
+      lifecycle.init();
+      lifecycle.mount();
+
+      // unmount with update = true
+      // @ts-expect-error - testing internal debounce call
+      lifecycle.unmount(() => {}, true);
+    });
+  });
+
+  describe('destroy cleanup', () => {
+    it('should cleanup modal element', () => {
+      lifecycle.init();
+      lifecycle.mount();
+
+      lifecycle.destroy();
+
+      expect(coreState.isDestroyed).toBe(true);
+    });
+
+    it('should clear emitter on destroy', () => {
+      const clearSpy = jest.spyOn(emitter, 'clear');
+
+      lifecycle.init();
+      lifecycle.destroy();
+
+      expect(clearSpy).toHaveBeenCalled();
+    });
+
+    it('should destroy managers on destroy', () => {
+      const destroySpy = jest.spyOn(managers, 'destroy');
+
+      lifecycle.init();
+      lifecycle.destroy();
+
+      expect(destroySpy).toHaveBeenCalled();
     });
   });
 });

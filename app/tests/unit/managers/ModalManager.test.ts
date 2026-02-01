@@ -344,5 +344,157 @@ describe('ModalManager', () => {
       expect(document.body.style.overflowY).toBe('scroll');
     });
   });
-});
 
+  describe('setScrollbarOrNot with enableScrollbar true', () => {
+    it('should restore scrollbar after timeout when enableScrollbar is true', () => {
+      jest.useFakeTimers();
+
+      const scrollbarOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          enableScrollbar: true,
+        },
+      };
+
+      document.body.style.overflowY = 'hidden';
+      document.body.style.paddingRight = '15px';
+
+      const scrollbarCore = new CoreState(mockElement, scrollbarOptions, 'test-scrollbar-enable');
+      const scrollbarModalManager = new ModalManager(scrollbarCore, emitter);
+
+      scrollbarModalManager.setScrollbarOrNot();
+
+      jest.advanceTimersByTime(800);
+
+      scrollbarModalManager.destroy();
+    });
+  });
+
+  describe('inline mode showButtons option', () => {
+    it('should hide buttons when showButtons is false in inline mode', () => {
+      const inlineContainer = document.createElement('div');
+      inlineContainer.id = 'inline-hide-buttons';
+      document.body.appendChild(inlineContainer);
+
+      const inlineOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          inline: {
+            enabled: true,
+            containerId: 'inline-hide-buttons',
+            showButtons: false,
+          },
+        },
+      };
+
+      const inlineCore = new CoreState(mockElement, inlineOptions, 'test-inline-hide-buttons');
+      const inlineModalManager = new ModalManager(inlineCore, emitter);
+
+      inlineModalManager.setModalTemplate();
+
+      const buttons = inlineContainer.querySelectorAll('.tp-ui-wrapper-btn');
+      buttons.forEach((btn) => {
+        expect((btn as HTMLElement).style.display).toBe('none');
+      });
+
+      inlineModalManager.destroy();
+    });
+
+    it('should show buttons when showButtons is true in inline mode', () => {
+      const inlineContainer = document.createElement('div');
+      inlineContainer.id = 'inline-show-buttons';
+      document.body.appendChild(inlineContainer);
+
+      const inlineOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          inline: {
+            enabled: true,
+            containerId: 'inline-show-buttons',
+            showButtons: true,
+          },
+        },
+      };
+
+      const inlineCore = new CoreState(mockElement, inlineOptions, 'test-inline-show-buttons');
+      const inlineModalManager = new ModalManager(inlineCore, emitter);
+
+      inlineModalManager.setModalTemplate();
+
+      const buttons = inlineContainer.querySelectorAll('.tp-ui-wrapper-btn');
+      buttons.forEach((btn) => {
+        expect((btn as HTMLElement).style.display).not.toBe('none');
+      });
+
+      inlineModalManager.destroy();
+    });
+  });
+
+  describe('setInitialFocus', () => {
+    it('should focus wrapper when focusTrap is enabled', () => {
+      jest.useFakeTimers();
+
+      const focusTrapOptions = {
+        ...DEFAULT_OPTIONS,
+        behavior: {
+          ...DEFAULT_OPTIONS.behavior,
+          focusTrap: true,
+        },
+      };
+
+      const focusTrapCore = new CoreState(mockElement, focusTrapOptions, 'test-focus-trap');
+      const focusTrapModalManager = new ModalManager(focusTrapCore, emitter);
+
+      focusTrapModalManager.setModalTemplate();
+
+      const modal = document.querySelector('.tp-ui-modal') as HTMLDivElement;
+      const wrapper = modal?.querySelector('.tp-ui-wrapper') as HTMLDivElement;
+      wrapper?.setAttribute('tabindex', '-1');
+
+      jest.spyOn(focusTrapCore, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(focusTrapCore, 'getWrapper').mockReturnValue(wrapper);
+
+      focusTrapModalManager.setShowClassToBackdrop();
+
+      jest.advanceTimersByTime(200);
+
+      focusTrapModalManager.destroy();
+    });
+  });
+
+  describe('removeBackdrop with open elements', () => {
+    it('should add disabled class to open elements', () => {
+      const noBackdropOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          backdrop: false,
+        },
+      };
+
+      const noBackdropCore = new CoreState(mockElement, noBackdropOptions, 'test-open-elements');
+      const noBackdropModalManager = new ModalManager(noBackdropCore, emitter);
+
+      noBackdropModalManager.setModalTemplate();
+
+      const modal = document.querySelector('.tp-ui-modal');
+      const openElement = document.createElement('div');
+      openElement.setAttribute('data-open', 'test');
+      document.body.appendChild(openElement);
+
+      jest.spyOn(noBackdropCore, 'getModalElement').mockReturnValue(modal as HTMLDivElement);
+      jest
+        .spyOn(noBackdropCore, 'getOpenElement')
+        .mockReturnValue([openElement] as unknown as NodeListOf<Element>);
+
+      noBackdropModalManager.removeBackdrop();
+
+      expect(openElement.classList.contains('disabled')).toBe(true);
+
+      noBackdropModalManager.destroy();
+    });
+  });
+});

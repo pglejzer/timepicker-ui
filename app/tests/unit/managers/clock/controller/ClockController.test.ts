@@ -53,6 +53,30 @@ describe('ClockController', () => {
       expect(controller.getHour()).toBe('14');
       expect(controller.getMinute()).toBe('30');
     });
+
+    it('should accept disabledTime config', () => {
+      const renderer = createMockRenderer();
+      const state = createInitialState();
+      const disabledTime = { hours: ['03', '04'], minutes: ['15', '45'] };
+
+      const controller = new ClockController(renderer as never, state, '12h', disabledTime, 1, 1, true);
+
+      expect(controller.getState()).toEqual(state);
+    });
+
+    it('should accept callbacks parameter', () => {
+      const renderer = createMockRenderer();
+      const state = createInitialState();
+      const onHourChange = jest.fn();
+      const onMinuteChange = jest.fn();
+
+      const controller = new ClockController(renderer as never, state, '12h', null, 1, 1, true, {
+        onHourChange,
+        onMinuteChange,
+      });
+
+      expect(controller.getState()).toEqual(state);
+    });
   });
 
   describe('getState', () => {
@@ -239,6 +263,58 @@ describe('ClockController', () => {
       expect(onMinuteChange).toHaveBeenCalled();
       expect(renderer.setHandAngle).toHaveBeenCalled();
     });
+
+    it('should skip processing when same coordinates are passed twice', () => {
+      const renderer = createMockRenderer();
+      const state = createInitialState();
+      const onHourChange = jest.fn();
+
+      const controller = new ClockController(renderer as never, state, '12h', null, 1, 1, false, {
+        onHourChange,
+      });
+
+      controller.handlePointerMove({ x: 150, y: 100 }, { x: 100, y: 100 }, 100);
+      expect(onHourChange).toHaveBeenCalledTimes(1);
+
+      renderer.setHandAngle.mockClear();
+      onHourChange.mockClear();
+
+      controller.handlePointerMove({ x: 150, y: 100 }, { x: 100, y: 100 }, 100);
+      expect(onHourChange).not.toHaveBeenCalled();
+      expect(renderer.setHandAngle).not.toHaveBeenCalled();
+    });
+
+    it('should process new coordinates after same coordinates', () => {
+      const renderer = createMockRenderer();
+      const state = createInitialState();
+      const onHourChange = jest.fn();
+
+      const controller = new ClockController(renderer as never, state, '12h', null, 1, 1, false, {
+        onHourChange,
+      });
+
+      controller.handlePointerMove({ x: 150, y: 100 }, { x: 100, y: 100 }, 100);
+      controller.handlePointerMove({ x: 150, y: 100 }, { x: 100, y: 100 }, 100);
+      controller.handlePointerMove({ x: 100, y: 20 }, { x: 100, y: 100 }, 100);
+
+      expect(renderer.setHandAngle).toHaveBeenCalledTimes(2);
+    });
+
+    it('should process coordinates after handlePointerUp resets cache', () => {
+      const renderer = createMockRenderer();
+      const state = createInitialState();
+
+      const controller = new ClockController(renderer as never, state, '12h', null, 1, 1, false, {});
+
+      controller.handlePointerMove({ x: 150, y: 100 }, { x: 100, y: 100 }, 100);
+      const firstCallCount = renderer.setHandAngle.mock.calls.length;
+
+      controller.handlePointerUp();
+
+      controller.handlePointerMove({ x: 150, y: 100 }, { x: 100, y: 100 }, 100);
+
+      expect(renderer.setHandAngle.mock.calls.length).toBeGreaterThan(firstCallCount);
+    });
   });
 
   describe('handlePointerUp', () => {
@@ -305,4 +381,3 @@ describe('ClockController', () => {
     });
   });
 });
-
