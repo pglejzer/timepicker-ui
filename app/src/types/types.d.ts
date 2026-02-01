@@ -80,7 +80,7 @@ export type RangeValidationEventData = {
 export type RangeMinuteCommitEventData = {
   hour: string;
   minutes: string;
-  type?: string | null;
+  type?: string;
 };
 
 export type RangeGetDisabledTimeEventData = Record<string, never>;
