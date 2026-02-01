@@ -7,7 +7,7 @@ Modern time picker library built with TypeScript. Works with any framework or va
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://img.shields.io/npm/l/timepicker-ui)
 [![Coverage Status](https://coveralls.io/repos/github/pglejzer/timepicker-ui/badge.svg?branch=main)](https://coveralls.io/github/pglejzer/timepicker-ui?branch=main)
 [![Tests](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml/badge.svg)](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml)
-
+[![Socket Badge](https://badge.socket.dev/npm/package/timepicker-ui/4.1.1)](https://badge.socket.dev/npm/package/timepicker-ui/4.1.1)
 [Live Demo](https://timepicker-ui.vercel.app/) • [Documentation](https://timepicker-ui.vercel.app/docs) • [React Wrapper](https://github.com/pglejzer/timepicker-ui-react) • [Changelog](./CHANGELOG.md)
 
 **Upgrading from v3?** Check the [upgrade guide](#upgrade-guide-v3--v4) below.
