@@ -4,6 +4,7 @@ import "./globals.css";
 import "timepicker-ui/index.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { SimpleMobileSidebar } from "@/components/simple-mobile-sidebar";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -55,6 +56,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Header />
+        <SimpleMobileSidebar />
         <main className="min-h-screen">{children}</main>
         <Footer />
         <Analytics />

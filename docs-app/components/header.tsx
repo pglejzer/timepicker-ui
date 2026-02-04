@@ -3,9 +3,17 @@
 import { Moon, Sun, Github, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function Header() {
   const [isDark, setIsDark] = useState(false);
+  const pathname = usePathname();
+
+  // Pages with DocsSidebar (detailed sidebar)
+  const hasDocsSidebar =
+    pathname?.startsWith("/docs") ||
+    pathname?.startsWith("/examples") ||
+    pathname?.startsWith("/react");
 
   useEffect(() => {
     const isDarkMode = document.documentElement.classList.contains("dark");
@@ -19,7 +27,12 @@ export function Header() {
   };
 
   const handleMobileSidebarOpen = () => {
-    window.dispatchEvent(new CustomEvent("toggle-mobile-sidebar"));
+    // Send different event based on page type
+    if (hasDocsSidebar) {
+      window.dispatchEvent(new CustomEvent("toggle-mobile-sidebar"));
+    } else {
+      window.dispatchEvent(new CustomEvent("toggle-simple-mobile-sidebar"));
+    }
   };
 
   return (

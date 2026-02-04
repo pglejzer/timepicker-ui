@@ -23,7 +23,7 @@
       "timepicker-ui": ["./src/index.d.ts"]
     }
   },
-  "include": ["./.eslintrc.js", "src", "docs/index.ts", "tests"],
+  "include": ["./.eslintrc.js", "src", "docs/index.ts", "tests", "*.ts"],
   "exclude": [
     "./dist",
     "node_modules",

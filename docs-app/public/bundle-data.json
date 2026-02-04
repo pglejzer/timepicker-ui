@@ -1,0 +1,335 @@
+{
+  "timestamp": "2026-02-04T17:38:38.215Z",
+  "results": {
+    "rollup": {
+      "core": {
+        "label": "🎯 Core Bundle",
+        "files": [
+          {
+            "name": "core-only.js",
+            "displayName": "Core (unminified)",
+            "raw": 81907,
+            "gzip": 20343,
+            "brotli": 17558
+          },
+          {
+            "name": "core-only.min.js",
+            "displayName": "Core (minified)",
+            "raw": 80151,
+            "gzip": 19630,
+            "brotli": 16962
+          }
+        ],
+        "total": {
+          "raw": 162058,
+          "gzip": 39973,
+          "brotli": 34520
+        }
+      },
+      "full": {
+        "label": "📦 Full Bundle (with Plugins)",
+        "files": [
+          {
+            "name": "full-static.js",
+            "displayName": "Full (unminified)",
+            "raw": 98432,
+            "gzip": 24255,
+            "brotli": 20938
+          },
+          {
+            "name": "full-static.min.js",
+            "displayName": "Full (minified)",
+            "raw": 96319,
+            "gzip": 23361,
+            "brotli": 20163
+          }
+        ],
+        "total": {
+          "raw": 194751,
+          "gzip": 47616,
+          "brotli": 41101
+        }
+      },
+      "lazy": {
+        "label": "⚡ Lazy Load Bundle",
+        "files": [
+          {
+            "name": "entry-lazy-load.js",
+            "displayName": "entry-lazy-load.js",
+            "raw": 80392,
+            "gzip": 19733,
+            "brotli": 17064
+          },
+          {
+            "name": "plugin-range.js",
+            "displayName": "Range Plugin",
+            "raw": 9783,
+            "gzip": 2566,
+            "brotli": 2321
+          },
+          {
+            "name": "plugin-timezone.js",
+            "displayName": "Timezone Plugin",
+            "raw": 6360,
+            "gzip": 2085,
+            "brotli": 1846
+          }
+        ],
+        "total": {
+          "raw": 96535,
+          "gzip": 24384,
+          "brotli": 21231
+        }
+      }
+    },
+    "vite": {
+      "core": {
+        "label": "🎯 Core Bundle",
+        "files": [
+          {
+            "name": "core-only.js",
+            "displayName": "Core (minified)",
+            "raw": 84167,
+            "gzip": 20283,
+            "brotli": 17470
+          },
+          {
+            "name": "core-only.unmin.js",
+            "displayName": "Core (unminified)",
+            "raw": 107347,
+            "gzip": 22659,
+            "brotli": 19245
+          }
+        ],
+        "total": {
+          "raw": 191514,
+          "gzip": 42942,
+          "brotli": 36715
+        }
+      },
+      "full": {
+        "label": "📦 Full Bundle (with Plugins)",
+        "files": [
+          {
+            "name": "full-static.js",
+            "displayName": "Full (minified)",
+            "raw": 101257,
+            "gzip": 24147,
+            "brotli": 20803
+          },
+          {
+            "name": "full-static.unmin.js",
+            "displayName": "Full (unminified)",
+            "raw": 130080,
+            "gzip": 27231,
+            "brotli": 23176
+          }
+        ],
+        "total": {
+          "raw": 231337,
+          "gzip": 51378,
+          "brotli": 43979
+        }
+      },
+      "lazy": {
+        "label": "⚡ Lazy Load Bundle",
+        "files": [
+          {
+            "name": "lazy-load.js",
+            "displayName": "Main chunk",
+            "raw": 85636,
+            "gzip": 20904,
+            "brotli": 17972
+          },
+          {
+            "name": "plugin-range-DYFEgEQK.js",
+            "displayName": "Range Plugin",
+            "raw": 10480,
+            "gzip": 2745,
+            "brotli": 2477
+          },
+          {
+            "name": "plugin-timezone-BX_BRdyg.js",
+            "displayName": "Timezone Plugin",
+            "raw": 6916,
+            "gzip": 2275,
+            "brotli": 2010
+          }
+        ],
+        "total": {
+          "raw": 103032,
+          "gzip": 25924,
+          "brotli": 22459
+        }
+      }
+    },
+    "webpack": {
+      "core": {
+        "label": "🎯 Core Bundle",
+        "files": [
+          {
+            "name": "core-only.js",
+            "displayName": "Core (unminified)",
+            "raw": 81715,
+            "gzip": 20569,
+            "brotli": 17726
+          },
+          {
+            "name": "core-only.min.js",
+            "displayName": "Core (minified)",
+            "raw": 80209,
+            "gzip": 19640,
+            "brotli": 16990
+          }
+        ],
+        "total": {
+          "raw": 161924,
+          "gzip": 40209,
+          "brotli": 34716
+        }
+      },
+      "full": {
+        "label": "📦 Full Bundle (with Plugins)",
+        "files": [
+          {
+            "name": "full-static.js",
+            "displayName": "Full (unminified)",
+            "raw": 98408,
+            "gzip": 24560,
+            "brotli": 21113
+          },
+          {
+            "name": "full-static.min.js",
+            "displayName": "Full (minified)",
+            "raw": 96362,
+            "gzip": 23363,
+            "brotli": 20172
+          }
+        ],
+        "total": {
+          "raw": 194770,
+          "gzip": 47923,
+          "brotli": 41285
+        }
+      },
+      "lazy": {
+        "label": "⚡ Lazy Load Bundle",
+        "files": [
+          {
+            "name": "21.chunk.js",
+            "displayName": "Range Plugin chunk",
+            "raw": 9899,
+            "gzip": 2617,
+            "brotli": 2386
+          },
+          {
+            "name": "37.chunk.js",
+            "displayName": "Timezone Plugin chunk",
+            "raw": 6473,
+            "gzip": 2148,
+            "brotli": 1902
+          },
+          {
+            "name": "lazy-load.js",
+            "displayName": "Main chunk",
+            "raw": 82901,
+            "gzip": 20890,
+            "brotli": 18028
+          }
+        ],
+        "total": {
+          "raw": 99273,
+          "gzip": 25655,
+          "brotli": 22316
+        }
+      }
+    },
+    "esbuild": {
+      "core": {
+        "label": "🎯 Core Bundle",
+        "files": [
+          {
+            "name": "core-only.js",
+            "displayName": "Core (unminified)",
+            "raw": 99738,
+            "gzip": 22090,
+            "brotli": 18791
+          },
+          {
+            "name": "core-only.min.js",
+            "displayName": "Core (minified)",
+            "raw": 81224,
+            "gzip": 20328,
+            "brotli": 17493
+          }
+        ],
+        "total": {
+          "raw": 180962,
+          "gzip": 42418,
+          "brotli": 36284
+        }
+      },
+      "full": {
+        "label": "📦 Full Bundle (with Plugins)",
+        "files": [
+          {
+            "name": "full-static.js",
+            "displayName": "Full (unminified)",
+            "raw": 120789,
+            "gzip": 26626,
+            "brotli": 22575
+          },
+          {
+            "name": "full-static.min.js",
+            "displayName": "Full (minified)",
+            "raw": 97621,
+            "gzip": 24167,
+            "brotli": 20747
+          }
+        ],
+        "total": {
+          "raw": 218410,
+          "gzip": 50793,
+          "brotli": 43322
+        }
+      },
+      "lazy": {
+        "label": "⚡ Lazy Load Bundle",
+        "files": [
+          {
+            "name": "entry-lazy-load.js",
+            "displayName": "Main chunk",
+            "raw": 81414,
+            "gzip": 20423,
+            "brotli": 17578
+          },
+          {
+            "name": "range-4FGRCNOL.js",
+            "displayName": "Range Plugin",
+            "raw": 9795,
+            "gzip": 2556,
+            "brotli": 2319
+          },
+          {
+            "name": "timezone-PBB5NCTC.js",
+            "displayName": "Timezone Plugin",
+            "raw": 6597,
+            "gzip": 2275,
+            "brotli": 1995
+          }
+        ],
+        "total": {
+          "raw": 97806,
+          "gzip": 25254,
+          "brotli": 21892
+        }
+      }
+    }
+  },
+  "treeshaking": {
+    "coreSize": 19630,
+    "fullSize": 23361,
+    "pluginOverhead": 3731,
+    "pluginOverheadPercent": "19.0"
+  }
+}
