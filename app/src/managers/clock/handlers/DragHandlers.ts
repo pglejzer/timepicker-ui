@@ -116,6 +116,8 @@ export class DragHandlers {
     this.removeGlobalListeners();
 
     if (autoSwitchToMinutes && hourElement?.classList.contains('active') && !isMobileView) {
+      hourElement.classList.remove('active');
+      minutesElement?.classList.add('active');
       minutesElement?.click();
       minutesElement?.focus();
     } else if (minutesElement?.classList.contains('active') && this.config.onMinuteCommit) {
