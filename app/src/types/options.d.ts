@@ -339,6 +339,58 @@ export interface RangeOptions {
 }
 
 /**
+ * Time slot definition
+ */
+export interface TimeSlotOption {
+  /**
+   * @description Start time in HH:mm format
+   */
+  start: string;
+
+  /**
+   * @description End time in HH:mm format
+   */
+  end: string;
+
+  /**
+   * @description Optional label for the slot
+   */
+  label?: string;
+}
+
+/**
+ * Slots/Availability configuration (opt-in)
+ */
+export interface SlotsOptions {
+  /**
+   * @description Enable slots mode
+   * @default false
+   */
+  enabled?: boolean;
+
+  /**
+   * @description Available time slots
+   */
+  available?: TimeSlotOption[];
+
+  /**
+   * @description Booked time slots (blocked)
+   */
+  booked?: TimeSlotOption[];
+
+  /**
+   * @description Behavior when selection overlaps booked slot
+   * @default 'warn'
+   */
+  overlap?: 'allow' | 'warn' | 'deny';
+
+  /**
+   * @description Slot duration in minutes (for display grid)
+   */
+  slotDuration?: number;
+}
+
+/**
  * Event callbacks configuration
  */
 export interface CallbacksOptions {
@@ -419,4 +471,5 @@ export interface TimepickerOptions {
   callbacks?: CallbacksOptions;
   timezone?: TimezoneOptions;
   range?: RangeOptions;
+  slots?: SlotsOptions;
 }

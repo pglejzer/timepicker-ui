@@ -1,0 +1,95 @@
+@use '../variables.scss' as *;
+
+:root {
+  --tp-slot-available-fill: rgba(46, 125, 50, 0.2);
+  --tp-slot-available-stroke: #2e7d32;
+
+  --tp-slot-booked-fill: rgba(198, 40, 40, 0.15);
+  --tp-slot-booked-stroke: #c62828;
+
+  --tp-slot-overlap-fill: rgba(230, 81, 0, 0.2);
+  --tp-slot-overlap-stroke: #e65100;
+}
+
+.tp-ui-slots-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--tp-radius-circle);
+  pointer-events: none;
+  z-index: -1; // Behind hour numbers - slots should never cover digits
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tp-ui-slots-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.tp-ui-slot-arc {
+  pointer-events: none;
+
+  &__fill {
+    fill: var(--slot-fill-color);
+    stroke: none;
+    opacity: 1;
+    transition: opacity 150ms ease;
+  }
+
+  &__cap {
+    fill: var(--slot-stroke-color);
+    stroke: var(--tp-surface);
+    stroke-width: 2;
+    opacity: 0.9;
+    transition: opacity 150ms ease;
+
+    &--start {
+    }
+
+    &--end {
+      opacity: 0.7;
+    }
+  }
+
+  &--available {
+    --slot-fill-color: var(--tp-slot-available-fill);
+    --slot-stroke-color: var(--tp-slot-available-stroke);
+  }
+
+  &--booked {
+    --slot-fill-color: var(--tp-slot-booked-fill);
+    --slot-stroke-color: var(--tp-slot-booked-stroke);
+
+    .tp-ui-slot-arc__fill {
+      fill: var(--slot-fill-color);
+    }
+  }
+}
+
+[data-theme='dark'] {
+  --tp-slot-available-fill: rgba(76, 175, 80, 0.25);
+  --tp-slot-available-stroke: #81c784;
+
+  --tp-slot-booked-fill: rgba(239, 83, 80, 0.2);
+  --tp-slot-booked-stroke: #ef5350;
+}
+
+[data-theme='m3-green'] {
+  --tp-slot-available-fill: rgba(102, 187, 106, 0.2);
+  --tp-slot-available-stroke: #66bb6a;
+
+  --tp-slot-booked-fill: rgba(239, 83, 80, 0.15);
+  --tp-slot-booked-stroke: #ef5350;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tp-ui-slot-arc__fill,
+  .tp-ui-slot-arc__cap {
+    transition: none;
+  }
+}
+

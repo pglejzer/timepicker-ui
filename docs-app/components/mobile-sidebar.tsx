@@ -65,9 +65,7 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
               </nav>
             </div>
 
-            <div className="p-4" onClick={() => setIsOpen(false)}>
-              {children}
-            </div>
+            <div className="p-4">{children}</div>
           </div>
         </>
       )}

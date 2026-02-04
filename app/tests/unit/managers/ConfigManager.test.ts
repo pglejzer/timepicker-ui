@@ -634,9 +634,7 @@ describe('ConfigManager', () => {
       jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutesInput);
       jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
 
-      // First call expands
       configManager.toggleMobileClockFace();
-      // Second call should be blocked by isAnimating
       configManager.toggleMobileClockFace();
 
       jest.advanceTimersByTime(500);

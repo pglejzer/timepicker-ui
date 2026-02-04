@@ -1,10 +1,12 @@
 import { TimepickerUI, PluginRegistry } from '../src/index';
 import { RangePlugin } from '../src/plugins/range';
 import { TimezonePlugin } from '../src/plugins/timezone';
+import { SlotsPlugin } from '../src/plugins/slots';
 import { codeToHtml } from 'shiki';
 
 PluginRegistry.register(RangePlugin);
 PluginRegistry.register(TimezonePlugin);
+PluginRegistry.register(SlotsPlugin);
 
 console.log(
   `%c
@@ -588,6 +590,60 @@ const range24hPicker = new TimepickerUI('#range-picker-24h', {
   },
 });
 range24hPicker.create();
+
+const slotsPicker = new TimepickerUI('#slots-picker', {
+  clock: { type: '24h' },
+  ui: { enableSwitchIcon: true },
+  slots: {
+    enabled: true,
+    available: [
+      { start: '09:00', end: '12:00' },
+      { start: '14:00', end: '18:00' },
+    ],
+    booked: [{ start: '10:00', end: '11:00', label: 'Meeting' }],
+    overlap: 'warn',
+  },
+});
+slotsPicker.create();
+
+const slotsRangePicker = new TimepickerUI('#slots-range-picker', {
+  clock: { type: '24h' },
+  ui: { enableSwitchIcon: true },
+  range: {
+    enabled: true,
+    minDuration: 30,
+    maxDuration: 240,
+    fromLabel: 'Start',
+    toLabel: 'End',
+  },
+  slots: {
+    enabled: true,
+    available: [
+      { start: '09:00', end: '12:00' },
+      { start: '13:00', end: '17:00' },
+    ],
+    booked: [
+      { start: '10:00', end: '10:30', label: 'Call' },
+      { start: '14:00', end: '15:00', label: 'Meeting' },
+    ],
+    overlap: 'deny',
+  },
+  callbacks: {
+    onRangeConfirm: (data) => {
+      console.log('Slots+Range confirmed:', data.from, '–', data.to);
+      const display = document.getElementById('slots-range-display');
+      const status = document.getElementById('slots-range-status');
+      if (display) {
+        display.textContent = `${data.from} – ${data.to}`;
+      }
+      if (status) {
+        status.textContent = 'Booked!';
+        status.classList.add('text-green-600', 'dark:text-green-400');
+      }
+    },
+  },
+});
+slotsRangePicker.create();
 
 const themes = [
   'basic',

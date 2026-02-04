@@ -515,7 +515,6 @@ describe('Lifecycle', () => {
       lifecycle.init();
       lifecycle.mount();
 
-      // unmount with update = true
       // @ts-expect-error - testing internal debounce call
       lifecycle.unmount(() => {}, true);
     });

@@ -290,6 +290,11 @@ export class Lifecycle {
       range.init();
     }
 
+    const slots = this.managers.getPlugin('slots');
+    if (slots) {
+      slots.init();
+    }
+
     this.managers.events.handleCancelButton();
     this.managers.events.handleOkButton();
     this.managers.events.handleHourEvents();

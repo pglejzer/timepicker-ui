@@ -79,6 +79,14 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     fromLabel: 'From',
     toLabel: 'To',
   },
+
+  slots: {
+    enabled: false,
+    available: undefined,
+    booked: undefined,
+    overlap: 'warn',
+    slotDuration: undefined,
+  },
 };
 
 export function mergeOptions(userOptions: TimepickerOptions = {}): Required<TimepickerOptions> {
@@ -110,6 +118,10 @@ export function mergeOptions(userOptions: TimepickerOptions = {}): Required<Time
     range: {
       ...DEFAULT_OPTIONS.range,
       ...(userOptions.range || {}),
+    },
+    slots: {
+      ...DEFAULT_OPTIONS.slots,
+      ...(userOptions.slots || {}),
     },
   };
 }
