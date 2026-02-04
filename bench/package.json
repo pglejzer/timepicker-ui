@@ -1,0 +1,44 @@
+{
+  "name": "timepicker-ui-bench",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "analyze:rollup:core": "rollup -c config/rollup/rollup.config.core.js",
+    "analyze:rollup:full": "rollup -c config/rollup/rollup.config.full.js",
+    "analyze:rollup:lazy": "rollup -c config/rollup/rollup.config.lazy.js",
+    "analyze:vite:core": "vite build --config config/vite/vite.config.core.js && vite build --config config/vite/vite.config.core.unmin.js",
+    "analyze:vite:full": "vite build --config config/vite/vite.config.full.js && vite build --config config/vite/vite.config.full.unmin.js",
+    "analyze:vite:lazy": "vite build --config config/vite/vite.config.lazy.js",
+    "analyze:webpack:core": "webpack --config config/webpack/webpack.config.core.js",
+    "analyze:webpack:full": "webpack --config config/webpack/webpack.config.full.js",
+    "analyze:webpack:lazy": "webpack --config config/webpack/webpack.config.lazy.js",
+    "analyze:esbuild:core": "node config/esbuild/esbuild.config.core.js",
+    "analyze:esbuild:full": "node config/esbuild/esbuild.config.full.js",
+    "analyze:esbuild:lazy": "node config/esbuild/esbuild.config.lazy.js",
+    "analyze:all": "npm run analyze:rollup:core && npm run analyze:rollup:full && npm run analyze:rollup:lazy && npm run analyze:vite:core && npm run analyze:vite:full && npm run analyze:vite:lazy && npm run analyze:webpack:core && npm run analyze:webpack:full && npm run analyze:webpack:lazy && npm run analyze:esbuild:core && npm run analyze:esbuild:full && npm run analyze:esbuild:lazy",
+    "compare": "node scripts/compare-results.js",
+    "report": "npm run analyze:all && npm run compare",
+    "update-docs": "npm run report && node scripts/update-docs-bundle-stats.js"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.9",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "compression-webpack-plugin": "^11.1.0",
+    "esbuild": "^0.24.2",
+    "gzip-size": "^7.0.0",
+    "rollup": "^4.57.1",
+    "rollup-plugin-analyzer": "^4.0.0",
+    "rollup-plugin-visualizer": "^6.0.5",
+    "terser-webpack-plugin": "^5.3.11",
+    "vite": "^6.0.11",
+    "vite-plugin-compression": "^0.5.1",
+    "webpack": "^5.97.1",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "timepicker-ui": "file:.."
+  }
+}

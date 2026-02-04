@@ -49,6 +49,7 @@ const navigation = [
     links: [
       { title: "Changelog", href: "/docs/changelog" },
       { title: "Roadmap", href: "/docs/roadmap" },
+      { title: "Bundle Analysis", href: "/bundle-stats" },
     ],
   },
   {
@@ -66,7 +67,15 @@ export function DocsSidebar() {
   );
 
   const toggleSection = (title: string) => {
-    setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
+    if (window.innerWidth < 768) {
+      setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
+    }
+  };
+
+  const handleLinkClick = () => {
+    if (window.innerWidth < 768) {
+      window.dispatchEvent(new CustomEvent("toggle-mobile-sidebar"));
+    }
   };
 
   return (
@@ -98,6 +107,7 @@ export function DocsSidebar() {
                       <li key={link.href}>
                         <Link
                           href={link.href}
+                          onClick={handleLinkClick}
                           className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
                             isActive
                               ? "bg-primary/10 font-medium text-primary"
