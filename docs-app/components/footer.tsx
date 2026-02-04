@@ -152,6 +152,14 @@ export function Footer() {
                   Changelog
                 </a>
               </li>
+              <li>
+                <Link
+                  href="/bundle-stats"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Bundle Analysis
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
