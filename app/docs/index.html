@@ -1592,6 +1592,157 @@ range24hPicker.create();</code></pre>
             </div>
           </div>
         </section>
+
+        <!-- Slots / Availability Section -->
+        <section class="mb-12">
+          <div
+            id="slots-mode"
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Slots / Availability</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Visualize available and booked time slots - perfect for booking systems, scheduling, and
+              reservation interfaces.
+            </p>
+
+            <div class="mt-6 grid md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <input
+                  id="slots-picker"
+                  type="text"
+                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  value=""
+                  placeholder="Select available time"
+                />
+                <div class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm">
+                  <div class="flex items-center gap-4 mb-2">
+                    <span class="flex items-center gap-2">
+                      <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                      <span class="text-gray-700 dark:text-gray-300">Available</span>
+                    </span>
+                    <span class="flex items-center gap-2">
+                      <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                      <span class="text-gray-700 dark:text-gray-300">Booked</span>
+                    </span>
+                  </div>
+                  <p class="text-gray-600 dark:text-gray-400 text-xs">
+                    Available: 09:00-12:00, 14:00-18:00 | Booked: 10:00-11:00 (Meeting)
+                  </p>
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <pre data-lang="js">
+import { SlotsPlugin } from 'timepicker-ui/plugins/slots';
+PluginRegistry.register(SlotsPlugin);
+
+const slotsPicker = new TimepickerUI('#slots-picker', {
+  clock: { type: '24h' },
+  slots: {
+    enabled: true,
+    available: [
+      { start: '09:00', end: '12:00' },
+      { start: '14:00', end: '18:00' },
+    ],
+    booked: [
+      { start: '10:00', end: '11:00', label: 'Meeting' },
+    ],
+    overlap: 'warn',
+  },
+  callbacks: {
+    onSlotsConflict: (data) => {
+      console.log('Conflict detected:', data.overlap);
+    },
+  },
+});
+slotsPicker.create();</pre
+                >
+              </div>
+            </div>
+
+            <div
+              class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"
+            >
+              <p class="text-sm text-blue-800 dark:text-blue-300">
+                <strong>Pro tip:</strong> Combine with Range Plugin for booking flows! The Slots plugin
+                automatically blocks booked times and validates selections. Use
+                <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">overlap: 'deny'</code> to prevent
+                booking over existing reservations.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slots with Range Section -->
+        <section class="mb-12">
+          <div
+            id="slots-range-mode"
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Slots + Range Mode</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Combine slots with range selection for complete booking experiences.
+            </p>
+
+            <div class="mt-6 grid md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <input
+                  id="slots-range-picker"
+                  type="text"
+                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  value=""
+                  placeholder="Book a time slot"
+                />
+                <div
+                  id="slots-range-result"
+                  class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300"
+                >
+                  Booking: <span id="slots-range-display">--:-- – --:--</span>
+                  <br />
+                  Status: <span id="slots-range-status" class="font-medium">Ready</span>
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <pre data-lang="js">
+const slotsRangePicker = new TimepickerUI('#slots-range-picker', {
+  clock: { type: '12h' },
+  range: {
+    enabled: true,
+    minDuration: 30,
+    maxDuration: 240,
+    fromLabel: 'Start',
+    toLabel: 'End',
+  },
+  slots: {
+    enabled: true,
+    available: [
+      { start: '09:00', end: '12:00' },
+      { start: '13:00', end: '17:00' },
+    ],
+    booked: [
+      { start: '10:00', end: '10:30', label: 'Call' },
+      { start: '14:00', end: '15:00', label: 'Meeting' },
+    ],
+    overlap: 'deny',
+  },
+  callbacks: {
+    onSlotsConflict: (data) => {
+      if (data.action === 'deny') {
+        alert('Cannot book over existing reservations!');
+      }
+    },
+    onRangeConfirm: (data) => {
+      console.log('Booked:', data.from, '–', data.to);
+    },
+  },
+});
+slotsRangePicker.create();</pre
+                >
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </main>
 

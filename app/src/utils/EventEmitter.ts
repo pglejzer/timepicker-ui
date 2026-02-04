@@ -17,6 +17,8 @@ import type {
   RangeMinuteCommitEventData,
   RangeGetDisabledTimeEventData,
   RangeUpdateDisabledEventData,
+  SlotsDisabledEventData,
+  SlotsConflictEventData,
   ErrorEventData,
 } from '../types/types';
 
@@ -41,6 +43,8 @@ export interface TimepickerEventMap {
   'range:minute:commit': RangeMinuteCommitEventData;
   'range:get-disabled-time': RangeGetDisabledTimeEventData;
   'range:update-disabled': RangeUpdateDisabledEventData;
+  'slots:disabled': SlotsDisabledEventData;
+  'slots:conflict': SlotsConflictEventData;
   'animation:clock': Record<string, never>;
   'animation:start': Record<string, never>;
   'animation:end': Record<string, never>;

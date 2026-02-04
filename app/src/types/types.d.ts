@@ -87,6 +87,30 @@ export type RangeGetDisabledTimeEventData = Record<string, never>;
 
 export type RangeUpdateDisabledEventData = Record<string, never>;
 
+export type SlotsDisabledEventData = {
+  hours: string[];
+  minutes: string[];
+};
+
+export type SlotsConflictEventData = {
+  overlap: {
+    hasOverlap: boolean;
+    overlappingSlots: Array<{
+      start: { hour: number; minute: number };
+      end: { hour: number; minute: number };
+      label?: string;
+      status: 'available' | 'booked';
+      crossesMidnight: boolean;
+    }>;
+    overlapType: 'none' | 'partial' | 'full';
+  };
+  selectedRange: {
+    from: { hour: number; minute: number };
+    to: { hour: number; minute: number };
+  };
+  action: 'warn' | 'deny';
+};
+
 /** Payload when validation error occurs */
 export type ErrorEventData = {
   error: string;
