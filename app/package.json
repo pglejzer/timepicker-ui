@@ -115,7 +115,7 @@
     "rollup-plugin-typescript2": "^0.36.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "sass": "1.89.2",
-    "sass-loader": "16.0.5",
+    "sass-loader": "16.0.7",
     "shiki": "^3.8.1",
     "style-loader": "4.0.0",
     "svg-sprite-loader": "6.0.11",
