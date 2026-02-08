@@ -59,6 +59,28 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_412 = {
+  fixed: [
+    {
+      title: "Range button text visibility",
+      description:
+        "Fixed text visibility in range buttons for crane, crane-straight, dark and cyberpunk themes",
+    },
+    {
+      title: "Documentation examples",
+      description:
+        "Corrected timezone option property name from defaultTimezone to default in all examples",
+    },
+  ],
+  added: [
+    {
+      title: "Auto-switch to minutes",
+      description:
+        "Hour and minute input elements automatically update active state when hour is selected on desktop",
+    },
+  ],
+};
+
 const CHANGELOG_411 = {
   fixed: [
     {
@@ -243,8 +265,26 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.1.1</strong> - Released February 1, 2026
+        <strong>v4.1.2</strong> - Released February 8, 2026
       </InfoBox>
+
+      <Section icon={Bug} title="Version 4.1.2 - February 8, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_412.fixed}
+          />
+
+          <ChangeSection
+            icon={Sparkles}
+            label="Added"
+            color="green-500"
+            items={CHANGELOG_412.added}
+          />
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.1.1 - February 1, 2026">
         <div className="space-y-4">

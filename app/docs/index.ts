@@ -136,6 +136,126 @@ const themeCyberpunkPicker = new TimepickerUI('#theme-cyberpunk', {
 });
 themeCyberpunkPicker.create();
 
+const timezoneBasic = new TimepickerUI('#timezone-basic', {
+  ui: { theme: 'basic', enableSwitchIcon: true },
+  timezone: { enabled: true, default: 'America/New_York' },
+});
+timezoneBasic.create();
+
+const timezoneCrane = new TimepickerUI('#timezone-crane', {
+  ui: { theme: 'crane', enableSwitchIcon: true },
+  timezone: { enabled: true, default: 'Europe/London' },
+});
+timezoneCrane.create();
+
+const timezoneCraneStraight = new TimepickerUI('#timezone-crane-straight', {
+  ui: { theme: 'crane-straight', enableSwitchIcon: true },
+  timezone: { enabled: true, default: 'Asia/Tokyo' },
+});
+timezoneCraneStraight.create();
+
+const timezoneM3 = new TimepickerUI('#timezone-m3', {
+  ui: { theme: 'm3-green', enableSwitchIcon: true },
+  timezone: { enabled: true, default: 'America/Los_Angeles' },
+});
+timezoneM3.create();
+
+const timezoneDark = new TimepickerUI('#timezone-dark', {
+  ui: { theme: 'dark', enableSwitchIcon: true },
+  timezone: { enabled: true, default: 'Europe/Paris' },
+});
+timezoneDark.create();
+
+const timezoneM2 = new TimepickerUI('#timezone-m2', {
+  ui: { theme: 'm2', enableSwitchIcon: true },
+  timezone: { enabled: true, default: 'Australia/Sydney' },
+});
+timezoneM2.create();
+
+const timezoneGlassmorphic = new TimepickerUI('#timezone-glassmorphic', {
+  ui: { theme: 'glassmorphic', enableSwitchIcon: true },
+  timezone: { enabled: true, default: 'America/Chicago' },
+});
+timezoneGlassmorphic.create();
+
+const timezonePastel = new TimepickerUI('#timezone-pastel', {
+  ui: { theme: 'pastel', enableSwitchIcon: true },
+  timezone: { enabled: true, default: 'Europe/Berlin' },
+});
+timezonePastel.create();
+
+const timezoneAI = new TimepickerUI('#timezone-ai', {
+  ui: { theme: 'ai', enableSwitchIcon: true },
+  timezone: { enabled: true, default: 'Asia/Dubai' },
+});
+timezoneAI.create();
+
+const timezoneCyberpunk = new TimepickerUI('#timezone-cyberpunk', {
+  ui: { theme: 'cyberpunk', enableSwitchIcon: true },
+  timezone: { enabled: true, default: 'America/Toronto' },
+});
+timezoneCyberpunk.create();
+
+const rangeBasic = new TimepickerUI('#range-basic', {
+  ui: { theme: 'basic', enableSwitchIcon: true },
+  range: { enabled: true },
+});
+rangeBasic.create();
+
+const rangeCrane = new TimepickerUI('#range-crane', {
+  ui: { theme: 'crane', enableSwitchIcon: true },
+  range: { enabled: true },
+});
+rangeCrane.create();
+
+const rangeCraneStraight = new TimepickerUI('#range-crane-straight', {
+  ui: { theme: 'crane-straight', enableSwitchIcon: true },
+  range: { enabled: true },
+});
+rangeCraneStraight.create();
+
+const rangeM3 = new TimepickerUI('#range-m3', {
+  ui: { theme: 'm3-green', enableSwitchIcon: true },
+  range: { enabled: true },
+});
+rangeM3.create();
+
+const rangeDark = new TimepickerUI('#range-dark', {
+  ui: { theme: 'dark', enableSwitchIcon: true },
+  range: { enabled: true },
+});
+rangeDark.create();
+
+const rangeM2 = new TimepickerUI('#range-m2', {
+  ui: { theme: 'm2', enableSwitchIcon: true },
+  range: { enabled: true },
+});
+rangeM2.create();
+
+const rangeGlassmorphic = new TimepickerUI('#range-glassmorphic', {
+  ui: { theme: 'glassmorphic', enableSwitchIcon: true },
+  range: { enabled: true },
+});
+rangeGlassmorphic.create();
+
+const rangePastel = new TimepickerUI('#range-pastel', {
+  ui: { theme: 'pastel', enableSwitchIcon: true },
+  range: { enabled: true },
+});
+rangePastel.create();
+
+const rangeAI = new TimepickerUI('#range-ai', {
+  ui: { theme: 'ai', enableSwitchIcon: true },
+  range: { enabled: true },
+});
+rangeAI.create();
+
+const rangeCyberpunk = new TimepickerUI('#range-cyberpunk', {
+  ui: { theme: 'cyberpunk', enableSwitchIcon: true },
+  range: { enabled: true },
+});
+rangeCyberpunk.create();
+
 const disabledHoursPicker = new TimepickerUI('#disabled-hours', {
   clock: { type: '24h', disabledTime: { hours: [1, 2, 3, 22, 23] } },
 });
