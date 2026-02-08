@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.1.2] - 2026-02-08
+
+### Fixed
+
+- Range button text visibility for crane, crane-straight, dark and cyberpunk themes. Added missing on-surface color variable for proper contrast
+- Documentation examples corrected to use correct timezone option property name. Changed from incorrect defaultTimezone to default as defined in TimezoneOptions interface
+
+### Added
+
+- Auto-switch from hours to minutes on desktop when hour is selected. Hour and minute input elements automatically update active state and focus when autoSwitchToMinutes is enabled
+
+---
+
 ## [4.1.1] - 2026-02-01
 
 ### Fixed
