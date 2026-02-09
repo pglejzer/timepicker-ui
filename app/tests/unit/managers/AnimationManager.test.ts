@@ -155,5 +155,39 @@ describe('AnimationManager', () => {
       expect(modal.classList.contains('show')).toBe(false);
     });
   });
-});
 
+  describe('animations disabled', () => {
+    it('should run callback immediately when animation is disabled', () => {
+      const noAnimOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: { ...DEFAULT_OPTIONS.ui, animation: false },
+      };
+      coreState = new CoreState(mockElement, noAnimOptions, 'test-no-anim');
+      animationManager = new AnimationManager(coreState, emitter);
+
+      const modal = document.createElement('div') as HTMLDivElement;
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+
+      animationManager.setAnimationToOpen();
+
+      expect(modal.classList.contains('opacity')).toBe(true);
+      expect(modal.classList.contains('show')).toBe(true);
+    });
+
+    it('should not run handleAnimationClock when animation disabled', () => {
+      const noAnimOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: { ...DEFAULT_OPTIONS.ui, animation: false },
+      };
+      coreState = new CoreState(mockElement, noAnimOptions, 'test-no-anim');
+      animationManager = new AnimationManager(coreState, emitter);
+
+      const clockFace = document.createElement('div');
+      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
+
+      animationManager.handleAnimationClock();
+
+      expect(clockFace.classList.contains('tp-ui-clock-animation')).toBe(false);
+    });
+  });
+});
