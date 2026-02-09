@@ -103,17 +103,21 @@
       border: 2px solid var(--tp-outline);
     }
 
-    &:hover {
-      color: var(--tp-text);
-      background-color: var(--tp-surface-hover);
+    @media (hover: hover) {
+      &:hover {
+        color: var(--tp-text);
+        background-color: var(--tp-surface-hover);
+      }
     }
 
     &.active {
       color: var(--tp-on-primary-container);
       background-color: var(--tp-primary-container);
 
-      &:hover {
-        color: var(--tp-on-primary-container);
+      @media (hover: hover) {
+        &:hover {
+          color: var(--tp-on-primary-container);
+        }
       }
     }
 

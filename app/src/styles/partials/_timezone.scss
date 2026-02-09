@@ -37,9 +37,11 @@
     border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
 
-  &:hover {
-    background-color: var(--tp-surface-hover);
-    border-bottom-color: var(--tp-text);
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--tp-surface-hover);
+      border-bottom-color: var(--tp-text);
+    }
   }
 
   &:focus {
@@ -199,4 +201,3 @@
     font-size: 13px;
   }
 }
-

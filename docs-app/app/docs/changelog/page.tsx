@@ -59,6 +59,48 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_413 = {
+  fixed: [
+    {
+      title: "Mobile hover state persistence",
+      description:
+        "Fixed hover state remaining on hour/minute inputs and AM/PM buttons after touch events on mobile devices",
+    },
+    {
+      title: "Range mode AM/PM state",
+      description:
+        "Fixed AM/PM remaining selected when switching from filled 'from' to empty 'to' in range mode",
+    },
+    {
+      title: "Range mode input updates",
+      description:
+        "Input value now updates only on confirm instead of during selection in range mode",
+    },
+    {
+      title: "Mobile view class assignment",
+      description:
+        "Added missing mobile class to wrapper-type-time, AM/PM buttons and input-ripple-wrapper when toggling mobile view",
+    },
+    {
+      title: "Input readonly removal on view switch",
+      description:
+        "Fixed readonly attribute not being removed when switching from desktop to mobile view with enableSwitchIcon",
+    },
+    {
+      title: "Dynamic input validation on view switch",
+      description:
+        "Mobile input validation now works when switching views - blur handlers check readonly attribute dynamically instead of static options",
+    },
+  ],
+  added: [
+    {
+      title: "Range plugin TypeScript types",
+      description:
+        "Exported RangeOptions, RangeConfirmEventData, RangeSwitchEventData, RangeValidationEventData for better type safety",
+    },
+  ],
+};
+
 const CHANGELOG_412 = {
   fixed: [
     {
@@ -265,8 +307,26 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.1.2</strong> - Released February 8, 2026
+        <strong>v4.1.3</strong> - Released February 9, 2026
       </InfoBox>
+
+      <Section icon={Bug} title="Version 4.1.3 - February 9, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_413.fixed}
+          />
+
+          <ChangeSection
+            icon={Sparkles}
+            label="Added"
+            color="green-500"
+            items={CHANGELOG_413.added}
+          />
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.1.2 - February 8, 2026">
         <div className="space-y-4">
