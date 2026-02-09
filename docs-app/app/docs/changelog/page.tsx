@@ -62,7 +62,7 @@ function ChangeSection({
 const CHANGELOG_414 = {
   fixed: [
     {
-      title: "iOS Mobile hover state fix [CRITICAL]",
+      title: "iOS Mobile hover state fix",
       description:
         "v4.1.3 didn't fix the hover bug on all mobile devices, especially iOS Safari. Enhanced CSS with additional touch-action properties and improved media query specificity to completely prevent hover state persistence on all mobile browsers",
     },
