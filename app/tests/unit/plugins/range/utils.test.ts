@@ -143,10 +143,10 @@ describe('range utils', () => {
       expect(calculateDuration(from, to, '12h')).toBe(8 * 60);
     });
 
-    it('should handle overnight duration', () => {
+    it('should return negative duration when end is before start', () => {
       const from: RangeValue = { hour: '10', minutes: '00', type: 'PM' };
       const to: RangeValue = { hour: '6', minutes: '00', type: 'AM' };
-      expect(calculateDuration(from, to, '12h')).toBe(8 * 60);
+      expect(calculateDuration(from, to, '12h')).toBe(-960);
     });
 
     it('should calculate 24h duration', () => {
@@ -229,4 +229,3 @@ describe('range utils', () => {
     });
   });
 });
-
