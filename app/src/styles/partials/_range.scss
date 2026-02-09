@@ -25,6 +25,8 @@
   border-radius: var(--tp-radius-md);
   cursor: pointer;
   transition: background-color var(--tp-duration-fast) var(--tp-easing-standard);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 
   &::after {
     content: '';
@@ -43,7 +45,7 @@
     outline-offset: var(--tp-outline-offset);
   }
 
-  @media (hover: hover) {
+  @media (hover: hover) and (pointer: fine) {
     &:not(.active):hover {
       background: rgba(var(--tp-on-surface-rgb), var(--tp-opacity-hover));
     }

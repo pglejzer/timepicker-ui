@@ -65,7 +65,11 @@ export class RangeState {
   }
 
   canConfirm(): boolean {
-    return this.isFromComplete() && this.isToComplete();
+    if (!this.isFromComplete() || !this.isToComplete()) return false;
+
+    const duration = this.getDuration();
+
+    return duration > 0;
   }
 
   setActivePart(part: RangePart): boolean {
@@ -174,4 +178,3 @@ export class RangeState {
     this.previewValue = null;
   }
 }
-

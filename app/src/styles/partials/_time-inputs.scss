@@ -89,6 +89,8 @@
     width: var(--tp-size-input);
     text-align: center;
     color: var(--tp-text);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 
     &.mobile {
       height: 72px;
@@ -103,7 +105,7 @@
       border: 2px solid var(--tp-outline);
     }
 
-    @media (hover: hover) {
+    @media (hover: hover) and (pointer: fine) {
       &:hover {
         color: var(--tp-text);
         background-color: var(--tp-surface-hover);
@@ -114,7 +116,7 @@
       color: var(--tp-on-primary-container);
       background-color: var(--tp-primary-container);
 
-      @media (hover: hover) {
+      @media (hover: hover) and (pointer: fine) {
         &:hover {
           color: var(--tp-on-primary-container);
         }
