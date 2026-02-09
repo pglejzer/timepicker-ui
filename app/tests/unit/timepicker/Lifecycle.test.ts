@@ -55,6 +55,41 @@ describe('Lifecycle', () => {
       lifecycle.init();
       expect(coreState.isInitialized).toBe(false);
     });
+
+    it('should set isDestroyed to true and return when init throws error', () => {
+      jest.spyOn(managers.config, 'updateInputValueWithCurrentTimeOnStart').mockImplementation(() => {
+        throw new Error('Test error');
+      });
+
+      lifecycle.init();
+
+      expect(coreState.isDestroyed).toBe(true);
+      expect(coreState.isInitialized).toBe(false);
+    });
+
+    it('should not call handleOpenOnClick when inline mode is enabled', () => {
+      const inlineOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          inline: {
+            enabled: true,
+            containerId: 'test-container',
+          },
+        },
+      };
+
+      const inlineCore = new CoreState(mockElement, inlineOptions, 'test-inline-id');
+      const inlineEmitter = new EventEmitter<TimepickerEventMap>();
+      const inlineManagers = new Managers(inlineCore, inlineEmitter);
+      const inlineLifecycle = new Lifecycle(inlineCore, inlineManagers, inlineEmitter);
+
+      const handleOpenSpy = jest.spyOn(inlineManagers.events, 'handleOpenOnClick');
+
+      inlineLifecycle.init();
+
+      expect(handleOpenSpy).not.toHaveBeenCalled();
+    });
   });
 
   describe('mount', () => {

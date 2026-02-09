@@ -43,8 +43,10 @@
     outline-offset: var(--tp-outline-offset);
   }
 
-  &:not(.active):hover {
-    background: rgba(var(--tp-on-surface-rgb), var(--tp-opacity-hover));
+  @media (hover: hover) {
+    &:not(.active):hover {
+      background: rgba(var(--tp-on-surface-rgb), var(--tp-opacity-hover));
+    }
   }
 
   &.active {
@@ -88,4 +90,3 @@
   opacity: var(--tp-opacity-disabled);
   pointer-events: none;
 }
-

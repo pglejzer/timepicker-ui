@@ -244,6 +244,7 @@ export default class RangeManager {
     const toStr = to ? formatDisplayTime(to) : '--:--';
     const duration = this.state.getDuration();
 
+    this.ui.updateInputValue();
     this.emitter.emit('range:confirm', { from: fromStr, to: toStr, duration });
   }
 

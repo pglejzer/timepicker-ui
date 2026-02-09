@@ -300,23 +300,18 @@ describe('RangeUI', () => {
   describe('updateAll', () => {
     it('should call all update methods', () => {
       const okBtn = document.createElement('button');
-      const input = document.createElement('input') as HTMLInputElement;
       mockCore.getOkButton.mockReturnValue(okBtn);
-      mockCore.getInput.mockReturnValue(input);
 
       const ui = new RangeUI(mockCore as never, state);
       const updateTabsSpy = jest.spyOn(ui, 'updateTabs');
       const updateTimeDisplaySpy = jest.spyOn(ui, 'updateTimeDisplay');
       const updateOkButtonSpy = jest.spyOn(ui, 'updateOkButton');
-      const updateInputValueSpy = jest.spyOn(ui, 'updateInputValue');
 
       ui.updateAll();
 
       expect(updateTabsSpy).toHaveBeenCalled();
       expect(updateTimeDisplaySpy).toHaveBeenCalled();
       expect(updateOkButtonSpy).toHaveBeenCalled();
-      expect(updateInputValueSpy).toHaveBeenCalled();
     });
   });
 });
-

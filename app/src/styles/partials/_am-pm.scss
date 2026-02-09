@@ -43,9 +43,11 @@
     height: 100%;
     color: var(--tp-am-pm-text-unselected);
 
-    &:hover {
-      color: var(--tp-am-pm-text-unselected);
-      background-color: var(--tp-am-pm-active);
+    @media (hover: hover) {
+      &:hover {
+        color: var(--tp-am-pm-text-unselected);
+        background-color: var(--tp-am-pm-active);
+      }
     }
 
     &.active {
@@ -53,8 +55,10 @@
       background-color: var(--tp-am-pm-active);
       pointer-events: none;
 
-      &:hover {
-        color: var(--tp-am-pm-text-selected);
+      @media (hover: hover) {
+        &:hover {
+          color: var(--tp-am-pm-text-selected);
+        }
       }
     }
   }

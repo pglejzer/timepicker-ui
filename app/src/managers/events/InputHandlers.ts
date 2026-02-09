@@ -34,34 +34,34 @@ export class InputHandlers {
     hour.addEventListener('click', handler);
     this.cleanupHandlers.push(() => hour.removeEventListener('click', handler));
 
-    if (this.core.options.ui.editable || this.core.options.ui.mobile) {
-      let previousValue = hour.value;
-      const blurHandler = (): void => {
-        if (this.core.isDestroyed) return;
+    let previousValue = hour.value;
+    const blurHandler = (): void => {
+      if (this.core.isDestroyed) return;
 
-        const is12h = this.core.options.clock.type === '12h';
-        const clampedValue = clampHourValue(hour.value, is12h);
-        hour.value = clampedValue;
-        hour.setAttribute('aria-valuenow', clampedValue);
+      if (hour.hasAttribute('readonly')) return;
 
-        if (hour.value !== previousValue) {
-          previousValue = hour.value;
-          this.emitter.emit('animation:clock', {});
-          this.emitter.emit('select:hour', { hour: hour.value });
+      const is12h = this.core.options.clock.type === '12h';
+      const clampedValue = clampHourValue(hour.value, is12h);
+      hour.value = clampedValue;
+      hour.setAttribute('aria-valuenow', clampedValue);
 
-          const minutes = this.core.getMinutes();
-          const activeTypeMode = this.core.getActiveTypeMode();
-          this.emitter.emit('update', {
-            hour: hour.value,
-            minutes: minutes?.value,
-            type: activeTypeMode?.textContent || undefined,
-          });
-        }
-      };
+      if (hour.value !== previousValue) {
+        previousValue = hour.value;
+        this.emitter.emit('animation:clock', {});
+        this.emitter.emit('select:hour', { hour: hour.value });
 
-      hour.addEventListener('blur', blurHandler);
-      this.cleanupHandlers.push(() => hour.removeEventListener('blur', blurHandler));
-    }
+        const minutes = this.core.getMinutes();
+        const activeTypeMode = this.core.getActiveTypeMode();
+        this.emitter.emit('update', {
+          hour: hour.value,
+          minutes: minutes?.value,
+          type: activeTypeMode?.textContent || undefined,
+        });
+      }
+    };
+
+    hour.addEventListener('blur', blurHandler);
+    this.cleanupHandlers.push(() => hour.removeEventListener('blur', blurHandler));
   }
 
   handleMinutesEvents(): void {
@@ -86,33 +86,33 @@ export class InputHandlers {
     minutes.addEventListener('click', handler);
     this.cleanupHandlers.push(() => minutes.removeEventListener('click', handler));
 
-    if (this.core.options.ui.editable || this.core.options.ui.mobile) {
-      let previousValue = minutes.value;
-      const blurHandler = (): void => {
-        if (this.core.isDestroyed) return;
+    let previousValue = minutes.value;
+    const blurHandler = (): void => {
+      if (this.core.isDestroyed) return;
 
-        const clampedValue = clampMinuteValue(minutes.value);
-        minutes.value = clampedValue;
-        minutes.setAttribute('aria-valuenow', clampedValue);
+      if (minutes.hasAttribute('readonly')) return;
 
-        if (minutes.value !== previousValue) {
-          previousValue = minutes.value;
-          this.emitter.emit('animation:clock', {});
-          this.emitter.emit('select:minute', { minutes: minutes.value });
+      const clampedValue = clampMinuteValue(minutes.value);
+      minutes.value = clampedValue;
+      minutes.setAttribute('aria-valuenow', clampedValue);
 
-          const hour = this.core.getHour();
-          const activeTypeMode = this.core.getActiveTypeMode();
-          this.emitter.emit('update', {
-            hour: hour?.value,
-            minutes: minutes.value,
-            type: activeTypeMode?.textContent || undefined,
-          });
-        }
-      };
+      if (minutes.value !== previousValue) {
+        previousValue = minutes.value;
+        this.emitter.emit('animation:clock', {});
+        this.emitter.emit('select:minute', { minutes: minutes.value });
 
-      minutes.addEventListener('blur', blurHandler);
-      this.cleanupHandlers.push(() => minutes.removeEventListener('blur', blurHandler));
-    }
+        const hour = this.core.getHour();
+        const activeTypeMode = this.core.getActiveTypeMode();
+        this.emitter.emit('update', {
+          hour: hour?.value,
+          minutes: minutes.value,
+          type: activeTypeMode?.textContent || undefined,
+        });
+      }
+    };
+
+    minutes.addEventListener('blur', blurHandler);
+    this.cleanupHandlers.push(() => minutes.removeEventListener('blur', blurHandler));
   }
 
   destroy(): void {
@@ -120,4 +120,3 @@ export class InputHandlers {
     this.cleanupHandlers = [];
   }
 }
-

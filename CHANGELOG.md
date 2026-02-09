@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.1.3] - 2026-02-09
+
+### Fixed
+
+- Mobile hover state persistence on hour and minute inputs after touch events
+- Mobile hover state persistence on AM/PM buttons after touch events
+- Range mode AM/PM state when switching from filled "from" to empty "to" selection
+- Range mode input value updating during selection instead of only on confirm
+- Missing mobile class on wrapper-type-time, AM/PM buttons and input-ripple-wrapper elements when toggling mobile view
+- Input readonly attribute not being removed when switching from desktop to mobile view with enableSwitchIcon
+- Mobile input validation now works dynamically when switching views - blur handlers check readonly attribute instead of static options
+
+### Added
+
+- Exported Range plugin types: RangeOptions, RangeConfirmEventData, RangeSwitchEventData, RangeValidationEventData for better TypeScript support
+
+---
+
 ## [4.1.2] - 2026-02-08
 
 ### Fixed

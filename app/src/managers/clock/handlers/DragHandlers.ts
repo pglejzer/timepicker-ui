@@ -120,6 +120,7 @@ export class DragHandlers {
       minutesElement?.classList.add('active');
       minutesElement?.click();
       minutesElement?.focus();
+      hourElement.blur();
     } else if (minutesElement?.classList.contains('active') && this.config.onMinuteCommit) {
       this.config.onMinuteCommit();
     }

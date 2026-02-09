@@ -215,6 +215,10 @@ export class MobileViewHandler {
     const iconButton = icon?.querySelector('.tp-ui-keyboard-icon');
     const inputWrapper = this.core.getInputWrappers();
     const header = this.core.getHeader();
+    const wrapperTypeTime = modal?.querySelector('.tp-ui-wrapper-type-time');
+    const amButton = modal?.querySelector('.tp-ui-am');
+    const pmButton = modal?.querySelector('.tp-ui-pm');
+    const inputRippleWrappers = modal?.querySelectorAll('.tp-ui-input-ripple-wrapper');
 
     const { iconTemplate, iconTemplateMobile } = this.core.options.ui;
     const { time: timeLabel, mobileTime: mobileTimeLabel } = this.core.options.labels;
@@ -223,11 +227,21 @@ export class MobileViewHandler {
       selectTimeLabel?.classList.add('mobile');
       icon?.classList.add('mobile');
       hourInput?.classList.add('mobile');
+      hourInput?.removeAttribute('readonly');
       minuteInput?.classList.add('mobile');
+      minuteInput?.removeAttribute('readonly');
       hourText?.classList.add('mobile');
       minuteText?.classList.add('mobile');
       header?.classList.add('mobile');
+      wrapperTypeTime?.classList.add('mobile');
+      amButton?.classList.add('mobile');
+      amButton?.classList.remove('tp-ui-ripple');
+      pmButton?.classList.add('mobile');
+      pmButton?.classList.remove('tp-ui-ripple');
       inputWrapper?.forEach((wrapper) => {
+        wrapper.classList.add('mobile');
+      });
+      inputRippleWrappers?.forEach((wrapper) => {
         wrapper.classList.add('mobile');
       });
 
@@ -245,10 +259,24 @@ export class MobileViewHandler {
       icon?.classList.remove('mobile');
       hourInput?.classList.remove('mobile');
       minuteInput?.classList.remove('mobile');
+
+      if (!this.core.options.ui.editable) {
+        hourInput?.setAttribute('readonly', '');
+        minuteInput?.setAttribute('readonly', '');
+      }
+
       hourText?.classList.remove('mobile');
       minuteText?.classList.remove('mobile');
       header?.classList.remove('mobile');
+      wrapperTypeTime?.classList.remove('mobile');
+      amButton?.classList.remove('mobile');
+      amButton?.classList.add('tp-ui-ripple');
+      pmButton?.classList.remove('mobile');
+      pmButton?.classList.add('tp-ui-ripple');
       inputWrapper?.forEach((wrapper) => {
+        wrapper.classList.remove('mobile');
+      });
+      inputRippleWrappers?.forEach((wrapper) => {
         wrapper.classList.remove('mobile');
       });
 
@@ -293,4 +321,3 @@ export class MobileViewHandler {
 
   destroy(): void {}
 }
-

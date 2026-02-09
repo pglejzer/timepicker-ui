@@ -13,6 +13,9 @@ import type {
   SelectPMEventData,
   SwitchViewEventData,
   TimezoneChangeEventData,
+  RangeConfirmEventData,
+  RangeSwitchEventData,
+  RangeValidationEventData,
   ErrorEventData,
 } from './types/types';
 import type {
@@ -23,6 +26,7 @@ import type {
   BehaviorOptions,
   CallbacksOptions,
   TimezoneOptions,
+  RangeOptions,
 } from './types/options';
 import { EventEmitter } from './utils/EventEmitter';
 import type { TimepickerEventMap } from './utils/EventEmitter';
@@ -40,6 +44,7 @@ export {
   BehaviorOptions,
   CallbacksOptions,
   TimezoneOptions,
+  RangeOptions,
   OpenEventData,
   CancelEventData,
   ConfirmEventData,
@@ -52,6 +57,9 @@ export {
   SelectPMEventData,
   SwitchViewEventData,
   TimezoneChangeEventData,
+  RangeConfirmEventData,
+  RangeSwitchEventData,
+  RangeValidationEventData,
   ErrorEventData,
   EventEmitter,
   PluginRegistry,

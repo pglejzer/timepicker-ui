@@ -127,7 +127,5 @@ export class RangeUI {
     this.updateTabs();
     this.updateTimeDisplay();
     this.updateOkButton();
-    this.updateInputValue();
   }
 }
-
