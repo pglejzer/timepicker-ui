@@ -56,11 +56,7 @@ export function calculateDuration(
   if (!fromValue || !toValue) return 0;
 
   const fromMinutes = timeToMinutes(fromValue, clockType);
-  let toMinutes = timeToMinutes(toValue, clockType);
-
-  if (toMinutes <= fromMinutes) {
-    toMinutes += 24 * 60;
-  }
+  const toMinutes = timeToMinutes(toValue, clockType);
 
   return toMinutes - fromMinutes;
 }
@@ -99,4 +95,3 @@ export function parseRangeInput(inputValue: string): { from: RangeValue | null; 
     to: parseTimeString(parts[1]),
   };
 }
-

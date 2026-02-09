@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.1.4] - 2026-02-09
+
+### Fixed
+
+- **[CRITICAL]** Additional mobile hover state fix specifically for iOS devices - v4.1.3 didn't resolve the issue on all mobile devices, especially iOS Safari. Enhanced CSS specificity and touch-action properties to completely prevent hover state persistence
+- Range mode validation - OK button now correctly disabled when end time is before or equal to start time. AM/PM changes automatically trigger validation to prevent invalid range selection
+
+---
+
 ## [4.1.3] - 2026-02-09
 
 ### Fixed

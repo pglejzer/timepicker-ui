@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-09T15:03:04.500Z",
+  "timestamp": "2026-02-09T17:39:37.321Z",
   "results": {
     "rollup": {
       "core": {
@@ -32,22 +32,22 @@
           {
             "name": "full-static.js",
             "displayName": "Full (unminified)",
-            "raw": 99091,
-            "gzip": 24371,
-            "brotli": 21046
+            "raw": 99100,
+            "gzip": 24361,
+            "brotli": 21072
           },
           {
             "name": "full-static.min.js",
             "displayName": "Full (minified)",
-            "raw": 96978,
-            "gzip": 23473,
-            "brotli": 20259
+            "raw": 96984,
+            "gzip": 23470,
+            "brotli": 20266
           }
         ],
         "total": {
-          "raw": 196069,
-          "gzip": 47844,
-          "brotli": 41305
+          "raw": 196084,
+          "gzip": 47831,
+          "brotli": 41338
         }
       },
       "lazy": {
@@ -63,9 +63,9 @@
           {
             "name": "plugin-range.js",
             "displayName": "Range Plugin",
-            "raw": 9786,
-            "gzip": 2566,
-            "brotli": 2322
+            "raw": 9792,
+            "gzip": 2560,
+            "brotli": 2317
           },
           {
             "name": "plugin-timezone.js",
@@ -76,9 +76,9 @@
           }
         ],
         "total": {
-          "raw": 97194,
-          "gzip": 24493,
-          "brotli": 21338
+          "raw": 97200,
+          "gzip": 24487,
+          "brotli": 21333
         }
       }
     },
@@ -113,22 +113,22 @@
           {
             "name": "full-static.js",
             "displayName": "Full (minified)",
-            "raw": 102100,
-            "gzip": 24277,
-            "brotli": 20878
+            "raw": 102106,
+            "gzip": 24275,
+            "brotli": 20920
           },
           {
             "name": "full-static.unmin.js",
             "displayName": "Full (unminified)",
-            "raw": 131176,
-            "gzip": 27386,
-            "brotli": 23248
+            "raw": 131175,
+            "gzip": 27383,
+            "brotli": 23253
           }
         ],
         "total": {
-          "raw": 233276,
-          "gzip": 51663,
-          "brotli": 44126
+          "raw": 233281,
+          "gzip": 51658,
+          "brotli": 44173
         }
       },
       "lazy": {
@@ -139,14 +139,14 @@
             "displayName": "Main chunk",
             "raw": 86476,
             "gzip": 21033,
-            "brotli": 18085
+            "brotli": 18080
           },
           {
-            "name": "plugin-range-D46j3TgW.js",
+            "name": "plugin-range-DOgB-kjA.js",
             "displayName": "Range Plugin",
-            "raw": 10483,
-            "gzip": 2745,
-            "brotli": 2480
+            "raw": 10489,
+            "gzip": 2738,
+            "brotli": 2474
           },
           {
             "name": "plugin-timezone-BX_BRdyg.js",
@@ -157,9 +157,9 @@
           }
         ],
         "total": {
-          "raw": 103875,
-          "gzip": 26053,
-          "brotli": 22575
+          "raw": 103881,
+          "gzip": 26046,
+          "brotli": 22564
         }
       }
     },
@@ -194,22 +194,22 @@
           {
             "name": "full-static.js",
             "displayName": "Full (unminified)",
-            "raw": 99067,
-            "gzip": 24702,
-            "brotli": 21194
+            "raw": 99072,
+            "gzip": 24691,
+            "brotli": 21200
           },
           {
             "name": "full-static.min.js",
             "displayName": "Full (minified)",
-            "raw": 97021,
-            "gzip": 23475,
-            "brotli": 20269
+            "raw": 97027,
+            "gzip": 23472,
+            "brotli": 20274
           }
         ],
         "total": {
-          "raw": 196088,
-          "gzip": 48177,
-          "brotli": 41463
+          "raw": 196099,
+          "gzip": 48163,
+          "brotli": 41474
         }
       },
       "lazy": {
@@ -218,9 +218,9 @@
           {
             "name": "21.chunk.js",
             "displayName": "Range Plugin chunk",
-            "raw": 9902,
-            "gzip": 2618,
-            "brotli": 2384
+            "raw": 9908,
+            "gzip": 2613,
+            "brotli": 2381
           },
           {
             "name": "37.chunk.js",
@@ -238,9 +238,9 @@
           }
         ],
         "total": {
-          "raw": 99932,
-          "gzip": 25771,
-          "brotli": 22404
+          "raw": 99938,
+          "gzip": 25766,
+          "brotli": 22401
         }
       }
     },
@@ -275,21 +275,21 @@
           {
             "name": "full-static.js",
             "displayName": "Full (unminified)",
-            "raw": 121478,
-            "gzip": 26751,
-            "brotli": 22698
+            "raw": 121482,
+            "gzip": 26757,
+            "brotli": 22706
           },
           {
             "name": "full-static.min.js",
             "displayName": "Full (minified)",
-            "raw": 98280,
-            "gzip": 24289,
-            "brotli": 20832
+            "raw": 98285,
+            "gzip": 24285,
+            "brotli": 20824
           }
         ],
         "total": {
-          "raw": 219758,
-          "gzip": 51040,
+          "raw": 219767,
+          "gzip": 51042,
           "brotli": 43530
         }
       },
@@ -300,15 +300,15 @@
             "name": "entry-lazy-load.js",
             "displayName": "Main chunk",
             "raw": 82070,
-            "gzip": 20546,
-            "brotli": 17690
+            "gzip": 20547,
+            "brotli": 17685
           },
           {
-            "name": "range-FD6OFWOE.js",
+            "name": "range-A6PYIGWE.js",
             "displayName": "Range Plugin",
-            "raw": 9798,
-            "gzip": 2558,
-            "brotli": 2320
+            "raw": 9803,
+            "gzip": 2554,
+            "brotli": 2316
           },
           {
             "name": "timezone-PBB5NCTC.js",
@@ -319,17 +319,17 @@
           }
         ],
         "total": {
-          "raw": 98465,
-          "gzip": 25379,
-          "brotli": 22005
+          "raw": 98470,
+          "gzip": 25376,
+          "brotli": 21996
         }
       }
     }
   },
   "treeshaking": {
     "coreSize": 19739,
-    "fullSize": 23473,
-    "pluginOverhead": 3734,
+    "fullSize": 23470,
+    "pluginOverhead": 3731,
     "pluginOverheadPercent": "18.9"
   }
 }

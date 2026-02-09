@@ -59,6 +59,21 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_414 = {
+  fixed: [
+    {
+      title: "iOS Mobile hover state fix [CRITICAL]",
+      description:
+        "v4.1.3 didn't fix the hover bug on all mobile devices, especially iOS Safari. Enhanced CSS with additional touch-action properties and improved media query specificity to completely prevent hover state persistence on all mobile browsers",
+    },
+    {
+      title: "Range mode validation",
+      description:
+        "OK button now correctly disabled when end time ≤ start time. AM/PM changes automatically trigger validation to prevent invalid range selection",
+    },
+  ],
+};
+
 const CHANGELOG_413 = {
   fixed: [
     {
@@ -307,8 +322,30 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.1.3</strong> - Released February 9, 2026
+        <strong>v4.1.4</strong> - Released February 9, 2026
       </InfoBox>
+
+      <Section icon={Bug} title="Version 4.1.4 - February 9, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_414.fixed}
+          />
+        </div>
+      </Section>
+
+      <Section icon={Bug} title="Version 4.1.4 - February 9, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_414.fixed}
+          />
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.1.3 - February 9, 2026">
         <div className="space-y-4">
