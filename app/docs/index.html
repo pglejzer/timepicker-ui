@@ -721,6 +721,174 @@ disabledTime: { interval: ['04:33 - 12:12', '16:34 - 20:22'] }
         </section>
 
         <section
+          id="dynamic-updates"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Dynamic Updates</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Update disabledTime and other options dynamically
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex flex-col items-center gap-4">
+                <input
+                  id="dynamic-update-picker"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="10:00 AM"
+                />
+                <div class="flex gap-2">
+                  <button
+                    id="update-morning-shift"
+                    class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
+                  >
+                    Morning Shift
+                  </button>
+                  <button
+                    id="update-evening-shift"
+                    class="px-6 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-colors"
+                  >
+                    Evening Shift
+                  </button>
+                  <button
+                    id="clear-restrictions"
+                    class="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors"
+                  >
+                    Clear All
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="dynamic-update-picker" value="10:00 AM" /&gt;
+&lt;button id="update-morning-shift"&gt;Morning Shift&lt;/button&gt;
+&lt;button id="update-evening-shift"&gt;Evening Shift&lt;/button&gt;
+&lt;button id="clear-restrictions"&gt;Clear All&lt;/button&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const picker = new TimepickerUI('#dynamic-update-picker', {
+  clock: { disabledTime: { hours: [9, 10, 11, 12] } }
+});
+picker.create();
+
+// Update to morning shift (disable 0-8)
+document.getElementById('update-morning-shift')
+  .addEventListener('click', () => {
+    picker.update({ 
+      clock: { disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] } }
+    }, true);
+  });
+
+// Update to evening shift (disable 18-23)
+document.getElementById('update-evening-shift')
+  .addEventListener('click', () => {
+    picker.update({ 
+      clock: { disabledTime: { hours: [18, 19, 20, 21, 22, 23] } }
+    }, true);
+  });
+
+// Clear all restrictions
+document.getElementById('clear-restrictions')
+  .addEventListener('click', () => {
+    picker.update({ clock: { disabledTime: { hours: [] } } }, true);
+  });</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="dynamic-interval-updates"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div class="bg-gradient-to-r from-rose-50 to-red-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Dynamic Interval Updates</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Update disabled intervals dynamically for shift scheduling
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex flex-col items-center gap-4">
+                <input
+                  id="dynamic-interval-picker"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="10:00"
+                />
+                <div class="flex gap-2 flex-wrap justify-center">
+                  <button
+                    id="update-single-interval"
+                    class="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-lg font-medium transition-colors"
+                  >
+                    Single Interval
+                  </button>
+                  <button
+                    id="update-multiple-intervals"
+                    class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors"
+                  >
+                    Multiple Intervals
+                  </button>
+                  <button
+                    id="clear-intervals"
+                    class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium transition-colors"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="dynamic-interval-picker" value="10:00" /&gt;
+&lt;button id="update-single-interval"&gt;Single Interval&lt;/button&gt;
+&lt;button id="update-multiple-intervals"&gt;Multiple Intervals&lt;/button&gt;
+&lt;button id="clear-intervals"&gt;Clear&lt;/button&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const intervalPicker = new TimepickerUI('#dynamic-interval-picker', {
+  clock: { type: '24h', disabledTime: { interval: '09:00 - 12:00' } }
+});
+intervalPicker.create();
+
+// Update to single interval (lunch break)
+document.getElementById('update-single-interval')
+  .addEventListener('click', () => {
+    intervalPicker.update({ 
+      clock: { disabledTime: { interval: '12:00 - 13:00' } }
+    }, true);
+  });
+
+// Update to multiple intervals (shift schedule)
+document.getElementById('update-multiple-intervals')
+  .addEventListener('click', () => {
+    intervalPicker.update({ 
+      clock: { 
+        disabledTime: { 
+          interval: ['00:00 - 08:00', '12:00 - 13:00', '18:00 - 23:59']
+        } 
+      }
+    }, true);
+  });
+
+// Clear all intervals
+document.getElementById('clear-intervals')
+  .addEventListener('click', () => {
+    intervalPicker.update({ clock: { disabledTime: {} } }, true);
+  });</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
           id="editable-mode"
           class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
         >

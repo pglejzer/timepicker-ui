@@ -113,6 +113,9 @@ export default class TimepickerUI {
     });
   }
 
+  /**
+   * Create the timepicker instance and render it in the DOM. If inline mode is enabled, the timepicker will be mounted immediately.
+   */
   public create(): void {
     this.lifecycle.init();
 
@@ -121,26 +124,49 @@ export default class TimepickerUI {
     }
   }
 
+  /**
+   * Open the timepicker, optionally executing a callback after opening.
+   * @param callback - Optional callback to be executed after opening.
+   */
   public open(callback?: Callback): void {
     this.lifecycle.mount();
     if (callback) callback();
   }
 
+  /**
+   * Close the timepicker, optionally updating the input value before closing.
+   * @param update - If true, the input value will be updated with the current selection before closing.
+   * @param callback - Optional callback to be executed after closing.
+   */
   public close(update?: boolean, callback?: Callback): void {
     this.lifecycle.unmount(update ? callback : undefined);
     if (!update && callback) callback();
   }
 
+  /**
+   * Destroy the timepicker instance, removing all event listeners and DOM elements.
+   * @param options - Optional parameters to control destruction behavior.
+   *                  If a callback function is provided directly, it will be treated as the callback parameter.
+   *                  If an options object is provided, it can include:
+   *                  - keepInputValue: A boolean indicating whether to keep the input value after destruction (default: false).
+   *                  - callback: An optional callback function to be executed after destruction.
+   */
   public destroy(options?: { keepInputValue?: boolean; callback?: Callback } | Callback): void {
     instanceRegistry.delete(this.core.instanceId);
     this.lifecycle.destroy(options);
   }
 
+  /**
+   * Update the timepicker instance with new options.
+   * @param value - The new options and optional create flag.
+   * @param callback - Optional callback to be executed after update.
+   */
   public update(value: { options: TimepickerOptions; create?: boolean }, callback?: Callback): void {
     if (this.core.isDestroyed) return;
 
     this.core.updateOptions(value.options);
     this.managers.config.checkMobileOption();
+    this.managers.config.getDisableTime();
 
     if (value.create) {
       this.create();
@@ -149,6 +175,10 @@ export default class TimepickerUI {
     if (callback) callback();
   }
 
+  /**
+   * Get the current selected time value from the timepicker.
+   * @returns An object containing the current hour, minutes, type (if applicable), formatted time string, and degrees for hours and minutes.
+   */
   public getValue(): {
     hour: string;
     minutes: string;
@@ -194,6 +224,11 @@ export default class TimepickerUI {
     };
   }
 
+  /**
+   * Set the timepicker value programmatically.
+   * @param time - The time string to set, in the format "HH:MM" for 24h or "HH:MM AM/PM" for 12h.
+   * @param updateInput - If true, the input field will be updated with the new time value. Default is true.
+   */
   public setValue(time: string, updateInput: boolean = true): void {
     if (this.core.isDestroyed) return;
     if (!time || typeof time !== 'string') return;
@@ -268,46 +303,92 @@ export default class TimepickerUI {
     }
   }
 
+  /**
+   * Get the root element of the timepicker instance.
+   * @returns - The HTMLElement that serves as the root of the timepicker instance.
+   */
   public getElement(): HTMLElement {
     return this.core.element;
   }
 
+  /**
+   * Get the unique instance ID of the timepicker.
+   * @return - The unique instance ID as a string.
+   */
   public get instanceId(): string {
     return this.core.instanceId;
   }
 
+  /**
+   * Get the current options of the timepicker instance.
+   * @returns - The current options of the timepicker instance.
+   */
   public get options(): Required<TimepickerOptions> {
     return this.core.options;
   }
 
+  /**
+   * Check if the timepicker instance is currently initialized.
+   * @returns - True if the instance is initialized, false otherwise.
+   */
   public get isInitialized(): boolean {
     return this.core.isInitialized;
   }
 
+  /**
+   * Check if the timepicker instance has been destroyed.
+   * @returns - True if the instance is destroyed, false otherwise.
+   */
   public get isDestroyed(): boolean {
     return this.core.isDestroyed;
   }
 
+  /**
+   * Get the hour input element of the timepicker instance.
+   * @returns - The HTMLInputElement for the hour input, or null if not found.
+   */
   public get hour(): HTMLInputElement | null {
     return this.core.getHour();
   }
 
+  /**
+   * Get the minutes input element of the timepicker instance.
+   * @returns - The HTMLInputElement for the minutes input, or null if not found.
+   */
   public get minutes(): HTMLInputElement | null {
     return this.core.getMinutes();
   }
 
+  /**
+   * Get the OK button element of the timepicker instance.
+   * @returns - The HTMLButtonElement for the OK button, or null if not found.
+   */
   public get okButton(): HTMLButtonElement | null {
     return this.core.getOkButton();
   }
 
+  /**
+   * Get the Cancel button element of the timepicker instance.
+   * @returns - The HTMLButtonElement for the Cancel button, or null if not found.
+   */
   public get cancelButton(): HTMLButtonElement | null {
     return this.core.getCancelButton();
   }
 
+  /**
+   * Get the clock hand element of the timepicker instance.
+   * @returns - The HTMLDivElement for the clock hand, or null if not found.
+   */
   public get clockHand(): HTMLDivElement | null {
     return this.core.getClockHand();
   }
 
+  /**
+   * Subscribe to a timepicker event with a handler function.
+   * @param event - The name of the event to subscribe to.
+   * @param handler - The function to handle the event.
+   * @returns - void
+   */
   public on<K extends keyof TimepickerEventMap>(
     event: K,
     handler: (data: TimepickerEventMap[K]) => void,
@@ -316,6 +397,12 @@ export default class TimepickerUI {
     this.emitter.on(event, handler);
   }
 
+  /**
+   * Subscribe to a timepicker event with a handler function that will be called only once.
+   * @param event - The name of the event to subscribe to.
+   * @param handler - The function to handle the event.
+   * @returns - void
+   */
   public once<K extends keyof TimepickerEventMap>(
     event: K,
     handler: (data: TimepickerEventMap[K]) => void,
@@ -324,6 +411,12 @@ export default class TimepickerUI {
     this.emitter.once(event, handler);
   }
 
+  /**
+   * Unsubscribe from a timepicker event. If a handler is provided, only that handler will be removed. If no handler is provided, all handlers for the event will be removed.
+   * @param event - The name of the event to unsubscribe from.
+   * @param handler - The function to handle the event.
+   * @returns - void
+   */
   public off<K extends keyof TimepickerEventMap>(
     event: K,
     handler?: (data: TimepickerEventMap[K]) => void,
@@ -378,14 +471,28 @@ export default class TimepickerUI {
     return parentElement || inputElement;
   }
 
+  /**
+   * Get a timepicker instance by its unique ID.
+   * @param id - The unique instance ID of the timepicker to retrieve.
+   * @returns - The timepicker instance if found, otherwise undefined.
+   */
   static getById(id: string): TimepickerUI | undefined {
     return instanceRegistry.get(id);
   }
 
+  /**
+   * Get all existing timepicker instances.
+   * @returns - An array of all timepicker instances.
+   */
   static getAllInstances(): TimepickerUI[] {
     return Array.from(instanceRegistry.values());
   }
 
+  /**
+   *  Check if a timepicker instance can be created for the given selector or element. This method verifies that the environment is a browser, the element exists in the DOM, and is either an input or contains an input.
+   * @param selectorOrElement - A CSS selector string or an HTMLElement to check for timepicker availability.
+   * @returns - True if a timepicker instance can be created for the given selector or element, false otherwise.
+   */
   static isAvailable(selectorOrElement: string | HTMLElement): boolean {
     if (isNode()) {
       return false;
@@ -399,6 +506,9 @@ export default class TimepickerUI {
     return false;
   }
 
+  /**
+   * Destroy all existing timepicker instances. This method iterates through all registered instances, calls their destroy method, and clears the instance registry.
+   */
   static destroyAll(): void {
     const instances = Array.from(instanceRegistry.values());
     instances.forEach((instance) => instance.destroy());

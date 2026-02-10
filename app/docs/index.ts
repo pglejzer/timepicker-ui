@@ -550,6 +550,93 @@ const multipleIntervalsPicker24h = new TimepickerUI('#disabled-intervals-24h', {
 });
 multipleIntervalsPicker24h.create();
 
+const dynamicUpdatePicker = new TimepickerUI('#dynamic-update-picker', {
+  clock: {
+    type: '12h',
+    disabledTime: { hours: [9, 10, 11, 12] },
+  },
+});
+dynamicUpdatePicker.create();
+
+document.getElementById('update-morning-shift')?.addEventListener('click', () => {
+  dynamicUpdatePicker.update({
+    options: {
+      clock: {
+        type: '12h',
+        disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
+      },
+    },
+    create: true,
+  });
+});
+
+document.getElementById('update-evening-shift')?.addEventListener('click', () => {
+  dynamicUpdatePicker.update({
+    options: {
+      ui: { theme: 'm3-green' },
+      clock: {
+        type: '24h',
+        disabledTime: { hours: [18, 19, 20, 21, 22, 23] },
+      },
+    },
+    create: true,
+  });
+});
+
+document.getElementById('clear-restrictions')?.addEventListener('click', () => {
+  dynamicUpdatePicker.update({
+    options: {
+      clock: {
+        disabledTime: { hours: [] },
+      },
+    },
+    create: true,
+  });
+});
+
+const dynamicIntervalPicker = new TimepickerUI('#dynamic-interval-picker', {
+  clock: {
+    type: '24h',
+    disabledTime: { interval: '09:00 - 12:00' },
+  },
+});
+dynamicIntervalPicker.create();
+
+document.getElementById('update-single-interval')?.addEventListener('click', () => {
+  dynamicIntervalPicker.update({
+    options: {
+      clock: {
+        disabledTime: { interval: '12:00 - 13:00' },
+      },
+    },
+    create: true,
+  });
+});
+
+document.getElementById('update-multiple-intervals')?.addEventListener('click', () => {
+  dynamicIntervalPicker.update({
+    options: {
+      clock: {
+        disabledTime: {
+          interval: ['00:00 - 08:00', '12:00 - 13:00', '18:00 - 23:59'],
+        },
+      },
+    },
+    create: true,
+  });
+});
+
+document.getElementById('clear-intervals')?.addEventListener('click', () => {
+  dynamicIntervalPicker.update({
+    options: {
+      clock: {
+        disabledTime: {},
+      },
+    },
+    create: true,
+  });
+});
+
 const timezonePicker = new TimepickerUI('#timezone-picker', {
   clock: { type: '24h' },
   timezone: {
