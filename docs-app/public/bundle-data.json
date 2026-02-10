@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-09T17:39:37.321Z",
+  "timestamp": "2026-02-10T16:24:11.227Z",
   "results": {
     "rollup": {
       "core": {
@@ -8,22 +8,22 @@
           {
             "name": "core-only.js",
             "displayName": "Core (unminified)",
-            "raw": 82565,
-            "gzip": 20461,
-            "brotli": 17666
+            "raw": 82603,
+            "gzip": 20463,
+            "brotli": 17648
           },
           {
             "name": "core-only.min.js",
             "displayName": "Core (minified)",
-            "raw": 80807,
-            "gzip": 19739,
-            "brotli": 17065
+            "raw": 80845,
+            "gzip": 19741,
+            "brotli": 17064
           }
         ],
         "total": {
-          "raw": 163372,
-          "gzip": 40200,
-          "brotli": 34731
+          "raw": 163448,
+          "gzip": 40204,
+          "brotli": 34712
         }
       },
       "full": {
@@ -32,22 +32,22 @@
           {
             "name": "full-static.js",
             "displayName": "Full (unminified)",
-            "raw": 99100,
-            "gzip": 24361,
-            "brotli": 21072
+            "raw": 99138,
+            "gzip": 24362,
+            "brotli": 21032
           },
           {
             "name": "full-static.min.js",
             "displayName": "Full (minified)",
-            "raw": 96984,
-            "gzip": 23470,
+            "raw": 97022,
+            "gzip": 23473,
             "brotli": 20266
           }
         ],
         "total": {
-          "raw": 196084,
-          "gzip": 47831,
-          "brotli": 41338
+          "raw": 196160,
+          "gzip": 47835,
+          "brotli": 41298
         }
       },
       "lazy": {
@@ -56,9 +56,9 @@
           {
             "name": "entry-lazy-load.js",
             "displayName": "entry-lazy-load.js",
-            "raw": 81048,
-            "gzip": 19842,
-            "brotli": 17170
+            "raw": 81086,
+            "gzip": 19845,
+            "brotli": 17161
           },
           {
             "name": "plugin-range.js",
@@ -76,9 +76,9 @@
           }
         ],
         "total": {
-          "raw": 97200,
-          "gzip": 24487,
-          "brotli": 21333
+          "raw": 97238,
+          "gzip": 24490,
+          "brotli": 21324
         }
       }
     },
@@ -89,22 +89,22 @@
           {
             "name": "core-only.js",
             "displayName": "Core (minified)",
-            "raw": 85007,
-            "gzip": 20412,
-            "brotli": 17571
+            "raw": 85045,
+            "gzip": 20415,
+            "brotli": 17586
           },
           {
             "name": "core-only.unmin.js",
             "displayName": "Core (unminified)",
-            "raw": 108414,
-            "gzip": 22794,
-            "brotli": 19374
+            "raw": 108453,
+            "gzip": 22797,
+            "brotli": 19388
           }
         ],
         "total": {
-          "raw": 193421,
-          "gzip": 43206,
-          "brotli": 36945
+          "raw": 193498,
+          "gzip": 43212,
+          "brotli": 36974
         }
       },
       "full": {
@@ -113,22 +113,22 @@
           {
             "name": "full-static.js",
             "displayName": "Full (minified)",
-            "raw": 102106,
-            "gzip": 24275,
-            "brotli": 20920
+            "raw": 102144,
+            "gzip": 24277,
+            "brotli": 20871
           },
           {
             "name": "full-static.unmin.js",
             "displayName": "Full (unminified)",
-            "raw": 131175,
-            "gzip": 27383,
-            "brotli": 23253
+            "raw": 131214,
+            "gzip": 27388,
+            "brotli": 23270
           }
         ],
         "total": {
-          "raw": 233281,
-          "gzip": 51658,
-          "brotli": 44173
+          "raw": 233358,
+          "gzip": 51665,
+          "brotli": 44141
         }
       },
       "lazy": {
@@ -137,9 +137,9 @@
           {
             "name": "lazy-load.js",
             "displayName": "Main chunk",
-            "raw": 86476,
-            "gzip": 21033,
-            "brotli": 18080
+            "raw": 86514,
+            "gzip": 21036,
+            "brotli": 18085
           },
           {
             "name": "plugin-range-DOgB-kjA.js",
@@ -157,9 +157,9 @@
           }
         ],
         "total": {
-          "raw": 103881,
-          "gzip": 26046,
-          "brotli": 22564
+          "raw": 103919,
+          "gzip": 26049,
+          "brotli": 22569
         }
       }
     },
@@ -170,22 +170,22 @@
           {
             "name": "core-only.js",
             "displayName": "Core (unminified)",
-            "raw": 82371,
-            "gzip": 20697,
-            "brotli": 17815
+            "raw": 82409,
+            "gzip": 20700,
+            "brotli": 17853
           },
           {
             "name": "core-only.min.js",
             "displayName": "Core (minified)",
-            "raw": 80865,
-            "gzip": 19749,
-            "brotli": 17071
+            "raw": 80903,
+            "gzip": 19752,
+            "brotli": 17073
           }
         ],
         "total": {
-          "raw": 163236,
-          "gzip": 40446,
-          "brotli": 34886
+          "raw": 163312,
+          "gzip": 40452,
+          "brotli": 34926
         }
       },
       "full": {
@@ -194,22 +194,22 @@
           {
             "name": "full-static.js",
             "displayName": "Full (unminified)",
-            "raw": 99072,
-            "gzip": 24691,
-            "brotli": 21200
+            "raw": 99110,
+            "gzip": 24696,
+            "brotli": 21216
           },
           {
             "name": "full-static.min.js",
             "displayName": "Full (minified)",
-            "raw": 97027,
-            "gzip": 23472,
-            "brotli": 20274
+            "raw": 97065,
+            "gzip": 23476,
+            "brotli": 20291
           }
         ],
         "total": {
-          "raw": 196099,
-          "gzip": 48163,
-          "brotli": 41474
+          "raw": 196175,
+          "gzip": 48172,
+          "brotli": 41507
         }
       },
       "lazy": {
@@ -232,15 +232,15 @@
           {
             "name": "lazy-load.js",
             "displayName": "Main chunk",
-            "raw": 83557,
-            "gzip": 21005,
-            "brotli": 18118
+            "raw": 83595,
+            "gzip": 21013,
+            "brotli": 18120
           }
         ],
         "total": {
-          "raw": 99938,
-          "gzip": 25766,
-          "brotli": 22401
+          "raw": 99976,
+          "gzip": 25774,
+          "brotli": 22403
         }
       }
     },
@@ -251,22 +251,22 @@
           {
             "name": "core-only.js",
             "displayName": "Core (unminified)",
-            "raw": 100405,
-            "gzip": 22202,
-            "brotli": 18879
+            "raw": 100444,
+            "gzip": 22205,
+            "brotli": 18870
           },
           {
             "name": "core-only.min.js",
             "displayName": "Core (minified)",
-            "raw": 81880,
-            "gzip": 20452,
-            "brotli": 17591
+            "raw": 81918,
+            "gzip": 20455,
+            "brotli": 17580
           }
         ],
         "total": {
-          "raw": 182285,
-          "gzip": 42654,
-          "brotli": 36470
+          "raw": 182362,
+          "gzip": 42660,
+          "brotli": 36450
         }
       },
       "full": {
@@ -275,22 +275,22 @@
           {
             "name": "full-static.js",
             "displayName": "Full (unminified)",
-            "raw": 121482,
-            "gzip": 26757,
-            "brotli": 22706
+            "raw": 121521,
+            "gzip": 26760,
+            "brotli": 22678
           },
           {
             "name": "full-static.min.js",
             "displayName": "Full (minified)",
-            "raw": 98285,
-            "gzip": 24285,
-            "brotli": 20824
+            "raw": 98323,
+            "gzip": 24286,
+            "brotli": 20821
           }
         ],
         "total": {
-          "raw": 219767,
-          "gzip": 51042,
-          "brotli": 43530
+          "raw": 219844,
+          "gzip": 51046,
+          "brotli": 43499
         }
       },
       "lazy": {
@@ -299,9 +299,9 @@
           {
             "name": "entry-lazy-load.js",
             "displayName": "Main chunk",
-            "raw": 82070,
-            "gzip": 20547,
-            "brotli": 17685
+            "raw": 82108,
+            "gzip": 20550,
+            "brotli": 17670
           },
           {
             "name": "range-A6PYIGWE.js",
@@ -319,17 +319,17 @@
           }
         ],
         "total": {
-          "raw": 98470,
-          "gzip": 25376,
-          "brotli": 21996
+          "raw": 98508,
+          "gzip": 25379,
+          "brotli": 21981
         }
       }
     }
   },
   "treeshaking": {
-    "coreSize": 19739,
-    "fullSize": 23470,
-    "pluginOverhead": 3731,
+    "coreSize": 19741,
+    "fullSize": 23473,
+    "pluginOverhead": 3732,
     "pluginOverheadPercent": "18.9"
   }
 }
