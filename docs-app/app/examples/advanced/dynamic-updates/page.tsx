@@ -19,7 +19,7 @@ export default function DynamicUpdatesPage() {
       clock: { type: clockType },
       ui: { theme },
     }),
-    [clockType, theme]
+    [clockType, theme],
   );
 
   useEffect(() => {
@@ -247,6 +247,146 @@ window.matchMedia('(prefers-color-scheme: dark)')
   .addEventListener('change', (e) => {
     updatePickerTheme(e.matches);
   });`}
+          language="typescript"
+        />
+      </Section>
+
+      <Section icon={RefreshCw} title="Update DisabledTime Dynamically">
+        <p className="text-muted-foreground mb-4">
+          Change disabled times based on business rules or user context:
+        </p>
+        <CodeBlock
+          code={`import { TimepickerUI } from 'timepicker-ui';
+
+const input = document.querySelector('#timepicker');
+const picker = new TimepickerUI(input, {
+  clock: {
+    type: '24h',
+    disabledTime: {
+      hours: [9, 10, 11, 12] // Morning hours disabled
+    }
+  }
+});
+picker.create();
+
+// Update to disable evening hours instead
+function switchToEveningRestriction() {
+  picker.update({
+    options: {
+      clock: {
+        disabledTime: {
+          hours: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        }
+      }
+    },
+    create: true // Reinitialize to apply changes
+  });
+}
+
+// Clear all restrictions
+function clearRestrictions() {
+  picker.update({
+    options: {
+      clock: {
+        disabledTime: {}
+      }
+    },
+    create: true
+  });
+}
+
+// Update based on day of week
+function updateForDayOfWeek() {
+  const day = new Date().getDay();
+  const isWeekend = day === 0 || day === 6;
+  
+  picker.update({
+    options: {
+      clock: {
+        disabledTime: isWeekend
+          ? {} // No restrictions on weekends
+          : { hours: [0, 1, 2, 3, 4, 5, 6, 22, 23] } // Business hours only
+      }
+    },
+    create: true
+  });
+}`}
+          language="typescript"
+        />
+      </Section>
+
+      <Section icon={RefreshCw} title="Update Disabled Intervals Dynamically">
+        <p className="text-muted-foreground mb-4">
+          Change disabled time intervals for business hours, shifts, or
+          scheduling:
+        </p>
+        <CodeBlock
+          code={`import { TimepickerUI } from 'timepicker-ui';
+
+const input = document.querySelector('#timepicker');
+const picker = new TimepickerUI(input, {
+  clock: {
+    type: '24h',
+    disabledTime: {
+      interval: '09:00 - 17:00' // Block business hours
+    }
+  }
+});
+picker.create();
+
+// Update to block after-hours
+function switchToAfterHoursBlock() {
+  picker.update({
+    options: {
+      clock: {
+        disabledTime: {
+          interval: ['00:00 - 08:00', '18:00 - 23:59']
+        }
+      }
+    },
+    create: true
+  });
+}
+
+// Multiple intervals for break times
+function setBreakSchedule() {
+  picker.update({
+    options: {
+      clock: {
+        disabledTime: {
+          interval: [
+            '00:00 - 09:00',  // Before work
+            '12:00 - 13:00',  // Lunch break  
+            '18:00 - 23:59'   // After work
+          ]
+        }
+      }
+    },
+    create: true
+  });
+}
+
+// 12h format intervals
+const picker12h = new TimepickerUI('#picker-12h', {
+  clock: {
+    type: '12h',
+    disabledTime: {
+      interval: '09:00 AM - 05:00 PM'
+    }
+  }
+});
+
+// Update 12h format intervals
+picker12h.update({
+  options: {
+    clock: {
+      disabledTime: {
+        interval: ['06:00 AM - 08:00 AM', '06:00 PM - 10:00 PM']
+      }
+    }
+  },
+  create: true
+});`}
           language="typescript"
         />
       </Section>

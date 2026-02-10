@@ -59,6 +59,16 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_415 = {
+  fixed: [
+    {
+      title: "DisabledTime update() method",
+      description:
+        "update() now properly calls getDisableTime() to refresh disabled time state after options change",
+    },
+  ],
+};
+
 const CHANGELOG_414 = {
   fixed: [
     {
@@ -322,16 +332,16 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.1.4</strong> - Released February 9, 2026
+        <strong>v4.1.5</strong> - Released February 10, 2026
       </InfoBox>
 
-      <Section icon={Bug} title="Version 4.1.4 - February 9, 2026">
+      <Section icon={Bug} title="Version 4.1.5 - February 10, 2026">
         <div className="space-y-4">
           <ChangeSection
             icon={Wrench}
             label="Fixed"
             color="orange-500"
-            items={CHANGELOG_414.fixed}
+            items={CHANGELOG_415.fixed}
           />
         </div>
       </Section>

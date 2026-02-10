@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.1.5] - 2026-02-10
+
+### Fixed
+
+- DisabledTime update() method not recalculating state - update() now properly calls getDisableTime() to refresh disabled time state after options change
+
+---
+
 ## [4.1.4] - 2026-02-09
 
 ### Fixed

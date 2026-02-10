@@ -145,6 +145,95 @@ picker.create();`}
           }}
         />
       </Section>
+
+      <Section icon={Ban} title="Dynamic DisabledTime Update">
+        <p className="text-muted-foreground mb-4">
+          Update disabled times dynamically using the update() method:
+        </p>
+        <TimepickerExample
+          code={`const picker = new TimepickerUI(input, {
+  clock: {
+    type: '24h',
+    disabledTime: { hours: [9, 10, 11, 12] }
+  }
+});
+picker.create();
+
+// Later, update disabled times
+picker.update({
+  options: {
+    clock: {
+      disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] }
+    }
+  },
+  create: true
+});`}
+          options={{
+            clock: {
+              type: "24h",
+              disabledTime: {
+                hours: [9, 10, 11, 12],
+              },
+            },
+          }}
+        />
+      </Section>
+
+      <Section icon={Ban} title="Dynamic Interval Update">
+        <p className="text-muted-foreground mb-4">
+          Update disabled intervals dynamically for shift scheduling or business
+          rules:
+        </p>
+        <TimepickerExample
+          code={`const picker = new TimepickerUI(input, {
+  clock: {
+    type: '24h',
+    disabledTime: { interval: '09:00 - 12:00' }
+  }
+});
+picker.create();
+
+// Update to different interval
+picker.update({
+  options: {
+    clock: {
+      disabledTime: { interval: '14:00 - 18:00' }
+    }
+  },
+  create: true
+});
+
+// Update to multiple intervals
+picker.update({
+  options: {
+    clock: {
+      disabledTime: {
+        interval: ['00:00 - 08:00', '12:00 - 13:00', '18:00 - 23:59']
+      }
+    }
+  },
+  create: true
+});
+
+// Switch from interval to hours
+picker.update({
+  options: {
+    clock: {
+      disabledTime: { hours: [20, 21, 22, 23] }
+    }
+  },
+  create: true
+});`}
+          options={{
+            clock: {
+              type: "24h",
+              disabledTime: {
+                interval: "09:00 - 12:00",
+              },
+            },
+          }}
+        />
+      </Section>
     </div>
   );
 }
