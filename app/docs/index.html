@@ -154,6 +154,76 @@ basicTimePicker.create();</code></pre>
         </section>
 
         <section
+          id="clear-button"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Clear Button</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Allow users to clear selected time with a dedicated button
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="clear-button-picker"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="2:30 PM"
+                />
+              </div>
+              <div class="mt-4 text-center">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  <strong>Try it:</strong> Open the timepicker and click the "Clear" button on the left side
+                  to reset the time.
+                </p>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="clear-button-picker" value="2:30 PM" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const clearButtonPicker = new TimepickerUI('#clear-button-picker', {
+  ui: { 
+    enableClearButton: true,
+    theme: 'basic'
+  },
+  labels: {
+    clear: 'Clear'
+  },
+  callbacks: {
+    onClear: (data) => {
+      console.log('Time cleared! Previous value:', data.previousValue);
+    }
+  }
+});
+clearButtonPicker.create();</code></pre>
+              </div>
+            </div>
+            <div
+              class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800"
+            >
+              <h4 class="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-2">
+                Clear Button Behavior
+              </h4>
+              <ul class="text-sm text-blue-800 dark:text-blue-300 space-y-1 list-disc list-inside">
+                <li>Removes the selected time value completely</li>
+                <li>Resets clock hands to neutral position (12:00 for 12h, 12:00 for 24h)</li>
+                <li>Disables the confirm button until a new time is selected</li>
+                <li>
+                  Triggers the <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">onClear</code> callback
+                  with previous value
+                </li>
+                <li>The button is disabled when no time is selected</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section
           id="24h-format"
           class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
         >

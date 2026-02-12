@@ -17,6 +17,11 @@ export type ConfirmEventData = {
   type?: string;
 };
 
+/** Payload when user clears time */
+export type ClearEventData = {
+  previousValue: string | null;
+};
+
 /** Payload when modal shows */
 export type ShowEventData = Record<string, never>;
 

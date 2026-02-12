@@ -73,6 +73,26 @@ const basicTimePicker = new TimepickerUI('#basic-picker', {
 });
 basicTimePicker.create();
 
+const clearButtonPicker = new TimepickerUI('#clear-button-picker', {
+  ui: {
+    enableClearButton: true,
+    theme: 'basic',
+    enableSwitchIcon: true,
+  },
+  labels: {
+    clear: 'Clear',
+  },
+  clock: {
+    type: '12h',
+  },
+  callbacks: {
+    onClear: (data) => {
+      console.log('Time cleared! Previous value:', data.previousValue);
+    },
+  },
+});
+clearButtonPicker.create();
+
 const format24hPicker = new TimepickerUI('#format-24h-picker', {
   clock: { type: '24h' },
   ui: { enableSwitchIcon: true },

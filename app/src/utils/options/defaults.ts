@@ -29,6 +29,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     iconTemplate: '',
     iconTemplateMobile: '',
     inline: undefined,
+    enableClearButton: false,
   },
 
   labels: {
@@ -40,6 +41,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     mobileTime: 'Enter Time',
     mobileHour: 'Hour',
     mobileMinute: 'Minute',
+    clear: 'Clear',
   },
 
   behavior: {
@@ -63,6 +65,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     onRangeConfirm: undefined,
     onRangeSwitch: undefined,
     onRangeValidation: undefined,
+    onClear: undefined,
   },
 
   timezone: {
