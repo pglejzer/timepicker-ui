@@ -7,6 +7,7 @@ import ThemeManager from '../managers/ThemeManager';
 import ValidationManager from '../managers/ValidationManager';
 import EventManager from '../managers/EventManager';
 import ClockManager from '../managers/ClockManager';
+import ClearButtonManager from '../managers/ClearButtonManager';
 import { PluginRegistry, type PluginManager } from '../core/PluginRegistry';
 
 export class Managers {
@@ -17,6 +18,7 @@ export class Managers {
   public readonly validation: ValidationManager;
   public readonly events: EventManager;
   public readonly clock: ClockManager;
+  public readonly clearButton: ClearButtonManager;
   private plugins: Map<string, PluginManager> = new Map();
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
@@ -27,6 +29,7 @@ export class Managers {
     this.validation = new ValidationManager(core, emitter);
     this.events = new EventManager(core, emitter);
     this.clock = new ClockManager(core, emitter);
+    this.clearButton = new ClearButtonManager(core, emitter);
 
     const registeredPlugins = PluginRegistry.getAll();
 
@@ -48,6 +51,7 @@ export class Managers {
     this.validation.destroy();
     this.events.destroy();
     this.clock.destroy();
+    this.clearButton.destroy();
 
     this.plugins.forEach((plugin) => plugin.destroy());
     this.plugins.clear();

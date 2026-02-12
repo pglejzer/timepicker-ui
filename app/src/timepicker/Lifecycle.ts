@@ -92,6 +92,9 @@ export class Lifecycle {
     if (callbacks.onRangeValidation) {
       this.emitter.on('range:validation', callbacks.onRangeValidation);
     }
+    if (callbacks.onClear) {
+      this.emitter.on('clear', callbacks.onClear);
+    }
   }
 
   mount(): void {
@@ -292,6 +295,7 @@ export class Lifecycle {
 
     this.managers.events.handleCancelButton();
     this.managers.events.handleOkButton();
+    this.managers.clearButton.init();
     this.managers.events.handleHourEvents();
     this.managers.events.handleMinutesEvents();
     this.managers.events.handleKeyboardInput();

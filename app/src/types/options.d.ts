@@ -20,6 +20,7 @@ import type {
   RangeConfirmEventData,
   RangeSwitchEventData,
   RangeValidationEventData,
+  ClearEventData,
 } from './types';
 
 /**
@@ -156,6 +157,12 @@ export interface UIOptions {
   cssClass?: string;
 
   /**
+   * @description Enable clear button to reset time selection
+   * @default false
+   */
+  enableClearButton?: boolean;
+
+  /**
    * @description Selector where to append modal (default: body)
    * @default ""
    */
@@ -242,6 +249,11 @@ export interface LabelsOptions {
    * @default "Minute"
    */
   mobileMinute?: string;
+  /**
+   * @description "Clear" button text
+   * @default "Clear"
+   */
+  clear?: string;
 }
 
 /**
@@ -406,6 +418,11 @@ export interface CallbacksOptions {
    * @description Triggered on range validation (range mode only)
    */
   onRangeValidation?: TimepickerEventCallback<RangeValidationEventData>;
+
+  /**
+   * @description Triggered when clear button is clicked
+   */
+  onClear?: TimepickerEventCallback<ClearEventData>;
 }
 
 /**

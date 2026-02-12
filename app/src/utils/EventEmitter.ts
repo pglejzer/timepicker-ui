@@ -18,6 +18,7 @@ import type {
   RangeGetDisabledTimeEventData,
   RangeUpdateDisabledEventData,
   ErrorEventData,
+  ClearEventData,
 } from '../types/types';
 
 type EventHandler<T = unknown> = (data: T) => void;
@@ -26,6 +27,7 @@ export interface TimepickerEventMap {
   open: OpenEventData;
   cancel: CancelEventData;
   confirm: ConfirmEventData;
+  clear: ClearEventData;
   show: ShowEventData;
   hide: HideEventData;
   update: UpdateEventData;
