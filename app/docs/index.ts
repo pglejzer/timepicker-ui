@@ -23,9 +23,12 @@ console.log(
   'color: #00BCD4; font-weight: bold; font-family: monospace; font-size: 11px;',
 );
 
-const codeBlocks = document.querySelectorAll<HTMLElement>('pre');
+const codeBlocks = document.querySelectorAll<HTMLElement>('pre code[class*="language-"]');
 
-codeBlocks.forEach(async (block) => {
+codeBlocks.forEach(async (codeElement) => {
+  const block = codeElement.parentElement as HTMLElement;
+  if (!block || block.id === 'getvalue-output') return;
+
   const lang = block.dataset.lang || 'js';
   const rawCode = block.innerText.trim();
 
@@ -795,6 +798,69 @@ const range24hPicker = new TimepickerUI('#range-picker-24h', {
   },
 });
 range24hPicker.create();
+
+// getValue() Without Opening Widget Demo (Bug Fix Demo)
+const getValueDemoPicker = new TimepickerUI('#getvalue-demo-picker', {
+  clock: { type: '24h' },
+});
+getValueDemoPicker.create();
+
+const getValueButton = document.getElementById('getvalue-button');
+const setValueButton = document.getElementById('setvalue-button');
+const openCheckButton = document.getElementById('open-check-button');
+const getValueOutput = document.getElementById('getvalue-output');
+
+if (getValueButton && getValueOutput) {
+  getValueButton.addEventListener('click', () => {
+    const value = getValueDemoPicker.getValue();
+    console.log('getValue() output:', value);
+    getValueOutput.textContent = JSON.stringify(
+      {
+        hour: value.hour,
+        minutes: value.minutes,
+        time: value.time,
+        degreesHours: value.degreesHours,
+        degreesMinutes: value.degreesMinutes,
+      },
+      null,
+      2,
+    );
+  });
+}
+
+if (setValueButton && getValueOutput) {
+  setValueButton.addEventListener('click', () => {
+    getValueDemoPicker.setValue('18:45');
+    getValueOutput.textContent = JSON.stringify(
+      {
+        message: 'Value set to 18:45',
+        ...getValueDemoPicker.getValue(),
+      },
+      null,
+      2,
+    );
+  });
+}
+
+if (openCheckButton && getValueOutput) {
+  openCheckButton.addEventListener('click', () => {
+    getValueDemoPicker.open();
+    setTimeout(() => {
+      getValueDemoPicker.close();
+      const value = getValueDemoPicker.getValue();
+      getValueOutput.textContent = JSON.stringify(
+        {
+          message: 'Opened and closed, value still matches input',
+          hour: value.hour,
+          minutes: value.minutes,
+          time: value.time,
+        },
+        null,
+        2,
+      );
+    }, 1000);
+  });
+}
 
 const themes = [
   'basic',

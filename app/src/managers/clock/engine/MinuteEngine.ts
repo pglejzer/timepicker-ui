@@ -30,6 +30,13 @@ export class MinuteEngine {
       return this.isDisabledForRange12h(value, hour, amPm, disabledTime);
     }
 
+    if (disabledTime.rangeFromHour !== undefined) {
+      const currentHour = parseInt(hour, 10);
+      if (currentHour !== disabledTime.rangeFromHour) {
+        return false;
+      }
+    }
+
     if (disabledTime.minutes) {
       return disabledTime.minutes.some(
         (m) => String(m) === value || Number(m) === Number(value) || m === value,

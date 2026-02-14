@@ -156,7 +156,7 @@ export class RangeState {
       for (let m = 0; m < fromMinutes; m++) {
         disabledMinutes.push(m.toString().padStart(2, '0'));
       }
-      return { hours: disabledHours, minutes: disabledMinutes };
+      return { hours: disabledHours, minutes: disabledMinutes, fromHour };
     }
 
     for (let m = 0; m < fromMinutes; m++) {

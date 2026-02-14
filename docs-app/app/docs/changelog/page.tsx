@@ -59,6 +59,21 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_416 = {
+  fixed: [
+    {
+      title: "Range plugin minute disabling",
+      description:
+        "Minutes were incorrectly disabled for all hours in TO picker instead of only for the FROM hour. Now minutes are blocked only when TO hour equals FROM hour (both 12h and 24h modes)",
+    },
+    {
+      title: "setValue() method",
+      description:
+        "Fixed setValue() not working correctly when called programmatically after initialization",
+    },
+  ],
+};
+
 const CHANGELOG_415 = {
   fixed: [
     {
@@ -332,8 +347,19 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.1.5</strong> - Released February 10, 2026
+        <strong>v4.1.6</strong> - Released February 14, 2026
       </InfoBox>
+
+      <Section icon={Bug} title="Version 4.1.6 - February 14, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_416.fixed}
+          />
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.1.5 - February 10, 2026">
         <div className="space-y-4">
