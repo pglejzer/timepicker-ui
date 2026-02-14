@@ -198,14 +198,35 @@ export default class TimepickerUI {
       };
     }
 
-    const hour = this.core.getHour();
-    const minutes = this.core.getMinutes();
-    const activeTypeMode = this.core.getActiveTypeMode();
+    const modal = this.core.getModalElement();
+    const input = this.core.getInput();
 
-    const currentHour = hour?.value || '12';
-    const currentMinutes = minutes?.value || '00';
-    const currentType =
-      this.core.options.clock.type === '24h' ? undefined : activeTypeMode?.textContent || 'AM';
+    let currentHour = '12';
+    let currentMinutes = '00';
+    let currentType: string | undefined = this.core.options.clock.type === '24h' ? undefined : 'AM';
+    let degreesHours: number | null = null;
+    let degreesMinutes: number | null = null;
+
+    if (modal) {
+      const hour = this.core.getHour();
+      const minutes = this.core.getMinutes();
+      const activeTypeMode = this.core.getActiveTypeMode();
+
+      currentHour = hour?.value || '12';
+      currentMinutes = minutes?.value || '00';
+      currentType = this.core.options.clock.type === '24h' ? undefined : activeTypeMode?.textContent || 'AM';
+
+      degreesHours = this.core.degreesHours;
+      degreesMinutes = this.core.degreesMinutes;
+    } else if (input) {
+      const inputValue = getInputValue(input, this.core.options.clock.type);
+      currentHour = inputValue.hour;
+      currentMinutes = inputValue.minutes;
+      currentType = inputValue.type;
+
+      degreesHours = Number(currentHour) * 30;
+      degreesMinutes = Number(currentMinutes) * 6;
+    }
 
     let timeString = '';
     if (this.core.options.clock.type === '24h') {
@@ -219,8 +240,8 @@ export default class TimepickerUI {
       minutes: currentMinutes,
       type: currentType,
       time: timeString,
-      degreesHours: this.core.degreesHours,
-      degreesMinutes: this.core.degreesMinutes,
+      degreesHours,
+      degreesMinutes,
     };
   }
 

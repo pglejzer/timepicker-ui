@@ -1854,6 +1854,150 @@ worldTimezonePicker.create();</code></pre>
           </div>
         </section>
 
+        <!-- getValue Without Opening Section -->
+        <section
+          id="get-value-demo"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-12"
+        >
+          <div
+            class="bg-gradient-to-r from-lime-50 to-green-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
+              getValue() Without Opening Widget
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Read time values programmatically without opening the modal (Bug Fix Demo)
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex flex-col items-center gap-6">
+                <div class="w-full max-w-md">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Time Input (pre-filled with 14:30)
+                  </label>
+                  <input
+                    id="getvalue-demo-picker"
+                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    value="14:30"
+                  />
+                </div>
+
+                <div class="flex gap-3 flex-wrap justify-center">
+                  <button
+                    id="getvalue-button"
+                    class="px-5 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors shadow-sm hover:shadow-md"
+                  >
+                    Get Value (without opening)
+                  </button>
+                  <button
+                    id="setvalue-button"
+                    class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium transition-colors shadow-sm hover:shadow-md"
+                  >
+                    Set to 18:45
+                  </button>
+                  <button
+                    id="open-check-button"
+                    class="px-5 py-2.5 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-colors shadow-sm hover:shadow-md"
+                  >
+                    Open & Check
+                  </button>
+                </div>
+
+                <div
+                  id="getvalue-result"
+                  class="w-full max-w-md p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border border-blue-200 dark:border-gray-500"
+                >
+                  <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Result:</div>
+                  <pre
+                    id="getvalue-output"
+                    class="text-sm text-gray-900 dark:text-white font-mono whitespace-pre-wrap"
+                  >
+Click "Get Value" to see result</pre
+                  >
+                </div>
+
+                <div
+                  class="w-full max-w-md bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-4"
+                >
+                  <div class="flex items-start">
+                    <svg
+                      class="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 mr-2"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <div class="text-sm text-green-800 dark:text-green-300">
+                      <strong>Fixed in v4.1.0:</strong> getValue() now correctly reads from input value when
+                      modal hasn't been opened yet. Degrees are also calculated correctly!
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                  The Bug That Was Fixed
+                </h4>
+                <div
+                  class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4"
+                >
+                  <p class="text-sm text-red-800 dark:text-red-300">
+                    <strong>Before Fix:</strong> Calling getValue() without opening the modal returned default
+                    values (12:00) instead of reading from the input field.
+                  </p>
+                </div>
+                <div
+                  class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4"
+                >
+                  <p class="text-sm text-green-800 dark:text-green-300">
+                    <strong>After Fix:</strong> getValue() now checks if modal exists. If not, it reads
+                    directly from the input value using getInputValue() utility.
+                  </p>
+                </div>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                  <pre><code class="language-html">&lt;input id="getvalue-demo-picker" value="14:30" /&gt;
+&lt;button id="getvalue-button"&gt;Get Value&lt;/button&gt;
+&lt;button id="setvalue-button"&gt;Set to 18:45&lt;/button&gt;</code></pre>
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                  <pre><code class="language-javascript">const picker = new TimepickerUI('#getvalue-demo-picker', {
+  clock: { type: '24h' }
+});
+picker.create();
+
+// Get value without opening modal - now works correctly!
+document.getElementById('getvalue-button')
+  .addEventListener('click', () => {
+    const value = picker.getValue();
+    console.log(value);
+    // Returns: { hour: '14', minutes: '30', time: '14:30', ... }
+  });
+
+// Set value programmatically
+document.getElementById('setvalue-button')
+  .addEventListener('click', () => {
+    picker.setValue('18:45');
+    console.log(picker.getValue()); // Works immediately!
+  });</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- Range Mode Section -->
         <section class="mb-12">
           <div
