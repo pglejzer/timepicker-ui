@@ -59,6 +59,16 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_417 = {
+  fixed: [
+    {
+      title: "Range plugin 12h AM/PM sync",
+      description:
+        "AM/PM state desynchronization when switching between From/To tabs. Clock now correctly syncs internal AM/PM state with saved range values",
+    },
+  ],
+};
+
 const CHANGELOG_416 = {
   fixed: [
     {
@@ -347,8 +357,19 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.1.6</strong> - Released February 14, 2026
+        <strong>v4.1.7</strong> - Released March 8, 2026
       </InfoBox>
+
+      <Section icon={Bug} title="Version 4.1.7 - March 8, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_417.fixed}
+          />
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.1.6 - February 14, 2026">
         <div className="space-y-4">

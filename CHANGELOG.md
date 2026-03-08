@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.1.7] - 2026-03-08
+
+### Fixed
+
+- Range plugin 12h mode: AM/PM state desynchronization when switching between From/To tabs. Clock now correctly syncs internal AM/PM state with saved range values
+
+---
+
 ## [4.1.6] - 2026-02-14
 
 ### Fixed

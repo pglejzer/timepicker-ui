@@ -799,6 +799,33 @@ const range24hPicker = new TimepickerUI('#range-picker-24h', {
 });
 range24hPicker.create();
 
+const range12hAmPmPicker = new TimepickerUI('#range-picker-12h-ampm', {
+  clock: { type: '12h' },
+  ui: { enableSwitchIcon: true },
+  range: {
+    enabled: true,
+    fromLabel: 'From',
+    toLabel: 'To',
+  },
+  callbacks: {
+    onRangeConfirm: (data) => {
+      console.log('Range 12h AM/PM confirmed:', data.from, '–', data.to, 'Duration:', data.duration);
+      const rangeDisplay = document.getElementById('range-display-12h-ampm');
+      const durationDisplay = document.getElementById('range-duration-12h-ampm');
+      if (rangeDisplay) {
+        rangeDisplay.textContent = `${data.from} – ${data.to}`;
+      }
+      if (durationDisplay) {
+        durationDisplay.textContent = String(data.duration);
+      }
+    },
+    onRangeSwitch: (data) => {
+      console.log('Range 12h AM/PM part switched to:', data.active);
+    },
+  },
+});
+range12hAmPmPicker.create();
+
 // getValue() Without Opening Widget Demo (Bug Fix Demo)
 const getValueDemoPicker = new TimepickerUI('#getvalue-demo-picker', {
   clock: { type: '24h' },
