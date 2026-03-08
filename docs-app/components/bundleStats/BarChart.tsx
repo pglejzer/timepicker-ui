@@ -71,8 +71,10 @@ export function BarChart({
                 ? "0 8px 24px rgba(0,0,0,0.4)"
                 : "0 8px 24px rgba(0,0,0,0.12)",
             }}
-            formatter={(value: number | undefined) =>
-              value !== undefined ? [formatBytes(value), "Size"] : ["", ""]
+            formatter={(value) =>
+              typeof value === "number"
+                ? [formatBytes(value), "Size"]
+                : ["", ""]
             }
             labelStyle={{ color: colors.tooltipLabel, fontWeight: 600 }}
             cursor={{
