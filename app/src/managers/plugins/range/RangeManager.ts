@@ -12,6 +12,7 @@ export default class RangeManager {
   private readonly state: RangeState;
   private readonly ui: RangeUI;
   private cleanupHandlers: Array<() => void> = [];
+  private isSyncingAmPm = false;
 
   private boundHandleMinuteCommit: (data: RangeMinuteCommitEventData) => void;
   private boundHandleConfirm: (data: ConfirmEventData) => void;
@@ -50,6 +51,7 @@ export default class RangeManager {
 
     this.bindEvents();
     this.ui.syncClockToActivePart();
+    this.emitAmPmSyncEvent();
     this.ui.updateAll();
   }
 
@@ -70,6 +72,7 @@ export default class RangeManager {
     }
 
     this.ui.syncClockToActivePart();
+    this.emitAmPmSyncEvent();
     this.ui.updateAll();
   }
 
@@ -182,6 +185,7 @@ export default class RangeManager {
           disabledTime: this.state.getDisabledTimeForEndPart(),
         });
         this.ui.syncClockToActivePart();
+        this.emitAmPmSyncEvent();
       }
     } else {
       this.state.setToValue(value);
@@ -194,6 +198,7 @@ export default class RangeManager {
 
   private handleAmPm(): void {
     if (!this.isEnabled) return;
+    if (this.isSyncingAmPm) return;
     if (this.core.options.clock.type !== '12h') return;
 
     const activeTypeMode = this.core.getActiveTypeMode();
@@ -215,6 +220,7 @@ export default class RangeManager {
             disabledTime: this.state.getDisabledTimeForEndPart(),
           });
           this.ui.syncClockToActivePart();
+          this.emitAmPmSyncEvent();
         }
       }
     } else {
@@ -230,6 +236,24 @@ export default class RangeManager {
 
     this.state.validate();
     this.ui.updateAll();
+  }
+
+  private emitAmPmSyncEvent(): void {
+    if (this.core.options.clock.type !== '12h') return;
+
+    const savedValue = this.state.getSavedValue();
+    if (!savedValue?.type) return;
+
+    this.isSyncingAmPm = true;
+    try {
+      if (savedValue.type === 'AM') {
+        this.emitter.emit('select:am', {});
+      } else if (savedValue.type === 'PM') {
+        this.emitter.emit('select:pm', {});
+      }
+    } finally {
+      this.isSyncingAmPm = false;
+    }
   }
 
   private handleConfirm(_data: ConfirmEventData): void {
