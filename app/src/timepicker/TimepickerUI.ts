@@ -7,6 +7,7 @@ import { getInputValue } from '../utils/input';
 import { mergeOptions } from '../utils/options';
 import { sanitizeTimeInput } from '../utils/validation';
 import type { TimepickerOptions } from '../types/options';
+import type { WheelManager } from '../managers/plugins/wheel';
 import { isDocument, isNode } from '../utils/node';
 
 type Callback = () => void;
@@ -315,9 +316,16 @@ export default class TimepickerUI {
         }
       }
 
-      const clockHand = this.core.getClockHand();
-      if (clockHand) {
-        clockHand.style.transform = `rotateZ(${this.core.degreesHours || 0}deg)`;
+      if (this.core.options.ui.mode === 'wheel') {
+        const wheel = this.managers.getPlugin<WheelManager>('wheel');
+        if (wheel) {
+          wheel.scrollToValue(hourValue, minutesValue, typeValue);
+        }
+      } else {
+        const clockHand = this.core.getClockHand();
+        if (clockHand) {
+          clockHand.style.transform = `rotateZ(${this.core.degreesHours || 0}deg)`;
+        }
       }
     } catch (error) {
       return;

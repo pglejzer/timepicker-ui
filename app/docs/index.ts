@@ -1,10 +1,12 @@
 import { TimepickerUI, PluginRegistry } from '../src/index';
 import { RangePlugin } from '../src/plugins/range';
 import { TimezonePlugin } from '../src/plugins/timezone';
+import { WheelPlugin } from '../src/plugins/wheel';
 import { codeToHtml } from 'shiki';
 
 PluginRegistry.register(RangePlugin);
 PluginRegistry.register(TimezonePlugin);
+PluginRegistry.register(WheelPlugin);
 
 console.log(
   `%c
@@ -284,6 +286,38 @@ const smoothHourPicker = new TimepickerUI('#smooth-hour-snap-picker', {
   clock: { smoothHourSnap: true },
 });
 smoothHourPicker.create();
+
+const wheelBasicPicker = new TimepickerUI('#wheel-basic', {
+  ui: { mode: 'wheel' },
+});
+wheelBasicPicker.create();
+
+const wheel24hPicker = new TimepickerUI('#wheel-24h', {
+  clock: { type: '24h' },
+  ui: { mode: 'wheel' },
+});
+wheel24hPicker.create();
+
+const wheelDarkPicker = new TimepickerUI('#wheel-dark', {
+  ui: { mode: 'wheel', theme: 'dark' },
+});
+wheelDarkPicker.create();
+
+const wheelM3Picker = new TimepickerUI('#wheel-m3', {
+  ui: { mode: 'wheel', theme: 'm3-green' },
+});
+wheelM3Picker.create();
+
+const wheelCyberpunkPicker = new TimepickerUI('#wheel-cyberpunk', {
+  ui: { mode: 'wheel', theme: 'cyberpunk' },
+});
+wheelCyberpunkPicker.create();
+
+const wheelStepPicker = new TimepickerUI('#wheel-step', {
+  clock: { incrementMinutes: 5 },
+  ui: { mode: 'wheel' },
+});
+wheelStepPicker.create();
 
 const inlinePicker = new TimepickerUI('#inline-picker', {
   clock: { type: '24h' },
@@ -914,3 +948,40 @@ themes.forEach((theme) => {
   });
   picker.create();
 });
+
+const clearButtonPicker = new TimepickerUI('#clear-button-picker', {
+  ui: {
+    clearButton: true,
+    theme: 'basic',
+    enableSwitchIcon: true,
+  },
+  labels: {
+    clear: 'Clear',
+  },
+  clock: {
+    type: '12h',
+  },
+  callbacks: {
+    onClear: (data) => {
+      console.log('Time cleared! Previous value:', data.previousValue);
+    },
+  },
+});
+clearButtonPicker.create();
+
+const clearNoClearInputPicker = new TimepickerUI('#clear-no-input-picker', {
+  ui: {
+    clearButton: true,
+    theme: 'basic',
+    enableSwitchIcon: true,
+  },
+  clearBehavior: {
+    clearInput: false,
+  },
+  callbacks: {
+    onClear: (data) => {
+      console.log('Clear clicked (input kept)! Previous value:', data.previousValue);
+    },
+  },
+});
+clearNoClearInputPicker.create();

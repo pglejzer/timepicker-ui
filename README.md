@@ -7,7 +7,7 @@ Modern time picker library built with TypeScript. Works with any framework or va
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://img.shields.io/npm/l/timepicker-ui)
 [![Coverage Status](https://coveralls.io/repos/github/pglejzer/timepicker-ui/badge.svg?branch=main)](https://coveralls.io/github/pglejzer/timepicker-ui?branch=main)
 [![Tests](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml/badge.svg)](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml)
-[![Socket Badge](https://badge.socket.dev/npm/package/timepicker-ui/4.1.1)](https://badge.socket.dev/npm/package/timepicker-ui/4.1.1)
+[![Socket Badge](https://badge.socket.dev/npm/package/timepicker-ui/4.2.0)](https://badge.socket.dev/npm/package/timepicker-ui/4.2.0)
 
 [Live Demo](https://timepicker-ui.vercel.app/) • [Documentation](https://timepicker-ui.vercel.app/docs) • [React Wrapper](https://github.com/pglejzer/timepicker-ui-react) • [Changelog](./CHANGELOG.md)
 
@@ -18,9 +18,11 @@ Modern time picker library built with TypeScript. Works with any framework or va
 
 - 10 built-in themes (Material, Crane, Dark, Glassmorphic, Cyberpunk, and more)
 - Mobile-first design with touch support
+- **Wheel (scroll-spinner) mode** — alternative to the analog clock face
 - Framework agnostic - works with React, Vue, Angular, Svelte, or vanilla JS
 - Full TypeScript support
 - Inline mode for always-visible timepicker
+- Clear button to reset time selection
 - ARIA-compliant and keyboard accessible
 - SSR compatible
 - Lightweight with tree-shaking support
@@ -157,6 +159,7 @@ const picker = new TimepickerUI(input, {
   labels: LabelsOptions, // Text labels (AM/PM, buttons, headers)
   behavior: BehaviorOptions, // Behavior (focus, delays, ID)
   callbacks: CallbacksOptions, // Event handlers
+  clearBehavior: ClearBehaviorOptions, // Clear button behavior
 });
 ```
 
@@ -174,20 +177,22 @@ const picker = new TimepickerUI(input, {
 
 ### UI Options
 
-| Property              | Type    | Default     | Description                     |
-| --------------------- | ------- | ----------- | ------------------------------- |
-| `theme`               | string  | `basic`     | Theme (11 themes available)     |
-| `animation`           | boolean | `true`      | Enable animations               |
-| `backdrop`            | boolean | `true`      | Show backdrop overlay           |
-| `mobile`              | boolean | `false`     | Force mobile version            |
-| `enableSwitchIcon`    | boolean | `false`     | Show desktop/mobile switch icon |
-| `editable`            | boolean | `false`     | Allow manual input editing      |
-| `enableScrollbar`     | boolean | `false`     | Enable scroll when picker open  |
-| `cssClass`            | string  | `undefined` | Additional CSS class            |
-| `appendModalSelector` | string  | `""`        | Custom container selector       |
-| `iconTemplate`        | string  | SVG         | Desktop switch icon template    |
-| `iconTemplateMobile`  | string  | SVG         | Mobile switch icon template     |
-| `inline`              | object  | `undefined` | Inline mode configuration       |
+| Property              | Type              | Default     | Description                                  |
+| --------------------- | ----------------- | ----------- | -------------------------------------------- |
+| `theme`               | string            | `basic`     | Theme (11 themes available)                  |
+| `animation`           | boolean           | `true`      | Enable animations                            |
+| `backdrop`            | boolean           | `true`      | Show backdrop overlay                        |
+| `mobile`              | boolean           | `false`     | Force mobile version                         |
+| `enableSwitchIcon`    | boolean           | `false`     | Show desktop/mobile switch icon              |
+| `editable`            | boolean           | `false`     | Allow manual input editing                   |
+| `enableScrollbar`     | boolean           | `false`     | Enable scroll when picker open               |
+| `cssClass`            | string            | `undefined` | Additional CSS class                         |
+| `appendModalSelector` | string            | `""`        | Custom container selector                    |
+| `iconTemplate`        | string            | SVG         | Desktop switch icon template                 |
+| `iconTemplateMobile`  | string            | SVG         | Mobile switch icon template                  |
+| `inline`              | object            | `undefined` | Inline mode configuration                    |
+| `clearButton`         | boolean           | `true`      | Show clear button                            |
+| `mode`                | `clock` / `wheel` | `clock`     | Picker mode — analog clock or scroll-spinner |
 
 ### Labels Options
 
@@ -201,6 +206,7 @@ const picker = new TimepickerUI(input, {
 | `mobileTime`   | string | `Enter Time`  | Mobile time label   |
 | `mobileHour`   | string | `Hour`        | Mobile hour label   |
 | `mobileMinute` | string | `Minute`      | Mobile minute label |
+| `clear`        | string | `Clear`       | Clear button text   |
 
 ### Behavior Options
 
@@ -210,6 +216,12 @@ const picker = new TimepickerUI(input, {
 | `focusTrap`            | boolean | `true`         | Trap focus in modal     |
 | `delayHandler`         | number  | `300`          | Click delay (ms)        |
 | `id`                   | string  | auto-generated | Custom instance ID      |
+
+### Clear Behavior Options
+
+| Property     | Type    | Default | Description                             |
+| ------------ | ------- | ------- | --------------------------------------- |
+| `clearInput` | boolean | `true`  | Whether clearing also empties the input |
 
 ### Callbacks Options
 
@@ -224,6 +236,7 @@ const picker = new TimepickerUI(input, {
 | `onSelectAM`     | function | AM selected              |
 | `onSelectPM`     | function | PM selected              |
 | `onError`        | function | Error occurred           |
+| `onClear`        | function | Time cleared             |
 
 ### Migration from v3.x to v4.0.0
 
@@ -347,6 +360,33 @@ const picker = new TimepickerUI(input, {
 });
 ```
 
+### Wheel Mode
+
+Wheel mode replaces the analog clock face with a touch-friendly scroll-spinner. The header (hour/minute inputs, AM/PM toggle) and footer (OK/Cancel buttons) remain unchanged — only the clock body is replaced.
+
+```javascript
+const picker = new TimepickerUI(input, {
+  ui: { mode: "wheel" },
+});
+
+picker.create();
+```
+
+Wheel mode works with all existing features:
+
+- **12h / 24h**: Respects `clock.type` — AM/PM column appears only in 12h mode
+- **Themes**: Inherits the active theme via CSS variables
+- **Disabled time**: Disabled hours/minutes are dimmed and skipped during scroll snap
+- **setValue / getValue**: `picker.setValue('09:30 AM')` scrolls the wheel to the correct position
+- **Keyboard navigation**: Arrow Up/Down scrolls one item, Tab moves between columns
+- **Events**: All standard events work — `select:hour`, `select:minute`, `update`, `confirm`, `cancel`, `clear`, `select:am`, `select:pm`, `error`
+- **Wheel-specific events**: `wheel:scroll:start` (column starts scrolling), `wheel:scroll:end` (column snaps to value with `previousValue`)
+
+**Limitations (v1):**
+
+- Range plugin (`range.enabled`) is not supported in wheel mode
+- `ui.mobile` is ignored — wheel layout is always the same regardless of viewport
+
 ## API Methods
 
 ### Instance Methods
@@ -415,6 +455,20 @@ picker.on("select:pm", (data) => {
 
 picker.on("error", (data) => {
   console.log("Error:", data.error);
+});
+
+picker.on("clear", (data) => {
+  console.log("Cleared, previous value:", data.previousValue);
+});
+
+// Wheel-specific events (wheel mode only)
+picker.on("wheel:scroll:start", (data) => {
+  console.log("Scroll started on:", data.column);
+});
+
+picker.on("wheel:scroll:end", (data) => {
+  console.log("Column:", data.column, "snapped to:", data.value);
+  console.log("Previous value:", data.previousValue);
 });
 
 picker.once("confirm", (data) => {
@@ -635,6 +689,7 @@ All modules are now SSR-safe and can be imported in Node.js environments without
 - **Better TypeScript types** - Fully typed event payloads and options
 - **Smaller bundle** - Removed unused code, optimized build (63.3 KB ESM)
 - **Focus improvements** - Auto-focus on modal open, auto-focus on minute switch
+- **Clear button** - Reset time selection with a dedicated clear button (v4.2.0)
 
 ### Bundle Size Comparison
 

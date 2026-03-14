@@ -134,6 +134,19 @@
   --tp-gap-md: 12px;
 
   --tp-position-hidden: -10000px;
+
+  --tp-wheel-item-height: 44px;
+  --tp-wheel-visible-items: 5;
+  --tp-wheel-column-width: 76px;
+  --tp-wheel-separator-width: 20px;
+  --tp-wheel-highlight-bg: var(--tp-primary-container, rgba(103, 80, 164, 0.08));
+  --tp-wheel-highlight-border: var(--tp-outline-variant, rgba(0, 0, 0, 0.12));
+  --tp-wheel-highlight-radius: var(--tp-radius-md);
+  --tp-wheel-text-color: var(--tp-on-surface, #1d1b20);
+  --tp-wheel-selected-color: var(--tp-primary, #6750a4);
+  --tp-wheel-disabled-opacity: var(--tp-opacity-disabled, 0.38);
+  --tp-wheel-font-size: var(--tp-font-size-lg, 16px);
+  --tp-wheel-selected-font-size: 22px;
 }
 
 $red-invalid: #d50000;

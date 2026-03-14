@@ -59,6 +59,40 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_420 = {
+  added: [
+    {
+      title: "Wheel mode",
+      description:
+        "Scroll-spinner interface replacing the analog clock face. Enable via ui.mode: 'wheel'. Supports 12h/24h, all themes, disabled time, and keyboard navigation",
+    },
+    {
+      title: "Clear button",
+      description:
+        "Reset time selection with a dedicated clear button. Enabled by default via ui.clearButton option",
+    },
+    {
+      title: "clearBehavior.clearInput option",
+      description:
+        "Control whether clearing also empties the input field value (default: true)",
+    },
+    {
+      title: "labels.clear option",
+      description: 'Customize the clear button text (default: "Clear")',
+    },
+    {
+      title: "onClear callback and clear event",
+      description:
+        "New callback and EventEmitter event with previousValue payload",
+    },
+    {
+      title: "ClearEventData and ClearBehaviorOptions types",
+      description:
+        "Exported TypeScript types for clear button configuration and event data",
+    },
+  ],
+};
+
 const CHANGELOG_417 = {
   fixed: [
     {
@@ -357,8 +391,19 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.1.7</strong> - Released March 8, 2026
+        <strong>v4.2.0</strong> - Released March 13, 2026
       </InfoBox>
+
+      <Section icon={History} title="Version 4.2.0 - March 13, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Sparkles}
+            label="Added"
+            color="green-500"
+            items={CHANGELOG_420.added}
+          />
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.1.7 - March 8, 2026">
         <div className="space-y-4">

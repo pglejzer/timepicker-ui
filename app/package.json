@@ -19,14 +19,21 @@
       "types": "./dist/plugins/timezone.d.ts",
       "import": "./dist/plugins/timezone.js",
       "require": "./dist/plugins/timezone.umd.js"
+    },
+    "./plugins/wheel": {
+      "types": "./dist/plugins/wheel.d.ts",
+      "import": "./dist/plugins/wheel.js",
+      "require": "./dist/plugins/wheel.umd.js"
     }
   },
   "type": "module",
   "sideEffects": [
     "**/plugins/range.ts",
     "**/plugins/timezone.ts",
+    "**/plugins/wheel.ts",
     "**/plugins/range.js",
-    "**/plugins/timezone.js"
+    "**/plugins/timezone.js",
+    "**/plugins/wheel.js"
   ],
   "files": [
     "dist/*"

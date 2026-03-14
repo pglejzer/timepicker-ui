@@ -20,6 +20,7 @@ import type {
   RangeConfirmEventData,
   RangeSwitchEventData,
   RangeValidationEventData,
+  ClearEventData,
 } from './types';
 
 /**
@@ -98,6 +99,12 @@ export interface ClockOptions {
  */
 export interface UIOptions {
   /**
+   * @description Picker mode: analog clock face or scroll wheel spinner
+   * @default "clock"
+   */
+  mode?: 'clock' | 'wheel';
+
+  /**
    * @description Theme for the timepicker
    * @default "basic"
    */
@@ -154,6 +161,12 @@ export interface UIOptions {
    * @example cssClass: "my-custom-timepicker"
    */
   cssClass?: string;
+
+  /**
+   * @description Show clear button to reset time selection
+   * @default true
+   */
+  clearButton?: boolean;
 
   /**
    * @description Selector where to append modal (default: body)
@@ -242,6 +255,12 @@ export interface LabelsOptions {
    * @default "Minute"
    */
   mobileMinute?: string;
+
+  /**
+   * @description "Clear" button text
+   * @default "Clear"
+   */
+  clear?: string;
 }
 
 /**
@@ -406,6 +425,22 @@ export interface CallbacksOptions {
    * @description Triggered on range validation (range mode only)
    */
   onRangeValidation?: TimepickerEventCallback<RangeValidationEventData>;
+
+  /**
+   * @description Triggered when clear button is clicked
+   */
+  onClear?: TimepickerEventCallback<ClearEventData>;
+}
+
+/**
+ * Clear button behavior configuration
+ */
+export interface ClearBehaviorOptions {
+  /**
+   * @description Whether clicking clear also empties the input field value
+   * @default true
+   */
+  clearInput?: boolean;
 }
 
 /**
@@ -419,4 +454,5 @@ export interface TimepickerOptions {
   callbacks?: CallbacksOptions;
   timezone?: TimezoneOptions;
   range?: RangeOptions;
+  clearBehavior?: ClearBehaviorOptions;
 }

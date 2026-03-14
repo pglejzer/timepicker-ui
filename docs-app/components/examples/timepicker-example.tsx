@@ -22,7 +22,7 @@ interface TimepickerExampleProps {
   options?: Record<string, unknown>;
   inputPlaceholder?: string;
   showCode?: boolean;
-  plugins?: Array<"range" | "timezone">;
+  plugins?: Array<"range" | "timezone" | "wheel">;
 }
 
 export function TimepickerExample({
@@ -56,6 +56,10 @@ export function TimepickerExample({
         const { TimezonePlugin } =
           await import("timepicker-ui/plugins/timezone");
         PluginRegistry.register(TimezonePlugin);
+      }
+      if (plugins.includes("wheel")) {
+        const { WheelPlugin } = await import("timepicker-ui/plugins/wheel");
+        PluginRegistry.register(WheelPlugin);
       }
 
       if (
