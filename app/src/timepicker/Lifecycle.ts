@@ -1,6 +1,7 @@
 import type { CoreState } from './CoreState';
 import type { Managers } from './Managers';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
+import { PluginRegistry } from '../core/PluginRegistry';
 import { initMd3Ripple } from '../utils/ripple';
 import { debounce } from '../utils/debounce';
 import { allEvents } from '../utils/variables';
@@ -91,6 +92,10 @@ export class Lifecycle {
     }
     if (callbacks.onRangeValidation) {
       this.emitter.on('range:validation', callbacks.onRangeValidation);
+    }
+
+    if (callbacks.onClear) {
+      this.emitter.on('clear', callbacks.onClear);
     }
   }
 
@@ -276,9 +281,37 @@ export class Lifecycle {
     this.managers.animation.setAnimationToOpen();
     this.managers.config.getInputValueOnOpenAndSet();
 
-    this.managers.clock.initializeClockSystem();
-    this.managers.clock.setOnStartCSSClassesIfClockType24h();
-    this.managers.clock.setClassActiveToHourOnOpen();
+    const isWheelMode = this.core.options.ui.mode === 'wheel' && PluginRegistry.has('wheel');
+
+    if (this.core.options.ui.mode === 'wheel' && !PluginRegistry.has('wheel')) {
+      this.emitter.emit('error', {
+        error: 'WheelPlugin is not registered. Import and register it: PluginRegistry.register(WheelPlugin)',
+      });
+    }
+
+    if (this.core.options.range?.enabled && !PluginRegistry.has('range')) {
+      this.emitter.emit('error', {
+        error: 'RangePlugin is not registered. Import and register it: PluginRegistry.register(RangePlugin)',
+      });
+    }
+
+    if (this.core.options.timezone?.enabled && !PluginRegistry.has('timezone')) {
+      this.emitter.emit('error', {
+        error:
+          'TimezonePlugin is not registered. Import and register it: PluginRegistry.register(TimezonePlugin)',
+      });
+    }
+
+    if (isWheelMode) {
+      const wheel = this.managers.getPlugin('wheel');
+      if (wheel) {
+        wheel.init();
+      }
+    } else {
+      this.managers.clock.initializeClockSystem();
+      this.managers.clock.setOnStartCSSClassesIfClockType24h();
+      this.managers.clock.setClassActiveToHourOnOpen();
+    }
 
     const timezone = this.managers.getPlugin('timezone');
     if (timezone) {
@@ -286,17 +319,22 @@ export class Lifecycle {
     }
 
     const range = this.managers.getPlugin('range');
-    if (range) {
+    if (range && !isWheelMode) {
       range.init();
     }
 
     this.managers.events.handleCancelButton();
     this.managers.events.handleOkButton();
-    this.managers.events.handleHourEvents();
-    this.managers.events.handleMinutesEvents();
+    this.managers.clearButton.init();
+
+    if (!isWheelMode) {
+      this.managers.events.handleHourEvents();
+      this.managers.events.handleMinutesEvents();
+    }
+
     this.managers.events.handleKeyboardInput();
 
-    if (this.core.options.ui.enableSwitchIcon) {
+    if (this.core.options.ui.enableSwitchIcon && !isWheelMode) {
       this.managers.events.handleSwitchViewButton();
     }
 
@@ -319,13 +357,15 @@ export class Lifecycle {
       initMd3Ripple(modal);
     }
 
-    const clockFace = this.core.getClockFace();
-    if (clockFace && typeof requestAnimationFrame !== 'undefined') {
-      requestAnimationFrame(() => {
+    if (!isWheelMode) {
+      const clockFace = this.core.getClockFace();
+      if (clockFace && typeof requestAnimationFrame !== 'undefined') {
         requestAnimationFrame(() => {
-          clockFace?.classList.add('scale-in');
+          requestAnimationFrame(() => {
+            clockFace?.classList.add('scale-in');
+          });
         });
-      });
+      }
     }
 
     this.managers.modal.setShowClassToBackdrop();

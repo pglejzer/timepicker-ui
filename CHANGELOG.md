@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.2.0] - 2026-03-13
+
+### Added
+
+- Wheel mode — scroll-spinner interface replacing the analog clock face. Enable via `ui.mode: 'wheel'`
+- Wheel mode supports 12h/24h, all themes, disabled time, setValue/getValue, and keyboard navigation
+- Wheel mode emits all standard events (`select:hour`, `select:minute`, `update`, `confirm`, `cancel`, `clear`, `select:am`, `select:pm`, `error`) — no separate API needed
+- `wheel:scroll:start` event — fires when a wheel column starts scrolling (includes `column` field)
+- `wheel:scroll:end` event — fires when a wheel column snaps to a value (includes `column`, `value`, `previousValue` fields)
+- Exported `WheelScrollStartEventData` and `WheelScrollEndEventData` types
+- Clear button to reset time selection. Enabled by default via `ui.clearButton` option
+- `clearBehavior.clearInput` option to control whether clearing also empties the input field value
+- `labels.clear` option to customize the clear button text
+- `onClear` callback and `clear` event with `previousValue` payload
+- Clear button automatically disables when no time is selected and re-enables on interaction
+- Clock hands reset to neutral position (12:00) and confirm button disables after clearing
+- Screen reader announcement when time is cleared
+- Exported `ClearEventData` and `ClearBehaviorOptions` types
+
+---
+
 ## [4.1.7] - 2026-03-08
 
 ### Fixed

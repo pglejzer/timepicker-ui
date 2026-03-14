@@ -5,6 +5,7 @@ export default defineConfig({
     index: 'src/index.ts',
     'plugins/range': 'src/range.ts',
     'plugins/timezone': 'src/timezone.ts',
+    'plugins/wheel': 'src/wheel.ts',
   },
   format: ['esm', 'cjs'],
   outDir: '../dist',

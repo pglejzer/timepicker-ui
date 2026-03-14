@@ -1,6 +1,15 @@
 import { CodeBlock } from "@/components/code-block";
 import { Section } from "@/components/section";
-import { Settings, Tag, Layout, Lock, Clock, Zap, Bell } from "lucide-react";
+import {
+  Settings,
+  Tag,
+  Layout,
+  Lock,
+  Clock,
+  Zap,
+  Bell,
+  Trash2,
+} from "lucide-react";
 import { InfoBox } from "@/components/info-box";
 
 export const metadata = {
@@ -37,6 +46,12 @@ const clockOptions = [
     type: "object",
     default: "undefined",
     description: "Disable specific times",
+  },
+  {
+    name: "smoothHourSnap",
+    type: "boolean",
+    default: "true",
+    description: "Smooth hour dragging with snap",
   },
   {
     name: "currentTime",
@@ -119,6 +134,18 @@ const uiOptions = [
     default: "undefined",
     description: "Inline mode config",
   },
+  {
+    name: "clearButton",
+    type: "boolean",
+    default: "true",
+    description: "Show clear button",
+  },
+  {
+    name: "mode",
+    type: "clock | wheel",
+    default: "clock",
+    description: "Picker mode",
+  },
 ];
 
 const labelsOptions = [
@@ -154,6 +181,12 @@ const labelsOptions = [
     type: "string",
     default: "Minute",
     description: "Mobile minute",
+  },
+  {
+    name: "clear",
+    type: "string",
+    default: "Clear",
+    description: "Clear button text",
   },
 ];
 
@@ -238,6 +271,21 @@ const callbacksOptions = [
     type: "function",
     default: "undefined",
     description: "Error occurred",
+  },
+  {
+    name: "onClear",
+    type: "function",
+    default: "undefined",
+    description: "Time cleared",
+  },
+];
+
+const clearBehaviorOptions = [
+  {
+    name: "clearInput",
+    type: "boolean",
+    default: "true",
+    description: "Whether clearing also empties the input",
   },
 ];
 
@@ -333,6 +381,13 @@ export default function ConfigurationPage() {
           Control focus, delays, and instance behavior:
         </p>
         <OptionsTable options={behaviorOptions} />
+      </Section>
+
+      <Section icon={Trash2} title="Clear Behavior Options">
+        <p className="text-muted-foreground mb-4">
+          Control clear button behavior:
+        </p>
+        <OptionsTable options={clearBehaviorOptions} />
       </Section>
 
       <Section icon={Bell} title="Callbacks Options">

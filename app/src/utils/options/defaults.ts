@@ -1,9 +1,3 @@
-/**
- * Default options for Timepicker UI v4.0.0
- *
- * Uses grouped structure for better organization and clarity.
- */
-
 import type { TimepickerOptions } from '../../types/options';
 
 export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
@@ -17,6 +11,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
   },
 
   ui: {
+    mode: 'clock',
     theme: 'basic',
     animation: true,
     backdrop: true,
@@ -29,6 +24,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     iconTemplate: '',
     iconTemplateMobile: '',
     inline: undefined,
+    clearButton: true,
   },
 
   labels: {
@@ -40,6 +36,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     mobileTime: 'Enter Time',
     mobileHour: 'Hour',
     mobileMinute: 'Minute',
+    clear: 'Clear',
   },
 
   behavior: {
@@ -63,6 +60,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     onRangeConfirm: undefined,
     onRangeSwitch: undefined,
     onRangeValidation: undefined,
+    onClear: undefined,
   },
 
   timezone: {
@@ -78,6 +76,10 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     maxDuration: undefined,
     fromLabel: 'From',
     toLabel: 'To',
+  },
+
+  clearBehavior: {
+    clearInput: true,
   },
 };
 
@@ -110,6 +112,10 @@ export function mergeOptions(userOptions: TimepickerOptions = {}): Required<Time
     range: {
       ...DEFAULT_OPTIONS.range,
       ...(userOptions.range || {}),
+    },
+    clearBehavior: {
+      ...DEFAULT_OPTIONS.clearBehavior,
+      ...(userOptions.clearBehavior || {}),
     },
   };
 }

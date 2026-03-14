@@ -965,6 +965,148 @@ smoothHourPicker.create();</code></pre>
         </section>
 
         <section
+          id="wheel-mode"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div class="bg-gradient-to-r from-sky-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Wheel Mode</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Scroll-spinner interface — replaces the analog clock face with touch-friendly wheels
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >12h Wheel</label
+                  >
+                  <input
+                    id="wheel-basic"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+                    value="10:30 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >24h Wheel</label
+                  >
+                  <input
+                    id="wheel-24h"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+                    value="14:45"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Wheel + Dark Theme</label
+                  >
+                  <input
+                    id="wheel-dark"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+                    value="08:00 AM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Wheel + M3 Theme</label
+                  >
+                  <input
+                    id="wheel-m3"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+                    value="09:15 AM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Wheel + Cyberpunk</label
+                  >
+                  <input
+                    id="wheel-cyberpunk"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+                    value="11:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Wheel + 5 min step</label
+                  >
+                  <input
+                    id="wheel-step"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+                    value="07:30 AM"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="wheel-basic" value="10:30 PM" /&gt;
+&lt;input id="wheel-24h" value="14:45" /&gt;
+&lt;input id="wheel-dark" value="08:00 AM" /&gt;
+&lt;input id="wheel-m3" value="09:15 AM" /&gt;
+&lt;input id="wheel-cyberpunk" value="11:00 PM" /&gt;
+&lt;input id="wheel-step" value="07:30 AM" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">// Basic 12h wheel
+new TimepickerUI('#wheel-basic', {
+  ui: { mode: 'wheel' }
+}).create();
+
+// 24h wheel
+new TimepickerUI('#wheel-24h', {
+  clock: { type: '24h' },
+  ui: { mode: 'wheel' }
+}).create();
+
+// Wheel with dark theme
+new TimepickerUI('#wheel-dark', {
+  ui: { mode: 'wheel', theme: 'dark' }
+}).create();
+
+// Wheel with M3 theme
+new TimepickerUI('#wheel-m3', {
+  ui: { mode: 'wheel', theme: 'm3-green' }
+}).create();
+
+// Wheel with Cyberpunk theme
+new TimepickerUI('#wheel-cyberpunk', {
+  ui: { mode: 'wheel', theme: 'cyberpunk' }
+}).create();
+
+// Wheel with 5-minute step
+new TimepickerUI('#wheel-step', {
+  clock: { incrementMinutes: 5 },
+  ui: { mode: 'wheel' }
+}).create();</code></pre>
+              </div>
+            </div>
+            <div
+              class="mt-6 p-4 bg-sky-50 dark:bg-sky-900/20 rounded-lg border border-sky-200 dark:border-sky-800"
+            >
+              <h4 class="text-sm font-semibold text-sky-900 dark:text-sky-200 mb-2">Wheel Mode Notes</h4>
+              <ul class="text-sm text-sky-800 dark:text-sky-300 space-y-1 list-disc list-inside">
+                <li>
+                  Set <code class="bg-sky-100 dark:bg-sky-800 px-1 rounded">ui.mode: 'wheel'</code> to replace
+                  the analog clock with scroll wheels
+                </li>
+                <li>Works with all themes via CSS variables</li>
+                <li>AM/PM column appears automatically in 12h mode</li>
+                <li>
+                  <code class="bg-sky-100 dark:bg-sky-800 px-1 rounded">clock.incrementMinutes</code> controls
+                  the minute step between wheel items
+                </li>
+                <li>Keyboard: Arrow Up/Down scrolls one item, Tab moves between columns</li>
+                <li>Range plugin is not supported in wheel mode</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section
           id="inline-mode"
           class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
         >
@@ -1540,6 +1682,116 @@ if (pickerElement) {
   });
 }
 </code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          id="clear-button"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Clear Button</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Allow users to clear selected time with a dedicated button
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="clear-button-picker"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="2:30 PM"
+                />
+              </div>
+              <div class="mt-4 text-center">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  <strong>Try it:</strong> Open the timepicker and click the "Clear" button on the left side
+                  to reset the time.
+                </p>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="clear-button-picker" value="2:30 PM" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const clearButtonPicker = new TimepickerUI('#clear-button-picker', {
+  ui: { 
+    clearButton: true,
+    theme: 'basic'
+  },
+  labels: {
+    clear: 'Clear'
+  },
+  callbacks: {
+    onClear: (data) => {
+      console.log('Time cleared! Previous value:', data.previousValue);
+    }
+  }
+});
+clearButtonPicker.create();</code></pre>
+              </div>
+            </div>
+            <div
+              class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800"
+            >
+              <h4 class="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-2">
+                Clear Button Behavior
+              </h4>
+              <ul class="text-sm text-blue-800 dark:text-blue-300 space-y-1 list-disc list-inside">
+                <li>Removes the selected time value completely</li>
+                <li>Resets clock hands to neutral position (12:00 for 12h, 12:00 for 24h)</li>
+                <li>Disables the confirm button until a new time is selected</li>
+                <li>
+                  Triggers the <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">onClear</code> callback
+                  with previous value
+                </li>
+                <li>The button is disabled when no time is selected</li>
+                <li>
+                  Use
+                  <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded"
+                    >clearBehavior: { clearInput: false }</code
+                  >
+                  to keep the input value when clearing
+                </li>
+              </ul>
+            </div>
+            <div class="mt-8">
+              <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                Clear without clearing input
+              </h4>
+              <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-4">
+                <div class="flex justify-center">
+                  <input
+                    id="clear-no-input-picker"
+                    class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    value="9:15 AM"
+                  />
+                </div>
+                <div class="mt-4 text-center">
+                  <p class="text-sm text-gray-600 dark:text-gray-400">
+                    <strong>Try it:</strong> Click "Clear" — the clock resets but the input keeps its value.
+                  </p>
+                </div>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const picker = new TimepickerUI('#clear-no-input-picker', {
+  ui: { clearButton: true },
+  clearBehavior: {
+    clearInput: false
+  },
+  callbacks: {
+    onClear: (data) => {
+      console.log('Clear clicked (input kept)!', data.previousValue);
+    }
+  }
+});
+picker.create();</code></pre>
               </div>
             </div>
           </div>

@@ -34,22 +34,35 @@ export default function WhatsNewPage() {
       </div>
 
       <InfoBox
-        title="Version 4.1.1 Released!"
+        title="Version 4.2.0 Released!"
         variant="emerald"
         className="mb-8"
       >
         <p className="mb-3">
-          <strong>February 1, 2026</strong> - Bug fix and quality improvements
+          <strong>March 13, 2026</strong> - Wheel mode &amp; clear button
         </p>
         <p className="text-sm">What&apos;s new:</p>
         <ul className="mt-2 space-y-1 text-sm ml-4">
           <li>
-            <strong>Mobile input validation fix</strong> - Invalid time values
-            (e.g., 169:70) now auto-clamp to valid ranges when typing
+            <strong>Wheel mode</strong> - Scroll-spinner interface replacing the
+            analog clock face. Enable via{" "}
+            <code>ui.mode: &apos;wheel&apos;</code>
           </li>
           <li>
-            <strong>Test coverage</strong> - Expanded to 1100+ tests with 90%+
-            code coverage
+            <strong>Clear button</strong> - Reset time selection with a
+            dedicated button, enabled by default via <code>ui.clearButton</code>
+          </li>
+          <li>
+            <strong>clearBehavior options</strong> - Control whether clearing
+            empties the input value with <code>clearBehavior.clearInput</code>
+          </li>
+          <li>
+            <strong>onClear callback &amp; event</strong> - New callback and
+            EventEmitter event with <code>previousValue</code> payload
+          </li>
+          <li>
+            <strong>New exported types</strong> - <code>ClearEventData</code>{" "}
+            and <code>ClearBehaviorOptions</code>
           </li>
         </ul>
         <Link

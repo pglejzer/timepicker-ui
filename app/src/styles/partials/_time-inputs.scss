@@ -82,7 +82,10 @@
     background-color: var(--tp-input-bg);
     border-radius: var(--tp-radius-md);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition:
+      color var(--tp-duration-slow, 300ms) var(--tp-easing-ease, ease),
+      background-color var(--tp-duration-slow, 300ms) var(--tp-easing-ease, ease),
+      border-color var(--tp-duration-slow, 300ms) var(--tp-easing-ease, ease);
     outline: none;
     border: var(--tp-border-width-thick) solid transparent;
     padding: var(--tp-size-padding);

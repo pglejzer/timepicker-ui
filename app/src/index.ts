@@ -4,6 +4,7 @@ import type {
   OpenEventData,
   CancelEventData,
   ConfirmEventData,
+  ClearEventData,
   ShowEventData,
   HideEventData,
   UpdateEventData,
@@ -17,6 +18,8 @@ import type {
   RangeSwitchEventData,
   RangeValidationEventData,
   ErrorEventData,
+  WheelScrollStartEventData,
+  WheelScrollEndEventData,
 } from './types/types';
 import type {
   TimepickerOptions,
@@ -27,6 +30,7 @@ import type {
   CallbacksOptions,
   TimezoneOptions,
   RangeOptions,
+  ClearBehaviorOptions,
 } from './types/options';
 import { EventEmitter } from './utils/EventEmitter';
 import type { TimepickerEventMap } from './utils/EventEmitter';
@@ -45,9 +49,11 @@ export {
   CallbacksOptions,
   TimezoneOptions,
   RangeOptions,
+  ClearBehaviorOptions,
   OpenEventData,
   CancelEventData,
   ConfirmEventData,
+  ClearEventData,
   ShowEventData,
   HideEventData,
   UpdateEventData,
@@ -61,6 +67,8 @@ export {
   RangeSwitchEventData,
   RangeValidationEventData,
   ErrorEventData,
+  WheelScrollStartEventData,
+  WheelScrollEndEventData,
   EventEmitter,
   PluginRegistry,
   Plugin,
