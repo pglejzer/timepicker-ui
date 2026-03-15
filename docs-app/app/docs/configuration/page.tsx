@@ -38,7 +38,7 @@ const clockOptions = [
   {
     name: "autoSwitchToMinutes",
     type: "boolean",
-    default: "false",
+    default: "true",
     description: "Auto-switch after hour",
   },
   {
@@ -142,9 +142,15 @@ const uiOptions = [
   },
   {
     name: "mode",
-    type: "clock | wheel",
+    type: "clock | wheel | compact-wheel",
     default: "clock",
     description: "Picker mode",
+  },
+  {
+    name: "wheel",
+    type: "object",
+    default: "undefined",
+    description: "Wheel config (placement, hideFooter, commitOnScroll)",
   },
 ];
 
@@ -421,7 +427,12 @@ export default function ConfigurationPage() {
     mobile: false,
     editable: false,
     enableScrollbar: false,
-    enableSwitchIcon: true
+    enableSwitchIcon: true,
+    wheel: {
+      placement: 'bottom',
+      hideFooter: true,
+      commitOnScroll: true
+    }
   },
   labels: {
     ok: 'Confirm',
@@ -457,7 +468,8 @@ export default function ConfigurationPage() {
   clock: {
     disabledTime: {
       hours: [1, 3, 5, 23],
-      minutes: [15, 30, 45]
+      minutes: [15, 30, 45],
+      hideOptions: true
     }
   }
 }`}
@@ -495,6 +507,25 @@ export default function ConfigurationPage() {
       containerId: 'timepicker-container',
       autoUpdate: true,
       showButtons: false
+    }
+  }
+}`}
+          language="typescript"
+        />
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
+          Wheel Mode
+        </h2>
+        <CodeBlock
+          code={`{
+  ui: {
+    mode: 'wheel',
+    wheel: {
+      placement: 'bottom',     // Popover placement (compact-wheel only)
+      hideFooter: true,        // Hide OK/Cancel footer
+      commitOnScroll: true     // Commit value on scroll end
     }
   }
 }`}

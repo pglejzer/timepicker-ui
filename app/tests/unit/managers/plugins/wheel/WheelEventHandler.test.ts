@@ -114,10 +114,12 @@ describe('WheelEventHandler', () => {
   describe('scroll end event emission', () => {
     it('should emit select:hour when scroll handler reports hour scroll end', () => {
       const emitSpy = jest.spyOn(ctx.emitter, 'emit');
-      let capturedCallback: ((columnType: string, value: string) => void) | null = null;
+      const capturedRef: { callback: ((columnType: string, value: string) => void) | null } = {
+        callback: null,
+      };
 
       jest.spyOn(scrollHandler, 'setScrollEndCallback').mockImplementation((cb) => {
-        capturedCallback = cb as (columnType: string, value: string) => void;
+        capturedRef.callback = cb as (columnType: string, value: string) => void;
       });
 
       jest.spyOn(scrollHandler, 'getCurrentSelection').mockReturnValue({
@@ -130,8 +132,8 @@ describe('WheelEventHandler', () => {
       eventHandler = new WheelEventHandler(ctx.emitter, scrollHandler, ctx.core);
       eventHandler.init();
 
-      expect(capturedCallback).not.toBeNull();
-      capturedCallback?.('hours', '09');
+      expect(capturedRef.callback).not.toBeNull();
+      capturedRef.callback?.('hours', '09');
 
       expect(emitSpy).toHaveBeenCalledWith('select:hour', { hour: '09' });
       expect(emitSpy).toHaveBeenCalledWith('update', {
@@ -143,10 +145,12 @@ describe('WheelEventHandler', () => {
 
     it('should emit select:minute when scroll handler reports minute scroll end', () => {
       const emitSpy = jest.spyOn(ctx.emitter, 'emit');
-      let capturedCallback: ((columnType: string, value: string) => void) | null = null;
+      const capturedRef: { callback: ((columnType: string, value: string) => void) | null } = {
+        callback: null,
+      };
 
       jest.spyOn(scrollHandler, 'setScrollEndCallback').mockImplementation((cb) => {
-        capturedCallback = cb as (columnType: string, value: string) => void;
+        capturedRef.callback = cb as (columnType: string, value: string) => void;
       });
 
       jest.spyOn(scrollHandler, 'getCurrentSelection').mockReturnValue({
@@ -159,8 +163,8 @@ describe('WheelEventHandler', () => {
       eventHandler = new WheelEventHandler(ctx.emitter, scrollHandler, ctx.core);
       eventHandler.init();
 
-      expect(capturedCallback).not.toBeNull();
-      capturedCallback?.('minutes', '45');
+      expect(capturedRef.callback).not.toBeNull();
+      capturedRef.callback?.('minutes', '45');
 
       expect(emitSpy).toHaveBeenCalledWith('select:minute', { minutes: '45' });
       expect(emitSpy).toHaveBeenCalledWith('update', {

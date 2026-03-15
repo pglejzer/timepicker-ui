@@ -17,7 +17,7 @@
   &-ok.btn-mobile {
     position: relative;
     color: var(--tp-primary);
-    border-radius: 20px;
+    border-radius: var(--tp-btn-radius);
     background-color: transparent;
     text-align: center;
     font-size: 14px;

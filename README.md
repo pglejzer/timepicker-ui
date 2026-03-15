@@ -18,7 +18,8 @@ Modern time picker library built with TypeScript. Works with any framework or va
 
 - 10 built-in themes (Material, Crane, Dark, Glassmorphic, Cyberpunk, and more)
 - Mobile-first design with touch support
-- **Wheel (scroll-spinner) mode** — alternative to the analog clock face
+- **Wheel (scroll-spinner) mode** - alternative to the analog clock face
+- **Compact-wheel mode** - headerless wheel picker with optional popover placement
 - Framework agnostic - works with React, Vue, Angular, Svelte, or vanilla JS
 - Full TypeScript support
 - Inline mode for always-visible timepicker
@@ -177,22 +178,23 @@ const picker = new TimepickerUI(input, {
 
 ### UI Options
 
-| Property              | Type              | Default     | Description                                  |
-| --------------------- | ----------------- | ----------- | -------------------------------------------- |
-| `theme`               | string            | `basic`     | Theme (11 themes available)                  |
-| `animation`           | boolean           | `true`      | Enable animations                            |
-| `backdrop`            | boolean           | `true`      | Show backdrop overlay                        |
-| `mobile`              | boolean           | `false`     | Force mobile version                         |
-| `enableSwitchIcon`    | boolean           | `false`     | Show desktop/mobile switch icon              |
-| `editable`            | boolean           | `false`     | Allow manual input editing                   |
-| `enableScrollbar`     | boolean           | `false`     | Enable scroll when picker open               |
-| `cssClass`            | string            | `undefined` | Additional CSS class                         |
-| `appendModalSelector` | string            | `""`        | Custom container selector                    |
-| `iconTemplate`        | string            | SVG         | Desktop switch icon template                 |
-| `iconTemplateMobile`  | string            | SVG         | Mobile switch icon template                  |
-| `inline`              | object            | `undefined` | Inline mode configuration                    |
-| `clearButton`         | boolean           | `true`      | Show clear button                            |
-| `mode`                | `clock` / `wheel` | `clock`     | Picker mode — analog clock or scroll-spinner |
+| Property              | Type                                | Default     | Description                                                        |
+| --------------------- | ----------------------------------- | ----------- | ------------------------------------------------------------------ |
+| `theme`               | string                              | `basic`     | Theme (11 themes available)                                        |
+| `animation`           | boolean                             | `true`      | Enable animations                                                  |
+| `backdrop`            | boolean                             | `true`      | Show backdrop overlay                                              |
+| `mobile`              | boolean                             | `false`     | Force mobile version                                               |
+| `enableSwitchIcon`    | boolean                             | `false`     | Show desktop/mobile switch icon                                    |
+| `editable`            | boolean                             | `false`     | Allow manual input editing                                         |
+| `enableScrollbar`     | boolean                             | `false`     | Enable scroll when picker open                                     |
+| `cssClass`            | string                              | `undefined` | Additional CSS class                                               |
+| `appendModalSelector` | string                              | `""`        | Custom container selector                                          |
+| `iconTemplate`        | string                              | SVG         | Desktop switch icon template                                       |
+| `iconTemplateMobile`  | string                              | SVG         | Mobile switch icon template                                        |
+| `inline`              | object                              | `undefined` | Inline mode configuration                                          |
+| `clearButton`         | boolean                             | `true`      | Show clear button                                                  |
+| `mode`                | `clock` / `wheel` / `compact-wheel` | `clock`     | Picker mode - analog clock, scroll-spinner, or headerless wheel    |
+| `wheel`               | object                              | `undefined` | Wheel/compact-wheel config (placement, hideFooter, commitOnScroll) |
 
 ### Labels Options
 
@@ -362,7 +364,7 @@ const picker = new TimepickerUI(input, {
 
 ### Wheel Mode
 
-Wheel mode replaces the analog clock face with a touch-friendly scroll-spinner. The header (hour/minute inputs, AM/PM toggle) and footer (OK/Cancel buttons) remain unchanged — only the clock body is replaced.
+Wheel mode replaces the analog clock face with a touch-friendly scroll-spinner. The header (hour/minute inputs, AM/PM toggle) and footer (OK/Cancel buttons) remain unchanged - only the clock body is replaced.
 
 ```javascript
 const picker = new TimepickerUI(input, {
@@ -374,18 +376,45 @@ picker.create();
 
 Wheel mode works with all existing features:
 
-- **12h / 24h**: Respects `clock.type` — AM/PM column appears only in 12h mode
+- **12h / 24h**: Respects `clock.type` - AM/PM column appears only in 12h mode
 - **Themes**: Inherits the active theme via CSS variables
 - **Disabled time**: Disabled hours/minutes are dimmed and skipped during scroll snap
+- **Hide disabled options**: Set `clock.disabledTime.hideOptions: true` to completely remove disabled values from the list
 - **setValue / getValue**: `picker.setValue('09:30 AM')` scrolls the wheel to the correct position
 - **Keyboard navigation**: Arrow Up/Down scrolls one item, Tab moves between columns
-- **Events**: All standard events work — `select:hour`, `select:minute`, `update`, `confirm`, `cancel`, `clear`, `select:am`, `select:pm`, `error`
+- **Events**: All standard events work - `select:hour`, `select:minute`, `update`, `confirm`, `cancel`, `clear`, `select:am`, `select:pm`, `error`
 - **Wheel-specific events**: `wheel:scroll:start` (column starts scrolling), `wheel:scroll:end` (column snaps to value with `previousValue`)
+- **Auto-commit**: Set `ui.wheel.commitOnScroll: true` to auto-confirm on scroll end without pressing OK
 
-**Limitations (v1):**
+### Compact-Wheel Mode
 
-- Range plugin (`range.enabled`) is not supported in wheel mode
-- `ui.mobile` is ignored — wheel layout is always the same regardless of viewport
+Compact-wheel mode is a headerless variant of wheel mode - it shows only the scroll wheels without the hour/minute input header. Ideal for minimal UIs or popover-style pickers.
+
+```javascript
+const picker = new TimepickerUI(input, {
+  ui: { mode: "compact-wheel" },
+});
+
+picker.create();
+```
+
+Combine with `ui.wheel.placement` to open as a popover anchored to the input:
+
+```javascript
+const picker = new TimepickerUI(input, {
+  ui: {
+    mode: "compact-wheel",
+    wheel: {
+      placement: "auto", // 'auto', 'top', or 'bottom'
+    },
+  },
+});
+```
+
+**Limitations:**
+
+- Range plugin (`range.enabled`) is not supported in wheel or compact-wheel mode
+- `ui.mobile` is ignored - wheel layout is always the same regardless of viewport
 
 ## API Methods
 
@@ -689,7 +718,9 @@ All modules are now SSR-safe and can be imported in Node.js environments without
 - **Better TypeScript types** - Fully typed event payloads and options
 - **Smaller bundle** - Removed unused code, optimized build (63.3 KB ESM)
 - **Focus improvements** - Auto-focus on modal open, auto-focus on minute switch
-- **Clear button** - Reset time selection with a dedicated clear button (v4.2.0)
+- **Clear button** - Reset time selection with a dedicated clear button (v4.2.0)- **Compact-wheel mode** - Headerless wheel picker with optional popover placement (v4.2.0)
+- **Hide disabled options** - Remove disabled values from the list instead of dimming (v4.2.0)
+- **Auto-commit on scroll** - Auto-confirm time at scroll end in wheel modes (v4.2.0)
 
 ### Bundle Size Comparison
 

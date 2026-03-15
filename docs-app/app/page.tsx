@@ -232,7 +232,7 @@ export default function Home() {
               <Sparkles className="h-4 w-4 flex-shrink-0" />
               <span>
                 <span className="font-medium">New:</span> Version 4.2.0 — Wheel
-                Plugin, Clear Button and more!
+                Plugin, Compact-Wheel, Clear Button and more!
               </span>
             </Link>
           </div>

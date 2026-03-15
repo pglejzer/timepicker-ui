@@ -67,6 +67,26 @@ const CHANGELOG_420 = {
         "Scroll-spinner interface replacing the analog clock face. Enable via ui.mode: 'wheel'. Supports 12h/24h, all themes, disabled time, and keyboard navigation",
     },
     {
+      title: "Compact-wheel mode",
+      description:
+        "Headerless wheel picker without the hour/minute inputs header. Enable via ui.mode: 'compact-wheel'. Combine with ui.wheel.placement for popover positioning",
+    },
+    {
+      title: "ui.wheel.placement option",
+      description:
+        "Popover placement ('auto', 'top', 'bottom') for compact-wheel mode. Opens as a popover anchored to the input instead of a centered modal",
+    },
+    {
+      title: "clock.disabledTime.hideOptions option",
+      description:
+        "Completely remove disabled hours/minutes from the list instead of dimming them. Works in all modes: clock, wheel, compact-wheel",
+    },
+    {
+      title: "ui.wheel.commitOnScroll option",
+      description:
+        "Auto-commit time at the end of wheel scrolling without pressing OK. Only applies to wheel and compact-wheel modes",
+    },
+    {
       title: "Clear button",
       description:
         "Reset time selection with a dedicated clear button. Enabled by default via ui.clearButton option",
@@ -86,9 +106,9 @@ const CHANGELOG_420 = {
         "New callback and EventEmitter event with previousValue payload",
     },
     {
-      title: "ClearEventData and ClearBehaviorOptions types",
+      title: "New exported types",
       description:
-        "Exported TypeScript types for clear button configuration and event data",
+        "ClearEventData, ClearBehaviorOptions, WheelScrollStartEventData, WheelScrollEndEventData",
     },
   ],
 };

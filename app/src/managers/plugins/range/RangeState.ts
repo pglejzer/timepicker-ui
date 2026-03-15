@@ -87,6 +87,11 @@ export class RangeState {
     return changed;
   }
 
+  resetActivePart(): void {
+    this.activePart = 'from';
+    this.previewValue = null;
+  }
+
   getCurrentValue(): RangeValue | null {
     if (this.previewValue) {
       return this.previewValue;

@@ -1,0 +1,483 @@
+        <section
+          id="new-events-and-callbacks"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-slate-50 to-gray-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Callback Options</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Alternative way to handle events using callback options
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="new-events-and-callbacks-picker"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="10:00 PM"
+                />
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="new-events-and-callbacks-picker"  value="10:00 PM" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const newEventsAndCallbacksPicker = new TimepickerUI('#new-events-and-callbacks-picker', {
+  callbacks: {
+    onOpen: (data) => {
+      console.log('Picker opened!', data);
+    },
+    onCancel: (data) => {
+      console.log('Picker cancelled', data);
+    },
+    onConfirm: (data) => {
+      console.log('Time confirmed', data);
+    },
+    onUpdate: (data) => {
+      console.log('Time updated', data);
+    },
+    onSelectHour: (data) => {
+      console.log('Hour mode selected', data);
+    },
+    onSelectMinute: (data) => {
+      console.log('Minute mode selected', data);
+    },
+    onSelectAM: (data) => {
+      console.log('AM selected', data);
+    },
+    onSelectPM: (data) => {
+      console.log('PM selected', data);
+    },
+    onError: (data) => {
+      console.log('Error occurred', data.error);
+    }
+  }
+});
+newEventsAndCallbacksPicker.create();
+
+const pickerElement = newEventsAndCallbacksPicker.getElement();
+if (pickerElement) {
+  pickerElement.addEventListener('timepicker:open', (data) => {
+    console.log('Picker opened!', data);
+  });
+  pickerElement.addEventListener('timepicker:cancel', (data) => {
+    console.log('Picker cancelled', data);
+  });
+}
+</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="advanced-config"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-slate-50 to-gray-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Advanced Configuration</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Complex setup with multiple advanced options</p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="advanced-picker"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="10:00"
+                />
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="advanced-picker"  value="10:00" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const advancedPicker = new TimepickerUI('#advanced-picker', {
+  clockType: '12h',
+  theme: 'm3',
+  enableSwitchIcon: true,
+  focusTrap: true,
+  editable: true,
+  focusInputAfterCloseModal: true,
+  delayHandler: 500,
+  incrementHours: 1,
+  incrementMinutes: 15,
+  currentTime: {
+    time: new Date(),
+    updateInput: false,
+    preventClockType: true
+  },
+  disabledTime: {
+    interval: '22:00 - 06:00'
+  },
+  cssClass: 'my-custom-picker'
+});
+advancedPicker.create();</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="custom-template"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-slate-50 to-gray-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Version 3 events</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Examples of the new version 3.0 events</p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="version3-example"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="10:00"
+                />
+              </div>
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                  <pre><code class="language-html">&lt;input id="version3-example"  value="10:00" /&gt;</code></pre>
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                  <pre><code class="language-javascript">const version3Example = new TimepickerUI('#version3-example', {
+  theme: 'm3',
+  clockType: '24h',
+  focusTrap: false,
+  delayHandler: 200,
+  onOpen: (data) => {
+    console.log('Version 3.0 picker opened!', data);
+  },
+});
+version3Example.create();
+
+const pickerElement = version3Example.getElement();
+if (pickerElement) {
+  pickerElement.addEventListener('timepicker:open', (data) => {
+    console.log('Picker opened!', data);
+  });
+}
+</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="destroy-example"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Destroy example</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Example of how to destroy the timepicker</p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="destroy-example"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="14:30"
+                />
+
+                <button id="destroy-button" class="ml-4 bg-red-500 text-white px-4 py-2 rounded-md">
+                  Destroy
+                </button>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="destroy-example"  value="14:30" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const destroyExample = new TimepickerUI('#destroy-example', {
+mobile: true,
+clockType: '24h',
+enableSwitchIcon: true
+});
+destroyExample.create();
+
+const pickerElement = destroyExample.getElement();
+if (pickerElement) {
+  pickerElement.addEventListener('timepicker:open', (data) => {
+    console.log('Picker opened!', data);
+  });
+}
+</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          id="clear-button"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Clear Button</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Allow users to clear selected time with a dedicated button
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="clear-button-picker"
+                  class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="2:30 PM"
+                />
+              </div>
+              <div class="mt-4 text-center">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  <strong>Try it:</strong> Open the timepicker and click the "Clear" button on the left side
+                  to reset the time.
+                </p>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="clear-button-picker" value="2:30 PM" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const clearButtonPicker = new TimepickerUI('#clear-button-picker', {
+  ui: { 
+    clearButton: true,
+    theme: 'basic'
+  },
+  labels: {
+    clear: 'Clear'
+  },
+  callbacks: {
+    onClear: (data) => {
+      console.log('Time cleared! Previous value:', data.previousValue);
+    }
+  }
+});
+clearButtonPicker.create();</code></pre>
+              </div>
+            </div>
+            <div
+              class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800"
+            >
+              <h4 class="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-2">
+                Clear Button Behavior
+              </h4>
+              <ul class="text-sm text-blue-800 dark:text-blue-300 space-y-1 list-disc list-inside">
+                <li>Removes the selected time value completely</li>
+                <li>Resets clock hands to neutral position (12:00 for 12h, 12:00 for 24h)</li>
+                <li>Disables the confirm button until a new time is selected</li>
+                <li>
+                  Triggers the <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">onClear</code> callback
+                  with previous value
+                </li>
+                <li>The button is disabled when no time is selected</li>
+                <li>
+                  Use
+                  <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded"
+                    >clearBehavior: { clearInput: false }</code
+                  >
+                  to keep the input value when clearing
+                </li>
+              </ul>
+            </div>
+            <div class="mt-8">
+              <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                Clear without clearing input
+              </h4>
+              <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-4">
+                <div class="flex justify-center">
+                  <input
+                    id="clear-no-input-picker"
+                    class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    value="9:15 AM"
+                  />
+                </div>
+                <div class="mt-4 text-center">
+                  <p class="text-sm text-gray-600 dark:text-gray-400">
+                    <strong>Try it:</strong> Click "Clear" — the clock resets but the input keeps its value.
+                  </p>
+                </div>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const picker = new TimepickerUI('#clear-no-input-picker', {
+  ui: { clearButton: true },
+  clearBehavior: {
+    clearInput: false
+  },
+  callbacks: {
+    onClear: (data) => {
+      console.log('Clear clicked (input kept)!', data.previousValue);
+    }
+  }
+});
+picker.create();</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="clear-button-themes"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div class="bg-gradient-to-r from-rose-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Clear Button - All Themes</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Clear button preview across all available themes
+            </p>
+          </div>
+          <div class="p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Basic</label>
+                  <input
+                    id="clear-theme-basic"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+                    value="10:30 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Crane</label>
+                  <input
+                    id="clear-theme-crane"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+                    value="10:30 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Crane Straight</label
+                  >
+                  <input
+                    id="clear-theme-crane-straight"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+                    value="10:30 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >M3 Green</label
+                  >
+                  <input
+                    id="clear-theme-m3-green"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+                    value="10:30 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Dark</label>
+                  <input
+                    id="clear-theme-dark"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+                    value="10:30 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">M2</label>
+                  <input
+                    id="clear-theme-m2"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+                    value="10:30 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Glassmorphic</label
+                  >
+                  <input
+                    id="clear-theme-glassmorphic"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+                    value="10:30 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Pastel</label
+                  >
+                  <input
+                    id="clear-theme-pastel"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+                    value="10:30 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">AI</label>
+                  <input
+                    id="clear-theme-ai"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+                    value="10:30 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Cyberpunk</label
+                  >
+                  <input
+                    id="clear-theme-cyberpunk"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+                    value="10:30 PM"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="clear-theme-basic" value="10:30 PM" /&gt;
+&lt;input id="clear-theme-crane" value="10:30 PM" /&gt;
+&lt;input id="clear-theme-crane-straight" value="10:30 PM" /&gt;
+&lt;input id="clear-theme-m3-green" value="10:30 PM" /&gt;
+&lt;input id="clear-theme-dark" value="10:30 PM" /&gt;
+&lt;input id="clear-theme-m2" value="10:30 PM" /&gt;
+&lt;input id="clear-theme-glassmorphic" value="10:30 PM" /&gt;
+&lt;input id="clear-theme-pastel" value="10:30 PM" /&gt;
+&lt;input id="clear-theme-ai" value="10:30 PM" /&gt;
+&lt;input id="clear-theme-cyberpunk" value="10:30 PM" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const clearThemeList = [
+  'basic', 'crane', 'crane-straight',
+  'm3-green', 'dark', 'm2',
+  'glassmorphic', 'pastel', 'ai', 'cyberpunk'
+];
+
+clearThemeList.forEach((theme) => {
+  new TimepickerUI(`#clear-theme-${theme}`, {
+    ui: { clearButton: true, theme, enableSwitchIcon: true },
+    labels: { clear: 'Clear' },
+    callbacks: {
+      onClear: (data) => {
+        console.log(`Clear (${theme}):`, data.previousValue);
+      },
+    },
+  }).create();
+});</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+

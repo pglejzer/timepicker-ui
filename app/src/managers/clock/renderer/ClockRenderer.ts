@@ -175,6 +175,12 @@ export class ClockRenderer {
       spanTip.classList.add('tp-ui-tips-disabled');
       spanTip.setAttribute('aria-disabled', 'true');
       spanTip.tabIndex = -1;
+
+      if (this.config.hideOptions === true) {
+        span.classList.add('tp-ui-tips-hidden');
+      }
+    } else {
+      span.classList.remove('tp-ui-tips-hidden');
     }
   }
 

@@ -15,6 +15,8 @@ export type ConfirmEventData = {
   hour?: string;
   minutes?: string;
   type?: string;
+  /** When true, this confirm was triggered by commitOnScroll (auto-commit) */
+  autoCommit?: boolean;
 };
 
 /** Payload when user clears time */
@@ -119,8 +121,8 @@ export type ErrorEventData = {
 export type TimepickerEventCallback<T = unknown> = (eventData: T) => void;
 
 export type OptionTypes = {
-  /** Picker mode: clock or wheel @default "clock" */
-  mode?: 'clock' | 'wheel';
+  /** Picker mode: clock, wheel, or compact-wheel @default "clock" */
+  mode?: 'clock' | 'wheel' | 'compact-wheel';
   /** AM label text @default "AM" */
   amLabel?: string;
   /** Enable animations @default true */

@@ -86,6 +86,11 @@ export default {
         },
       },
       {
+        test: /\.html$/,
+        include: path.resolve(__dirname, 'docs/partials'),
+        type: 'asset/source',
+      },
+      {
         test: /\.svg$/,
         type: 'asset/source',
       },

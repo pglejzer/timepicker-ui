@@ -1,0 +1,636 @@
+<section
+  id="popover-placement"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-violet-50 to-fuchsia-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Compact Wheel + Popover</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Popover mode opens the compact wheel as a dropdown attached to the input. Supports auto, top, and bottom
+      placement.
+    </p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Popover Auto</label>
+          <input
+            id="popover-auto"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="09:30 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Popover Top</label>
+          <input
+            id="popover-top"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="10:15 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Popover Bottom</label
+          >
+          <input
+            id="popover-bottom"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="02:45 PM"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Popover Variants</h4>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">24h + Auto</label>
+          <input
+            id="popover-24h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="14:30"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Dark + Auto</label>
+          <input
+            id="popover-dark"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="08:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >M3 Green + Top</label
+          >
+          <input
+            id="popover-m3"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="11:00 AM"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="popover-auto" value="09:30 AM" /&gt;
+&lt;input id="popover-top" value="10:15 AM" /&gt;
+&lt;input id="popover-bottom" value="02:45 PM" /&gt;
+&lt;input id="popover-24h" value="14:30" /&gt;
+&lt;input id="popover-dark" value="08:00 PM" /&gt;
+&lt;input id="popover-m3" value="11:00 AM" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">// Auto placement (default)
+new TimepickerUI('#popover-auto', {
+  ui: { mode: 'compact-wheel', wheel: { placement: 'auto' } },
+}).create();
+
+// Top placement
+new TimepickerUI('#popover-top', {
+  ui: { mode: 'compact-wheel', wheel: { placement: 'top' } },
+}).create();
+
+// Bottom placement
+new TimepickerUI('#popover-bottom', {
+  ui: { mode: 'compact-wheel', wheel: { placement: 'bottom' } },
+}).create();
+
+// 24h + auto placement
+new TimepickerUI('#popover-24h', {
+  clock: { type: '24h' },
+  ui: { mode: 'compact-wheel', wheel: { placement: 'auto' } },
+}).create();
+
+// Dark theme + auto placement
+new TimepickerUI('#popover-dark', {
+  ui: { mode: 'compact-wheel', theme: 'dark', wheel: { placement: 'auto' } },
+}).create();
+
+// M3 Green + top placement
+new TimepickerUI('#popover-m3', {
+  ui: { mode: 'compact-wheel', theme: 'm3-green', wheel: { placement: 'top' } },
+}).create();</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section
+  id="multi-popover"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-rose-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Multiple Popover Pickers</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Multiple independent popover pickers on the same page — opening one closes any other
+    </p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Start Time</label>
+          <input
+            id="multi-popover-1"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+            value="09:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Break Time (24h, M3)</label
+          >
+          <input
+            id="multi-popover-2"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+            value="12:30"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >End Time (Dark)</label
+          >
+          <input
+            id="multi-popover-3"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-colors"
+            value="05:00 PM"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="multi-popover-1" value="09:00 AM" /&gt;
+&lt;input id="multi-popover-2" value="12:30" /&gt;
+&lt;input id="multi-popover-3" value="05:00 PM" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">// Each picker is fully independent
+new TimepickerUI('#multi-popover-1', {
+  ui: { mode: 'compact-wheel', wheel: { placement: 'auto' } },
+}).create();
+
+new TimepickerUI('#multi-popover-2', {
+  clock: { type: '24h' },
+  ui: { mode: 'compact-wheel', theme: 'm3-green', wheel: { placement: 'auto' } },
+}).create();
+
+new TimepickerUI('#multi-popover-3', {
+  ui: { mode: 'compact-wheel', theme: 'dark', wheel: { placement: 'auto' } },
+}).create();</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section
+  id="popover-themes"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-fuchsia-50 to-violet-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Popover — All Themes</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Compact wheel popover mode across all available themes
+    </p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Basic</label>
+          <input
+            id="popover-theme-basic"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Crane</label>
+          <input
+            id="popover-theme-crane"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Crane Straight</label
+          >
+          <input
+            id="popover-theme-crane-straight"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">M3 Green</label>
+          <input
+            id="popover-theme-m3-green"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Dark</label>
+          <input
+            id="popover-theme-dark"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">M2</label>
+          <input
+            id="popover-theme-m2"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Glassmorphic</label>
+          <input
+            id="popover-theme-glassmorphic"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pastel</label>
+          <input
+            id="popover-theme-pastel"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">AI</label>
+          <input
+            id="popover-theme-ai"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cyberpunk</label>
+          <input
+            id="popover-theme-cyberpunk"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="popover-theme-basic" value="10:00 AM" /&gt;
+&lt;input id="popover-theme-crane" value="10:00 AM" /&gt;
+&lt;!-- ... one input per theme --&gt;
+&lt;input id="popover-theme-cyberpunk" value="10:00 AM" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">const popoverThemeList = [
+  'basic', 'crane', 'crane-straight',
+  'm3-green', 'dark', 'm2',
+  'glassmorphic', 'pastel', 'ai', 'cyberpunk'
+];
+
+popoverThemeList.forEach((theme) => {
+  new TimepickerUI(`#popover-theme-${theme}`, {
+    ui: { mode: 'compact-wheel', theme, wheel: { placement: 'auto' } },
+  }).create();
+});</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section
+  id="inline-mode"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Inline Mode</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">Always-visible timepicker embedded in the page</p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid md:grid-cols-2 gap-8 items-start">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Selected Time:</label
+          >
+          <input
+            id="inline-picker"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+            value="14:30"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Timepicker:</label>
+          <div id="inline-container" class="border border-gray-200 dark:border-gray-600 rounded-lg p-4"></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="inline-picker"  value="14:30" /&gt;
+&lt;div id="inline-container"&gt;&lt;/div&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">const inlinePicker = new TimepickerUI('#inline-picker', {
+  inline: {
+    enabled: true,
+    containerId: 'inline-container',
+    showButtons: false,
+    autoUpdate: true
+  },
+  clockType: '24h'
+});
+inlinePicker.create();</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section
+  id="event-handling"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Event Handling</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">Listen to value changes and user interactions</p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="flex flex-col items-center space-y-4">
+        <input
+          id="event-picker"
+          class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+          value="12:00 PM"
+        />
+        <div class="text-center">
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Event Log:</p>
+          <div
+            id="event-log"
+            class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-4 min-h-[100px] max-h-[200px] overflow-y-auto"
+          >
+            <p class="text-gray-500 dark:text-gray-400 text-sm">Events will appear here...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="event-picker"  value="12:00 PM" /&gt;
+&lt;div id="event-log"&gt;&lt;/div&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">const eventPicker = new TimepickerUI('#event-picker');
+eventPicker.create();
+
+const eventLog = document.querySelector('#event-log');
+const picker = document.querySelector('#event-picker');
+
+picker.addEventListener('accept', (e) => {
+  eventLog.innerHTML += `&lt;p&gt;Accept: ${e.detail.hour}:${e.detail.minutes}&lt;/p&gt;`;
+});
+
+picker.addEventListener('cancel', (e) => {
+  eventLog.innerHTML += `&lt;p&gt;Cancel event fired&lt;/p&gt;`;
+});</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section
+  id="custom-labels"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-pink-50 to-rose-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Custom Labels</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">Customize all labels and text in different languages</p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="flex justify-center">
+        <input
+          id="custom-labels-picker"
+          class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+          value="10:30 PM"
+        />
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="custom-labels-picker"  value="10:30 PM" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">const customLabelsPicker = new TimepickerUI('#custom-labels-picker', {
+timeLabel: 'Select time',
+okLabel: 'It is ok',
+cancelLabel: 'Nope',
+amLabel: 'AM',
+pmLabel: 'PM',
+mobileTimeLabel: 'Enter Time',
+hourMobileLabel: 'Hour',
+minuteMobileLabel: 'Minute',
+});
+customLabelsPicker.create();</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section
+  id="multiple-pickers"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Multiple Pickers</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">Multiple isolated time pickers on the same page</p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Start Time</label>
+          <input
+            id="multi-picker-1"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+            value="09:00"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Break Time</label>
+          <input
+            id="multi-picker-2"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+            value="12:30 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">End Time</label>
+          <input
+            id="multi-picker-3"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+            value="17:00"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="multi-picker-1"  value="09:00" /&gt;
+&lt;input id="multi-picker-2"  value="12:30 PM" /&gt;
+&lt;input id="multi-picker-3"  value="17:00" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">new TimepickerUI('#multi-picker-1', {
+  clockType: '24h',
+  theme: 'basic'
+}).create();
+
+new TimepickerUI('#multi-picker-2', {
+  clockType: '12h',
+  theme: 'm3'
+}).create();
+
+new TimepickerUI('#multi-picker-3', {
+  clockType: '24h',
+  theme: 'crane-radius'
+}).create();</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section
+  id="event-emitter-api"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">EventEmitter API (v3.1+)</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Modern event handling with on(), once(), and off() methods
+    </p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="flex flex-col items-center space-y-4">
+        <input
+          id="event-emitter-picker"
+          class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-colors"
+          value="02:30 PM"
+        />
+        <div class="text-center">
+          <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Event Log:</h4>
+          <div
+            id="emitter-event-log"
+            class="w-full max-w-md h-48 overflow-y-auto bg-gray-800 dark:bg-gray-900 rounded-lg p-4 text-left font-mono text-xs"
+          ></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="event-emitter-picker" value="02:30 PM" /&gt;
+&lt;div id="emitter-event-log"&gt;&lt;/div&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">const picker = new TimepickerUI('#event-emitter-picker');
+picker.create();
+
+// Subscribe to events
+picker.on('confirm', (data) => {
+  console.log('Confirmed:', data.hour, data.minutes);
+});
+
+picker.on('cancel', (data) => {
+  console.log('Cancelled');
+});
+
+picker.on('update', (data) => {
+  console.log('Updated:', data);
+});
+
+picker.on('select:hour', (data) => {
+  console.log('Hour selected:', data.hour);
+});
+
+picker.on('select:minute', (data) => {
+  console.log('Minute selected:', data.minutes);
+});
+
+// One-time event
+picker.once('open', () => {
+  console.log('Opened for the first time!');
+});
+
+// Unsubscribe
+const handler = (data) => console.log(data);
+picker.on('confirm', handler);
+picker.off('confirm', handler);</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section
+  id="custom-theme"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-fuchsia-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Custom Theme</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">Override default styles with your custom theme</p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="flex justify-center">
+        <input
+          id="custom-theme-picker"
+          class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+          value="03:45 PM"
+        />
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="custom-theme-picker" value="03:45 PM" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">const customThemePicker = new TimepickerUI('#custom-theme-picker');
+customThemePicker.create();
+
+// Override theme with custom styles
+customThemePicker.setTheme({
+  primaryColor: '#9333ea',
+  backgroundColor: '#1f2937',
+  surfaceColor: '#374151',
+  surfaceHoverColor: '#4b5563',
+  textColor: '#f3f4f6',
+  borderRadius: '12px'
+});</code></pre>
+      </div>
+    </div>
+  </div>
+</section>

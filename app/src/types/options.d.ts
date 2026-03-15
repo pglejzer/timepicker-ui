@@ -71,6 +71,13 @@ export interface ClockOptions {
     minutes?: Array<string | number>;
     hours?: Array<string | number>;
     interval?: string | string[];
+    /**
+     * @description When true, disabled hours/minutes are completely removed from the list
+     * instead of being dimmed. Useful when many values are disabled (e.g., business hours only).
+     * Works in all modes: clock, wheel, compact-wheel.
+     * @default false
+     */
+    hideOptions?: boolean;
   };
 
   /**
@@ -99,10 +106,10 @@ export interface ClockOptions {
  */
 export interface UIOptions {
   /**
-   * @description Picker mode: analog clock face or scroll wheel spinner
+   * @description Picker mode: analog clock face, scroll wheel spinner, or compact wheel (no header)
    * @default "clock"
    */
-  mode?: 'clock' | 'wheel';
+  mode?: 'clock' | 'wheel' | 'compact-wheel';
 
   /**
    * @description Theme for the timepicker
@@ -201,6 +208,41 @@ export interface UIOptions {
     containerId: string;
     showButtons?: boolean;
     autoUpdate?: boolean;
+  };
+
+  /**
+   * @description Wheel / compact-wheel mode configuration
+   * @example
+   * wheel: {
+   *   placement: 'auto',
+   *   hideFooter: true,
+   *   commitOnScroll: true
+   * }
+   */
+  wheel?: {
+    /**
+     * @description Popover placement relative to input in compact-wheel mode.
+     * 'auto' opens below if space allows, otherwise above.
+     * When undefined, compact-wheel behaves as a normal centered modal with backdrop.
+     * @default undefined
+     */
+    placement?: 'auto' | 'top' | 'bottom';
+
+    /**
+     * @description When true, the footer (OK/Cancel/Clear buttons + switch icon)
+     * is not rendered in the DOM at all. Only works in compact-wheel mode.
+     * Useful when commitOnScroll is enabled and buttons are unnecessary.
+     * @default false
+     */
+    hideFooter?: boolean;
+
+    /**
+     * @description When enabled, the timepicker automatically commits the selected time
+     * at the end of wheel scrolling, updating the input value and emitting a change event
+     * without requiring the user to press OK. Only applies to wheel and compact-wheel modes.
+     * @default false
+     */
+    commitOnScroll?: boolean;
   };
 }
 

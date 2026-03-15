@@ -32,7 +32,7 @@ export default class ModalManager {
       return;
     }
 
-    const existing = document.querySelector('.tp-ui-modal');
+    const existing = this.core.getModalElement();
     if (existing) existing.remove();
   }
 
@@ -81,6 +81,7 @@ export default class ModalManager {
     }
 
     if (this.core.options.ui.inline?.enabled) return;
+    if (this.core.options.ui.mode === 'compact-wheel' && !!this.core.options.ui.wheel?.placement) return;
 
     if (!this.core.options.ui.enableScrollbar) {
       this.originalOverflow = document.body.style.overflowY;
@@ -128,6 +129,12 @@ export default class ModalManager {
       return;
     }
 
+    if (this.core.options.ui.mode === 'compact-wheel' && !!this.core.options.ui.wheel?.placement) {
+      this.core.getModalElement()?.classList.add('show');
+      this.setInitialFocus();
+      return;
+    }
+
     if (this.core.options.ui.backdrop) {
       this.runWithTimeout(() => {
         this.core.getModalElement()?.classList.add('show');
@@ -165,4 +172,3 @@ export default class ModalManager {
     this.clearExistingModal();
   }
 }
-

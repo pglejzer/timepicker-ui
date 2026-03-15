@@ -1,0 +1,1030 @@
+<section
+  id="wheel-mode"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-sky-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Wheel Mode</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Scroll-spinner interface — replaces the analog clock face with touch-friendly wheels
+    </p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">12h Wheel</label>
+          <input
+            id="wheel-basic"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="10:30 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">24h Wheel</label>
+          <input
+            id="wheel-24h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="14:45"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Wheel + Dark Theme</label
+          >
+          <input
+            id="wheel-dark"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="08:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Wheel + M3 Theme</label
+          >
+          <input
+            id="wheel-m3"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="09:15 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Wheel + Cyberpunk</label
+          >
+          <input
+            id="wheel-cyberpunk"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="11:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Wheel + 5 min step</label
+          >
+          <input
+            id="wheel-step"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="07:30 AM"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="wheel-basic" value="10:30 PM" /&gt;
+&lt;input id="wheel-24h" value="14:45" /&gt;
+&lt;input id="wheel-dark" value="08:00 AM" /&gt;
+&lt;input id="wheel-m3" value="09:15 AM" /&gt;
+&lt;input id="wheel-cyberpunk" value="11:00 PM" /&gt;
+&lt;input id="wheel-step" value="07:30 AM" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">// Basic 12h wheel
+new TimepickerUI('#wheel-basic', {
+  ui: { mode: 'wheel' }
+}).create();
+
+// 24h wheel
+new TimepickerUI('#wheel-24h', {
+  clock: { type: '24h' },
+  ui: { mode: 'wheel' }
+}).create();
+
+// Wheel with dark theme
+new TimepickerUI('#wheel-dark', {
+  ui: { mode: 'wheel', theme: 'dark' }
+}).create();
+
+// Wheel with M3 theme
+new TimepickerUI('#wheel-m3', {
+  ui: { mode: 'wheel', theme: 'm3-green' }
+}).create();
+
+// Wheel with Cyberpunk theme
+new TimepickerUI('#wheel-cyberpunk', {
+  ui: { mode: 'wheel', theme: 'cyberpunk' }
+}).create();
+
+// Wheel with 5-minute step
+new TimepickerUI('#wheel-step', {
+  clock: { incrementMinutes: 5 },
+  ui: { mode: 'wheel' }
+}).create();</code></pre>
+      </div>
+    </div>
+    <div class="mt-6 p-4 bg-sky-50 dark:bg-sky-900/20 rounded-lg border border-sky-200 dark:border-sky-800">
+      <h4 class="text-sm font-semibold text-sky-900 dark:text-sky-200 mb-2">Wheel Mode Notes</h4>
+      <ul class="text-sm text-sky-800 dark:text-sky-300 space-y-1 list-disc list-inside">
+        <li>
+          Set <code class="bg-sky-100 dark:bg-sky-800 px-1 rounded">ui.mode: 'wheel'</code> to replace the
+          analog clock with scroll wheels
+        </li>
+        <li>Works with all themes via CSS variables</li>
+        <li>AM/PM column appears automatically in 12h mode</li>
+        <li>
+          <code class="bg-sky-100 dark:bg-sky-800 px-1 rounded">clock.incrementMinutes</code> controls the
+          minute step between wheel items
+        </li>
+        <li>Keyboard: Arrow Up/Down scrolls one item, Tab moves between columns</li>
+        <li>Range plugin is not supported in wheel mode</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section
+  id="wheel-themes"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Wheel - All Themes</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">Wheel mode preview across all available themes</p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Basic</label>
+          <input
+            id="wheel-theme-basic"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Crane</label>
+          <input
+            id="wheel-theme-crane"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Crane Straight</label
+          >
+          <input
+            id="wheel-theme-crane-straight"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">M3 Green</label>
+          <input
+            id="wheel-theme-m3-green"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Dark</label>
+          <input
+            id="wheel-theme-dark"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">M2</label>
+          <input
+            id="wheel-theme-m2"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Glassmorphic</label>
+          <input
+            id="wheel-theme-glassmorphic"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pastel</label>
+          <input
+            id="wheel-theme-pastel"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">AI</label>
+          <input
+            id="wheel-theme-ai"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cyberpunk</label>
+          <input
+            id="wheel-theme-cyberpunk"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="wheel-theme-basic" value="10:00 AM" /&gt;
+&lt;input id="wheel-theme-crane" value="10:00 AM" /&gt;
+&lt;input id="wheel-theme-crane-straight" value="10:00 AM" /&gt;
+&lt;input id="wheel-theme-m3-green" value="10:00 AM" /&gt;
+&lt;input id="wheel-theme-dark" value="10:00 AM" /&gt;
+&lt;input id="wheel-theme-m2" value="10:00 AM" /&gt;
+&lt;input id="wheel-theme-glassmorphic" value="10:00 AM" /&gt;
+&lt;input id="wheel-theme-pastel" value="10:00 AM" /&gt;
+&lt;input id="wheel-theme-ai" value="10:00 AM" /&gt;
+&lt;input id="wheel-theme-cyberpunk" value="10:00 AM" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">const wheelThemeList = [
+  'basic', 'crane', 'crane-straight',
+  'm3-green', 'dark', 'm2',
+  'glassmorphic', 'pastel', 'ai', 'cyberpunk'
+];
+
+wheelThemeList.forEach((theme) => {
+  new TimepickerUI(`#wheel-theme-${theme}`, {
+    ui: { mode: 'wheel', theme, enableSwitchIcon: true },
+  }).create();
+});</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section
+  id="compact-wheel"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-violet-50 to-fuchsia-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Compact Wheel Mode</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Minimal wheel-only picker — no header, no clock face. AM/PM appears as a third scrollable column in 12h
+      mode. Perfect for mobile and embedded UIs.
+    </p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">12h Compact</label>
+          <input
+            id="compact-wheel-12h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="02:30 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">24h Compact</label>
+          <input
+            id="compact-wheel-24h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="17:15"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Compact + 5 min step</label
+          >
+          <input
+            id="compact-wheel-step"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="09:00 AM"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="compact-wheel-12h" value="02:30 PM" /&gt;
+&lt;input id="compact-wheel-24h" value="17:15" /&gt;
+&lt;input id="compact-wheel-step" value="09:00 AM" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">// 12h compact — AM/PM as third wheel column
+new TimepickerUI('#compact-wheel-12h', {
+  ui: { mode: 'compact-wheel' }
+}).create();
+
+// 24h compact — two columns only
+new TimepickerUI('#compact-wheel-24h', {
+  clock: { type: '24h' },
+  ui: { mode: 'compact-wheel' }
+}).create();
+
+// Compact with 5-minute step
+new TimepickerUI('#compact-wheel-step', {
+  clock: { incrementMinutes: 5 },
+  ui: { mode: 'compact-wheel' }
+}).create();</code></pre>
+      </div>
+    </div>
+    <div
+      class="mt-6 p-4 bg-violet-50 dark:bg-violet-900/20 rounded-lg border border-violet-200 dark:border-violet-800"
+    >
+      <h4 class="text-sm font-semibold text-violet-900 dark:text-violet-200 mb-2">Compact Wheel Notes</h4>
+      <ul class="text-sm text-violet-800 dark:text-violet-300 space-y-1 list-disc list-inside">
+        <li>
+          Set
+          <code class="bg-violet-100 dark:bg-violet-800 px-1 rounded">ui.mode: 'compact-wheel'</code>
+          — no header, wheel is the sole UI
+        </li>
+        <li>In 12h mode, AM/PM is a third scrollable column next to minutes</li>
+        <li>In 24h mode, only hours + minutes columns are shown</li>
+        <li>Center item = selected value with high-contrast styling</li>
+        <li>Works with all themes via CSS variables</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section
+  id="compact-wheel-themes"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Compact Wheel - All Themes</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Compact wheel mode preview across all available themes
+    </p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Basic</label>
+          <input
+            id="compact-theme-basic"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="03:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Crane</label>
+          <input
+            id="compact-theme-crane"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="03:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Crane Straight</label
+          >
+          <input
+            id="compact-theme-crane-straight"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="03:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">M3 Green</label>
+          <input
+            id="compact-theme-m3-green"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="03:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Dark</label>
+          <input
+            id="compact-theme-dark"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="03:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">M2</label>
+          <input
+            id="compact-theme-m2"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="03:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Glassmorphic</label>
+          <input
+            id="compact-theme-glassmorphic"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="03:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pastel</label>
+          <input
+            id="compact-theme-pastel"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="03:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">AI</label>
+          <input
+            id="compact-theme-ai"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="03:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cyberpunk</label>
+          <input
+            id="compact-theme-cyberpunk"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 transition-colors"
+            value="03:00 PM"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="compact-theme-basic" value="03:00 PM" /&gt;
+&lt;input id="compact-theme-crane" value="03:00 PM" /&gt;
+&lt;input id="compact-theme-crane-straight" value="03:00 PM" /&gt;
+&lt;input id="compact-theme-m3-green" value="03:00 PM" /&gt;
+&lt;input id="compact-theme-dark" value="03:00 PM" /&gt;
+&lt;input id="compact-theme-m2" value="03:00 PM" /&gt;
+&lt;input id="compact-theme-glassmorphic" value="03:00 PM" /&gt;
+&lt;input id="compact-theme-pastel" value="03:00 PM" /&gt;
+&lt;input id="compact-theme-ai" value="03:00 PM" /&gt;
+&lt;input id="compact-theme-cyberpunk" value="03:00 PM" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">const compactThemeList = [
+  'basic', 'crane', 'crane-straight',
+  'm3-green', 'dark', 'm2',
+  'glassmorphic', 'pastel', 'ai', 'cyberpunk'
+];
+
+compactThemeList.forEach((theme) => {
+  new TimepickerUI(`#compact-theme-${theme}`, {
+    ui: { mode: 'compact-wheel', theme, enableSwitchIcon: true },
+  }).create();
+});</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section
+  id="commit-on-scroll"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Commit on Scroll</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Auto-commit the selected time when the wheel stops scrolling — no OK button needed
+    </p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Wheel + Auto Commit</label
+          >
+          <input
+            id="commit-on-scroll-wheel"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-amber-500 transition-colors"
+            value="10:30 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Popover + Auto Commit</label
+          >
+          <input
+            id="commit-on-scroll-popover"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-amber-500 transition-colors"
+            value="02:00 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >24h Popover + Auto Commit</label
+          >
+          <input
+            id="commit-on-scroll-24h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-amber-500 transition-colors"
+            value="14:30"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="commit-on-scroll-wheel" value="10:30 AM" /&gt;
+&lt;input id="commit-on-scroll-popover" value="02:00 PM" /&gt;
+&lt;input id="commit-on-scroll-24h" value="14:30" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">// Wheel with auto-commit
+new TimepickerUI('#commit-on-scroll-wheel', {
+  ui: { mode: 'wheel', wheel: { commitOnScroll: true } },
+}).create();
+
+// Popover with auto-commit
+new TimepickerUI('#commit-on-scroll-popover', {
+  ui: { mode: 'compact-wheel', wheel: { placement: 'auto', commitOnScroll: true } },
+}).create();
+
+// 24h popover with auto-commit
+new TimepickerUI('#commit-on-scroll-24h', {
+  clock: { type: '24h' },
+  ui: { mode: 'compact-wheel', wheel: { placement: 'auto', commitOnScroll: true } },
+}).create();</code></pre>
+      </div>
+    </div>
+    <div
+      class="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800"
+    >
+      <h4 class="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-2">commitOnScroll Notes</h4>
+      <ul class="text-sm text-amber-800 dark:text-amber-300 space-y-1 list-disc list-inside">
+        <li>
+          Set
+          <code class="bg-amber-100 dark:bg-amber-800 px-1 rounded">ui.wheel.commitOnScroll: true</code> for
+          instant commit on scroll end
+        </li>
+        <li>
+          Applies to <code class="bg-amber-100 dark:bg-amber-800 px-1 rounded">wheel</code> and
+          <code class="bg-amber-100 dark:bg-amber-800 px-1 rounded">compact-wheel</code> modes only
+        </li>
+        <li>Input value updates immediately when scrolling stops</li>
+        <li>OK/Cancel buttons still work normally when this option is disabled</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Compact Wheel + Popover Placement Section -->
+
+<section
+  id="wheel-disabled"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-red-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Wheel + Disabled Time</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      All disabledTime options in wheel mode — hours, minutes, single interval, multiple intervals, 24h,
+      hideDisabledOptions
+    </p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Disabled Hours (12h)</label
+          >
+          <input
+            id="wheel-disabled-hours-12h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 transition-colors"
+            value="09:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Disabled Hours (24h)</label
+          >
+          <input
+            id="wheel-disabled-hours-24h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 transition-colors"
+            value="09:00"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Disabled Minutes</label
+          >
+          <input
+            id="wheel-disabled-minutes"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Single Interval (12h)</label
+          >
+          <input
+            id="wheel-disabled-interval-12h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 transition-colors"
+            value="08:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Single Interval (24h)</label
+          >
+          <input
+            id="wheel-disabled-interval-24h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 transition-colors"
+            value="07:00"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Multiple Intervals (12h)</label
+          >
+          <input
+            id="wheel-disabled-intervals-12h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 transition-colors"
+            value="07:30 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Multiple Intervals (24h)</label
+          >
+          <input
+            id="wheel-disabled-intervals-24h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 transition-colors"
+            value="06:00"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Hide Disabled Hours</label
+          >
+          <input
+            id="wheel-hide-disabled-hours"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 transition-colors"
+            value="09:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Hide Disabled Interval</label
+          >
+          <input
+            id="wheel-hide-disabled-interval"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 transition-colors"
+            value="09:00"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="wheel-disabled-hours-12h" value="09:00 AM" /&gt;
+&lt;input id="wheel-disabled-hours-24h" value="09:00" /&gt;
+&lt;input id="wheel-disabled-minutes" value="10:00 AM" /&gt;
+&lt;input id="wheel-disabled-interval-12h" value="08:00 AM" /&gt;
+&lt;input id="wheel-disabled-interval-24h" value="07:00" /&gt;
+&lt;input id="wheel-disabled-intervals-12h" value="07:30 AM" /&gt;
+&lt;input id="wheel-disabled-intervals-24h" value="06:00" /&gt;
+&lt;input id="wheel-hide-disabled-hours" value="09:00 AM" /&gt;
+&lt;input id="wheel-hide-disabled-interval" value="09:00" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">// Disabled specific hours — 12h
+new TimepickerUI('#wheel-disabled-hours-12h', {
+  clock: {
+    type: '12h',
+    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8] }
+  },
+  ui: { mode: 'wheel' }
+}).create();
+
+// Disabled specific hours — 24h
+new TimepickerUI('#wheel-disabled-hours-24h', {
+  clock: {
+    type: '24h',
+    disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23] }
+  },
+  ui: { mode: 'wheel' }
+}).create();
+
+// Disabled specific minutes
+new TimepickerUI('#wheel-disabled-minutes', {
+  clock: {
+    disabledTime: { minutes: [15, 30, 45] }
+  },
+  ui: { mode: 'wheel' }
+}).create();
+
+// Single interval — 12h
+new TimepickerUI('#wheel-disabled-interval-12h', {
+  clock: {
+    type: '12h',
+    disabledTime: { interval: '10:00 AM - 2:00 PM' }
+  },
+  ui: { mode: 'wheel' }
+}).create();
+
+// Single interval — 24h
+new TimepickerUI('#wheel-disabled-interval-24h', {
+  clock: {
+    type: '24h',
+    disabledTime: { interval: '12:00 - 18:00' }
+  },
+  ui: { mode: 'wheel' }
+}).create();
+
+// Multiple intervals — 12h
+new TimepickerUI('#wheel-disabled-intervals-12h', {
+  clock: {
+    type: '12h',
+    disabledTime: {
+      interval: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM']
+    }
+  },
+  ui: { mode: 'wheel' }
+}).create();
+
+// Multiple intervals — 24h
+new TimepickerUI('#wheel-disabled-intervals-24h', {
+  clock: {
+    type: '24h',
+    disabledTime: {
+      interval: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59']
+    }
+  },
+  ui: { mode: 'wheel' }
+}).create();
+
+// hideDisabledOptions — hours
+new TimepickerUI('#wheel-hide-disabled-hours', {
+  clock: {
+    type: '12h',
+    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8], hideOptions: true }
+  },
+  ui: { mode: 'wheel' }
+}).create();
+
+// hideDisabledOptions — interval 24h
+new TimepickerUI('#wheel-hide-disabled-interval', {
+  clock: {
+    type: '24h',
+    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'], hideOptions: true }
+  },
+  ui: { mode: 'wheel' }
+}).create();</code></pre>
+      </div>
+    </div>
+    <div class="mt-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+      <h4 class="text-sm font-semibold text-red-900 dark:text-red-200 mb-2">Wheel + disabledTime Notes</h4>
+      <ul class="text-sm text-red-800 dark:text-red-300 space-y-1 list-disc list-inside">
+        <li>Disabled items are dimmed and skipped during keyboard navigation</li>
+        <li>
+          Set <code class="bg-red-100 dark:bg-red-800 px-1 rounded">disabledTime.hideOptions: true</code> to
+          completely remove them from the wheel
+        </li>
+        <li>
+          When using <code class="bg-red-100 dark:bg-red-800 px-1 rounded">interval</code>, the
+          <code class="bg-red-100 dark:bg-red-800 px-1 rounded">hours</code> and
+          <code class="bg-red-100 dark:bg-red-800 px-1 rounded">minutes</code> keys are ignored
+        </li>
+        <li>Multiple intervals accepted as an array of strings</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section
+  id="compact-wheel-disabled"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-fuchsia-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Compact Wheel + Disabled Time</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      All disabledTime options in compact-wheel mode — hours, minutes, single interval, multiple intervals,
+      24h, hideDisabledOptions
+    </p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Disabled Hours (12h)</label
+          >
+          <input
+            id="compact-disabled-hours-12h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="09:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Disabled Hours (24h)</label
+          >
+          <input
+            id="compact-disabled-hours-24h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="09:00"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Disabled Minutes</label
+          >
+          <input
+            id="compact-disabled-minutes"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="10:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Single Interval (12h)</label
+          >
+          <input
+            id="compact-disabled-interval-12h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="08:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Single Interval (24h)</label
+          >
+          <input
+            id="compact-disabled-interval-24h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="07:00"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Multiple Intervals (12h)</label
+          >
+          <input
+            id="compact-disabled-intervals-12h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="07:30 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Multiple Intervals (24h)</label
+          >
+          <input
+            id="compact-disabled-intervals-24h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="06:00"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Hide Disabled Hours</label
+          >
+          <input
+            id="compact-hide-disabled-hours"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="09:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Hide Disabled Interval</label
+          >
+          <input
+            id="compact-hide-disabled-interval"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 transition-colors"
+            value="09:00"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="compact-disabled-hours-12h" value="09:00 AM" /&gt;
+&lt;input id="compact-disabled-hours-24h" value="09:00" /&gt;
+&lt;input id="compact-disabled-minutes" value="10:00 AM" /&gt;
+&lt;input id="compact-disabled-interval-12h" value="08:00 AM" /&gt;
+&lt;input id="compact-disabled-interval-24h" value="07:00" /&gt;
+&lt;input id="compact-disabled-intervals-12h" value="07:30 AM" /&gt;
+&lt;input id="compact-disabled-intervals-24h" value="06:00" /&gt;
+&lt;input id="compact-hide-disabled-hours" value="09:00 AM" /&gt;
+&lt;input id="compact-hide-disabled-interval" value="09:00" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">// Disabled specific hours — 12h
+new TimepickerUI('#compact-disabled-hours-12h', {
+  clock: {
+    type: '12h',
+    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8] }
+  },
+  ui: { mode: 'compact-wheel' }
+}).create();
+
+// Disabled specific hours — 24h
+new TimepickerUI('#compact-disabled-hours-24h', {
+  clock: {
+    type: '24h',
+    disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23] }
+  },
+  ui: { mode: 'compact-wheel' }
+}).create();
+
+// Disabled specific minutes
+new TimepickerUI('#compact-disabled-minutes', {
+  clock: {
+    disabledTime: { minutes: [15, 30, 45] }
+  },
+  ui: { mode: 'compact-wheel' }
+}).create();
+
+// Single interval — 12h
+new TimepickerUI('#compact-disabled-interval-12h', {
+  clock: {
+    type: '12h',
+    disabledTime: { interval: '10:00 AM - 2:00 PM' }
+  },
+  ui: { mode: 'compact-wheel' }
+}).create();
+
+// Single interval — 24h
+new TimepickerUI('#compact-disabled-interval-24h', {
+  clock: {
+    type: '24h',
+    disabledTime: { interval: '12:00 - 18:00' }
+  },
+  ui: { mode: 'compact-wheel' }
+}).create();
+
+// Multiple intervals — 12h
+new TimepickerUI('#compact-disabled-intervals-12h', {
+  clock: {
+    type: '12h',
+    disabledTime: {
+      interval: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM']
+    }
+  },
+  ui: { mode: 'compact-wheel' }
+}).create();
+
+// Multiple intervals — 24h
+new TimepickerUI('#compact-disabled-intervals-24h', {
+  clock: {
+    type: '24h',
+    disabledTime: {
+      interval: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59']
+    }
+  },
+  ui: { mode: 'compact-wheel' }
+}).create();
+
+// hideDisabledOptions — hours
+new TimepickerUI('#compact-hide-disabled-hours', {
+  clock: {
+    type: '12h',
+    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8], hideOptions: true }
+  },
+  ui: { mode: 'compact-wheel' }
+}).create();
+
+// hideDisabledOptions — interval 24h
+new TimepickerUI('#compact-hide-disabled-interval', {
+  clock: {
+    type: '24h',
+    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'], hideOptions: true }
+  },
+  ui: { mode: 'compact-wheel' }
+}).create();</code></pre>
+      </div>
+    </div>
+    <div
+      class="mt-6 p-4 bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-lg border border-fuchsia-200 dark:border-fuchsia-800"
+    >
+      <h4 class="text-sm font-semibold text-fuchsia-900 dark:text-fuchsia-200 mb-2">
+        Compact Wheel + disabledTime Notes
+      </h4>
+      <ul class="text-sm text-fuchsia-800 dark:text-fuchsia-300 space-y-1 list-disc list-inside">
+        <li>All disabledTime options work identically in compact-wheel and wheel modes</li>
+        <li>
+          In compact-wheel 12h mode, AM/PM column is always shown as the third wheel — it is never disabled
+        </li>
+        <li>
+          Set
+          <code class="bg-fuchsia-100 dark:bg-fuchsia-800 px-1 rounded">disabledTime.hideOptions: true</code>
+          to remove disabled items entirely
+        </li>
+        <li>
+          Combine with
+          <code class="bg-fuchsia-100 dark:bg-fuchsia-800 px-1 rounded">ui.wheel.placement</code> for a
+          popover variant
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

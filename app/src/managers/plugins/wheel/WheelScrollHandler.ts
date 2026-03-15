@@ -81,7 +81,15 @@ export class WheelScrollHandler {
   getCurrentSelection(): WheelSelectionState {
     const hour = this.getSelectedValue('hours') ?? '12';
     const minute = this.getSelectedValue('minutes') ?? '00';
-    const ampm = this.core.options.clock.type !== '24h' ? this.getSelectedValue('ampm') : null;
+    let ampm: string | null = null;
+
+    if (this.core.options.clock.type !== '24h') {
+      ampm = this.getSelectedValue('ampm');
+      if (ampm === null) {
+        const am = this.core.getAM();
+        ampm = am?.classList.contains('active') ? 'AM' : 'PM';
+      }
+    }
 
     return { hour, minute, ampm };
   }
@@ -129,12 +137,22 @@ export class WheelScrollHandler {
 
     items.forEach((item, i) => {
       const distance = Math.abs(i - centerIndex);
-      item.classList.toggle('is-center', distance === 0);
+      const isCenter = distance === 0;
+      item.classList.toggle('is-center', isCenter);
       item.classList.toggle('is-near', distance === 1);
+      item.setAttribute('aria-selected', String(isCenter));
     });
 
     const col = this.renderer.getColumnElement(columnType);
     if (col) {
+      const centerItem = items[centerIndex];
+      if (centerItem) {
+        const itemId = centerItem.getAttribute('id');
+        if (itemId) {
+          col.setAttribute('aria-activedescendant', itemId);
+        }
+      }
+
       const wrapper = col.parentElement;
       if (wrapper) {
         wrapper.classList.toggle('at-start', centerIndex <= 0);
@@ -177,6 +195,9 @@ export class WheelScrollHandler {
         const nextValue = items[nextIndex].getAttribute('data-value');
         if (nextValue !== null) {
           this.scrollToValue(columnType, nextValue);
+          if (this.onScrollEnd) {
+            this.onScrollEnd(columnType, nextValue);
+          }
           return;
         }
       }
@@ -185,6 +206,9 @@ export class WheelScrollHandler {
         const prevValue = items[prevIndex].getAttribute('data-value');
         if (prevValue !== null) {
           this.scrollToValue(columnType, prevValue);
+          if (this.onScrollEnd) {
+            this.onScrollEnd(columnType, prevValue);
+          }
           return;
         }
       }

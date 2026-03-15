@@ -145,9 +145,17 @@ const uiOptions = [
   },
   {
     name: "mode",
-    type: '"clock" | "wheel"',
+    type: '"clock" | "wheel" | "compact-wheel"',
     default: '"clock"',
-    description: "Picker mode — analog clock face or scroll-spinner wheels",
+    description:
+      "Picker mode \u2014 analog clock face, scroll-spinner wheels, or headerless wheel",
+  },
+  {
+    name: "wheel",
+    type: "WheelOptions",
+    default: "undefined",
+    description:
+      "Wheel/compact-wheel config (placement, hideFooter, commitOnScroll)",
   },
 ];
 
@@ -489,6 +497,26 @@ export default function OptionsPage() {
         />
       </Section>
 
+      <Section icon={Layout} title="Wheel Mode Configuration">
+        <p className="text-muted-foreground mb-4">
+          Configure wheel/compact-wheel mode via{" "}
+          <code className="text-primary">ui.wheel</code>:
+        </p>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
+  ui: {
+    mode: 'wheel',
+    wheel: {
+      placement: 'bottom',     // Popover placement (compact-wheel only)
+      hideFooter: true,        // Hide OK/Cancel footer
+      commitOnScroll: true     // Commit value on scroll end
+    }
+  }
+});`}
+          language="typescript"
+        />
+      </Section>
+
       <Section icon={Lock} title="Disabled Time Configuration">
         <p className="text-muted-foreground mb-4">
           Disable specific hours, minutes, or intervals via{" "}
@@ -500,7 +528,8 @@ export default function OptionsPage() {
     disabledTime: {
       hours: [1, 3, 5, 8],              // Disable specific hours
       minutes: [15, 30, 45],            // Disable specific minutes
-      interval: 15                      // Or use interval shorthand (15, 30, etc.)
+      interval: 15,                     // Or use interval shorthand (15, 30, etc.)
+      hideOptions: true                 // Hide disabled items instead of greying out
     }
   }
 });`}
@@ -541,7 +570,8 @@ export default function OptionsPage() {
     autoSwitchToMinutes: true,
     disabledTime: {
       hours: [0, 1, 2, 3],
-      interval: 15
+      interval: 15,
+      hideOptions: true
     },
     currentTime: {
       updateInput: true,
@@ -559,7 +589,12 @@ export default function OptionsPage() {
     enableSwitchIcon: false,
     editable: false,
     cssClass: 'custom-picker',
-    appendModalSelector: '#timepicker-container'
+    appendModalSelector: '#timepicker-container',
+    wheel: {
+      placement: 'bottom',
+      hideFooter: true,
+      commitOnScroll: true
+    }
   },
   
   // Labels options

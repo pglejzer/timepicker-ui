@@ -39,7 +39,8 @@ export default function WhatsNewPage() {
         className="mb-8"
       >
         <p className="mb-3">
-          <strong>March 13, 2026</strong> - Wheel mode &amp; clear button
+          <strong>March 15, 2026</strong> - Wheel mode, compact-wheel, clear
+          button and more
         </p>
         <p className="text-sm">What&apos;s new:</p>
         <ul className="mt-2 space-y-1 text-sm ml-4">
@@ -47,6 +48,27 @@ export default function WhatsNewPage() {
             <strong>Wheel mode</strong> - Scroll-spinner interface replacing the
             analog clock face. Enable via{" "}
             <code>ui.mode: &apos;wheel&apos;</code>
+          </li>
+          <li>
+            <strong>Compact-wheel mode</strong> - Headerless wheel picker
+            without the hour/minute inputs header. Enable via{" "}
+            <code>ui.mode: &apos;compact-wheel&apos;</code>
+          </li>
+          <li>
+            <strong>Popover placement</strong> - Use{" "}
+            <code>ui.wheel.placement</code> to open compact-wheel as a popover
+            anchored to the input (<code>&apos;auto&apos;</code>,{" "}
+            <code>&apos;top&apos;</code>, <code>&apos;bottom&apos;</code>)
+          </li>
+          <li>
+            <strong>Hide disabled options</strong> - Set{" "}
+            <code>clock.disabledTime.hideOptions: true</code> to completely
+            remove disabled values instead of dimming them
+          </li>
+          <li>
+            <strong>Auto-commit on scroll</strong> - Set{" "}
+            <code>ui.wheel.commitOnScroll: true</code> to auto-confirm time at
+            scroll end without pressing OK
           </li>
           <li>
             <strong>Clear button</strong> - Reset time selection with a
@@ -61,8 +83,10 @@ export default function WhatsNewPage() {
             EventEmitter event with <code>previousValue</code> payload
           </li>
           <li>
-            <strong>New exported types</strong> - <code>ClearEventData</code>{" "}
-            and <code>ClearBehaviorOptions</code>
+            <strong>New exported types</strong> - <code>ClearEventData</code>,{" "}
+            <code>ClearBehaviorOptions</code>,{" "}
+            <code>WheelScrollStartEventData</code>,{" "}
+            <code>WheelScrollEndEventData</code>
           </li>
         </ul>
         <Link

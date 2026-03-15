@@ -18,6 +18,7 @@ export default class RangeManager {
   private boundHandleConfirm: (data: ConfirmEventData) => void;
   private boundHandleUpdate: () => void;
   private boundHandleAmPm: () => void;
+  private boundHandleClear: () => void;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -31,6 +32,7 @@ export default class RangeManager {
     this.boundHandleConfirm = this.handleConfirm.bind(this);
     this.boundHandleUpdate = this.handleUpdate.bind(this);
     this.boundHandleAmPm = this.handleAmPm.bind(this);
+    this.boundHandleClear = this.handleClear.bind(this);
   }
 
   private get isEnabled(): boolean {
@@ -148,6 +150,18 @@ export default class RangeManager {
 
     this.emitter.on('select:pm', this.boundHandleAmPm);
     this.cleanupHandlers.push(() => this.emitter.off('select:pm', this.boundHandleAmPm));
+
+    this.emitter.on('clear', this.boundHandleClear);
+    this.cleanupHandlers.push(() => this.emitter.off('clear', this.boundHandleClear));
+  }
+
+  private handleClear(): void {
+    if (!this.isEnabled) return;
+
+    this.state.setFromValue(null);
+    this.state.setToValue(null);
+    this.state.setPreviewValue(null);
+    this.state.resetActivePart();
   }
 
   private handleUpdate(): void {

@@ -7,16 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [4.2.0] - 2026-03-13
+## [4.2.0] - 2026-03-15
 
 ### Added
 
-- Wheel mode — scroll-spinner interface replacing the analog clock face. Enable via `ui.mode: 'wheel'`
+- Wheel mode - scroll-spinner interface replacing the analog clock face. Enable via `ui.mode: 'wheel'`
+- Compact-wheel mode - headerless wheel picker without the hour/minute inputs header. Enable via `ui.mode: 'compact-wheel'`
 - Wheel mode supports 12h/24h, all themes, disabled time, setValue/getValue, and keyboard navigation
-- Wheel mode emits all standard events (`select:hour`, `select:minute`, `update`, `confirm`, `cancel`, `clear`, `select:am`, `select:pm`, `error`) — no separate API needed
-- `wheel:scroll:start` event — fires when a wheel column starts scrolling (includes `column` field)
-- `wheel:scroll:end` event — fires when a wheel column snaps to a value (includes `column`, `value`, `previousValue` fields)
+- Wheel mode emits all standard events (`select:hour`, `select:minute`, `update`, `confirm`, `cancel`, `clear`, `select:am`, `select:pm`, `error`) - no separate API needed
+- `wheel:scroll:start` event - fires when a wheel column starts scrolling (includes `column` field)
+- `wheel:scroll:end` event - fires when a wheel column snaps to a value (includes `column`, `value`, `previousValue` fields)
 - Exported `WheelScrollStartEventData` and `WheelScrollEndEventData` types
+- `ui.wheel.placement` option (`'auto'` | `'top'` | `'bottom'`) for popover positioning in compact-wheel mode
+- `clock.disabledTime.hideOptions` option to completely remove disabled hours/minutes from the list instead of dimming them
+- `ui.wheel.commitOnScroll` option to auto-commit time at the end of wheel scrolling without pressing OK
+- `autoCommit` field on `ConfirmEventData` to distinguish auto-committed from manual confirmations
 - Clear button to reset time selection. Enabled by default via `ui.clearButton` option
 - `clearBehavior.clearInput` option to control whether clearing also empties the input field value
 - `labels.clear` option to customize the clear button text

@@ -99,7 +99,9 @@ export default class TimepickerUI {
           const type = data.type ? ` ${data.type}` : '';
           input.value = `${data.hour}:${data.minutes}${type}`;
         }
-        this.lifecycle.unmount();
+        if (!data.autoCommit) {
+          this.lifecycle.unmount();
+        }
       }
     });
 
@@ -260,54 +262,11 @@ export default class TimepickerUI {
     }
 
     const trimmedTime = sanitizeTimeInput(time.trim());
-    let hourValue = '12';
-    let minutesValue = '00';
-    let typeValue = 'AM';
 
     try {
-      if (this.core.options.clock.type === '24h') {
-        const timeMatch = trimmedTime.match(/^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/);
-        if (!timeMatch) {
-          throw new Error('Invalid 24h format. Expected HH:MM');
-        }
-        hourValue = timeMatch[1].padStart(2, '0');
-        minutesValue = timeMatch[2];
-      } else {
-        const timeMatch = trimmedTime.match(/^(1[0-2]|[1-9]):([0-5][0-9])\s*(AM|PM)$/i);
-        if (!timeMatch) {
-          throw new Error('Invalid 12h format. Expected HH:MM AM/PM');
-        }
-        hourValue = timeMatch[1];
-        minutesValue = timeMatch[2];
-        typeValue = timeMatch[3].toUpperCase();
-      }
-
-      const hour = this.core.getHour();
-      const minutes = this.core.getMinutes();
-      const AM = this.core.getAM();
-      const PM = this.core.getPM();
-
-      if (hour) {
-        hour.value = hourValue;
-        hour.setAttribute('aria-valuenow', hourValue);
-        this.core.setDegreesHours(Number(hourValue) * 30);
-      }
-
-      if (minutes) {
-        minutes.value = minutesValue;
-        minutes.setAttribute('aria-valuenow', minutesValue);
-        this.core.setDegreesMinutes(Number(minutesValue) * 6);
-      }
-
-      if (this.core.options.clock.type !== '24h' && AM && PM) {
-        if (typeValue === 'AM') {
-          AM.classList.add('active');
-          PM.classList.remove('active');
-        } else {
-          PM.classList.add('active');
-          AM.classList.remove('active');
-        }
-      }
+      const parsed = this.parseTimeString(trimmedTime);
+      this.applyParsedTime(parsed);
+      this.syncPeriodIndicator(parsed.typeValue);
 
       if (updateInput) {
         const input = this.core.getInput();
@@ -316,19 +275,77 @@ export default class TimepickerUI {
         }
       }
 
-      if (this.core.options.ui.mode === 'wheel') {
-        const wheel = this.managers.getPlugin<WheelManager>('wheel');
-        if (wheel) {
-          wheel.scrollToValue(hourValue, minutesValue, typeValue);
-        }
-      } else {
-        const clockHand = this.core.getClockHand();
-        if (clockHand) {
-          clockHand.style.transform = `rotateZ(${this.core.degreesHours || 0}deg)`;
-        }
-      }
+      this.syncClockVisual(parsed);
     } catch (error) {
       return;
+    }
+  }
+
+  private parseTimeString(trimmedTime: string): {
+    hourValue: string;
+    minutesValue: string;
+    typeValue: string;
+  } {
+    if (this.core.options.clock.type === '24h') {
+      const timeMatch = trimmedTime.match(/^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/);
+      if (!timeMatch) {
+        throw new Error('Invalid 24h format. Expected HH:MM');
+      }
+      return { hourValue: timeMatch[1].padStart(2, '0'), minutesValue: timeMatch[2], typeValue: 'AM' };
+    }
+
+    const timeMatch = trimmedTime.match(/^(1[0-2]|[1-9]):([0-5][0-9])\s*(AM|PM)$/i);
+    if (!timeMatch) {
+      throw new Error('Invalid 12h format. Expected HH:MM AM/PM');
+    }
+    return { hourValue: timeMatch[1], minutesValue: timeMatch[2], typeValue: timeMatch[3].toUpperCase() };
+  }
+
+  private applyParsedTime(parsed: { hourValue: string; minutesValue: string }): void {
+    const hour = this.core.getHour();
+    const minutes = this.core.getMinutes();
+
+    if (hour) {
+      hour.value = parsed.hourValue;
+      hour.setAttribute('aria-valuenow', parsed.hourValue);
+      this.core.setDegreesHours(Number(parsed.hourValue) * 30);
+    }
+
+    if (minutes) {
+      minutes.value = parsed.minutesValue;
+      minutes.setAttribute('aria-valuenow', parsed.minutesValue);
+      this.core.setDegreesMinutes(Number(parsed.minutesValue) * 6);
+    }
+  }
+
+  private syncPeriodIndicator(typeValue: string): void {
+    if (this.core.options.clock.type === '24h') return;
+
+    const AM = this.core.getAM();
+    const PM = this.core.getPM();
+    if (!AM || !PM) return;
+
+    if (typeValue === 'AM') {
+      AM.classList.add('active');
+      PM.classList.remove('active');
+    } else {
+      PM.classList.add('active');
+      AM.classList.remove('active');
+    }
+  }
+
+  private syncClockVisual(parsed: { hourValue: string; minutesValue: string; typeValue: string }): void {
+    const mode = this.core.options.ui.mode;
+    if (mode === 'wheel' || mode === 'compact-wheel') {
+      const wheel = this.managers.getPlugin<WheelManager>('wheel');
+      if (wheel) {
+        wheel.scrollToValue(parsed.hourValue, parsed.minutesValue, parsed.typeValue);
+      }
+    } else {
+      const clockHand = this.core.getClockHand();
+      if (clockHand) {
+        clockHand.style.transform = `rotateZ(${this.core.degreesHours || 0}deg)`;
+      }
     }
   }
 

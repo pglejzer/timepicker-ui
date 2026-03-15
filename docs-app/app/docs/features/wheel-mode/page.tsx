@@ -1,7 +1,16 @@
 import { CodeBlock } from "@/components/code-block";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
-import { Disc3, Settings, Palette, Keyboard, Zap } from "lucide-react";
+import {
+  Disc3,
+  Settings,
+  Palette,
+  Keyboard,
+  Zap,
+  Minimize2,
+  EyeOff,
+  RotateCcw,
+} from "lucide-react";
 
 export const metadata = {
   title: "Wheel Mode - Timepicker-UI",
@@ -27,9 +36,11 @@ export default function WheelModePage() {
         variant="emerald"
         className="mb-8"
       >
-        Set <code>ui.mode: &apos;wheel&apos;</code> to switch from the default
-        analog clock to scroll wheels. The header (hour/minute inputs, AM/PM
-        toggle) and footer (OK/Cancel/Clear buttons) remain unchanged.
+        Two wheel variants are available:{" "}
+        <code>ui.mode: &apos;wheel&apos;</code> (with header) and{" "}
+        <code>ui.mode: &apos;compact-wheel&apos;</code> (headerless). The header
+        (hour/minute inputs, AM/PM toggle) and footer (OK/Cancel/Clear buttons)
+        remain unchanged in wheel mode.
       </InfoBox>
 
       <Section icon={Disc3} title="Basic Usage">
@@ -194,7 +205,7 @@ picker.on('clear', (data) => {
           <ul className="space-y-2 text-sm text-orange-800 dark:text-orange-300 list-disc list-inside">
             <li>
               Range plugin (<code>range.enabled</code>) is not supported in
-              wheel mode
+              wheel or compact-wheel mode
             </li>
             <li>
               <code>ui.mobile</code> is ignored — wheel layout is always the
@@ -202,6 +213,140 @@ picker.on('clear', (data) => {
             </li>
           </ul>
         </div>
+      </Section>
+
+      <Section icon={Minimize2} title="Compact-Wheel Mode">
+        <p className="text-muted-foreground mb-4">
+          Compact-wheel mode is a headerless variant — it shows only the scroll
+          wheels without the hour/minute input header. Ideal for minimal UIs or
+          popover-style pickers.
+        </p>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
+  ui: { mode: 'compact-wheel' }
+});
+picker.create();`}
+          language="typescript"
+        />
+        <div className="mt-6 rounded-lg border border-border bg-card p-6">
+          <h3 className="font-semibold mb-3 text-foreground">
+            Popover Placement
+          </h3>
+          <p className="text-muted-foreground mb-3">
+            Combine with{" "}
+            <code className="text-primary">ui.wheel.placement</code> to open as
+            a popover anchored to the input instead of a centered modal:
+          </p>
+          <CodeBlock
+            code={`new TimepickerUI(input, {
+  ui: {
+    mode: 'compact-wheel',
+    wheel: {
+      placement: 'auto'  // 'auto', 'top', or 'bottom'
+    }
+  }
+}).create();`}
+            language="typescript"
+          />
+          <div className="mt-4 overflow-x-auto rounded-lg border border-border">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/50">
+                <tr className="border-b border-border">
+                  <th className="px-4 py-3 text-left font-semibold text-foreground">
+                    Value
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-foreground">
+                    Behavior
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                <tr>
+                  <td className="px-4 py-3">
+                    <code className="text-primary text-xs">
+                      &apos;auto&apos;
+                    </code>
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    Opens below if space allows, otherwise above
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3">
+                    <code className="text-primary text-xs">
+                      &apos;top&apos;
+                    </code>
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    Always opens above the input
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3">
+                    <code className="text-primary text-xs">
+                      &apos;bottom&apos;
+                    </code>
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    Always opens below the input
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3">
+                    <code className="text-primary text-xs">undefined</code>
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    Centered modal with backdrop (default)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </Section>
+
+      <Section icon={EyeOff} title="Hide Disabled Options">
+        <p className="text-muted-foreground mb-4">
+          Set{" "}
+          <code className="text-primary">
+            clock.disabledTime.hideOptions: true
+          </code>{" "}
+          to completely remove disabled hours/minutes from the wheel instead of
+          showing them as dimmed. Useful when many values are disabled (e.g.,
+          business hours only).
+        </p>
+        <CodeBlock
+          code={`new TimepickerUI(input, {
+  clock: {
+    disabledTime: { hours: [0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23], hideOptions: true }
+  },
+  ui: { mode: 'wheel' }
+}).create();`}
+          language="typescript"
+        />
+      </Section>
+
+      <Section icon={RotateCcw} title="Auto-Commit on Scroll">
+        <p className="text-muted-foreground mb-4">
+          Set{" "}
+          <code className="text-primary">ui.wheel.commitOnScroll: true</code> to
+          automatically confirm the selected time when scrolling stops, without
+          requiring the user to press OK. Works in both wheel and compact-wheel
+          modes.
+        </p>
+        <CodeBlock
+          code={`new TimepickerUI(input, {
+  ui: { mode: 'wheel', wheel: { commitOnScroll: true } }
+}).create();
+
+// The confirm event includes autoCommit: true
+picker.on('confirm', (data) => {
+  if (data.autoCommit) {
+    console.log('Auto-committed:', data.hour, data.minutes);
+  }
+});`}
+          language="typescript"
+        />
       </Section>
     </div>
   );

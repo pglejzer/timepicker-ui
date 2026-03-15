@@ -45,6 +45,8 @@ export class WheelDragHandler {
   }
 
   init(): void {
+    this.cleanupPreviousInit();
+
     if (!isDocument()) return;
 
     const columnTypes: readonly WheelColumnType[] = ['hours', 'minutes', 'ampm'];
@@ -107,6 +109,13 @@ export class WheelDragHandler {
   }
 
   destroy(): void {
+    this.cleanupPreviousInit();
+    this.onSnap = null;
+    this.onVisualUpdate = null;
+    this.onScrollStart = null;
+  }
+
+  private cleanupPreviousInit(): void {
     if (this.visualUpdateRaf !== null) {
       cancelAnimationFrame(this.visualUpdateRaf);
       this.visualUpdateRaf = null;
@@ -122,9 +131,6 @@ export class WheelDragHandler {
 
     this.columnStates.forEach((state) => state.destroy());
     this.columnStates.clear();
-    this.onSnap = null;
-    this.onVisualUpdate = null;
-    this.onScrollStart = null;
   }
 
   private handlePointerDown(columnType: WheelColumnType, e: PointerEvent): void {

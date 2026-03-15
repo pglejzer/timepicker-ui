@@ -1,7 +1,14 @@
 import { WheelScrollHandler } from '../../../../../src/managers/plugins/wheel/WheelScrollHandler';
 import { WheelRenderer } from '../../../../../src/managers/plugins/wheel/WheelRenderer';
 import { WheelDragHandler } from '../../../../../src/managers/plugins/wheel/WheelDragHandler';
-import { setupWheelTestContext, WHEEL_ITEM_HEIGHT_PX, type WheelTestContext } from './wheel-test-helpers';
+import { CoreState } from '../../../../../src/timepicker/CoreState';
+import { EventEmitter, type TimepickerEventMap } from '../../../../../src/utils/EventEmitter';
+import {
+  setupWheelTestContext,
+  createWheelOptions,
+  WHEEL_ITEM_HEIGHT_PX,
+  type WheelTestContext,
+} from './wheel-test-helpers';
 
 describe('WheelScrollHandler', () => {
   let ctx: WheelTestContext;
@@ -90,6 +97,129 @@ describe('WheelScrollHandler', () => {
       scrollHandler24.destroy();
       dragHandler24.destroy();
       renderer24.destroy();
+    });
+
+    it('should fall back to AM header button when ampm wheel column is absent', () => {
+      scrollHandler.destroy();
+      dragHandler.destroy();
+      renderer.destroy();
+      document.body.innerHTML = '';
+
+      const element = document.createElement('div');
+      element.innerHTML = '<input type="text" />';
+      document.body.appendChild(element);
+
+      const options = createWheelOptions({ clock: { type: '12h' } });
+      const core = new CoreState(element, options, 'test-no-ampm-col');
+
+      const modal = document.createElement('div');
+      modal.setAttribute('data-owner-id', 'test-no-ampm-col');
+
+      const am = document.createElement('div');
+      am.className = 'tp-ui-type-mode tp-ui-am active';
+      modal.appendChild(am);
+
+      const pm = document.createElement('div');
+      pm.className = 'tp-ui-type-mode tp-ui-pm';
+      modal.appendChild(pm);
+
+      const hoursWrapper = document.createElement('div');
+      hoursWrapper.className = 'tp-ui-wheel-column-wrapper';
+      const hoursCol = document.createElement('div');
+      hoursCol.className = 'tp-ui-wheel-column tp-ui-wheel-hours';
+      hoursWrapper.appendChild(hoursCol);
+      modal.appendChild(hoursWrapper);
+
+      const minutesWrapper = document.createElement('div');
+      minutesWrapper.className = 'tp-ui-wheel-column-wrapper';
+      const minutesCol = document.createElement('div');
+      minutesCol.className = 'tp-ui-wheel-column tp-ui-wheel-minutes';
+      minutesWrapper.appendChild(minutesCol);
+      modal.appendChild(minutesWrapper);
+
+      document.body.appendChild(modal);
+
+      const emitter2 = new EventEmitter<TimepickerEventMap>();
+      const renderer2 = new WheelRenderer(core, emitter2);
+      const dragHandler2 = new WheelDragHandler(renderer2);
+      const scrollHandler2 = new WheelScrollHandler(renderer2, core);
+      scrollHandler2.setDragHandler(dragHandler2);
+
+      renderer2.init();
+      dragHandler2.init();
+      scrollHandler2.init();
+
+      const selection = scrollHandler2.getCurrentSelection();
+      expect(selection.ampm).toBe('AM');
+
+      scrollHandler2.destroy();
+      dragHandler2.destroy();
+      renderer2.destroy();
+    });
+
+    it('should fall back to PM when PM header button is active and ampm column is absent', () => {
+      scrollHandler.destroy();
+      dragHandler.destroy();
+      renderer.destroy();
+      document.body.innerHTML = '';
+
+      const element = document.createElement('div');
+      element.innerHTML = '<input type="text" />';
+      document.body.appendChild(element);
+
+      const options = createWheelOptions({ clock: { type: '12h' } });
+      const core = new CoreState(element, options, 'test-no-ampm-pm');
+
+      const modal = document.createElement('div');
+      modal.setAttribute('data-owner-id', 'test-no-ampm-pm');
+
+      const am = document.createElement('div');
+      am.className = 'tp-ui-type-mode tp-ui-am';
+      modal.appendChild(am);
+
+      const pm = document.createElement('div');
+      pm.className = 'tp-ui-type-mode tp-ui-pm active';
+      modal.appendChild(pm);
+
+      const hoursWrapper = document.createElement('div');
+      hoursWrapper.className = 'tp-ui-wheel-column-wrapper';
+      const hoursCol = document.createElement('div');
+      hoursCol.className = 'tp-ui-wheel-column tp-ui-wheel-hours';
+      hoursWrapper.appendChild(hoursCol);
+      modal.appendChild(hoursWrapper);
+
+      const minutesWrapper = document.createElement('div');
+      minutesWrapper.className = 'tp-ui-wheel-column-wrapper';
+      const minutesCol = document.createElement('div');
+      minutesCol.className = 'tp-ui-wheel-column tp-ui-wheel-minutes';
+      minutesWrapper.appendChild(minutesCol);
+      modal.appendChild(minutesWrapper);
+
+      document.body.appendChild(modal);
+
+      const emitter2 = new EventEmitter<TimepickerEventMap>();
+      const renderer2 = new WheelRenderer(core, emitter2);
+      const dragHandler2 = new WheelDragHandler(renderer2);
+      const scrollHandler2 = new WheelScrollHandler(renderer2, core);
+      scrollHandler2.setDragHandler(dragHandler2);
+
+      renderer2.init();
+      dragHandler2.init();
+      scrollHandler2.init();
+
+      const selection = scrollHandler2.getCurrentSelection();
+      expect(selection.ampm).toBe('PM');
+
+      scrollHandler2.destroy();
+      dragHandler2.destroy();
+      renderer2.destroy();
+    });
+
+    it('should read ampm from wheel column when it exists in 12h mode', () => {
+      jest.spyOn(renderer, 'getItemHeight').mockReturnValue(WHEEL_ITEM_HEIGHT_PX);
+      scrollHandler.scrollToValue('ampm', 'PM');
+      const selection = scrollHandler.getCurrentSelection();
+      expect(selection.ampm).toBe('PM');
     });
   });
 

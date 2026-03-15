@@ -85,6 +85,10 @@ export class InputValueHandler {
       typeValue = value.type as string;
     }
 
+    if (this.core.options.clock.type !== '24h' && !typeValue) {
+      typeValue = value.type || 'AM';
+    }
+
     if (hour) hour.value = hourValue.padStart(2, '0');
     if (minutes) minutes.value = minutesValue.padStart(2, '0');
 
@@ -114,4 +118,3 @@ export class InputValueHandler {
 
   destroy(): void {}
 }
-

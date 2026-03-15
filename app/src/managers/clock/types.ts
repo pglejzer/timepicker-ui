@@ -56,4 +56,5 @@ export interface RenderConfig {
   clockHand: HTMLElement;
   circle: HTMLElement;
   theme?: string;
+  hideOptions?: boolean;
 }

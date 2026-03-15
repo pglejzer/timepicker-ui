@@ -25,6 +25,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     iconTemplateMobile: '',
     inline: undefined,
     clearButton: true,
+    wheel: undefined,
   },
 
   labels: {
@@ -84,38 +85,50 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
 };
 
 export function mergeOptions(userOptions: TimepickerOptions = {}): Required<TimepickerOptions> {
-  return {
+  const merged: Required<TimepickerOptions> = {
     clock: {
       ...DEFAULT_OPTIONS.clock,
-      ...(userOptions.clock || {}),
+      ...userOptions.clock,
     },
     ui: {
       ...DEFAULT_OPTIONS.ui,
-      ...(userOptions.ui || {}),
+      ...userOptions.ui,
     },
     labels: {
       ...DEFAULT_OPTIONS.labels,
-      ...(userOptions.labels || {}),
+      ...userOptions.labels,
     },
     behavior: {
       ...DEFAULT_OPTIONS.behavior,
-      ...(userOptions.behavior || {}),
+      ...userOptions.behavior,
     },
     callbacks: {
       ...DEFAULT_OPTIONS.callbacks,
-      ...(userOptions.callbacks || {}),
+      ...userOptions.callbacks,
     },
     timezone: {
       ...DEFAULT_OPTIONS.timezone,
-      ...(userOptions.timezone || {}),
+      ...userOptions.timezone,
     },
     range: {
       ...DEFAULT_OPTIONS.range,
-      ...(userOptions.range || {}),
+      ...userOptions.range,
     },
     clearBehavior: {
       ...DEFAULT_OPTIONS.clearBehavior,
-      ...(userOptions.clearBehavior || {}),
+      ...userOptions.clearBehavior,
     },
   };
+
+  const mergedMode = merged.ui.mode;
+  if (mergedMode === 'wheel' || mergedMode === 'compact-wheel') {
+    merged.ui.wheel = {
+      placement: mergedMode === 'compact-wheel' ? 'auto' : undefined,
+      hideFooter: undefined,
+      commitOnScroll: undefined,
+      ...merged.ui.wheel,
+    };
+  }
+
+  return merged;
 }

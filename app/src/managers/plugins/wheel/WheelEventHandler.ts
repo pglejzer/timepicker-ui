@@ -3,11 +3,14 @@ import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitt
 import type { WheelScrollHandler } from './WheelScrollHandler';
 import type { WheelColumnType } from './WheelTypes';
 import { isDocument } from '../../../utils/node';
+import { announceToScreenReader } from '../../../utils/accessibility';
 
 const ARROW_UP = 'ArrowUp';
 const ARROW_DOWN = 'ArrowDown';
 const NEUTRAL_HOUR = '12';
 const NEUTRAL_MINUTES = '00';
+const NEUTRAL_AMPM = 'AM';
+const COMMIT_ON_SCROLL_DELAY_MS = 400;
 
 export class WheelEventHandler {
   private emitter: EventEmitter<TimepickerEventMap>;
@@ -17,6 +20,7 @@ export class WheelEventHandler {
   private clearHandler: ((data: { previousValue: string | null }) => void) | null = null;
   private previousValues: Map<WheelColumnType, string | null> = new Map();
   private scrollStartHandler: ((columnType: WheelColumnType) => void) | null = null;
+  private commitOnScrollTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(emitter: EventEmitter<TimepickerEventMap>, scrollHandler: WheelScrollHandler, core: CoreState) {
     this.emitter = emitter;
@@ -25,6 +29,10 @@ export class WheelEventHandler {
   }
 
   init(): void {
+    this.removeKeyboardListeners();
+    this.removeClearListener();
+    this.previousValues.clear();
+
     this.captureCurrentValues();
 
     this.scrollHandler.setScrollEndCallback((columnType: WheelColumnType, value: string): void => {
@@ -47,6 +55,10 @@ export class WheelEventHandler {
     this.removeClearListener();
     this.previousValues.clear();
     this.scrollStartHandler = null;
+    if (this.commitOnScrollTimer !== null) {
+      clearTimeout(this.commitOnScrollTimer);
+      this.commitOnScrollTimer = null;
+    }
   }
 
   private handleColumnScrollEnd(columnType: WheelColumnType, value: string): void {
@@ -61,14 +73,27 @@ export class WheelEventHandler {
 
     this.previousValues.set(columnType, value);
 
+    const modal = this.core.getModalElement();
+
     switch (columnType) {
       case 'hours':
         this.syncHourInput(value);
         this.emitter.emit('select:hour', { hour: value });
+        announceToScreenReader(modal, `Hour: ${value}`);
         break;
       case 'minutes':
         this.syncMinuteInput(value);
         this.emitter.emit('select:minute', { minutes: value });
+        announceToScreenReader(modal, `Minutes: ${value}`);
+        break;
+      case 'ampm':
+        this.syncAmPmState(value);
+        if (value === 'AM') {
+          this.emitter.emit('select:am', {});
+        } else {
+          this.emitter.emit('select:pm', {});
+        }
+        announceToScreenReader(modal, `${value} selected`);
         break;
     }
 
@@ -77,6 +102,34 @@ export class WheelEventHandler {
       minutes: selection.minute,
       type: selection.ampm ?? undefined,
     });
+
+    if (this.core.options.ui.wheel?.commitOnScroll === true) {
+      this.scheduleCommitOnScroll();
+    }
+  }
+
+  private scheduleCommitOnScroll(): void {
+    if (this.commitOnScrollTimer !== null) {
+      clearTimeout(this.commitOnScrollTimer);
+    }
+
+    this.commitOnScrollTimer = setTimeout(() => {
+      this.commitOnScrollTimer = null;
+      const selection = this.scrollHandler.getCurrentSelection();
+
+      const input = this.core.getInput();
+      if (input) {
+        const type = selection.ampm ? ` ${selection.ampm}` : '';
+        input.value = `${selection.hour}:${selection.minute}${type}`;
+      }
+
+      this.emitter.emit('confirm', {
+        hour: selection.hour,
+        minutes: selection.minute,
+        type: selection.ampm ?? undefined,
+        autoCommit: true,
+      });
+    }, COMMIT_ON_SCROLL_DELAY_MS);
   }
 
   private syncHourInput(value: string): void {
@@ -97,10 +150,20 @@ export class WheelEventHandler {
     this.core.setDegreesMinutes(parseInt(value, 10) * 6);
   }
 
+  private syncAmPmState(value: string): void {
+    const AM = this.core.getAM();
+    const PM = this.core.getPM();
+
+    if (AM && PM) {
+      AM.classList.toggle('active', value === 'AM');
+      PM.classList.toggle('active', value === 'PM');
+    }
+  }
+
   private attachKeyboardListeners(): void {
     if (!isDocument()) return;
 
-    const columnTypes: readonly WheelColumnType[] = ['hours', 'minutes'];
+    const columnTypes: readonly WheelColumnType[] = ['hours', 'minutes', 'ampm'];
 
     columnTypes.forEach((type) => {
       const col = this.scrollHandler.getCurrentSelection() ? this.getColumnFromRenderer(type) : null;
@@ -175,6 +238,7 @@ export class WheelEventHandler {
     this.clearHandler = (): void => {
       this.scrollHandler.scrollToValue('hours', NEUTRAL_HOUR);
       this.scrollHandler.scrollToValue('minutes', NEUTRAL_MINUTES);
+      this.scrollHandler.scrollToValue('ampm', NEUTRAL_AMPM);
     };
 
     this.emitter.on('clear', this.clearHandler);
