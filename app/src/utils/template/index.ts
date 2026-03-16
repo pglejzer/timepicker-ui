@@ -136,7 +136,7 @@ export const getModalTemplate = (options: Required<TimepickerOptions>, instanceI
   const header = isCompactWheel ? '' : buildHeader(options, config);
   const pickerBody = buildPickerBody(config, incrementMinutes ?? 1);
   const footer =
-    isCompactWheel && options.ui.wheel?.hideFooter === true ? '' : buildFooter(options, mobileClass);
+    isCompactWheel && options.wheel?.hideFooter === true ? '' : buildFooter(options, mobileClass);
 
   const wheelClass = isCompactWheel ? ' tp-ui-compact-wheel-mode' : isWheelMode ? ' tp-ui-wheel-mode' : '';
 

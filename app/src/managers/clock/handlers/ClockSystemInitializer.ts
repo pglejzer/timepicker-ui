@@ -52,7 +52,6 @@ export class ClockSystemInitializer {
       incrementHours: this.core.options.clock.incrementHours || 1,
       incrementMinutes: this.core.options.clock.incrementMinutes || 1,
       smoothHourSnap: this.core.options.clock.smoothHourSnap ?? true,
-      hideOptions: this.core.options.clock.disabledTime?.hideOptions ?? false,
       timepicker: null,
       dragConfig: {
         autoSwitchToMinutes: this.core.options.clock.autoSwitchToMinutes,

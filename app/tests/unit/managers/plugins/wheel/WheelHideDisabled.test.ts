@@ -126,8 +126,9 @@ describe('Wheel + hideDisabledOptions (pointer drag & touch)', () => {
     const options = createWheelOptions({
       clock: {
         type: '12h',
-        disabledTime: { hours: [1, 2, 3, 4, 5, 6], minutes: [0, 15, 30, 45], hideOptions: true },
+        disabledTime: { hours: [1, 2, 3, 4, 5, 6], minutes: [0, 15, 30, 45] },
       },
+      wheel: { hideDisabled: true },
     });
 
     core = new CoreState(element, options, INSTANCE_ID);

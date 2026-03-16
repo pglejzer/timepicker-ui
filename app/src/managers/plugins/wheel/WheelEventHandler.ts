@@ -103,7 +103,7 @@ export class WheelEventHandler {
       type: selection.ampm ?? undefined,
     });
 
-    if (this.core.options.ui.wheel?.commitOnScroll === true) {
+    if (this.core.options.wheel?.commitOnScroll === true) {
       this.scheduleCommitOnScroll();
     }
   }

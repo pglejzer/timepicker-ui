@@ -54,7 +54,8 @@ describe('WheelEventHandler edge cases', () => {
 
       const commitOpts = createWheelOptions({
         clock: { type: '12h' },
-        ui: { mode: 'wheel', wheel: { commitOnScroll: true } },
+        ui: { mode: 'wheel' },
+        wheel: { commitOnScroll: true },
       });
       const element = document.createElement('div');
       const input = document.createElement('input');
@@ -255,7 +256,8 @@ describe('WheelEventHandler edge cases', () => {
 
       const commitOpts = createWheelOptions({
         clock: { type: '12h' },
-        ui: { mode: 'wheel', wheel: { commitOnScroll: true } },
+        ui: { mode: 'wheel' },
+        wheel: { commitOnScroll: true },
       });
       ctx.core.setOptions(commitOpts);
 

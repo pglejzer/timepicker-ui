@@ -133,22 +133,14 @@ document.getElementById('clear-intervals')?.addEventListener('click', () => {
   });
 });
 
-// hideDisabledOptions — Clock mode
-const hideDisabledClockPicker = new TimepickerUI('#hide-disabled-clock', {
-  clock: {
-    type: '24h',
-    disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 18, 19, 20, 21, 22, 23], hideOptions: true },
-  },
-});
-hideDisabledClockPicker.create();
-
 // hideDisabledOptions — Wheel mode
 const hideDisabledWheelPicker = new TimepickerUI('#hide-disabled-wheel', {
   clock: {
     type: '12h',
-    disabledTime: { hours: [1, 2, 3, 4, 5, 6], minutes: [0, 15, 30, 45], hideOptions: true },
+    disabledTime: { hours: [1, 2, 3, 4, 5, 6], minutes: [0, 15, 30, 45] },
   },
   ui: { mode: 'wheel' },
+  wheel: { hideDisabled: true },
 });
 hideDisabledWheelPicker.create();
 
@@ -157,8 +149,9 @@ const hideDisabledPopoverPicker = new TimepickerUI('#hide-disabled-popover', {
   clock: {
     type: '24h',
     incrementMinutes: 5,
-    disabledTime: { hours: [0, 1, 2, 3, 4, 5, 22, 23], hideOptions: true },
+    disabledTime: { hours: [0, 1, 2, 3, 4, 5, 22, 23] },
   },
-  ui: { mode: 'compact-wheel', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto', hideDisabled: true },
 });
 hideDisabledPopoverPicker.create();

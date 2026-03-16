@@ -27,6 +27,10 @@ export default class ModalManager {
     this.timeouts = [];
   }
 
+  private isPopoverMode(): boolean {
+    return this.core.options.ui.mode === 'compact-wheel' && !!this.core.options.wheel?.placement;
+  }
+
   private clearExistingModal(): void {
     if (isDocument() === false) {
       return;
@@ -80,8 +84,7 @@ export default class ModalManager {
       return;
     }
 
-    if (this.core.options.ui.inline?.enabled) return;
-    if (this.core.options.ui.mode === 'compact-wheel' && !!this.core.options.ui.wheel?.placement) return;
+    if (this.core.options.ui.inline?.enabled || this.isPopoverMode()) return;
 
     if (!this.core.options.ui.enableScrollbar) {
       this.originalOverflow = document.body.style.overflowY;
@@ -123,13 +126,7 @@ export default class ModalManager {
   }
 
   setShowClassToBackdrop(): void {
-    if (this.core.options.ui.inline?.enabled) {
-      this.core.getModalElement()?.classList.add('show');
-      this.setInitialFocus();
-      return;
-    }
-
-    if (this.core.options.ui.mode === 'compact-wheel' && !!this.core.options.ui.wheel?.placement) {
+    if (this.core.options.ui.inline?.enabled || this.isPopoverMode()) {
       this.core.getModalElement()?.classList.add('show');
       this.setInitialFocus();
       return;

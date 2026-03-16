@@ -19,7 +19,6 @@ export interface ClockSystemConfig {
   incrementHours?: number;
   incrementMinutes?: number;
   smoothHourSnap?: boolean;
-  hideOptions?: boolean;
   onHourChange?: (hour: string) => void;
   onMinuteChange?: (minute: string) => void;
   timepicker: unknown;
@@ -48,7 +47,6 @@ export class ClockSystem {
       clockHand: config.clockHand,
       circle: config.circle,
       theme: config.theme,
-      hideOptions: config.hideOptions,
     };
 
     this.renderer = new ClockRenderer(renderConfig);

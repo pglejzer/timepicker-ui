@@ -109,6 +109,7 @@ function createWheelOptions(overrides: Partial<TimepickerOptions> = {}): Require
     callbacks: { ...DEFAULT_OPTIONS.callbacks, ...overrides.callbacks },
     timezone: { ...DEFAULT_OPTIONS.timezone, ...overrides.timezone },
     range: { ...DEFAULT_OPTIONS.range, ...overrides.range },
+    wheel: { ...DEFAULT_OPTIONS.wheel, ...overrides.wheel },
     clearBehavior: { ...DEFAULT_OPTIONS.clearBehavior, ...overrides.clearBehavior },
   };
 }

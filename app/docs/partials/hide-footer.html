@@ -120,7 +120,8 @@
 
 themes.forEach((theme) => {
   new TimepickerUI(`#nofooter-${theme}`, {
-    ui: { mode: 'compact-wheel', theme, wheel: { hideFooter: true, commitOnScroll: true } },
+    ui: { mode: 'compact-wheel', theme },
+    wheel: { hideFooter: true, commitOnScroll: true },
   }).create();
 });</code></pre>
       </div>
@@ -131,7 +132,7 @@ themes.forEach((theme) => {
       <h4 class="text-sm font-semibold text-rose-800 dark:text-rose-300 mb-2">How it works</h4>
       <ul class="text-sm text-rose-700 dark:text-rose-400 space-y-1">
         <li>
-          <code class="bg-rose-100 dark:bg-rose-800 px-1 rounded">ui.wheel.hideFooter: true</code>
+          <code class="bg-rose-100 dark:bg-rose-800 px-1 rounded">wheel.hideFooter: true</code>
           — footer is not rendered in the DOM (not display:none — completely absent for accessibility)
         </li>
         <li>
@@ -139,7 +140,7 @@ themes.forEach((theme) => {
         </li>
         <li>
           Combine with
-          <code class="bg-rose-100 dark:bg-rose-800 px-1 rounded">ui.wheel.commitOnScroll: true</code>
+          <code class="bg-rose-100 dark:bg-rose-800 px-1 rounded">wheel.commitOnScroll: true</code>
           so the selected time auto-commits without buttons
         </li>
         <li>Click outside or press Escape to close the picker</li>

@@ -59,8 +59,9 @@ new TimepickerUI('#compact-wheel-12h', {
 }).create();
 
 new TimepickerUI('#compact-wheel-24h', {
-  clock: { type: '24h' },
+  clock: { type: '24h', disabledTime: { hours: [12] } },
   ui: { mode: 'compact-wheel' },
+  wheel: { hideDisabled: true },
 }).create();
 
 new TimepickerUI('#compact-wheel-step', {
@@ -90,63 +91,75 @@ compactThemeList.forEach((theme) => {
 
 // Compact Wheel + Popover — placement auto (default)
 new TimepickerUI('#popover-auto', {
-  ui: { mode: 'compact-wheel', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto' },
 }).create();
 
 // Compact Wheel + Popover — placement top
 new TimepickerUI('#popover-top', {
-  ui: { mode: 'compact-wheel', wheel: { placement: 'top' } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'top' },
 }).create();
 
 // Compact Wheel + Popover — placement bottom
 new TimepickerUI('#popover-bottom', {
-  ui: { mode: 'compact-wheel', wheel: { placement: 'bottom' } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'bottom' },
 }).create();
 
 // Compact Wheel + Popover — 24h + placement auto
 new TimepickerUI('#popover-24h', {
   clock: { type: '24h' },
-  ui: { mode: 'compact-wheel', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto' },
 }).create();
 
 // Compact Wheel + Popover — dark theme + placement auto
 new TimepickerUI('#popover-dark', {
-  ui: { mode: 'compact-wheel', theme: 'dark', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel', theme: 'dark' },
+  wheel: { placement: 'auto' },
 }).create();
 
 // Compact Wheel + Popover — m3-green theme + placement top
 new TimepickerUI('#popover-m3', {
-  ui: { mode: 'compact-wheel', theme: 'm3-green', wheel: { placement: 'top' } },
+  ui: { mode: 'compact-wheel', theme: 'm3-green' },
+  wheel: { placement: 'top' },
 }).create();
 
 // commitOnScroll — Wheel (auto-commit without OK)
 new TimepickerUI('#commit-on-scroll-wheel', {
-  ui: { mode: 'wheel', wheel: { commitOnScroll: true } },
+  ui: { mode: 'wheel' },
+  wheel: { commitOnScroll: true },
 }).create();
 
 // commitOnScroll — Compact Wheel + Popover
 new TimepickerUI('#commit-on-scroll-popover', {
-  ui: { mode: 'compact-wheel', wheel: { placement: 'auto', commitOnScroll: true } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto', commitOnScroll: true },
 }).create();
 
 // commitOnScroll — 24h + Popover
 new TimepickerUI('#commit-on-scroll-24h', {
   clock: { type: '24h' },
-  ui: { mode: 'compact-wheel', wheel: { placement: 'auto', commitOnScroll: true } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto', commitOnScroll: true },
 }).create();
 
 // Multiple Popover pickers (independent instances)
 new TimepickerUI('#multi-popover-1', {
-  ui: { mode: 'compact-wheel', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto' },
 }).create();
 
 new TimepickerUI('#multi-popover-2', {
   clock: { type: '24h' },
-  ui: { mode: 'compact-wheel', theme: 'm3-green', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel', theme: 'm3-green' },
+  wheel: { placement: 'auto' },
 }).create();
 
 new TimepickerUI('#multi-popover-3', {
-  ui: { mode: 'compact-wheel', theme: 'dark', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel', theme: 'dark' },
+  wheel: { placement: 'auto' },
 }).create();
 
 // Popover — All Themes
@@ -165,7 +178,8 @@ const popoverThemeList = [
 
 popoverThemeList.forEach((theme) => {
   new TimepickerUI(`#popover-theme-${theme}`, {
-    ui: { mode: 'compact-wheel', theme, wheel: { placement: 'auto' } },
+    ui: { mode: 'compact-wheel', theme },
+    wheel: { placement: 'auto' },
   }).create();
 });
 
@@ -228,17 +242,19 @@ new TimepickerUI('#wheel-disabled-intervals-24h', {
 new TimepickerUI('#wheel-hide-disabled-hours', {
   clock: {
     type: '12h',
-    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8], hideOptions: true },
+    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8] },
   },
   ui: { mode: 'wheel' },
+  wheel: { hideDisabled: true },
 }).create();
 
 new TimepickerUI('#wheel-hide-disabled-interval', {
   clock: {
     type: '24h',
-    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'], hideOptions: true },
+    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'] },
   },
   ui: { mode: 'wheel' },
+  wheel: { hideDisabled: true },
 }).create();
 
 // Compact Wheel + Disabled Time — all options
@@ -300,15 +316,17 @@ new TimepickerUI('#compact-disabled-intervals-24h', {
 new TimepickerUI('#compact-hide-disabled-hours', {
   clock: {
     type: '12h',
-    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8], hideOptions: true },
+    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8] },
   },
   ui: { mode: 'compact-wheel' },
+  wheel: { hideDisabled: true },
 }).create();
 
 new TimepickerUI('#compact-hide-disabled-interval', {
   clock: {
     type: '24h',
-    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'], hideOptions: true },
+    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'] },
   },
   ui: { mode: 'compact-wheel' },
+  wheel: { hideDisabled: true },
 }).create();

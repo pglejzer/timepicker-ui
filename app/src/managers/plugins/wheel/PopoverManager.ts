@@ -24,7 +24,7 @@ export default class PopoverManager {
   }
 
   isPopoverMode(): boolean {
-    return this.core.options.ui.mode === 'compact-wheel' && !!this.core.options.ui.wheel?.placement;
+    return this.core.options.ui.mode === 'compact-wheel' && !!this.core.options.wheel?.placement;
   }
 
   attach(): void {
@@ -56,7 +56,7 @@ export default class PopoverManager {
     if (!input || !modal) return;
 
     const inputRect = input.getBoundingClientRect();
-    const placement = this.core.options.ui.wheel?.placement ?? 'auto';
+    const placement = this.core.options.wheel?.placement ?? 'auto';
 
     const width = Math.min(Math.max(inputRect.width, TP_POPOVER_MIN_WIDTH_PX), TP_POPOVER_MAX_WIDTH_PX);
     modal.style.width = `${width}px`;

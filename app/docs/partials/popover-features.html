@@ -85,33 +85,39 @@
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">// Auto placement (default)
 new TimepickerUI('#popover-auto', {
-  ui: { mode: 'compact-wheel', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto' },
 }).create();
 
 // Top placement
 new TimepickerUI('#popover-top', {
-  ui: { mode: 'compact-wheel', wheel: { placement: 'top' } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'top' },
 }).create();
 
 // Bottom placement
 new TimepickerUI('#popover-bottom', {
-  ui: { mode: 'compact-wheel', wheel: { placement: 'bottom' } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'bottom' },
 }).create();
 
 // 24h + auto placement
 new TimepickerUI('#popover-24h', {
   clock: { type: '24h' },
-  ui: { mode: 'compact-wheel', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto' },
 }).create();
 
 // Dark theme + auto placement
 new TimepickerUI('#popover-dark', {
-  ui: { mode: 'compact-wheel', theme: 'dark', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel', theme: 'dark' },
+  wheel: { placement: 'auto' },
 }).create();
 
 // M3 Green + top placement
 new TimepickerUI('#popover-m3', {
-  ui: { mode: 'compact-wheel', theme: 'm3-green', wheel: { placement: 'top' } },
+  ui: { mode: 'compact-wheel', theme: 'm3-green' },
+  wheel: { placement: 'top' },
 }).create();</code></pre>
       </div>
     </div>
@@ -172,16 +178,19 @@ new TimepickerUI('#popover-m3', {
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">// Each picker is fully independent
 new TimepickerUI('#multi-popover-1', {
-  ui: { mode: 'compact-wheel', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto' },
 }).create();
 
 new TimepickerUI('#multi-popover-2', {
   clock: { type: '24h' },
-  ui: { mode: 'compact-wheel', theme: 'm3-green', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel', theme: 'm3-green' },
+  wheel: { placement: 'auto' },
 }).create();
 
 new TimepickerUI('#multi-popover-3', {
-  ui: { mode: 'compact-wheel', theme: 'dark', wheel: { placement: 'auto' } },
+  ui: { mode: 'compact-wheel', theme: 'dark' },
+  wheel: { placement: 'auto' },
 }).create();</code></pre>
       </div>
     </div>
@@ -303,7 +312,8 @@ new TimepickerUI('#multi-popover-3', {
 
 popoverThemeList.forEach((theme) => {
   new TimepickerUI(`#popover-theme-${theme}`, {
-    ui: { mode: 'compact-wheel', theme, wheel: { placement: 'auto' } },
+    ui: { mode: 'compact-wheel', theme },
+    wheel: { placement: 'auto' },
   }).create();
 });</code></pre>
       </div>

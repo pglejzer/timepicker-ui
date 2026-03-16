@@ -16,6 +16,7 @@ export default class WheelManager {
   private readonly popover: PopoverManager;
   private amPmHandler: (() => void) | null = null;
   private hourChangeHandler: (() => void) | null = null;
+  private clearHandler: (() => void) | null = null;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -40,6 +41,7 @@ export default class WheelManager {
 
     this.listenForAmPmChanges();
     this.listenForHourChanges();
+    this.listenForClear();
     this.deferInitialSync();
   }
 
@@ -74,6 +76,10 @@ export default class WheelManager {
       this.emitter.off('select:hour', this.hourChangeHandler);
       this.hourChangeHandler = null;
     }
+    if (this.clearHandler) {
+      this.emitter.off('clear', this.clearHandler);
+      this.clearHandler = null;
+    }
     this.eventHandler.destroy();
     this.scrollHandler.destroy();
     this.dragHandler.destroy();
@@ -93,20 +99,48 @@ export default class WheelManager {
   private syncInitialValues(): void {
     const hourInput = this.core.getHour();
     const minutesInput = this.core.getMinutes();
+    const isCompact = this.isCompactWheelMode();
 
-    if (hourInput?.value) {
-      this.scrollHandler.scrollToValue('hours', hourInput.value.padStart(2, '0'));
+    let hourValue = hourInput?.value ?? '';
+    let minuteValue = minutesInput?.value ?? '';
+
+    if (isCompact && (!hourValue || !minuteValue)) {
+      const parsed = this.parseMainInputValue();
+      if (!hourValue) hourValue = parsed.hour;
+      if (!minuteValue) minuteValue = parsed.minutes;
     }
 
-    if (minutesInput?.value) {
-      this.scrollHandler.scrollToValue('minutes', minutesInput.value.padStart(2, '0'));
+    if (hourValue) {
+      this.scrollHandler.scrollToValue('hours', hourValue.padStart(2, '0'));
     }
 
-    if (this.isCompactWheelMode()) {
+    if (minuteValue) {
+      this.scrollHandler.scrollToValue('minutes', minuteValue.padStart(2, '0'));
+    }
+
+    if (isCompact) {
       const am = this.core.getAM();
       const initialPeriod = am?.classList.contains('active') ? 'AM' : 'PM';
       this.scrollHandler.scrollToValue('ampm', initialPeriod);
     }
+  }
+
+  private parseMainInputValue(): { hour: string; minutes: string; type?: string } {
+    const input = this.core.getInput();
+    if (!input?.value) return { hour: '', minutes: '' };
+
+    const value = input.value.trim();
+    const [timePart, typePart] = value.split(' ');
+    const [hStr = '', mStr = ''] = (timePart ?? '').split(':');
+
+    const hour = hStr.replace(/\D/g, '').padStart(2, '0');
+    const minutes = mStr.replace(/\D/g, '').padStart(2, '0');
+
+    return {
+      hour,
+      minutes,
+      type: this.core.options.clock.type === '12h' ? typePart : undefined,
+    };
   }
 
   private isCompactWheelMode(): boolean {
@@ -122,6 +156,13 @@ export default class WheelManager {
 
     this.emitter.on('select:am', this.amPmHandler);
     this.emitter.on('select:pm', this.amPmHandler);
+  }
+
+  private listenForClear(): void {
+    this.clearHandler = (): void => {
+      this.deferInitialSync();
+    };
+    this.emitter.on('clear', this.clearHandler);
   }
 
   private listenForHourChanges(): void {

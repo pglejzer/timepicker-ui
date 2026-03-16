@@ -9,6 +9,8 @@ import { isDocument, isNode } from '../utils/node';
 import { TIMINGS } from '../constants/timings';
 import type WheelManager from '../managers/plugins/wheel/WheelManager';
 
+const THEME_CLASSES = ['basic', 'crane-straight', 'crane', 'm2', 'm3-green'] as const;
+
 type TypeFunction = () => void;
 
 export class Lifecycle {
@@ -190,7 +192,7 @@ export class Lifecycle {
     openElements?.forEach((el) => {
       if (el) {
         el.classList.remove('disabled', 'active', 'tp-ui-open-element');
-        el.classList.remove('basic', 'crane-straight', 'crane', 'm2', 'm3-green');
+        el.classList.remove(...THEME_CLASSES);
       }
     });
 
@@ -207,7 +209,7 @@ export class Lifecycle {
 
     const element = this.core.element;
     if (element) {
-      element.classList.remove('basic', 'crane-straight', 'crane', 'm2', 'm3-green');
+      element.classList.remove(...THEME_CLASSES);
       element.classList.remove('error', 'active', 'disabled');
       element.removeAttribute('data-owner-id');
       element.removeAttribute('data-open');
@@ -329,7 +331,7 @@ export class Lifecycle {
   }
 
   private isPopoverMode(): boolean {
-    return this.isCompactWheelMode() && !!this.core.options.ui.wheel?.placement;
+    return this.isCompactWheelMode() && !!this.core.options.wheel?.placement;
   }
 
   private resolveWheelMode(): boolean {

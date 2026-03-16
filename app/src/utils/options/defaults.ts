@@ -25,7 +25,6 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     iconTemplateMobile: '',
     inline: undefined,
     clearButton: true,
-    wheel: undefined,
   },
 
   labels: {
@@ -79,6 +78,13 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     toLabel: 'To',
   },
 
+  wheel: {
+    placement: undefined,
+    hideFooter: undefined,
+    commitOnScroll: undefined,
+    hideDisabled: undefined,
+  },
+
   clearBehavior: {
     clearInput: true,
   },
@@ -114,6 +120,10 @@ export function mergeOptions(userOptions: TimepickerOptions = {}): Required<Time
       ...DEFAULT_OPTIONS.range,
       ...userOptions.range,
     },
+    wheel: {
+      ...DEFAULT_OPTIONS.wheel,
+      ...userOptions.wheel,
+    },
     clearBehavior: {
       ...DEFAULT_OPTIONS.clearBehavior,
       ...userOptions.clearBehavior,
@@ -122,11 +132,11 @@ export function mergeOptions(userOptions: TimepickerOptions = {}): Required<Time
 
   const mergedMode = merged.ui.mode;
   if (mergedMode === 'wheel' || mergedMode === 'compact-wheel') {
-    merged.ui.wheel = {
+    merged.wheel = {
       placement: mergedMode === 'compact-wheel' ? 'auto' : undefined,
       hideFooter: undefined,
       commitOnScroll: undefined,
-      ...merged.ui.wheel,
+      ...merged.wheel,
     };
   }
 

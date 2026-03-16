@@ -15,7 +15,8 @@ const noFooterThemes = [
 
 noFooterThemes.forEach((theme) => {
   new TimepickerUI(`#nofooter-${theme}`, {
-    ui: { mode: 'compact-wheel', theme, wheel: { hideFooter: true, commitOnScroll: true } },
+    ui: { mode: 'compact-wheel', theme },
+    wheel: { hideFooter: true, commitOnScroll: true },
   }).create();
 });
 

@@ -21,7 +21,8 @@ describe('WheelRenderer edge cases', () => {
   describe('hideDisabledOptions + cache invalidation', () => {
     it('should exclude hidden items from getItems after updateDisabledItems', () => {
       const hideOpts = createWheelOptions({
-        clock: { type: '12h', disabledTime: { hideOptions: true } },
+        clock: { type: '12h', disabledTime: {} },
+        wheel: { hideDisabled: true },
       });
       const hideCore = new CoreState(ctx.element, hideOpts, ctx.core.instanceId);
       const hideRenderer = new WheelRenderer(hideCore, ctx.emitter);

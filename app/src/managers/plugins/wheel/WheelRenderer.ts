@@ -15,6 +15,7 @@ export class WheelRenderer {
   private columns: Map<WheelColumnType, HTMLDivElement> = new Map();
   private cachedItemHeight: number | null = null;
   private cachedItems: Map<WheelColumnType, NodeListOf<HTMLDivElement>> = new Map();
+  private removedItems: Map<WheelColumnType, HTMLDivElement[]> = new Map();
 
   constructor(core: CoreState, _emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -23,6 +24,7 @@ export class WheelRenderer {
   init(): void {
     this.cachedItems.clear();
     this.cachedItemHeight = null;
+    this.restoreRemovedItems();
 
     if (!isDocument()) return;
 
@@ -44,7 +46,7 @@ export class WheelRenderer {
     const disabled = this.core.disabledTime;
     if (!disabled?.value) return;
 
-    const shouldHide = this.core.options.clock.disabledTime?.hideOptions === true;
+    const shouldHide = this.core.options.wheel.hideDisabled === true;
 
     if (disabled.value.isInterval && disabled.value.intervals) {
       this.updateDisabledByInterval(disabled.value, shouldHide);
@@ -93,8 +95,8 @@ export class WheelRenderer {
 
         const allMinutesDisabled = this.isHourFullyDisabled(hourVal, amPm, intervals, clockType);
         item.classList.toggle('is-disabled', allMinutesDisabled);
-        if (shouldHide) {
-          item.classList.toggle('is-hidden', allMinutesDisabled);
+        if (shouldHide && allMinutesDisabled) {
+          this.removeItemFromDOM(item, hoursColumn);
         }
       });
     }
@@ -108,8 +110,8 @@ export class WheelRenderer {
 
         const isValid = checkedDisabledValuesInterval(currentHour, minuteVal, amPm, intervals, clockType);
         item.classList.toggle('is-disabled', !isValid);
-        if (shouldHide) {
-          item.classList.toggle('is-hidden', !isValid);
+        if (shouldHide && !isValid) {
+          this.removeItemFromDOM(item, minutesColumn);
         }
       });
     }
@@ -139,8 +141,8 @@ export class WheelRenderer {
         const numVal = String(parseInt(val, 10));
         const isDisabled = disabledSet.has(numVal) || disabledSet.has(val);
         item.classList.toggle('is-disabled', isDisabled);
-        if (shouldHide) {
-          item.classList.toggle('is-hidden', isDisabled);
+        if (shouldHide && isDisabled) {
+          this.removeItemFromDOM(item, column);
         }
       }
     });
@@ -168,10 +170,7 @@ export class WheelRenderer {
     const col = this.columns.get(type);
     if (!col) return null;
 
-    const shouldHide = this.core.options.clock.disabledTime?.hideOptions === true;
-    const selector = shouldHide ? '.tp-ui-wheel-item:not(.is-hidden)' : '.tp-ui-wheel-item';
-
-    const items = col.querySelectorAll<HTMLDivElement>(selector);
+    const items = col.querySelectorAll<HTMLDivElement>('.tp-ui-wheel-item');
     this.cachedItems.set(type, items);
     return items;
   }
@@ -192,7 +191,7 @@ export class WheelRenderer {
     const hoursCol = this.columns.get('hours');
     if (!hoursCol) return 0;
 
-    const firstItem = hoursCol.querySelector<HTMLDivElement>('.tp-ui-wheel-item:not(.is-hidden)');
+    const firstItem = hoursCol.querySelector<HTMLDivElement>('.tp-ui-wheel-item');
     if (!firstItem) return 0;
 
     const height = firstItem.getBoundingClientRect().height;
@@ -202,9 +201,63 @@ export class WheelRenderer {
     return height;
   }
 
+  private removeItemFromDOM(item: HTMLDivElement, column: HTMLDivElement): void {
+    const type = this.getColumnTypeByElement(column);
+    if (!type) return;
+
+    const list = this.removedItems.get(type) ?? [];
+    list.push(item);
+    this.removedItems.set(type, list);
+
+    item.remove();
+  }
+
+  private restoreRemovedItems(): void {
+    const columnTypes: readonly WheelColumnType[] = ['hours', 'minutes', 'ampm'];
+    columnTypes.forEach((type) => {
+      const removed = this.removedItems.get(type);
+      if (!removed || removed.length === 0) return;
+
+      const col = this.columns.get(type);
+      if (!col) return;
+
+      const existingItems = Array.from(col.querySelectorAll<HTMLDivElement>('.tp-ui-wheel-item'));
+      removed.forEach((item) => {
+        item.classList.remove('is-disabled');
+        const itemValue = parseInt(item.getAttribute('data-value') ?? '0', 10);
+        const insertBefore = existingItems.find((existing) => {
+          const existingValue = parseInt(existing.getAttribute('data-value') ?? '0', 10);
+          return existingValue > itemValue;
+        });
+        if (insertBefore) {
+          col.insertBefore(item, insertBefore);
+        } else {
+          col.appendChild(item);
+        }
+        existingItems.push(item);
+        existingItems.sort((a, b) => {
+          return (
+            parseInt(a.getAttribute('data-value') ?? '0', 10) -
+            parseInt(b.getAttribute('data-value') ?? '0', 10)
+          );
+        });
+      });
+    });
+    this.removedItems.clear();
+  }
+
+  private getColumnTypeByElement(column: HTMLDivElement): WheelColumnType | null {
+    for (const [type, el] of this.columns) {
+      if (el === column) return type;
+    }
+    return null;
+  }
+
   destroy(): void {
+    this.restoreRemovedItems();
     this.columns.clear();
     this.cachedItems.clear();
     this.cachedItemHeight = null;
+    this.removedItems.clear();
   }
 }

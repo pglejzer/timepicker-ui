@@ -269,7 +269,8 @@ describe('Wheel commitOnScroll after disabled skip', () => {
         type: '12h',
         disabledTime: { minutes: [28, 29, 30, 31, 32] },
       },
-      ui: { mode: 'wheel', wheel: { commitOnScroll: true } },
+      ui: { mode: 'wheel' },
+      wheel: { commitOnScroll: true },
     });
 
     core = new CoreState(element, options, INSTANCE_ID);

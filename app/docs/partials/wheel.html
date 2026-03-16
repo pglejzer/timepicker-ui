@@ -534,18 +534,21 @@ compactThemeList.forEach((theme) => {
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">// Wheel with auto-commit
 new TimepickerUI('#commit-on-scroll-wheel', {
-  ui: { mode: 'wheel', wheel: { commitOnScroll: true } },
+  ui: { mode: 'wheel' },
+  wheel: { commitOnScroll: true },
 }).create();
 
 // Popover with auto-commit
 new TimepickerUI('#commit-on-scroll-popover', {
-  ui: { mode: 'compact-wheel', wheel: { placement: 'auto', commitOnScroll: true } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto', commitOnScroll: true },
 }).create();
 
 // 24h popover with auto-commit
 new TimepickerUI('#commit-on-scroll-24h', {
   clock: { type: '24h' },
-  ui: { mode: 'compact-wheel', wheel: { placement: 'auto', commitOnScroll: true } },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto', commitOnScroll: true },
 }).create();</code></pre>
       </div>
     </div>
@@ -556,7 +559,7 @@ new TimepickerUI('#commit-on-scroll-24h', {
       <ul class="text-sm text-amber-800 dark:text-amber-300 space-y-1 list-disc list-inside">
         <li>
           Set
-          <code class="bg-amber-100 dark:bg-amber-800 px-1 rounded">ui.wheel.commitOnScroll: true</code> for
+          <code class="bg-amber-100 dark:bg-amber-800 px-1 rounded">wheel.commitOnScroll: true</code> for
           instant commit on scroll end
         </li>
         <li>
@@ -763,18 +766,20 @@ new TimepickerUI('#wheel-disabled-intervals-24h', {
 new TimepickerUI('#wheel-hide-disabled-hours', {
   clock: {
     type: '12h',
-    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8], hideOptions: true }
+    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8] }
   },
-  ui: { mode: 'wheel' }
+  ui: { mode: 'wheel' },
+  wheel: { hideDisabled: true }
 }).create();
 
 // hideDisabledOptions — interval 24h
 new TimepickerUI('#wheel-hide-disabled-interval', {
   clock: {
     type: '24h',
-    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'], hideOptions: true }
+    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'] }
   },
-  ui: { mode: 'wheel' }
+  ui: { mode: 'wheel' },
+  wheel: { hideDisabled: true }
 }).create();</code></pre>
       </div>
     </div>
@@ -783,7 +788,7 @@ new TimepickerUI('#wheel-hide-disabled-interval', {
       <ul class="text-sm text-red-800 dark:text-red-300 space-y-1 list-disc list-inside">
         <li>Disabled items are dimmed and skipped during keyboard navigation</li>
         <li>
-          Set <code class="bg-red-100 dark:bg-red-800 px-1 rounded">disabledTime.hideOptions: true</code> to
+          Set <code class="bg-red-100 dark:bg-red-800 px-1 rounded">wheel.hideDisabled: true</code> to
           completely remove them from the wheel
         </li>
         <li>
@@ -988,18 +993,20 @@ new TimepickerUI('#compact-disabled-intervals-24h', {
 new TimepickerUI('#compact-hide-disabled-hours', {
   clock: {
     type: '12h',
-    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8], hideOptions: true }
+    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8] }
   },
-  ui: { mode: 'compact-wheel' }
+  ui: { mode: 'compact-wheel' },
+  wheel: { hideDisabled: true }
 }).create();
 
 // hideDisabledOptions — interval 24h
 new TimepickerUI('#compact-hide-disabled-interval', {
   clock: {
     type: '24h',
-    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'], hideOptions: true }
+    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'] }
   },
-  ui: { mode: 'compact-wheel' }
+  ui: { mode: 'compact-wheel' },
+  wheel: { hideDisabled: true }
 }).create();</code></pre>
       </div>
     </div>
@@ -1016,13 +1023,13 @@ new TimepickerUI('#compact-hide-disabled-interval', {
         </li>
         <li>
           Set
-          <code class="bg-fuchsia-100 dark:bg-fuchsia-800 px-1 rounded">disabledTime.hideOptions: true</code>
+          <code class="bg-fuchsia-100 dark:bg-fuchsia-800 px-1 rounded">wheel.hideDisabled: true</code>
           to remove disabled items entirely
         </li>
         <li>
           Combine with
-          <code class="bg-fuchsia-100 dark:bg-fuchsia-800 px-1 rounded">ui.wheel.placement</code> for a
-          popover variant
+          <code class="bg-fuchsia-100 dark:bg-fuchsia-800 px-1 rounded">wheel.placement</code> for a popover
+          variant
         </li>
       </ul>
     </div>
