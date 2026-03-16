@@ -69,20 +69,20 @@ const CHANGELOG_420 = {
     {
       title: "Compact-wheel mode",
       description:
-        "Headerless wheel picker without the hour/minute inputs header. Enable via ui.mode: 'compact-wheel'. Combine with ui.wheel.placement for popover positioning",
+        "Headerless wheel picker without the hour/minute inputs header. Enable via ui.mode: 'compact-wheel'. Combine with wheel.placement for popover positioning",
     },
     {
-      title: "ui.wheel.placement option",
+      title: "wheel.placement option",
       description:
         "Popover placement ('auto', 'top', 'bottom') for compact-wheel mode. Opens as a popover anchored to the input instead of a centered modal",
     },
     {
-      title: "clock.disabledTime.hideOptions option",
+      title: "wheel.hideDisabled option",
       description:
-        "Completely remove disabled hours/minutes from the list instead of dimming them. Works in all modes: clock, wheel, compact-wheel",
+        "Completely remove disabled hours/minutes from the wheel list instead of dimming them. Only applies to wheel and compact-wheel modes",
     },
     {
-      title: "ui.wheel.commitOnScroll option",
+      title: "wheel.commitOnScroll option",
       description:
         "Auto-commit time at the end of wheel scrolling without pressing OK. Only applies to wheel and compact-wheel modes",
     },

@@ -233,17 +233,15 @@ picker.create();`}
             Popover Placement
           </h3>
           <p className="text-muted-foreground mb-3">
-            Combine with{" "}
-            <code className="text-primary">ui.wheel.placement</code> to open as
-            a popover anchored to the input instead of a centered modal:
+            Combine with <code className="text-primary">wheel.placement</code>{" "}
+            to open as a popover anchored to the input instead of a centered
+            modal:
           </p>
           <CodeBlock
             code={`new TimepickerUI(input, {
-  ui: {
-    mode: 'compact-wheel',
-    wheel: {
-      placement: 'auto'  // 'auto', 'top', or 'bottom'
-    }
+  ui: { mode: 'compact-wheel' },
+  wheel: {
+    placement: 'auto'  // 'auto', 'top', or 'bottom'
   }
 }).create();`}
             language="typescript"
@@ -307,20 +305,18 @@ picker.create();`}
 
       <Section icon={EyeOff} title="Hide Disabled Options">
         <p className="text-muted-foreground mb-4">
-          Set{" "}
-          <code className="text-primary">
-            clock.disabledTime.hideOptions: true
-          </code>{" "}
-          to completely remove disabled hours/minutes from the wheel instead of
+          Set <code className="text-primary">wheel.hideDisabled: true</code> to
+          completely remove disabled hours/minutes from the wheel instead of
           showing them as dimmed. Useful when many values are disabled (e.g.,
           business hours only).
         </p>
         <CodeBlock
           code={`new TimepickerUI(input, {
   clock: {
-    disabledTime: { hours: [0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23], hideOptions: true }
+    disabledTime: { hours: [0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23] }
   },
-  ui: { mode: 'wheel' }
+  ui: { mode: 'wheel' },
+  wheel: { hideDisabled: true }
 }).create();`}
           language="typescript"
         />
@@ -328,15 +324,15 @@ picker.create();`}
 
       <Section icon={RotateCcw} title="Auto-Commit on Scroll">
         <p className="text-muted-foreground mb-4">
-          Set{" "}
-          <code className="text-primary">ui.wheel.commitOnScroll: true</code> to
-          automatically confirm the selected time when scrolling stops, without
-          requiring the user to press OK. Works in both wheel and compact-wheel
-          modes.
+          Set <code className="text-primary">wheel.commitOnScroll: true</code>{" "}
+          to automatically confirm the selected time when scrolling stops,
+          without requiring the user to press OK. Works in both wheel and
+          compact-wheel modes.
         </p>
         <CodeBlock
           code={`new TimepickerUI(input, {
-  ui: { mode: 'wheel', wheel: { commitOnScroll: true } }
+  ui: { mode: 'wheel' },
+  wheel: { commitOnScroll: true }
 }).create();
 
 // The confirm event includes autoCommit: true

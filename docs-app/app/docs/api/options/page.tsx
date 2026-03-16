@@ -150,12 +150,27 @@ const uiOptions = [
     description:
       "Picker mode \u2014 analog clock face, scroll-spinner wheels, or headerless wheel",
   },
+];
+
+const wheelOptions = [
   {
-    name: "wheel",
-    type: "WheelOptions",
+    name: "placement",
+    type: '"auto" | "top" | "bottom"',
     default: "undefined",
+    description: "Popover placement relative to input in compact-wheel mode",
+  },
+  {
+    name: "hideFooter",
+    type: "boolean",
+    default: "false",
+    description: "Hide footer (OK/Cancel/Clear buttons) in compact-wheel mode",
+  },
+  {
+    name: "commitOnScroll",
+    type: "boolean",
+    default: "false",
     description:
-      "Wheel/compact-wheel config (placement, hideFooter, commitOnScroll)",
+      "Auto-commit time at end of wheel scrolling without pressing OK",
   },
 ];
 
@@ -415,6 +430,14 @@ export default function OptionsPage() {
         <OptionsTable options={uiOptions} />
       </Section>
 
+      <Section icon={Layout} title="Wheel Options">
+        <p className="text-muted-foreground mb-4">
+          Wheel / compact-wheel mode configuration via{" "}
+          <code className="text-primary">wheel</code>:
+        </p>
+        <OptionsTable options={wheelOptions} />
+      </Section>
+
       <Section icon={Type} title="Labels Options">
         <p className="text-muted-foreground mb-4">
           Customize all text labels for localization:
@@ -500,17 +523,15 @@ export default function OptionsPage() {
       <Section icon={Layout} title="Wheel Mode Configuration">
         <p className="text-muted-foreground mb-4">
           Configure wheel/compact-wheel mode via{" "}
-          <code className="text-primary">ui.wheel</code>:
+          <code className="text-primary">wheel</code>:
         </p>
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
-  ui: {
-    mode: 'wheel',
-    wheel: {
-      placement: 'bottom',     // Popover placement (compact-wheel only)
-      hideFooter: true,        // Hide OK/Cancel footer
-      commitOnScroll: true     // Commit value on scroll end
-    }
+  ui: { mode: 'wheel' },
+  wheel: {
+    placement: 'bottom',     // Popover placement (compact-wheel only)
+    hideFooter: true,        // Hide OK/Cancel footer
+    commitOnScroll: true     // Commit value on scroll end
   }
 });`}
           language="typescript"
@@ -529,8 +550,10 @@ export default function OptionsPage() {
       hours: [1, 3, 5, 8],              // Disable specific hours
       minutes: [15, 30, 45],            // Disable specific minutes
       interval: 15,                     // Or use interval shorthand (15, 30, etc.)
-      hideOptions: true                 // Hide disabled items instead of greying out
     }
+  },
+  wheel: {
+    hideDisabled: true                   // Hide disabled items instead of greying out (wheel modes only)
   }
 });`}
           language="typescript"
@@ -570,8 +593,7 @@ export default function OptionsPage() {
     autoSwitchToMinutes: true,
     disabledTime: {
       hours: [0, 1, 2, 3],
-      interval: 15,
-      hideOptions: true
+      interval: 15
     },
     currentTime: {
       updateInput: true,
@@ -589,12 +611,15 @@ export default function OptionsPage() {
     enableSwitchIcon: false,
     editable: false,
     cssClass: 'custom-picker',
-    appendModalSelector: '#timepicker-container',
-    wheel: {
-      placement: 'bottom',
-      hideFooter: true,
-      commitOnScroll: true
-    }
+    appendModalSelector: '#timepicker-container'
+  },
+
+  // Wheel options
+  wheel: {
+    placement: 'bottom',
+    hideFooter: true,
+    commitOnScroll: true,
+    hideDisabled: true
   },
   
   // Labels options

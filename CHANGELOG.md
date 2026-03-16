@@ -18,9 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `wheel:scroll:start` event - fires when a wheel column starts scrolling (includes `column` field)
 - `wheel:scroll:end` event - fires when a wheel column snaps to a value (includes `column`, `value`, `previousValue` fields)
 - Exported `WheelScrollStartEventData` and `WheelScrollEndEventData` types
-- `ui.wheel.placement` option (`'auto'` | `'top'` | `'bottom'`) for popover positioning in compact-wheel mode
-- `clock.disabledTime.hideOptions` option to completely remove disabled hours/minutes from the list instead of dimming them
-- `ui.wheel.commitOnScroll` option to auto-commit time at the end of wheel scrolling without pressing OK
+- `wheel.placement` option (`'auto'` | `'top'` | `'bottom'`) for popover positioning in compact-wheel mode
+- `wheel.hideDisabled` option to completely remove disabled hours/minutes from the wheel list instead of dimming them (wheel and compact-wheel modes only)
+- `wheel.commitOnScroll` option to auto-commit time at the end of wheel scrolling without pressing OK
 - `autoCommit` field on `ConfirmEventData` to distinguish auto-committed from manual confirmations
 - Clear button to reset time selection. Enabled by default via `ui.clearButton` option
 - `clearBehavior.clearInput` option to control whether clearing also empties the input field value
@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clock hands reset to neutral position (12:00) and confirm button disables after clearing
 - Screen reader announcement when time is cleared
 - Exported `ClearEventData` and `ClearBehaviorOptions` types
+- `WheelOptions` is now a top-level key (`wheel`) instead of being nested inside `ui.wheel`
 
 ---
 

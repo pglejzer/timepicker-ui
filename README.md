@@ -379,12 +379,12 @@ Wheel mode works with all existing features:
 - **12h / 24h**: Respects `clock.type` - AM/PM column appears only in 12h mode
 - **Themes**: Inherits the active theme via CSS variables
 - **Disabled time**: Disabled hours/minutes are dimmed and skipped during scroll snap
-- **Hide disabled options**: Set `clock.disabledTime.hideOptions: true` to completely remove disabled values from the list
+- **Hide disabled options**: Set `wheel.hideDisabled: true` to completely remove disabled values from the list
 - **setValue / getValue**: `picker.setValue('09:30 AM')` scrolls the wheel to the correct position
 - **Keyboard navigation**: Arrow Up/Down scrolls one item, Tab moves between columns
 - **Events**: All standard events work - `select:hour`, `select:minute`, `update`, `confirm`, `cancel`, `clear`, `select:am`, `select:pm`, `error`
 - **Wheel-specific events**: `wheel:scroll:start` (column starts scrolling), `wheel:scroll:end` (column snaps to value with `previousValue`)
-- **Auto-commit**: Set `ui.wheel.commitOnScroll: true` to auto-confirm on scroll end without pressing OK
+- **Auto-commit**: Set `wheel.commitOnScroll: true` to auto-confirm on scroll end without pressing OK
 
 ### Compact-Wheel Mode
 
@@ -398,15 +398,13 @@ const picker = new TimepickerUI(input, {
 picker.create();
 ```
 
-Combine with `ui.wheel.placement` to open as a popover anchored to the input:
+Combine with `wheel.placement` to open as a popover anchored to the input:
 
 ```javascript
 const picker = new TimepickerUI(input, {
-  ui: {
-    mode: "compact-wheel",
-    wheel: {
-      placement: "auto", // 'auto', 'top', or 'bottom'
-    },
+  ui: { mode: "compact-wheel" },
+  wheel: {
+    placement: "auto", // 'auto', 'top', or 'bottom'
   },
 });
 ```

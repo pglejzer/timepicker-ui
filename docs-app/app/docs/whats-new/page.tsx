@@ -56,18 +56,18 @@ export default function WhatsNewPage() {
           </li>
           <li>
             <strong>Popover placement</strong> - Use{" "}
-            <code>ui.wheel.placement</code> to open compact-wheel as a popover
+            <code>wheel.placement</code> to open compact-wheel as a popover
             anchored to the input (<code>&apos;auto&apos;</code>,{" "}
             <code>&apos;top&apos;</code>, <code>&apos;bottom&apos;</code>)
           </li>
           <li>
             <strong>Hide disabled options</strong> - Set{" "}
-            <code>clock.disabledTime.hideOptions: true</code> to completely
-            remove disabled values instead of dimming them
+            <code>wheel.hideDisabled: true</code> to completely remove disabled
+            values instead of dimming them
           </li>
           <li>
             <strong>Auto-commit on scroll</strong> - Set{" "}
-            <code>ui.wheel.commitOnScroll: true</code> to auto-confirm time at
+            <code>wheel.commitOnScroll: true</code> to auto-confirm time at
             scroll end without pressing OK
           </li>
           <li>

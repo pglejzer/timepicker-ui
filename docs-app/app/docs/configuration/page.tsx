@@ -146,11 +146,26 @@ const uiOptions = [
     default: "clock",
     description: "Picker mode",
   },
+];
+
+const wheelOptions = [
   {
-    name: "wheel",
-    type: "object",
+    name: "placement",
+    type: "auto | top | bottom",
     default: "undefined",
-    description: "Wheel config (placement, hideFooter, commitOnScroll)",
+    description: "Popover placement (compact-wheel only)",
+  },
+  {
+    name: "hideFooter",
+    type: "boolean",
+    default: "false",
+    description: "Hide footer in compact-wheel mode",
+  },
+  {
+    name: "commitOnScroll",
+    type: "boolean",
+    default: "false",
+    description: "Auto-commit time at scroll end",
   },
 ];
 
@@ -375,6 +390,13 @@ export default function ConfigurationPage() {
         <OptionsTable options={uiOptions} />
       </Section>
 
+      <Section icon={Layout} title="Wheel Options">
+        <p className="text-muted-foreground mb-4">
+          Wheel / compact-wheel mode configuration:
+        </p>
+        <OptionsTable options={wheelOptions} />
+      </Section>
+
       <Section icon={Tag} title="Labels Options">
         <p className="text-muted-foreground mb-4">
           Customize all text labels and button texts:
@@ -428,11 +450,11 @@ export default function ConfigurationPage() {
     editable: false,
     enableScrollbar: false,
     enableSwitchIcon: true,
-    wheel: {
-      placement: 'bottom',
-      hideFooter: true,
-      commitOnScroll: true
-    }
+  },
+  wheel: {
+    placement: 'bottom',
+    hideFooter: true,
+    commitOnScroll: true
   },
   labels: {
     ok: 'Confirm',
@@ -468,9 +490,11 @@ export default function ConfigurationPage() {
   clock: {
     disabledTime: {
       hours: [1, 3, 5, 23],
-      minutes: [15, 30, 45],
-      hideOptions: true
+      minutes: [15, 30, 45]
     }
+  },
+  wheel: {
+    hideDisabled: true
   }
 }`}
               language="typescript"
@@ -520,13 +544,11 @@ export default function ConfigurationPage() {
         </h2>
         <CodeBlock
           code={`{
-  ui: {
-    mode: 'wheel',
-    wheel: {
-      placement: 'bottom',     // Popover placement (compact-wheel only)
-      hideFooter: true,        // Hide OK/Cancel footer
-      commitOnScroll: true     // Commit value on scroll end
-    }
+  ui: { mode: 'wheel' },
+  wheel: {
+    placement: 'bottom',     // Popover placement (compact-wheel only)
+    hideFooter: true,        // Hide OK/Cancel footer
+    commitOnScroll: true     // Commit value on scroll end
   }
 }`}
           language="typescript"
