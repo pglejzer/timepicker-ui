@@ -16,8 +16,10 @@ export class ButtonHandlers {
     const openElements = this.core.getOpenElement();
     if (!openElements) return;
 
-    const handler = (): void => {
+    const handler = (e: Event): void => {
       if (this.core.isDestroyed) return;
+      const target = e.currentTarget as Element;
+      if (target?.classList.contains('disabled')) return;
       this.emitter.emit('show', {});
     };
 

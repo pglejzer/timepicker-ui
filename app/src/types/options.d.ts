@@ -164,7 +164,7 @@ export interface UIOptions {
 
   /**
    * @description Show clear button to reset time selection
-   * @default true
+   * @default false
    */
   clearButton?: boolean;
 

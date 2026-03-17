@@ -111,6 +111,13 @@ const CHANGELOG_420 = {
         "ClearEventData, ClearBehaviorOptions, WheelScrollStartEventData, WheelScrollEndEventData",
     },
   ],
+  fixed: [
+    {
+      title: "Rapid-click race condition",
+      description:
+        "Rapidly clicking the input before the modal fully opened could cause the picker to remain invisible in the DOM or permanently block the input element",
+    },
+  ],
 };
 
 const CHANGELOG_417 = {
@@ -411,16 +418,23 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.2.0</strong> - Released March 13, 2026
+        <strong>v4.2.0</strong> - Released March 17, 2026
       </InfoBox>
 
-      <Section icon={History} title="Version 4.2.0 - March 13, 2026">
+      <Section icon={History} title="Version 4.2.0 - March 17, 2026">
         <div className="space-y-4">
           <ChangeSection
             icon={Sparkles}
             label="Added"
             color="green-500"
             items={CHANGELOG_420.added}
+          />
+
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_420.fixed}
           />
         </div>
       </Section>

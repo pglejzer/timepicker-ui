@@ -18,7 +18,7 @@ export class KeyboardHandlers {
     if (!input) return;
 
     const handler = (e: KeyboardEvent): void => {
-      if (e.key === 'Enter' && !this.core.isDestroyed) {
+      if (e.key === 'Enter' && !this.core.isDestroyed && !this.core.isOpen) {
         this.emitter.emit('show', {});
       }
     };
@@ -172,4 +172,3 @@ export class KeyboardHandlers {
     this.cleanupHandlers = [];
   }
 }
-

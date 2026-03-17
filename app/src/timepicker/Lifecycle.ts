@@ -19,6 +19,7 @@ export class Lifecycle {
   private emitter: EventEmitter<TimepickerEventMap>;
   private eventsClickMobileHandler: EventListenerOrEventListenerObject = () => {};
   private mutliEventsMoveHandler: EventListenerOrEventListenerObject = () => {};
+  private unmountTimeouts: ReturnType<typeof setTimeout>[] = [];
 
   constructor(core: CoreState, managers: Managers, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -104,6 +105,7 @@ export class Lifecycle {
 
   mount(): void {
     if (this.core.isDestroyed) return;
+    if (this.core.isOpen) return;
 
     if (!this.core.isInitialized) {
       this.init();
@@ -129,6 +131,7 @@ export class Lifecycle {
       }
 
       this.core.setIsTouchMouseMove(false);
+      this.core.setIsOpen(false);
 
       this.removeEventListeners();
 
@@ -144,14 +147,15 @@ export class Lifecycle {
       const openElements = this.core.getOpenElement();
       openElements.forEach((openEl) => openEl?.classList.remove('disabled'));
 
-      setTimeout(() => {
+      const scrollbarTimeout = setTimeout(() => {
         if (isDocument()) {
           document.body.style.overflowY = '';
           document.body.style.paddingRight = '';
         }
       }, TIMINGS.SCROLLBAR_RESTORE);
+      this.unmountTimeouts.push(scrollbarTimeout);
 
-      setTimeout(() => {
+      const modalRemoveTimeout = setTimeout(() => {
         const input = this.core.getInput();
         if (this.core.options.behavior.focusInputAfterClose) {
           input?.focus();
@@ -163,6 +167,7 @@ export class Lifecycle {
         }
         this.core.setIsModalRemove(true);
       }, TIMINGS.MODAL_REMOVE);
+      this.unmountTimeouts.push(modalRemoveTimeout);
 
       if (cb) cb();
     }, this.core.options.behavior.delayHandler || TIMINGS.DEFAULT_DELAY);
@@ -176,6 +181,8 @@ export class Lifecycle {
 
   destroy(options?: { keepInputValue?: boolean; callback?: TypeFunction } | TypeFunction): void {
     if (this.core.isDestroyed) return;
+
+    this.clearUnmountTimeouts();
 
     const config = typeof options === 'function' ? { callback: options } : options || {};
     const { keepInputValue = false, callback } = config;
@@ -240,6 +247,10 @@ export class Lifecycle {
   private eventsBundle(): void {
     if (this.core.isDestroyed) return;
     if (!this.core.isModalRemove) return;
+
+    this.clearUnmountTimeouts();
+    this.core.setIsOpen(true);
+    this.core.setIsModalRemove(false);
 
     this.setupValidation();
     this.disableOpenElements();
@@ -436,6 +447,11 @@ export class Lifecycle {
         });
       }
     }
+  }
+
+  private clearUnmountTimeouts(): void {
+    this.unmountTimeouts.forEach(clearTimeout);
+    this.unmountTimeouts = [];
   }
 
   private removeEventListeners(): void {

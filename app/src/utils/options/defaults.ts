@@ -24,7 +24,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     iconTemplate: '',
     iconTemplateMobile: '',
     inline: undefined,
-    clearButton: true,
+    clearButton: false,
   },
 
   labels: {

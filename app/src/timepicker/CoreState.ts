@@ -20,6 +20,7 @@ export interface CoreStateData {
   } | null;
   readonly cloned: Node | null;
   readonly isModalRemove: boolean;
+  readonly isOpen: boolean;
   readonly isInitialized: boolean;
   readonly customId?: string;
   readonly eventHandlersRegistered: boolean;
@@ -46,6 +47,7 @@ export class CoreState {
       disabledTime: null,
       cloned: null,
       isModalRemove: true,
+      isOpen: false,
       isInitialized: false,
       customId,
       eventHandlersRegistered: false,
@@ -91,6 +93,10 @@ export class CoreState {
 
   get isModalRemove(): boolean {
     return this.state.isModalRemove;
+  }
+
+  get isOpen(): boolean {
+    return this.state.isOpen;
   }
 
   get isInitialized(): boolean {
@@ -141,6 +147,10 @@ export class CoreState {
     this.state = { ...this.state, isModalRemove: value };
   }
 
+  setIsOpen(value: boolean): void {
+    this.state = { ...this.state, isOpen: value };
+  }
+
   setIsInitialized(value: boolean): void {
     this.state = { ...this.state, isInitialized: value };
   }
@@ -176,6 +186,7 @@ export class CoreState {
       disabledTime: null,
       cloned: null,
       isModalRemove: true,
+      isOpen: false,
       isInitialized: false,
       isDestroyed: true,
       eventHandlersRegistered: false,

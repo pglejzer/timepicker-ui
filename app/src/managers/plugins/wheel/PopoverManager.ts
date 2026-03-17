@@ -30,6 +30,7 @@ export default class PopoverManager {
   attach(): void {
     if (!this.isPopoverMode()) return;
     if (!isDocument()) return;
+    if (this.isAttached) return;
 
     const modal = this.core.getModalElement();
     if (!modal) return;

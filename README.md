@@ -192,7 +192,7 @@ const picker = new TimepickerUI(input, {
 | `iconTemplate`        | string                              | SVG         | Desktop switch icon template                                       |
 | `iconTemplateMobile`  | string                              | SVG         | Mobile switch icon template                                        |
 | `inline`              | object                              | `undefined` | Inline mode configuration                                          |
-| `clearButton`         | boolean                             | `true`      | Show clear button                                                  |
+| `clearButton`         | boolean                             | `false`     | Show clear button                                                  |
 | `mode`                | `clock` / `wheel` / `compact-wheel` | `clock`     | Picker mode - analog clock, scroll-spinner, or headerless wheel    |
 | `wheel`               | object                              | `undefined` | Wheel/compact-wheel config (placement, hideFooter, commitOnScroll) |
 

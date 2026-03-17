@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [4.2.0] - 2026-03-15
+## [4.2.0] - 2026-03-17
 
 ### Added
 
@@ -31,6 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Screen reader announcement when time is cleared
 - Exported `ClearEventData` and `ClearBehaviorOptions` types
 - `WheelOptions` is now a top-level key (`wheel`) instead of being nested inside `ui.wheel`
+
+### Fixed
+
+- Race condition when rapidly clicking the input to open the timepicker - multiple clicks before the modal fully opened could cause the picker to remain invisible in the DOM or permanently block the input element
 
 ---
 

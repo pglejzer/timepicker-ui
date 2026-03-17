@@ -39,8 +39,8 @@ export default function WhatsNewPage() {
         className="mb-8"
       >
         <p className="mb-3">
-          <strong>March 15, 2026</strong> - Wheel mode, compact-wheel, clear
-          button and more
+          <strong>March 17, 2026</strong> - Wheel mode, compact-wheel, clear
+          button, race condition fix, and more
         </p>
         <p className="text-sm">What&apos;s new:</p>
         <ul className="mt-2 space-y-1 text-sm ml-4">
@@ -87,6 +87,11 @@ export default function WhatsNewPage() {
             <code>ClearBehaviorOptions</code>,{" "}
             <code>WheelScrollStartEventData</code>,{" "}
             <code>WheelScrollEndEventData</code>
+          </li>
+          <li>
+            <strong>Race condition fix</strong> - Rapidly clicking the input
+            before the modal fully opened no longer causes the picker to get
+            stuck invisible in the DOM or permanently blocks the input
           </li>
         </ul>
         <Link
