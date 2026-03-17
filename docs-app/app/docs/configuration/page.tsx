@@ -167,6 +167,18 @@ const wheelOptions = [
     default: "false",
     description: "Auto-commit time at scroll end",
   },
+  {
+    name: "hideDisabled",
+    type: "boolean",
+    default: "false",
+    description: "Remove disabled values from wheel list",
+  },
+  {
+    name: "ignoreOutsideClick",
+    type: "boolean",
+    default: "false",
+    description: "Keep picker open on outside click",
+  },
 ];
 
 const labelsOptions = [
@@ -548,7 +560,8 @@ export default function ConfigurationPage() {
   wheel: {
     placement: 'bottom',     // Popover placement (compact-wheel only)
     hideFooter: true,        // Hide OK/Cancel footer
-    commitOnScroll: true     // Commit value on scroll end
+    commitOnScroll: true,    // Commit value on scroll end
+    ignoreOutsideClick: true  // Keep open on outside click
   }
 }`}
           language="typescript"

@@ -573,6 +573,106 @@ new TimepickerUI('#commit-on-scroll-24h', {
   </div>
 </section>
 
+<!-- Ignore Outside Click Section -->
+
+<section
+  id="ignore-outside-click"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Ignore Outside Click</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Keep the picker open when clicking outside its area — the user must press OK or Cancel to close it
+    </p>
+  </div>
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Wheel + Persist</label
+          >
+          <input
+            id="ignore-outside-wheel"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 transition-colors"
+            value="09:00 AM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Popover + Persist</label
+          >
+          <input
+            id="ignore-outside-popover"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 transition-colors"
+            value="02:30 PM"
+          />
+        </div>
+        <div class="text-center">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >24h Popover + Persist</label
+          >
+          <input
+            id="ignore-outside-24h"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 transition-colors"
+            value="16:45"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;input id="ignore-outside-wheel" value="09:00 AM" /&gt;
+&lt;input id="ignore-outside-popover" value="02:30 PM" /&gt;
+&lt;input id="ignore-outside-24h" value="16:45" /&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">// Wheel — stays open on outside click
+new TimepickerUI('#ignore-outside-wheel', {
+  ui: { mode: 'wheel' },
+  wheel: { ignoreOutsideClick: true },
+}).create();
+
+// Popover — stays open on outside click
+new TimepickerUI('#ignore-outside-popover', {
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto', ignoreOutsideClick: true },
+}).create();
+
+// 24h Popover — stays open on outside click
+new TimepickerUI('#ignore-outside-24h', {
+  clock: { type: '24h' },
+  ui: { mode: 'compact-wheel' },
+  wheel: { placement: 'auto', ignoreOutsideClick: true },
+}).create();</code></pre>
+      </div>
+    </div>
+    <div
+      class="mt-6 p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800"
+    >
+      <h4 class="text-sm font-semibold text-teal-900 dark:text-teal-200 mb-2">ignoreOutsideClick Notes</h4>
+      <ul class="text-sm text-teal-800 dark:text-teal-300 space-y-1 list-disc list-inside">
+        <li>
+          Set
+          <code class="bg-teal-100 dark:bg-teal-800 px-1 rounded">wheel.ignoreOutsideClick: true</code> to
+          keep the picker open when clicking outside
+        </li>
+        <li>
+          Applies to <code class="bg-teal-100 dark:bg-teal-800 px-1 rounded">wheel</code> and
+          <code class="bg-teal-100 dark:bg-teal-800 px-1 rounded">compact-wheel</code> modes only
+        </li>
+        <li>The user must press OK or Cancel to close the picker</li>
+        <li>
+          Default is <code class="bg-teal-100 dark:bg-teal-800 px-1 rounded">false</code> — picker closes on
+          outside click
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- Compact Wheel + Popover Placement Section -->
 
 <section
@@ -671,7 +771,7 @@ new TimepickerUI('#commit-on-scroll-24h', {
         </div>
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >Hide Disabled Interval</label
+            >Hide Disabled Interval lol</label
           >
           <input
             id="wheel-hide-disabled-interval"
@@ -898,7 +998,7 @@ new TimepickerUI('#wheel-hide-disabled-interval', {
         </div>
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >Hide Disabled Interval</label
+            >Hide Disabled Interval xd</label
           >
           <input
             id="compact-hide-disabled-interval"

@@ -110,6 +110,11 @@ const CHANGELOG_420 = {
       description:
         "ClearEventData, ClearBehaviorOptions, WheelScrollStartEventData, WheelScrollEndEventData",
     },
+    {
+      title: "wheel.ignoreOutsideClick option",
+      description:
+        "Prevent the picker from closing when clicking outside its area. Only applies to wheel and compact-wheel modes",
+    },
   ],
   fixed: [
     {

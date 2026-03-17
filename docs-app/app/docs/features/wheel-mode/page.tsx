@@ -10,6 +10,7 @@ import {
   Minimize2,
   EyeOff,
   RotateCcw,
+  MousePointer,
 } from "lucide-react";
 
 export const metadata = {
@@ -341,6 +342,26 @@ picker.on('confirm', (data) => {
     console.log('Auto-committed:', data.hour, data.minutes);
   }
 });`}
+          language="typescript"
+        />
+      </Section>
+
+      <Section icon={MousePointer} title="Persist on Outside Click">
+        <p className="text-muted-foreground mb-4">
+          Set{" "}
+          <code className="text-primary">wheel.ignoreOutsideClick: true</code>{" "}
+          to prevent the picker from closing when the user clicks outside its
+          area. The user must explicitly press OK or Cancel to close. Works in
+          both wheel and compact-wheel modes (popover and modal).
+        </p>
+        <CodeBlock
+          code={`new TimepickerUI(input, {
+  ui: { mode: 'compact-wheel' },
+  wheel: {
+    placement: 'bottom',
+    ignoreOutsideClick: true
+  }
+}).create();`}
           language="typescript"
         />
       </Section>

@@ -165,6 +165,8 @@ export default class PopoverManager {
   }
 
   private handleClickOutside(e: MouseEvent): void {
+    if (this.core.options.wheel?.ignoreOutsideClick) return;
+
     const modal = this.core.getModalElement();
     const input = this.core.getInput();
     const target = e.target as Node | null;

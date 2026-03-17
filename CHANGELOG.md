@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `wheel.placement` option (`'auto'` | `'top'` | `'bottom'`) for popover positioning in compact-wheel mode
 - `wheel.hideDisabled` option to completely remove disabled hours/minutes from the wheel list instead of dimming them (wheel and compact-wheel modes only)
 - `wheel.commitOnScroll` option to auto-commit time at the end of wheel scrolling without pressing OK
+- `wheel.ignoreOutsideClick` option to prevent the picker from closing when clicking outside its area (wheel and compact-wheel modes only)
 - `autoCommit` field on `ConfirmEventData` to distinguish auto-committed from manual confirmations
 - Clear button to reset time selection. Enabled by default via `ui.clearButton` option
 - `clearBehavior.clearInput` option to control whether clearing also empties the input field value

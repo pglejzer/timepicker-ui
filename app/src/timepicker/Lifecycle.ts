@@ -426,7 +426,13 @@ export class Lifecycle {
       this.managers.events.handleEscClick();
 
       if (!this.isPopoverMode()) {
-        this.managers.events.handleBackdropClick();
+        const isWheelWithPersist =
+          (this.core.options.ui.mode === 'wheel' || this.core.options.ui.mode === 'compact-wheel') &&
+          this.core.options.wheel?.ignoreOutsideClick;
+
+        if (!isWheelWithPersist) {
+          this.managers.events.handleBackdropClick();
+        }
       }
     }
   }

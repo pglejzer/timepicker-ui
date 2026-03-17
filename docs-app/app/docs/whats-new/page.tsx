@@ -89,6 +89,11 @@ export default function WhatsNewPage() {
             <code>WheelScrollEndEventData</code>
           </li>
           <li>
+            <strong>Persist on outside click</strong> - Set{" "}
+            <code>wheel.ignoreOutsideClick: true</code> to keep the picker open
+            when clicking outside its area (wheel and compact-wheel modes)
+          </li>
+          <li>
             <strong>Race condition fix</strong> - Rapidly clicking the input
             before the modal fully opened no longer causes the picker to get
             stuck invisible in the DOM or permanently blocks the input

@@ -83,6 +83,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     hideFooter: undefined,
     commitOnScroll: undefined,
     hideDisabled: undefined,
+    ignoreOutsideClick: undefined,
   },
 
   clearBehavior: {
@@ -136,6 +137,7 @@ export function mergeOptions(userOptions: TimepickerOptions = {}): Required<Time
       placement: mergedMode === 'compact-wheel' ? 'auto' : undefined,
       hideFooter: undefined,
       commitOnScroll: undefined,
+      ignoreOutsideClick: undefined,
       ...merged.wheel,
     };
   }

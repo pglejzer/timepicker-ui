@@ -48,6 +48,11 @@ export class WheelRenderer {
 
     const shouldHide = this.core.options.wheel.hideDisabled === true;
 
+    if (shouldHide) {
+      this.restoreRemovedItems();
+      this.invalidateItemCache();
+    }
+
     if (disabled.value.isInterval && disabled.value.intervals) {
       this.updateDisabledByInterval(disabled.value, shouldHide);
     } else {
@@ -232,7 +237,13 @@ export class WheelRenderer {
         if (insertBefore) {
           col.insertBefore(item, insertBefore);
         } else {
-          col.appendChild(item);
+          const lastExisting = existingItems[existingItems.length - 1];
+          const ref = lastExisting?.nextSibling ?? null;
+          if (ref) {
+            col.insertBefore(item, ref);
+          } else {
+            col.appendChild(item);
+          }
         }
         existingItems.push(item);
         existingItems.sort((a, b) => {

@@ -151,7 +151,11 @@ export default class WheelManager {
     if (this.core.options.clock.type === '24h') return;
 
     this.amPmHandler = (): void => {
+      const currentHour = this.scrollHandler.getSelectedValue('hours');
+      const currentMinute = this.scrollHandler.getSelectedValue('minutes');
       this.renderer.updateDisabledItems();
+      this.scrollToFirstAvailable('hours', currentHour);
+      this.scrollToFirstAvailable('minutes', currentMinute);
     };
 
     this.emitter.on('select:am', this.amPmHandler);
@@ -170,9 +174,42 @@ export default class WheelManager {
     if (!disabled?.value?.isInterval) return;
 
     this.hourChangeHandler = (): void => {
+      const currentMinute = this.scrollHandler.getSelectedValue('minutes');
       this.renderer.updateDisabledItems();
+      this.scrollToFirstAvailable('minutes', currentMinute);
     };
 
     this.emitter.on('select:hour', this.hourChangeHandler);
+  }
+
+  /**
+   * Find item by data-value (not scroll position) and scroll to it.
+   * If preferred value no longer exists in DOM, scroll to first available.
+   */
+  private scrollToFirstAvailable(columnType: 'hours' | 'minutes', preferredValue: string | null): void {
+    const items = this.renderer.getItems(columnType);
+    if (!items || items.length === 0) return;
+
+    if (preferredValue !== null) {
+      for (let i = 0; i < items.length; i++) {
+        if (
+          items[i].getAttribute('data-value') === preferredValue &&
+          !items[i].classList.contains('is-disabled')
+        ) {
+          this.scrollHandler.scrollToValue(columnType, preferredValue);
+          return;
+        }
+      }
+    }
+
+    for (let i = 0; i < items.length; i++) {
+      if (!items[i].classList.contains('is-disabled')) {
+        const val = items[i].getAttribute('data-value');
+        if (val !== null) {
+          this.scrollHandler.scrollToValue(columnType, val);
+          return;
+        }
+      }
+    }
   }
 }

@@ -366,6 +366,14 @@ export interface WheelOptions {
    * @default false
    */
   hideDisabled?: boolean;
+
+  /**
+   * @description When true, clicking outside the picker area does not close it.
+   * Only applies to wheel and compact-wheel modes (popover and modal).
+   * The user must explicitly press OK or Cancel to close the picker.
+   * @default false
+   */
+  ignoreOutsideClick?: boolean;
 }
 
 /**

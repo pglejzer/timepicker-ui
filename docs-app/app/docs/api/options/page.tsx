@@ -2,7 +2,6 @@ import { CodeBlock } from "@/components/code-block";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import {
-  Settings,
   Layout,
   Lock,
   Clock,
@@ -171,6 +170,20 @@ const wheelOptions = [
     default: "false",
     description:
       "Auto-commit time at end of wheel scrolling without pressing OK",
+  },
+  {
+    name: "hideDisabled",
+    type: "boolean",
+    default: "false",
+    description:
+      "Completely remove disabled hours/minutes from the wheel list instead of dimming them",
+  },
+  {
+    name: "ignoreOutsideClick",
+    type: "boolean",
+    default: "false",
+    description:
+      "Prevent the picker from closing when clicking outside its area",
   },
 ];
 
@@ -619,7 +632,8 @@ export default function OptionsPage() {
     placement: 'bottom',
     hideFooter: true,
     commitOnScroll: true,
-    hideDisabled: true
+    hideDisabled: true,
+    ignoreOutsideClick: false
   },
   
   // Labels options

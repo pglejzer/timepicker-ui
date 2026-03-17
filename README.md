@@ -385,6 +385,7 @@ Wheel mode works with all existing features:
 - **Events**: All standard events work - `select:hour`, `select:minute`, `update`, `confirm`, `cancel`, `clear`, `select:am`, `select:pm`, `error`
 - **Wheel-specific events**: `wheel:scroll:start` (column starts scrolling), `wheel:scroll:end` (column snaps to value with `previousValue`)
 - **Auto-commit**: Set `wheel.commitOnScroll: true` to auto-confirm on scroll end without pressing OK
+- **Persist on outside click**: Set `wheel.ignoreOutsideClick: true` to keep the picker open when clicking outside
 
 ### Compact-Wheel Mode
 
