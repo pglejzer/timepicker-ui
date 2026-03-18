@@ -158,6 +158,44 @@ const timezoneUmdConfig = {
   ],
 };
 
+const wheelUmdConfig = {
+  external: dependencies,
+  input: './src/wheel.ts',
+  output: {
+    file: '../dist/plugins/wheel.umd.js',
+    format: 'umd',
+    name: 'TimepickerUIWheel',
+    sourcemap: false,
+  },
+  plugins: [
+    peerDepsExternal(),
+    replace({ 'process.env.NODE_ENV': JSON.stringify('production'), preventAssignment: true }),
+    resolve(),
+    commonjs({
+      include: 'node_modules/**',
+    }),
+    nodeResolve({
+      jsnext: true,
+      main: true,
+    }),
+    importAsString({
+      include: ['**/*.svg'],
+      exclude: ['**/*.test.*'],
+    }),
+    typescript({
+      tsconfig: './tsconfig.prod.json',
+      declaration: false,
+      declarationDir: undefined,
+      outDir: undefined,
+    }),
+    babel({
+      babelHelpers: 'runtime',
+      exclude: 'node_modules/**',
+    }),
+    terser(),
+  ],
+};
+
 const dtsConfig = {
   input: './src/index.ts',
   output: {
@@ -185,12 +223,23 @@ const dtsTimezoneConfig = {
   plugins: [dts()],
 };
 
+const dtsWheelConfig = {
+  input: './src/plugins/wheel.d.ts',
+  output: {
+    file: '../dist/plugins/wheel.d.ts',
+    format: 'es',
+  },
+  plugins: [dts()],
+};
+
 export default [
   ...scssConfigs,
   umdConfig,
   rangeUmdConfig,
   timezoneUmdConfig,
+  wheelUmdConfig,
   dtsConfig,
   dtsRangeConfig,
   dtsTimezoneConfig,
+  dtsWheelConfig,
 ];
