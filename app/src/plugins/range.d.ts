@@ -5,7 +5,7 @@ interface PluginManager {
 
 interface PluginDefinition {
   name: string;
-  factory: (core: never, emitter: never) => PluginManager;
+  factory: (core: any, emitter: any) => PluginManager;
   optionsExtender?: (options: Record<string, unknown>) => void;
 }
 
@@ -19,4 +19,3 @@ export declare class RangeManager implements PluginManager {
 }
 
 export declare const RangePlugin: PluginDefinition;
-

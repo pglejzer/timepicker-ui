@@ -435,7 +435,10 @@ export default class TimepickerUI {
    * @param handler - The function to handle the event.
    * @returns - void
    */
-  public on<K extends keyof TimepickerEventMap>(event: K, handler: () => void): void {
+  public on<K extends keyof TimepickerEventMap>(
+    event: K,
+    handler: (data: TimepickerEventMap[K]) => void,
+  ): void {
     if (this.core.isDestroyed) return;
     this.emitter.on(event, handler);
   }
@@ -446,7 +449,10 @@ export default class TimepickerUI {
    * @param handler - The function to handle the event.
    * @returns - void
    */
-  public once<K extends keyof TimepickerEventMap>(event: K, handler: () => void): void {
+  public once<K extends keyof TimepickerEventMap>(
+    event: K,
+    handler: (data: TimepickerEventMap[K]) => void,
+  ): void {
     if (this.core.isDestroyed) return;
     this.emitter.once(event, handler);
   }
@@ -457,7 +463,10 @@ export default class TimepickerUI {
    * @param handler - The function to handle the event.
    * @returns - void
    */
-  public off<K extends keyof TimepickerEventMap>(event: K, handler?: () => void): void {
+  public off<K extends keyof TimepickerEventMap>(
+    event: K,
+    handler?: (data: TimepickerEventMap[K]) => void,
+  ): void {
     if (this.core.isDestroyed) return;
     this.emitter.off(event, handler);
   }

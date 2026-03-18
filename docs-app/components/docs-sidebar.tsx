@@ -32,10 +32,10 @@ const navigation = [
       { title: "Inline Mode", href: "/docs/features/inline-mode" },
       { title: "Mobile Support", href: "/docs/features/mobile" },
       { title: "Disabled Time", href: "/docs/features/disabled-time" },
-      { title: "Wheel Mode", href: "/docs/features/wheel-mode" },
       { title: "Clear Button", href: "/docs/features/clear-button" },
       { title: "Validation", href: "/docs/features/validation" },
       { title: "Plugins", href: "/docs/features/plugins" },
+      { title: "Wheel Mode", href: "/docs/features/wheel-mode" },
     ],
   },
   {
