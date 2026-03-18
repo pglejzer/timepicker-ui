@@ -59,6 +59,97 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_420 = {
+  added: [
+    {
+      title: "Wheel mode",
+      description:
+        "Scroll-spinner interface replacing the analog clock face. Enable via ui.mode: 'wheel'. Supports 12h/24h, all themes, disabled time, and keyboard navigation",
+    },
+    {
+      title: "Compact-wheel mode",
+      description:
+        "Headerless wheel picker without the hour/minute inputs header. Enable via ui.mode: 'compact-wheel'. Combine with wheel.placement for popover positioning",
+    },
+    {
+      title: "wheel.placement option",
+      description:
+        "Popover placement ('auto', 'top', 'bottom') for compact-wheel mode. Opens as a popover anchored to the input instead of a centered modal",
+    },
+    {
+      title: "wheel.hideDisabled option",
+      description:
+        "Completely remove disabled hours/minutes from the wheel list instead of dimming them. Only applies to wheel and compact-wheel modes",
+    },
+    {
+      title: "wheel.commitOnScroll option",
+      description:
+        "Auto-commit time at the end of wheel scrolling without pressing OK. Only applies to wheel and compact-wheel modes",
+    },
+    {
+      title: "Clear button",
+      description:
+        "Reset time selection with a dedicated clear button. Enabled by default via ui.clearButton option",
+    },
+    {
+      title: "clearBehavior.clearInput option",
+      description:
+        "Control whether clearing also empties the input field value (default: true)",
+    },
+    {
+      title: "labels.clear option",
+      description: 'Customize the clear button text (default: "Clear")',
+    },
+    {
+      title: "onClear callback and clear event",
+      description:
+        "New callback and EventEmitter event with previousValue payload",
+    },
+    {
+      title: "New exported types",
+      description:
+        "ClearEventData, ClearBehaviorOptions, WheelScrollStartEventData, WheelScrollEndEventData",
+    },
+    {
+      title: "wheel.ignoreOutsideClick option",
+      description:
+        "Prevent the picker from closing when clicking outside its area. Only applies to wheel and compact-wheel modes",
+    },
+  ],
+  fixed: [
+    {
+      title: "Rapid-click race condition",
+      description:
+        "Rapidly clicking the input before the modal fully opened could cause the picker to remain invisible in the DOM or permanently block the input element",
+    },
+    {
+      title: "Range plugin landscape layout",
+      description:
+        "From/To header tabs were mispositioned in landscape orientation. Fixed with proper absolute positioning within the grid layout",
+    },
+    {
+      title: "Timezone plugin landscape layout",
+      description:
+        "Timezone picker was broken in landscape orientation. Implemented CSS Grid layout that properly positions header, timezone selector, and clock face side by side",
+    },
+    {
+      title: "AM/PM border color in landscape",
+      description:
+        "Hardcoded black border replaced with theme-aware var(--tp-border) variable",
+    },
+    {
+      title: "Compact-wheel popover viewport detection",
+      description:
+        "Popover did not flip from bottom to top early enough near the viewport edge. Added safety threshold, switched to accurate visible viewport measurement, and improved fallback to prefer the side with more space",
+    },
+    {
+      title: "PluginFactory type safety",
+      description:
+        "PluginFactory type now correctly accepts CoreState and EventEmitter parameters instead of using any/never workarounds. Removed unsafe type assertions from the plugin registry",
+    },
+  ],
+};
+
 const CHANGELOG_417 = {
   fixed: [
     {
@@ -357,8 +448,26 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.1.7</strong> - Released March 8, 2026
+        <strong>v4.2.0</strong> - Released March 18, 2026
       </InfoBox>
+
+      <Section icon={History} title="Version 4.2.0 - March 18, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Sparkles}
+            label="Added"
+            color="green-500"
+            items={CHANGELOG_420.added}
+          />
+
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_420.fixed}
+          />
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.1.7 - March 8, 2026">
         <div className="space-y-4">

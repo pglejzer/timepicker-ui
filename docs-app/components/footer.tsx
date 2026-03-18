@@ -201,7 +201,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
-                v4.1.7
+                v4.2.0
               </a>
             </div>
           </div>

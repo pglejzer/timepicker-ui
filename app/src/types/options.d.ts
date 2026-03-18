@@ -20,6 +20,7 @@ import type {
   RangeConfirmEventData,
   RangeSwitchEventData,
   RangeValidationEventData,
+  ClearEventData,
 } from './types';
 
 /**
@@ -98,6 +99,12 @@ export interface ClockOptions {
  */
 export interface UIOptions {
   /**
+   * @description Picker mode: analog clock face, scroll wheel spinner, or compact wheel (no header)
+   * @default "clock"
+   */
+  mode?: 'clock' | 'wheel' | 'compact-wheel';
+
+  /**
    * @description Theme for the timepicker
    * @default "basic"
    */
@@ -154,6 +161,12 @@ export interface UIOptions {
    * @example cssClass: "my-custom-timepicker"
    */
   cssClass?: string;
+
+  /**
+   * @description Show clear button to reset time selection
+   * @default false
+   */
+  clearButton?: boolean;
 
   /**
    * @description Selector where to append modal (default: body)
@@ -242,6 +255,12 @@ export interface LabelsOptions {
    * @default "Minute"
    */
   mobileMinute?: string;
+
+  /**
+   * @description "Clear" button text
+   * @default "Clear"
+   */
+  clear?: string;
 }
 
 /**
@@ -303,6 +322,58 @@ export interface TimezoneOptions {
    * @default "Timezone"
    */
   label?: string;
+}
+
+/**
+ * Wheel / compact-wheel mode configuration
+ * @example
+ * wheel: {
+ *   placement: 'auto',
+ *   hideFooter: true,
+ *   commitOnScroll: true
+ * }
+ */
+export interface WheelOptions {
+  /**
+   * @description Popover placement relative to input in compact-wheel mode.
+   * 'auto' opens below if space allows, otherwise above.
+   * Defaults to 'auto' in compact-wheel mode.
+   * Can be overridden to 'top' or 'bottom' for fixed positioning.
+   * @default 'auto' (compact-wheel) | undefined (wheel)
+   */
+  placement?: 'auto' | 'top' | 'bottom';
+
+  /**
+   * @description When true, the footer (OK/Cancel/Clear buttons + switch icon)
+   * is not rendered in the DOM at all. Only works in compact-wheel mode.
+   * Useful when commitOnScroll is enabled and buttons are unnecessary.
+   * @default false
+   */
+  hideFooter?: boolean;
+
+  /**
+   * @description When enabled, the timepicker automatically commits the selected time
+   * at the end of wheel scrolling, updating the input value and emitting a change event
+   * without requiring the user to press OK. Only applies to wheel and compact-wheel modes.
+   * @default false
+   */
+  commitOnScroll?: boolean;
+
+  /**
+   * @description When true, disabled hours/minutes are completely removed from the wheel list
+   * instead of being dimmed. Only applies to wheel and compact-wheel modes.
+   * Useful when many values are disabled (e.g., business hours only).
+   * @default false
+   */
+  hideDisabled?: boolean;
+
+  /**
+   * @description When true, clicking outside the picker area does not close it.
+   * Only applies to wheel and compact-wheel modes (popover and modal).
+   * The user must explicitly press OK or Cancel to close the picker.
+   * @default false
+   */
+  ignoreOutsideClick?: boolean;
 }
 
 /**
@@ -406,6 +477,22 @@ export interface CallbacksOptions {
    * @description Triggered on range validation (range mode only)
    */
   onRangeValidation?: TimepickerEventCallback<RangeValidationEventData>;
+
+  /**
+   * @description Triggered when clear button is clicked
+   */
+  onClear?: TimepickerEventCallback<ClearEventData>;
+}
+
+/**
+ * Clear button behavior configuration
+ */
+export interface ClearBehaviorOptions {
+  /**
+   * @description Whether clicking clear also empties the input field value
+   * @default true
+   */
+  clearInput?: boolean;
 }
 
 /**
@@ -419,4 +506,6 @@ export interface TimepickerOptions {
   callbacks?: CallbacksOptions;
   timezone?: TimezoneOptions;
   range?: RangeOptions;
+  wheel?: WheelOptions;
+  clearBehavior?: ClearBehaviorOptions;
 }

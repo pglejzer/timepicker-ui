@@ -757,6 +757,7 @@ describe('TimepickerUI.update() - functional tests', () => {
       expect(mapBefore['1']).toBe(false);
 
       timepicker.close();
+      jest.runAllTimers();
       timepicker.update({
         options: { clock: { disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] } } },
         create: true,
@@ -785,6 +786,7 @@ describe('TimepickerUI.update() - functional tests', () => {
       expect(disabledBefore.length).toBeGreaterThan(0);
 
       timepicker.close();
+      jest.runAllTimers();
       timepicker.update({
         options: { clock: { disabledTime: {} } },
         create: true,
@@ -798,4 +800,3 @@ describe('TimepickerUI.update() - functional tests', () => {
     });
   });
 });
-

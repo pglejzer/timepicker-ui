@@ -16,8 +16,10 @@ export class ButtonHandlers {
     const openElements = this.core.getOpenElement();
     if (!openElements) return;
 
-    const handler = (): void => {
+    const handler = (e: Event): void => {
       if (this.core.isDestroyed) return;
+      const target = e.currentTarget as Element;
+      if (target?.classList.contains('disabled')) return;
       this.emitter.emit('show', {});
     };
 
@@ -46,15 +48,38 @@ export class ButtonHandlers {
 
     const handler = (): void => {
       if (this.core.isDestroyed) return;
+
       const hour = this.core.getHour();
       const minutes = this.core.getMinutes();
-      const activeTypeMode = this.core.getActiveTypeMode();
 
-      this.emitter.emit('confirm', {
-        hour: hour?.value,
-        minutes: minutes?.value,
-        type: activeTypeMode?.textContent || undefined,
-      });
+      if (hour && minutes) {
+        const activeTypeMode = this.core.getActiveTypeMode();
+        this.emitter.emit('confirm', {
+          hour: hour.value,
+          minutes: minutes.value,
+          type: activeTypeMode?.textContent || undefined,
+        });
+        return;
+      }
+
+      const modal = this.core.getModalElement();
+      if (modal) {
+        const centerHour = modal.querySelector<HTMLDivElement>(
+          '.tp-ui-wheel-hours .tp-ui-wheel-item.is-center',
+        );
+        const centerMinute = modal.querySelector<HTMLDivElement>(
+          '.tp-ui-wheel-minutes .tp-ui-wheel-item.is-center',
+        );
+        const centerAmpm = modal.querySelector<HTMLDivElement>(
+          '.tp-ui-wheel-ampm .tp-ui-wheel-item.is-center',
+        );
+
+        this.emitter.emit('confirm', {
+          hour: centerHour?.getAttribute('data-value') ?? undefined,
+          minutes: centerMinute?.getAttribute('data-value') ?? undefined,
+          type: centerAmpm?.getAttribute('data-value') ?? undefined,
+        });
+      }
     };
 
     okButton.addEventListener('click', handler);
@@ -141,4 +166,3 @@ export class ButtonHandlers {
     this.cleanupHandlers = [];
   }
 }
-

@@ -2,7 +2,6 @@ import { CodeBlock } from "@/components/code-block";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import {
-  Settings,
   Layout,
   Lock,
   Clock,
@@ -10,6 +9,7 @@ import {
   Palette,
   Sliders,
   Bell,
+  Trash2,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -48,6 +48,12 @@ const clockOptions = [
     type: "DisabledTime",
     default: "undefined",
     description: "Disable specific hours, minutes, or intervals",
+  },
+  {
+    name: "smoothHourSnap",
+    type: "boolean",
+    default: "true",
+    description: "Enable smooth hour dragging with snap animation",
   },
   {
     name: "currentTime",
@@ -130,6 +136,55 @@ const uiOptions = [
     default: "undefined",
     description: "Inline mode configuration",
   },
+  {
+    name: "clearButton",
+    type: "boolean",
+    default: "true",
+    description: "Show clear button to reset time selection",
+  },
+  {
+    name: "mode",
+    type: '"clock" | "wheel" | "compact-wheel"',
+    default: '"clock"',
+    description:
+      "Picker mode \u2014 analog clock face, scroll-spinner wheels, or headerless wheel",
+  },
+];
+
+const wheelOptions = [
+  {
+    name: "placement",
+    type: '"auto" | "top" | "bottom"',
+    default: "undefined",
+    description: "Popover placement relative to input in compact-wheel mode",
+  },
+  {
+    name: "hideFooter",
+    type: "boolean",
+    default: "false",
+    description: "Hide footer (OK/Cancel/Clear buttons) in compact-wheel mode",
+  },
+  {
+    name: "commitOnScroll",
+    type: "boolean",
+    default: "false",
+    description:
+      "Auto-commit time at end of wheel scrolling without pressing OK",
+  },
+  {
+    name: "hideDisabled",
+    type: "boolean",
+    default: "false",
+    description:
+      "Completely remove disabled hours/minutes from the wheel list instead of dimming them",
+  },
+  {
+    name: "ignoreOutsideClick",
+    type: "boolean",
+    default: "false",
+    description:
+      "Prevent the picker from closing when clicking outside its area",
+  },
 ];
 
 const labelsOptions = [
@@ -180,6 +235,12 @@ const labelsOptions = [
     type: "string",
     default: '"Minute"',
     description: "Minute label for mobile version",
+  },
+  {
+    name: "clear",
+    type: "string",
+    default: '"Clear"',
+    description: "Text for clear button",
   },
 ];
 
@@ -264,6 +325,21 @@ const callbacksOptions = [
     type: "(data: CallbackData) => void",
     default: "undefined",
     description: "Triggered when validation error occurs",
+  },
+  {
+    name: "onClear",
+    type: "(data: ClearEventData) => void",
+    default: "undefined",
+    description: "Triggered when user clicks the clear button",
+  },
+];
+
+const clearBehaviorOptions = [
+  {
+    name: "clearInput",
+    type: "boolean",
+    default: "true",
+    description: "Whether clearing also empties the input field value",
   },
 ];
 
@@ -367,6 +443,14 @@ export default function OptionsPage() {
         <OptionsTable options={uiOptions} />
       </Section>
 
+      <Section icon={Layout} title="Wheel Options">
+        <p className="text-muted-foreground mb-4">
+          Wheel / compact-wheel mode configuration via{" "}
+          <code className="text-primary">wheel</code>:
+        </p>
+        <OptionsTable options={wheelOptions} />
+      </Section>
+
       <Section icon={Type} title="Labels Options">
         <p className="text-muted-foreground mb-4">
           Customize all text labels for localization:
@@ -386,6 +470,14 @@ export default function OptionsPage() {
           Event handlers and lifecycle callbacks:
         </p>
         <OptionsTable options={callbacksOptions} />
+      </Section>
+
+      <Section icon={Trash2} title="Clear Behavior Options">
+        <p className="text-muted-foreground mb-4">
+          Control clear button behavior via{" "}
+          <code className="text-primary">clearBehavior</code>:
+        </p>
+        <OptionsTable options={clearBehaviorOptions} />
       </Section>
 
       <Section icon={Palette} title="Available Themes">
@@ -441,6 +533,24 @@ export default function OptionsPage() {
         />
       </Section>
 
+      <Section icon={Layout} title="Wheel Mode Configuration">
+        <p className="text-muted-foreground mb-4">
+          Configure wheel/compact-wheel mode via{" "}
+          <code className="text-primary">wheel</code>:
+        </p>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
+  ui: { mode: 'wheel' },
+  wheel: {
+    placement: 'bottom',     // Popover placement (compact-wheel only)
+    hideFooter: true,        // Hide OK/Cancel footer
+    commitOnScroll: true     // Commit value on scroll end
+  }
+});`}
+          language="typescript"
+        />
+      </Section>
+
       <Section icon={Lock} title="Disabled Time Configuration">
         <p className="text-muted-foreground mb-4">
           Disable specific hours, minutes, or intervals via{" "}
@@ -452,8 +562,11 @@ export default function OptionsPage() {
     disabledTime: {
       hours: [1, 3, 5, 8],              // Disable specific hours
       minutes: [15, 30, 45],            // Disable specific minutes
-      interval: 15                      // Or use interval shorthand (15, 30, etc.)
+      interval: 15,                     // Or use interval shorthand (15, 30, etc.)
     }
+  },
+  wheel: {
+    hideDisabled: true                   // Hide disabled items instead of greying out (wheel modes only)
   }
 });`}
           language="typescript"
@@ -512,6 +625,15 @@ export default function OptionsPage() {
     editable: false,
     cssClass: 'custom-picker',
     appendModalSelector: '#timepicker-container'
+  },
+
+  // Wheel options
+  wheel: {
+    placement: 'bottom',
+    hideFooter: true,
+    commitOnScroll: true,
+    hideDisabled: true,
+    ignoreOutsideClick: false
   },
   
   // Labels options

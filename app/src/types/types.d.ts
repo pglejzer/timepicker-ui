@@ -15,6 +15,13 @@ export type ConfirmEventData = {
   hour?: string;
   minutes?: string;
   type?: string;
+  /** When true, this confirm was triggered by commitOnScroll (auto-commit) */
+  autoCommit?: boolean;
+};
+
+/** Payload when user clears time */
+export type ClearEventData = {
+  previousValue: string | null;
 };
 
 /** Payload when modal shows */
@@ -87,6 +94,18 @@ export type RangeGetDisabledTimeEventData = Record<string, never>;
 
 export type RangeUpdateDisabledEventData = Record<string, never>;
 
+/** Payload when wheel scroll starts on a column */
+export type WheelScrollStartEventData = {
+  column: 'hours' | 'minutes' | 'ampm';
+};
+
+/** Payload when wheel scroll ends and snaps to a value */
+export type WheelScrollEndEventData = {
+  column: 'hours' | 'minutes' | 'ampm';
+  value: string;
+  previousValue: string | null;
+};
+
 /** Payload when validation error occurs */
 export type ErrorEventData = {
   error: string;
@@ -102,6 +121,8 @@ export type ErrorEventData = {
 export type TimepickerEventCallback<T = unknown> = (eventData: T) => void;
 
 export type OptionTypes = {
+  /** Picker mode: clock, wheel, or compact-wheel @default "clock" */
+  mode?: 'clock' | 'wheel' | 'compact-wheel';
   /** AM label text @default "AM" */
   amLabel?: string;
   /** Enable animations @default true */

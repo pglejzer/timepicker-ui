@@ -14,20 +14,14 @@ export interface Plugin {
   optionsExtender?: (options: Record<string, unknown>) => void;
 }
 
-interface PluginInput {
-  name: string;
-  factory: (core: never, emitter: never) => PluginManager;
-  optionsExtender?: (options: Record<string, unknown>) => void;
-}
-
 class PluginRegistryClass {
   private plugins: Map<string, Plugin> = new Map();
 
-  register(plugin: Plugin | PluginInput): void {
+  register(plugin: Plugin): void {
     if (this.plugins.has(plugin.name)) {
       return;
     }
-    this.plugins.set(plugin.name, plugin as Plugin);
+    this.plugins.set(plugin.name, plugin);
   }
 
   getAll(): Plugin[] {

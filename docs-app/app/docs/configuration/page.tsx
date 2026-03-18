@@ -1,6 +1,15 @@
 import { CodeBlock } from "@/components/code-block";
 import { Section } from "@/components/section";
-import { Settings, Tag, Layout, Lock, Clock, Zap, Bell } from "lucide-react";
+import {
+  Settings,
+  Tag,
+  Layout,
+  Lock,
+  Clock,
+  Zap,
+  Bell,
+  Trash2,
+} from "lucide-react";
 import { InfoBox } from "@/components/info-box";
 
 export const metadata = {
@@ -29,7 +38,7 @@ const clockOptions = [
   {
     name: "autoSwitchToMinutes",
     type: "boolean",
-    default: "false",
+    default: "true",
     description: "Auto-switch after hour",
   },
   {
@@ -37,6 +46,12 @@ const clockOptions = [
     type: "object",
     default: "undefined",
     description: "Disable specific times",
+  },
+  {
+    name: "smoothHourSnap",
+    type: "boolean",
+    default: "true",
+    description: "Smooth hour dragging with snap",
   },
   {
     name: "currentTime",
@@ -119,6 +134,51 @@ const uiOptions = [
     default: "undefined",
     description: "Inline mode config",
   },
+  {
+    name: "clearButton",
+    type: "boolean",
+    default: "true",
+    description: "Show clear button",
+  },
+  {
+    name: "mode",
+    type: "clock | wheel | compact-wheel",
+    default: "clock",
+    description: "Picker mode",
+  },
+];
+
+const wheelOptions = [
+  {
+    name: "placement",
+    type: "auto | top | bottom",
+    default: "undefined",
+    description: "Popover placement (compact-wheel only)",
+  },
+  {
+    name: "hideFooter",
+    type: "boolean",
+    default: "false",
+    description: "Hide footer in compact-wheel mode",
+  },
+  {
+    name: "commitOnScroll",
+    type: "boolean",
+    default: "false",
+    description: "Auto-commit time at scroll end",
+  },
+  {
+    name: "hideDisabled",
+    type: "boolean",
+    default: "false",
+    description: "Remove disabled values from wheel list",
+  },
+  {
+    name: "ignoreOutsideClick",
+    type: "boolean",
+    default: "false",
+    description: "Keep picker open on outside click",
+  },
 ];
 
 const labelsOptions = [
@@ -154,6 +214,12 @@ const labelsOptions = [
     type: "string",
     default: "Minute",
     description: "Mobile minute",
+  },
+  {
+    name: "clear",
+    type: "string",
+    default: "Clear",
+    description: "Clear button text",
   },
 ];
 
@@ -239,6 +305,21 @@ const callbacksOptions = [
     default: "undefined",
     description: "Error occurred",
   },
+  {
+    name: "onClear",
+    type: "function",
+    default: "undefined",
+    description: "Time cleared",
+  },
+];
+
+const clearBehaviorOptions = [
+  {
+    name: "clearInput",
+    type: "boolean",
+    default: "true",
+    description: "Whether clearing also empties the input",
+  },
 ];
 
 function OptionsTable({ options, title }: { options: any[]; title?: string }) {
@@ -321,6 +402,13 @@ export default function ConfigurationPage() {
         <OptionsTable options={uiOptions} />
       </Section>
 
+      <Section icon={Layout} title="Wheel Options">
+        <p className="text-muted-foreground mb-4">
+          Wheel / compact-wheel mode configuration:
+        </p>
+        <OptionsTable options={wheelOptions} />
+      </Section>
+
       <Section icon={Tag} title="Labels Options">
         <p className="text-muted-foreground mb-4">
           Customize all text labels and button texts:
@@ -333,6 +421,13 @@ export default function ConfigurationPage() {
           Control focus, delays, and instance behavior:
         </p>
         <OptionsTable options={behaviorOptions} />
+      </Section>
+
+      <Section icon={Trash2} title="Clear Behavior Options">
+        <p className="text-muted-foreground mb-4">
+          Control clear button behavior:
+        </p>
+        <OptionsTable options={clearBehaviorOptions} />
       </Section>
 
       <Section icon={Bell} title="Callbacks Options">
@@ -366,7 +461,12 @@ export default function ConfigurationPage() {
     mobile: false,
     editable: false,
     enableScrollbar: false,
-    enableSwitchIcon: true
+    enableSwitchIcon: true,
+  },
+  wheel: {
+    placement: 'bottom',
+    hideFooter: true,
+    commitOnScroll: true
   },
   labels: {
     ok: 'Confirm',
@@ -404,6 +504,9 @@ export default function ConfigurationPage() {
       hours: [1, 3, 5, 23],
       minutes: [15, 30, 45]
     }
+  },
+  wheel: {
+    hideDisabled: true
   }
 }`}
               language="typescript"
@@ -441,6 +544,24 @@ export default function ConfigurationPage() {
       autoUpdate: true,
       showButtons: false
     }
+  }
+}`}
+          language="typescript"
+        />
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
+          Wheel Mode
+        </h2>
+        <CodeBlock
+          code={`{
+  ui: { mode: 'wheel' },
+  wheel: {
+    placement: 'bottom',     // Popover placement (compact-wheel only)
+    hideFooter: true,        // Hide OK/Cancel footer
+    commitOnScroll: true,    // Commit value on scroll end
+    ignoreOutsideClick: true  // Keep open on outside click
   }
 }`}
           language="typescript"

@@ -34,22 +34,81 @@ export default function WhatsNewPage() {
       </div>
 
       <InfoBox
-        title="Version 4.1.1 Released!"
+        title="Version 4.2.0 Released!"
         variant="emerald"
         className="mb-8"
       >
         <p className="mb-3">
-          <strong>February 1, 2026</strong> - Bug fix and quality improvements
+          <strong>March 18, 2026</strong> - Wheel mode, compact-wheel, clear
+          button, landscape fixes, and more
         </p>
         <p className="text-sm">What&apos;s new:</p>
         <ul className="mt-2 space-y-1 text-sm ml-4">
           <li>
-            <strong>Mobile input validation fix</strong> - Invalid time values
-            (e.g., 169:70) now auto-clamp to valid ranges when typing
+            <strong>Wheel mode</strong> - Scroll-spinner interface replacing the
+            analog clock face. Enable via{" "}
+            <code>ui.mode: &apos;wheel&apos;</code>
           </li>
           <li>
-            <strong>Test coverage</strong> - Expanded to 1100+ tests with 90%+
-            code coverage
+            <strong>Compact-wheel mode</strong> - Headerless wheel picker
+            without the hour/minute inputs header. Enable via{" "}
+            <code>ui.mode: &apos;compact-wheel&apos;</code>
+          </li>
+          <li>
+            <strong>Popover placement</strong> - Use{" "}
+            <code>wheel.placement</code> to open compact-wheel as a popover
+            anchored to the input (<code>&apos;auto&apos;</code>,{" "}
+            <code>&apos;top&apos;</code>, <code>&apos;bottom&apos;</code>)
+          </li>
+          <li>
+            <strong>Hide disabled options</strong> - Set{" "}
+            <code>wheel.hideDisabled: true</code> to completely remove disabled
+            values instead of dimming them
+          </li>
+          <li>
+            <strong>Auto-commit on scroll</strong> - Set{" "}
+            <code>wheel.commitOnScroll: true</code> to auto-confirm time at
+            scroll end without pressing OK
+          </li>
+          <li>
+            <strong>Clear button</strong> - Reset time selection with a
+            dedicated button, enabled by default via <code>ui.clearButton</code>
+          </li>
+          <li>
+            <strong>clearBehavior options</strong> - Control whether clearing
+            empties the input value with <code>clearBehavior.clearInput</code>
+          </li>
+          <li>
+            <strong>onClear callback &amp; event</strong> - New callback and
+            EventEmitter event with <code>previousValue</code> payload
+          </li>
+          <li>
+            <strong>New exported types</strong> - <code>ClearEventData</code>,{" "}
+            <code>ClearBehaviorOptions</code>,{" "}
+            <code>WheelScrollStartEventData</code>,{" "}
+            <code>WheelScrollEndEventData</code>
+          </li>
+          <li>
+            <strong>Persist on outside click</strong> - Set{" "}
+            <code>wheel.ignoreOutsideClick: true</code> to keep the picker open
+            when clicking outside its area (wheel and compact-wheel modes)
+          </li>
+          <li>
+            <strong>Race condition fix</strong> - Rapidly clicking the input
+            before the modal fully opened no longer causes the picker to get
+            stuck invisible in the DOM or permanently blocks the input
+          </li>
+          <li>
+            <strong>Range landscape fix</strong> - From/To tabs now properly
+            positioned in landscape orientation
+          </li>
+          <li>
+            <strong>Timezone landscape fix</strong> - Timezone picker layout
+            corrected in landscape orientation with CSS Grid
+          </li>
+          <li>
+            <strong>AM/PM border theming</strong> - Landscape border color now
+            uses theme variable instead of hardcoded black
           </li>
         </ul>
         <Link

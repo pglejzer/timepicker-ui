@@ -6,6 +6,16 @@ export interface TimezoneInfo {
 
 let cachedTimezones: TimezoneInfo[] | null = null;
 
+const normalizeOffset = (raw: string): string => {
+  if (!raw || raw === '+0' || raw === '-0') return '+00:00';
+  const sign = raw.startsWith('-') ? '-' : '+';
+  const stripped = raw.replace(/^[+-]/, '');
+  const parts = stripped.split(':');
+  const hours = parts[0].padStart(2, '0');
+  const minutes = parts.length > 1 ? parts[1].padStart(2, '0') : '00';
+  return `${sign}${hours}:${minutes}`;
+};
+
 export const getTimezoneOffset = (timezone: string): string => {
   try {
     const formatter = new Intl.DateTimeFormat('en-US', {
@@ -14,7 +24,8 @@ export const getTimezoneOffset = (timezone: string): string => {
     });
     const parts = formatter.formatToParts(new Date());
     const tzPart = parts.find((p) => p.type === 'timeZoneName');
-    return tzPart?.value?.replace('GMT', '') || '+00:00';
+    const raw = tzPart?.value?.replace('GMT', '') || '';
+    return normalizeOffset(raw);
   } catch {
     return '+00:00';
   }
@@ -98,4 +109,3 @@ export const getTimezoneList = (whitelist?: readonly string[]): TimezoneInfo[] =
 export const clearTimezoneCache = (): void => {
   cachedTimezones = null;
 };
-

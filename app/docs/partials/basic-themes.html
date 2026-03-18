@@ -1,0 +1,474 @@
+        <section
+          id="basic-usage"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Basic Usage</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Simple time picker with default settings</p>
+          </div>
+          <div class="p-4 sm:p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="basic-picker"
+                  class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="10:30 PM"
+                />
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="basic-picker" value="10:30 PM" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const basicTimePicker = new TimepickerUI('#basic-picker');
+basicTimePicker.create();</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="24h-format"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">24-Hour Format</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Time picker with 24-hour clock format</p>
+          </div>
+          <div class="p-4 sm:p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="format-24h-picker"
+                  class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="15:45"
+                />
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="format-24h-picker"  value="15:45" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const format24hPicker = new TimepickerUI('#format-24h-picker', {
+  clockType: '24h',
+  enableSwitchIcon: true
+});
+format24hPicker.create();</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="mobile-version"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Mobile Version</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Optimized interface for mobile devices</p>
+          </div>
+          <div class="p-4 sm:p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
+              <div class="flex justify-center">
+                <input
+                  id="mobile-picker"
+                  class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value="11:30 PM"
+                />
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="mobile-picker"  value="14:30" /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">const mobilePicker = new TimepickerUI('#mobile-picker', {
+  mobile: true,
+  clockType: '24h',
+  enableSwitchIcon: true
+});
+mobilePicker.create();</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="themes"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Different Themes</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Choose from various themes included in the library
+            </p>
+          </div>
+          <div class="p-4 sm:p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Basic Theme</label
+                  >
+                  <input
+                    id="theme-basic"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="10:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">M2</label>
+                  <input
+                    id="theme-m2"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="10:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Crane Straight</label
+                  >
+                  <input
+                    id="theme-crane-straight"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="11:15 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Crane Radius</label
+                  >
+                  <input
+                    id="theme-crane-radius"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="12:30 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Material 3</label
+                  >
+                  <input
+                    id="theme-m3"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="11:45 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Dark Theme</label
+                  >
+                  <input
+                    id="theme-dark"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="11:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Glassmorphic Theme</label
+                  >
+                  <input
+                    id="theme-glassmorphic"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="11:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Pastel Theme</label
+                  >
+                  <input
+                    id="theme-pastel"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="11:00 PM"
+                  />
+                </div>
+
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >AI Theme</label
+                  >
+                  <input
+                    id="theme-ai"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="11:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Cyberpunk Theme</label
+                  >
+                  <input
+                    id="theme-cyberpunk"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="11:00 PM"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+                <pre><code class="language-html">&lt;input id="theme-basic"  /&gt;
+&lt;input id="theme-crane-straight"  /&gt;
+&lt;input id="theme-crane-radius"  /&gt;
+&lt;input id="theme-m3"  /&gt;
+&lt;input id="theme-dark"  /&gt;
+&lt;input id="theme-glassmorphic"  /&gt;
+&lt;input id="theme-pastel"  /&gt;
+&lt;input id="theme-ai"  /&gt;
+&lt;input id="theme-cyberpunk"  /&gt;</code></pre>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+                <pre><code class="language-javascript">new TimepickerUI('#theme-basic', { theme: 'basic' }).create();
+new TimepickerUI('#theme-crane-straight', { theme: 'crane-straight' }).create();
+new TimepickerUI('#theme-crane-radius', { theme: 'crane-radius' }).create();
+new TimepickerUI('#theme-m3', { theme: 'm3' }).create();
+new TimepickerUI('#theme-dark', { theme: 'dark' }).create();
+new TimepickerUI('#theme-glassmorphic', { theme: 'glassmorphic' }).create();
+new TimepickerUI('#theme-pastel', { theme: 'pastel' }).create();
+new TimepickerUI('#theme-ai', { theme: 'ai' }).create();
+new TimepickerUI('#theme-cyberpunk', { theme: 'cyberpunk' }).create();</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="timezone-themes"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Timezone - All Themes</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Preview timezone selector across all available themes
+            </p>
+          </div>
+          <div class="p-4 sm:p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Basic</label>
+                  <input
+                    id="timezone-basic"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="12:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Crane</label>
+                  <input
+                    id="timezone-crane"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="12:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Crane Straight</label
+                  >
+                  <input
+                    id="timezone-crane-straight"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="12:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >M3 Green</label
+                  >
+                  <input
+                    id="timezone-m3"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="12:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Dark</label>
+                  <input
+                    id="timezone-dark"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="12:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">M2</label>
+                  <input
+                    id="timezone-m2"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="12:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Glassmorphic</label
+                  >
+                  <input
+                    id="timezone-glassmorphic"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="12:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Pastel</label
+                  >
+                  <input
+                    id="timezone-pastel"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="12:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">AI</label>
+                  <input
+                    id="timezone-ai"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="12:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Cyberpunk</label
+                  >
+                  <input
+                    id="timezone-cyberpunk"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="12:00 PM"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="range-themes"
+          class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-green-50 to-teal-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Range - All Themes</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">
+              Preview range selector across all available themes
+            </p>
+          </div>
+          <div class="p-4 sm:p-8">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Basic</label>
+                  <input
+                    id="range-basic"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="09:00 AM - 05:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Crane</label>
+                  <input
+                    id="range-crane"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="09:00 AM - 05:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Crane Straight</label
+                  >
+                  <input
+                    id="range-crane-straight"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="09:00 AM - 05:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >M3 Green</label
+                  >
+                  <input
+                    id="range-m3"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="09:00 AM - 05:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Dark</label>
+                  <input
+                    id="range-dark"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="09:00 AM - 05:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">M2</label>
+                  <input
+                    id="range-m2"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="09:00 AM - 05:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Glassmorphic</label
+                  >
+                  <input
+                    id="range-glassmorphic"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="09:00 AM - 05:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Pastel</label
+                  >
+                  <input
+                    id="range-pastel"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="09:00 AM - 05:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">AI</label>
+                  <input
+                    id="range-ai"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="09:00 AM - 05:00 PM"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Cyberpunk</label
+                  >
+                  <input
+                    id="range-cyberpunk"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-colors"
+                    value="09:00 AM - 05:00 PM"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+

@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.2.0] - 2026-03-18
+
+### Added
+
+- Wheel mode - scroll-spinner interface replacing the analog clock face. Enable via `ui.mode: 'wheel'`
+- Compact-wheel mode - headerless wheel picker without the hour/minute inputs header. Enable via `ui.mode: 'compact-wheel'`
+- Wheel mode supports 12h/24h, all themes, disabled time, setValue/getValue, and keyboard navigation
+- Wheel mode emits all standard events (`select:hour`, `select:minute`, `update`, `confirm`, `cancel`, `clear`, `select:am`, `select:pm`, `error`) - no separate API needed
+- `wheel:scroll:start` event - fires when a wheel column starts scrolling (includes `column` field)
+- `wheel:scroll:end` event - fires when a wheel column snaps to a value (includes `column`, `value`, `previousValue` fields)
+- Exported `WheelScrollStartEventData` and `WheelScrollEndEventData` types
+- `wheel.placement` option (`'auto'` | `'top'` | `'bottom'`) for popover positioning in compact-wheel mode
+- `wheel.hideDisabled` option to completely remove disabled hours/minutes from the wheel list instead of dimming them (wheel and compact-wheel modes only)
+- `wheel.commitOnScroll` option to auto-commit time at the end of wheel scrolling without pressing OK
+- `wheel.ignoreOutsideClick` option to prevent the picker from closing when clicking outside its area (wheel and compact-wheel modes only)
+- `autoCommit` field on `ConfirmEventData` to distinguish auto-committed from manual confirmations
+- Clear button to reset time selection. Enabled by default via `ui.clearButton` option
+- `clearBehavior.clearInput` option to control whether clearing also empties the input field value
+- `labels.clear` option to customize the clear button text
+- `onClear` callback and `clear` event with `previousValue` payload
+- Clear button automatically disables when no time is selected and re-enables on interaction
+- Clock hands reset to neutral position (12:00) and confirm button disables after clearing
+- Screen reader announcement when time is cleared
+- Exported `ClearEventData` and `ClearBehaviorOptions` types
+- `WheelOptions` is now a top-level key (`wheel`) instead of being nested inside `ui.wheel`
+
+### Fixed
+
+- Race condition when rapidly clicking the input to open the timepicker - multiple clicks before the modal fully opened could cause the picker to remain invisible in the DOM or permanently block the input element
+- Range plugin landscape layout - From/To header tabs were mispositioned in landscape orientation. Fixed with proper absolute positioning within the grid layout
+- Timezone plugin landscape layout - timezone picker was broken in landscape orientation. Implemented CSS Grid layout that properly positions the header, timezone selector, and clock face side by side
+- AM/PM border color in landscape mode - hardcoded black border replaced with theme-aware `var(--tp-border)` variable
+- Compact-wheel popover viewport detection - popover did not flip from bottom to top early enough near viewport edge. Added 16px safety threshold, switched from `window.innerHeight` to `document.documentElement.clientHeight` for accurate visible viewport measurement, and improved fallback to prefer the side with more available space
+- `PluginFactory` type now correctly accepts `CoreState` and `EventEmitter` parameters instead of using `any` or `never` workarounds. Removed internal `PluginInput` interface and unsafe type assertions from the plugin registry
+
+---
+
 ## [4.1.7] - 2026-03-08
 
 ### Fixed

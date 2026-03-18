@@ -92,3 +92,18 @@
   opacity: var(--tp-opacity-disabled);
   pointer-events: none;
 }
+
+@media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+  .tp-ui-range-mode .tp-ui-range-header.expanded {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 0;
+    padding: var(--tp-spacing-sm) var(--tp-spacing-md) 0;
+    z-index: 1;
+    box-sizing: border-box;
+    justify-content: flex-start;
+  }
+}

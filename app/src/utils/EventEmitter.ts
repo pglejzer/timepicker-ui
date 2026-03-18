@@ -17,7 +17,10 @@ import type {
   RangeMinuteCommitEventData,
   RangeGetDisabledTimeEventData,
   RangeUpdateDisabledEventData,
+  WheelScrollStartEventData,
+  WheelScrollEndEventData,
   ErrorEventData,
+  ClearEventData,
 } from '../types/types';
 
 type EventHandler<T = unknown> = (data: T) => void;
@@ -26,6 +29,7 @@ export interface TimepickerEventMap {
   open: OpenEventData;
   cancel: CancelEventData;
   confirm: ConfirmEventData;
+  clear: ClearEventData;
   show: ShowEventData;
   hide: HideEventData;
   update: UpdateEventData;
@@ -41,6 +45,8 @@ export interface TimepickerEventMap {
   'range:minute:commit': RangeMinuteCommitEventData;
   'range:get-disabled-time': RangeGetDisabledTimeEventData;
   'range:update-disabled': RangeUpdateDisabledEventData;
+  'wheel:scroll:start': WheelScrollStartEventData;
+  'wheel:scroll:end': WheelScrollEndEventData;
   'animation:clock': Record<string, never>;
   'animation:start': Record<string, never>;
   'animation:end': Record<string, never>;

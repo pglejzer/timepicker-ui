@@ -17,6 +17,7 @@ import {
   Paintbrush,
   Languages,
   Timer,
+  Disc3,
 } from "lucide-react";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
 
@@ -70,6 +71,27 @@ const picker = new TimepickerUI(input, {
       }}
       plugins={["range"]}
       inputPlaceholder="Select time range"
+      showCode={false}
+    />
+  );
+}
+
+function WheelExample() {
+  return (
+    <TimepickerExample
+      code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
+
+PluginRegistry.register(WheelPlugin);
+
+const picker = new TimepickerUI(input, {
+  ui: { mode: 'wheel' },
+});`}
+      options={{
+        ui: { mode: "wheel" },
+      }}
+      plugins={["wheel"]}
+      inputPlaceholder="Select time"
       showCode={false}
     />
   );
@@ -209,8 +231,8 @@ export default function Home() {
             >
               <Sparkles className="h-4 w-4 flex-shrink-0" />
               <span>
-                <span className="font-medium">New:</span> Version 4.1.1 with
-                Range Plugin and improved input validation!
+                <span className="font-medium">New:</span> Version 4.2.0 — Wheel
+                Plugin, Compact-Wheel, Clear Button and more!
               </span>
             </Link>
           </div>
@@ -260,7 +282,7 @@ export default function Home() {
               Try the timepicker right here with different configurations
             </p>
           </div>
-          <div className="mx-auto max-w-6xl grid gap-8 lg:grid-cols-3">
+          <div className="mx-auto max-w-6xl grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-xl border border-border bg-card p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 rounded-lg bg-primary/10">
@@ -311,6 +333,26 @@ export default function Home() {
                 </div>
               </div>
               <RangeExample />
+            </div>
+
+            <div className="rounded-xl border border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-transparent p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 rounded-lg bg-amber-500/10">
+                  <Disc3 className="h-5 w-5 text-amber-500" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground flex items-center gap-2">
+                    Wheel Plugin
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                      NEW
+                    </span>
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Scroll-spinner interface
+                  </p>
+                </div>
+              </div>
+              <WheelExample />
             </div>
           </div>
           <div className="mt-12 text-center">

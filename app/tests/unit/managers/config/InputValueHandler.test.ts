@@ -232,6 +232,110 @@ describe('InputValueHandler', () => {
     });
   });
 
+  describe('getInputValueOnOpenAndSet() 12h period inference', () => {
+    it('should default period to AM when input has no AM/PM suffix in 12h mode', () => {
+      mockInput.value = '10:55';
+      const hourInput = document.createElement('input') as HTMLInputElement;
+      const minutesInput = document.createElement('input') as HTMLInputElement;
+      const modal = document.createElement('div');
+      const amElement = document.createElement('div');
+      amElement.setAttribute('data-type', 'AM');
+      const pmElement = document.createElement('div');
+      pmElement.setAttribute('data-type', 'PM');
+      modal.appendChild(amElement);
+      modal.appendChild(pmElement);
+
+      jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
+      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutesInput);
+      jest.spyOn(coreState, 'getActiveTypeMode').mockReturnValue(null);
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(coreState, 'getAM').mockReturnValue(null);
+
+      handler.getInputValueOnOpenAndSet();
+
+      expect(hourInput.value).toBe('10');
+      expect(minutesInput.value).toBe('55');
+      expect(amElement.classList.contains('active')).toBe(true);
+      expect(pmElement.classList.contains('active')).toBe(false);
+    });
+
+    it('should keep PM when input explicitly has PM suffix', () => {
+      mockInput.value = '3:20 PM';
+      const hourInput = document.createElement('input') as HTMLInputElement;
+      const minutesInput = document.createElement('input') as HTMLInputElement;
+      const modal = document.createElement('div');
+      const amElement = document.createElement('div');
+      amElement.setAttribute('data-type', 'AM');
+      const pmElement = document.createElement('div');
+      pmElement.setAttribute('data-type', 'PM');
+      modal.appendChild(amElement);
+      modal.appendChild(pmElement);
+
+      jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
+      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutesInput);
+      jest.spyOn(coreState, 'getActiveTypeMode').mockReturnValue(null);
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(coreState, 'getAM').mockReturnValue(null);
+
+      handler.getInputValueOnOpenAndSet();
+
+      expect(hourInput.value).toBe('03');
+      expect(minutesInput.value).toBe('20');
+      expect(pmElement.classList.contains('active')).toBe(true);
+      expect(amElement.classList.contains('active')).toBe(false);
+    });
+
+    it('should emit open event with inferred period when input lacks AM/PM', () => {
+      mockInput.value = '7:45';
+      const emitSpy = jest.spyOn(emitter, 'emit');
+      const hourInput = document.createElement('input') as HTMLInputElement;
+      const minutesInput = document.createElement('input') as HTMLInputElement;
+      const modal = document.createElement('div');
+      const amElement = document.createElement('div');
+      amElement.setAttribute('data-type', 'AM');
+      modal.appendChild(amElement);
+
+      jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
+      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutesInput);
+      jest.spyOn(coreState, 'getActiveTypeMode').mockReturnValue(null);
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(coreState, 'getAM').mockReturnValue(null);
+
+      handler.getInputValueOnOpenAndSet();
+
+      expect(emitSpy).toHaveBeenCalledWith('open', expect.any(Object));
+    });
+
+    it('should not infer period in 24h mode when input lacks AM/PM', () => {
+      const options24h = {
+        ...DEFAULT_OPTIONS,
+        clock: { ...DEFAULT_OPTIONS.clock, type: '24h' as const },
+      };
+      const core24h = new CoreState(mockElement, options24h, 'test-24h-period');
+      const handler24h = new InputValueHandler(core24h, emitter);
+
+      mockInput.value = '14:30';
+      const hourInput = document.createElement('input') as HTMLInputElement;
+      const minutesInput = document.createElement('input') as HTMLInputElement;
+      const modal = document.createElement('div');
+
+      jest.spyOn(core24h, 'getHour').mockReturnValue(hourInput);
+      jest.spyOn(core24h, 'getMinutes').mockReturnValue(minutesInput);
+      jest.spyOn(core24h, 'getActiveTypeMode').mockReturnValue(null);
+      jest.spyOn(core24h, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(core24h, 'getAM').mockReturnValue(null);
+
+      handler24h.getInputValueOnOpenAndSet();
+
+      expect(hourInput.value).toBe('14');
+      expect(minutesInput.value).toBe('30');
+      const activatedElements = modal.querySelectorAll('.active');
+      expect(activatedElements.length).toBe(0);
+
+      handler24h.destroy();
+    });
+  });
+
   describe('getInputValue', () => {
     it('should return input value object for 12h format', () => {
       mockInput.value = '10:45 PM';
@@ -256,4 +360,3 @@ describe('InputValueHandler', () => {
     });
   });
 });
-

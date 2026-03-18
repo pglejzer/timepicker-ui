@@ -1,9 +1,3 @@
-/**
- * Default options for Timepicker UI v4.0.0
- *
- * Uses grouped structure for better organization and clarity.
- */
-
 import type { TimepickerOptions } from '../../types/options';
 
 export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
@@ -17,6 +11,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
   },
 
   ui: {
+    mode: 'clock',
     theme: 'basic',
     animation: true,
     backdrop: true,
@@ -29,6 +24,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     iconTemplate: '',
     iconTemplateMobile: '',
     inline: undefined,
+    clearButton: false,
   },
 
   labels: {
@@ -40,6 +36,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     mobileTime: 'Enter Time',
     mobileHour: 'Hour',
     mobileMinute: 'Minute',
+    clear: 'Clear',
   },
 
   behavior: {
@@ -63,6 +60,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     onRangeConfirm: undefined,
     onRangeSwitch: undefined,
     onRangeValidation: undefined,
+    onClear: undefined,
   },
 
   timezone: {
@@ -79,37 +77,70 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     fromLabel: 'From',
     toLabel: 'To',
   },
+
+  wheel: {
+    placement: undefined,
+    hideFooter: undefined,
+    commitOnScroll: undefined,
+    hideDisabled: undefined,
+    ignoreOutsideClick: undefined,
+  },
+
+  clearBehavior: {
+    clearInput: true,
+  },
 };
 
 export function mergeOptions(userOptions: TimepickerOptions = {}): Required<TimepickerOptions> {
-  return {
+  const merged: Required<TimepickerOptions> = {
     clock: {
       ...DEFAULT_OPTIONS.clock,
-      ...(userOptions.clock || {}),
+      ...userOptions.clock,
     },
     ui: {
       ...DEFAULT_OPTIONS.ui,
-      ...(userOptions.ui || {}),
+      ...userOptions.ui,
     },
     labels: {
       ...DEFAULT_OPTIONS.labels,
-      ...(userOptions.labels || {}),
+      ...userOptions.labels,
     },
     behavior: {
       ...DEFAULT_OPTIONS.behavior,
-      ...(userOptions.behavior || {}),
+      ...userOptions.behavior,
     },
     callbacks: {
       ...DEFAULT_OPTIONS.callbacks,
-      ...(userOptions.callbacks || {}),
+      ...userOptions.callbacks,
     },
     timezone: {
       ...DEFAULT_OPTIONS.timezone,
-      ...(userOptions.timezone || {}),
+      ...userOptions.timezone,
     },
     range: {
       ...DEFAULT_OPTIONS.range,
-      ...(userOptions.range || {}),
+      ...userOptions.range,
+    },
+    wheel: {
+      ...DEFAULT_OPTIONS.wheel,
+      ...userOptions.wheel,
+    },
+    clearBehavior: {
+      ...DEFAULT_OPTIONS.clearBehavior,
+      ...userOptions.clearBehavior,
     },
   };
+
+  const mergedMode = merged.ui.mode;
+  if (mergedMode === 'wheel' || mergedMode === 'compact-wheel') {
+    merged.wheel = {
+      placement: mergedMode === 'compact-wheel' ? 'auto' : undefined,
+      hideFooter: undefined,
+      commitOnScroll: undefined,
+      ignoreOutsideClick: undefined,
+      ...merged.wheel,
+    };
+  }
+
+  return merged;
 }

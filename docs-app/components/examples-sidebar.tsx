@@ -53,6 +53,12 @@ const navigation: NavigationSection[] = [
       { title: "Increment Steps", href: "/examples/features/increment" },
       { title: "Focus Trap", href: "/examples/features/focus-trap" },
       { title: "Switch Icon", href: "/examples/features/switch-icon" },
+      {
+        title: "Smooth Hour Snap",
+        href: "/examples/features/smooth-hour-snap",
+      },
+      { title: "Wheel Mode", href: "/examples/features/wheel-mode" },
+      { title: "Clear Button", href: "/examples/features/clear-button" },
     ],
   },
   {

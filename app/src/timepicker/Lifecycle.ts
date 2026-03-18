@@ -1,11 +1,15 @@
 import type { CoreState } from './CoreState';
 import type { Managers } from './Managers';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
+import { PluginRegistry } from '../core/PluginRegistry';
 import { initMd3Ripple } from '../utils/ripple';
 import { debounce } from '../utils/debounce';
 import { allEvents } from '../utils/variables';
 import { isDocument, isNode } from '../utils/node';
 import { TIMINGS } from '../constants/timings';
+import type WheelManager from '../managers/plugins/wheel/WheelManager';
+
+const THEME_CLASSES = ['basic', 'crane-straight', 'crane', 'm2', 'm3-green'] as const;
 
 type TypeFunction = () => void;
 
@@ -15,6 +19,7 @@ export class Lifecycle {
   private emitter: EventEmitter<TimepickerEventMap>;
   private eventsClickMobileHandler: EventListenerOrEventListenerObject = () => {};
   private mutliEventsMoveHandler: EventListenerOrEventListenerObject = () => {};
+  private unmountTimeouts: ReturnType<typeof setTimeout>[] = [];
 
   constructor(core: CoreState, managers: Managers, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -29,7 +34,7 @@ export class Lifecycle {
     try {
       this.managers.config.updateInputValueWithCurrentTimeOnStart();
       this.managers.validation.checkDisabledValuesOnStart();
-    } catch (error) {
+    } catch {
       this.core.setIsDestroyed(true);
       return;
     }
@@ -92,10 +97,15 @@ export class Lifecycle {
     if (callbacks.onRangeValidation) {
       this.emitter.on('range:validation', callbacks.onRangeValidation);
     }
+
+    if (callbacks.onClear) {
+      this.emitter.on('clear', callbacks.onClear);
+    }
   }
 
   mount(): void {
     if (this.core.isDestroyed) return;
+    if (this.core.isOpen) return;
 
     if (!this.core.isInitialized) {
       this.init();
@@ -106,46 +116,58 @@ export class Lifecycle {
 
   unmount(callback?: TypeFunction): void {
     const debouncedUnmount = debounce((...args: unknown[]): void => {
-      if (args.length > 2 || !this.core.getModalElement()) return;
+      if (args.length > 2) return;
 
       const [update] = args.filter((e) => typeof e === 'boolean') as boolean[];
       const [cb] = args.filter((e) => typeof e === 'function') as TypeFunction[];
 
       this.core.setIsMobileView(!!this.core.options.ui.mobile);
 
-      if (update) {
+      const modal = this.core.getModalElement();
+
+      if (update && modal) {
         const okButton = this.core.getOkButton();
         okButton?.click();
       }
 
       this.core.setIsTouchMouseMove(false);
+      this.core.setIsOpen(false);
 
       this.removeEventListeners();
 
-      this.managers.animation.removeAnimationToClose();
+      if (this.isPopoverMode()) {
+        const wheel = this.managers.getPlugin<WheelManager>('wheel');
+        wheel?.detachPopover();
+      }
+
+      if (modal) {
+        this.managers.animation.removeAnimationToClose();
+      }
 
       const openElements = this.core.getOpenElement();
       openElements.forEach((openEl) => openEl?.classList.remove('disabled'));
 
-      setTimeout(() => {
+      const scrollbarTimeout = setTimeout(() => {
         if (isDocument()) {
           document.body.style.overflowY = '';
           document.body.style.paddingRight = '';
         }
       }, TIMINGS.SCROLLBAR_RESTORE);
+      this.unmountTimeouts.push(scrollbarTimeout);
 
-      setTimeout(() => {
+      const modalRemoveTimeout = setTimeout(() => {
         const input = this.core.getInput();
         if (this.core.options.behavior.focusInputAfterClose) {
           input?.focus();
         }
 
-        const modal = this.core.getModalElement();
-        if (modal === null) return;
-
-        modal.remove();
+        const currentModal = this.core.getModalElement();
+        if (currentModal) {
+          currentModal.remove();
+        }
         this.core.setIsModalRemove(true);
       }, TIMINGS.MODAL_REMOVE);
+      this.unmountTimeouts.push(modalRemoveTimeout);
 
       if (cb) cb();
     }, this.core.options.behavior.delayHandler || TIMINGS.DEFAULT_DELAY);
@@ -159,6 +181,8 @@ export class Lifecycle {
 
   destroy(options?: { keepInputValue?: boolean; callback?: TypeFunction } | TypeFunction): void {
     if (this.core.isDestroyed) return;
+
+    this.clearUnmountTimeouts();
 
     const config = typeof options === 'function' ? { callback: options } : options || {};
     const { keepInputValue = false, callback } = config;
@@ -175,7 +199,7 @@ export class Lifecycle {
     openElements?.forEach((el) => {
       if (el) {
         el.classList.remove('disabled', 'active', 'tp-ui-open-element');
-        el.classList.remove('basic', 'crane-straight', 'crane', 'm2', 'm3-green');
+        el.classList.remove(...THEME_CLASSES);
       }
     });
 
@@ -192,7 +216,7 @@ export class Lifecycle {
 
     const element = this.core.element;
     if (element) {
-      element.classList.remove('basic', 'crane-straight', 'crane', 'm2', 'm3-green');
+      element.classList.remove(...THEME_CLASSES);
       element.classList.remove('error', 'active', 'disabled');
       element.removeAttribute('data-owner-id');
       element.removeAttribute('data-open');
@@ -224,21 +248,60 @@ export class Lifecycle {
     if (this.core.isDestroyed) return;
     if (!this.core.isModalRemove) return;
 
-    this.managers.validation.setErrorHandler();
-    this.managers.validation.removeErrorHandler();
+    this.clearUnmountTimeouts();
+    this.core.setIsOpen(true);
+    this.core.setIsModalRemove(false);
 
-    if (!this.core.options.ui.inline?.enabled) {
-      const openElements = this.core.getOpenElement();
-      const input = this.core.getInput();
-      openElements.forEach((openEl) => openEl?.classList.add('disabled'));
-      input?.blur();
+    this.setupValidation();
+    this.disableOpenElements();
+    this.setupModal();
+    this.applyExpandedState();
+
+    this.managers.modal.setFlexEndToFooterIfNoKeyboardIcon();
+    this.applyThemeDeferred();
+    this.managers.animation.setAnimationToOpen();
+    this.managers.config.getInputValueOnOpenAndSet();
+
+    const isWheelMode = this.resolveWheelMode();
+    this.emitMissingPluginErrors();
+    this.initClockOrWheel(isWheelMode);
+    this.initOptionalPlugins(isWheelMode);
+    this.bindEventHandlers(isWheelMode);
+    this.finalizeModal(isWheelMode);
+
+    if (this.isPopoverMode()) {
+      const wheel = this.managers.getPlugin<WheelManager>('wheel');
+      wheel?.attachPopover();
     }
 
+    this.managers.modal.setShowClassToBackdrop();
+  }
+
+  private setupValidation(): void {
+    this.managers.validation.setErrorHandler();
+    this.managers.validation.removeErrorHandler();
+  }
+
+  private disableOpenElements(): void {
+    if (!this.core.options.ui.inline?.enabled) {
+      const openElements = this.core.getOpenElement();
+      openElements.forEach((openEl) => openEl?.classList.add('disabled'));
+
+      if (!this.isPopoverMode()) {
+        const input = this.core.getInput();
+        input?.blur();
+      }
+    }
+  }
+
+  private setupModal(): void {
     this.managers.modal.setScrollbarOrNot();
     this.managers.modal.setModalTemplate();
     this.managers.modal.setNormalizeClass();
     this.managers.modal.removeBackdrop();
+  }
 
+  private applyExpandedState(): void {
     if (!this.core.isMobileView) {
       const modal = this.core.getModalElement();
       const clockWrapper = modal?.querySelector('.tp-ui-mobile-clock-wrapper');
@@ -259,9 +322,9 @@ export class Lifecycle {
     } else {
       this.managers.config.updateClockFaceAccessibility(true);
     }
+  }
 
-    this.managers.modal.setFlexEndToFooterIfNoKeyboardIcon();
-
+  private applyThemeDeferred(): void {
     setTimeout(() => {
       this.managers.theme.setTheme();
 
@@ -272,35 +335,85 @@ export class Lifecycle {
         }
       }
     }, 0);
+  }
 
-    this.managers.animation.setAnimationToOpen();
-    this.managers.config.getInputValueOnOpenAndSet();
+  private isCompactWheelMode(): boolean {
+    return this.core.options.ui.mode === 'compact-wheel';
+  }
 
-    this.managers.clock.initializeClockSystem();
-    this.managers.clock.setOnStartCSSClassesIfClockType24h();
-    this.managers.clock.setClassActiveToHourOnOpen();
+  private isPopoverMode(): boolean {
+    return this.isCompactWheelMode() && !!this.core.options.wheel?.placement;
+  }
 
+  private resolveWheelMode(): boolean {
+    const mode = this.core.options.ui.mode;
+    return (mode === 'wheel' || mode === 'compact-wheel') && PluginRegistry.has('wheel');
+  }
+
+  private emitMissingPluginErrors(): void {
+    const mode = this.core.options.ui.mode;
+    if ((mode === 'wheel' || mode === 'compact-wheel') && !PluginRegistry.has('wheel')) {
+      this.emitter.emit('error', {
+        error: 'WheelPlugin is not registered. Import and register it: PluginRegistry.register(WheelPlugin)',
+      });
+    }
+
+    if (this.core.options.range?.enabled && !PluginRegistry.has('range')) {
+      this.emitter.emit('error', {
+        error: 'RangePlugin is not registered. Import and register it: PluginRegistry.register(RangePlugin)',
+      });
+    }
+
+    if (this.core.options.timezone?.enabled && !PluginRegistry.has('timezone')) {
+      this.emitter.emit('error', {
+        error:
+          'TimezonePlugin is not registered. Import and register it: PluginRegistry.register(TimezonePlugin)',
+      });
+    }
+  }
+
+  private initClockOrWheel(isWheelMode: boolean): void {
+    if (isWheelMode) {
+      const wheel = this.managers.getPlugin('wheel');
+      if (wheel) {
+        wheel.init();
+      }
+    } else {
+      this.managers.clock.initializeClockSystem();
+      this.managers.clock.setOnStartCSSClassesIfClockType24h();
+      this.managers.clock.setClassActiveToHourOnOpen();
+    }
+  }
+
+  private initOptionalPlugins(isWheelMode: boolean): void {
     const timezone = this.managers.getPlugin('timezone');
     if (timezone) {
       timezone.init();
     }
 
     const range = this.managers.getPlugin('range');
-    if (range) {
+    if (range && !isWheelMode) {
       range.init();
     }
+  }
 
+  private bindEventHandlers(isWheelMode: boolean): void {
     this.managers.events.handleCancelButton();
     this.managers.events.handleOkButton();
-    this.managers.events.handleHourEvents();
-    this.managers.events.handleMinutesEvents();
+    this.managers.clearButton.init();
+
+    if (!isWheelMode) {
+      this.managers.events.handleHourEvents();
+      this.managers.events.handleMinutesEvents();
+    }
+
     this.managers.events.handleKeyboardInput();
 
-    if (this.core.options.ui.enableSwitchIcon) {
+    if (this.core.options.ui.enableSwitchIcon && !isWheelMode) {
       this.managers.events.handleSwitchViewButton();
     }
 
-    if (this.core.options.clock.type !== '24h') {
+    if (this.core.options.clock.type !== '24h' && !this.isCompactWheelMode()) {
       this.managers.events.handleAmClick();
       this.managers.events.handlePmClick();
     }
@@ -311,24 +424,40 @@ export class Lifecycle {
 
     if (!this.core.options.ui.inline?.enabled) {
       this.managers.events.handleEscClick();
-      this.managers.events.handleBackdropClick();
-    }
 
+      if (!this.isPopoverMode()) {
+        const isWheelWithPersist =
+          (this.core.options.ui.mode === 'wheel' || this.core.options.ui.mode === 'compact-wheel') &&
+          this.core.options.wheel?.ignoreOutsideClick;
+
+        if (!isWheelWithPersist) {
+          this.managers.events.handleBackdropClick();
+        }
+      }
+    }
+  }
+
+  private finalizeModal(isWheelMode: boolean): void {
     const modal = this.core.getModalElement();
     if (modal) {
       initMd3Ripple(modal);
     }
 
-    const clockFace = this.core.getClockFace();
-    if (clockFace && typeof requestAnimationFrame !== 'undefined') {
-      requestAnimationFrame(() => {
+    if (!isWheelMode) {
+      const clockFace = this.core.getClockFace();
+      if (clockFace && typeof requestAnimationFrame !== 'undefined') {
         requestAnimationFrame(() => {
-          clockFace?.classList.add('scale-in');
+          requestAnimationFrame(() => {
+            clockFace?.classList.add('scale-in');
+          });
         });
-      });
+      }
     }
+  }
 
-    this.managers.modal.setShowClassToBackdrop();
+  private clearUnmountTimeouts(): void {
+    this.unmountTimeouts.forEach(clearTimeout);
+    this.unmountTimeouts = [];
   }
 
   private removeEventListeners(): void {

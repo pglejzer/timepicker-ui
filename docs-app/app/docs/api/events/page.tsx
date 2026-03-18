@@ -103,6 +103,32 @@ const availableEvents = [
   console.log('Current values:', data.currentHour, data.currentMin);
 });`,
   },
+  {
+    name: "clear",
+    description: "Triggered when user clicks the clear button.",
+    code: `picker.on('clear', (data) => {
+  console.log('Time cleared. Previous value:', data.previousValue);
+});`,
+  },
+  {
+    name: "wheel:scroll:start",
+    description:
+      "Triggered when a wheel column starts scrolling (wheel mode only).",
+    code: `picker.on('wheel:scroll:start', (data) => {
+  console.log('Scroll started on column:', data.column);
+  // data.column: 'hours' | 'minutes' | 'ampm'
+});`,
+  },
+  {
+    name: "wheel:scroll:end",
+    description:
+      "Triggered when a wheel column finishes scrolling and snaps to a value (wheel mode only).",
+    code: `picker.on('wheel:scroll:end', (data) => {
+  console.log('Column:', data.column, 'snapped to:', data.value);
+  console.log('Previous value:', data.previousValue);
+  // data.column: 'hours' | 'minutes' | 'ampm'
+});`,
+  },
 ];
 
 const callbacks = [
@@ -196,6 +222,17 @@ const callbacks = [
   }
 });`,
   },
+  {
+    name: "onClear",
+    description: "Triggered when user clicks the clear button.",
+    code: `new TimepickerUI(input, {
+  callbacks: {
+    onClear: (data) => {
+      console.log('Cleared:', data.previousValue);
+    }
+  }
+});`,
+  },
 ];
 
 export default function EventsPage() {
@@ -230,7 +267,8 @@ export default function EventsPage() {
 
       <Section icon={Bell} title="Available Events">
         <p className="text-muted-foreground mb-6">
-          All events you can subscribe to:
+          All events you can subscribe to. These events work in both{" "}
+          <strong>clock</strong> (default) and <strong>wheel</strong> mode.
         </p>
         <div className="space-y-8">
           {availableEvents.map((event) => (
