@@ -35,7 +35,6 @@ const navigation = [
       { title: "Clear Button", href: "/docs/features/clear-button" },
       { title: "Validation", href: "/docs/features/validation" },
       { title: "Plugins", href: "/docs/features/plugins" },
-      { title: "Wheel Mode", href: "/docs/features/wheel-mode" },
     ],
   },
   {
