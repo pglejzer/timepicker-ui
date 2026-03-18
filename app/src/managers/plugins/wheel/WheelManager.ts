@@ -21,7 +21,7 @@ export default class WheelManager {
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
     this.emitter = emitter;
-    this.renderer = new WheelRenderer(core, emitter);
+    this.renderer = new WheelRenderer(core);
     this.dragHandler = new WheelDragHandler(this.renderer);
     this.scrollHandler = new WheelScrollHandler(this.renderer, core);
     this.scrollHandler.setDragHandler(this.dragHandler);
