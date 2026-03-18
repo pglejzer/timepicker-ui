@@ -39,8 +39,8 @@ export default function WhatsNewPage() {
         className="mb-8"
       >
         <p className="mb-3">
-          <strong>March 17, 2026</strong> - Wheel mode, compact-wheel, clear
-          button, race condition fix, and more
+          <strong>March 18, 2026</strong> - Wheel mode, compact-wheel, clear
+          button, landscape fixes, and more
         </p>
         <p className="text-sm">What&apos;s new:</p>
         <ul className="mt-2 space-y-1 text-sm ml-4">
@@ -97,6 +97,18 @@ export default function WhatsNewPage() {
             <strong>Race condition fix</strong> - Rapidly clicking the input
             before the modal fully opened no longer causes the picker to get
             stuck invisible in the DOM or permanently blocks the input
+          </li>
+          <li>
+            <strong>Range landscape fix</strong> - From/To tabs now properly
+            positioned in landscape orientation
+          </li>
+          <li>
+            <strong>Timezone landscape fix</strong> - Timezone picker layout
+            corrected in landscape orientation with CSS Grid
+          </li>
+          <li>
+            <strong>AM/PM border theming</strong> - Landscape border color now
+            uses theme variable instead of hardcoded black
           </li>
         </ul>
         <Link

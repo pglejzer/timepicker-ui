@@ -43,7 +43,7 @@
     "build:webpack": "webpack",
     "build:rollup": "rollup -c",
     "build:tsup": "tsup",
-    "build:prod": "npm run build:tsup && npm run build:rollup",
+    "build:prod": "npm run eslint && npm run build:tsup && npm run build:rollup",
     "build:vercel": "webpack --config webpack.config.js",
     "start": "webpack serve --config webpack.config.js",
     "lint": "lint-staged && pretty-quick --staged",
@@ -60,10 +60,6 @@
   "author": "pglejzer",
   "license": "MIT",
   "homepage": "https://github.com/pglejzer/timepicker-ui#readme",
-  "eslintIgnore": [
-    "dist/*",
-    "/dist/*"
-  ],
   "devDependencies": {
     "@babel/core": "^7.28.0",
     "@babel/eslint-parser": "^7.28.0",
@@ -100,6 +96,7 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.3",
     "eslint-plugin-tree-shaking": "^1.12.2",
+    "eslint-webpack-plugin": "^5.0.3",
     "file-loader": "^6.2.0",
     "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.3",
@@ -136,6 +133,7 @@
     "ts-node": "^10.9.2",
     "tsup": "^8.5.0",
     "typescript": "5.8.3",
+    "typescript-eslint": "^8.57.1",
     "url-loader": "4.1.1",
     "webpack": "5.100.2",
     "webpack-cli": "6.0.1",

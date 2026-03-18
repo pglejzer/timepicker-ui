@@ -121,6 +121,7 @@ export const getModalTemplate = (options: Required<TimepickerOptions>, instanceI
   const isCompactWheel = pickerMode === 'compact-wheel' && PluginRegistry.has('wheel');
   const isWheelMode = (pickerMode === 'wheel' || isCompactWheel) && PluginRegistry.has('wheel');
   const isRangeMode = !!options.range?.enabled && PluginRegistry.has('range');
+  const isTzMode = !!options.timezone?.enabled && PluginRegistry.has('timezone');
 
   const config: TemplateConfig = {
     mobileClass,
@@ -138,7 +139,15 @@ export const getModalTemplate = (options: Required<TimepickerOptions>, instanceI
   const footer =
     isCompactWheel && options.wheel?.hideFooter === true ? '' : buildFooter(options, mobileClass);
 
-  const wheelClass = isCompactWheel ? ' tp-ui-compact-wheel-mode' : isWheelMode ? ' tp-ui-wheel-mode' : '';
+  let wheelClass;
 
-  return `<div class="tp-ui-modal normalize ${mobileClass}${isRangeMode ? ' tp-ui-range-mode' : ''}${wheelClass}" data-theme="${theme}" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-${instanceId}" data-owner-id="${instanceId}" style='transition:${animation ? 'opacity 0.15s linear' : 'none'}'><div class="tp-ui-wrapper ${mobileClass}" tabindex="0">${rangeSelector}${header}${timezoneSelector}${pickerBody}${footer}</div><div class="timepicker-announcer sr-only" role="status" aria-live="polite" aria-atomic="true"></div></div>`;
+  if (isCompactWheel) {
+    wheelClass = ' tp-ui-compact-wheel-mode';
+  } else if (isWheelMode) {
+    wheelClass = ' tp-ui-wheel-mode';
+  } else {
+    wheelClass = '';
+  }
+
+  return `<div class="tp-ui-modal normalize ${mobileClass}${isRangeMode ? ' tp-ui-range-mode' : ''}${isTzMode ? ' tp-ui-tz-mode' : ''}${wheelClass}" data-theme="${theme}" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-${instanceId}" data-owner-id="${instanceId}" style='transition:${animation ? 'opacity 0.15s linear' : 'none'}'><div class="tp-ui-wrapper ${mobileClass}" tabindex="0">${rangeSelector}${header}${timezoneSelector}${pickerBody}${footer}</div><div class="timepicker-announcer sr-only" role="status" aria-live="polite" aria-atomic="true"></div></div>`;
 };

@@ -7,4 +7,3 @@ export const WheelPlugin: Plugin = {
 };
 
 export { WheelManager };
-

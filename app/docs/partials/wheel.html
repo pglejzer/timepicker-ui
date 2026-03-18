@@ -2,14 +2,14 @@
   id="wheel-mode"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-sky-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-sky-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Wheel Mode</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       Scroll-spinner interface — replaces the analog clock face with touch-friendly wheels
     </p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">12h Wheel</label>
@@ -138,12 +138,12 @@ new TimepickerUI('#wheel-step', {
   id="wheel-themes"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Wheel - All Themes</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Wheel mode preview across all available themes</p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Basic</label>
@@ -265,15 +265,15 @@ wheelThemeList.forEach((theme) => {
   id="compact-wheel"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-violet-50 to-fuchsia-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-violet-50 to-fuchsia-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Compact Wheel Mode</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       Minimal wheel-only picker — no header, no clock face. AM/PM appears as a third scrollable column in 12h
       mode. Perfect for mobile and embedded UIs.
     </p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">12h Compact</label>
@@ -353,14 +353,14 @@ new TimepickerUI('#compact-wheel-step', {
   id="compact-wheel-themes"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Compact Wheel - All Themes</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       Compact wheel mode preview across all available themes
     </p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Basic</label>
@@ -482,14 +482,14 @@ compactThemeList.forEach((theme) => {
   id="commit-on-scroll"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Commit on Scroll</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       Auto-commit the selected time when the wheel stops scrolling — no OK button needed
     </p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
@@ -579,14 +579,14 @@ new TimepickerUI('#commit-on-scroll-24h', {
   id="ignore-outside-click"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Ignore Outside Click</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       Keep the picker open when clicking outside its area — the user must press OK or Cancel to close it
     </p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
@@ -679,15 +679,15 @@ new TimepickerUI('#ignore-outside-24h', {
   id="wheel-disabled"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-red-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-red-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Wheel + Disabled Time</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       All disabledTime options in wheel mode — hours, minutes, single interval, multiple intervals, 24h,
       hideDisabledOptions
     </p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
@@ -906,15 +906,15 @@ new TimepickerUI('#wheel-hide-disabled-interval', {
   id="compact-wheel-disabled"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-fuchsia-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-fuchsia-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Compact Wheel + Disabled Time</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       All disabledTime options in compact-wheel mode — hours, minutes, single interval, multiple intervals,
       24h, hideDisabledOptions
     </p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"

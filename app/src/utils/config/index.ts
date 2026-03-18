@@ -1,6 +1,6 @@
 import { isDocument } from '../node';
 
-/* eslint-disable no-else-return */
+ 
 export const getScrollbarWidth = (): number => {
   if (isDocument() === false) {
     return 0;

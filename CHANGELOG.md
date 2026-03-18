@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [4.2.0] - 2026-03-17
+## [4.2.0] - 2026-03-18
 
 ### Added
 
@@ -36,6 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Race condition when rapidly clicking the input to open the timepicker - multiple clicks before the modal fully opened could cause the picker to remain invisible in the DOM or permanently block the input element
+- Range plugin landscape layout - From/To header tabs were mispositioned in landscape orientation. Fixed with proper absolute positioning within the grid layout
+- Timezone plugin landscape layout - timezone picker was broken in landscape orientation. Implemented CSS Grid layout that properly positions the header, timezone selector, and clock face side by side
+- AM/PM border color in landscape mode - hardcoded black border replaced with theme-aware `var(--tp-border)` variable
+- Compact-wheel popover viewport detection - popover did not flip from bottom to top early enough near viewport edge. Added 16px safety threshold, switched from `window.innerHeight` to `document.documentElement.clientHeight` for accurate visible viewport measurement, and improved fallback to prefer the side with more available space
+- `PluginFactory` type now correctly accepts `CoreState` and `EventEmitter` parameters instead of using `any` or `never` workarounds. Removed internal `PluginInput` interface and unsafe type assertions from the plugin registry
 
 ---
 

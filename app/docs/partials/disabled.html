@@ -2,12 +2,12 @@
   id="disabled-times"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Disabled Times</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Block specific hours, minutes, or time intervals</p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
@@ -70,12 +70,12 @@ new TimepickerUI('#disabled-interval', {
   id="multiple-intervals"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Multiple Intervals</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Block specific hours, minutes, or time intervals</p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
@@ -125,19 +125,19 @@ disabledTime: { interval: ['04:33 - 12:12', '16:34 - 20:22'] }
   id="dynamic-updates"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Dynamic Updates</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Update disabledTime and other options dynamically</p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="flex flex-col items-center gap-4">
         <input
           id="dynamic-update-picker"
-          class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+          class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
           value="10:00 AM"
         />
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2 justify-center">
           <button
             id="update-morning-shift"
             class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
@@ -204,18 +204,18 @@ document.getElementById('clear-restrictions')
   id="dynamic-interval-updates"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-rose-50 to-red-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-rose-50 to-red-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Dynamic Interval Updates</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       Update disabled intervals dynamically for shift scheduling
     </p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="flex flex-col items-center gap-4">
         <input
           id="dynamic-interval-picker"
-          class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+          class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
           value="10:00"
         />
         <div class="flex gap-2 flex-wrap justify-center">
@@ -289,16 +289,16 @@ document.getElementById('clear-intervals')
   id="editable-mode"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Editable Mode</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Allow direct editing of time values in picker</p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="flex justify-center">
         <input
           id="editable-picker"
-          class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+          class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
           value="09:15 PM"
         />
       </div>
@@ -325,15 +325,15 @@ editablePicker.create();</code></pre>
   id="hide-disabled-options"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-rose-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-rose-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Hide Disabled Options</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       Completely remove disabled hours/minutes from the list instead of dimming them. Available in wheel and
       compact-wheel modes only.
     </p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
@@ -412,16 +412,16 @@ new TimepickerUI('#hide-disabled-popover', {
   id="smooth-hour-snap"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-8 py-6">
+  <div class="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Smooth Hour Snap</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Fluid hour dragging with smooth snapping animation</p>
   </div>
-  <div class="p-8">
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 mb-8">
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="flex justify-center">
         <input
           id="smooth-hour-snap-picker"
-          class="w-64 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+          class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
           value="10:30 PM"
         />
       </div>

@@ -16,7 +16,7 @@ export class HourEngine {
     return baseIndex === 0 ? 12 : baseIndex;
   }
 
-  static indexToValue(index: number, clockType: ClockType, amPm: AmPmType): string {
+  static indexToValue(index: number, clockType: ClockType): string {
     if (clockType === '24h') {
       return index.toString().padStart(2, '0');
     }
@@ -171,7 +171,6 @@ export class HourEngine {
     clockType: ClockType,
     amPm: AmPmType,
     disabledTime: DisabledTimeConfig | null,
-    isInnerCircle: boolean,
   ): number {
     const maxHour = clockType === '24h' ? 23 : 12;
 
@@ -183,7 +182,7 @@ export class HourEngine {
         if (testIndex < 0) testIndex += maxHour + 1;
         if (testIndex > maxHour) testIndex = testIndex % (maxHour + 1);
 
-        const value = this.indexToValue(testIndex, clockType, amPm);
+        const value = this.indexToValue(testIndex, clockType);
         if (!this.isDisabled(value, amPm, disabledTime)) {
           return testIndex;
         }

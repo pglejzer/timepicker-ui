@@ -55,7 +55,6 @@ export class KeyboardHandlers {
         e.preventDefault();
         const currentValue = parseInt(hour.value) || 0;
         const max = parseInt(hour.getAttribute('max') || '23');
-        const min = parseInt(hour.getAttribute('min') || '0');
         const is12h = this.core.options.clock.type === '12h';
 
         let newValue: number;

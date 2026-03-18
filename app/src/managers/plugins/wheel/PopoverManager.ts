@@ -6,6 +6,7 @@ const TP_POPOVER_GAP_PX = 4;
 const TP_POPOVER_MIN_WIDTH_PX = 260;
 const TP_POPOVER_MAX_WIDTH_PX = 328;
 const TP_POPOVER_EDGE_MARGIN_PX = 4;
+const TP_POPOVER_VIEWPORT_THRESHOLD_PX = 16;
 
 type PopoverPlacement = 'top' | 'bottom';
 
@@ -81,12 +82,14 @@ export default class PopoverManager {
     if (placement === 'top') return 'top';
     if (placement === 'bottom') return 'bottom';
 
-    const spaceBelow = window.innerHeight - inputRect.bottom;
+    const viewportHeight = document.documentElement.clientHeight;
+    const spaceBelow = viewportHeight - inputRect.bottom;
     const spaceAbove = inputRect.top;
+    const requiredSpace = pickerHeight + TP_POPOVER_GAP_PX + TP_POPOVER_VIEWPORT_THRESHOLD_PX;
 
-    if (spaceBelow >= pickerHeight + TP_POPOVER_GAP_PX) return 'bottom';
-    if (spaceAbove >= pickerHeight + TP_POPOVER_GAP_PX) return 'top';
-    return 'bottom';
+    if (spaceBelow >= requiredSpace) return 'bottom';
+    if (spaceAbove >= requiredSpace) return 'top';
+    return spaceBelow >= spaceAbove ? 'bottom' : 'top';
   }
 
   private computeTop(resolved: PopoverPlacement, inputRect: DOMRect, pickerHeight: number): number {
@@ -97,9 +100,10 @@ export default class PopoverManager {
   }
 
   private clampHorizontal(idealLeft: number, width: number): number {
+    const viewportWidth = document.documentElement.clientWidth;
     let left = idealLeft;
-    if (left + width > window.innerWidth) {
-      left = window.innerWidth - width - TP_POPOVER_EDGE_MARGIN_PX;
+    if (left + width > viewportWidth) {
+      left = viewportWidth - width - TP_POPOVER_EDGE_MARGIN_PX;
     }
     if (left < TP_POPOVER_EDGE_MARGIN_PX) {
       left = TP_POPOVER_EDGE_MARGIN_PX;

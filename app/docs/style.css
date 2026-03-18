@@ -9,3 +9,18 @@
 html {
   line-height: normal !important;
 }
+
+pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.docs-section-header {
+  padding: 1rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .docs-section-header {
+    padding: 1.5rem 2rem;
+  }
+}

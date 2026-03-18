@@ -29,15 +29,15 @@ export class ClockEngine {
     const isInner = input.clockType === '24h' && AngleEngine.isInnerCircle(distance, input.clockRadius);
 
     let index = HourEngine.angleToIndex(workingAngle, input.clockType, isInner);
-    const value = HourEngine.indexToValue(index, input.clockType, input.amPm);
+    const value = HourEngine.indexToValue(index, input.clockType);
 
     const isDisabled = HourEngine.isDisabled(value, input.amPm, input.disabledTime);
 
     if (isDisabled) {
-      index = HourEngine.findNearestValid(index, input.clockType, input.amPm, input.disabledTime, isInner);
+      index = HourEngine.findNearestValid(index, input.clockType, input.amPm, input.disabledTime);
     }
 
-    const finalValue = HourEngine.indexToValue(index, input.clockType, input.amPm);
+    const finalValue = HourEngine.indexToValue(index, input.clockType);
 
     let finalAngle: number;
     if (smoothSnap) {

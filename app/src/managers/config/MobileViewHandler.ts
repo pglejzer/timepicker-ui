@@ -87,7 +87,143 @@ export class MobileViewHandler {
   ): void {
     this.isAnimating = true;
 
-    this.switchView(selectTimeLabel, icon, hourInput, minuteInput, true);
+    if (typeof requestAnimationFrame !== 'undefined') {
+      const isLandscape =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(orientation: landscape) and (min-width: 320px) and (max-width: 825px)').matches;
+
+      requestAnimationFrame(() => {
+        if (isLandscape && wrapper instanceof HTMLElement) {
+          this.collapseLandscape(
+            wrapper,
+            mobileClockWrapper,
+            allElements,
+            icon,
+            selectTimeLabel,
+            hourInput,
+            minuteInput,
+            clockFace,
+            isOriginallyMobile,
+          );
+        } else {
+          this.collapsePortrait(
+            wrapper,
+            mobileClockWrapper,
+            allElements,
+            icon,
+            selectTimeLabel,
+            hourInput,
+            minuteInput,
+            clockFace,
+            isOriginallyMobile,
+          );
+        }
+      });
+    } else {
+      this.switchView(selectTimeLabel, icon, hourInput, minuteInput, true);
+      this.isAnimating = false;
+    }
+
+    icon?.setAttribute('aria-label', 'Show clock face');
+    icon?.setAttribute('aria-pressed', 'false');
+  }
+
+  private collapseLandscape(
+    wrapper: HTMLElement,
+    mobileClockWrapper: Element | null,
+    allElements: NodeListOf<Element>,
+    icon: HTMLElement | null,
+    selectTimeLabel: Element | null,
+    hourInput: HTMLInputElement | null,
+    minuteInput: HTMLInputElement | null,
+    clockFace: HTMLDivElement | null,
+    isOriginallyMobile: boolean,
+  ): void {
+    clockFace?.classList.remove('scale-in');
+
+    const modal = this.core.getModalElement();
+    const targetHeight = this.getMobileLandscapeHeight(modal);
+
+    wrapper.style.width = '328px';
+    wrapper.style.height = targetHeight;
+
+    if (mobileClockWrapper instanceof HTMLElement) {
+      mobileClockWrapper.style.height = '0';
+      mobileClockWrapper.style.opacity = '0';
+      mobileClockWrapper.style.transform = 'scale(0)';
+    }
+
+    setTimeout(() => {
+      this.applyMobileClasses(wrapper, mobileClockWrapper, allElements, selectTimeLabel, isOriginallyMobile);
+
+      wrapper.classList.add('mobile');
+      if (mobileClockWrapper) {
+        mobileClockWrapper.classList.add('mobile');
+      }
+
+      this.switchView(selectTimeLabel, icon, hourInput, minuteInput, true);
+
+      requestAnimationFrame(() => {
+        wrapper.style.width = '';
+        wrapper.style.height = '';
+
+        if (mobileClockWrapper instanceof HTMLElement) {
+          mobileClockWrapper.style.height = '';
+          mobileClockWrapper.style.opacity = '';
+          mobileClockWrapper.style.transform = '';
+        }
+
+        this.isAnimating = false;
+      });
+    }, TIMINGS.WRAPPER_TRANSITION);
+  }
+
+  private collapsePortrait(
+    wrapper: Element,
+    mobileClockWrapper: Element | null,
+    allElements: NodeListOf<Element>,
+    icon: HTMLElement | null,
+    selectTimeLabel: Element | null,
+    hourInput: HTMLInputElement | null,
+    minuteInput: HTMLInputElement | null,
+    clockFace: HTMLDivElement | null,
+    isOriginallyMobile: boolean,
+  ): void {
+    if (isOriginallyMobile) {
+      clockFace?.classList.remove('scale-in');
+    } else {
+      clockFace?.classList.add('scale-in');
+    }
+
+    mobileClockWrapper?.classList.remove('expanded');
+    if (isOriginallyMobile) {
+      mobileClockWrapper?.classList.add('mobile');
+    }
+
+    requestAnimationFrame(() => {
+      this.applyMobileClasses(wrapper, mobileClockWrapper, allElements, selectTimeLabel, isOriginallyMobile);
+      this.switchView(selectTimeLabel, icon, hourInput, minuteInput, true);
+
+      setTimeout(() => {
+        this.isAnimating = false;
+      }, TIMINGS.MOBILE_TOGGLE);
+    });
+  }
+
+  private applyMobileClasses(
+    wrapper: Element,
+    mobileClockWrapper: Element | null,
+    allElements: NodeListOf<Element>,
+    selectTimeLabel: Element | null,
+    isOriginallyMobile: boolean,
+  ): void {
+    wrapper.classList.remove('expanded');
+    mobileClockWrapper?.classList.remove('expanded');
+
+    if (isOriginallyMobile) {
+      wrapper.classList.add('mobile');
+      mobileClockWrapper?.classList.add('mobile');
+    }
 
     allElements.forEach((el) => {
       if (el !== mobileClockWrapper && el !== wrapper && el !== selectTimeLabel) {
@@ -104,34 +240,6 @@ export class MobileViewHandler {
         selectTimeLabel.classList.add('mobile');
       }
     }
-
-    if (typeof requestAnimationFrame !== 'undefined') {
-      requestAnimationFrame(() => {
-        mobileClockWrapper?.classList.remove('expanded');
-        if (isOriginallyMobile) {
-          mobileClockWrapper?.classList.add('mobile');
-        }
-        wrapper?.classList.remove('expanded');
-        if (isOriginallyMobile) {
-          wrapper?.classList.add('mobile');
-        }
-
-        if (isOriginallyMobile) {
-          clockFace?.classList.remove('scale-in');
-        } else {
-          clockFace?.classList.add('scale-in');
-        }
-
-        setTimeout(() => {
-          this.isAnimating = false;
-        }, TIMINGS.MOBILE_TOGGLE);
-      });
-    } else {
-      this.isAnimating = false;
-    }
-
-    icon?.setAttribute('aria-label', 'Show clock face');
-    icon?.setAttribute('aria-pressed', 'false');
   }
 
   private expandClockFace(
@@ -317,6 +425,16 @@ export class MobileViewHandler {
         tip.removeAttribute('aria-hidden');
       });
     }
+  }
+
+  private getMobileLandscapeHeight(modal: HTMLElement | null): string {
+    if (modal?.classList.contains('tp-ui-tz-mode')) {
+      return '326px';
+    }
+    if (modal?.classList.contains('tp-ui-range-mode')) {
+      return '287px';
+    }
+    return '258px';
   }
 
   destroy(): void {}

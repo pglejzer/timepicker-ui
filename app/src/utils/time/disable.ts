@@ -2,7 +2,7 @@ import { range, reverseRange, timeConversion, normalize24h, isOverlappingRangeAr
 import { getInputValue, handleValueAndCheck } from '../input';
 import type { TimepickerOptions } from '../../types/options';
 
-/* eslint-disable no-else-return */
+ 
 export const createDisabledTime = (options: Required<TimepickerOptions>) => {
   if (!options) return;
   const { disabledTime, type: clockType } = options.clock;

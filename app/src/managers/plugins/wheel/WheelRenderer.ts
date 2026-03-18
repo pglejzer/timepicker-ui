@@ -1,5 +1,4 @@
 import type { CoreState } from '../../../timepicker/CoreState';
-import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitter';
 import { isDocument } from '../../../utils/node';
 import { checkedDisabledValuesInterval } from '../../../utils/time/disable';
 import type { WheelColumnType } from './WheelTypes';
@@ -17,7 +16,7 @@ export class WheelRenderer {
   private cachedItems: Map<WheelColumnType, NodeListOf<HTMLDivElement>> = new Map();
   private removedItems: Map<WheelColumnType, HTMLDivElement[]> = new Map();
 
-  constructor(core: CoreState, _emitter: EventEmitter<TimepickerEventMap>) {
+  constructor(core: CoreState) {
     this.core = core;
   }
 

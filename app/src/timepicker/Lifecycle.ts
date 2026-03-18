@@ -34,7 +34,7 @@ export class Lifecycle {
     try {
       this.managers.config.updateInputValueWithCurrentTimeOnStart();
       this.managers.validation.checkDisabledValuesOnStart();
-    } catch (error) {
+    } catch {
       this.core.setIsDestroyed(true);
       return;
     }

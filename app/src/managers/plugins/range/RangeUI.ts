@@ -45,19 +45,19 @@ export class RangeUI {
     const fromValue = this.state.getFromValue();
     const toValue = this.state.getToValue();
 
-    const fromDisplay =
-      activePart === 'from' && previewValue
-        ? formatDisplayTime(previewValue)
-        : fromValue
-          ? formatDisplayTime(fromValue)
-          : '--:--';
+    let fromDisplay = '--:--';
+    if (activePart === 'from' && previewValue) {
+      fromDisplay = formatDisplayTime(previewValue);
+    } else if (fromValue) {
+      fromDisplay = formatDisplayTime(fromValue);
+    }
 
-    const toDisplay =
-      activePart === 'to' && previewValue
-        ? formatDisplayTime(previewValue)
-        : toValue
-          ? formatDisplayTime(toValue)
-          : '--:--';
+    let toDisplay = '--:--';
+    if (activePart === 'to' && previewValue) {
+      toDisplay = formatDisplayTime(previewValue);
+    } else if (toValue) {
+      toDisplay = formatDisplayTime(toValue);
+    }
 
     if (fromTimeEl) fromTimeEl.textContent = fromDisplay;
     if (toTimeEl) toTimeEl.textContent = toDisplay;

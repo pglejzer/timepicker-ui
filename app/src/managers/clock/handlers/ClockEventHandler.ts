@@ -91,4 +91,3 @@ export class ClockEventHandler {
     clockSystem.updateDisabledTime(mergedDisabled);
   }
 }
-

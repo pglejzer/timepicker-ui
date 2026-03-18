@@ -204,4 +204,3 @@ export default class TimezoneManager {
     clearTimezoneCache();
   }
 }
-

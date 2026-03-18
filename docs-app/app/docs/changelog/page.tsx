@@ -122,6 +122,31 @@ const CHANGELOG_420 = {
       description:
         "Rapidly clicking the input before the modal fully opened could cause the picker to remain invisible in the DOM or permanently block the input element",
     },
+    {
+      title: "Range plugin landscape layout",
+      description:
+        "From/To header tabs were mispositioned in landscape orientation. Fixed with proper absolute positioning within the grid layout",
+    },
+    {
+      title: "Timezone plugin landscape layout",
+      description:
+        "Timezone picker was broken in landscape orientation. Implemented CSS Grid layout that properly positions header, timezone selector, and clock face side by side",
+    },
+    {
+      title: "AM/PM border color in landscape",
+      description:
+        "Hardcoded black border replaced with theme-aware var(--tp-border) variable",
+    },
+    {
+      title: "Compact-wheel popover viewport detection",
+      description:
+        "Popover did not flip from bottom to top early enough near the viewport edge. Added safety threshold, switched to accurate visible viewport measurement, and improved fallback to prefer the side with more space",
+    },
+    {
+      title: "PluginFactory type safety",
+      description:
+        "PluginFactory type now correctly accepts CoreState and EventEmitter parameters instead of using any/never workarounds. Removed unsafe type assertions from the plugin registry",
+    },
   ],
 };
 
@@ -423,10 +448,10 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.2.0</strong> - Released March 17, 2026
+        <strong>v4.2.0</strong> - Released March 18, 2026
       </InfoBox>
 
-      <Section icon={History} title="Version 4.2.0 - March 17, 2026">
+      <Section icon={History} title="Version 4.2.0 - March 18, 2026">
         <div className="space-y-4">
           <ChangeSection
             icon={Sparkles}

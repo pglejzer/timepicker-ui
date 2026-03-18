@@ -45,7 +45,7 @@
       class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700"
     >
       <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center py-4">
+        <div class="flex flex-wrap justify-between items-center py-4 gap-2">
           <div class="flex items-center">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Timepicker-UI</h1>
             <span
@@ -108,8 +108,8 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <section class="text-center mb-16">
-        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+      <section class="text-center mb-8 sm:mb-16">
+        <h2 class="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
           Modern Time Picker Library
         </h2>
         <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
@@ -118,7 +118,7 @@
         </p>
       </section>
 
-      <div class="grid gap-8">
+      <div class="grid grid-cols-1 gap-8">
         <!-- Partials: basic & themes -->
         <%= require("./partials/basic-themes.html") %>
 
