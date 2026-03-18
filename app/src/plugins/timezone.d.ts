@@ -5,7 +5,7 @@ interface PluginManager {
 
 interface PluginDefinition {
   name: string;
-  factory: (core: never, emitter: never) => PluginManager;
+  factory: (core: any, emitter: any) => PluginManager;
   optionsExtender?: (options: Record<string, unknown>) => void;
 }
 
@@ -17,4 +17,3 @@ export declare class TimezoneManager implements PluginManager {
 }
 
 export declare const TimezonePlugin: PluginDefinition;
-

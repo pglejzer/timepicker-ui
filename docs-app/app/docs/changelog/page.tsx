@@ -59,6 +59,16 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_421 = {
+  fixed: [
+    {
+      title: "Plugin type declarations",
+      description:
+        "Plugin .d.ts files (range, timezone, wheel) used 'never' for factory parameters, causing PluginRegistry.register() to reject plugins in strict TypeScript projects",
+    },
+  ],
+};
+
 const CHANGELOG_420 = {
   added: [
     {
@@ -448,8 +458,19 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.2.0</strong> - Released March 18, 2026
+        <strong>v4.2.1</strong> - Released March 18, 2026
       </InfoBox>
+
+      <Section icon={Bug} title="Version 4.2.1 - March 18, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_421.fixed}
+          />
+        </div>
+      </Section>
 
       <Section icon={History} title="Version 4.2.0 - March 18, 2026">
         <div className="space-y-4">

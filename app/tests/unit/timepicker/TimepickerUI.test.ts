@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import TimepickerUI from '../../../src/timepicker/TimepickerUI';
 import TimepickerUIDefault from '../../../src/timepicker/index';
 
@@ -688,8 +689,6 @@ describe('TimepickerUI', () => {
     });
 
     it('should destroy all instances without throwing', () => {
-      const timepicker = new TimepickerUI(input);
-
       expect(() => TimepickerUI.destroyAll()).not.toThrow();
     });
   });

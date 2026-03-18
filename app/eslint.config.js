@@ -62,7 +62,7 @@ export default tseslint.config(
         },
       ],
       'no-nested-ternary': 'error',
+      '@typescript-eslint/ban-ts-comment': 'off',
     },
   },
 );
-

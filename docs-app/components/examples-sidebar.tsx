@@ -57,7 +57,6 @@ const navigation: NavigationSection[] = [
         title: "Smooth Hour Snap",
         href: "/examples/features/smooth-hour-snap",
       },
-      { title: "Wheel Mode", href: "/examples/features/wheel-mode" },
       { title: "Clear Button", href: "/examples/features/clear-button" },
     ],
   },
@@ -85,6 +84,7 @@ const navigation: NavigationSection[] = [
     links: [
       { title: "Range Mode", href: "/examples/plugins/range" },
       { title: "Timezone Selector", href: "/examples/plugins/timezone" },
+      { title: "Wheel Mode", href: "/examples/plugins/wheel" },
     ],
   },
 ];

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.2.1] - 2026-03-18
+
+### Fixed
+
+- Plugin type declarations (`range.d.ts`, `timezone.d.ts`, `wheel.d.ts`) used `never` for factory parameters, causing `PluginRegistry.register()` to reject plugins in strict TypeScript projects
+
+---
+
 ## [4.2.0] - 2026-03-18
 
 ### Added
