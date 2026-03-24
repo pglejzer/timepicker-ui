@@ -59,6 +59,16 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_422 = {
+  fixed: [
+    {
+      title: "WheelOptions not exported",
+      description:
+        "WheelOptions interface was defined but missing from the public API export. TypeScript consumers can now import it directly to type wheel/compact-wheel configuration objects",
+    },
+  ],
+};
+
 const CHANGELOG_421 = {
   fixed: [
     {
@@ -458,8 +468,19 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.2.1</strong> - Released March 18, 2026
+        <strong>v4.2.2</strong> - Released March 24, 2026
       </InfoBox>
+
+      <Section icon={Bug} title="Version 4.2.2 - March 24, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Wrench}
+            label="Fixed"
+            color="orange-500"
+            items={CHANGELOG_422.fixed}
+          />
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.2.1 - March 18, 2026">
         <div className="space-y-4">

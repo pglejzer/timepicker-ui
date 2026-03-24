@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.2.2] - 2026-03-24
+
+### Fixed
+
+- `WheelOptions` was not exported from the public API - wheel mode configuration type is now accessible for TypeScript consumers
+
+---
+
 ## [4.2.1] - 2026-03-18
 
 ### Fixed
