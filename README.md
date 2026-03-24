@@ -7,7 +7,7 @@ Modern time picker library built with TypeScript. Works with any framework or va
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://img.shields.io/npm/l/timepicker-ui)
 [![Coverage Status](https://coveralls.io/repos/github/pglejzer/timepicker-ui/badge.svg?branch=main)](https://coveralls.io/github/pglejzer/timepicker-ui?branch=main)
 [![Tests](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml/badge.svg)](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml)
-[![Socket Badge](https://badge.socket.dev/npm/package/timepicker-ui/4.2.0)](https://badge.socket.dev/npm/package/timepicker-ui/4.2.0)
+[![Socket Badge](https://badge.socket.dev/npm/package/timepicker-ui/4.2.2)](https://badge.socket.dev/npm/package/timepicker-ui/4.2.2)
 
 [Live Demo](https://timepicker-ui.vercel.app/) • [Documentation](https://timepicker-ui.vercel.app/docs) • [React Wrapper](https://github.com/pglejzer/timepicker-ui-react) • [Changelog](./CHANGELOG.md)
 
@@ -161,6 +161,7 @@ const picker = new TimepickerUI(input, {
   behavior: BehaviorOptions, // Behavior (focus, delays, ID)
   callbacks: CallbacksOptions, // Event handlers
   clearBehavior: ClearBehaviorOptions, // Clear button behavior
+  wheel: WheelOptions, // Wheel/compact-wheel mode configuration
 });
 ```
 
@@ -194,7 +195,7 @@ const picker = new TimepickerUI(input, {
 | `inline`              | object                              | `undefined` | Inline mode configuration                                          |
 | `clearButton`         | boolean                             | `false`     | Show clear button                                                  |
 | `mode`                | `clock` / `wheel` / `compact-wheel` | `clock`     | Picker mode - analog clock, scroll-spinner, or headerless wheel    |
-| `wheel`               | object                              | `undefined` | Wheel/compact-wheel config (placement, hideFooter, commitOnScroll) |
+| `wheel`               | `WheelOptions`                      | `undefined` | Wheel/compact-wheel config (placement, hideFooter, commitOnScroll) |
 
 ### Labels Options
 
@@ -224,6 +225,16 @@ const picker = new TimepickerUI(input, {
 | Property     | Type    | Default | Description                             |
 | ------------ | ------- | ------- | --------------------------------------- |
 | `clearInput` | boolean | `true`  | Whether clearing also empties the input |
+
+### Wheel Options
+
+| Property             | Type                      | Default | Description                                                          |
+| -------------------- | ------------------------- | ------- | -------------------------------------------------------------------- |
+| `placement`          | `auto` / `top` / `bottom` | `auto`  | Popover placement in compact-wheel mode                              |
+| `hideFooter`         | boolean                   | `false` | Hide OK/Cancel/Clear buttons — useful with `commitOnScroll`          |
+| `commitOnScroll`     | boolean                   | `false` | Auto-confirm time at end of scroll without pressing OK               |
+| `hideDisabled`       | boolean                   | `false` | Remove disabled values from list instead of dimming them             |
+| `ignoreOutsideClick` | boolean                   | `false` | Prevent picker from closing when clicking outside (wheel modes only) |
 
 ### Callbacks Options
 
