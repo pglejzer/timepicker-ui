@@ -8,7 +8,6 @@ import {
   Zap,
   Package,
   CheckCircle2,
-  AlertTriangle,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -34,13 +33,39 @@ export default function WhatsNewPage() {
       </div>
 
       <InfoBox
-        title="Version 4.2.0 Released!"
+        title="Version 4.3.0 Released!"
         variant="emerald"
         className="mb-8"
       >
         <p className="mb-3">
-          <strong>March 18, 2026</strong> - Wheel mode, compact-wheel, clear
-          button, landscape fixes, and more
+          <strong>March 26, 2026</strong> - Tree-shakeable plugin system,
+          smaller core bundle
+        </p>
+        <p className="text-sm">What&apos;s new:</p>
+        <ul className="mt-2 space-y-1 text-sm ml-4">
+          <li>
+            <strong>Tree-shakeable plugins</strong> - Unused plugins (wheel,
+            range, timezone) are completely excluded from the final bundle when
+            not imported
+          </li>
+          <li>
+            <strong>Plugin templateProvider hook</strong> - Plugins register
+            their own templates, eliminating static imports from core
+          </li>
+          <li>
+            <strong>Plugin clearHandler hook</strong> - Plugins provide custom
+            clear logic, decoupling core from plugin implementations
+          </li>
+          <li>
+            <strong>New exported types</strong> - <code>TemplateProvider</code>{" "}
+            and <code>ClearHandler</code> for plugin authors
+          </li>
+        </ul>
+      </InfoBox>
+
+      <InfoBox title="Version 4.2.0" variant="blue" className="mb-8">
+        <p className="mb-3">
+          <strong>March 18, 2026</strong> - Wheel mode, clear button, and more
         </p>
         <p className="text-sm">What&apos;s new:</p>
         <ul className="mt-2 space-y-1 text-sm ml-4">
@@ -50,14 +75,8 @@ export default function WhatsNewPage() {
             <code>ui.mode: &apos;wheel&apos;</code>
           </li>
           <li>
-            <strong>Compact-wheel mode</strong> - Headerless wheel picker
-            without the hour/minute inputs header. Enable via{" "}
-            <code>ui.mode: &apos;compact-wheel&apos;</code>
-          </li>
-          <li>
-            <strong>Popover placement</strong> - Use{" "}
-            <code>wheel.placement</code> to open compact-wheel as a popover
-            anchored to the input (<code>&apos;auto&apos;</code>,{" "}
+            <strong>Compact-wheel mode</strong> - Headerless wheel picker with
+            optional popover placement (<code>&apos;auto&apos;</code>,{" "}
             <code>&apos;top&apos;</code>, <code>&apos;bottom&apos;</code>)
           </li>
           <li>
