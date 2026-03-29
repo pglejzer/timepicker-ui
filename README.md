@@ -142,7 +142,7 @@ Docs: [Plugins overview](https://timepicker-ui.vercel.app/docs/features/plugins)
 import { TimepickerUI, PluginRegistry } from "timepicker-ui";
 import { RangePlugin } from "timepicker-ui/plugins/range";
 import { TimezonePlugin } from "timepicker-ui/plugins/timezone";
-import { WheelPlugin } from "timepicker-ui/plugins/timezone";
+import { WheelPlugin } from "timepicker-ui/plugins/wheel";
 
 // Register once at app startup
 PluginRegistry.register(RangePlugin);
