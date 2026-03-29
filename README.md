@@ -205,7 +205,7 @@ function TimePicker() {
 ## Performance
 
 - **Tree-shakeable** - unused plugins are fully excluded from the bundle
-- **Lightweight core** - ~63 KB ESM (minified)
+- **[Lightweight core](https://timepicker-ui.vercel.app/bundle-stats)** - with tree-shaking support
 - **Plugins loaded on demand** - range, timezone, wheel add size only when imported
 - **No runtime dependencies** - nothing extra to download or audit
 
