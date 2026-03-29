@@ -133,7 +133,7 @@ document.getElementById('clear-intervals')?.addEventListener('click', () => {
   });
 });
 
-// hideDisabledOptions — Wheel mode
+// hideDisabledOptions - Wheel mode
 const hideDisabledWheelPicker = new TimepickerUI('#hide-disabled-wheel', {
   clock: {
     type: '12h',
@@ -144,7 +144,7 @@ const hideDisabledWheelPicker = new TimepickerUI('#hide-disabled-wheel', {
 });
 hideDisabledWheelPicker.create();
 
-// hideDisabledOptions — Compact Wheel + Popover
+// hideDisabledOptions - Compact Wheel + Popover
 const hideDisabledPopoverPicker = new TimepickerUI('#hide-disabled-popover', {
   clock: {
     type: '24h',

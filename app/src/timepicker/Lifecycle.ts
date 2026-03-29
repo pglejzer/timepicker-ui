@@ -7,7 +7,6 @@ import { debounce } from '../utils/debounce';
 import { allEvents } from '../utils/variables';
 import { isDocument, isNode } from '../utils/node';
 import { TIMINGS } from '../constants/timings';
-import type WheelManager from '../managers/plugins/wheel/WheelManager';
 
 const THEME_CLASSES = ['basic', 'crane-straight', 'crane', 'm2', 'm3-green'] as const;
 
@@ -136,8 +135,10 @@ export class Lifecycle {
       this.removeEventListeners();
 
       if (this.isPopoverMode()) {
-        const wheel = this.managers.getPlugin<WheelManager>('wheel');
-        wheel?.detachPopover();
+        const wheel = this.managers.getPlugin('wheel');
+        if (wheel && 'detachPopover' in wheel) {
+          (wheel as { detachPopover: () => void }).detachPopover();
+        }
       }
 
       if (modal) {
@@ -270,8 +271,10 @@ export class Lifecycle {
     this.finalizeModal(isWheelMode);
 
     if (this.isPopoverMode()) {
-      const wheel = this.managers.getPlugin<WheelManager>('wheel');
-      wheel?.attachPopover();
+      const wheel = this.managers.getPlugin('wheel');
+      if (wheel && 'attachPopover' in wheel) {
+        (wheel as { attachPopover: () => void }).attachPopover();
+      }
     }
 
     this.managers.modal.setShowClassToBackdrop();

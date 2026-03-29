@@ -36,12 +36,9 @@ describe('managers index exports', () => {
     expect(managersIndex.ClockManager).toBe(ClockManager);
   });
 
-  it('should export TimezoneManager', () => {
-    expect(managersIndex.TimezoneManager).toBeDefined();
-  });
-
-  it('should export RangeManager', () => {
-    expect(managersIndex.RangeManager).toBeDefined();
+  it('should not export plugin managers from core barrel (tree-shaking)', () => {
+    expect((managersIndex as Record<string, unknown>).TimezoneManager).toBeUndefined();
+    expect((managersIndex as Record<string, unknown>).RangeManager).toBeUndefined();
+    expect((managersIndex as Record<string, unknown>).WheelManager).toBeUndefined();
   });
 });
-

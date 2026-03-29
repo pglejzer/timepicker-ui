@@ -2,10 +2,12 @@
   id="wheel-mode"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-sky-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-sky-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Wheel Mode</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
-      Scroll-spinner interface — replaces the analog clock face with touch-friendly wheels
+      Scroll-spinner interface - replaces the analog clock face with touch-friendly wheels
     </p>
   </div>
   <div class="p-4 sm:p-8">
@@ -138,7 +140,9 @@ new TimepickerUI('#wheel-step', {
   id="wheel-themes"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Wheel - All Themes</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Wheel mode preview across all available themes</p>
   </div>
@@ -265,10 +269,12 @@ wheelThemeList.forEach((theme) => {
   id="compact-wheel"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-violet-50 to-fuchsia-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-violet-50 to-fuchsia-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Compact Wheel Mode</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
-      Minimal wheel-only picker — no header, no clock face. AM/PM appears as a third scrollable column in 12h
+      Minimal wheel-only picker - no header, no clock face. AM/PM appears as a third scrollable column in 12h
       mode. Perfect for mobile and embedded UIs.
     </p>
   </div>
@@ -312,12 +318,12 @@ wheelThemeList.forEach((theme) => {
       </div>
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// 12h compact — AM/PM as third wheel column
+        <pre><code class="language-javascript">// 12h compact - AM/PM as third wheel column
 new TimepickerUI('#compact-wheel-12h', {
   ui: { mode: 'compact-wheel' }
 }).create();
 
-// 24h compact — two columns only
+// 24h compact - two columns only
 new TimepickerUI('#compact-wheel-24h', {
   clock: { type: '24h' },
   ui: { mode: 'compact-wheel' }
@@ -338,7 +344,7 @@ new TimepickerUI('#compact-wheel-step', {
         <li>
           Set
           <code class="bg-violet-100 dark:bg-violet-800 px-1 rounded">ui.mode: 'compact-wheel'</code>
-          — no header, wheel is the sole UI
+          - no header, wheel is the sole UI
         </li>
         <li>In 12h mode, AM/PM is a third scrollable column next to minutes</li>
         <li>In 24h mode, only hours + minutes columns are shown</li>
@@ -353,7 +359,9 @@ new TimepickerUI('#compact-wheel-step', {
   id="compact-wheel-themes"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Compact Wheel - All Themes</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       Compact wheel mode preview across all available themes
@@ -482,10 +490,12 @@ compactThemeList.forEach((theme) => {
   id="commit-on-scroll"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Commit on Scroll</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
-      Auto-commit the selected time when the wheel stops scrolling — no OK button needed
+      Auto-commit the selected time when the wheel stops scrolling - no OK button needed
     </p>
   </div>
   <div class="p-4 sm:p-8">
@@ -579,10 +589,12 @@ new TimepickerUI('#commit-on-scroll-24h', {
   id="ignore-outside-click"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Ignore Outside Click</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
-      Keep the picker open when clicking outside its area — the user must press OK or Cancel to close it
+      Keep the picker open when clicking outside its area - the user must press OK or Cancel to close it
     </p>
   </div>
   <div class="p-4 sm:p-8">
@@ -629,19 +641,19 @@ new TimepickerUI('#commit-on-scroll-24h', {
       </div>
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// Wheel — stays open on outside click
+        <pre><code class="language-javascript">// Wheel - stays open on outside click
 new TimepickerUI('#ignore-outside-wheel', {
   ui: { mode: 'wheel' },
   wheel: { ignoreOutsideClick: true },
 }).create();
 
-// Popover — stays open on outside click
+// Popover - stays open on outside click
 new TimepickerUI('#ignore-outside-popover', {
   ui: { mode: 'compact-wheel' },
   wheel: { placement: 'auto', ignoreOutsideClick: true },
 }).create();
 
-// 24h Popover — stays open on outside click
+// 24h Popover - stays open on outside click
 new TimepickerUI('#ignore-outside-24h', {
   clock: { type: '24h' },
   ui: { mode: 'compact-wheel' },
@@ -665,7 +677,7 @@ new TimepickerUI('#ignore-outside-24h', {
         </li>
         <li>The user must press OK or Cancel to close the picker</li>
         <li>
-          Default is <code class="bg-teal-100 dark:bg-teal-800 px-1 rounded">false</code> — picker closes on
+          Default is <code class="bg-teal-100 dark:bg-teal-800 px-1 rounded">false</code> - picker closes on
           outside click
         </li>
       </ul>
@@ -679,10 +691,12 @@ new TimepickerUI('#ignore-outside-24h', {
   id="wheel-disabled"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-red-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-red-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Wheel + Disabled Time</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
-      All disabledTime options in wheel mode — hours, minutes, single interval, multiple intervals, 24h,
+      All disabledTime options in wheel mode - hours, minutes, single interval, multiple intervals, 24h,
       hideDisabledOptions
     </p>
   </div>
@@ -796,7 +810,7 @@ new TimepickerUI('#ignore-outside-24h', {
       </div>
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// Disabled specific hours — 12h
+        <pre><code class="language-javascript">// Disabled specific hours - 12h
 new TimepickerUI('#wheel-disabled-hours-12h', {
   clock: {
     type: '12h',
@@ -805,7 +819,7 @@ new TimepickerUI('#wheel-disabled-hours-12h', {
   ui: { mode: 'wheel' }
 }).create();
 
-// Disabled specific hours — 24h
+// Disabled specific hours - 24h
 new TimepickerUI('#wheel-disabled-hours-24h', {
   clock: {
     type: '24h',
@@ -822,7 +836,7 @@ new TimepickerUI('#wheel-disabled-minutes', {
   ui: { mode: 'wheel' }
 }).create();
 
-// Single interval — 12h
+// Single interval - 12h
 new TimepickerUI('#wheel-disabled-interval-12h', {
   clock: {
     type: '12h',
@@ -831,7 +845,7 @@ new TimepickerUI('#wheel-disabled-interval-12h', {
   ui: { mode: 'wheel' }
 }).create();
 
-// Single interval — 24h
+// Single interval - 24h
 new TimepickerUI('#wheel-disabled-interval-24h', {
   clock: {
     type: '24h',
@@ -840,7 +854,7 @@ new TimepickerUI('#wheel-disabled-interval-24h', {
   ui: { mode: 'wheel' }
 }).create();
 
-// Multiple intervals — 12h
+// Multiple intervals - 12h
 new TimepickerUI('#wheel-disabled-intervals-12h', {
   clock: {
     type: '12h',
@@ -851,7 +865,7 @@ new TimepickerUI('#wheel-disabled-intervals-12h', {
   ui: { mode: 'wheel' }
 }).create();
 
-// Multiple intervals — 24h
+// Multiple intervals - 24h
 new TimepickerUI('#wheel-disabled-intervals-24h', {
   clock: {
     type: '24h',
@@ -862,7 +876,7 @@ new TimepickerUI('#wheel-disabled-intervals-24h', {
   ui: { mode: 'wheel' }
 }).create();
 
-// hideDisabledOptions — hours
+// hideDisabledOptions - hours
 new TimepickerUI('#wheel-hide-disabled-hours', {
   clock: {
     type: '12h',
@@ -872,7 +886,7 @@ new TimepickerUI('#wheel-hide-disabled-hours', {
   wheel: { hideDisabled: true }
 }).create();
 
-// hideDisabledOptions — interval 24h
+// hideDisabledOptions - interval 24h
 new TimepickerUI('#wheel-hide-disabled-interval', {
   clock: {
     type: '24h',
@@ -906,10 +920,12 @@ new TimepickerUI('#wheel-hide-disabled-interval', {
   id="compact-wheel-disabled"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-fuchsia-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-fuchsia-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Compact Wheel + Disabled Time</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
-      All disabledTime options in compact-wheel mode — hours, minutes, single interval, multiple intervals,
+      All disabledTime options in compact-wheel mode - hours, minutes, single interval, multiple intervals,
       24h, hideDisabledOptions
     </p>
   </div>
@@ -1023,7 +1039,7 @@ new TimepickerUI('#wheel-hide-disabled-interval', {
       </div>
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// Disabled specific hours — 12h
+        <pre><code class="language-javascript">// Disabled specific hours - 12h
 new TimepickerUI('#compact-disabled-hours-12h', {
   clock: {
     type: '12h',
@@ -1032,7 +1048,7 @@ new TimepickerUI('#compact-disabled-hours-12h', {
   ui: { mode: 'compact-wheel' }
 }).create();
 
-// Disabled specific hours — 24h
+// Disabled specific hours - 24h
 new TimepickerUI('#compact-disabled-hours-24h', {
   clock: {
     type: '24h',
@@ -1049,7 +1065,7 @@ new TimepickerUI('#compact-disabled-minutes', {
   ui: { mode: 'compact-wheel' }
 }).create();
 
-// Single interval — 12h
+// Single interval - 12h
 new TimepickerUI('#compact-disabled-interval-12h', {
   clock: {
     type: '12h',
@@ -1058,7 +1074,7 @@ new TimepickerUI('#compact-disabled-interval-12h', {
   ui: { mode: 'compact-wheel' }
 }).create();
 
-// Single interval — 24h
+// Single interval - 24h
 new TimepickerUI('#compact-disabled-interval-24h', {
   clock: {
     type: '24h',
@@ -1067,7 +1083,7 @@ new TimepickerUI('#compact-disabled-interval-24h', {
   ui: { mode: 'compact-wheel' }
 }).create();
 
-// Multiple intervals — 12h
+// Multiple intervals - 12h
 new TimepickerUI('#compact-disabled-intervals-12h', {
   clock: {
     type: '12h',
@@ -1078,7 +1094,7 @@ new TimepickerUI('#compact-disabled-intervals-12h', {
   ui: { mode: 'compact-wheel' }
 }).create();
 
-// Multiple intervals — 24h
+// Multiple intervals - 24h
 new TimepickerUI('#compact-disabled-intervals-24h', {
   clock: {
     type: '24h',
@@ -1089,7 +1105,7 @@ new TimepickerUI('#compact-disabled-intervals-24h', {
   ui: { mode: 'compact-wheel' }
 }).create();
 
-// hideDisabledOptions — hours
+// hideDisabledOptions - hours
 new TimepickerUI('#compact-hide-disabled-hours', {
   clock: {
     type: '12h',
@@ -1099,7 +1115,7 @@ new TimepickerUI('#compact-hide-disabled-hours', {
   wheel: { hideDisabled: true }
 }).create();
 
-// hideDisabledOptions — interval 24h
+// hideDisabledOptions - interval 24h
 new TimepickerUI('#compact-hide-disabled-interval', {
   clock: {
     type: '24h',
@@ -1119,7 +1135,7 @@ new TimepickerUI('#compact-hide-disabled-interval', {
       <ul class="text-sm text-fuchsia-800 dark:text-fuchsia-300 space-y-1 list-disc list-inside">
         <li>All disabledTime options work identically in compact-wheel and wheel modes</li>
         <li>
-          In compact-wheel 12h mode, AM/PM column is always shown as the third wheel — it is never disabled
+          In compact-wheel 12h mode, AM/PM column is always shown as the third wheel - it is never disabled
         </li>
         <li>
           Set

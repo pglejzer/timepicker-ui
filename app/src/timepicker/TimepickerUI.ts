@@ -7,7 +7,6 @@ import { getInputValue } from '../utils/input';
 import { mergeOptions } from '../utils/options';
 import { sanitizeTimeInput } from '../utils/validation';
 import type { TimepickerOptions } from '../types/options';
-import type { WheelManager } from '../managers/plugins/wheel';
 import { isDocument, isNode } from '../utils/node';
 
 type Callback = () => void;
@@ -337,9 +336,13 @@ export default class TimepickerUI {
   private syncClockVisual(parsed: { hourValue: string; minutesValue: string; typeValue: string }): void {
     const mode = this.core.options.ui.mode;
     if (mode === 'wheel' || mode === 'compact-wheel') {
-      const wheel = this.managers.getPlugin<WheelManager>('wheel');
-      if (wheel) {
-        wheel.scrollToValue(parsed.hourValue, parsed.minutesValue, parsed.typeValue);
+      const wheel = this.managers.getPlugin('wheel');
+      if (wheel && 'scrollToValue' in wheel) {
+        (wheel as { scrollToValue: (h: string, m: string, t?: string) => void }).scrollToValue(
+          parsed.hourValue,
+          parsed.minutesValue,
+          parsed.typeValue,
+        );
       }
     } else {
       const clockHand = this.core.getClockHand();

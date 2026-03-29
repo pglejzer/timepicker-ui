@@ -1,7 +1,7 @@
 ---
 name: repo-maintenance
 description: >
-  Full repository maintenance pipeline that orchestrates all project agents in sequence —
+  Full repository maintenance pipeline that orchestrates all project agents in sequence -
   code review, accessibility, bundle size, security, API stability, test coverage, ecosystem,
   and release preparation. Acts as a quality gate before publishing or merging major changes.
   Use when: maintenance, health check, pre-release audit, quality gate, full pipeline,
@@ -35,14 +35,14 @@ Stage 7: Ecosystem         → compatibility risks, modernization
 Stage 8: Release (gated)   → version bump, changelog, docs
 ```
 
-Stages 1–5 are **read-only analysis** — they produce reports but do not modify code.
+Stages 1–5 are **read-only analysis** - they produce reports but do not modify code.
 Stage 6 may **create new test files** if gaps are found.
-Stage 7 is **research-only** — it produces recommendations.
-Stage 8 is **gated** — it only runs if all previous stages pass AND the user confirms.
+Stage 7 is **research-only** - it produces recommendations.
+Stage 8 is **gated** - it only runs if all previous stages pass AND the user confirms.
 
 ## Detailed Stage Definitions
 
-### Stage 1 — Code Review
+### Stage 1 - Code Review
 
 **Agent**: `code-review`
 **Tools**: read, search (read-only)
@@ -60,11 +60,11 @@ Stage 8 is **gated** — it only runs if all previous stages pass AND the user c
 - **WARN**: P0 = 0, but P1/P2 findings exist (continue with warnings noted)
 - **FAIL**: Any P0 finding → stop pipeline, report blockers to user
 
-### Stage 2 — Accessibility
+### Stage 2 - Accessibility
 
 **Agent**: `accessibility`
 **Tools**: read, search (read-only)
-**Goal**: Detect WCAG 2.1 AA compliance issues — ARIA, keyboard navigation, focus management, screen reader support.
+**Goal**: Detect WCAG 2.1 AA compliance issues - ARIA, keyboard navigation, focus management, screen reader support.
 
 **Delegate prompt**:
 
@@ -78,7 +78,7 @@ Stage 8 is **gated** — it only runs if all previous stages pass AND the user c
 - **WARN**: P0 = 0, but P1/P2 findings exist
 - **FAIL**: Any P0 finding → stop pipeline, report blockers to user
 
-### Stage 3 — Bundle Size
+### Stage 3 - Bundle Size
 
 **Agent**: `bundle-optimizer`
 **Tools**: read, search, execute
@@ -97,7 +97,7 @@ Stage 8 is **gated** — it only runs if all previous stages pass AND the user c
 - **WARN**: Minor size increase (<5%) without side-effect issues
 - **FAIL**: Side-effect leak in core, or size increase >10% → stop pipeline
 
-### Stage 4 — Security
+### Stage 4 - Security
 
 **Agent**: `security`
 **Tools**: read, search, execute
@@ -120,7 +120,7 @@ Stage 8 is **gated** — it only runs if all previous stages pass AND the user c
 - **WARN**: Only Medium/Low findings
 - **FAIL**: Any Critical or High finding → stop pipeline, report blockers to user
 
-### Stage 5 — API Stability
+### Stage 5 - API Stability
 
 **Agent**: `api-stability`
 **Tools**: read, search, execute
@@ -144,7 +144,7 @@ Stage 8 is **gated** — it only runs if all previous stages pass AND the user c
 - **WARN**: Breaking changes exist but are intentional (user must confirm major bump)
 - **FAIL**: Unintentional breaking changes detected → stop pipeline, report to user
 
-### Stage 6 — Test Coverage
+### Stage 6 - Test Coverage
 
 **Agent**: `test-writer`
 **Tools**: read, edit, search, execute, agent
@@ -169,7 +169,7 @@ Stage 8 is **gated** — it only runs if all previous stages pass AND the user c
 - **WARN**: Some tests skipped due to missing DOM setup (note for followup)
 - **FAIL**: New tests fail or existing tests regress → stop pipeline
 
-### Stage 7 — Ecosystem
+### Stage 7 - Ecosystem
 
 **Agent**: `ecosystem`
 **Tools**: read, search, web
@@ -182,7 +182,7 @@ Stage 8 is **gated** — it only runs if all previous stages pass AND the user c
 > 1. Framework compatibility: React (latest), Vue 3, Angular, Svelte, Astro, Next.js SSR
 > 2. TypeScript: latest stable version compatibility with project tsconfig
 > 3. Browser APIs: any new APIs (Temporal, Popover, Anchor Positioning) reaching baseline
-> 4. Build tooling: tsup, Rollup, Vite — any breaking updates or deprecations
+> 4. Build tooling: tsup, Rollup, Vite - any breaking updates or deprecations
 > 5. Node.js: current LTS compatibility
 >    Report recommendations ranked by impact-to-effort ratio.
 
@@ -190,9 +190,9 @@ Stage 8 is **gated** — it only runs if all previous stages pass AND the user c
 
 - **PASS**: No critical compatibility risks
 - **WARN**: Recommendations exist but none are urgent
-- This stage never blocks the pipeline — it is informational only
+- This stage never blocks the pipeline - it is informational only
 
-### Stage 8 — Release (Gated)
+### Stage 8 - Release (Gated)
 
 **Agent**: `release`
 **Tools**: read, edit, search, execute
@@ -241,8 +241,8 @@ After each stage, evaluate the gate criteria:
 
 Pause and ask the user before:
 
-1. **Stage 6** (test-writer) — "Stages 1–5 passed. Proceed to generate missing tests?"
-2. **Stage 8** (release) — "All stages passed. Semver bump: [type]. Proceed with release?"
+1. **Stage 6** (test-writer) - "Stages 1–5 passed. Proceed to generate missing tests?"
+2. **Stage 8** (release) - "All stages passed. Semver bump: [type]. Proceed with release?"
 
 ### Partial Runs
 
@@ -263,7 +263,7 @@ The user may request a subset of stages:
 After each stage, report:
 
 ```
-## Stage X: [Name] — [PASS|WARN|FAIL]
+## Stage X: [Name] - [PASS|WARN|FAIL]
 
 **Findings**: X issues (Y critical, Z warnings)
 **Details**: [summary of key findings]
@@ -281,7 +281,7 @@ After all stages complete (or pipeline stops), produce:
 | ----- | ---------------- | ------ | -------- |
 | 1     | code-review      | PASS   | 0 P0     |
 | 2     | accessibility    | WARN   | 0 P0, 3 P1 |
-| 3     | bundle-optimizer | PASS   | —        |
+| 3     | bundle-optimizer | PASS   | -        |
 | 4     | security         | PASS   | 2 Low    |
 | 5     | api-stability    | PASS   | minor bump |
 | 6     | test-writer      | PASS   | 3 tests added |
@@ -299,7 +299,7 @@ After all stages complete (or pipeline stops), produce:
 ### MUST
 
 - Run stages in the defined order
-- Stop on any FAIL gate — never skip a failed stage
+- Stop on any FAIL gate - never skip a failed stage
 - Ask for user confirmation before test generation (Stage 6) and release (Stage 8)
 - Respect each agent's tool restrictions (code-review and accessibility are read-only)
 - Report exact file paths and line numbers for all findings
@@ -310,5 +310,5 @@ After all stages complete (or pipeline stops), produce:
 - Modify source code during read-only stages (1, 2, 5, 7)
 - Auto-proceed past user checkpoints
 - Run Stage 8 (release) if any previous stage FAILed
-- Skip stages in a full run — every stage must execute
-- Suppress or hide warnings — always surface them in the final summary
+- Skip stages in a full run - every stage must execute
+- Suppress or hide warnings - always surface them in the final summary

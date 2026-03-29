@@ -202,7 +202,7 @@ const sections = [
 ];
 
 sections.forEach((section) => {
-  console.log(`\n📦 ${section.label} — ${section.bundler}`);
+  console.log(`\n📦 ${section.label} - ${section.bundler}`);
   console.log("─".repeat(70));
 
   section.files.forEach((file) => {

@@ -1,6 +1,7 @@
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 import { announceToScreenReader } from '../utils/accessibility';
+import { PluginRegistry } from '../core/PluginRegistry';
 
 export default class ClearButtonManager {
   private core: CoreState;
@@ -86,12 +87,14 @@ export default class ClearButtonManager {
     this.core.setDegreesHours(null);
     this.core.setDegreesMinutes(null);
 
-    if (this.core.options.range?.enabled) {
-      this.clearRangeValues();
+    const rangeClear = PluginRegistry.getClearHandler('range');
+    if (rangeClear) {
+      rangeClear(this.core, this.emitter);
     }
 
-    if (this.core.options.timezone?.enabled) {
-      this.clearTimezoneValue();
+    const timezoneClear = PluginRegistry.getClearHandler('timezone');
+    if (timezoneClear) {
+      timezoneClear(this.core, this.emitter);
     }
   }
 
@@ -212,83 +215,9 @@ export default class ClearButtonManager {
     this.wasCleared = false;
   }
 
-  private clearRangeValues(): void {
-    const fromTab = this.getFromTab();
-    const toTab = this.getToTab();
-    const fromTime = this.getFromTimeDisplay();
-    const toTime = this.getToTimeDisplay();
-
-    if (fromTime) fromTime.textContent = '--:--';
-    if (toTime) toTime.textContent = '--:--';
-
-    fromTab?.classList.add('active');
-    toTab?.classList.remove('active');
-
-    fromTab?.setAttribute('aria-selected', 'true');
-    toTab?.setAttribute('aria-selected', 'false');
-
-    fromTab?.setAttribute('tabindex', '0');
-    toTab?.setAttribute('tabindex', '-1');
-
-    toTab?.classList.add('disabled');
-    toTab?.setAttribute('aria-disabled', 'true');
-
-    const hourInput = this.core.getHour();
-    if (hourInput) {
-      hourInput.focus();
-    }
-
-    this.emitter.emit('range:switch', {
-      active: 'from',
-      disabledTime: null,
-    });
-  }
-
-  private clearTimezoneValue(): void {
-    const dropdown = this.getTimezoneDropdown();
-    const selected = this.getTimezoneSelected();
-
-    if (selected) {
-      const placeholder = selected.getAttribute('data-placeholder') || 'Timezone...';
-      selected.textContent = placeholder;
-    }
-
-    dropdown?.setAttribute('aria-expanded', 'false');
-  }
-
   private getClearButton(): HTMLButtonElement | null {
     const modal = this.core.getModalElement();
     return modal?.querySelector('.tp-ui-clear-btn') || null;
-  }
-
-  private getFromTab(): HTMLButtonElement | null {
-    const modal = this.core.getModalElement();
-    return modal?.querySelector('.tp-ui-range-from') || null;
-  }
-
-  private getToTab(): HTMLButtonElement | null {
-    const modal = this.core.getModalElement();
-    return modal?.querySelector('.tp-ui-range-to') || null;
-  }
-
-  private getFromTimeDisplay(): HTMLElement | null {
-    const modal = this.core.getModalElement();
-    return modal?.querySelector('.tp-ui-range-from-time') || null;
-  }
-
-  private getToTimeDisplay(): HTMLElement | null {
-    const modal = this.core.getModalElement();
-    return modal?.querySelector('.tp-ui-range-to-time') || null;
-  }
-
-  private getTimezoneDropdown(): HTMLElement | null {
-    const modal = this.core.getModalElement();
-    return modal?.querySelector('.tp-ui-timezone-dropdown') || null;
-  }
-
-  private getTimezoneSelected(): HTMLElement | null {
-    const modal = this.core.getModalElement();
-    return modal?.querySelector('.tp-ui-timezone-selected') || null;
   }
 
   destroy(): void {
@@ -296,4 +225,3 @@ export default class ClearButtonManager {
     this.cleanupHandlers = [];
   }
 }
-

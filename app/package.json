@@ -28,12 +28,6 @@
   },
   "type": "module",
   "sideEffects": [
-    "**/plugins/range.ts",
-    "**/plugins/timezone.ts",
-    "**/plugins/wheel.ts",
-    "**/plugins/range.js",
-    "**/plugins/timezone.js",
-    "**/plugins/wheel.js",
     "docs/**"
   ],
   "files": [

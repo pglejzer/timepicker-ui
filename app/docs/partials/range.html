@@ -1,35 +1,35 @@
-        <section class="mb-12">
-          <div
-            id="range-mode"
-            class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
-          >
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Range Mode (From–To)</h3>
-            <p class="text-gray-600 dark:text-gray-300 mt-2">
-              Select a time range for booking, scheduling, or reservation use cases.
-            </p>
+<section class="mb-12">
+  <div
+    id="range-mode"
+    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
+  >
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Range Mode (From–To)</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Select a time range for booking, scheduling, or reservation use cases.
+    </p>
 
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
-              <div class="space-y-4">
-                <input
-                  id="range-picker"
-                  type="text"
-                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  value=""
-                  placeholder="Select time range"
-                />
-                <div
-                  id="range-result"
-                  class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300"
-                >
-                  Selected range: <span id="range-display">--:-- – --:--</span>
-                  <br />
-                  Duration: <span id="range-duration">0</span> minutes
-                </div>
-              </div>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
+      <div class="space-y-4">
+        <input
+          id="range-picker"
+          type="text"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          value=""
+          placeholder="Select time range"
+        />
+        <div
+          id="range-result"
+          class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300"
+        >
+          Selected range: <span id="range-display">--:-- – --:--</span>
+          <br />
+          Duration: <span id="range-duration">0</span> minutes
+        </div>
+      </div>
 
-              <div class="space-y-3">
-                <pre><code class="language-html">&lt;input id="range-picker" value="09:00" /&gt;</code></pre>
-                <pre><code class="language-javascript">const rangePicker = new TimepickerUI('#range-picker', {
+      <div class="space-y-3">
+        <pre><code class="language-html">&lt;input id="range-picker" value="09:00" /&gt;</code></pre>
+        <pre><code class="language-javascript">const rangePicker = new TimepickerUI('#range-picker', {
   clock: { type: '12h' },
   range: {
     enabled: true,
@@ -54,53 +54,51 @@
   },
 });
 rangePicker.create();</code></pre>
-              </div>
-            </div>
-            <div
-              class="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg"
-            >
-              <p class="text-sm text-amber-800 dark:text-amber-300">
-                <strong>Tip:</strong> Range mode uses a single clock face. After selecting the "From" time, it
-                automatically switches to "To" selection. Use minDuration/maxDuration for validation (e.g.,
-                minimum booking 30 minutes, max 8 hours).
-              </p>
-            </div>
-          </div>
-        </section>
+      </div>
+    </div>
+    <div
+      class="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg"
+    >
+      <p class="text-sm text-amber-800 dark:text-amber-300">
+        <strong>Tip:</strong> Range mode uses a single clock face. After selecting the "From" time, it
+        automatically switches to "To" selection. Use minDuration/maxDuration for validation (e.g., minimum
+        booking 30 minutes, max 8 hours).
+      </p>
+    </div>
+  </div>
+</section>
 
-        <!-- Range Mode 24h Section -->
-        <section class="mb-12">
-          <div
-            id="range-mode-24h"
-            class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
-          >
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Range Mode (24h Format)</h3>
-            <p class="text-gray-600 dark:text-gray-300 mt-2">
-              Time range selection with 24-hour clock format.
-            </p>
+<!-- Range Mode 24h Section -->
+<section class="mb-12">
+  <div
+    id="range-mode-24h"
+    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
+  >
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Range Mode (24h Format)</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">Time range selection with 24-hour clock format.</p>
 
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
-              <div class="space-y-4">
-                <input
-                  id="range-picker-24h"
-                  type="text"
-                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  value=""
-                  placeholder="Select time range"
-                />
-                <div
-                  id="range-result-24h"
-                  class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300"
-                >
-                  Selected range: <span id="range-display-24h">--:-- – --:--</span>
-                  <br />
-                  Duration: <span id="range-duration-24h">0</span> minutes
-                </div>
-              </div>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
+      <div class="space-y-4">
+        <input
+          id="range-picker-24h"
+          type="text"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          value=""
+          placeholder="Select time range"
+        />
+        <div
+          id="range-result-24h"
+          class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300"
+        >
+          Selected range: <span id="range-display-24h">--:-- – --:--</span>
+          <br />
+          Duration: <span id="range-duration-24h">0</span> minutes
+        </div>
+      </div>
 
-              <div class="space-y-3">
-                <pre><code class="language-html">&lt;input id="range-picker-24h" /&gt;</code></pre>
-                <pre><code class="language-javascript">const range24hPicker = new TimepickerUI('#range-picker-24h', {
+      <div class="space-y-3">
+        <pre><code class="language-html">&lt;input id="range-picker-24h" /&gt;</code></pre>
+        <pre><code class="language-javascript">const range24hPicker = new TimepickerUI('#range-picker-24h', {
   clock: { type: '24h' },
   range: {
     enabled: true,
@@ -119,44 +117,44 @@ rangePicker.create();</code></pre>
   },
 });
 range24hPicker.create();</code></pre>
-              </div>
-            </div>
-          </div>
-        </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <!-- Range Mode 12h AM/PM Section -->
-        <section class="mb-12">
-          <div
-            id="range-mode-12h-ampm"
-            class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
-          >
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Range Mode (12h AM/PM)</h3>
-            <p class="text-gray-600 dark:text-gray-300 mt-2">
-              Time range selection spanning AM to PM periods. Try selecting 09:00 AM to 06:00 PM.
-            </p>
+<!-- Range Mode 12h AM/PM Section -->
+<section class="mb-12">
+  <div
+    id="range-mode-12h-ampm"
+    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
+  >
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Range Mode (12h AM/PM)</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Time range selection spanning AM to PM periods. Try selecting 09:00 AM to 06:00 PM.
+    </p>
 
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
-              <div class="space-y-4">
-                <input
-                  id="range-picker-12h-ampm"
-                  type="text"
-                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  value="09:00 AM - 05:00 PM"
-                  placeholder="Select time range"
-                />
-                <div
-                  id="range-result-12h-ampm"
-                  class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300"
-                >
-                  Selected range: <span id="range-display-12h-ampm">09:00 AM – 05:00 PM</span>
-                  <br />
-                  Duration: <span id="range-duration-12h-ampm">480</span> minutes
-                </div>
-              </div>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
+      <div class="space-y-4">
+        <input
+          id="range-picker-12h-ampm"
+          type="text"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          value="09:00 AM - 05:00 PM"
+          placeholder="Select time range"
+        />
+        <div
+          id="range-result-12h-ampm"
+          class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300"
+        >
+          Selected range: <span id="range-display-12h-ampm">09:00 AM – 05:00 PM</span>
+          <br />
+          Duration: <span id="range-duration-12h-ampm">480</span> minutes
+        </div>
+      </div>
 
-              <div class="space-y-3">
-                <pre><code class="language-html">&lt;input id="range-picker-12h-ampm" value="09:00 AM - 05:00 PM" /&gt;</code></pre>
-                <pre><code class="language-javascript">const range12hAmPmPicker = new TimepickerUI('#range-picker-12h-ampm', {
+      <div class="space-y-3">
+        <pre><code class="language-html">&lt;input id="range-picker-12h-ampm" value="09:00 AM - 05:00 PM" /&gt;</code></pre>
+        <pre><code class="language-javascript">const range12hAmPmPicker = new TimepickerUI('#range-picker-12h-ampm', {
   clock: { type: '12h' },
   range: {
     enabled: true,
@@ -173,51 +171,51 @@ range24hPicker.create();</code></pre>
   },
 });
 range12hAmPmPicker.create();</code></pre>
-              </div>
-            </div>
-            <div
-              class="mt-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
-            >
-              <p class="text-sm text-green-800 dark:text-green-300">
-                <strong>AM/PM Sync:</strong> When switching between From (AM) and To (PM) tabs, the clock
-                correctly synchronizes the AM/PM state. Try clicking on the "To" tab and selecting any hour
-                (1-12) - all hours are selectable in PM mode.
-              </p>
-            </div>
-          </div>
-        </section>
+      </div>
+    </div>
+    <div
+      class="mt-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
+    >
+      <p class="text-sm text-green-800 dark:text-green-300">
+        <strong>AM/PM Sync:</strong> When switching between From (AM) and To (PM) tabs, the clock correctly
+        synchronizes the AM/PM state. Try clicking on the "To" tab and selecting any hour (1-12) - all hours
+        are selectable in PM mode.
+      </p>
+    </div>
+  </div>
+</section>
 
-        <!-- Range + Clear Button Section -->
-        <section class="mb-12">
-          <div
-            id="range-clear-button"
-            class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
-          >
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Range + Clear Button</h3>
-            <p class="text-gray-600 dark:text-gray-300 mt-2">
-              Combine range mode with the clear button — select a time range with a reset option.
-            </p>
+<!-- Range + Clear Button Section -->
+<section class="mb-12">
+  <div
+    id="range-clear-button"
+    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
+  >
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Range + Clear Button</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Combine range mode with the clear button - select a time range with a reset option.
+    </p>
 
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
-              <div class="space-y-4">
-                <input
-                  id="range-clear-picker"
-                  type="text"
-                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  value=""
-                  placeholder="Select time range"
-                />
-                <div
-                  id="range-clear-result"
-                  class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300"
-                >
-                  Selected range: <span id="range-clear-display">--:-- – --:--</span>
-                </div>
-              </div>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
+      <div class="space-y-4">
+        <input
+          id="range-clear-picker"
+          type="text"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          value=""
+          placeholder="Select time range"
+        />
+        <div
+          id="range-clear-result"
+          class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300"
+        >
+          Selected range: <span id="range-clear-display">--:-- – --:--</span>
+        </div>
+      </div>
 
-              <div class="space-y-3">
-                <pre><code class="language-html">&lt;input id="range-clear-picker" /&gt;</code></pre>
-                <pre><code class="language-javascript">const rangeClearPicker = new TimepickerUI('#range-clear-picker', {
+      <div class="space-y-3">
+        <pre><code class="language-html">&lt;input id="range-clear-picker" /&gt;</code></pre>
+        <pre><code class="language-javascript">const rangeClearPicker = new TimepickerUI('#range-clear-picker', {
   clock: { type: '12h' },
   ui: {
     clearButton: true,
@@ -240,16 +238,16 @@ range12hAmPmPicker.create();</code></pre>
   },
 });
 rangeClearPicker.create();</code></pre>
-              </div>
-            </div>
-            <div
-              class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"
-            >
-              <p class="text-sm text-blue-800 dark:text-blue-300">
-                <strong>Tip:</strong> The Clear button resets both the From and To values. The
-                <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">onClear</code> callback provides the
-                previous range value so you can restore it if needed.
-              </p>
-            </div>
-          </div>
-        </section>
+      </div>
+    </div>
+    <div
+      class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"
+    >
+      <p class="text-sm text-blue-800 dark:text-blue-300">
+        <strong>Tip:</strong> The Clear button resets both the From and To values. The
+        <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">onClear</code> callback provides the previous
+        range value so you can restore it if needed.
+      </p>
+    </div>
+  </div>
+</section>

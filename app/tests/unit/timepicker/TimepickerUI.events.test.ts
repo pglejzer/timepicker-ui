@@ -577,7 +577,7 @@ describe('TimepickerUI EventEmitter public API (v4.1.7 compat)', () => {
       emitter.emit('confirm', { hour: '10', minutes: '00' });
 
       // Handler was called 0 times after destroy (emitter cleared)
-      // but the internal confirm handler fires once during destroy unmount — check net calls
+      // but the internal confirm handler fires once during destroy unmount - check net calls
       // The key assertion: no NEW calls from the post-destroy emit
       const callCountAfterDestroy = handler.mock.calls.length;
       emitter.emit('confirm', { hour: '11', minutes: '00' });
@@ -647,4 +647,3 @@ describe('TimepickerUI EventEmitter public API (v4.1.7 compat)', () => {
     });
   });
 });
-

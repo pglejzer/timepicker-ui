@@ -1,7 +1,6 @@
 import type { TimepickerOptions } from '../../types/options';
 import keyboardSvg from '../../../assets/keyboard.svg';
 import scheduleSvg from '../../../assets/schedule.svg';
-import { getWheelTemplate } from './wheel';
 import { PluginRegistry } from '../../core/PluginRegistry';
 
 export const HOURS_24 = ['00', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
@@ -59,10 +58,17 @@ const buildClearButton = (options: Required<TimepickerOptions>, mobileClass: str
   return `<div class="tp-ui-clear-btn ${mobileClass} disabled" data-md3-ripple tabindex="0" role="button" aria-pressed="false" aria-label="${clearLabel}" aria-disabled="true">${clearLabel}</div>`;
 };
 
-const buildPickerBody = (config: TemplateConfig, incrementMinutes: number): string => {
+const buildPickerBody = (
+  config: TemplateConfig,
+  incrementMinutes: number,
+  options: Required<TimepickerOptions>,
+): string => {
   if (config.isWheelMode) {
-    const includeAmPmColumn = config.isCompactWheel && config.clockType === '12h';
-    return `<div class="tp-ui-mobile-clock-wrapper ${config.mobileClass}">${getWheelTemplate(config.clockType as '12h' | '24h', incrementMinutes, includeAmPmColumn, config.instanceId)}</div>`;
+    const wheelTemplateProvider = PluginRegistry.getTemplateProvider('wheel');
+    if (wheelTemplateProvider) {
+      return `<div class="tp-ui-mobile-clock-wrapper ${config.mobileClass}">${wheelTemplateProvider(options, config.instanceId)}</div>`;
+    }
+    return `<div class="tp-ui-mobile-clock-wrapper ${config.mobileClass}"></div>`;
   }
 
   return `<div class="tp-ui-mobile-clock-wrapper ${config.mobileClass}"><div class="tp-ui-body ${config.mobileClass}"><div class="tp-ui-clock-face ${config.mobileClass}" role="group" aria-label="Clock"><div class="tp-ui-dot ${config.mobileClass}" aria-hidden="true"></div><div class="tp-ui-clock-hand ${config.mobileClass}" aria-hidden="true"><div class="tp-ui-circle-hand ${config.mobileClass}"></div></div><div class="tp-ui-tips-wrapper ${config.mobileClass}" role="listbox" aria-label="Time"></div>${config.clockType === '24h' ? `<div class="tp-ui-tips-wrapper-24h ${config.mobileClass}" role="listbox" aria-label="24h"></div>` : ''}</div></div></div>`;
@@ -135,7 +141,7 @@ export const getModalTemplate = (options: Required<TimepickerOptions>, instanceI
   const rangeSelector = buildRangeSelector(options);
   const timezoneSelector = buildTimezoneSelector(options, mobileClass, instanceId);
   const header = isCompactWheel ? '' : buildHeader(options, config);
-  const pickerBody = buildPickerBody(config, incrementMinutes ?? 1);
+  const pickerBody = buildPickerBody(config, incrementMinutes ?? 1, options);
   const footer =
     isCompactWheel && options.wheel?.hideFooter === true ? '' : buildFooter(options, mobileClass);
 

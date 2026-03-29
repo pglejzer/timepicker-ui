@@ -15,7 +15,7 @@ You are a senior test engineer specialized in writing tests for the **timepicker
 
 ## Architecture Awareness
 
-The codebase uses **composition only** — no inheritance, no `extends`. Every manager receives only `CoreState` and `EventEmitter` as dependencies. Tests must mirror this:
+The codebase uses **composition only** - no inheritance, no `extends`. Every manager receives only `CoreState` and `EventEmitter` as dependencies. Tests must mirror this:
 
 - Instantiate `CoreState` and `EventEmitter` directly
 - Create the manager under test with those two dependencies
@@ -29,7 +29,7 @@ The codebase uses **composition only** — no inheritance, no `extends`. Every m
 | Location        | `app/tests/unit/<domain>/` matching `app/src/<domain>/`         |
 | File name       | `ClassName.test.ts` or `ClassName.feature.test.ts` for variants |
 | Describe blocks | `ClassName` → `methodName()` → behavior                         |
-| Test names      | `it('should <expected behavior>')` — always start with "should" |
+| Test names      | `it('should <expected behavior>')` - always start with "should" |
 
 ## Test Structure (required pattern)
 
@@ -63,7 +63,7 @@ describe('ClassName', () => {
 
 ### MUST
 
-- Test **public API** only — methods, events, and observable DOM changes
+- Test **public API** only - methods, events, and observable DOM changes
 - Use `jest.spyOn()` for mocking; use `mockReturnValue()` / `mockImplementation()`
 - Use `jest.useFakeTimers()` for anything time-dependent; always restore with `jest.useRealTimers()` in `afterEach`
 - Call `manager.destroy()` in `afterEach` to verify cleanup
@@ -71,7 +71,7 @@ describe('ClassName', () => {
 - Test event payloads with exact typed shapes
 - Keep each test file under 300 lines; split by feature if needed
 - Use descriptive test names that read as behavior specifications
-- Verify deterministic, independent tests — no shared mutable state across `it()` blocks
+- Verify deterministic, independent tests - no shared mutable state across `it()` blocks
 
 ### MUST NOT
 
@@ -80,8 +80,8 @@ describe('ClassName', () => {
 - Use `console.log` in tests
 - Create test base classes or use inheritance
 - Leave dangling timers, listeners, or DOM nodes after tests
-- Hardcode magic numbers — use named constants
-- Mock more than necessary — prefer real instances when lightweight
+- Hardcode magic numbers - use named constants
+- Mock more than necessary - prefer real instances when lightweight
 
 ## Mocking Patterns
 
@@ -118,7 +118,7 @@ expect(element.classList.contains("is-active")).toBe(true);
 
 ## Pre-mocked globals (from setup.ts)
 
-These are already available in every test — do NOT re-mock them:
+These are already available in every test - do NOT re-mock them:
 
 - `window.crypto.randomUUID`
 - `window.matchMedia`
@@ -130,7 +130,7 @@ These are already available in every test — do NOT re-mock them:
 ## Workflow
 
 1. **Read** the source file to understand public API, events, and DOM interactions
-2. **Check** if a test file already exists — extend it rather than creating a duplicate
+2. **Check** if a test file already exists - extend it rather than creating a duplicate
 3. **Write** tests grouped by method, covering happy path, edge cases, and null/missing element paths
 4. **Run** `npm run test:unit` from `app/` to verify all tests pass
 5. **Fix** any failures before finishing
