@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.3.0] - 2026-03-26
+
+### Added
+
+- Plugin `templateProvider` hook allowing plugins to register their own modal templates without core static imports
+- Plugin `clearHandler` hook allowing plugins to register custom clear logic executed when the clear button is pressed
+- Exported `TemplateProvider` and `ClearHandler` types from the public API
+- `getTemplateProvider()` and `getClearHandler()` methods on `PluginRegistry`
+
+### Changed
+
+- Plugin system refactored for true tree-shaking: unused plugins (wheel, range, timezone) are completely excluded from the final bundle when not imported
+- Wheel template is no longer statically bundled with core - it is registered by the WheelPlugin at import time
+- Range and timezone clear logic moved from core ClearButtonManager to plugin-provided clear handlers
+- Core no longer statically imports any plugin implementation modules
+- `sideEffects` field corrected to exclude plugin files, enabling bundlers to eliminate unused plugin code
+
+---
+
 ## [4.2.2] - 2026-03-24
 
 ### Fixed

@@ -59,6 +59,43 @@ function ChangeSection({
   );
 }
 
+const CHANGELOG_430 = {
+  added: [
+    {
+      title: "Plugin templateProvider hook",
+      description:
+        "Plugins can register their own modal templates without core static imports, enabling true tree-shaking",
+    },
+    {
+      title: "Plugin clearHandler hook",
+      description:
+        "Plugins can register custom clear logic executed when the clear button is pressed",
+    },
+    {
+      title: "New exported types",
+      description:
+        "TemplateProvider and ClearHandler types available from the public API",
+    },
+  ],
+  changed: [
+    {
+      title: "Tree-shakeable plugin system",
+      description:
+        "Unused plugins (wheel, range, timezone) are completely excluded from the final bundle when not imported. Core no longer statically imports any plugin implementation modules",
+    },
+    {
+      title: "Wheel template registration",
+      description:
+        "Wheel template is no longer statically bundled with core - it is registered by the WheelPlugin at import time",
+    },
+    {
+      title: "Plugin clear logic decoupled",
+      description:
+        "Range and timezone clear logic moved from core ClearButtonManager to plugin-provided clear handlers",
+    },
+  ],
+};
+
 const CHANGELOG_422 = {
   fixed: [
     {
@@ -468,8 +505,26 @@ export default function ChangelogPage() {
         variant="purple"
         className="mb-6"
       >
-        <strong>v4.2.2</strong> - Released March 24, 2026
+        <strong>v4.3.0</strong> - Released March 26, 2026
       </InfoBox>
+
+      <Section icon={Sparkles} title="Version 4.3.0 - March 26, 2026">
+        <div className="space-y-4">
+          <ChangeSection
+            icon={Sparkles}
+            label="Added"
+            color="green-500"
+            items={CHANGELOG_430.added}
+          />
+
+          <ChangeSection
+            icon={Zap}
+            label="Changed"
+            color="blue-500"
+            items={CHANGELOG_430.changed}
+          />
+        </div>
+      </Section>
 
       <Section icon={Bug} title="Version 4.2.2 - March 24, 2026">
         <div className="space-y-4">

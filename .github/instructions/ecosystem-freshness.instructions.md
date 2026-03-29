@@ -8,10 +8,10 @@ description: "Use when: ecosystem research, framework updates, browser API statu
 
 Before citing or relying on ecosystem information (framework versions, API status, browser support, roadmap items):
 
-1. **Web-search first** — prefer live sources over static notes in the repository
-2. **Check official sources** — GitHub releases, official docs, npm registry, TC39 proposals
-3. **Verify browser support** — use Can I Use or MDN baseline data, not assumptions
-4. **Flag uncertainty** — if current status cannot be confirmed, explicitly state the information may be outdated
+1. **Web-search first** - prefer live sources over static notes in the repository
+2. **Check official sources** - GitHub releases, official docs, npm registry, TC39 proposals
+3. **Verify browser support** - use Can I Use or MDN baseline data, not assumptions
+4. **Flag uncertainty** - if current status cannot be confirmed, explicitly state the information may be outdated
 
 ## Stale Data Handling
 
@@ -28,7 +28,7 @@ Repository files like "Key Opportunities to Track" tables, version references, a
 3. npm registry (latest published version, publish date)
 4. MDN Web Docs / Can I Use for browser APIs
 5. TC39 proposal tracker for ECMAScript features
-6. Repository notes and static tables (lowest priority — always verify)
+6. Repository notes and static tables (lowest priority - always verify)
 
 ## When Recommending Changes
 

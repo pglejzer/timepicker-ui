@@ -36,7 +36,13 @@ import type {
 import { EventEmitter } from './utils/EventEmitter';
 import type { TimepickerEventMap } from './utils/EventEmitter';
 import { PluginRegistry } from './core/PluginRegistry';
-import type { Plugin, PluginManager, PluginFactory } from './core/PluginRegistry';
+import type {
+  Plugin,
+  PluginManager,
+  PluginFactory,
+  TemplateProvider,
+  ClearHandler,
+} from './core/PluginRegistry';
 import type { CoreState } from './timepicker/CoreState';
 
 export {
@@ -76,6 +82,8 @@ export {
   Plugin,
   PluginManager,
   PluginFactory,
+  TemplateProvider,
+  ClearHandler,
   CoreState,
   TimepickerEventMap,
 };

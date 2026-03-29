@@ -5,7 +5,3 @@ export { default as ThemeManager } from './ThemeManager';
 export { default as ValidationManager } from './ValidationManager';
 export { default as EventManager } from './EventManager';
 export { default as ClockManager } from './ClockManager';
-
-export { TimezoneManager } from './plugins/timezone';
-export { RangeManager } from './plugins/range';
-export { WheelManager } from './plugins/wheel';

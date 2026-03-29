@@ -2,7 +2,9 @@
   id="disabled-times"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Disabled Times</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Block specific hours, minutes, or time intervals</p>
   </div>
@@ -70,7 +72,9 @@ new TimepickerUI('#disabled-interval', {
   id="multiple-intervals"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Multiple Intervals</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Block specific hours, minutes, or time intervals</p>
   </div>
@@ -125,7 +129,9 @@ disabledTime: { interval: ['04:33 - 12:12', '16:34 - 20:22'] }
   id="dynamic-updates"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Dynamic Updates</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Update disabledTime and other options dynamically</p>
   </div>
@@ -204,7 +210,9 @@ document.getElementById('clear-restrictions')
   id="dynamic-interval-updates"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-rose-50 to-red-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-rose-50 to-red-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Dynamic Interval Updates</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       Update disabled intervals dynamically for shift scheduling
@@ -289,7 +297,9 @@ document.getElementById('clear-intervals')
   id="editable-mode"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Editable Mode</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Allow direct editing of time values in picker</p>
   </div>
@@ -325,7 +335,9 @@ editablePicker.create();</code></pre>
   id="hide-disabled-options"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-rose-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-rose-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Hide Disabled Options</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">
       Completely remove disabled hours/minutes from the list instead of dimming them. Available in wheel and
@@ -337,7 +349,7 @@ editablePicker.create();</code></pre>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >Wheel — Hidden Hours &amp; Minutes</label
+            >Wheel - Hidden Hours &amp; Minutes</label
           >
           <input
             id="hide-disabled-wheel"
@@ -347,7 +359,7 @@ editablePicker.create();</code></pre>
         </div>
         <div class="text-center">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >Popover — Hidden + 5min Step</label
+            >Popover - Hidden + 5min Step</label
           >
           <input
             id="hide-disabled-popover"
@@ -365,7 +377,7 @@ editablePicker.create();</code></pre>
       </div>
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// Wheel — hide specific hours & minutes
+        <pre><code class="language-javascript">// Wheel - hide specific hours & minutes
 new TimepickerUI('#hide-disabled-wheel', {
   clock: {
     type: '12h',
@@ -375,7 +387,7 @@ new TimepickerUI('#hide-disabled-wheel', {
   wheel: { hideDisabled: true },
 }).create();
 
-// Popover — hidden + 5min step
+// Popover - hidden + 5min step
 new TimepickerUI('#hide-disabled-popover', {
   clock: {
     type: '24h',
@@ -412,7 +424,9 @@ new TimepickerUI('#hide-disabled-popover', {
   id="smooth-hour-snap"
   class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
 >
-  <div class="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6">
+  <div
+    class="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Smooth Hour Snap</h3>
     <p class="text-gray-600 dark:text-gray-300 mt-2">Fluid hour dragging with smooth snapping animation</p>
   </div>

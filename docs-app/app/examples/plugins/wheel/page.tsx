@@ -185,7 +185,7 @@ picker.create();`}
             Auto-Commit on Scroll
           </h2>
           <p className="text-muted-foreground mb-4">
-            Automatically confirms and closes when scrolling stops — no OK
+            Automatically confirms and closes when scrolling stops - no OK
             button needed.
           </p>
           <TimepickerExample
@@ -216,7 +216,7 @@ picker.create();`}
             Ignore Outside Click
           </h2>
           <p className="text-muted-foreground mb-4">
-            Prevents the popover from closing on outside click — user must press
+            Prevents the popover from closing on outside click - user must press
             OK or Cancel.
           </p>
           <TimepickerExample

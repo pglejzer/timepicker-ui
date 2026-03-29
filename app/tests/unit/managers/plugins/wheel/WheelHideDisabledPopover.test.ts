@@ -72,7 +72,7 @@ function buildCompactWheelModal(instanceId: string): HTMLDivElement {
   return modal;
 }
 
-describe('Wheel hideDisabled — compact-wheel popover 24h + 5min step', () => {
+describe('Wheel hideDisabled - compact-wheel popover 24h + 5min step', () => {
   let element: HTMLDivElement;
   let modal: HTMLDivElement;
   let core: CoreState;
@@ -254,7 +254,7 @@ describe('Wheel hideDisabled — compact-wheel popover 24h + 5min step', () => {
   });
 });
 
-describe('WheelManager integration — popover 24h hideDisabled + 5min step', () => {
+describe('WheelManager integration - popover 24h hideDisabled + 5min step', () => {
   let element: HTMLDivElement;
   let modal: HTMLDivElement;
   let core: CoreState;
@@ -358,4 +358,3 @@ describe('WheelManager integration — popover 24h hideDisabled + 5min step', ()
     });
   });
 });
-

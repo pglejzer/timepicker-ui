@@ -9,7 +9,7 @@ These rules are absolute and have the highest priority.
 
 ---
 
-# 1. Architecture — Composition Only
+# 1. Architecture - Composition Only
 
 ## Mandatory Rules:
 
@@ -21,9 +21,9 @@ These rules are absolute and have the highest priority.
 
 ## Required Modules (ONLY these are allowed):
 
-TimepickerUI — top-level orchestrator
-CoreState — pure state container (no logic)
-EventEmitter — event system
+TimepickerUI - top-level orchestrator
+CoreState - pure state container (no logic)
+EventEmitter - event system
 Managers (composition container)
 ├── ModalManager
 ├── ClockManager
@@ -31,7 +31,7 @@ Managers (composition container)
 ├── ConfigManager
 ├── ThemeManager
 └── ValidationManager
-Lifecycle — mount / unmount orchestration
+Lifecycle - mount / unmount orchestration
 
 All additional functionality MUST be implemented as new manager classes.
 
@@ -75,13 +75,13 @@ Copilot MUST follow these standards in every generated file:
 
 ## Core Principles:
 
-- KISS — Keep It Simple, Stupid
-- DRY — Don't Repeat Yourself
-- YAGNI — You Aren't Gonna Need It
-- SoC — Separation of Concerns
-- SRP — Single Responsibility Principle
-- DIP — Dependency Inversion Principle
-- ISP — Interface Segregation Principle
+- KISS - Keep It Simple, Stupid
+- DRY - Don't Repeat Yourself
+- YAGNI - You Aren't Gonna Need It
+- SoC - Separation of Concerns
+- SRP - Single Responsibility Principle
+- DIP - Dependency Inversion Principle
+- ISP - Interface Segregation Principle
 
 ## Code Quality:
 

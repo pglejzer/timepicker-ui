@@ -231,8 +231,8 @@ export default function Home() {
             >
               <Sparkles className="h-4 w-4 flex-shrink-0" />
               <span>
-                <span className="font-medium">New:</span> Version 4.2.1 — Wheel
-                Plugin, Compact-Wheel, Clear Button and more!
+                <span className="font-medium">New:</span> Version 4.3.0 -
+                Tree-shakeable plugin system: smaller core bundle!
               </span>
             </Link>
           </div>

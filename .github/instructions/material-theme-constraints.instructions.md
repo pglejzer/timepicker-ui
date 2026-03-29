@@ -36,13 +36,13 @@ The following themes are based on **official Material Design color systems** and
 
 When a contrast problem is found in a Material theme:
 
-1. **Verify** whether the palette follows official Material tokens — cross-check against the Material Design 3 color system
-2. **If it follows the spec** — do NOT change the base color. Instead:
+1. **Verify** whether the palette follows official Material tokens - cross-check against the Material Design 3 color system
+2. **If it follows the spec** - do NOT change the base color. Instead:
    - Adjust the `--tp-on-*` (foreground/text) token
    - Adjust `--tp-*-opacity` overlay values
    - Use a different Material surface role (`surface-container-high` instead of `surface`)
    - Add a tint overlay layer
-3. **If it deviates from the spec** — note the deviation and suggest realigning with official tokens
+3. **If it deviates from the spec** - note the deviation and suggest realigning with official tokens
 
 Material tokens from the official spec are the **source of truth**.
 
