@@ -49,7 +49,8 @@ Full guide: [Quick Start docs](https://timepicker-ui.vercel.app/docs/quick-start
 import { TimepickerUI } from "timepicker-ui";
 import "timepicker-ui/main.css";
 
-const picker = new TimepickerUI(document.querySelector("#timepicker"), {
+const input = document.querySelector("#timepicker");
+const picker = new TimepickerUI(input, {
   clock: { type: "24h" },
   ui: { theme: "dark" },
   callbacks: {
@@ -59,7 +60,7 @@ const picker = new TimepickerUI(document.querySelector("#timepicker"), {
 picker.create();
 ```
 
-> **Global CSS required** - make sure your project includes `box-sizing: border-box` (most frameworks do this by default).
+> **Note** - Requires [global](https://timepicker-ui.vercel.app/docs/installation) `box-sizing: border-box` (included by default in most frameworks) .
 
 ## API
 
