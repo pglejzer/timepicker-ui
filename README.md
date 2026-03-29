@@ -1,6 +1,6 @@
 # timepicker-ui
 
-Highly customizable time picker with clock and wheel modes, built for modern frameworks and SSR. Works with any framework or vanilla JavaScript.
+Highly customizable time picker UI library for JavaScript and modern frameworks (React, Vue, Angular), with clock and wheel modes, zero dependencies, and full SSR support.
 
 [![npm version](https://badge.fury.io/js/timepicker-ui.svg)](https://badge.fury.io/js/timepicker-ui)
 [![downloads](https://img.shields.io/npm/dm/timepicker-ui)](https://npmcharts.com/compare/timepicker-ui?minimal=true)
@@ -13,12 +13,31 @@ Highly customizable time picker with clock and wheel modes, built for modern fra
 
 ## Why timepicker-ui?
 
-- **Zero dependencies** - no bloat, no supply-chain risk
+- **Zero dependencies** - no runtime deps, smaller bundle, no supply-chain risk
 - **Multiple UI modes** - analog clock, scroll wheel, compact popover - not just one layout
-- **Plugin architecture** - range picker, timezone selector, wheel mode - import only what you need
-- **SSR safe** - works in Next.js, Nuxt, Remix, Astro without hacks
+- **Plugin architecture** - range, timezone, wheel - import only what you need
+- **SSR safe** - works in Next.js, Nuxt, Remix, Astro out of the box
 - **Any framework** - React, Vue, Angular, Svelte, or plain JS - same API everywhere
-- **Accessible** - ARIA attributes, keyboard navigation, focus trap, screen reader support
+- **Accessible** - ARIA, keyboard nav, focus trap, screen reader support
+
+## Use Cases
+
+- Booking forms, scheduling, reservations
+- Admin panels and dashboards
+- Mobile-first apps with touch/scroll UX
+- Time range selection (via Range plugin)
+- SSR applications (Next.js, Nuxt, Remix, Astro)
+
+## Compared to Other Libraries
+
+|                   | timepicker-ui                    | Typical UI lib             |
+| ----------------- | -------------------------------- | -------------------------- |
+| Dependencies      | **0**                            | 1-10+                      |
+| UI modes          | Clock + Wheel + Compact          | Clock only                 |
+| Plugin system     | Yes (range, timezone, wheel)     | No                         |
+| Framework lock-in | None - works everywhere          | Often React-only           |
+| SSR safe          | Yes, out of the box              | Often requires workarounds |
+| Tree-shakeable    | Yes - plugins excluded if unused | Varies                     |
 
 ## Features
 
@@ -182,6 +201,13 @@ function TimePicker() {
 ```
 
 > There is also a dedicated [React wrapper package](https://github.com/pglejzer/timepicker-ui-react).
+
+## Performance
+
+- **Tree-shakeable** - unused plugins are fully excluded from the bundle
+- **Lightweight core** - ~63 KB ESM (minified)
+- **Plugins loaded on demand** - range, timezone, wheel add size only when imported
+- **No runtime dependencies** - nothing extra to download or audit
 
 ## Development
 
