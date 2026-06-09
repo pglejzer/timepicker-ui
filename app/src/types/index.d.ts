@@ -160,7 +160,9 @@ declare module 'timepicker-ui' {
       | 'glassmorphic'
       | 'pastel'
       | 'ai'
-      | 'cyberpunk';
+      | 'cyberpunk'
+      | 'blueprint'
+      | 'blueprint-dark';
     /** @default true */
     animation?: boolean;
     /** @default true */
