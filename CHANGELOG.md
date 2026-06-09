@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.4.0] - 2026-06-09
+
+### Added
+
+- Two new built-in themes - `blueprint` (light precision-instrument look: cobalt-blue accent, white surfaces, hairline borders) and `blueprint-dark` (cobalt accent on near-black neutrals). Enable via `ui.theme: 'blueprint'` / `'blueprint-dark'` and import the matching `timepicker-ui/theme-blueprint.css` / `timepicker-ui/theme-blueprint-dark.css` stylesheet. Brings the bundled theme count from 10 to 12, each still tree-shakeable as a separate CSS file
+- 16 new accessibility `labels.*` options for fully localizable screen-reader and ARIA text: `hourLabel`, `minuteLabel`, `clockLabel`, `periodLabel`, `timeLabel`, `format24Label`, `rangeSelectionLabel`, `switchToKeyboardLabel`, `switchToClockLabel`, `toggleLabel`, `timezoneSelectorLabel`, `announceHour`, `announceMinute`, `announceAmSelected`, `announcePmSelected`, and `invalidTimeFormat`. All optional, with English defaults - previously these strings were hardcoded
+- Home / End / PageUp / PageDown key support on the hour and minute spinbuttons (clock mode) and on the wheel columns, in addition to the existing Arrow keys, for faster keyboard time selection
+
+### Changed
+
+- Screen-reader announcements and ARIA labels across the clock, wheel, range, timezone, and modal now read from the `labels` group instead of hardcoded English, so all assistive-technology text can be localized
+- Spinbutton inputs now expose `aria-valuetext` and keep it in sync on every change for more accurate screen-reader output
+- Focus trap now skips elements marked `aria-disabled` / `aria-hidden`, so keyboard tabbing only lands on genuinely actionable controls
+
+### Fixed
+
+- Improved focus-ring visibility with a new high-contrast focus halo, so the focused control is clearly distinguishable on every theme
+
+---
+
 ## [4.3.0] - 2026-03-26
 
 ### Added
