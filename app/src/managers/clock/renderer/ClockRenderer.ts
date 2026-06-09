@@ -3,6 +3,7 @@ import { HourEngine } from '../engine/HourEngine';
 import { MinuteEngine } from '../engine/MinuteEngine';
 import { AngleEngine } from '../engine/AngleEngine';
 import { isDocument } from '../../../utils/node';
+import { prefersReducedMotion } from '../../../utils/accessibility';
 
 export class ClockRenderer {
   private config: RenderConfig;
@@ -39,6 +40,11 @@ export class ClockRenderer {
     const targetAngle = AngleEngine.calculateShortestPath(this.currentAngle, angle);
     this.currentAngle = targetAngle;
 
+    if (prefersReducedMotion()) {
+      this.config.clockHand.style.transform = `rotateZ(${targetAngle}deg)`;
+      return;
+    }
+
     this.config.tipsWrapper.classList.add('tp-ui-tips-animation');
     this.config.clockHand.style.transform = `rotateZ(${targetAngle}deg)`;
 
@@ -62,10 +68,8 @@ export class ClockRenderer {
 
         if (isActive) {
           htmlTip.classList.add('active');
-          htmlTip.setAttribute('aria-selected', 'true');
         } else {
           htmlTip.classList.remove('active');
-          htmlTip.setAttribute('aria-selected', 'false');
         }
       });
     });
@@ -134,9 +138,7 @@ export class ClockRenderer {
     const spanTip = document.createElement('span');
 
     spanTip.textContent = value;
-    spanTip.setAttribute('role', 'option');
-    spanTip.setAttribute('aria-selected', 'false');
-    spanTip.tabIndex = 0;
+    spanTip.tabIndex = -1;
 
     const tipClass =
       clockType === '24h' && className.includes('24') ? 'tp-ui-value-tips-24h' : 'tp-ui-value-tips';
@@ -165,16 +167,13 @@ export class ClockRenderer {
   ): void {
     span.classList.remove('tp-ui-tips-disabled');
     spanTip.classList.remove('tp-ui-tips-disabled');
-    spanTip.removeAttribute('aria-disabled');
-    spanTip.tabIndex = 0;
+    spanTip.tabIndex = -1;
 
     const isDisabled = this.checkIfDisabled(value, mode, disabledTime, clockType, amPm, currentHour);
 
     if (isDisabled) {
       span.classList.add('tp-ui-tips-disabled');
       spanTip.classList.add('tp-ui-tips-disabled');
-      spanTip.setAttribute('aria-disabled', 'true');
-      spanTip.tabIndex = -1;
     }
   }
 

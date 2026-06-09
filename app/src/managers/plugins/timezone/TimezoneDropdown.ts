@@ -34,6 +34,15 @@ export class TimezoneDropdown {
     return options;
   }
 
+  private getInstanceId(): string {
+    const dropdown = this.getDropdown();
+    return dropdown?.getAttribute('data-tz-id') ?? 'tp';
+  }
+
+  getOptionId(index: number): string {
+    return `tp-tz-opt-${this.getInstanceId()}-${index}`;
+  }
+
   populateOptions(): void {
     const { whitelist } = this.core.options.timezone ?? {};
     const timezones = getTimezoneList(whitelist);
@@ -43,8 +52,8 @@ export class TimezoneDropdown {
 
     const optionsHtml = timezones
       .map(
-        (tz: TimezoneInfo) =>
-          `<div class="tp-ui-timezone-option" role="option" data-value="${tz.id}" tabindex="-1">${tz.label}</div>`,
+        (tz: TimezoneInfo, index: number) =>
+          `<div class="tp-ui-timezone-option" role="option" id="${this.getOptionId(index)}" data-value="${tz.id}" aria-selected="false" tabindex="-1">${tz.label}</div>`,
       )
       .join('');
 
@@ -63,6 +72,8 @@ export class TimezoneDropdown {
       if (selectedOption instanceof HTMLElement) {
         selectedOption.scrollIntoView({ block: 'nearest' });
       }
+    } else {
+      dropdown.removeAttribute('aria-activedescendant');
     }
   }
 
@@ -85,6 +96,7 @@ export class TimezoneDropdown {
       options.forEach((option) => {
         const isSelected = option.getAttribute('data-value') === timezoneId;
         option.setAttribute('data-selected', String(isSelected));
+        option.setAttribute('aria-selected', String(isSelected));
         if (isSelected) {
           selectedLabel = option.textContent || '';
         }

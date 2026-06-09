@@ -1,12 +1,14 @@
 import type { WheelRenderer } from './WheelRenderer';
 import type { WheelColumnType } from './WheelTypes';
 import { ColumnDragState } from './ColumnDragState';
+import {
+  MOMENTUM_FRICTION,
+  MOMENTUM_MIN_VELOCITY,
+  MOMENTUM_MAX_VELOCITY,
+  WHEEL_ITEM_SNAP_THRESHOLD,
+} from './WheelMomentum';
+import { clampValue } from '../../../utils/input/clamp';
 import { isDocument } from '../../../utils/node';
-
-const MOMENTUM_FRICTION = 0.92;
-const MOMENTUM_MIN_VELOCITY = 0.3;
-const MOMENTUM_MAX_VELOCITY = 8;
-const WHEEL_ITEM_SNAP_THRESHOLD = 30;
 
 type SnapCallback = (columnType: WheelColumnType) => void;
 type VisualUpdateCallback = (columnType: WheelColumnType) => void;
@@ -158,7 +160,7 @@ export class WheelDragHandler {
     state.addVelocitySample(e.clientY);
 
     const maxOffset = this.getMaxOffset(state.columnType);
-    const newOffset = clamp(state.element.scrollTop + delta, 0, maxOffset);
+    const newOffset = clampValue(state.element.scrollTop + delta, 0, maxOffset);
 
     state.element.scrollTop = newOffset;
     state.updateLastY(e.clientY);
@@ -212,7 +214,7 @@ export class WheelDragHandler {
       const maxOffset = this.getMaxOffset(columnType);
       const currentIndex = Math.round(state.element.scrollTop / itemHeight);
       const nextIndex = currentIndex + direction;
-      const targetOffset = clamp(nextIndex * itemHeight, 0, maxOffset);
+      const targetOffset = clampValue(nextIndex * itemHeight, 0, maxOffset);
 
       state.animateToOffset(targetOffset, (): void => {
         this.emitVisualUpdate(columnType);
@@ -226,7 +228,7 @@ export class WheelDragHandler {
   }
 
   private startMomentum(state: ColumnDragState, initialVelocity: number): void {
-    let velocity = clamp(initialVelocity, -MOMENTUM_MAX_VELOCITY, MOMENTUM_MAX_VELOCITY);
+    let velocity = clampValue(initialVelocity, -MOMENTUM_MAX_VELOCITY, MOMENTUM_MAX_VELOCITY);
     let lastTime = performance.now();
     const maxOffset = this.getMaxOffset(state.columnType);
 
@@ -238,7 +240,7 @@ export class WheelDragHandler {
       velocity *= MOMENTUM_FRICTION;
       const displacement = velocity * dt;
       const currentTop = state.element.scrollTop;
-      const newOffset = clamp(currentTop + displacement, 0, maxOffset);
+      const newOffset = clampValue(currentTop + displacement, 0, maxOffset);
 
       state.element.scrollTop = newOffset;
       this.emitVisualUpdate(state.columnType);
@@ -264,7 +266,7 @@ export class WheelDragHandler {
 
     const maxOffset = this.getMaxOffset(columnType);
     const snappedIndex = Math.round(state.element.scrollTop / itemHeight);
-    const snappedOffset = clamp(snappedIndex * itemHeight, 0, maxOffset);
+    const snappedOffset = clampValue(snappedIndex * itemHeight, 0, maxOffset);
 
     state.animateToOffset(snappedOffset, (): void => {
       this.emitVisualUpdate(columnType);
@@ -293,9 +295,5 @@ export class WheelDragHandler {
       this.onVisualUpdate(columnType);
     }
   }
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
 }
 

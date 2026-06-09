@@ -24,6 +24,7 @@
 
   --tp-border: rgba(255, 255, 255, 0.35);
   --tp-outline: rgba(255, 255, 255, 0.9);
+  --tp-focus-ring-halo: rgba(255, 255, 255, 0.85);
 
   --tp-shadow: 0 10px 32px rgba(15, 15, 15, 0.25), 0 4px 8px rgba(0, 0, 0, 0.12);
   --tp-backdrop-filter: blur(12px) saturate(180%);
@@ -32,6 +33,7 @@
 
   --tp-dropdown-option-bg: rgba(255, 255, 255, 0.85);
   --tp-dropdown-option-text: #000000;
+  --tp-error: #ffb4ab;
 
   --tp-wheel-highlight-bg: rgba(255, 255, 255, 0.12);
   --tp-wheel-highlight-border: rgba(255, 255, 255, 0.2);

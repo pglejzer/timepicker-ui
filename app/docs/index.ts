@@ -1,6 +1,7 @@
 import './examples/setup';
 import './examples/basic';
 import './examples/themes';
+import './examples/blueprint';
 import './examples/timezone-themes';
 import './examples/range-themes';
 import './examples/disabled';

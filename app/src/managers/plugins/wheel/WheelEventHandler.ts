@@ -7,6 +7,12 @@ import { announceToScreenReader } from '../../../utils/accessibility';
 
 const ARROW_UP = 'ArrowUp';
 const ARROW_DOWN = 'ArrowDown';
+const HOME = 'Home';
+const END = 'End';
+const PAGE_UP = 'PageUp';
+const PAGE_DOWN = 'PageDown';
+const NAV_KEYS = [ARROW_UP, ARROW_DOWN, HOME, END, PAGE_UP, PAGE_DOWN];
+const PAGE_STEP = 5;
 const NEUTRAL_HOUR = '12';
 const NEUTRAL_MINUTES = '00';
 const NEUTRAL_AMPM = 'AM';
@@ -76,25 +82,32 @@ export class WheelEventHandler {
     const modal = this.core.getModalElement();
 
     switch (columnType) {
-      case 'hours':
+      case 'hours': {
         this.syncHourInput(value);
         this.emitter.emit('select:hour', { hour: value });
-        announceToScreenReader(modal, `Hour: ${value}`);
+        const prefix = this.core.options.labels.announceHour ?? 'Hour';
+        announceToScreenReader(modal, `${prefix}: ${value}`);
         break;
-      case 'minutes':
+      }
+      case 'minutes': {
         this.syncMinuteInput(value);
         this.emitter.emit('select:minute', { minutes: value });
-        announceToScreenReader(modal, `Minutes: ${value}`);
+        const prefix = this.core.options.labels.announceMinute ?? 'Minutes';
+        announceToScreenReader(modal, `${prefix}: ${value}`);
         break;
-      case 'ampm':
+      }
+      case 'ampm': {
         this.syncAmPmState(value);
+        const labels = this.core.options.labels;
         if (value === 'AM') {
           this.emitter.emit('select:am', {});
+          announceToScreenReader(modal, labels.announceAmSelected ?? 'AM selected');
         } else {
           this.emitter.emit('select:pm', {});
+          announceToScreenReader(modal, labels.announcePmSelected ?? 'PM selected');
         }
-        announceToScreenReader(modal, `${value} selected`);
         break;
+      }
     }
 
     this.emitter.emit('update', {
@@ -171,9 +184,9 @@ export class WheelEventHandler {
       if (!col) return;
 
       const listener = (e: KeyboardEvent): void => {
-        if (e.key === ARROW_UP || e.key === ARROW_DOWN) {
+        if (NAV_KEYS.includes(e.key)) {
           e.preventDefault();
-          this.handleArrowKey(type, e.key);
+          this.handleNavKey(type, e.key);
         }
       };
 
@@ -196,7 +209,7 @@ export class WheelEventHandler {
     return modal.querySelector<HTMLDivElement>(selectorMap[type]);
   }
 
-  private handleArrowKey(columnType: WheelColumnType, key: string): void {
+  private handleNavKey(columnType: WheelColumnType, key: string): void {
     const currentValue = this.scrollHandler.getSelectedValue(columnType);
     if (currentValue === null) return;
 
@@ -204,6 +217,8 @@ export class WheelEventHandler {
     if (!col) return;
 
     const items = col.querySelectorAll<HTMLDivElement>('.tp-ui-wheel-item');
+    if (items.length === 0) return;
+
     let currentIndex = -1;
     for (let i = 0; i < items.length; i++) {
       if (items[i].getAttribute('data-value') === currentValue) {
@@ -213,14 +228,33 @@ export class WheelEventHandler {
     }
     if (currentIndex < 0) return;
 
-    const direction = key === ARROW_UP ? -1 : 1;
-    const nextIndex = currentIndex + direction;
-    if (nextIndex < 0 || nextIndex >= items.length) return;
+    const lastIndex = items.length - 1;
+    const nextIndex = this.computeNavIndex(key, currentIndex, lastIndex);
+    if (nextIndex < 0 || nextIndex > lastIndex || nextIndex === currentIndex) return;
 
     const nextValue = items[nextIndex].getAttribute('data-value');
     if (nextValue !== null) {
       this.scrollHandler.scrollToValue(columnType, nextValue);
       this.handleColumnScrollEnd(columnType, nextValue);
+    }
+  }
+
+  private computeNavIndex(key: string, currentIndex: number, lastIndex: number): number {
+    switch (key) {
+      case ARROW_UP:
+        return currentIndex - 1;
+      case ARROW_DOWN:
+        return currentIndex + 1;
+      case HOME:
+        return 0;
+      case END:
+        return lastIndex;
+      case PAGE_UP:
+        return Math.max(0, currentIndex - PAGE_STEP);
+      case PAGE_DOWN:
+        return Math.min(lastIndex, currentIndex + PAGE_STEP);
+      default:
+        return currentIndex;
     }
   }
 

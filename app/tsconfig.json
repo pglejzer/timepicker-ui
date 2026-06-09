@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
     "declaration": true,
     "declarationDir": "./dist/types",
     "esModuleInterop": true,
@@ -9,14 +8,13 @@
     "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "ESNext", "dom.iterable"],
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noErrorTruncation": true,
     "noImplicitAny": true,
     "removeComments": false,
     "sourceMap": false,
     "strict": true,
-    "target": "es6",
-    "downlevelIteration": true,
+    "target": "es2020",
     "typeRoots": ["./src/index.d.ts", "./node_modules/@types", "./typings", "./dist/types", "./types"],
     "types": ["node", "jest"],
     "paths": {

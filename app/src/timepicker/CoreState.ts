@@ -28,7 +28,22 @@ export interface CoreStateData {
 }
 
 export class CoreState {
-  private state: CoreStateData;
+  private _degreesHours: number | null = null;
+  private _degreesMinutes: number | null = null;
+  private _options: Required<TimepickerOptions>;
+  private _isMobileView = false;
+  private _isTouchMouseMove = false;
+  private _disabledTime: CoreStateData['disabledTime'] = null;
+  private _cloned: Node | null = null;
+  private _isModalRemove = true;
+  private _isOpen = false;
+  private _isInitialized = false;
+  private _eventHandlersRegistered = false;
+  private _isDestroyed = false;
+
+  public readonly element: HTMLElement;
+  public readonly instanceId: string;
+  public readonly customId?: string;
 
   constructor(
     element: HTMLElement,
@@ -36,255 +51,186 @@ export class CoreState {
     instanceId: string,
     customId?: string,
   ) {
-    this.state = {
-      degreesHours: null,
-      degreesMinutes: null,
-      options,
-      element,
-      instanceId,
-      isMobileView: false,
-      isTouchMouseMove: false,
-      disabledTime: null,
-      cloned: null,
-      isModalRemove: true,
-      isOpen: false,
-      isInitialized: false,
-      customId,
-      eventHandlersRegistered: false,
-      isDestroyed: false,
-    };
+    this.element = element;
+    this.instanceId = instanceId;
+    this.customId = customId;
+    this._options = options;
   }
 
   get degreesHours(): number | null {
-    return this.state.degreesHours;
+    return this._degreesHours;
   }
-
   get degreesMinutes(): number | null {
-    return this.state.degreesMinutes;
+    return this._degreesMinutes;
   }
-
   get options(): Required<TimepickerOptions> {
-    return this.state.options;
+    return this._options;
   }
-
-  get element(): HTMLElement {
-    return this.state.element;
-  }
-
-  get instanceId(): string {
-    return this.state.instanceId;
-  }
-
   get isMobileView(): boolean {
-    return this.state.isMobileView;
+    return this._isMobileView;
   }
-
   get isTouchMouseMove(): boolean {
-    return this.state.isTouchMouseMove;
+    return this._isTouchMouseMove;
   }
-
   get disabledTime(): CoreStateData['disabledTime'] {
-    return this.state.disabledTime;
+    return this._disabledTime;
   }
-
   get cloned(): Node | null {
-    return this.state.cloned;
+    return this._cloned;
   }
-
   get isModalRemove(): boolean {
-    return this.state.isModalRemove;
+    return this._isModalRemove;
   }
-
   get isOpen(): boolean {
-    return this.state.isOpen;
+    return this._isOpen;
   }
-
   get isInitialized(): boolean {
-    return this.state.isInitialized;
+    return this._isInitialized;
   }
-
-  get customId(): string | undefined {
-    return this.state.customId;
-  }
-
   get eventHandlersRegistered(): boolean {
-    return this.state.eventHandlersRegistered;
+    return this._eventHandlersRegistered;
   }
-
   get isDestroyed(): boolean {
-    return this.state.isDestroyed;
+    return this._isDestroyed;
   }
 
   setDegreesHours(value: number | null): void {
-    this.state = { ...this.state, degreesHours: value };
+    this._degreesHours = value;
   }
-
   setDegreesMinutes(value: number | null): void {
-    this.state = { ...this.state, degreesMinutes: value };
+    this._degreesMinutes = value;
   }
-
   setOptions(options: Required<TimepickerOptions>): void {
-    this.state = { ...this.state, options };
+    this._options = options;
   }
-
   setIsMobileView(value: boolean): void {
-    this.state = { ...this.state, isMobileView: value };
+    this._isMobileView = value;
   }
-
   setIsTouchMouseMove(value: boolean): void {
-    this.state = { ...this.state, isTouchMouseMove: value };
+    this._isTouchMouseMove = value;
   }
-
   setDisabledTime(value: CoreStateData['disabledTime']): void {
-    this.state = { ...this.state, disabledTime: value };
+    this._disabledTime = value;
   }
-
   setCloned(value: Node | null): void {
-    this.state = { ...this.state, cloned: value };
+    this._cloned = value;
   }
-
   setIsModalRemove(value: boolean): void {
-    this.state = { ...this.state, isModalRemove: value };
+    this._isModalRemove = value;
   }
-
   setIsOpen(value: boolean): void {
-    this.state = { ...this.state, isOpen: value };
+    this._isOpen = value;
   }
-
   setIsInitialized(value: boolean): void {
-    this.state = { ...this.state, isInitialized: value };
+    this._isInitialized = value;
   }
-
   setEventHandlersRegistered(value: boolean): void {
-    this.state = { ...this.state, eventHandlersRegistered: value };
+    this._eventHandlersRegistered = value;
   }
-
   setIsDestroyed(value: boolean): void {
-    this.state = { ...this.state, isDestroyed: value };
+    this._isDestroyed = value;
   }
 
   updateOptions(updates: Partial<TimepickerOptions>): void {
-    this.state = {
-      ...this.state,
-      options: {
-        ...this.state.options,
-        clock: { ...this.state.options.clock, ...(updates.clock || {}) },
-        ui: { ...this.state.options.ui, ...(updates.ui || {}) },
-        labels: { ...this.state.options.labels, ...(updates.labels || {}) },
-        behavior: { ...this.state.options.behavior, ...(updates.behavior || {}) },
-        callbacks: { ...this.state.options.callbacks, ...(updates.callbacks || {}) },
-      },
+    this._options = {
+      ...this._options,
+      clock: { ...this._options.clock, ...(updates.clock || {}) },
+      ui: { ...this._options.ui, ...(updates.ui || {}) },
+      labels: { ...this._options.labels, ...(updates.labels || {}) },
+      behavior: { ...this._options.behavior, ...(updates.behavior || {}) },
+      callbacks: { ...this._options.callbacks, ...(updates.callbacks || {}) },
     };
   }
 
   reset(): void {
-    this.state = {
-      ...this.state,
-      degreesHours: null,
-      degreesMinutes: null,
-      isTouchMouseMove: false,
-      disabledTime: null,
-      cloned: null,
-      isModalRemove: true,
-      isOpen: false,
-      isInitialized: false,
-      isDestroyed: true,
-      eventHandlersRegistered: false,
-    };
+    this._degreesHours = null;
+    this._degreesMinutes = null;
+    this._isTouchMouseMove = false;
+    this._disabledTime = null;
+    this._cloned = null;
+    this._isModalRemove = true;
+    this._isOpen = false;
+    this._isInitialized = false;
+    this._isDestroyed = true;
+    this._eventHandlersRegistered = false;
+  }
+
+  private q<T extends Element = HTMLElement>(selector: string): T | null {
+    const modal = this.getModalElement();
+    return (modal?.querySelector(selector) as T | null) ?? null;
+  }
+
+  private qMobile<T extends Element = HTMLElement>(mobileSel: string, desktopSel: string): T | null {
+    return this._isMobileView ? this.q<T>(mobileSel) : this.q<T>(desktopSel);
   }
 
   getModalElement(): HTMLDivElement | null {
     if (isDocument() === false) return null;
-    return document.querySelector(`[data-owner-id="${this.state.instanceId}"]`);
+    return document.querySelector(`[data-owner-id="${this.instanceId}"]`);
   }
 
   getInput(): HTMLInputElement | null {
-    return this.state.element?.querySelector('input');
+    return this.element?.querySelector('input');
   }
 
   getClockFace(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    if (!modal) return null;
-
-    if (this.state.isMobileView) {
-      return modal.querySelector('.tp-ui-clock-face.mobile');
-    }
-    return modal.querySelector('.tp-ui-clock-face:not(.mobile)');
+    return this.qMobile<HTMLDivElement>('.tp-ui-clock-face.mobile', '.tp-ui-clock-face:not(.mobile)');
   }
 
   getClockHand(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    if (!modal) return null;
-
-    if (this.state.isMobileView) {
-      return modal.querySelector('.tp-ui-mobile-clock-wrapper .tp-ui-clock-hand');
-    }
-    return modal.querySelector('.tp-ui-clock-hand:not(.mobile)');
+    return this.qMobile<HTMLDivElement>(
+      '.tp-ui-mobile-clock-wrapper .tp-ui-clock-hand',
+      '.tp-ui-clock-hand:not(.mobile)',
+    );
   }
 
   getCircle(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    if (!modal) return null;
-
-    if (this.state.isMobileView) {
-      return modal.querySelector('.tp-ui-mobile-clock-wrapper .tp-ui-circle-hand');
-    }
-    return modal.querySelector('.tp-ui-circle-hand:not(.mobile)');
+    return this.qMobile<HTMLDivElement>(
+      '.tp-ui-mobile-clock-wrapper .tp-ui-circle-hand',
+      '.tp-ui-circle-hand:not(.mobile)',
+    );
   }
 
   getTipsWrapper(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    if (!modal) return null;
-
-    if (this.state.isMobileView) {
-      return modal.querySelector('.tp-ui-mobile-clock-wrapper .tp-ui-tips-wrapper');
-    }
-    return modal.querySelector('.tp-ui-tips-wrapper:not(.mobile)');
+    return this.qMobile<HTMLDivElement>(
+      '.tp-ui-mobile-clock-wrapper .tp-ui-tips-wrapper',
+      '.tp-ui-tips-wrapper:not(.mobile)',
+    );
   }
 
   getTipsWrapperFor24h(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    if (!modal) return null;
-
-    if (this.state.isMobileView) {
-      return modal.querySelector('.tp-ui-mobile-clock-wrapper .tp-ui-tips-wrapper-24h');
-    }
-    return modal.querySelector('.tp-ui-tips-wrapper-24h:not(.mobile)');
+    return this.qMobile<HTMLDivElement>(
+      '.tp-ui-mobile-clock-wrapper .tp-ui-tips-wrapper-24h',
+      '.tp-ui-tips-wrapper-24h:not(.mobile)',
+    );
   }
 
   getMinutes(): HTMLInputElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-minutes') || null;
+    return this.q<HTMLInputElement>('.tp-ui-minutes');
   }
 
   getHour(): HTMLInputElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-hour') || null;
+    return this.q<HTMLInputElement>('.tp-ui-hour');
   }
 
   getAM(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-am') || null;
+    return this.q<HTMLDivElement>('.tp-ui-am');
   }
 
   getPM(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-pm') || null;
+    return this.q<HTMLDivElement>('.tp-ui-pm');
   }
 
   getHourText(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-hour-text') || null;
+    return this.q<HTMLDivElement>('.tp-ui-hour-text');
   }
 
   getMinutesText(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-minute-text') || null;
+    return this.q<HTMLDivElement>('.tp-ui-minute-text');
   }
 
   getHeader(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-header') || null;
+    return this.q<HTMLDivElement>('.tp-ui-header');
   }
 
   getInputWrappers(): NodeListOf<Element> | null {
@@ -293,18 +239,15 @@ export class CoreState {
   }
 
   getDots(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-dots') || null;
+    return this.q<HTMLDivElement>('.tp-ui-dots');
   }
 
   getMinutesTips(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-minutes-time') || null;
+    return this.q<HTMLDivElement>('.tp-ui-minutes-time');
   }
 
   getHourTips(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-hour-time-12') || null;
+    return this.q<HTMLDivElement>('.tp-ui-hour-time-12');
   }
 
   getAllValueTips(): Array<HTMLDivElement> {
@@ -318,7 +261,7 @@ export class CoreState {
   }
 
   getOpenElementData(): string[] | null {
-    const data: NodeListOf<HTMLElement> = this.state.element?.querySelectorAll('[data-open]');
+    const data: NodeListOf<HTMLElement> = this.element?.querySelectorAll('[data-open]');
 
     if (data?.length > 0) {
       const arr: string[] = [];
@@ -338,36 +281,30 @@ export class CoreState {
       return [input as HTMLInputElement] as const;
     }
 
-    return openData.map((open) => this.state.element?.querySelectorAll(`[data-open='${open}']`))[0] ?? '';
+    return openData.map((open) => this.element?.querySelectorAll(`[data-open='${open}']`))[0] ?? '';
   }
 
   getCancelButton(): HTMLButtonElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-cancel-btn') || null;
+    return this.q<HTMLButtonElement>('.tp-ui-cancel-btn');
   }
 
   getOkButton(): HTMLButtonElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-ok-btn') || null;
+    return this.q<HTMLButtonElement>('.tp-ui-ok-btn');
   }
 
   getActiveTypeMode(): HTMLButtonElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-type-mode.active') || null;
+    return this.q<HTMLButtonElement>('.tp-ui-type-mode.active');
   }
 
   getKeyboardClockIcon(): HTMLButtonElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-keyboard-icon-wrapper') || null;
+    return this.q<HTMLButtonElement>('.tp-ui-keyboard-icon-wrapper');
   }
 
   getFooter(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-footer') || null;
+    return this.q<HTMLDivElement>('.tp-ui-footer');
   }
 
   getWrapper(): HTMLDivElement | null {
-    const modal = this.getModalElement();
-    return modal?.querySelector('.tp-ui-wrapper') || null;
+    return this.q<HTMLDivElement>('.tp-ui-wrapper');
   }
 }

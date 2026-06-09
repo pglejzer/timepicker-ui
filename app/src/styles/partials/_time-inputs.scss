@@ -98,6 +98,8 @@
     color: var(--tp-text);
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    appearance: textfield !important;
+    -moz-appearance: textfield !important;
 
     &.mobile {
       height: 72px;

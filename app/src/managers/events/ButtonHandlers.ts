@@ -1,4 +1,4 @@
-import { announceToScreenReader, updateAriaPressed } from '../../utils/accessibility';
+import { announceToScreenReader, updateAriaPressed, bindActivate } from '../../utils/accessibility';
 import type { CoreState } from '../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../utils/EventEmitter';
 
@@ -16,16 +16,13 @@ export class ButtonHandlers {
     const openElements = this.core.getOpenElement();
     if (!openElements) return;
 
-    const handler = (e: Event): void => {
+    const handler = (): void => {
       if (this.core.isDestroyed) return;
-      const target = e.currentTarget as Element;
-      if (target?.classList.contains('disabled')) return;
       this.emitter.emit('show', {});
     };
 
     openElements.forEach((el) => {
-      el.addEventListener('click', handler);
-      this.cleanupHandlers.push(() => el.removeEventListener('click', handler));
+      this.cleanupHandlers.push(bindActivate(el as HTMLElement, handler));
     });
   }
 
@@ -38,8 +35,7 @@ export class ButtonHandlers {
       this.emitter.emit('cancel', {});
     };
 
-    cancelButton.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => cancelButton.removeEventListener('click', handler));
+    this.cleanupHandlers.push(bindActivate(cancelButton as HTMLElement, handler));
   }
 
   handleOkButton(): void {
@@ -48,6 +44,7 @@ export class ButtonHandlers {
 
     const handler = (): void => {
       if (this.core.isDestroyed) return;
+      if (okButton.getAttribute('aria-disabled') === 'true') return;
 
       const hour = this.core.getHour();
       const minutes = this.core.getMinutes();
@@ -82,8 +79,7 @@ export class ButtonHandlers {
       }
     };
 
-    okButton.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => okButton.removeEventListener('click', handler));
+    this.cleanupHandlers.push(bindActivate(okButton as HTMLElement, handler));
   }
 
   handleAmClick(): void {
@@ -100,7 +96,7 @@ export class ButtonHandlers {
       updateAriaPressed(PM, false);
 
       const modal = this.core.getModalElement();
-      announceToScreenReader(modal, 'AM selected');
+      announceToScreenReader(modal, this.core.options.labels.announceAmSelected ?? 'AM selected');
 
       this.emitter.emit('select:am', {});
 
@@ -113,8 +109,7 @@ export class ButtonHandlers {
       });
     };
 
-    AM.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => AM.removeEventListener('click', handler));
+    this.cleanupHandlers.push(bindActivate(AM, handler));
   }
 
   handlePmClick(): void {
@@ -131,7 +126,7 @@ export class ButtonHandlers {
       updateAriaPressed(AM, false);
 
       const modal = this.core.getModalElement();
-      announceToScreenReader(modal, 'PM selected');
+      announceToScreenReader(modal, this.core.options.labels.announcePmSelected ?? 'PM selected');
 
       this.emitter.emit('select:pm', {});
 
@@ -144,8 +139,7 @@ export class ButtonHandlers {
       });
     };
 
-    PM.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => PM.removeEventListener('click', handler));
+    this.cleanupHandlers.push(bindActivate(PM, handler));
   }
 
   handleSwitchViewButton(): void {
@@ -157,8 +151,7 @@ export class ButtonHandlers {
       this.emitter.emit('switch:view', {});
     };
 
-    switchButton.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => switchButton.removeEventListener('click', handler));
+    this.cleanupHandlers.push(bindActivate(switchButton as HTMLElement, handler));
   }
 
   destroy(): void {

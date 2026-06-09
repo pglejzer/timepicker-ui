@@ -38,6 +38,8 @@
   --tp-dropdown-option-bg: #ffffff;
   --tp-dropdown-option-text: #000000;
 
+  --tp-error: #d50000;
+
   --tp-shadow: unset;
 
   --tp-border-radius: 28px;
@@ -130,6 +132,11 @@
 
   --tp-shadow-inline: 0 2px 8px rgba(0, 0, 0, 0.15);
   --tp-shadow-focus: 0 0 0 4px rgba(98, 0, 238, 0.2);
+
+  --tp-focus-ring-halo: rgba(0, 0, 0, 0.55);
+  --tp-shadow-focus-ring:
+    0 0 0 var(--tp-outline-offset) var(--tp-bg),
+    0 0 0 calc(var(--tp-outline-offset) + var(--tp-outline-width-thick) + 1px) var(--tp-focus-ring-halo);
 
   --tp-gap-sm: 8px;
   --tp-gap-md: 12px;

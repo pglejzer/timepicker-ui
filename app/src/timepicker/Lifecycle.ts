@@ -5,14 +5,20 @@ import { PluginRegistry } from '../core/PluginRegistry';
 import { initMd3Ripple } from '../utils/ripple';
 import { debounce } from '../utils/debounce';
 import { allEvents } from '../utils/variables';
-import { isDocument, isNode } from '../utils/node';
+import { isDocument } from '../utils/node';
 import { TIMINGS } from '../constants/timings';
-
-const THEME_CLASSES = ['basic', 'crane-straight', 'crane', 'm2', 'm3-green'] as const;
+import { isWheelMode, isCompactWheelMode, isPopoverMode } from '../utils/options/predicates';
+import { setupCallbackBridge, emitMissingPluginErrors } from './LifecycleCallbacks';
 
 type TypeFunction = () => void;
 
 export class Lifecycle {
+  private static readonly EXPANDED_EXCLUDED: ReadonlyArray<string> = [
+    'tp-ui-select-time',
+    'tp-ui-mobile-clock-wrapper',
+    'tp-ui-wrapper',
+  ];
+
   private core: CoreState;
   private managers: Managers;
   private emitter: EventEmitter<TimepickerEventMap>;
@@ -49,57 +55,9 @@ export class Lifecycle {
     }
     this.managers.events.handleOpenOnEnterFocus();
 
-    this.setupCallbackBridge();
+    setupCallbackBridge(this.core, this.emitter);
 
     this.core.setIsInitialized(true);
-  }
-
-  private setupCallbackBridge(): void {
-    const { callbacks } = this.core.options;
-
-    if (callbacks.onOpen) {
-      this.emitter.on('open', callbacks.onOpen);
-    }
-    if (callbacks.onCancel) {
-      this.emitter.on('cancel', callbacks.onCancel);
-    }
-    if (callbacks.onConfirm) {
-      this.emitter.on('confirm', callbacks.onConfirm);
-    }
-    if (callbacks.onUpdate) {
-      this.emitter.on('update', callbacks.onUpdate);
-    }
-    if (callbacks.onSelectHour) {
-      this.emitter.on('select:hour', callbacks.onSelectHour);
-    }
-    if (callbacks.onSelectMinute) {
-      this.emitter.on('select:minute', callbacks.onSelectMinute);
-    }
-    if (callbacks.onSelectAM) {
-      this.emitter.on('select:am', callbacks.onSelectAM);
-    }
-    if (callbacks.onSelectPM) {
-      this.emitter.on('select:pm', callbacks.onSelectPM);
-    }
-    if (callbacks.onError) {
-      this.emitter.on('error', callbacks.onError);
-    }
-    if (callbacks.onTimezoneChange) {
-      this.emitter.on('timezone:change', callbacks.onTimezoneChange);
-    }
-    if (callbacks.onRangeConfirm) {
-      this.emitter.on('range:confirm', callbacks.onRangeConfirm);
-    }
-    if (callbacks.onRangeSwitch) {
-      this.emitter.on('range:switch', callbacks.onRangeSwitch);
-    }
-    if (callbacks.onRangeValidation) {
-      this.emitter.on('range:validation', callbacks.onRangeValidation);
-    }
-
-    if (callbacks.onClear) {
-      this.emitter.on('clear', callbacks.onClear);
-    }
   }
 
   mount(): void {
@@ -134,11 +92,9 @@ export class Lifecycle {
 
       this.removeEventListeners();
 
-      if (this.isPopoverMode()) {
+      if (isPopoverMode(this.core.options)) {
         const wheel = this.managers.getPlugin('wheel');
-        if (wheel && 'detachPopover' in wheel) {
-          (wheel as { detachPopover: () => void }).detachPopover();
-        }
+        wheel?.detachPopover?.();
       }
 
       if (modal) {
@@ -149,10 +105,7 @@ export class Lifecycle {
       openElements.forEach((openEl) => openEl?.classList.remove('disabled'));
 
       const scrollbarTimeout = setTimeout(() => {
-        if (isDocument()) {
-          document.body.style.overflowY = '';
-          document.body.style.paddingRight = '';
-        }
+        this.managers.modal.unlockScroll();
       }, TIMINGS.SCROLLBAR_RESTORE);
       this.unmountTimeouts.push(scrollbarTimeout);
 
@@ -200,7 +153,6 @@ export class Lifecycle {
     openElements?.forEach((el) => {
       if (el) {
         el.classList.remove('disabled', 'active', 'tp-ui-open-element');
-        el.classList.remove(...THEME_CLASSES);
       }
     });
 
@@ -217,7 +169,6 @@ export class Lifecycle {
 
     const element = this.core.element;
     if (element) {
-      element.classList.remove(...THEME_CLASSES);
       element.classList.remove('error', 'active', 'disabled');
       element.removeAttribute('data-owner-id');
       element.removeAttribute('data-open');
@@ -237,10 +188,7 @@ export class Lifecycle {
     this.managers.destroy();
     this.emitter.clear();
 
-    if (!isNode()) {
-      document.body.style.overflowY = '';
-      document.body.style.paddingRight = '';
-    }
+    this.managers.modal.unlockScroll();
 
     if (callback) callback();
   }
@@ -263,18 +211,16 @@ export class Lifecycle {
     this.managers.animation.setAnimationToOpen();
     this.managers.config.getInputValueOnOpenAndSet();
 
-    const isWheelMode = this.resolveWheelMode();
-    this.emitMissingPluginErrors();
-    this.initClockOrWheel(isWheelMode);
-    this.initOptionalPlugins(isWheelMode);
-    this.bindEventHandlers(isWheelMode);
-    this.finalizeModal(isWheelMode);
+    const wheelModeActive = isWheelMode(this.core.options) && PluginRegistry.has('wheel');
+    emitMissingPluginErrors(this.core, this.emitter);
+    this.initClockOrWheel(wheelModeActive);
+    this.initOptionalPlugins(wheelModeActive);
+    this.bindEventHandlers(wheelModeActive);
+    this.finalizeModal(wheelModeActive);
 
-    if (this.isPopoverMode()) {
+    if (isPopoverMode(this.core.options)) {
       const wheel = this.managers.getPlugin('wheel');
-      if (wheel && 'attachPopover' in wheel) {
-        (wheel as { attachPopover: () => void }).attachPopover();
-      }
+      wheel?.attachPopover?.();
     }
 
     this.managers.modal.setShowClassToBackdrop();
@@ -290,7 +236,7 @@ export class Lifecycle {
       const openElements = this.core.getOpenElement();
       openElements.forEach((openEl) => openEl?.classList.add('disabled'));
 
-      if (!this.isPopoverMode()) {
+      if (!isPopoverMode(this.core.options)) {
         const input = this.core.getInput();
         input?.blur();
       }
@@ -305,30 +251,26 @@ export class Lifecycle {
   }
 
   private applyExpandedState(): void {
-    if (!this.core.isMobileView) {
-      const modal = this.core.getModalElement();
-      const clockWrapper = modal?.querySelector('.tp-ui-mobile-clock-wrapper');
-      const wrapper = modal?.querySelector('.tp-ui-wrapper');
-      const allElements = modal?.querySelectorAll('*');
-
-      clockWrapper?.classList.add('expanded');
-      wrapper?.classList.add('expanded');
-      allElements?.forEach((el) => {
-        if (
-          !el.classList.contains('tp-ui-select-time') &&
-          !el.classList.contains('tp-ui-mobile-clock-wrapper') &&
-          !el.classList.contains('tp-ui-wrapper')
-        ) {
-          el.classList.add('expanded');
-        }
-      });
-    } else {
+    if (this.core.isMobileView) {
       this.managers.config.updateClockFaceAccessibility(true);
+      return;
     }
+    const modal = this.core.getModalElement();
+    if (!modal) return;
+
+    modal.querySelector('.tp-ui-mobile-clock-wrapper')?.classList.add('expanded');
+    modal.querySelector('.tp-ui-wrapper')?.classList.add('expanded');
+
+    modal.querySelectorAll('*').forEach((el) => {
+      const isExcluded = Lifecycle.EXPANDED_EXCLUDED.some((cls) => el.classList.contains(cls));
+      if (!isExcluded) {
+        el.classList.add('expanded');
+      }
+    });
   }
 
   private applyThemeDeferred(): void {
-    setTimeout(() => {
+    const themeTimeout = setTimeout(() => {
       this.managers.theme.setTheme();
 
       const wrapper = this.core.getWrapper();
@@ -338,41 +280,7 @@ export class Lifecycle {
         }
       }
     }, 0);
-  }
-
-  private isCompactWheelMode(): boolean {
-    return this.core.options.ui.mode === 'compact-wheel';
-  }
-
-  private isPopoverMode(): boolean {
-    return this.isCompactWheelMode() && !!this.core.options.wheel?.placement;
-  }
-
-  private resolveWheelMode(): boolean {
-    const mode = this.core.options.ui.mode;
-    return (mode === 'wheel' || mode === 'compact-wheel') && PluginRegistry.has('wheel');
-  }
-
-  private emitMissingPluginErrors(): void {
-    const mode = this.core.options.ui.mode;
-    if ((mode === 'wheel' || mode === 'compact-wheel') && !PluginRegistry.has('wheel')) {
-      this.emitter.emit('error', {
-        error: 'WheelPlugin is not registered. Import and register it: PluginRegistry.register(WheelPlugin)',
-      });
-    }
-
-    if (this.core.options.range?.enabled && !PluginRegistry.has('range')) {
-      this.emitter.emit('error', {
-        error: 'RangePlugin is not registered. Import and register it: PluginRegistry.register(RangePlugin)',
-      });
-    }
-
-    if (this.core.options.timezone?.enabled && !PluginRegistry.has('timezone')) {
-      this.emitter.emit('error', {
-        error:
-          'TimezonePlugin is not registered. Import and register it: PluginRegistry.register(TimezonePlugin)',
-      });
-    }
+    this.unmountTimeouts.push(themeTimeout);
   }
 
   private initClockOrWheel(isWheelMode: boolean): void {
@@ -416,7 +324,7 @@ export class Lifecycle {
       this.managers.events.handleSwitchViewButton();
     }
 
-    if (this.core.options.clock.type !== '24h' && !this.isCompactWheelMode()) {
+    if (this.core.options.clock.type !== '24h' && !isCompactWheelMode(this.core.options)) {
       this.managers.events.handleAmClick();
       this.managers.events.handlePmClick();
     }
@@ -428,10 +336,8 @@ export class Lifecycle {
     if (!this.core.options.ui.inline?.enabled) {
       this.managers.events.handleEscClick();
 
-      if (!this.isPopoverMode()) {
-        const isWheelWithPersist =
-          (this.core.options.ui.mode === 'wheel' || this.core.options.ui.mode === 'compact-wheel') &&
-          this.core.options.wheel?.ignoreOutsideClick;
+      if (!isPopoverMode(this.core.options)) {
+        const isWheelWithPersist = isWheelMode && this.core.options.wheel?.ignoreOutsideClick;
 
         if (!isWheelWithPersist) {
           this.managers.events.handleBackdropClick();

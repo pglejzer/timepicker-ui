@@ -54,6 +54,8 @@ export interface TimepickerEventMap {
   [key: string]: unknown;
 }
 
+type TaggedHandler = EventHandler<unknown> & { __originalHandler?: EventHandler<unknown> };
+
 export class EventEmitter<EventMap extends Record<string, unknown> = TimepickerEventMap> {
   private events = new Map<keyof EventMap, Set<EventHandler<unknown>>>();
 
@@ -65,23 +67,32 @@ export class EventEmitter<EventMap extends Record<string, unknown> = TimepickerE
   }
 
   once<K extends keyof EventMap>(event: K, handler: EventHandler<EventMap[K]>): void {
-    const wrappedHandler = (data: EventMap[K]) => {
-      handler(data);
-      this.off(event, wrappedHandler);
-    };
-    this.on(event, wrappedHandler);
+    const wrapped: TaggedHandler = ((data: unknown) => {
+      handler(data as EventMap[K]);
+      this.events.get(event)?.delete(wrapped);
+    }) as TaggedHandler;
+    wrapped.__originalHandler = handler as EventHandler<unknown>;
+    this.on(event, wrapped as EventHandler<EventMap[K]>);
   }
 
   off<K extends keyof EventMap>(event: K, handler?: EventHandler<EventMap[K]>): void {
     if (!handler) {
       this.events.delete(event);
-    } else {
-      this.events.get(event)?.delete(handler as EventHandler<unknown>);
+      return;
     }
+    const set = this.events.get(event);
+    if (!set) return;
+    set.forEach((registered) => {
+      if (registered === handler || (registered as TaggedHandler).__originalHandler === handler) {
+        set.delete(registered);
+      }
+    });
   }
 
   emit<K extends keyof EventMap>(event: K, data?: EventMap[K]): void {
-    this.events.get(event)?.forEach((handler) => {
+    const set = this.events.get(event);
+    if (!set) return;
+    [...set].forEach((handler) => {
       handler(data as EventMap[K]);
     });
   }

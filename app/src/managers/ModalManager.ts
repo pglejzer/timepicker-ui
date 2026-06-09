@@ -5,12 +5,36 @@ import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 import { isDocument, isNode } from '../utils/node';
 import { TIMINGS } from '../constants/timings';
 
+let scrollLockCount = 0;
+let savedOverflowY = '';
+let savedPaddingRight = '';
+
+function acquireScrollLock(): void {
+  if (scrollLockCount === 0) {
+    savedOverflowY = document.body.style.overflowY;
+    savedPaddingRight = document.body.style.paddingRight;
+    document.body.style.paddingRight = `${getScrollbarWidth()}px`;
+    document.body.style.overflowY = 'hidden';
+  }
+  scrollLockCount += 1;
+}
+
+function releaseScrollLock(): void {
+  if (scrollLockCount === 0) return;
+  scrollLockCount -= 1;
+  if (scrollLockCount === 0) {
+    document.body.style.overflowY = savedOverflowY;
+    document.body.style.paddingRight = savedPaddingRight;
+    savedOverflowY = '';
+    savedPaddingRight = '';
+  }
+}
+
 export default class ModalManager {
   private core: CoreState;
   private emitter: EventEmitter<TimepickerEventMap>;
   private timeouts: NodeJS.Timeout[] = [];
-  private originalOverflow?: string;
-  private originalPaddingRight?: string;
+  private scrollLocked = false;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -79,27 +103,35 @@ export default class ModalManager {
     }
   }
 
-  setScrollbarOrNot(): void {
-    if (isDocument() === false) {
-      return;
-    }
+  lockScroll(): void {
+    if (isDocument() === false) return;
+    if (this.core.options.ui.inline?.enabled || this.isPopoverMode()) return;
+    if (this.core.options.ui.enableScrollbar) return;
+    if (this.scrollLocked) return;
 
+    this.scrollLocked = true;
+    acquireScrollLock();
+  }
+
+  unlockScroll(): void {
+    if (isDocument() === false) return;
+    if (!this.scrollLocked) return;
+
+    this.scrollLocked = false;
+    releaseScrollLock();
+  }
+
+  setScrollbarOrNot(): void {
+    if (isDocument() === false) return;
     if (this.core.options.ui.inline?.enabled || this.isPopoverMode()) return;
 
     if (!this.core.options.ui.enableScrollbar) {
-      this.originalOverflow = document.body.style.overflowY;
-      this.originalPaddingRight = document.body.style.paddingRight;
-
-      document.body.style.paddingRight = `${getScrollbarWidth()}px`;
-      document.body.style.overflowY = 'hidden';
+      this.lockScroll();
     } else {
       this.runWithTimeout(() => {
         if (!isNode()) {
           this.runWithTimeout(() => {
-            if (typeof document !== 'undefined') {
-              document.body.style.overflowY = this.originalOverflow || '';
-              document.body.style.paddingRight = this.originalPaddingRight || '';
-            }
+            this.unlockScroll();
           }, TIMINGS.SCROLLBAR_RESTORE);
         }
       }, 400);
@@ -160,12 +192,7 @@ export default class ModalManager {
 
   destroy(): void {
     this.clearAllTimeouts();
-
-    if (!isNode() && !this.core.options.ui.inline?.enabled) {
-      document.body.style.overflowY = this.originalOverflow || '';
-      document.body.style.paddingRight = this.originalPaddingRight || '';
-    }
-
+    this.unlockScroll();
     this.clearExistingModal();
   }
 }

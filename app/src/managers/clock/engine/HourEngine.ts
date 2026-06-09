@@ -1,4 +1,5 @@
 import type { ClockType, AmPmType, DisabledTimeConfig } from '../types';
+import { parseIntervalEdge } from '../../../utils/time/parse';
 
 export class HourEngine {
   static angleToIndex(angle: number, clockType: ClockType, isInnerCircle: boolean): number {
@@ -128,42 +129,16 @@ export class HourEngine {
     clockType: ClockType,
   ): boolean {
     const timeStr = clockType === '12h' ? `${hour}:${minute} ${amPm}` : `${hour}:${minute}`;
+    const target = parseIntervalEdge(timeStr, clockType);
 
     for (const interval of intervals) {
       const [start, end] = interval.split('-').map((s) => s.trim());
-      if (this.isTimeBetween(timeStr, start, end, clockType)) {
-        return true;
-      }
+      const startValue = parseIntervalEdge(start, clockType);
+      const endValue = parseIntervalEdge(end, clockType);
+      if (target >= startValue && target <= endValue) return true;
     }
 
     return false;
-  }
-
-  private static isTimeBetween(time: string, start: string, end: string, clockType: ClockType): boolean {
-    const timeValue = this.timeToMinutes(time, clockType);
-    const startValue = this.timeToMinutes(start, clockType);
-    const endValue = this.timeToMinutes(end, clockType);
-
-    return timeValue >= startValue && timeValue <= endValue;
-  }
-
-  private static timeToMinutes(time: string, clockType: ClockType): number {
-    if (clockType === '12h') {
-      const match = time.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
-      if (!match) return 0;
-
-      let hours = parseInt(match[1]);
-      const minutes = parseInt(match[2]);
-      const period = match[3].toUpperCase();
-
-      if (period === 'PM' && hours !== 12) hours += 12;
-      if (period === 'AM' && hours === 12) hours = 0;
-
-      return hours * 60 + minutes;
-    } else {
-      const [hours, minutes] = time.split(':').map(Number);
-      return hours * 60 + minutes;
-    }
   }
 
   static findNearestValid(
