@@ -92,7 +92,7 @@ export function ReactExamplesSidebar() {
 
   return (
     <nav className="w-full md:w-64 md:shrink-0">
-      <div className="md:sticky md:top-20 md:h-[calc(100vh-5rem)] md:overflow-y-auto">
+      <div className="app-scroll md:sticky md:top-20 md:h-[calc(100vh-5rem)] md:overflow-y-auto">
         <div className="space-y-4 py-4">
           {navigation.map((section) => (
             <div key={section.title}>

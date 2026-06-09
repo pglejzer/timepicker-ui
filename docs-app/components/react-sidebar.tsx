@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ArrowUpRight } from "lucide-react";
 
 const navigation = [
   {
@@ -114,16 +114,16 @@ export function ReactSidebar() {
   };
 
   return (
-    <nav className="w-full md:w-64 md:shrink-0">
-      <div className="md:sticky md:top-20 md:h-[calc(100vh-5rem)] md:overflow-y-auto">
+    <nav className="w-full">
+      <div>
         <div className="space-y-4 py-4">
           {navigation.map((section) => (
             <div key={section.title}>
               <button
                 onClick={() => toggleSection(section.title)}
-                className="flex w-full items-center justify-between px-3 py-2 text-sm font-semibold transition-colors hover:bg-accent/50 md:cursor-default md:hover:bg-transparent"
+                className="flex w-full items-center justify-between px-3 py-2 transition-colors hover:bg-accent/50 md:cursor-default md:hover:bg-transparent"
               >
-                <span>{section.title}</span>
+                <span className="eyebrow">{section.title}</span>
                 <ChevronDown
                   className={`h-4 w-4 transition-transform md:hidden ${
                     openSections[section.title] ? "rotate-180" : ""
@@ -147,17 +147,18 @@ export function ReactSidebar() {
                             href={link.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block rounded-lg px-3 py-2 text-sm transition-colors text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                            className="flex items-center gap-1 border-l-2 border-transparent px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-border hover:text-foreground"
                           >
-                            {link.title} ↗
+                            {link.title}
+                            <ArrowUpRight className="h-3 w-3" />
                           </a>
                         ) : (
                           <Link
                             href={link.href}
-                            className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                            className={`block border-l-2 px-3 py-1.5 text-sm transition-colors ${
                               isActive
-                                ? "bg-primary/10 font-medium text-primary"
-                                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                                ? "border-primary font-medium text-primary"
+                                : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
                             }`}
                           >
                             {link.title}

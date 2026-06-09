@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo, useId } from "react";
+import type { KeyboardEvent } from "react";
 import { CodeBlock } from "@/components/code-block";
-import { Eye, Code } from "lucide-react";
+import { Eye, Code2, ArrowRight } from "lucide-react";
 import { TimepickerUI } from "timepicker-ui";
 
 interface ConfirmEventData {
@@ -41,8 +42,34 @@ export function TimepickerExample({
     to: string;
   } | null>(null);
   const uniqueId = useId();
+  const previewTabRef = useRef<HTMLButtonElement>(null);
+  const codeTabRef = useRef<HTMLButtonElement>(null);
 
-  const memoizedOptions = useMemo(() => options, [JSON.stringify(options)]);
+  // APG tabs: Left/Right (and Home/End) move between the two tabs, selection
+  // follows focus, and we move DOM focus to the newly selected tab.
+  const onTabKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+    let next: "preview" | "code" | null = null;
+    if (e.key === "ArrowRight" || e.key === "End") {
+      next = "code";
+    } else if (e.key === "ArrowLeft" || e.key === "Home") {
+      next = "preview";
+    }
+    if (!next) return;
+    e.preventDefault();
+    setViewMode(next);
+    (next === "preview" ? previewTabRef : codeTabRef).current?.focus();
+  };
+
+  // Serialize the options so the picker is only recreated when the option
+  // values actually change, not on every render that passes a new object
+  // literal. The serialized key is the real dependency here.
+  const optionsKey = JSON.stringify(options);
+  const pluginsKey = plugins.join(",");
+  const memoizedOptions = useMemo(
+    () => options,
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- optionsKey tracks `options` by value; depending on `options` directly would re-memo on every render
+    [optionsKey],
+  );
 
   useEffect(() => {
     (async () => {
@@ -135,76 +162,131 @@ export function TimepickerExample({
         }
       }
     };
-  }, [memoizedOptions, viewMode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- pluginsKey tracks `plugins` by value; `plugins` is a new array literal each render
+  }, [memoizedOptions, viewMode, pluginsKey]);
+
+  // The live preview panel — shared by both the tabbed and code-less layouts.
+  const preview = (
+    <div className="relative overflow-hidden bg-muted/20 p-8 sm:p-10">
+      {/* Atmospheric blueprint backdrop (theme-aware, non-interactive). */}
+      <div className="blueprint pointer-events-none absolute inset-0 opacity-[0.35]" />
+      <div className="relative mx-auto max-w-sm space-y-4">
+        <div>
+          <label
+            htmlFor={uniqueId}
+            className="eyebrow mb-2 block"
+          >
+            Select time
+          </label>
+          <input
+            ref={inputRef}
+            type="text"
+            id={uniqueId}
+            placeholder={inputPlaceholder}
+            className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/25"
+          />
+        </div>
+        {rangeValue && (
+          <div className="flex items-center justify-between rounded-lg border border-ok/30 bg-ok/10 px-3 py-2.5 text-sm">
+            <span className="eyebrow text-ok">Range</span>
+            <span className="nums inline-flex items-center gap-1.5 text-foreground">
+              {rangeValue.from}
+              <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
+              {rangeValue.to}
+            </span>
+          </div>
+        )}
+        {currentValue && !rangeValue && (
+          <div className="flex items-center justify-between rounded-lg border border-primary/30 bg-primary/10 px-3 py-2.5 text-sm">
+            <span className="eyebrow text-primary">Selected</span>
+            <span className="nums text-foreground">{currentValue}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  // When code is hidden, render the bare preview card — no tabs, no toolbar.
+  if (!showCode) {
+    return (
+      <div className="bench-in overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+        {preview}
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-4">
-      {showCode && (
-        <div className="flex gap-2 border-b border-border">
+    <div className="bench-in overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+      {/* Toolbar with segmented control */}
+      <div className="flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-3 py-2">
+        <div
+          role="tablist"
+          aria-label="Preview and code"
+          className="inline-flex items-center gap-0.5 rounded-lg border border-border bg-muted/60 p-0.5"
+        >
           <button
+            ref={previewTabRef}
+            type="button"
+            role="tab"
+            id={`${uniqueId}-tab-preview`}
+            aria-controls={`${uniqueId}-panel-preview`}
+            aria-selected={viewMode === "preview"}
+            tabIndex={viewMode === "preview" ? 0 : -1}
             onClick={() => setViewMode("preview")}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors ${
+            onKeyDown={onTabKeyDown}
+            className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
               viewMode === "preview"
-                ? "border-b-2 border-primary text-primary"
+                ? "bg-card text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            <Eye className="h-4 w-4" />
+            <Eye className="h-3.5 w-3.5" aria-hidden="true" />
             Preview
           </button>
           <button
+            ref={codeTabRef}
+            type="button"
+            role="tab"
+            id={`${uniqueId}-tab-code`}
+            aria-controls={`${uniqueId}-panel-code`}
+            aria-selected={viewMode === "code"}
+            tabIndex={viewMode === "code" ? 0 : -1}
             onClick={() => setViewMode("code")}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors ${
+            onKeyDown={onTabKeyDown}
+            className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
               viewMode === "code"
-                ? "border-b-2 border-primary text-primary"
+                ? "bg-card text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            <Code className="h-4 w-4" />
+            <Code2 className="h-3.5 w-3.5" aria-hidden="true" />
             Code
           </button>
         </div>
-      )}
+        <span className="eyebrow hidden sm:inline">Live</span>
+      </div>
 
-      {viewMode === "preview" ? (
-        <div className="rounded-lg border border-border bg-muted/30 p-8">
-          <div className="mx-auto max-w-sm space-y-4">
-            <div>
-              <label
-                htmlFor={uniqueId}
-                className="mb-2 block text-sm font-medium text-foreground"
-              >
-                Select time
-              </label>
-              <input
-                ref={inputRef}
-                type="text"
-                id={uniqueId}
-                placeholder={inputPlaceholder}
-                className="w-full rounded-lg border border-border bg-background px-4 py-2 text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-              />
-            </div>
-            {rangeValue && (
-              <div className="rounded-lg bg-emerald-500/10 p-3 text-sm">
-                <span className="font-medium text-emerald-600 dark:text-emerald-400">
-                  Range:{" "}
-                </span>
-                <span className="text-foreground">
-                  {rangeValue.from} → {rangeValue.to}
-                </span>
-              </div>
-            )}
-            {currentValue && !rangeValue && (
-              <div className="rounded-lg bg-primary/10 p-3 text-sm">
-                <span className="font-medium text-primary">Selected: </span>
-                <span className="text-foreground">{currentValue}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      ) : (
+      {/* Preview panel — kept mounted so the live picker instance persists. */}
+      <div
+        role="tabpanel"
+        id={`${uniqueId}-panel-preview`}
+        aria-labelledby={`${uniqueId}-tab-preview`}
+        hidden={viewMode !== "preview"}
+      >
+        {preview}
+      </div>
+
+      {/* Code panel */}
+      <div
+        role="tabpanel"
+        id={`${uniqueId}-panel-code`}
+        aria-labelledby={`${uniqueId}-tab-code`}
+        tabIndex={0}
+        hidden={viewMode !== "code"}
+        className="p-3"
+      >
         <CodeBlock code={code} language="typescript" />
-      )}
+      </div>
     </div>
   );
 }

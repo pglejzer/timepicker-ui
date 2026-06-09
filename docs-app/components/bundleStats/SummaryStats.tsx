@@ -12,69 +12,58 @@ export function SummaryStats({
   pluginOverhead: number;
   criteria?: Array<{ passed: boolean; text: string }>;
 }) {
-  return (
-    <div className="bg-primary/5 border border-primary/30 rounded-xl p-6 md:p-8 mb-8 transition-colors">
-      <h2 className="text-xl md:text-2xl font-bold mb-6 text-primary">
-        Bundle Overview
-      </h2>
+  const stats = [
+    {
+      value: formatBytes(rollupCore),
+      label: "Core bundle",
+      note: "Minimum production size",
+    },
+    {
+      value: formatBytes(rollupFull),
+      label: "Full bundle",
+      note: "With all plugins",
+    },
+    {
+      value: formatBytes(pluginOverhead),
+      label: "Plugin cost",
+      note: "Additional overhead",
+    },
+    {
+      value: `${((pluginOverhead / rollupCore) * 100).toFixed(1)}%`,
+      label: "Overhead ratio",
+      note: "Relative increase",
+    },
+  ];
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-        <StatCard
-          value={formatBytes(rollupCore)}
-          label="Core Bundle"
-          description="Minimum production size"
-        />
-        <StatCard
-          value={formatBytes(rollupFull)}
-          label="Full Bundle"
-          description="With all plugins"
-        />
-        <StatCard
-          value={formatBytes(pluginOverhead)}
-          label="Plugin Cost"
-          description="Additional overhead"
-        />
-        <StatCard
-          value={`${((pluginOverhead / rollupCore) * 100).toFixed(1)}%`}
-          label="Overhead Ratio"
-          description="Relative increase"
-        />
+  return (
+    <section
+      aria-label="Bundle overview"
+      className="rounded-xl border border-border bg-card"
+    >
+      {/* Instrument panel - divided columns, big tabular numerals. */}
+      <div className="grid grid-cols-2 divide-x divide-y divide-border md:grid-cols-4 md:divide-y-0">
+        {stats.map((s) => (
+          <div key={s.label} className="px-5 py-7">
+            <div className="nums text-2xl font-semibold text-foreground sm:text-3xl">
+              {s.value}
+            </div>
+            <div className="eyebrow mt-2">{s.label}</div>
+            <div className="mt-1 text-xs text-muted-foreground">{s.note}</div>
+          </div>
+        ))}
       </div>
 
       {criteria && criteria.length > 0 && (
-        <>
-          <h3 className="text-lg font-semibold mb-4 mt-8 text-foreground">
-            Success Criteria
-          </h3>
-          <ul className="space-y-2">
+        <div className="border-t border-border p-6">
+          <p className="eyebrow">Success criteria</p>
+          <ul className="mt-4 space-y-2">
             {criteria.map((item, index) => (
               <CriteriaItem key={index} passed={item.passed} text={item.text} />
             ))}
           </ul>
-        </>
+        </div>
       )}
-    </div>
+    </section>
   );
 }
 
-function StatCard({
-  value,
-  label,
-  description,
-}: {
-  value: string;
-  label: string;
-  description: string;
-}) {
-  return (
-    <div className="text-center">
-      <div className="text-2xl md:text-3xl font-bold text-primary mb-1">
-        {value}
-      </div>
-      <div className="text-xs text-foreground uppercase font-semibold mb-1">
-        {label}
-      </div>
-      <div className="text-xs text-muted-foreground">{description}</div>
-    </div>
-  );
-}

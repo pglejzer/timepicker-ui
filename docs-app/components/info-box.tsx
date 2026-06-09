@@ -1,6 +1,14 @@
 import { ReactNode } from "react";
+import {
+  Info,
+  CheckCircle2,
+  AlertTriangle,
+  AlertCircle,
+  type LucideIcon,
+} from "lucide-react";
 
 interface InfoBoxProps {
+  /** @deprecated kept for backwards-compat; icon is derived from `variant`. */
   emoji?: string;
   title?: string;
   children: ReactNode;
@@ -8,57 +16,74 @@ interface InfoBoxProps {
   className?: string;
 }
 
-const variantStyles = {
-  blue: {
-    container: "from-blue-500/5 to-cyan-500/5",
-    icon: "bg-blue-500/10",
+type Tone = "info" | "success" | "warning" | "danger";
+
+/**
+ * Token-driven tones. Colors come from the design-system telemetry tokens
+ * (`--info`/primary, `--ok`, `--warn`, `destructive`) so callouts stay legible
+ * in both light and dark themes — no hardcoded palette values.
+ */
+const tones: Record<
+  Tone,
+  { accent: string; surface: string; icon: string; Icon: LucideIcon }
+> = {
+  info: {
+    accent: "border-l-primary",
+    surface: "bg-primary/[0.04]",
+    icon: "text-primary",
+    Icon: Info,
   },
-  emerald: {
-    container: "from-emerald-500/5 to-green-500/5",
-    icon: "bg-emerald-500/10",
+  success: {
+    accent: "border-l-[hsl(var(--ok))]",
+    surface: "bg-[hsl(var(--ok)/0.05)]",
+    icon: "text-[hsl(var(--ok))]",
+    Icon: CheckCircle2,
   },
-  purple: {
-    container: "from-purple-500/5 to-pink-500/5",
-    icon: "bg-purple-500/10",
+  warning: {
+    accent: "border-l-[hsl(var(--warn))]",
+    surface: "bg-[hsl(var(--warn)/0.05)]",
+    icon: "text-[hsl(var(--warn))]",
+    Icon: AlertTriangle,
   },
-  green: {
-    container: "from-green-500/5 to-blue-500/5",
-    icon: "bg-green-500/10",
-  },
-  red: {
-    container: "from-red-500/5 to-orange-500/5",
-    icon: "bg-red-500/10",
-  },
-  orange: {
-    container: "from-orange-500/5 to-yellow-500/5",
-    icon: "bg-orange-500/10",
+  danger: {
+    accent: "border-l-destructive",
+    surface: "bg-destructive/[0.05]",
+    icon: "text-destructive",
+    Icon: AlertCircle,
   },
 };
 
+const variantTone: Record<NonNullable<InfoBoxProps["variant"]>, Tone> = {
+  blue: "info",
+  purple: "info",
+  emerald: "success",
+  green: "success",
+  orange: "warning",
+  red: "danger",
+};
+
 export function InfoBox({
-  emoji = "💡",
   title,
   children,
-  variant = "emerald",
+  variant = "blue",
   className,
 }: InfoBoxProps) {
-  const styles = variantStyles[variant];
+  const tone = tones[variantTone[variant]];
+  const { Icon } = tone;
 
   return (
     <div
-      className={`mt-12 rounded-xl border border-primary/20 bg-gradient-to-br ${styles.container} p-6 md:p-8 ${className}`}
+      className={`mt-10 rounded-lg border border-l-2 border-border ${tone.accent} ${tone.surface} p-5 md:p-6 ${className ?? ""}`}
     >
-      <div className="flex items-start gap-4">
-        <div
-          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${styles.icon}`}
-        >
-          <span className="text-xl">{emoji}</span>
-        </div>
-        <div>
+      <div className="flex items-start gap-3">
+        <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${tone.icon}`} />
+        <div className="min-w-0">
           {title && (
-            <p className="font-medium mb-1 md:mb-2 text-foreground">{title}</p>
+            <p className="mb-1 font-medium text-foreground">{title}</p>
           )}
-          <div className="text-sm text-muted-foreground">{children}</div>
+          <div className="text-sm leading-relaxed text-muted-foreground">
+            {children}
+          </div>
         </div>
       </div>
     </div>

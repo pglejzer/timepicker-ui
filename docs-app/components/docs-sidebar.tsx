@@ -4,62 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { docsNavigation as navigation } from "@/lib/docs-nav";
 
-const navigation = [
-  {
-    title: "Getting Started",
-    links: [
-      { title: "Installation", href: "/docs/installation" },
-      { title: "Quick Start", href: "/docs/quick-start" },
-      { title: "Configuration", href: "/docs/configuration" },
-      { title: "Migration Guide v3 to v4", href: "/docs/migration-guide" },
-    ],
-  },
-  {
-    title: "API Reference",
-    links: [
-      { title: "Options", href: "/docs/api/options" },
-      { title: "Methods", href: "/docs/api/methods" },
-      { title: "Events", href: "/docs/api/events" },
-      { title: "TypeScript", href: "/docs/api/typescript" },
-    ],
-  },
-  {
-    title: "Features",
-    links: [
-      { title: "12h/24h Format", href: "/docs/features/clock-format" },
-      { title: "Themes", href: "/docs/features/themes" },
-      { title: "Inline Mode", href: "/docs/features/inline-mode" },
-      { title: "Mobile Support", href: "/docs/features/mobile" },
-      { title: "Disabled Time", href: "/docs/features/disabled-time" },
-      { title: "Clear Button", href: "/docs/features/clear-button" },
-      { title: "Validation", href: "/docs/features/validation" },
-      { title: "Plugins", href: "/docs/features/plugins" },
-    ],
-  },
-  {
-    title: "Advanced",
-    links: [
-      { title: "Custom Styling", href: "/docs/advanced/styling" },
-      { title: "Localization", href: "/docs/advanced/localization" },
-      { title: "Accessibility", href: "/docs/advanced/accessibility" },
-    ],
-  },
-  {
-    title: "Project",
-    links: [
-      { title: "Changelog", href: "/docs/changelog" },
-      { title: "Roadmap", href: "/docs/roadmap" },
-      { title: "Bundle Analysis", href: "/bundle-stats" },
-    ],
-  },
-  {
-    title: "Legacy",
-    links: [
-      { title: "Migration Guide v2 to v3", href: "/docs/legacy-migration" },
-    ],
-  },
-];
+function slugifySection(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 export function DocsSidebar() {
   const pathname = usePathname();
@@ -79,24 +31,33 @@ export function DocsSidebar() {
     }
   };
 
+  const sectionPanelId = (title: string) =>
+    `docs-section-${slugifySection(title)}`;
+
   return (
-    <nav className="w-full md:w-64 md:shrink-0">
-      <div className="md:sticky md:top-20 md:h-[calc(100vh-5rem)] md:overflow-y-auto">
+    <nav className="w-full">
+      <div>
         <div className="space-y-4 py-4">
-          {navigation.map((section) => (
+          {navigation.map((section) => {
+            const panelId = sectionPanelId(section.title);
+            return (
             <div key={section.title}>
               <button
                 onClick={() => toggleSection(section.title)}
-                className="flex w-full items-center justify-between px-3 py-2 text-sm font-semibold transition-colors hover:bg-accent/50 md:cursor-default md:hover:bg-transparent"
+                aria-expanded={openSections[section.title]}
+                aria-controls={panelId}
+                className="flex w-full items-center justify-between px-3 py-2 transition-colors hover:bg-accent/50 md:pointer-events-none md:cursor-default md:hover:bg-transparent"
               >
-                <span>{section.title}</span>
+                <span className="eyebrow">{section.title}</span>
                 <ChevronDown
                   className={`h-4 w-4 transition-transform md:hidden ${
                     openSections[section.title] ? "rotate-180" : ""
                   }`}
+                  aria-hidden="true"
                 />
               </button>
               <div
+                id={panelId}
                 className={`mt-1 space-y-1 ${
                   openSections[section.title] ? "block" : "hidden md:block"
                 }`}
@@ -109,10 +70,11 @@ export function DocsSidebar() {
                         <Link
                           href={link.href}
                           onClick={handleLinkClick}
-                          className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                          aria-current={isActive ? "page" : undefined}
+                          className={`block border-l-2 px-3 py-1.5 text-sm transition-colors ${
                             isActive
-                              ? "bg-primary/10 font-medium text-primary"
-                              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                              ? "border-primary font-medium text-primary"
+                              : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
                           }`}
                         >
                           {link.title}
@@ -123,7 +85,8 @@ export function DocsSidebar() {
                 </ul>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </nav>
