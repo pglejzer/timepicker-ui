@@ -107,6 +107,16 @@ const CHANGELOG_440 = {
       description:
         "Improved focus-ring visibility with a new high-contrast focus halo, so the focused control is clearly distinguishable on every theme",
     },
+    {
+      title: "Firefox number-input spinner buttons",
+      description:
+        "Native browser spinner buttons no longer appear on the clock-mode time inputs in Firefox - number inputs now render cleanly and consistently across browsers (-moz-appearance: textfield + -webkit-appearance reset). Thanks to @in-omnibus (https://github.com/in-omnibus) for reporting and proposing the fix (https://github.com/pglejzer/timepicker-ui/issues/166)",
+    },
+    {
+      title: "Scroll lock release",
+      description:
+        "Fix the page scroll lock not releasing after rapid open/close cycles (or with multiple pickers on a page), which could leave the whole page unscrollable; body scroll locking is now reference-counted across instances",
+    },
   ],
 };
 
