@@ -112,6 +112,20 @@ describe('TimezoneDropdown', () => {
 
       expect(() => tz.populateOptions()).not.toThrow();
     });
+
+    it('should give each option a stable id, option role and aria-selected', () => {
+      dropdown.setAttribute('data-tz-id', 'inst');
+      const tz = new TimezoneDropdown(mockCore as never, emitter);
+
+      tz.populateOptions();
+
+      const options = menu.querySelectorAll('.tp-ui-timezone-option');
+      options.forEach((option, index) => {
+        expect(option.getAttribute('role')).toBe('option');
+        expect(option.getAttribute('id')).toBe(`tp-tz-opt-inst-${index}`);
+        expect(option.getAttribute('aria-selected')).toBe('false');
+      });
+    });
   });
 
   describe('setOpen', () => {
@@ -180,8 +194,29 @@ describe('TimezoneDropdown', () => {
       tz.selectTimezone('America/New_York');
 
       expect(option.getAttribute('data-selected')).toBe('true');
+      expect(option.getAttribute('aria-selected')).toBe('true');
       const selectedDisplay = dropdown.querySelector('.tp-ui-timezone-selected');
       expect(selectedDisplay?.textContent).toBe('New York (EST)');
+    });
+
+    it('should set aria-selected to false on non-selected options', () => {
+      const selected = document.createElement('div');
+      selected.classList.add('tp-ui-timezone-option');
+      selected.setAttribute('data-value', 'America/New_York');
+      selected.textContent = 'New York (EST)';
+      menu.appendChild(selected);
+
+      const other = document.createElement('div');
+      other.classList.add('tp-ui-timezone-option');
+      other.setAttribute('data-value', 'Europe/London');
+      other.textContent = 'London (GMT)';
+      menu.appendChild(other);
+
+      const tz = new TimezoneDropdown(mockCore as never, emitter);
+      tz.selectTimezone('America/New_York');
+
+      expect(selected.getAttribute('aria-selected')).toBe('true');
+      expect(other.getAttribute('aria-selected')).toBe('false');
     });
 
     it('should emit timezone:change event', () => {

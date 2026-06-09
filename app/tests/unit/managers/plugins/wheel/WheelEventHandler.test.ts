@@ -109,6 +109,78 @@ describe('WheelEventHandler', () => {
 
       expect(scrollSpy).not.toHaveBeenCalled();
     });
+
+    it('should jump to the first hour on Home', () => {
+      const hoursCol = renderer.getColumnElement('hours');
+      if (!hoursCol) return;
+
+      jest.spyOn(scrollHandler, 'getSelectedValue').mockReturnValue('06');
+      const scrollSpy = jest.spyOn(scrollHandler, 'scrollToValue');
+
+      hoursCol.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
+
+      expect(scrollSpy).toHaveBeenCalledWith('hours', '01');
+    });
+
+    it('should jump to the last hour on End', () => {
+      const hoursCol = renderer.getColumnElement('hours');
+      if (!hoursCol) return;
+
+      jest.spyOn(scrollHandler, 'getSelectedValue').mockReturnValue('06');
+      const scrollSpy = jest.spyOn(scrollHandler, 'scrollToValue');
+
+      hoursCol.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+
+      expect(scrollSpy).toHaveBeenCalledWith('hours', '12');
+    });
+
+    it('should step the minutes back by 5 on PageUp', () => {
+      const minutesCol = renderer.getColumnElement('minutes');
+      if (!minutesCol) return;
+
+      jest.spyOn(scrollHandler, 'getSelectedValue').mockReturnValue('30');
+      const scrollSpy = jest.spyOn(scrollHandler, 'scrollToValue');
+
+      minutesCol.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', bubbles: true }));
+
+      expect(scrollSpy).toHaveBeenCalledWith('minutes', '25');
+    });
+
+    it('should step the minutes forward by 5 on PageDown', () => {
+      const minutesCol = renderer.getColumnElement('minutes');
+      if (!minutesCol) return;
+
+      jest.spyOn(scrollHandler, 'getSelectedValue').mockReturnValue('30');
+      const scrollSpy = jest.spyOn(scrollHandler, 'scrollToValue');
+
+      minutesCol.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown', bubbles: true }));
+
+      expect(scrollSpy).toHaveBeenCalledWith('minutes', '35');
+    });
+
+    it('should clamp PageUp at the first minute', () => {
+      const minutesCol = renderer.getColumnElement('minutes');
+      if (!minutesCol) return;
+
+      jest.spyOn(scrollHandler, 'getSelectedValue').mockReturnValue('02');
+      const scrollSpy = jest.spyOn(scrollHandler, 'scrollToValue');
+
+      minutesCol.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', bubbles: true }));
+
+      expect(scrollSpy).toHaveBeenCalledWith('minutes', '00');
+    });
+
+    it('should jump to the last minute on End', () => {
+      const minutesCol = renderer.getColumnElement('minutes');
+      if (!minutesCol) return;
+
+      jest.spyOn(scrollHandler, 'getSelectedValue').mockReturnValue('30');
+      const scrollSpy = jest.spyOn(scrollHandler, 'scrollToValue');
+
+      minutesCol.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+
+      expect(scrollSpy).toHaveBeenCalledWith('minutes', '59');
+    });
   });
 
   describe('scroll end event emission', () => {

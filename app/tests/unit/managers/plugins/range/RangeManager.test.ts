@@ -407,6 +407,121 @@ describe('RangeManager', () => {
     });
   });
 
+  describe('tab keyboard navigation', () => {
+    const key = (el: Element | null, k: string): void => {
+      el?.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true }));
+    };
+
+    beforeEach(() => {
+      document.body.appendChild(modal);
+    });
+
+    afterEach(() => {
+      document.body.innerHTML = '';
+    });
+
+    const initWithEnabledToTab = (): RangeManager => {
+      const manager = new RangeManager(mockCore as never, emitter);
+      manager.init();
+      emitter.emit('range:minute:commit', { hour: '10', minutes: '00', type: 'AM' });
+      return manager;
+    };
+
+    it('moves focus to the to tab with ArrowRight', () => {
+      initWithEnabledToTab();
+
+      const fromTab = modal.querySelector('.tp-ui-range-from') as HTMLElement;
+      const toTab = modal.querySelector('.tp-ui-range-to') as HTMLElement;
+      fromTab.focus();
+
+      key(fromTab, 'ArrowRight');
+
+      expect(document.activeElement).toBe(toTab);
+    });
+
+    it('moves focus back to the from tab with ArrowLeft', () => {
+      initWithEnabledToTab();
+
+      const fromTab = modal.querySelector('.tp-ui-range-from') as HTMLElement;
+      const toTab = modal.querySelector('.tp-ui-range-to') as HTMLElement;
+      toTab.focus();
+
+      key(toTab, 'ArrowLeft');
+
+      expect(document.activeElement).toBe(fromTab);
+    });
+
+    it('moves focus to first/last tab with Home/End', () => {
+      initWithEnabledToTab();
+
+      const fromTab = modal.querySelector('.tp-ui-range-from') as HTMLElement;
+      const toTab = modal.querySelector('.tp-ui-range-to') as HTMLElement;
+
+      fromTab.focus();
+      key(fromTab, 'End');
+      expect(document.activeElement).toBe(toTab);
+
+      key(toTab, 'Home');
+      expect(document.activeElement).toBe(fromTab);
+    });
+
+    it('activates the to part on Enter when from is complete', () => {
+      const manager = new RangeManager(mockCore as never, emitter);
+      manager.init();
+
+      emitter.emit('range:minute:commit', { hour: '10', minutes: '00', type: 'AM' });
+
+      const toTab = modal.querySelector('.tp-ui-range-to') as HTMLElement;
+      key(toTab, 'Enter');
+
+      expect(manager.getActivePart()).toBe('to');
+    });
+
+    it('activates the from part on Space', () => {
+      const manager = new RangeManager(mockCore as never, emitter);
+      manager.init();
+
+      emitter.emit('range:minute:commit', { hour: '10', minutes: '00', type: 'AM' });
+      expect(manager.getActivePart()).toBe('to');
+
+      const fromTab = modal.querySelector('.tp-ui-range-from') as HTMLElement;
+      key(fromTab, ' ');
+
+      expect(manager.getActivePart()).toBe('from');
+    });
+
+    it('skips the disabled to tab on ArrowRight', () => {
+      const manager = new RangeManager(mockCore as never, emitter);
+      manager.init();
+
+      const fromTab = modal.querySelector('.tp-ui-range-from') as HTMLElement;
+      const toTab = modal.querySelector('.tp-ui-range-to') as HTMLElement;
+      toTab.setAttribute('aria-disabled', 'true');
+      fromTab.focus();
+
+      key(fromTab, 'ArrowRight');
+
+      expect(document.activeElement).toBe(fromTab);
+    });
+
+    it('does not activate the disabled to tab on Enter', () => {
+      const manager = new RangeManager(mockCore as never, emitter);
+      manager.init();
+
+      emitter.emit('range:minute:commit', { hour: '10', minutes: '00', type: 'AM' });
+
+      const fromTab = modal.querySelector('.tp-ui-range-from') as HTMLElement;
+      fromTab.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(manager.getActivePart()).toBe('from');
+
+      const toTab = modal.querySelector('.tp-ui-range-to') as HTMLElement;
+      toTab.setAttribute('aria-disabled', 'true');
+      key(toTab, 'Enter');
+
+      expect(manager.getActivePart()).toBe('from');
+    });
+  });
+
   describe('destroy', () => {
     it('should clean up event handlers', () => {
       const manager = new RangeManager(mockCore as never, emitter);

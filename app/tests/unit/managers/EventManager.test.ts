@@ -279,7 +279,8 @@ describe('EventManager', () => {
   });
 
   describe('handleEscClick', () => {
-    it('should emit cancel on Escape key', () => {
+    it('should emit cancel on Escape key when open', () => {
+      coreState.setIsOpen(true);
       const emitSpy = jest.spyOn(emitter, 'emit');
 
       eventManager.handleEscClick();
@@ -288,6 +289,18 @@ describe('EventManager', () => {
       document.dispatchEvent(escEvent);
 
       expect(emitSpy).toHaveBeenCalledWith('cancel', {});
+    });
+
+    it('should not emit cancel on Escape key when closed', () => {
+      coreState.setIsOpen(false);
+      const emitSpy = jest.spyOn(emitter, 'emit');
+
+      eventManager.handleEscClick();
+
+      const escEvent = new KeyboardEvent('keydown', { key: 'Escape' });
+      document.dispatchEvent(escEvent);
+
+      expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
     });
 
     it('should not emit on other keys', () => {
@@ -680,6 +693,7 @@ describe('EventManager', () => {
     it('should wrap hour from 12 to 1 on ArrowUp in 12h mode', () => {
       const hourInput = document.createElement('input') as HTMLInputElement;
       hourInput.value = '12';
+      hourInput.setAttribute('max', '12');
 
       jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
       jest.spyOn(coreState, 'getMinutes').mockReturnValue(null);
@@ -697,6 +711,7 @@ describe('EventManager', () => {
     it('should wrap hour from 1 to 12 on ArrowDown in 12h mode', () => {
       const hourInput = document.createElement('input') as HTMLInputElement;
       hourInput.value = '01';
+      hourInput.setAttribute('max', '12');
 
       jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
       jest.spyOn(coreState, 'getMinutes').mockReturnValue(null);

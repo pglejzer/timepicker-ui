@@ -168,6 +168,35 @@ describe('TimezoneKeyboard', () => {
 
       expect(options[0].scrollIntoView).not.toHaveBeenCalled();
     });
+
+    it('should set aria-activedescendant on the dropdown to the focused option id', () => {
+      const keyboard = new TimezoneKeyboard();
+      keyboard.setFocusedIndex(1);
+
+      const options = [document.createElement('div'), document.createElement('div')];
+      options[0].id = 'tp-tz-opt-0';
+      options[1].id = 'tp-tz-opt-1';
+      options.forEach((opt) => {
+        opt.scrollIntoView = jest.fn();
+      });
+
+      const dropdown = document.createElement('div');
+
+      keyboard.updateVisualFocus(options, dropdown);
+
+      expect(dropdown.getAttribute('aria-activedescendant')).toBe('tp-tz-opt-1');
+    });
+
+    it('should remove aria-activedescendant when no option is focused', () => {
+      const keyboard = new TimezoneKeyboard();
+
+      const dropdown = document.createElement('div');
+      dropdown.setAttribute('aria-activedescendant', 'tp-tz-opt-0');
+
+      keyboard.updateVisualFocus([], dropdown);
+
+      expect(dropdown.hasAttribute('aria-activedescendant')).toBe(false);
+    });
   });
 });
 
