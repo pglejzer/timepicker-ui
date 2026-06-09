@@ -11,3 +11,6 @@ OPTIMIZATION_*.md
 readme_dev*.md
 readme/*.md
 .npmrc
+docs/superpowers/*
+
+.superpowers/
