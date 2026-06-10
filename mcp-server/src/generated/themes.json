@@ -1,0 +1,1404 @@
+{
+  "ai": [
+    {
+      "name": "--tp-bg",
+      "value": "#f3f4f6"
+    },
+    {
+      "name": "--tp-surface",
+      "value": "#e5e7eb"
+    },
+    {
+      "name": "--tp-surface-hover",
+      "value": "#f9fafb"
+    },
+    {
+      "name": "--tp-input-bg",
+      "value": "#e5e7eb"
+    },
+    {
+      "name": "--tp-text",
+      "value": "#111827"
+    },
+    {
+      "name": "--tp-text-secondary",
+      "value": "#6b7280"
+    },
+    {
+      "name": "--tp-text-disabled",
+      "value": "rgba(107, 114, 128, 0.6)"
+    },
+    {
+      "name": "--tp-text-type-time",
+      "value": "#374151"
+    },
+    {
+      "name": "--tp-text-icon",
+      "value": "#6b7280"
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "value": "#3b82f6"
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "value": "white"
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "value": "#6b7280"
+    },
+    {
+      "name": "--tp-primary",
+      "value": "#3b82f6"
+    },
+    {
+      "name": "--tp-on-primary",
+      "value": "white"
+    },
+    {
+      "name": "--tp-primary-container",
+      "value": "#3b82f6"
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "value": "white"
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "value": "#3b82f6"
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "value": "white"
+    },
+    {
+      "name": "--tp-border",
+      "value": "#d1d5db"
+    },
+    {
+      "name": "--tp-outline",
+      "value": "#3b82f6"
+    },
+    {
+      "name": "--tp-shadow",
+      "value": "0 4px 12px rgba(0, 0, 0, 0.04)"
+    },
+    {
+      "name": "--tp-radius",
+      "value": "0.75rem"
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "value": "#111827"
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "value": "rgba(59, 130, 246, 0.1)"
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "value": "#d1d5db"
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "value": "#111827"
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "value": "#3b82f6"
+    }
+  ],
+  "blueprint-dark": [
+    {
+      "name": "--tp-bg",
+      "value": "#0a2747"
+    },
+    {
+      "name": "--tp-surface",
+      "value": "#103257"
+    },
+    {
+      "name": "--tp-surface-hover",
+      "value": "#16406e"
+    },
+    {
+      "name": "--tp-input-bg",
+      "value": "#103257"
+    },
+    {
+      "name": "--tp-text",
+      "value": "#dbeafe"
+    },
+    {
+      "name": "--tp-text-secondary",
+      "value": "#86b5e6"
+    },
+    {
+      "name": "--tp-text-disabled",
+      "value": "rgba(219, 234, 254, 0.4)"
+    },
+    {
+      "name": "--tp-text-type-time",
+      "value": "#86b5e6"
+    },
+    {
+      "name": "--tp-text-icon",
+      "value": "#86b5e6"
+    },
+    {
+      "name": "--tp-on-surface",
+      "value": "#dbeafe"
+    },
+    {
+      "name": "--tp-on-surface-rgb",
+      "value": "219, 234, 254"
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "value": "#56c5ff"
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "value": "#0a2747"
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "value": "#86b5e6"
+    },
+    {
+      "name": "--tp-primary",
+      "value": "#56c5ff"
+    },
+    {
+      "name": "--tp-on-primary",
+      "value": "#0a2747"
+    },
+    {
+      "name": "--tp-primary-container",
+      "value": "#1a4e85"
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "value": "#d6eaff"
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "value": "#1a4e85"
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "value": "#d6eaff"
+    },
+    {
+      "name": "--tp-border",
+      "value": "rgba(120, 185, 255, 0.25)"
+    },
+    {
+      "name": "--tp-outline",
+      "value": "#56c5ff"
+    },
+    {
+      "name": "--tp-hover-bg",
+      "value": "#16406e"
+    },
+    {
+      "name": "--tp-shadow",
+      "value": "0 8px 24px rgba(0, 0, 0, 0.55)"
+    },
+    {
+      "name": "--tp-focus-ring-halo",
+      "value": "rgba(160, 210, 255, 0.7)"
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "value": "#103257"
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "value": "#dbeafe"
+    },
+    {
+      "name": "--tp-error",
+      "value": "#ff7a7a"
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "value": "rgba(86, 197, 255, 0.16)"
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "value": "rgba(120, 185, 255, 0.25)"
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "value": "#dbeafe"
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "value": "#56c5ff"
+    }
+  ],
+  "blueprint": [
+    {
+      "name": "--tp-bg",
+      "value": "#e8f1fb"
+    },
+    {
+      "name": "--tp-surface",
+      "value": "#f3f8fe"
+    },
+    {
+      "name": "--tp-surface-hover",
+      "value": "#dfeafa"
+    },
+    {
+      "name": "--tp-input-bg",
+      "value": "#f3f8fe"
+    },
+    {
+      "name": "--tp-text",
+      "value": "#0a2e6e"
+    },
+    {
+      "name": "--tp-text-secondary",
+      "value": "#3a5fa0"
+    },
+    {
+      "name": "--tp-text-disabled",
+      "value": "rgba(10, 46, 110, 0.4)"
+    },
+    {
+      "name": "--tp-text-type-time",
+      "value": "#3a5fa0"
+    },
+    {
+      "name": "--tp-text-icon",
+      "value": "#3a5fa0"
+    },
+    {
+      "name": "--tp-on-surface",
+      "value": "#0a2e6e"
+    },
+    {
+      "name": "--tp-on-surface-rgb",
+      "value": "10, 46, 110"
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "value": "#0b4ea2"
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "value": "#3a5fa0"
+    },
+    {
+      "name": "--tp-primary",
+      "value": "#0b4ea2"
+    },
+    {
+      "name": "--tp-on-primary",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-primary-container",
+      "value": "#d3e4fb"
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "value": "#08245e"
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "value": "#d3e4fb"
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "value": "#08245e"
+    },
+    {
+      "name": "--tp-border",
+      "value": "rgba(11, 77, 162, 0.22)"
+    },
+    {
+      "name": "--tp-outline",
+      "value": "#0b4ea2"
+    },
+    {
+      "name": "--tp-hover-bg",
+      "value": "#dfeafa"
+    },
+    {
+      "name": "--tp-shadow",
+      "value": "0 8px 24px rgba(11, 46, 110, 0.12)"
+    },
+    {
+      "name": "--tp-focus-ring-halo",
+      "value": "rgba(11, 78, 162, 0.4)"
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "value": "#f3f8fe"
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "value": "#0a2e6e"
+    },
+    {
+      "name": "--tp-error",
+      "value": "#c5302f"
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "value": "rgba(11, 78, 162, 0.1)"
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "value": "rgba(11, 77, 162, 0.22)"
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "value": "#0a2e6e"
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "value": "#0b4ea2"
+    }
+  ],
+  "crane-straight": [
+    {
+      "name": "--tp-bg",
+      "value": "#5d1049"
+    },
+    {
+      "name": "--tp-surface",
+      "value": "#71135c"
+    },
+    {
+      "name": "--tp-surface-hover",
+      "value": "#71135c"
+    },
+    {
+      "name": "--tp-input-bg",
+      "value": "#71135c"
+    },
+    {
+      "name": "--tp-text",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-text-secondary",
+      "value": "#e5e5e5"
+    },
+    {
+      "name": "--tp-text-disabled",
+      "value": "rgba(255, 255, 255, 0.6)"
+    },
+    {
+      "name": "--tp-text-type-time",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-text-icon",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-on-surface",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-on-surface-rgb",
+      "value": "255, 255, 255"
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "value": "#f7363e"
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-primary",
+      "value": "#f7363e"
+    },
+    {
+      "name": "--tp-on-primary",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-primary-container",
+      "value": "#f7363e"
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "value": "#f7363e"
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-border",
+      "value": "transparent"
+    },
+    {
+      "name": "--tp-outline",
+      "value": "#ff4c52"
+    },
+    {
+      "name": "--tp-focus-ring-halo",
+      "value": "rgba(255, 255, 255, 0.75)"
+    },
+    {
+      "name": "--tp-radius",
+      "value": "0"
+    },
+    {
+      "name": "--tp-border-radius",
+      "value": "0"
+    },
+    {
+      "name": "--tp-radius-sm",
+      "value": "0"
+    },
+    {
+      "name": "--tp-radius-md",
+      "value": "0"
+    },
+    {
+      "name": "--tp-radius-lg",
+      "value": "0"
+    },
+    {
+      "name": "--tp-btn-radius",
+      "value": "0"
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-error",
+      "value": "#ffb4ab"
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "value": "rgba(247, 54, 62, 0.12)"
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "value": "rgba(255, 255, 255, 0.15)"
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "value": "#f7363e"
+    }
+  ],
+  "crane": [
+    {
+      "name": "--tp-bg",
+      "value": "#5d1049"
+    },
+    {
+      "name": "--tp-surface",
+      "value": "#71135c"
+    },
+    {
+      "name": "--tp-surface-hover",
+      "value": "#71135c"
+    },
+    {
+      "name": "--tp-input-bg",
+      "value": "#71135c"
+    },
+    {
+      "name": "--tp-text",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-text-secondary",
+      "value": "#e5e5e5"
+    },
+    {
+      "name": "--tp-text-disabled",
+      "value": "rgba(255, 255, 255, 0.6)"
+    },
+    {
+      "name": "--tp-text-type-time",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-text-icon",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-on-surface",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-on-surface-rgb",
+      "value": "255, 255, 255"
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "value": "#f7363e"
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-primary",
+      "value": "#f7363e"
+    },
+    {
+      "name": "--tp-on-primary",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-primary-container",
+      "value": "#f7363e"
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "value": "#f7363e"
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-border",
+      "value": "transparent"
+    },
+    {
+      "name": "--tp-outline",
+      "value": "#ff4c52"
+    },
+    {
+      "name": "--tp-radius",
+      "value": "1.25rem"
+    },
+    {
+      "name": "--tp-focus-ring-halo",
+      "value": "rgba(255, 255, 255, 0.75)"
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-error",
+      "value": "#ffb4ab"
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "value": "rgba(247, 54, 62, 0.12)"
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "value": "rgba(255, 255, 255, 0.15)"
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "value": "#f7363e"
+    }
+  ],
+  "cyberpunk": [
+    {
+      "name": "--tp-bg",
+      "value": "#0f0c29"
+    },
+    {
+      "name": "--tp-surface",
+      "value": "#1a1a2e"
+    },
+    {
+      "name": "--tp-surface-hover",
+      "value": "#1a1a2e"
+    },
+    {
+      "name": "--tp-input-bg",
+      "value": "#1a1a2e"
+    },
+    {
+      "name": "--tp-text",
+      "value": "#f8f8ff"
+    },
+    {
+      "name": "--tp-text-secondary",
+      "value": "#00f0ff"
+    },
+    {
+      "name": "--tp-text-disabled",
+      "value": "rgba(0, 240, 255, 0.4)"
+    },
+    {
+      "name": "--tp-text-type-time",
+      "value": "#00f0ff"
+    },
+    {
+      "name": "--tp-text-icon",
+      "value": "#00f0ff"
+    },
+    {
+      "name": "--tp-on-surface",
+      "value": "#00f0ff"
+    },
+    {
+      "name": "--tp-on-surface-rgb",
+      "value": "0, 240, 255"
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "value": "#00f0ff"
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "value": "#0f0c29"
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "value": "#00f0ff"
+    },
+    {
+      "name": "--tp-primary",
+      "value": "#00f0ff"
+    },
+    {
+      "name": "--tp-on-primary",
+      "value": "#0f0c29"
+    },
+    {
+      "name": "--tp-primary-container",
+      "value": "#00f0ff"
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "value": "#0f0c29"
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "value": "#00f0ff"
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "value": "#0f0c29"
+    },
+    {
+      "name": "--tp-border",
+      "value": "rgba(0, 240, 255, 0.3)"
+    },
+    {
+      "name": "--tp-outline",
+      "value": "rgb(255, 255, 255)"
+    },
+    {
+      "name": "--tp-shadow",
+      "value": "0 0 12px #00f0ff"
+    },
+    {
+      "name": "--tp-focus-ring-halo",
+      "value": "rgba(255, 255, 255, 0.85)"
+    },
+    {
+      "name": "--tp-radius",
+      "value": "1rem"
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "value": "#1a1a2e"
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "value": "#f8f8ff"
+    },
+    {
+      "name": "--tp-error",
+      "value": "#ff5c7a"
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "value": "rgba(0, 240, 255, 0.1)"
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "value": "rgba(0, 240, 255, 0.3)"
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "value": "#f8f8ff"
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "value": "#00f0ff"
+    }
+  ],
+  "dark": [
+    {
+      "name": "--tp-bg",
+      "value": "#1c1b1f"
+    },
+    {
+      "name": "--tp-surface",
+      "value": "#2c2b30"
+    },
+    {
+      "name": "--tp-surface-hover",
+      "value": "#3b3940"
+    },
+    {
+      "name": "--tp-input-bg",
+      "value": "#2c2b30"
+    },
+    {
+      "name": "--tp-text",
+      "value": "#e5e5e5"
+    },
+    {
+      "name": "--tp-text-secondary",
+      "value": "#a1a1a1"
+    },
+    {
+      "name": "--tp-text-disabled",
+      "value": "rgba(161, 161, 161, 0.6)"
+    },
+    {
+      "name": "--tp-text-type-time",
+      "value": "#a1a1a1"
+    },
+    {
+      "name": "--tp-text-icon",
+      "value": "#a1a1a1"
+    },
+    {
+      "name": "--tp-on-surface",
+      "value": "#e5e5e5"
+    },
+    {
+      "name": "--tp-on-surface-rgb",
+      "value": "229, 229, 229"
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "value": "#bb86fc"
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "value": "#a1a1a1"
+    },
+    {
+      "name": "--tp-primary",
+      "value": "#bb86fc"
+    },
+    {
+      "name": "--tp-on-primary",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-primary-container",
+      "value": "#bb86fc"
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "value": "#bb86fc"
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-border",
+      "value": "rgba(255, 255, 255, 0.12)"
+    },
+    {
+      "name": "--tp-outline",
+      "value": "#d8b4fe"
+    },
+    {
+      "name": "--tp-hover-bg",
+      "value": "#3b3940"
+    },
+    {
+      "name": "--tp-shadow",
+      "value": "0px 8px 16px rgba(0, 0, 0, 0.6)"
+    },
+    {
+      "name": "--tp-focus-ring-halo",
+      "value": "rgba(255, 255, 255, 0.7)"
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "value": "#2c2b30"
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "value": "#e5e5e5"
+    },
+    {
+      "name": "--tp-error",
+      "value": "#ff6b6b"
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "value": "rgba(187, 134, 252, 0.12)"
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "value": "rgba(255, 255, 255, 0.12)"
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "value": "#e5e5e5"
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "value": "#bb86fc"
+    }
+  ],
+  "glassmorphic": [
+    {
+      "name": "--tp-bg",
+      "value": "rgba(255, 255, 255, 0.12)"
+    },
+    {
+      "name": "--tp-surface",
+      "value": "rgba(255, 255, 255, 0.18)"
+    },
+    {
+      "name": "--tp-surface-hover",
+      "value": "rgba(255, 255, 255, 0.22)"
+    },
+    {
+      "name": "--tp-input-bg",
+      "value": "rgba(255, 255, 255, 0.16)"
+    },
+    {
+      "name": "--tp-text",
+      "value": "rgba(255, 255, 255, 0.95)"
+    },
+    {
+      "name": "--tp-text-secondary",
+      "value": "rgba(255, 255, 255, 0.75)"
+    },
+    {
+      "name": "--tp-text-disabled",
+      "value": "rgba(255, 255, 255, 0.45)"
+    },
+    {
+      "name": "--tp-text-type-time",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-text-icon",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "value": "rgba(255, 255, 255, 0.75)"
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "value": "rgba(255, 255, 255, 0.75)"
+    },
+    {
+      "name": "--tp-primary",
+      "value": "rgba(255, 255, 255, 0.75)"
+    },
+    {
+      "name": "--tp-on-primary",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-primary-container",
+      "value": "rgba(255, 255, 255, 0.6)"
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "value": "rgba(255, 255, 255, 0.55)"
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-border",
+      "value": "rgba(255, 255, 255, 0.35)"
+    },
+    {
+      "name": "--tp-outline",
+      "value": "rgba(255, 255, 255, 0.9)"
+    },
+    {
+      "name": "--tp-focus-ring-halo",
+      "value": "rgba(255, 255, 255, 0.85)"
+    },
+    {
+      "name": "--tp-shadow",
+      "value": "0 10px 32px rgba(15, 15, 15, 0.25), 0 4px 8px rgba(0, 0, 0, 0.12)"
+    },
+    {
+      "name": "--tp-backdrop-filter",
+      "value": "blur(12px) saturate(180%)"
+    },
+    {
+      "name": "--tp-radius",
+      "value": "1.25rem"
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "value": "rgba(255, 255, 255, 0.85)"
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-error",
+      "value": "#ffb4ab"
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "value": "rgba(255, 255, 255, 0.12)"
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "value": "rgba(255, 255, 255, 0.2)"
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "value": "rgba(255, 255, 255, 0.95)"
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "value": "rgba(255, 255, 255, 0.95)"
+    },
+    {
+      "name": "--tp-wheel-fade-opacity",
+      "value": "0"
+    }
+  ],
+  "m2": [
+    {
+      "name": "--tp-bg",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-surface",
+      "value": "#e0e0e0"
+    },
+    {
+      "name": "--tp-surface-hover",
+      "value": "#ece0fd"
+    },
+    {
+      "name": "--tp-input-bg",
+      "value": "#e4e4e4"
+    },
+    {
+      "name": "--tp-text",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-text-secondary",
+      "value": "#a9a9a9"
+    },
+    {
+      "name": "--tp-text-disabled",
+      "value": "rgba(156, 155, 155, 0.6)"
+    },
+    {
+      "name": "--tp-text-type-time",
+      "value": "#787878"
+    },
+    {
+      "name": "--tp-text-icon",
+      "value": "#4e545a"
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "value": "#ece0fd"
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "value": "#6200ee"
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "value": "#787878"
+    },
+    {
+      "name": "--tp-primary",
+      "value": "#6200ee"
+    },
+    {
+      "name": "--tp-on-primary",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-primary-container",
+      "value": "#ece0fd"
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "value": "#6200ee"
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "value": "#ece0fd"
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "value": "#6200ee"
+    },
+    {
+      "name": "--tp-border",
+      "value": "#d6d6d6"
+    },
+    {
+      "name": "--tp-outline",
+      "value": "#8b5cf6"
+    },
+    {
+      "name": "--tp-hover-bg",
+      "value": "#d6d6d6"
+    },
+    {
+      "name": "--tp-shadow",
+      "value": "0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14),\r\n    0px 1px 14px 0px rgba(0, 0, 0, 0.12)"
+    },
+    {
+      "name": "--tp-radius",
+      "value": "4px"
+    },
+    {
+      "name": "--tp-border-radius",
+      "value": "4px"
+    },
+    {
+      "name": "--tp-radius-md",
+      "value": "2px"
+    },
+    {
+      "name": "--tp-radius-sm",
+      "value": "4px"
+    },
+    {
+      "name": "--tp-btn-radius",
+      "value": "4px"
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "value": "#ece0fd"
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "value": "#d6d6d6"
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "value": "#000000"
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "value": "#6200ee"
+    },
+    {
+      "name": "--tp-wheel-highlight-radius",
+      "value": "2px"
+    }
+  ],
+  "m3-green": [
+    {
+      "name": "--tp-bg",
+      "value": "#e5eadc"
+    },
+    {
+      "name": "--tp-surface",
+      "value": "#dfe4d6"
+    },
+    {
+      "name": "--tp-surface-hover",
+      "value": "#dfe4d6"
+    },
+    {
+      "name": "--tp-input-bg",
+      "value": "#dfe4d6"
+    },
+    {
+      "name": "--tp-text",
+      "value": "#1a1c18"
+    },
+    {
+      "name": "--tp-text-secondary",
+      "value": "#6b7165"
+    },
+    {
+      "name": "--tp-text-disabled",
+      "value": "rgba(156, 155, 155, 0.6)"
+    },
+    {
+      "name": "--tp-text-type-time",
+      "value": "#6b7165"
+    },
+    {
+      "name": "--tp-text-icon",
+      "value": "#6b7165"
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "value": "#bbebeb"
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "value": "#002021"
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "value": "#6b7165"
+    },
+    {
+      "name": "--tp-primary",
+      "value": "#386a20"
+    },
+    {
+      "name": "--tp-on-primary",
+      "value": "#042100"
+    },
+    {
+      "name": "--tp-primary-container",
+      "value": "#b8f397"
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "value": "#042100"
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "value": "#bbebeb"
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "value": "#002021"
+    },
+    {
+      "name": "--tp-border",
+      "value": "#74796e"
+    },
+    {
+      "name": "--tp-outline",
+      "value": "#4ade80"
+    },
+    {
+      "name": "--tp-shadow",
+      "value": "unset"
+    },
+    {
+      "name": "--tp-radius",
+      "value": "35px"
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "value": "#1a1c18"
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "value": "rgba(184, 243, 151, 0.3)"
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "value": "#c4c8bb"
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "value": "#1a1c18"
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "value": "#386a20"
+    }
+  ],
+  "pastel": [
+    {
+      "name": "--tp-bg",
+      "value": "#fdf6f0"
+    },
+    {
+      "name": "--tp-surface",
+      "value": "#fae3d9"
+    },
+    {
+      "name": "--tp-surface-hover",
+      "value": "#fef0e8"
+    },
+    {
+      "name": "--tp-input-bg",
+      "value": "#fae3d9"
+    },
+    {
+      "name": "--tp-text",
+      "value": "#3b3b3b"
+    },
+    {
+      "name": "--tp-text-secondary",
+      "value": "#a58f86"
+    },
+    {
+      "name": "--tp-text-disabled",
+      "value": "rgba(59, 59, 59, 0.6)"
+    },
+    {
+      "name": "--tp-text-type-time",
+      "value": "#a58f86"
+    },
+    {
+      "name": "--tp-text-icon",
+      "value": "#a58f86"
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "value": "#ffb6b9"
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "value": "white"
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "value": "#a58f86"
+    },
+    {
+      "name": "--tp-primary",
+      "value": "#ffb6b9"
+    },
+    {
+      "name": "--tp-on-primary",
+      "value": "white"
+    },
+    {
+      "name": "--tp-primary-container",
+      "value": "#ffb6b9"
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "value": "white"
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "value": "#ffb6b9"
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "value": "white"
+    },
+    {
+      "name": "--tp-border",
+      "value": "#efdcd2"
+    },
+    {
+      "name": "--tp-outline",
+      "value": "#ff8a8f"
+    },
+    {
+      "name": "--tp-shadow",
+      "value": "0 4px 16px rgba(0, 0, 0, 0.05)"
+    },
+    {
+      "name": "--tp-radius",
+      "value": "1.25rem"
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "value": "#ffffff"
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "value": "#3b3b3b"
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "value": "rgba(255, 182, 185, 0.18)"
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "value": "#efdcd2"
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "value": "#3b3b3b"
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "value": "#ff8a8f"
+    }
+  ]
+}
