@@ -15,11 +15,8 @@
     "sourceMap": false,
     "strict": true,
     "target": "es2020",
-    "typeRoots": ["./src/index.d.ts", "./node_modules/@types", "./typings", "./dist/types", "./types"],
-    "types": ["node", "jest"],
-    "paths": {
-      "timepicker-ui": ["./src/index.d.ts"]
-    }
+    "typeRoots": ["./node_modules/@types", "./typings", "./dist/types", "./types"],
+    "types": ["node", "jest"]
   },
   "include": ["./.eslintrc.js", "src", "docs/index.ts", "docs/examples", "tests", "*.ts"],
   "exclude": [

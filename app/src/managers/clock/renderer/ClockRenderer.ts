@@ -146,11 +146,6 @@ export class ClockRenderer {
     spanTip.classList.add(tipClass);
     span.classList.add(className);
 
-    if (this.config.theme) {
-      span.classList.add(this.config.theme);
-      spanTip.classList.add(this.config.theme);
-    }
-
     span.appendChild(spanTip);
     return { wrapper: span, tip: spanTip };
   }
