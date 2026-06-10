@@ -82,8 +82,9 @@ const buildPickerBody = (
 const buildHeader = (options: Required<TimepickerOptions>, config: TemplateConfig): string => {
   const {
     labels: {
-      time: timeLabel,
-      mobileTime: mobileTimeLabel,
+      time: timeText,
+      mobileTime: mobileTimeText,
+      timeLabel,
       am: amLabel,
       pm: pmLabel,
       mobileMinute: minuteMobileLabel,
@@ -95,7 +96,7 @@ const buildHeader = (options: Required<TimepickerOptions>, config: TemplateConfi
     ui: { editable },
   } = options;
   const { mobileClass, clockType, instanceId } = config;
-  const label = mobileClass ? mobileTimeLabel : timeLabel;
+  const headingText = mobileClass ? mobileTimeText : timeText;
 
   const is12h = clockType === '12h';
   const hourMin = is12h ? '1' : '0';
@@ -107,7 +108,7 @@ const buildHeader = (options: Required<TimepickerOptions>, config: TemplateConfi
       ? `<div class="tp-ui-wrapper-type-time ${mobileClass}" role="group" aria-label="${periodLabel}"><div class="tp-ui-type-mode tp-ui-am ${mobileClass ? 'mobile' : 'tp-ui-ripple'}" data-md3-ripple tabindex="0" role="button" aria-label="${amLabel}" aria-pressed="false" data-type="AM">${amLabel}</div><div class="tp-ui-type-mode tp-ui-pm ${mobileClass ? 'mobile' : 'tp-ui-ripple'}" data-md3-ripple tabindex="0" role="button" aria-label="${pmLabel}" aria-pressed="false" data-type="PM">${pmLabel}</div></div>`
       : '';
 
-  return `<div class="tp-ui-select-time ${mobileClass}" id="tp-ui-label-${instanceId}">${label}</div><div class="tp-ui-header ${mobileClass}"><div class="tp-ui-wrapper-time ${mobileClass} ${clockType === '24h' ? 'tp-ui-wrapper-time-24h' : ''}" role="group" aria-label="${label}"><div class="tp-ui-input-wrapper ${mobileClass}"><div class="tp-ui-input-ripple-wrapper ${mobileClass}" data-md3-ripple><input name="hour" ${!editable && !mobileClass ? 'readonly' : ''} class="tp-ui-hour ${mobileClass}" tabindex="0" type="number" min="${hourMin}" max="${hourMax}" aria-label="${mobileClass ? hourMobileLabel : hourLabel}" role="spinbutton" aria-valuemin="${hourMin}" aria-valuemax="${hourMax}" aria-valuenow="${hourValueNow}" aria-valuetext="${hourValueNow}"></div><div class="tp-ui-hour-text ${mobileClass}">${hourMobileLabel}</div></div><div class="tp-ui-dots ${mobileClass}" aria-hidden="true"><span></span><span></span></div><div class="tp-ui-input-wrapper ${mobileClass}"><div class="tp-ui-input-ripple-wrapper ${mobileClass}" data-md3-ripple><input name="minutes" ${!editable && !mobileClass ? 'readonly' : ''} class="tp-ui-minutes ${mobileClass}" tabindex="0" type="number" min="0" max="59" aria-label="${mobileClass ? minuteMobileLabel : minuteLabel}" role="spinbutton" aria-valuemin="0" aria-valuemax="59" aria-valuenow="0" aria-valuetext="00"></div><div class="tp-ui-minute-text ${mobileClass}">${minuteMobileLabel}</div></div></div>${periodSelector}</div>`;
+  return `<div class="tp-ui-select-time ${mobileClass}" id="tp-ui-label-${instanceId}">${headingText}</div><div class="tp-ui-header ${mobileClass}"><div class="tp-ui-wrapper-time ${mobileClass} ${clockType === '24h' ? 'tp-ui-wrapper-time-24h' : ''}" role="group" aria-label="${timeLabel}"><div class="tp-ui-input-wrapper ${mobileClass}"><div class="tp-ui-input-ripple-wrapper ${mobileClass}" data-md3-ripple><input name="hour" ${!editable && !mobileClass ? 'readonly' : ''} class="tp-ui-hour ${mobileClass}" tabindex="0" type="number" min="${hourMin}" max="${hourMax}" aria-label="${mobileClass ? hourMobileLabel : hourLabel}" role="spinbutton" aria-valuemin="${hourMin}" aria-valuemax="${hourMax}" aria-valuenow="${hourValueNow}" aria-valuetext="${hourValueNow}"></div><div class="tp-ui-hour-text ${mobileClass}">${hourMobileLabel}</div></div><div class="tp-ui-dots ${mobileClass}" aria-hidden="true"><span></span><span></span></div><div class="tp-ui-input-wrapper ${mobileClass}"><div class="tp-ui-input-ripple-wrapper ${mobileClass}" data-md3-ripple><input name="minutes" ${!editable && !mobileClass ? 'readonly' : ''} class="tp-ui-minutes ${mobileClass}" tabindex="0" type="number" min="0" max="59" aria-label="${mobileClass ? minuteMobileLabel : minuteLabel}" role="spinbutton" aria-valuemin="0" aria-valuemax="59" aria-valuenow="0" aria-valuetext="00"></div><div class="tp-ui-minute-text ${mobileClass}">${minuteMobileLabel}</div></div></div>${periodSelector}</div>`;
 };
 
 const buildFooter = (options: Required<TimepickerOptions>, mobileClass: string): string => {
