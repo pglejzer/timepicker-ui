@@ -44,6 +44,7 @@
     "./main.css": "./dist/css/main.css",
     "./index.css": "./dist/css/index.css",
     "./theme-crane.css": "./dist/css/themes/theme-crane.css",
+    "./theme-crane-straight.css": "./dist/css/themes/theme-crane-straight.css",
     "./theme-dark.css": "./dist/css/themes/theme-dark.css",
     "./theme-m2.css": "./dist/css/themes/theme-m2.css",
     "./theme-m3-green.css": "./dist/css/themes/theme-m3-green.css",
