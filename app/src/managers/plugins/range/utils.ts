@@ -1,25 +1,16 @@
 import type { RangeValue, FormattedRange } from './types';
+import { parseTime12, parseTime24, timeToMinutes as sharedTimeToMinutes } from '../../../utils/time/parse';
 
 export function parseTimeString(str: string): RangeValue | null {
   if (!str || str === '--:--') return null;
-
-  const match12 = str.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
-  if (match12) {
-    return {
-      hour: match12[1],
-      minutes: match12[2],
-      type: match12[3].toUpperCase(),
-    };
-  }
-
-  const match24 = str.match(/^(\d{1,2}):(\d{2})$/);
-  if (match24) {
-    return {
-      hour: match24[1],
-      minutes: match24[2],
-    };
-  }
-
+  const r12 = parseTime12(str);
+  if (r12) return { hour: r12.hour, minutes: r12.minutes, type: r12.type };
+  const lax12 = str.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (lax12) return { hour: lax12[1], minutes: lax12[2], type: lax12[3].toUpperCase() };
+  const r24 = parseTime24(str);
+  if (r24) return { hour: r24.hour, minutes: r24.minutes };
+  const lax24 = str.match(/^(\d{1,2}):(\d{2})$/);
+  if (lax24) return { hour: lax24[1], minutes: lax24[2] };
   return null;
 }
 
@@ -36,16 +27,7 @@ export function formatOutputTime(value: RangeValue): string {
 
 export function timeToMinutes(value: RangeValue | null, clockType: '12h' | '24h'): number {
   if (!value) return 0;
-
-  let hours = parseInt(value.hour, 10);
-  const minutes = parseInt(value.minutes, 10);
-
-  if (clockType === '12h' && value.type) {
-    if (value.type === 'PM' && hours !== 12) hours += 12;
-    if (value.type === 'AM' && hours === 12) hours = 0;
-  }
-
-  return hours * 60 + minutes;
+  return sharedTimeToMinutes(value, clockType);
 }
 
 export function calculateDuration(

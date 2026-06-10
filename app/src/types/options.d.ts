@@ -118,7 +118,9 @@ export interface UIOptions {
     | 'glassmorphic'
     | 'pastel'
     | 'ai'
-    | 'cyberpunk';
+    | 'cyberpunk'
+    | 'blueprint'
+    | 'blueprint-dark';
 
   /**
    * @description Enable/disable animations
@@ -261,6 +263,102 @@ export interface LabelsOptions {
    * @default "Clear"
    */
   clear?: string;
+
+  /**
+   * @description Accessible label for the hour spinbutton
+   * @default "Hour"
+   */
+  hourLabel?: string;
+
+  /**
+   * @description Accessible label for the minute spinbutton
+   * @default "Minute"
+   */
+  minuteLabel?: string;
+
+  /**
+   * @description Accessible label for the analog clock face group
+   * @default "Clock"
+   */
+  clockLabel?: string;
+
+  /**
+   * @description Accessible label for the AM/PM period group
+   * @default "Period"
+   */
+  periodLabel?: string;
+
+  /**
+   * @description Accessible label for the time wrapper group / tips
+   * @default "Time"
+   */
+  timeLabel?: string;
+
+  /**
+   * @description Accessible label for the 24-hour tips group
+   * @default "24-hour"
+   */
+  format24Label?: string;
+
+  /**
+   * @description Accessible label for the range selection tablist
+   * @default "Range selection"
+   */
+  rangeSelectionLabel?: string;
+
+  /**
+   * @description Accessible label for the keyboard-input switch icon
+   * @default "Switch to keyboard input"
+   */
+  switchToKeyboardLabel?: string;
+
+  /**
+   * @description Accessible label for the clock-view switch icon
+   * @default "Switch to clock"
+   */
+  switchToClockLabel?: string;
+
+  /**
+   * @description Accessible label for the generic view toggle button
+   * @default "Toggle"
+   */
+  toggleLabel?: string;
+
+  /**
+   * @description Accessible label for the timezone selector
+   * @default "Timezone"
+   */
+  timezoneSelectorLabel?: string;
+
+  /**
+   * @description Screen-reader announcement prefix for the selected hour
+   * @default "Hour"
+   */
+  announceHour?: string;
+
+  /**
+   * @description Screen-reader announcement prefix for the selected minutes
+   * @default "Minutes"
+   */
+  announceMinute?: string;
+
+  /**
+   * @description Screen-reader announcement when AM is selected
+   * @default "AM selected"
+   */
+  announceAmSelected?: string;
+
+  /**
+   * @description Screen-reader announcement when PM is selected
+   * @default "PM selected"
+   */
+  announcePmSelected?: string;
+
+  /**
+   * @description Error/announcement text for an invalid time format
+   * @default "Invalid time format"
+   */
+  invalidTimeFormat?: string;
 }
 
 /**

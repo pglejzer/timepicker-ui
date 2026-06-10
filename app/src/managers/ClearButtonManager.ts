@@ -1,7 +1,8 @@
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
-import { announceToScreenReader } from '../utils/accessibility';
+import { announceToScreenReader, bindActivate } from '../utils/accessibility';
 import { PluginRegistry } from '../core/PluginRegistry';
+import { bindEmitter } from '../utils/managerHelpers';
 
 export default class ClearButtonManager {
   private core: CoreState;
@@ -22,31 +23,26 @@ export default class ClearButtonManager {
 
     const handler = (): void => {
       if (this.core.isDestroyed) return;
-      if (clearButton.getAttribute('aria-disabled') === 'true') return;
       this.handleClearClick();
     };
 
-    clearButton.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => clearButton.removeEventListener('click', handler));
+    this.cleanupHandlers.push(bindActivate(clearButton, handler));
 
     this.setupInternalEventListeners();
   }
 
   private setupInternalEventListeners(): void {
-    this.emitter.on('update', () => {
+    bindEmitter(this.emitter, this.cleanupHandlers, 'update', () => {
       this.updateClearButtonState();
     });
-
-    this.emitter.on('open', () => {
+    bindEmitter(this.emitter, this.cleanupHandlers, 'open', () => {
       this.updateClearButtonState();
     });
-
-    this.emitter.on('select:hour', () => {
+    bindEmitter(this.emitter, this.cleanupHandlers, 'select:hour', () => {
       this.updateClearButtonState();
       this.reenableConfirmIfCleared();
     });
-
-    this.emitter.on('select:minute', () => {
+    bindEmitter(this.emitter, this.cleanupHandlers, 'select:minute', () => {
       this.updateClearButtonState();
       this.reenableConfirmIfCleared();
     });

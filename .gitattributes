@@ -1,0 +1,16 @@
+# Force CRLF line endings on checkout and normalize on commit.
+# Matches ESLint rule `linebreak-style: windows` and EditorConfig setting.
+* text=auto eol=crlf
+
+# Binary files — never touch line endings
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pdf binary
+*.zip binary

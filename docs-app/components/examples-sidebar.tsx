@@ -4,10 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { NavBadge } from "@/components/nav-badge";
 
 interface NavigationLink {
   title: string;
   href: string;
+  badge?: "new";
 }
 
 interface NavigationSection {
@@ -39,6 +41,16 @@ const navigation: NavigationSection[] = [
       { title: "Pastel", href: "/examples/themes/pastel" },
       { title: "AI Theme", href: "/examples/themes/ai" },
       { title: "Cyberpunk", href: "/examples/themes/cyberpunk" },
+      {
+        title: "Blueprint",
+        href: "/examples/themes/blueprint",
+        badge: "new",
+      },
+      {
+        title: "Blueprint Dark",
+        href: "/examples/themes/blueprint-dark",
+        badge: "new",
+      },
     ],
   },
   {
@@ -100,16 +112,16 @@ export function ExamplesSidebar() {
   };
 
   return (
-    <nav className="w-full md:w-64 md:shrink-0">
-      <div className="md:sticky md:top-20 md:h-[calc(100vh-5rem)] md:overflow-y-auto">
+    <nav className="w-full">
+      <div>
         <div className="space-y-4 py-4">
           {navigation.map((section) => (
             <div key={section.title}>
               <button
                 onClick={() => toggleSection(section.title)}
-                className="flex w-full items-center justify-between px-3 py-2 text-sm font-semibold transition-colors hover:bg-accent/50 md:cursor-default md:hover:bg-transparent"
+                className="flex w-full items-center justify-between px-3 py-2 transition-colors hover:bg-accent/50 md:cursor-default md:hover:bg-transparent"
               >
-                <span>{section.title}</span>
+                <span className="eyebrow">{section.title}</span>
                 <ChevronDown
                   className={`h-4 w-4 transition-transform md:hidden ${
                     openSections[section.title] ? "rotate-180" : ""
@@ -128,13 +140,14 @@ export function ExamplesSidebar() {
                       <li key={link.href}>
                         <Link
                           href={link.href}
-                          className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                          className={`flex items-center border-l-2 px-3 py-1.5 text-sm transition-colors ${
                             isActive
-                              ? "bg-primary/10 font-medium text-primary"
-                              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                              ? "border-primary font-medium text-primary"
+                              : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
                           }`}
                         >
                           {link.title}
+                          {link.badge === "new" && <NavBadge />}
                         </Link>
                       </li>
                     );

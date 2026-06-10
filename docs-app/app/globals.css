@@ -1,48 +1,85 @@
 @import "tailwindcss";
 
+/*
+  timepicker-ui docs — "Editorial Precision" design system.
+  Near-monochrome base, one electric-cobalt accent, hairline borders,
+  Geist Sans for text, Geist Mono for every numeral / label / code.
+*/
+
 :root {
   --background: 0 0% 100%;
-  --foreground: 0 0% 3.9%;
+  --foreground: 0 0% 4%;
   --card: 0 0% 100%;
-  --card-foreground: 0 0% 3.9%;
+  --card-foreground: 0 0% 4%;
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 3.9%;
-  --primary: 263 70% 50%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 0 0% 96.1%;
+  --popover-foreground: 0 0% 4%;
+  --primary: 228 100% 56%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96.5%;
   --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 96.1%;
-  --muted-foreground: 0 0% 45.1%;
-  --accent: 0 0% 96.1%;
+  --muted: 0 0% 96.5%;
+  --muted-foreground: 0 0% 40%;
+  --accent: 0 0% 96.5%;
   --accent-foreground: 0 0% 9%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 89.8%;
-  --input: 0 0% 89.8%;
-  --ring: 263 70% 50%;
-  --radius: 0.5rem;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 228 100% 56%;
+  --radius: 0.375rem;
+
+  /* hairline used for blueprint/tick motifs */
+  --hairline: 0 0% 88%;
+
+  /* Code surface: a faint near-white panel that reads as "inset" against the
+     white card, so syntax highlighting sits on a calm, theme-aware ground
+     instead of a hardcoded navy. */
+  --code-bg: 0 0% 98%;
+
+  /* Semantic telemetry colors — harmonized with the cobalt primary.
+     ok = teal-green, info = the blue primary family, warn = amber. */
+  --ok: 158 64% 32%;
+  --ok-foreground: 0 0% 100%;
+  --info: 228 100% 56%;
+  --info-foreground: 0 0% 100%;
+  --warn: 35 92% 34%;
+  --warn-foreground: 0 0% 100%;
 }
 
 .dark {
-  --background: 0 0% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 0 0% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 0 0% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 263 70% 50%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 0 0% 14.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 14.9%;
-  --muted-foreground: 0 0% 63.9%;
-  --accent: 0 0% 14.9%;
-  --accent-foreground: 0 0% 98%;
+  --background: 0 0% 4.5%;
+  --foreground: 0 0% 96%;
+  --card: 0 0% 6.5%;
+  --card-foreground: 0 0% 96%;
+  --popover: 0 0% 6.5%;
+  --popover-foreground: 0 0% 96%;
+  --primary: 226 100% 66%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 12%;
+  --secondary-foreground: 0 0% 96%;
+  --muted: 0 0% 12%;
+  --muted-foreground: 0 0% 62%;
+  --accent: 0 0% 12%;
+  --accent-foreground: 0 0% 96%;
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 14.9%;
-  --input: 0 0% 14.9%;
-  --ring: 263 70% 50%;
+  --border: 0 0% 16%;
+  --input: 0 0% 16%;
+  --ring: 226 100% 66%;
+
+  --hairline: 0 0% 18%;
+
+  /* Code surface: a touch deeper than the card so the code panel reads as a
+     recessed instrument well in dark mode. */
+  --code-bg: 0 0% 5%;
+
+  /* Semantic telemetry colors — brighter for legibility on the dark base. */
+  --ok: 158 58% 48%;
+  --ok-foreground: 0 0% 4.5%;
+  --info: 226 100% 66%;
+  --info-foreground: 0 0% 4.5%;
+  --warn: 38 92% 56%;
+  --warn-foreground: 0 0% 4.5%;
 }
 
 @theme inline {
@@ -65,38 +102,246 @@
   --color-popover-foreground: hsl(var(--popover-foreground));
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-code-bg: hsl(var(--code-bg));
+
+  --color-ok: hsl(var(--ok));
+  --color-ok-foreground: hsl(var(--ok-foreground));
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+  --color-warn: hsl(var(--warn));
+  --color-warn-foreground: hsl(var(--warn-foreground));
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
 * {
   border-color: hsl(var(--border));
 }
 
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-feature-settings: "rlig" 1, "calt" 1;
+  font-family: var(--font-sans);
+  font-feature-settings: "cv01" 1, "ss01" 1, "calt" 1;
 }
 
+::selection {
+  background-color: hsl(var(--primary) / 0.18);
+}
+
+/* ----------------------------------------------------------------------------
+   Editorial primitives
+   ------------------------------------------------------------------------- */
+
+/* Mono kicker label: uppercase, tracked, muted. The signature of the system. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Tabular mono numerals for any time value (12:30, 09:41, bundle sizes…). */
+.time-numeral,
+.nums {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Tight display tracking for large marketing headlines. */
+.display {
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+/* Clock-tick ruler: a row of evenly spaced vertical hairlines. */
+.tick-row {
+  height: 14px;
+  width: 100%;
+  background-image: repeating-linear-gradient(
+    to right,
+    hsl(var(--hairline)) 0,
+    hsl(var(--hairline)) 1px,
+    transparent 1px,
+    transparent 12px
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+/* Faint docs-owned decorative grid for atmospheric backgrounds (replaces dotted grid). Namespaced to avoid colliding with library/third-party `blueprint` classes. */
+.bp-grid {
+  background-image: linear-gradient(
+      to right,
+      hsl(var(--hairline) / 0.55) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, hsl(var(--hairline) / 0.55) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* ----------------------------------------------------------------------------
+   Component bench (preview/code instrument card)
+   ------------------------------------------------------------------------- */
+
+/* Refined, theme-aware custom scrollbar for the docs UI. `.app-scroll` is the
+   reusable utility applied to scroll containers (TOC, sidebars, command menu);
+   `.bench-scroll` (code surface / preview overflow) shares the exact same look
+   so every scroll affordance matches the precision-instrument design. Tokens
+   keep it correct in both light and dark themes. */
+/* Global default: standard scrollbar props inherit, so every scroll container
+   (sidebars, TOC, page, dialogs) gets the thin token-colored scrollbar across
+   Firefox, Chromium and modern Safari — not just elements tagged `.app-scroll`. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+.app-scroll,
+.bench-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+.app-scroll::-webkit-scrollbar,
+.bench-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.app-scroll::-webkit-scrollbar-track,
+.bench-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.app-scroll::-webkit-scrollbar-thumb,
+.bench-scroll::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 9999px;
+}
+.app-scroll::-webkit-scrollbar-thumb:hover,
+.bench-scroll::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+  background-clip: padding-box;
+}
+
+/* Bottom fade mask applied to a collapsed (clamped) code block so long
+   snippets dissolve into the surface instead of cutting off hard. */
+.bench-code-fade {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0,
+    #000 72%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(to bottom, #000 0, #000 72%, transparent 100%);
+}
+
+/* Tasteful entrance for a bench when it first paints. */
+@keyframes bench-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.bench-in {
+  animation: bench-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bench-in {
+    animation: none;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Orchestrated page-load reveal
+   ------------------------------------------------------------------------- */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: reveal-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+  }
+  /* Mobile sidebar / overlay entrance animations (tw-animate utilities used by
+     mobile-sidebar and simple-mobile-sidebar) resolve instantly. */
+  .animate-in,
+  .fade-in,
+  .slide-in-from-left,
+  .slide-in-from-right {
+    animation: none !important;
+  }
+  * {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Prose (docs content)
+   ------------------------------------------------------------------------- */
 .prose {
   max-width: none;
   color: hsl(var(--foreground));
 }
 
-.prose a {
+.prose a:not([class]) {
   color: hsl(var(--primary));
   text-decoration: none;
+  text-underline-offset: 3px;
 }
 
-.prose a:hover {
+.prose a:not([class]):hover {
   text-decoration: underline;
 }
 
 .prose code {
+  font-family: var(--font-mono);
   background-color: hsl(var(--muted));
-  padding: 0.25rem 0.375rem;
-  border-radius: 0.25rem;
+  border: 1px solid hsl(var(--border));
+  padding: 0.12rem 0.36rem;
+  border-radius: 0.3rem;
   font-weight: 500;
-  font-size: 0.875em;
+  font-size: 0.85em;
 }
 
 .prose code::before,
@@ -106,6 +351,7 @@ body {
 
 .prose pre {
   background-color: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
   border-radius: 0.5rem;
   padding: 1rem;
   overflow-x: auto;
@@ -113,6 +359,456 @@ body {
 
 .prose pre code {
   background-color: transparent;
+  border: 0;
   padding: 0;
   font-weight: 400;
+}
+
+/* ----------------------------------------------------------------------------
+   Star call-out (instrument-panel gauge)
+   ------------------------------------------------------------------------- */
+.star-cta-icon {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), fill 0.25s ease;
+}
+
+.star-cta:hover .star-cta-icon,
+.star-cta:focus-visible .star-cta-icon {
+  fill: currentColor;
+  transform: scale(1.12);
+}
+
+/* Faint ruler marks across the milestone gauge, echoing .tick-row. */
+.tick-overlay {
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent 9px,
+    hsl(var(--background) / 0.5) 9px,
+    hsl(var(--background) / 0.5) 10px
+  );
+}
+
+/* Milestone gauge: smooth width ease when the section enters view. The duration
+   is set inline by <StarMeter>; transitioning width is acceptable here because
+   the bar is a fixed-height overlay (no surrounding layout reflows). */
+.star-gauge-fill {
+  transition-property: width;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ----------------------------------------------------------------------------
+   Sweeping second-hand clock motif — the signature, instrument-grade detail.
+   Continuous 4s linear sweep so it reads as "alive" without nagging.
+   ------------------------------------------------------------------------- */
+@keyframes star-clock-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.star-clock-hand {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: star-clock-sweep 4s linear infinite;
+}
+
+/* ----------------------------------------------------------------------------
+   Restrained star-burst on CTA hover/focus — a hint of delight, not confetti.
+   ------------------------------------------------------------------------- */
+.star-burst {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.star-spark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  margin: -1.5px 0 0 -1.5px;
+  border-radius: 9999px;
+  background-color: currentColor;
+  opacity: 0;
+  transform: translate(0, 0) scale(0.4);
+}
+
+.star-spark:nth-child(1) {
+  --burst-x: -9px;
+  --burst-y: -8px;
+}
+.star-spark:nth-child(2) {
+  --burst-x: 10px;
+  --burst-y: -6px;
+}
+.star-spark:nth-child(3) {
+  --burst-x: -7px;
+  --burst-y: 9px;
+}
+.star-spark:nth-child(4) {
+  --burst-x: 8px;
+  --burst-y: 8px;
+}
+
+@keyframes star-spark-pop {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  30% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--burst-x), var(--burst-y)) scale(0.9);
+  }
+}
+
+.star-cta:hover .star-spark,
+.star-cta:focus-visible .star-spark {
+  animation: star-spark-pop 0.55s ease-out forwards;
+}
+
+.star-cta:hover .star-spark:nth-child(2),
+.star-cta:focus-visible .star-spark:nth-child(2) {
+  animation-delay: 0.04s;
+}
+.star-cta:hover .star-spark:nth-child(3),
+.star-cta:focus-visible .star-spark:nth-child(3) {
+  animation-delay: 0.08s;
+}
+.star-cta:hover .star-spark:nth-child(4),
+.star-cta:focus-visible .star-spark:nth-child(4) {
+  animation-delay: 0.06s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star-cta-icon {
+    transition: fill 0.25s ease;
+  }
+  .star-cta:hover .star-cta-icon,
+  .star-cta:focus-visible .star-cta-icon {
+    transform: none;
+  }
+  .star-gauge-fill {
+    transition: none;
+  }
+  .star-clock-hand {
+    animation: none;
+  }
+  .star-cta:hover .star-spark,
+  .star-cta:focus-visible .star-spark {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Measuring-tape composition bar — the page's signature visualization.
+   A segmented horizontal bar (Core + plugin segments) with a hairline ruler
+   overlaid, echoing .tick-row. Segments grow in on reveal.
+   ------------------------------------------------------------------------- */
+.tape-bar {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 3.25rem;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--muted) / 0.4);
+}
+
+.tape-seg {
+  position: relative;
+  height: 100%;
+  min-width: 2px;
+  display: flex;
+  align-items: center;
+  padding-inline: 0.625rem;
+  transform-origin: left center;
+  animation: tape-grow 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tape-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Hairline ruler overlay across the whole tape, evoking .tick-row. */
+.tape-ruler {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: repeating-linear-gradient(
+    to right,
+    hsl(var(--foreground) / 0.16) 0,
+    hsl(var(--foreground) / 0.16) 1px,
+    transparent 1px,
+    transparent 12px
+  );
+}
+
+/* Taller ticks every fifth mark for an instrument-grade rule. */
+.tape-ruler-major {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: repeating-linear-gradient(
+    to right,
+    hsl(var(--foreground) / 0.28) 0,
+    hsl(var(--foreground) / 0.28) 1px,
+    transparent 1px,
+    transparent 60px
+  );
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 38%, transparent 38%);
+  mask-image: linear-gradient(to bottom, #000 0, #000 38%, transparent 38%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tape-seg {
+    animation: none;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Site header — "the instrument's faceplate".
+   Sticky, condense-on-scroll (no page reflow), a reading-progress ruler pinned
+   to its bottom edge, instrument-style active-nav ticks, and a clock-hand
+   micro-nudge on the wordmark. All motion is GPU/compositor work.
+   ------------------------------------------------------------------------- */
+
+/* Resting state: translucent, soft blur, hairline border. The chrome (bg /
+   blur / shadow / border) transitions; the outer header height never changes. */
+.site-header {
+  background-color: hsl(var(--background) / 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* Condensed state: more opaque, stronger blur, sharpened hairline + faint lift.
+   The page below cannot shift because only visual properties change here. */
+.site-header[data-scrolled] {
+  background-color: hsl(var(--background) / 0.88);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-color: hsl(var(--border));
+  box-shadow: 0 1px 0 hsl(var(--border)), 0 8px 24px -18px hsl(0 0% 0% / 0.35);
+}
+
+/* Only the INNER bar condenses (h-16 -> h-14). The outer <header> keeps its
+   fixed height, so this shrink is pure compositor work — zero content reflow. */
+.site-header-bar {
+  transition: height 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-header[data-scrolled] .site-header-bar {
+  height: 3.5rem; /* h-14 */
+}
+
+/* The reading-progress ruler: a primary hairline that fills left -> right as
+   the page scrolls. transform: scaleX is GPU-accelerated; --scroll-progress is
+   written by the header's rAF scroll handler each frame. */
+.site-header-progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 100%;
+  transform-origin: left center;
+  transform: scaleX(var(--scroll-progress, 0));
+  background-image: linear-gradient(
+    to right,
+    hsl(var(--primary) / 0.55),
+    hsl(var(--primary))
+  );
+  /* Smooths the fill between rAF samples; dropped under reduced motion so the
+     bar tracks the scroll position directly. */
+  transition: transform 0.08s linear;
+  will-change: transform;
+}
+
+/* Active-route nav indicator: an instrument tick centered under the label.
+   Filled for the active route, grows from 0 on hover for inactive ones. */
+.site-nav-link {
+  position: relative;
+}
+
+.site-nav-tick {
+  position: absolute;
+  left: 50%;
+  bottom: 0.125rem;
+  height: 1.5px;
+  width: 0;
+  transform: translateX(-50%);
+  background-color: hsl(var(--primary));
+  border-radius: 9999px;
+  transition: width 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-nav-link:hover .site-nav-tick {
+  width: 0.875rem;
+}
+
+.site-nav-link[data-active] .site-nav-tick {
+  width: 1.25rem;
+}
+
+/* Wordmark micro-interaction: the clock mark's minute hand nudges on hover,
+   echoing the live-instrument motif. CSS-only, transform-origin at the dial. */
+.site-logo svg {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-wordmark:hover .site-logo svg {
+  transform: rotate(15deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .site-header-bar,
+  .site-nav-tick,
+  .site-logo svg {
+    transition: none;
+  }
+  /* Progress stays functional but tracks scroll directly, no smoothing. */
+  .site-header-progress {
+    transition: none;
+  }
+  .site-wordmark:hover .site-logo svg {
+    transform: none;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   404 hero clock — "4:04, time not found".
+   An instrument-grade dial whose hour + minute hands rest at 4:04 (404 read as
+   a time). The second hand sweeps continuously (60s, true clock cadence); on
+   interaction the whole movement spins briefly — "searching for the page" —
+   then settles back, because the page is still lost. All motion is transform-
+   only (GPU). Under prefers-reduced-motion everything rests at 4:04.
+   ------------------------------------------------------------------------- */
+
+/* Continuous second-hand sweep — one full turn per minute. */
+@keyframes nf-second-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.nf-second {
+  transform-box: view-box;
+  transform-origin: 100px 100px;
+  animation: nf-second-sweep 60s linear infinite;
+}
+
+/* "Searching" spin: the hour + minute hands do a quick extra revolution and
+   ease back to rest, as if hunting for the missing page. Triggered by a
+   short-lived `.nf-searching` class toggled in the React island. The hands
+   keep their static 4:04 base rotation (set inline) and this spins the inner
+   movement group on top of it. */
+@keyframes nf-hand-search {
+  0% {
+    transform: rotate(0deg);
+  }
+  70% {
+    transform: rotate(370deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.nf-hand {
+  transform-box: view-box;
+}
+
+.nf-searching .nf-hand-hour {
+  animation: nf-hand-search 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: 100px 100px;
+}
+
+.nf-searching .nf-hand-minute {
+  animation: nf-hand-search 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.06s;
+  transform-origin: 100px 100px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No sweep, no spin — the hands simply rest at 4:04, page stays usable. */
+  .nf-second {
+    animation: none;
+  }
+  .nf-searching .nf-hand-hour,
+  .nf-searching .nf-hand-minute {
+    animation: none;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Footer — "the instrument's baseplate".
+   Oversized engraved wordmark, hairline link ticks, and the live clock readout.
+   ------------------------------------------------------------------------- */
+
+/* Atmospheric, outlined wordmark that scales fluidly and never overflows. */
+.footer-wordmark {
+  font-size: clamp(2.75rem, 15vw, 9rem);
+  letter-spacing: -0.045em;
+  color: hsl(var(--foreground) / 0.07);
+}
+
+/* Hairline indicator that grows in on hover — a tasteful "tick into place". */
+.footer-link-tick {
+  display: inline-block;
+  width: 0;
+  height: 1px;
+  background-color: hsl(var(--primary));
+  transition: width 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.footer-link:hover .footer-link-tick,
+a:focus-visible .footer-link-tick {
+  width: 0.875rem;
+}
+
+/* Live-clock colon: a gentle blink so the readout reads as "alive". */
+@keyframes footer-clock-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  95% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.footer-clock-colon {
+  animation: footer-clock-blink 1s steps(1, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-link-tick {
+    transition: none;
+  }
+  .footer-link-arrow {
+    transition: none;
+  }
+  /* Information keeps updating; only the decorative blink is silenced. */
+  .footer-clock-colon {
+    animation: none;
+    opacity: 1;
+  }
 }

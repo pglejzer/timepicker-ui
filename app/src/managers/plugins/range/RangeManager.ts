@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { CoreState } from '../../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitter';
-import type { RangeMinuteCommitEventData, ConfirmEventData } from '../../../types/types';
+import type { RangeMinuteCommitEventData } from '../../../types/types';
 import type { RangePart, RangeValue, DisabledTimeConfig, FormattedRange } from './types';
 import { RangeState } from './RangeState';
 import { RangeUI } from './RangeUI';
 import { parseRangeInput, formatDisplayTime } from './utils';
+import { bindEmitter } from '../../../utils/managerHelpers';
 
 export default class RangeManager {
   private readonly core: CoreState;
@@ -15,12 +15,6 @@ export default class RangeManager {
   private cleanupHandlers: Array<() => void> = [];
   private isSyncingAmPm = false;
 
-  private boundHandleMinuteCommit: (data: RangeMinuteCommitEventData) => void;
-  private boundHandleConfirm: (data: ConfirmEventData) => void;
-  private boundHandleUpdate: () => void;
-  private boundHandleAmPm: () => void;
-  private boundHandleClear: () => void;
-
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
     this.emitter = emitter;
@@ -28,12 +22,6 @@ export default class RangeManager {
     const { range, clock } = core.options;
     this.state = new RangeState(clock.type as '12h' | '24h', range?.minDuration, range?.maxDuration, emitter);
     this.ui = new RangeUI(core, this.state);
-
-    this.boundHandleMinuteCommit = this.handleMinuteCommit.bind(this);
-    this.boundHandleConfirm = this.handleConfirm.bind(this);
-    this.boundHandleUpdate = this.handleUpdate.bind(this);
-    this.boundHandleAmPm = this.handleAmPm.bind(this);
-    this.boundHandleClear = this.handleClear.bind(this);
   }
 
   private get isEnabled(): boolean {
@@ -122,38 +110,80 @@ export default class RangeManager {
     const modal = this.core.getModalElement();
     if (!modal) return;
 
-    const fromBtn = modal.querySelector('.tp-ui-range-tab.tp-ui-range-from');
-    const toBtn = modal.querySelector('.tp-ui-range-tab.tp-ui-range-to');
+    const fromBtn = modal.querySelector<HTMLElement>('.tp-ui-range-tab.tp-ui-range-from');
+    const toBtn = modal.querySelector<HTMLElement>('.tp-ui-range-tab.tp-ui-range-to');
 
     if (fromBtn) {
-      const handler = (): void => this.setActivePart('from');
+      const handler = (): void => this.activatePart('from', fromBtn);
       fromBtn.addEventListener('click', handler);
       this.cleanupHandlers.push(() => fromBtn.removeEventListener('click', handler));
     }
 
     if (toBtn) {
-      const handler = (): void => this.setActivePart('to');
+      const handler = (): void => this.activatePart('to', toBtn);
       toBtn.addEventListener('click', handler);
       this.cleanupHandlers.push(() => toBtn.removeEventListener('click', handler));
     }
 
-    this.emitter.on('update', this.boundHandleUpdate);
-    this.cleanupHandlers.push(() => this.emitter.off('update', this.boundHandleUpdate));
+    this.bindTabKeyboard(fromBtn, toBtn);
 
-    this.emitter.on('range:minute:commit', this.boundHandleMinuteCommit);
-    this.cleanupHandlers.push(() => this.emitter.off('range:minute:commit', this.boundHandleMinuteCommit));
+    bindEmitter(this.emitter, this.cleanupHandlers, 'update', () => this.handleUpdate());
+    bindEmitter(this.emitter, this.cleanupHandlers, 'range:minute:commit', (d) => this.handleMinuteCommit(d));
+    bindEmitter(this.emitter, this.cleanupHandlers, 'confirm', () => this.handleConfirm());
+    bindEmitter(this.emitter, this.cleanupHandlers, 'select:am', () => this.handleAmPm());
+    bindEmitter(this.emitter, this.cleanupHandlers, 'select:pm', () => this.handleAmPm());
+    bindEmitter(this.emitter, this.cleanupHandlers, 'clear', () => this.handleClear());
+  }
 
-    this.emitter.on('confirm', this.boundHandleConfirm);
-    this.cleanupHandlers.push(() => this.emitter.off('confirm', this.boundHandleConfirm));
+  private isTabDisabled(btn: HTMLElement | null): boolean {
+    return !btn || btn.getAttribute('aria-disabled') === 'true' || btn.classList.contains('disabled');
+  }
 
-    this.emitter.on('select:am', this.boundHandleAmPm);
-    this.cleanupHandlers.push(() => this.emitter.off('select:am', this.boundHandleAmPm));
+  private activatePart(part: RangePart, btn: HTMLElement | null): void {
+    if (this.isTabDisabled(btn)) return;
+    this.setActivePart(part);
+  }
 
-    this.emitter.on('select:pm', this.boundHandleAmPm);
-    this.cleanupHandlers.push(() => this.emitter.off('select:pm', this.boundHandleAmPm));
+  private bindTabKeyboard(fromBtn: HTMLElement | null, toBtn: HTMLElement | null): void {
+    const tabs = [fromBtn, toBtn].filter((t): t is HTMLElement => t !== null);
+    if (tabs.length === 0) return;
 
-    this.emitter.on('clear', this.boundHandleClear);
-    this.cleanupHandlers.push(() => this.emitter.off('clear', this.boundHandleClear));
+    tabs.forEach((tab, index) => {
+      const part: RangePart = index === 0 ? 'from' : 'to';
+
+      const handler = (e: KeyboardEvent): void => {
+        switch (e.key) {
+          case 'ArrowRight':
+          case 'ArrowLeft': {
+            e.preventDefault();
+            const targetIndex = e.key === 'ArrowRight' ? index + 1 : index - 1;
+            const wrapped = (targetIndex + tabs.length) % tabs.length;
+            const target = tabs[wrapped];
+            if (!this.isTabDisabled(target)) {
+              target.focus();
+            }
+            break;
+          }
+          case 'Home':
+            e.preventDefault();
+            tabs[0].focus();
+            break;
+          case 'End':
+            e.preventDefault();
+            tabs[tabs.length - 1].focus();
+            break;
+          case 'Enter':
+          case ' ':
+          case 'Spacebar':
+            e.preventDefault();
+            this.activatePart(part, tab);
+            break;
+        }
+      };
+
+      tab.addEventListener('keydown', handler);
+      this.cleanupHandlers.push(() => tab.removeEventListener('keydown', handler));
+    });
   }
 
   private handleClear(): void {
@@ -271,7 +301,7 @@ export default class RangeManager {
     }
   }
 
-  private handleConfirm(_data: ConfirmEventData): void {
+  private handleConfirm(): void {
     if (!this.isEnabled) return;
 
     this.state.commitPreview();

@@ -78,6 +78,46 @@ describe('ValidationManager', () => {
       expect(errorEl?.classList.contains('tp-ui-invalid-text')).toBe(true);
     });
 
+    it('should set role="alert" on the error element', () => {
+      mockInput.value = 'invalid';
+      jest.spyOn(coreState, 'getInput').mockReturnValue(mockInput);
+
+      validationManager.setErrorHandler();
+
+      const errorEl = mockInput.nextElementSibling;
+      expect(errorEl?.getAttribute('role')).toBe('alert');
+    });
+
+    it('should use labels.invalidTimeFormat as the error text', () => {
+      mockInput.value = 'invalid';
+      jest.spyOn(coreState, 'getInput').mockReturnValue(mockInput);
+
+      validationManager.setErrorHandler();
+
+      const errorEl = mockInput.nextElementSibling;
+      expect(errorEl?.textContent).toBe(DEFAULT_OPTIONS.labels.invalidTimeFormat);
+    });
+
+    it('should use a custom labels.invalidTimeFormat when provided', () => {
+      const customOptions = {
+        ...DEFAULT_OPTIONS,
+        labels: { ...DEFAULT_OPTIONS.labels, invalidTimeFormat: 'Bad time' },
+      };
+      const customCore = new CoreState(mockElement, customOptions, 'test-custom-invalid');
+      const customManager = new ValidationManager(customCore, emitter);
+
+      mockInput.value = 'invalid';
+      jest.spyOn(customCore, 'getInput').mockReturnValue(mockInput);
+
+      customManager.setErrorHandler();
+
+      const errorEl = mockInput.nextElementSibling;
+      expect(errorEl?.getAttribute('role')).toBe('alert');
+      expect(errorEl?.textContent).toBe('Bad time');
+
+      customManager.destroy();
+    });
+
     it('should not duplicate error message element', () => {
       mockInput.value = 'invalid';
       jest.spyOn(coreState, 'getInput').mockReturnValue(mockInput);

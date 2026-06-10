@@ -33,25 +33,42 @@ const generateMinutes = (step: number): ReadonlyArray<string> =>
 
 const AMPM_VALUES: ReadonlyArray<string> = ['AM', 'PM'];
 
+export interface WheelTemplateLabels {
+  hourLabel?: string;
+  minuteLabel?: string;
+  periodLabel?: string;
+}
+
 export const getWheelTemplate = (
   clockType: '12h' | '24h',
   incrementMinutes: number,
   includeAmPmColumn: boolean = false,
   instanceId: string = 'tp',
+  labels: WheelTemplateLabels = {},
 ): string => {
+  const hourLabel = labels.hourLabel ?? 'Hour';
+  const minuteLabel = labels.minuteLabel ?? 'Minute';
+  const periodLabel = labels.periodLabel ?? 'Period';
+
   const hours = clockType === '12h' ? generateHours12() : generateHours24();
 
   const minutes = generateMinutes(incrementMinutes);
 
-  const hoursColumn = buildColumn('tp-ui-wheel-hours', 'Hours', hours, 'Hour', `${instanceId}-wh`);
+  const hoursColumn = buildColumn('tp-ui-wheel-hours', hourLabel, hours, hourLabel, `${instanceId}-wh`);
 
   const separator = '<div class="tp-ui-wheel-separator" aria-hidden="true">:</div>';
 
-  const minutesColumn = buildColumn('tp-ui-wheel-minutes', 'Minutes', minutes, 'Minute', `${instanceId}-wm`);
+  const minutesColumn = buildColumn(
+    'tp-ui-wheel-minutes',
+    minuteLabel,
+    minutes,
+    minuteLabel,
+    `${instanceId}-wm`,
+  );
 
   const ampmColumn =
     includeAmPmColumn && clockType === '12h'
-      ? buildColumn('tp-ui-wheel-ampm', 'Period', AMPM_VALUES, 'Period', `${instanceId}-wp`)
+      ? buildColumn('tp-ui-wheel-ampm', periodLabel, AMPM_VALUES, periodLabel, `${instanceId}-wp`)
       : '';
 
   const highlight = '<div class="tp-ui-wheel-highlight" aria-hidden="true"></div>';

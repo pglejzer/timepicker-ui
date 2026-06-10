@@ -279,7 +279,8 @@ describe('EventManager', () => {
   });
 
   describe('handleEscClick', () => {
-    it('should emit cancel on Escape key', () => {
+    it('should emit cancel on Escape key when open', () => {
+      coreState.setIsOpen(true);
       const emitSpy = jest.spyOn(emitter, 'emit');
 
       eventManager.handleEscClick();
@@ -288,6 +289,18 @@ describe('EventManager', () => {
       document.dispatchEvent(escEvent);
 
       expect(emitSpy).toHaveBeenCalledWith('cancel', {});
+    });
+
+    it('should not emit cancel on Escape key when closed', () => {
+      coreState.setIsOpen(false);
+      const emitSpy = jest.spyOn(emitter, 'emit');
+
+      eventManager.handleEscClick();
+
+      const escEvent = new KeyboardEvent('keydown', { key: 'Escape' });
+      document.dispatchEvent(escEvent);
+
+      expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
     });
 
     it('should not emit on other keys', () => {
@@ -680,6 +693,7 @@ describe('EventManager', () => {
     it('should wrap hour from 12 to 1 on ArrowUp in 12h mode', () => {
       const hourInput = document.createElement('input') as HTMLInputElement;
       hourInput.value = '12';
+      hourInput.setAttribute('max', '12');
 
       jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
       jest.spyOn(coreState, 'getMinutes').mockReturnValue(null);
@@ -697,6 +711,7 @@ describe('EventManager', () => {
     it('should wrap hour from 1 to 12 on ArrowDown in 12h mode', () => {
       const hourInput = document.createElement('input') as HTMLInputElement;
       hourInput.value = '01';
+      hourInput.setAttribute('max', '12');
 
       jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
       jest.spyOn(coreState, 'getMinutes').mockReturnValue(null);
@@ -928,6 +943,70 @@ describe('EventManager', () => {
 
       const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
       wrapper.dispatchEvent(enterEvent);
+    });
+
+    it('should skip aria-disabled and aria-hidden elements when wrapping focus', () => {
+      const wrapper = document.createElement('div');
+      const first = document.createElement('button');
+      const disabled = document.createElement('button');
+      disabled.setAttribute('aria-disabled', 'true');
+      const hidden = document.createElement('button');
+      hidden.setAttribute('aria-hidden', 'true');
+      const last = document.createElement('button');
+
+      [first, disabled, hidden, last].forEach((el) => {
+        wrapper.appendChild(el);
+        jest
+          .spyOn(el, 'getClientRects')
+          .mockReturnValue([{ width: 1, height: 1 } as DOMRect] as unknown as DOMRectList);
+      });
+      document.body.appendChild(wrapper);
+
+      jest.spyOn(coreState, 'getWrapper').mockReturnValue(wrapper);
+
+      eventManager.focusTrapHandler();
+
+      last.focus();
+      const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true });
+      wrapper.dispatchEvent(tabEvent);
+
+      expect(document.activeElement).toBe(first);
+      expect(document.activeElement).not.toBe(disabled);
+      expect(document.activeElement).not.toBe(hidden);
+    });
+
+    it('should land on the last actionable control on Shift+Tab, skipping disabled/hidden', () => {
+      const wrapper = document.createElement('div');
+      const first = document.createElement('button');
+      const disabled = document.createElement('button');
+      disabled.setAttribute('aria-disabled', 'true');
+      const hidden = document.createElement('button');
+      hidden.setAttribute('aria-hidden', 'true');
+      const last = document.createElement('button');
+
+      [first, disabled, hidden, last].forEach((el) => {
+        wrapper.appendChild(el);
+        jest
+          .spyOn(el, 'getClientRects')
+          .mockReturnValue([{ width: 1, height: 1 } as DOMRect] as unknown as DOMRectList);
+      });
+      document.body.appendChild(wrapper);
+
+      jest.spyOn(coreState, 'getWrapper').mockReturnValue(wrapper);
+
+      eventManager.focusTrapHandler();
+
+      first.focus();
+      const shiftTabEvent = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        shiftKey: true,
+        bubbles: true,
+      });
+      wrapper.dispatchEvent(shiftTabEvent);
+
+      expect(document.activeElement).toBe(last);
+      expect(document.activeElement).not.toBe(disabled);
+      expect(document.activeElement).not.toBe(hidden);
     });
 
     it('should not trap when destroyed', () => {

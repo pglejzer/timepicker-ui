@@ -194,7 +194,9 @@ export type OptionTypes = {
     | 'glassmorphic'
     | 'pastel'
     | 'ai'
-    | 'cyberpunk';
+    | 'cyberpunk'
+    | 'blueprint'
+    | 'blueprint-dark';
   /** Clock type: 12h or 24h @default "12h" */
   clockType?: '12h' | '24h';
   /** Disable specific times (hours/minutes/intervals) */

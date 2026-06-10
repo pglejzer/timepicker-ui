@@ -1,3 +1,5 @@
+import { prefersReducedMotion } from '../../../utils/accessibility';
+
 export class TimezoneKeyboard {
   private focusedIndex: number = -1;
 
@@ -33,13 +35,26 @@ export class TimezoneKeyboard {
     this.focusedIndex = -1;
   }
 
-  updateVisualFocus(options: HTMLElement[]): void {
+  updateVisualFocus(options: HTMLElement[], dropdown?: HTMLElement | null): void {
     options.forEach((option, index) => {
       option.setAttribute('data-focused', String(index === this.focusedIndex));
     });
 
-    if (this.focusedIndex >= 0 && options[this.focusedIndex]) {
-      options[this.focusedIndex].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    const focused = this.focusedIndex >= 0 ? options[this.focusedIndex] : null;
+
+    if (dropdown) {
+      if (focused?.id) {
+        dropdown.setAttribute('aria-activedescendant', focused.id);
+      } else {
+        dropdown.removeAttribute('aria-activedescendant');
+      }
+    }
+
+    if (focused) {
+      focused.scrollIntoView({
+        block: 'nearest',
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      });
     }
   }
 }

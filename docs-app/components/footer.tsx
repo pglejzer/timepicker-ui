@@ -1,212 +1,210 @@
 import Link from "next/link";
-import { Github, Heart } from "lucide-react";
+import { Github, Package, ArrowUpRight } from "lucide-react";
+import { Logo } from "@/components/logo";
+import { FooterClock } from "@/components/footer-clock";
+
+const VERSION = "v4.4.0";
+
+const columns = [
+  {
+    title: "Documentation",
+    links: [
+      { label: "Installation", href: "/docs/installation" },
+      { label: "Quick Start", href: "/docs/quick-start" },
+      { label: "Configuration", href: "/docs/configuration" },
+      { label: "API Reference", href: "/docs/api/methods" },
+    ],
+  },
+  {
+    title: "Features",
+    links: [
+      { label: "Themes", href: "/docs/features/themes" },
+      { label: "Mobile Support", href: "/docs/features/mobile" },
+      { label: "Accessibility", href: "/docs/advanced/accessibility" },
+      { label: "Localization", href: "/docs/advanced/localization" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      {
+        label: "GitHub",
+        href: "https://github.com/pglejzer/timepicker-ui",
+        external: true,
+      },
+      {
+        label: "npm",
+        href: "https://www.npmjs.com/package/timepicker-ui",
+        external: true,
+      },
+      {
+        label: "Issues",
+        href: "https://github.com/pglejzer/timepicker-ui/issues",
+        external: true,
+      },
+      { label: "Bundle Analysis", href: "/bundle-stats" },
+    ],
+  },
+];
+
+const social = [
+  {
+    label: "GitHub",
+    href: "https://github.com/pglejzer/timepicker-ui",
+    icon: Github,
+  },
+  {
+    label: "npm",
+    href: "https://www.npmjs.com/package/timepicker-ui",
+    icon: Package,
+  },
+];
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-card/50 backdrop-blur-sm">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+    <footer className="relative overflow-hidden border-t border-border bg-muted/20">
+      {/* Atmospheric decorative grid, consistent with hero/CTA. */}
+      <div className="bp-grid pointer-events-none absolute inset-0 -z-10 opacity-30" />
+
+      <div className="container mx-auto px-4 md:px-6">
+        {/* Top plate: brand + live instrument readout */}
+        <div className="grid gap-10 border-b border-border py-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-foreground">Timepicker-UI</h3>
-            <p className="text-sm text-muted-foreground">
-              A beautiful, customizable, and accessible time picker component
-              for modern web applications.
+            <span className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight">
+              <Logo className="h-5 w-5" />
+              timepicker<span className="text-muted-foreground">-ui</span>
+            </span>
+            <p className="max-w-xs text-sm text-muted-foreground">
+              Zero-dependency time picker for the web. Analog clock, scroll
+              wheel and compact-wheel modes.
             </p>
-            <div className="flex items-center gap-4">
-              <a
-                href="https://github.com/pglejzer/timepicker-ui"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-                aria-label="GitHub"
-              >
-                <Github className="h-5 w-5" />
-              </a>
+            <div className="flex items-center gap-2 pt-1">
+              {social.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${s.label} (opens in new tab)`}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  <s.icon className="h-[18px] w-[18px]" aria-hidden="true" />
+                </a>
+              ))}
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-              Documentation
-            </h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/docs/installation"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Installation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/quick-start"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Quick Start
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/configuration"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Configuration
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/api/methods"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  API Reference
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-              Features
-            </h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/docs/features/themes"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Themes
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/features/mobile"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Mobile Support
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/advanced/accessibility"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Accessibility
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/docs/advanced/localization"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Localization
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-              Resources
-            </h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a
-                  href="https://github.com/pglejzer/timepicker-ui"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.npmjs.com/package/timepicker-ui"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  npm Package
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/pglejzer/timepicker-ui/issues"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Report Issues
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/pglejzer/timepicker-ui/blob/main/CHANGELOG.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Changelog
-                </a>
-              </li>
-              <li>
-                <Link
-                  href="/bundle-stats"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Bundle Analysis
-                </Link>
-              </li>
-            </ul>
+          {/* Live clock readout - the on-brand dynamic element */}
+          <div className="lg:justify-self-end">
+            <div className="rounded-xl border border-border bg-card p-5 shadow-sm sm:max-w-xs">
+              <div className="flex items-center justify-between">
+                <span className="eyebrow">Your local time</span>
+                <Logo className="h-4 w-4 text-primary" />
+              </div>
+              <div className="tick-row my-4" />
+              <FooterClock />
+            </div>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-border">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>© {currentYear} Timepicker-UI.</span>
-              <span className="hidden md:inline">Made with</span>
-              <Heart className="h-4 w-4 text-red-500 fill-red-500" />
-              <span className="hidden md:inline">
-                by the{" "}
-                <a
-                  href="https://github.com/pglejzer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Piotr Glejzer
-                </a>{" "}
-              </span>
+        {/* Link columns grouped by intent */}
+        <nav
+          aria-label="Footer"
+          className="grid grid-cols-2 gap-8 border-b border-border py-12 md:grid-cols-3"
+        >
+          {columns.map((col) => (
+            <div key={col.title}>
+              <h3 className="eyebrow mb-4">{col.title}</h3>
+              <ul className="space-y-1 text-sm">
+                {col.links.map((link) => {
+                  const external = "external" in link && link.external;
+                  const content = (
+                    <span className="footer-link group/link inline-flex min-h-[40px] items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground">
+                      <span className="footer-link-tick" aria-hidden="true" />
+                      <span className="footer-link-label">{link.label}</span>
+                      {external && (
+                        <ArrowUpRight
+                          className="footer-link-arrow h-3.5 w-3.5 opacity-0 transition-all group-hover/link:translate-x-0.5 group-hover/link:opacity-100"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </span>
+                  );
+
+                  return (
+                    <li key={link.label}>
+                      {external ? (
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${link.label} (opens in new tab)`}
+                          className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                        >
+                          {content}
+                        </a>
+                      ) : (
+                        <Link
+                          href={link.href}
+                          className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                        >
+                          {content}
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
-            <div className="flex items-center gap-6 text-sm">
-              <a
-                href="https://github.com/pglejzer/timepicker-ui/blob/main/LICENSE"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                MIT License
-              </a>
-              <Link
-                href="/docs"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                Documentation
-              </Link>
-              <a
-                href="https://github.com/pglejzer/timepicker-ui/releases"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                v4.3.0
-              </a>
-            </div>
+          ))}
+        </nav>
+
+        {/* Oversized wordmark - the engraved baseplate */}
+        <div className="relative overflow-hidden py-10">
+          <span
+            aria-hidden="true"
+            className="footer-wordmark display block select-none whitespace-nowrap font-semibold leading-none"
+          >
+            timepicker<span className="text-muted-foreground/40">-ui</span>
+          </span>
+        </div>
+
+        {/* Minimal utility bottom-bar */}
+        <div className="flex flex-col items-start justify-between gap-3 border-t border-border py-6 font-mono text-xs text-muted-foreground sm:flex-row sm:items-center">
+          <span>
+            © {currentYear} ·{" "}
+            <a
+              href="https://github.com/pglejzer"
+              className="transition-colors hover:text-foreground"
+            >
+              Piotr Glejzer
+            </a>
+          </span>
+          <div className="flex items-center gap-5">
+            <a
+              href="https://github.com/pglejzer/timepicker-ui/blob/main/LICENSE"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="MIT license (opens in new tab)"
+              className="transition-colors hover:text-foreground"
+            >
+              MIT
+            </a>
+            <a
+              href="https://github.com/pglejzer/timepicker-ui/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Release notes ${VERSION} (opens in new tab)`}
+              className="transition-colors hover:text-foreground"
+            >
+              {VERSION}
+            </a>
           </div>
         </div>
       </div>
     </footer>
   );
 }
+

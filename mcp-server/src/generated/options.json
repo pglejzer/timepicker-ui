@@ -1,0 +1,584 @@
+{
+  "clock": {
+    "interface": "ClockOptions",
+    "options": [
+      {
+        "name": "type",
+        "optional": true,
+        "type": "'12h' | '24h'",
+        "description": "Set type of clock: `12h` or `24h`",
+        "default": "\"12h\""
+      },
+      {
+        "name": "incrementHours",
+        "optional": true,
+        "type": "number",
+        "description": "Set increment for hours (1, 2, 3, etc.)",
+        "default": "1"
+      },
+      {
+        "name": "incrementMinutes",
+        "optional": true,
+        "type": "number",
+        "description": "Set increment for minutes (1, 5, 10, 15, etc.)",
+        "default": "1"
+      },
+      {
+        "name": "autoSwitchToMinutes",
+        "optional": true,
+        "type": "boolean",
+        "description": "Automatically switch to minutes after selecting hour",
+        "default": "true"
+      },
+      {
+        "name": "smoothHourSnap",
+        "optional": true,
+        "type": "boolean",
+        "description": "Enable smooth hour snapping with animation\r\nIn v5.0.0, this will become default and option will be renamed to discreteHourJump (inverted)",
+        "default": "true"
+      },
+      {
+        "name": "disabledTime",
+        "optional": true,
+        "type": "{ minutes?: Array<string | number>; hours?: Array<string | number>; interval?: string | string[]; }",
+        "description": "Disable specific hours/minutes or time intervals",
+        "example": "disabledTime: {\r\n  minutes: [1, 2, 4, 5, 55, 23, \"22\", \"38\"],\r\n  hours: [1, \"3\", \"5\", 8],\r\n  interval: \"10:00 AM - 12:00 PM\" | [\"10:00 AM - 12:00 PM\", \"5:00 PM - 8:00 PM\"]\r\n}"
+      },
+      {
+        "name": "currentTime",
+        "optional": true,
+        "type": "| { time?: Date; updateInput?: boolean; locales?: string | string[]; preventClockType?: boolean; } | boolean",
+        "description": "Set current time to the input and timepicker",
+        "example": "currentTime: {\r\n  time: new Date(),\r\n  updateInput: true,\r\n  locales: \"en-US\",\r\n  preventClockType: false\r\n}"
+      }
+    ]
+  },
+  "ui": {
+    "interface": "UIOptions",
+    "options": [
+      {
+        "name": "mode",
+        "optional": true,
+        "type": "'clock' | 'wheel' | 'compact-wheel'",
+        "description": "Picker mode: analog clock face, scroll wheel spinner, or compact wheel (no header)",
+        "default": "\"clock\""
+      },
+      {
+        "name": "theme",
+        "optional": true,
+        "type": "| 'basic' | 'crane' | 'crane-straight' | 'm2' | 'm3-green' | 'dark' | 'glassmorphic' | 'pastel' | 'ai' | 'cyberpunk' | 'blueprint' | 'blueprint-dark'",
+        "description": "Theme for the timepicker",
+        "default": "\"basic\""
+      },
+      {
+        "name": "animation",
+        "optional": true,
+        "type": "boolean",
+        "description": "Enable/disable animations",
+        "default": "true"
+      },
+      {
+        "name": "backdrop",
+        "optional": true,
+        "type": "boolean",
+        "description": "Show backdrop when timepicker is open",
+        "default": "true"
+      },
+      {
+        "name": "mobile",
+        "optional": true,
+        "type": "boolean",
+        "description": "Force mobile mode",
+        "default": "false"
+      },
+      {
+        "name": "enableSwitchIcon",
+        "optional": true,
+        "type": "boolean",
+        "description": "Enable switch icon (mobile ↔ desktop)",
+        "default": "false"
+      },
+      {
+        "name": "editable",
+        "optional": true,
+        "type": "boolean",
+        "description": "Allow editing hour/minutes directly",
+        "default": "false"
+      },
+      {
+        "name": "enableScrollbar",
+        "optional": true,
+        "type": "boolean",
+        "description": "Enable scrollbar when timepicker is open",
+        "default": "false"
+      },
+      {
+        "name": "cssClass",
+        "optional": true,
+        "type": "string",
+        "description": "Additional CSS class for the wrapper",
+        "example": "cssClass: \"my-custom-timepicker\""
+      },
+      {
+        "name": "clearButton",
+        "optional": true,
+        "type": "boolean",
+        "description": "Show clear button to reset time selection",
+        "default": "false"
+      },
+      {
+        "name": "appendModalSelector",
+        "optional": true,
+        "type": "string",
+        "description": "Selector where to append modal (default: body)",
+        "default": "\"\""
+      },
+      {
+        "name": "iconTemplate",
+        "optional": true,
+        "type": "string",
+        "description": "Custom keyboard icon template (desktop → mobile)",
+        "default": "Material Icons template"
+      },
+      {
+        "name": "iconTemplateMobile",
+        "optional": true,
+        "type": "string",
+        "description": "Custom schedule icon template (mobile → desktop)",
+        "default": "Material Icons template"
+      },
+      {
+        "name": "inline",
+        "optional": true,
+        "type": "{ enabled: boolean; containerId: string; showButtons?: boolean; autoUpdate?: boolean; }",
+        "description": "Inline mode configuration",
+        "example": "inline: {\r\n  enabled: true,\r\n  containerId: \"timepicker-container\",\r\n  showButtons: false,\r\n  autoUpdate: true\r\n}"
+      }
+    ]
+  },
+  "labels": {
+    "interface": "LabelsOptions",
+    "options": [
+      {
+        "name": "am",
+        "optional": true,
+        "type": "string",
+        "description": "\"AM\" label text",
+        "default": "\"AM\""
+      },
+      {
+        "name": "pm",
+        "optional": true,
+        "type": "string",
+        "description": "\"PM\" label text",
+        "default": "\"PM\""
+      },
+      {
+        "name": "ok",
+        "optional": true,
+        "type": "string",
+        "description": "\"OK\" button text",
+        "default": "\"OK\""
+      },
+      {
+        "name": "cancel",
+        "optional": true,
+        "type": "string",
+        "description": "\"Cancel\" button text",
+        "default": "\"Cancel\""
+      },
+      {
+        "name": "time",
+        "optional": true,
+        "type": "string",
+        "description": "Time label on desktop",
+        "default": "\"Select time\""
+      },
+      {
+        "name": "mobileTime",
+        "optional": true,
+        "type": "string",
+        "description": "Time label on mobile",
+        "default": "\"Enter Time\""
+      },
+      {
+        "name": "mobileHour",
+        "optional": true,
+        "type": "string",
+        "description": "Hour label on mobile",
+        "default": "\"Hour\""
+      },
+      {
+        "name": "mobileMinute",
+        "optional": true,
+        "type": "string",
+        "description": "Minute label on mobile",
+        "default": "\"Minute\""
+      },
+      {
+        "name": "clear",
+        "optional": true,
+        "type": "string",
+        "description": "\"Clear\" button text",
+        "default": "\"Clear\""
+      },
+      {
+        "name": "hourLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible label for the hour spinbutton",
+        "default": "\"Hour\""
+      },
+      {
+        "name": "minuteLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible label for the minute spinbutton",
+        "default": "\"Minute\""
+      },
+      {
+        "name": "clockLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible label for the analog clock face group",
+        "default": "\"Clock\""
+      },
+      {
+        "name": "periodLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible label for the AM/PM period group",
+        "default": "\"Period\""
+      },
+      {
+        "name": "timeLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible label for the time wrapper group / tips",
+        "default": "\"Time\""
+      },
+      {
+        "name": "format24Label",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible label for the 24-hour tips group",
+        "default": "\"24-hour\""
+      },
+      {
+        "name": "rangeSelectionLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible label for the range selection tablist",
+        "default": "\"Range selection\""
+      },
+      {
+        "name": "switchToKeyboardLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible label for the keyboard-input switch icon",
+        "default": "\"Switch to keyboard input\""
+      },
+      {
+        "name": "switchToClockLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible label for the clock-view switch icon",
+        "default": "\"Switch to clock\""
+      },
+      {
+        "name": "toggleLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible label for the generic view toggle button",
+        "default": "\"Toggle\""
+      },
+      {
+        "name": "timezoneSelectorLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible label for the timezone selector",
+        "default": "\"Timezone\""
+      },
+      {
+        "name": "announceHour",
+        "optional": true,
+        "type": "string",
+        "description": "Screen-reader announcement prefix for the selected hour",
+        "default": "\"Hour\""
+      },
+      {
+        "name": "announceMinute",
+        "optional": true,
+        "type": "string",
+        "description": "Screen-reader announcement prefix for the selected minutes",
+        "default": "\"Minutes\""
+      },
+      {
+        "name": "announceAmSelected",
+        "optional": true,
+        "type": "string",
+        "description": "Screen-reader announcement when AM is selected",
+        "default": "\"AM selected\""
+      },
+      {
+        "name": "announcePmSelected",
+        "optional": true,
+        "type": "string",
+        "description": "Screen-reader announcement when PM is selected",
+        "default": "\"PM selected\""
+      },
+      {
+        "name": "invalidTimeFormat",
+        "optional": true,
+        "type": "string",
+        "description": "Error/announcement text for an invalid time format",
+        "default": "\"Invalid time format\""
+      }
+    ]
+  },
+  "behavior": {
+    "interface": "BehaviorOptions",
+    "options": [
+      {
+        "name": "focusInputAfterClose",
+        "optional": true,
+        "type": "boolean",
+        "description": "Focus input after closing modal",
+        "default": "false"
+      },
+      {
+        "name": "focusTrap",
+        "optional": true,
+        "type": "boolean",
+        "description": "Enable focus trap in modal",
+        "default": "true"
+      },
+      {
+        "name": "delayHandler",
+        "optional": true,
+        "type": "number",
+        "description": "Delay for clickable elements (ms)",
+        "default": "300"
+      },
+      {
+        "name": "id",
+        "optional": true,
+        "type": "string",
+        "description": "Custom ID for the timepicker instance",
+        "example": "id: \"my-timepicker-1\""
+      }
+    ]
+  },
+  "timezone": {
+    "interface": "TimezoneOptions",
+    "description": "Optional timezone selector for B2B/global use cases.\r\nThis is a presentation layer only - no automatic time conversions.",
+    "options": [
+      {
+        "name": "enabled",
+        "optional": true,
+        "type": "boolean",
+        "description": "Enable timezone selector UI",
+        "default": "false"
+      },
+      {
+        "name": "default",
+        "optional": true,
+        "type": "string",
+        "description": "Default timezone ID (e.g., 'America/New_York')\r\nUses browser's local timezone if not specified."
+      },
+      {
+        "name": "whitelist",
+        "optional": true,
+        "type": "readonly string[]",
+        "description": "Whitelist of allowed timezone IDs.\r\nIf not provided, uses a curated list of common timezones.",
+        "example": "whitelist: ['UTC', 'America/New_York', 'Europe/London']"
+      },
+      {
+        "name": "label",
+        "optional": true,
+        "type": "string",
+        "description": "Label for timezone selector",
+        "default": "\"Timezone\""
+      }
+    ]
+  },
+  "wheel": {
+    "interface": "WheelOptions",
+    "options": [
+      {
+        "name": "placement",
+        "optional": true,
+        "type": "'auto' | 'top' | 'bottom'",
+        "description": "Popover placement relative to input in compact-wheel mode.\r\n'auto' opens below if space allows, otherwise above.\r\nDefaults to 'auto' in compact-wheel mode.\r\nCan be overridden to 'top' or 'bottom' for fixed positioning.",
+        "default": "'auto' (compact-wheel) | undefined (wheel)"
+      },
+      {
+        "name": "hideFooter",
+        "optional": true,
+        "type": "boolean",
+        "description": "When true, the footer (OK/Cancel/Clear buttons + switch icon)\r\nis not rendered in the DOM at all. Only works in compact-wheel mode.\r\nUseful when commitOnScroll is enabled and buttons are unnecessary.",
+        "default": "false"
+      },
+      {
+        "name": "commitOnScroll",
+        "optional": true,
+        "type": "boolean",
+        "description": "When enabled, the timepicker automatically commits the selected time\r\nat the end of wheel scrolling, updating the input value and emitting a change event\r\nwithout requiring the user to press OK. Only applies to wheel and compact-wheel modes.",
+        "default": "false"
+      },
+      {
+        "name": "hideDisabled",
+        "optional": true,
+        "type": "boolean",
+        "description": "When true, disabled hours/minutes are completely removed from the wheel list\r\ninstead of being dimmed. Only applies to wheel and compact-wheel modes.\r\nUseful when many values are disabled (e.g., business hours only).",
+        "default": "false"
+      },
+      {
+        "name": "ignoreOutsideClick",
+        "optional": true,
+        "type": "boolean",
+        "description": "When true, clicking outside the picker area does not close it.\r\nOnly applies to wheel and compact-wheel modes (popover and modal).\r\nThe user must explicitly press OK or Cancel to close the picker.",
+        "default": "false"
+      }
+    ]
+  },
+  "range": {
+    "interface": "RangeOptions",
+    "options": [
+      {
+        "name": "enabled",
+        "optional": true,
+        "type": "boolean",
+        "description": "Enable range mode (from-to selection)",
+        "default": "false"
+      },
+      {
+        "name": "minDuration",
+        "optional": true,
+        "type": "number",
+        "description": "Minimum duration in minutes"
+      },
+      {
+        "name": "maxDuration",
+        "optional": true,
+        "type": "number",
+        "description": "Maximum duration in minutes"
+      },
+      {
+        "name": "fromLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Label for \"from\" segment",
+        "default": "\"From\""
+      },
+      {
+        "name": "toLabel",
+        "optional": true,
+        "type": "string",
+        "description": "Label for \"to\" segment",
+        "default": "\"To\""
+      }
+    ]
+  },
+  "callbacks": {
+    "interface": "CallbacksOptions",
+    "options": [
+      {
+        "name": "onOpen",
+        "optional": true,
+        "type": "TimepickerEventCallback<OpenEventData>",
+        "description": "Triggered when timepicker opens"
+      },
+      {
+        "name": "onCancel",
+        "optional": true,
+        "type": "TimepickerEventCallback<CancelEventData>",
+        "description": "Triggered when user cancels"
+      },
+      {
+        "name": "onConfirm",
+        "optional": true,
+        "type": "TimepickerEventCallback<ConfirmEventData>",
+        "description": "Triggered when user confirms time"
+      },
+      {
+        "name": "onUpdate",
+        "optional": true,
+        "type": "TimepickerEventCallback<UpdateEventData>",
+        "description": "Triggered during interaction (real-time)"
+      },
+      {
+        "name": "onSelectHour",
+        "optional": true,
+        "type": "TimepickerEventCallback<SelectHourEventData>",
+        "description": "Triggered when hour mode is selected"
+      },
+      {
+        "name": "onSelectMinute",
+        "optional": true,
+        "type": "TimepickerEventCallback<SelectMinuteEventData>",
+        "description": "Triggered when minute mode is selected"
+      },
+      {
+        "name": "onSelectAM",
+        "optional": true,
+        "type": "TimepickerEventCallback<SelectAMEventData>",
+        "description": "Triggered when AM is selected"
+      },
+      {
+        "name": "onSelectPM",
+        "optional": true,
+        "type": "TimepickerEventCallback<SelectPMEventData>",
+        "description": "Triggered when PM is selected"
+      },
+      {
+        "name": "onError",
+        "optional": true,
+        "type": "TimepickerEventCallback<ErrorEventData>",
+        "description": "Triggered on invalid time format"
+      },
+      {
+        "name": "onTimezoneChange",
+        "optional": true,
+        "type": "TimepickerEventCallback<TimezoneChangeEventData>",
+        "description": "Triggered when timezone is changed (opt-in feature)"
+      },
+      {
+        "name": "onRangeConfirm",
+        "optional": true,
+        "type": "TimepickerEventCallback<RangeConfirmEventData>",
+        "description": "Triggered when range is confirmed (range mode only)"
+      },
+      {
+        "name": "onRangeSwitch",
+        "optional": true,
+        "type": "TimepickerEventCallback<RangeSwitchEventData>",
+        "description": "Triggered when switching between from/to (range mode only)"
+      },
+      {
+        "name": "onRangeValidation",
+        "optional": true,
+        "type": "TimepickerEventCallback<RangeValidationEventData>",
+        "description": "Triggered on range validation (range mode only)"
+      },
+      {
+        "name": "onClear",
+        "optional": true,
+        "type": "TimepickerEventCallback<ClearEventData>",
+        "description": "Triggered when clear button is clicked"
+      }
+    ]
+  },
+  "clearBehavior": {
+    "interface": "ClearBehaviorOptions",
+    "options": [
+      {
+        "name": "clearInput",
+        "optional": true,
+        "type": "boolean",
+        "description": "Whether clicking clear also empties the input field value",
+        "default": "true"
+      }
+    ]
+  }
+}

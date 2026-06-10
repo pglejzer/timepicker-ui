@@ -5,6 +5,7 @@ import { isOverlappingRangeArray } from '../utils/config';
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 import { isDocument } from '../utils/node';
+import { announceToScreenReader } from '../utils/accessibility';
 
 export default class ValidationManager {
   private core: CoreState;
@@ -31,15 +32,22 @@ export default class ValidationManager {
         return false;
       }
 
+      const message = this.core.options.labels.invalidTimeFormat ?? 'Invalid time format';
+
       const errorEl = document.createElement('div');
       errorEl.classList.add('tp-ui-invalid-text');
-      errorEl.innerHTML = '<b>Invalid Time Format</b>';
+      errorEl.setAttribute('role', 'alert');
+      const strong = document.createElement('b');
+      strong.textContent = message;
+      errorEl.appendChild(strong);
 
       input.classList.add('tp-ui-invalid-format');
 
       if (!input.nextElementSibling?.classList.contains('tp-ui-invalid-text')) {
         input.after(errorEl);
       }
+
+      announceToScreenReader(this.core.getModalElement(), message);
 
       const eventData = {
         error,

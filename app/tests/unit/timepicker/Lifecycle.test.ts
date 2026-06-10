@@ -555,6 +555,107 @@ describe('Lifecycle', () => {
     });
   });
 
+  describe('applyExpandedState wildcard', () => {
+    const EXPANDED_CHILDREN = [
+      'tp-ui-am',
+      'tp-ui-pm',
+      'tp-ui-wrapper-type-time',
+      'tp-ui-input-ripple-wrapper',
+      'tp-ui-wrapper-time',
+      'tp-ui-hour',
+      'tp-ui-minutes',
+    ];
+
+    const buildModal = (): { modal: HTMLDivElement; byClass: (cls: string) => HTMLElement } => {
+      const modal = document.createElement('div');
+      modal.setAttribute('data-owner-id', coreState.instanceId);
+
+      // Excluded-by-class descendants per Lifecycle.EXPANDED_EXCLUDED.
+      const selectTime = document.createElement('div');
+      selectTime.className = 'tp-ui-select-time';
+      modal.appendChild(selectTime);
+
+      const mobileWrapper = document.createElement('div');
+      mobileWrapper.className = 'tp-ui-mobile-clock-wrapper';
+      modal.appendChild(mobileWrapper);
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'tp-ui-wrapper';
+      modal.appendChild(wrapper);
+
+      // Regular descendants that SHOULD receive `expanded`.
+      EXPANDED_CHILDREN.forEach((cls) => {
+        const el = document.createElement('div');
+        el.className = cls;
+        modal.appendChild(el);
+      });
+
+      document.body.appendChild(modal);
+
+      const byClass = (cls: string): HTMLElement => {
+        const el = modal.querySelector<HTMLElement>(`.${cls}`);
+        if (!el) throw new Error(`fixture missing .${cls}`);
+        return el;
+      };
+
+      return { modal, byClass };
+    };
+
+    // applyExpandedState is private; invoke it through a typed cast — the smallest
+    // viable seam that does not require a full mount().
+    const invoke = (lc: Lifecycle): void => {
+      (lc as unknown as { applyExpandedState: () => void }).applyExpandedState();
+    };
+
+    it('non-mobile: adds "expanded" to previously-missing descendants', () => {
+      const { byClass } = buildModal();
+      coreState.setIsMobileView(false);
+
+      invoke(lifecycle);
+
+      EXPANDED_CHILDREN.forEach((cls) => {
+        expect(byClass(cls).classList.contains('expanded')).toBe(true);
+      });
+    });
+
+    it('non-mobile: excluded-by-class descendants do NOT receive "expanded" from the wildcard', () => {
+      const { byClass } = buildModal();
+      coreState.setIsMobileView(false);
+
+      invoke(lifecycle);
+
+      // tp-ui-select-time is excluded and gets no explicit add.
+      expect(byClass('tp-ui-select-time').classList.contains('expanded')).toBe(false);
+    });
+
+    it('non-mobile: explicitly adds "expanded" to .tp-ui-mobile-clock-wrapper and .tp-ui-wrapper', () => {
+      // These two are in EXPANDED_EXCLUDED (skipped by the wildcard), but the source
+      // explicitly adds `expanded` to them before the loop.
+      const { byClass } = buildModal();
+      coreState.setIsMobileView(false);
+
+      invoke(lifecycle);
+
+      expect(byClass('tp-ui-mobile-clock-wrapper').classList.contains('expanded')).toBe(true);
+      expect(byClass('tp-ui-wrapper').classList.contains('expanded')).toBe(true);
+    });
+
+    it('mobile: early return — no descendant receives "expanded"', () => {
+      const { modal } = buildModal();
+      coreState.setIsMobileView(true);
+
+      const accessibilitySpy = jest
+        .spyOn(managers.config, 'updateClockFaceAccessibility')
+        .mockImplementation(() => {});
+
+      invoke(lifecycle);
+
+      const expanded = modal.querySelectorAll('.expanded');
+      expect(expanded.length).toBe(0);
+      expect(accessibilitySpy).toHaveBeenCalledWith(true);
+    });
+  });
+
   describe('destroy cleanup', () => {
     it('should cleanup modal element', () => {
       lifecycle.init();

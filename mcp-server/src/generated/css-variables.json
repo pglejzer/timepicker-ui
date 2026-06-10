@@ -1,0 +1,687 @@
+[
+  {
+    "name": "--tp-bg",
+    "value": "#ece6ee",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-surface",
+    "value": "#e6e0e9",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-surface-hover",
+    "value": "#c8b3fd",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-input-bg",
+    "value": "#e6e0e9",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-text",
+    "value": "#1d1b20",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-text-secondary",
+    "value": "#49454f",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-text-disabled",
+    "value": "rgba(156, 155, 155, 0.6)",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-text-type-time",
+    "value": "#49454f",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-text-icon",
+    "value": "#4e545a",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-am-pm-active",
+    "value": "#ffd8e4",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-am-pm-text-selected",
+    "value": "#633b48",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-am-pm-text-unselected",
+    "value": "#49454f",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-primary",
+    "value": "#6750a4",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-on-primary",
+    "value": "#ffffff",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-primary-container",
+    "value": "#eaddff",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-on-primary-container",
+    "value": "#21005d",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-primary-rgb",
+    "value": "103, 80, 164",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-on-surface",
+    "value": "#1d1b20",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-on-surface-variant",
+    "value": "#49454f",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-on-surface-rgb",
+    "value": "29, 27, 32",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-surface-container",
+    "value": "#f3edf7",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-outline-variant",
+    "value": "#cac4d0",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-tertiary-container",
+    "value": "#ffd8e4",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-on-tertiary-container",
+    "value": "#633b48",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-border",
+    "value": "#000",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-outline",
+    "value": "#6750a4",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-hover-bg",
+    "value": "#d6d6d6",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-backdrop",
+    "value": "rgba(0, 0, 0, 0.5)",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-backdrop-filter",
+    "value": "unset",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-dropdown-option-bg",
+    "value": "#ffffff",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-dropdown-option-text",
+    "value": "#000000",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-error",
+    "value": "#d50000",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-shadow",
+    "value": "unset",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-border-radius",
+    "value": "28px",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-spacing-xs",
+    "value": "4px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-spacing-sm",
+    "value": "8px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-spacing-md",
+    "value": "12px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-spacing-lg",
+    "value": "16px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-spacing-xl",
+    "value": "24px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-spacing-2xl",
+    "value": "36px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-spacing-3xl",
+    "value": "48px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-border-width",
+    "value": "1px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-border-width-thick",
+    "value": "2px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-border-width-half",
+    "value": "calc(0.7504px / 2)",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-border-width-pm",
+    "value": "1.5008px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-outline-width",
+    "value": "2px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-outline-width-thick",
+    "value": "3px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-outline-width-contrast",
+    "value": "4px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-outline-offset",
+    "value": "2px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-font-size-xs",
+    "value": "12px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-font-size-sm",
+    "value": "12.8px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-font-size-base",
+    "value": "14px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-font-size-lg",
+    "value": "16px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-font-size-number",
+    "value": "17.6px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-font-size-xl",
+    "value": "51.2px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-radius-sm",
+    "value": "7px",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-radius-md",
+    "value": "8px",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-radius-lg",
+    "value": "20px",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-radius-circle",
+    "value": "50%",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-radius-full",
+    "value": "100%",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-btn-radius",
+    "value": "var(--tp-radius-lg)",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-size-clock",
+    "value": "256px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-wrapper",
+    "value": "328px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-wrapper-expanded",
+    "value": "584px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-wrapper-portrait",
+    "value": "315px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-wrapper-landscape-height",
+    "value": "360px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-wrapper-mobile-height",
+    "value": "258px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-input",
+    "value": "96px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-input-height",
+    "value": "80px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-input-mobile",
+    "value": "72px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-hand-circle",
+    "value": "46px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-hand-circle-small",
+    "value": "36px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-hand-width",
+    "value": "2px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-hand-offset",
+    "value": "calc(50% - 1px)",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-hand-top",
+    "value": "4px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-hand-left",
+    "value": "1px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-button-min",
+    "value": "44px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-dot",
+    "value": "6px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-dot-center",
+    "value": "8px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-am-pm-width",
+    "value": "54px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-am-pm-height",
+    "value": "40px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-am-pm-height-landscape",
+    "value": "44px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-icon",
+    "value": "24px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-colon-width",
+    "value": "24px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-colon-height",
+    "value": "48px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-number",
+    "value": "32px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-inner-circle",
+    "value": "200px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-inline-min-height",
+    "value": "500px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-padding",
+    "value": "10px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-duration-fast",
+    "value": "150ms",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-duration-base",
+    "value": "200ms",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-duration-slow",
+    "value": "300ms",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-duration-slower",
+    "value": "400ms",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-duration-slowest",
+    "value": "450ms",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-duration-animation",
+    "value": "350ms",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-duration-ripple",
+    "value": "700ms",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-duration-ripple-fade",
+    "value": "500ms",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-duration-reduced",
+    "value": "0.01ms",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-easing-standard",
+    "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-easing-ease",
+    "value": "ease",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-easing-linear",
+    "value": "linear",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-z-backdrop",
+    "value": "5000",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-z-modal",
+    "value": "5001",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-z-keyboard-icon",
+    "value": "10",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-z-hidden",
+    "value": "-9999",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-opacity-hover",
+    "value": "0.08",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-opacity-focus",
+    "value": "0.12",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-opacity-active",
+    "value": "0.16",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-opacity-disabled",
+    "value": "0.38",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-opacity-backdrop",
+    "value": "0.6",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-shadow-inline",
+    "value": "0 2px 8px rgba(0, 0, 0, 0.15)",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-shadow-focus",
+    "value": "0 0 0 4px rgba(98, 0, 238, 0.2)",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-focus-ring-halo",
+    "value": "rgba(0, 0, 0, 0.55)",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-shadow-focus-ring",
+    "value": "0 0 0 var(--tp-outline-offset) var(--tp-bg),\r\n    0 0 0 calc(var(--tp-outline-offset) + var(--tp-outline-width-thick) + 1px) var(--tp-focus-ring-halo)",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-gap-sm",
+    "value": "8px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-gap-md",
+    "value": "12px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-position-hidden",
+    "value": "-10000px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-wheel-item-height",
+    "value": "44px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-wheel-visible-items",
+    "value": "5",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-wheel-column-width",
+    "value": "76px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-wheel-separator-width",
+    "value": "20px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-wheel-landscape-footer-offset",
+    "value": "72px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-wheel-landscape-compact-width",
+    "value": "360px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-wheel-landscape-compact-visible-items",
+    "value": "3",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-wheel-highlight-bg",
+    "value": "var(--tp-primary-container, rgba(103, 80, 164, 0.08))",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-wheel-highlight-border",
+    "value": "var(--tp-outline-variant, rgba(0, 0, 0, 0.12))",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-wheel-highlight-radius",
+    "value": "var(--tp-radius-md)",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-wheel-text-color",
+    "value": "var(--tp-on-surface, #1d1b20)",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-wheel-selected-color",
+    "value": "var(--tp-primary, #6750a4)",
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-wheel-disabled-opacity",
+    "value": "var(--tp-opacity-disabled, 0.38)",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-wheel-font-size",
+    "value": "var(--tp-font-size-lg, 16px)",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-wheel-selected-font-size",
+    "value": "22px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-gap",
+    "value": "4px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-min-width",
+    "value": "260px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-max-width",
+    "value": "328px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-shadow",
+    "value": "0 4px 24px rgba(0, 0, 0, 0.15)",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-radius",
+    "value": "var(--tp-border-radius)",
+    "commonlyThemed": false
+  }
+]

@@ -5,6 +5,9 @@ import type { TimepickerOptions } from '../types/options';
 export interface PluginManager {
   init(): void;
   destroy(): void;
+  attachPopover?(): void;
+  detachPopover?(): void;
+  scrollToValue?(hour: string, minute: string, type?: string): void;
 }
 
 export type PluginFactory = (core: CoreState, emitter: EventEmitter<TimepickerEventMap>) => PluginManager;

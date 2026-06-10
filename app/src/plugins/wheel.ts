@@ -13,6 +13,11 @@ export const WheelPlugin: Plugin = {
       options.clock.incrementMinutes ?? 1,
       includeAmPmColumn,
       instanceId,
+      {
+        hourLabel: options.labels?.hourLabel,
+        minuteLabel: options.labels?.minuteLabel,
+        periodLabel: options.labels?.periodLabel,
+      },
     );
   },
 };

@@ -1,29 +1,50 @@
 @use '../variables.scss' as *;
 
+@mixin tp-focus-ring {
+  outline: var(--tp-outline-width-thick) solid var(--tp-primary);
+  outline-offset: var(--tp-outline-offset);
+  box-shadow: var(--tp-shadow-focus-ring);
+}
+
 .tp-ui {
-  &-hour-time-12:focus-visible,
-  &-minutes-time:focus-visible,
-  &-hour-time-24:focus-visible,
+  &-hour:focus-visible,
+  &-minutes:focus-visible,
   &-am:focus-visible,
   &-pm:focus-visible,
   &-cancel-btn:focus-visible,
   &-ok-btn:focus-visible,
-  &-keyboard-icon-wrapper:focus-visible {
-    outline: var(--tp-outline-width-thick) solid var(--tp-primary);
-    outline-offset: var(--tp-outline-offset);
-    box-shadow: var(--tp-shadow-focus);
+  &-clear-btn:focus-visible,
+  &-keyboard-icon:focus-visible,
+  &-keyboard-icon-wrapper:focus-visible,
+  &-range-tab:focus-visible,
+  &-timezone-dropdown:focus-visible,
+  &-wheel-column:focus-visible {
+    @include tp-focus-ring;
+  }
+
+  &-timezone-dropdown:focus-visible {
+    border-bottom: var(--tp-border-width-thick) solid var(--tp-primary);
+  }
+
+  &-timezone-option[data-focused='true'] {
+    outline: var(--tp-outline-width) solid var(--tp-primary);
+    outline-offset: calc(-1 * var(--tp-outline-width));
   }
 
   @media (prefers-contrast: high) {
-    &-hour-time-12:focus-visible,
-    &-minutes-time:focus-visible,
-    &-hour-time-24:focus-visible,
+    &-hour:focus-visible,
+    &-minutes:focus-visible,
     &-am:focus-visible,
     &-pm:focus-visible,
     &-cancel-btn:focus-visible,
-    &-ok-btn:focus-visible {
+    &-ok-btn:focus-visible,
+    &-clear-btn:focus-visible,
+    &-keyboard-icon:focus-visible,
+    &-keyboard-icon-wrapper:focus-visible,
+    &-range-tab:focus-visible,
+    &-timezone-dropdown:focus-visible,
+    &-wheel-column:focus-visible {
       outline-width: var(--tp-outline-width-contrast);
-      font-weight: 700;
     }
   }
 
@@ -52,6 +73,25 @@
   }
 }
 
+@media (forced-colors: active) {
+  .tp-ui-hour:focus-visible,
+  .tp-ui-minutes:focus-visible,
+  .tp-ui-am:focus-visible,
+  .tp-ui-pm:focus-visible,
+  .tp-ui-cancel-btn:focus-visible,
+  .tp-ui-ok-btn:focus-visible,
+  .tp-ui-clear-btn:focus-visible,
+  .tp-ui-keyboard-icon:focus-visible,
+  .tp-ui-keyboard-icon-wrapper:focus-visible,
+  .tp-ui-range-tab:focus-visible,
+  .tp-ui-timezone-dropdown:focus-visible,
+  .tp-ui-timezone-option[data-focused='true'],
+  .tp-ui-wheel-column:focus-visible {
+    outline: var(--tp-outline-width-thick) solid Highlight;
+    outline-offset: var(--tp-outline-offset);
+  }
+}
+
 @media (prefers-contrast: high) {
   .tp-ui-wrapper {
     border: var(--tp-border-width-thick) solid currentColor;
@@ -61,3 +101,4 @@
     border: var(--tp-border-width-thick) solid currentColor;
   }
 }
+

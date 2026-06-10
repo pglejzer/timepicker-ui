@@ -94,6 +94,34 @@ export class WheelScrollHandler {
     return { hour, minute, ampm };
   }
 
+  findFirstAvailable(
+    columnType: WheelColumnType,
+    preferredValue: string | null,
+  ): string | null {
+    const items = this.renderer.getItems(columnType);
+    if (!items || items.length === 0) return null;
+
+    if (preferredValue !== null) {
+      for (const it of items) {
+        if (
+          it.getAttribute('data-value') === preferredValue &&
+          !it.classList.contains('is-disabled')
+        ) {
+          return preferredValue;
+        }
+      }
+    }
+
+    for (const it of items) {
+      if (!it.classList.contains('is-disabled')) {
+        const val = it.getAttribute('data-value');
+        if (val !== null) return val;
+      }
+    }
+
+    return null;
+  }
+
   destroy(): void {
     this.onScrollEnd = null;
     this.onScrollStart = null;

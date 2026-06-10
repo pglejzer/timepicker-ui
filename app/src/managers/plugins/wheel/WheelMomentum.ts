@@ -1,0 +1,4 @@
+export const MOMENTUM_FRICTION = 0.92;
+export const MOMENTUM_MIN_VELOCITY = 0.3;
+export const MOMENTUM_MAX_VELOCITY = 8;
+export const WHEEL_ITEM_SNAP_THRESHOLD = 30;

@@ -1,0 +1,42 @@
+[data-theme='blueprint'] {
+  --tp-bg: #e8f1fb;
+  --tp-surface: #f3f8fe;
+  --tp-surface-hover: #dfeafa;
+  --tp-input-bg: #f3f8fe;
+
+  --tp-text: #0a2e6e;
+  --tp-text-secondary: #3a5fa0;
+  --tp-text-disabled: rgba(10, 46, 110, 0.4);
+  --tp-text-type-time: #3a5fa0;
+  --tp-text-icon: #3a5fa0;
+
+  --tp-on-surface: #0a2e6e;
+  --tp-on-surface-rgb: 10, 46, 110;
+
+  --tp-am-pm-active: #0b4ea2;
+  --tp-am-pm-text-selected: #ffffff;
+  --tp-am-pm-text-unselected: #3a5fa0;
+
+  --tp-primary: #0b4ea2;
+  --tp-on-primary: #ffffff;
+  --tp-primary-container: #d3e4fb;
+  --tp-on-primary-container: #08245e;
+
+  --tp-tertiary-container: #d3e4fb;
+  --tp-on-tertiary-container: #08245e;
+
+  --tp-border: rgba(11, 77, 162, 0.22);
+  --tp-outline: #0b4ea2;
+  --tp-hover-bg: #dfeafa;
+  --tp-shadow: 0 8px 24px rgba(11, 46, 110, 0.12);
+  --tp-focus-ring-halo: rgba(11, 78, 162, 0.4);
+
+  --tp-dropdown-option-bg: #f3f8fe;
+  --tp-dropdown-option-text: #0a2e6e;
+  --tp-error: #c5302f;
+
+  --tp-wheel-highlight-bg: rgba(11, 78, 162, 0.1);
+  --tp-wheel-highlight-border: rgba(11, 77, 162, 0.22);
+  --tp-wheel-text-color: #0a2e6e;
+  --tp-wheel-selected-color: #0b4ea2;
+}

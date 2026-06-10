@@ -7,7 +7,7 @@ Highly customizable time picker UI library for JavaScript and modern frameworks 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://img.shields.io/npm/l/timepicker-ui)
 [![Coverage Status](https://coveralls.io/repos/github/pglejzer/timepicker-ui/badge.svg?branch=main)](https://coveralls.io/github/pglejzer/timepicker-ui?branch=main)
 [![Tests](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml/badge.svg)](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml)
-[![Socket Badge](https://badge.socket.dev/npm/package/timepicker-ui/4.3.0)](https://badge.socket.dev/npm/package/timepicker-ui/4.3.0)
+[![Socket Badge](https://badge.socket.dev/npm/package/timepicker-ui/4.4.0)](https://badge.socket.dev/npm/package/timepicker-ui/4.4.0)
 
 [Live Demo](https://timepicker-ui.vercel.app/) • [Documentation](https://timepicker-ui.vercel.app/docs) • [Changelog](./CHANGELOG.md) • [React Wrapper](https://github.com/pglejzer/timepicker-ui-react)
 
@@ -41,7 +41,7 @@ Highly customizable time picker UI library for JavaScript and modern frameworks 
 
 ## Features
 
-- [10 built-in themes](https://timepicker-ui.vercel.app/docs/features/themes) (Material, Crane, Dark, Glassmorphic, Cyberpunk, and more)
+- [12 built-in themes](https://timepicker-ui.vercel.app/docs/features/themes) (Material, Crane, Dark, Glassmorphic, Cyberpunk, Blueprint, and more)
 - [Analog clock](https://timepicker-ui.vercel.app/examples/basic/getting-started), [wheel](https://timepicker-ui.vercel.app/examples/plugins/wheel), and [compact-wheel](https://timepicker-ui.vercel.app/examples/plugins/wheel) picker modes
 - [Inline mode](https://timepicker-ui.vercel.app/docs/features/inline-mode), [clear button](https://timepicker-ui.vercel.app/docs/features/clear-button), [disabled time ranges](https://timepicker-ui.vercel.app/docs/features/disabled-time)
 - [Mobile-first](https://timepicker-ui.vercel.app/docs/features/mobile) with touch & keyboard support
@@ -124,7 +124,7 @@ new TimepickerUI(input, {
     currentTime: boolean | object,
   },
   ui: {
-    theme: "basic" | "dark" | "m3-green" | "crane" | ...,  // 10 themes
+    theme: "basic" | "dark" | "m3-green" | "crane" | "blueprint" | ...,  // 12 themes
     mode: "clock" | "wheel" | "compact-wheel",             // default: "clock"
     animation: true,
     backdrop: true,
@@ -145,7 +145,7 @@ new TimepickerUI(input, {
 
 Browse all themes: [Theme docs](https://timepicker-ui.vercel.app/docs/features/themes) · [Live examples](https://timepicker-ui.vercel.app/examples/themes/basic) · [Custom styling](https://timepicker-ui.vercel.app/docs/advanced/styling)
 
-Available: `basic`, `crane`, `crane-straight`, `m3-green`, `m2`, `dark`, `glassmorphic`, `pastel`, `ai`, `cyberpunk`
+Available: `basic`, `crane`, `crane-straight`, `m3-green`, `m2`, `dark`, `glassmorphic`, `pastel`, `ai`, `cyberpunk`, `blueprint`, `blueprint-dark`
 
 ```javascript
 import "timepicker-ui/main.css"; // always required
@@ -174,6 +174,7 @@ new TimepickerUI(input, { range: { enabled: true } });
 
 ## Upgrading
 
+- **v4.3 → v4.4** - non-breaking: adds the `blueprint` / `blueprint-dark` themes, 16 localizable accessibility `labels.*` options, and Home/End/Page keyboard navigation. No migration needed. See [CHANGELOG](./CHANGELOG.md)
 - **v3 → v4** - grouped options, EventEmitter API, CSS classes renamed. See [Migration Guide](https://timepicker-ui.vercel.app/docs/migration-guide) · [Breaking Changes](./readme/BREAKING_CHANGES_V4.md) · [CHANGELOG](./CHANGELOG.md)
 - **v2 → v3** - CSS must be imported manually, event names changed. See [Legacy Migration](https://timepicker-ui.vercel.app/docs/legacy-migration) · [CHANGELOG](./CHANGELOG.md)
 

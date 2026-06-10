@@ -23,24 +23,29 @@
 }
 
 .invalid-value {
-  border-color: $redtovalid !important;
-  color: $redtovalid !important;
+  border-color: var(--tp-error, #{$redtovalid}) !important;
+  color: var(--tp-error, #{$redtovalid}) !important;
 
   &:hover,
   &:focus,
   &:active {
-    border-color: $redtovalid !important;
-    color: $redtovalid !important;
+    border-color: var(--tp-error, #{$redtovalid}) !important;
+    color: var(--tp-error, #{$redtovalid}) !important;
   }
 }
 
 .tp-ui-invalid-format {
-  border: 2px solid red;
-  color: red;
+  border: var(--tp-border-width-thick) solid var(--tp-error, #{$redtovalid});
+  color: var(--tp-error, #{$redtovalid});
 }
 
 .tp-ui-invalid-text {
-  color: red;
+  color: var(--tp-error, #{$redtovalid});
+
+  &::before {
+    content: '\26A0';
+    margin-right: var(--tp-spacing-xs);
+  }
 }
 
 .sr-only,

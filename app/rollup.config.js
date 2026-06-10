@@ -41,6 +41,8 @@ const scssConfigs = [
   baseConfig('./src/styles/themes/theme-pastel.scss', '../dist/css/themes/theme-pastel.css'),
   baseConfig('./src/styles/themes/theme-ai.scss', '../dist/css/themes/theme-ai.css'),
   baseConfig('./src/styles/themes/theme-cyberpunk.scss', '../dist/css/themes/theme-cyberpunk.css'),
+  baseConfig('./src/styles/themes/theme-blueprint.scss', '../dist/css/themes/theme-blueprint.css'),
+  baseConfig('./src/styles/themes/theme-blueprint-dark.scss', '../dist/css/themes/theme-blueprint-dark.css'),
 ];
 
 const umdConfig = {

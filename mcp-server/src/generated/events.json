@@ -1,0 +1,336 @@
+[
+  {
+    "name": "open",
+    "data": "OpenEventData",
+    "fields": [
+      {
+        "name": "hour",
+        "optional": false,
+        "type": "string"
+      },
+      {
+        "name": "minutes",
+        "optional": false,
+        "type": "string"
+      },
+      {
+        "name": "type",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "name": "degreesHours",
+        "optional": false,
+        "type": "number | null"
+      },
+      {
+        "name": "degreesMinutes",
+        "optional": false,
+        "type": "number | null"
+      }
+    ]
+  },
+  {
+    "name": "cancel",
+    "data": "CancelEventData",
+    "fields": []
+  },
+  {
+    "name": "confirm",
+    "data": "ConfirmEventData",
+    "fields": [
+      {
+        "name": "hour",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "name": "minutes",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "name": "type",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "name": "autoCommit",
+        "optional": true,
+        "type": "boolean"
+      }
+    ]
+  },
+  {
+    "name": "clear",
+    "data": "ClearEventData",
+    "fields": [
+      {
+        "name": "previousValue",
+        "optional": false,
+        "type": "string | null"
+      }
+    ]
+  },
+  {
+    "name": "show",
+    "data": "ShowEventData",
+    "fields": []
+  },
+  {
+    "name": "hide",
+    "data": "HideEventData",
+    "fields": []
+  },
+  {
+    "name": "update",
+    "data": "UpdateEventData",
+    "fields": [
+      {
+        "name": "hour",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "name": "minutes",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "name": "type",
+        "optional": true,
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "name": "select:hour",
+    "data": "SelectHourEventData",
+    "fields": [
+      {
+        "name": "hour",
+        "optional": false,
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "name": "select:minute",
+    "data": "SelectMinuteEventData",
+    "fields": [
+      {
+        "name": "minutes",
+        "optional": false,
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "name": "select:am",
+    "data": "SelectAMEventData",
+    "fields": []
+  },
+  {
+    "name": "select:pm",
+    "data": "SelectPMEventData",
+    "fields": []
+  },
+  {
+    "name": "switch:view",
+    "data": "SwitchViewEventData",
+    "fields": []
+  },
+  {
+    "name": "timezone:change",
+    "data": "TimezoneChangeEventData",
+    "fields": [
+      {
+        "name": "timezone",
+        "optional": false,
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "name": "range:confirm",
+    "data": "RangeConfirmEventData",
+    "fields": [
+      {
+        "name": "from",
+        "optional": false,
+        "type": "string"
+      },
+      {
+        "name": "to",
+        "optional": false,
+        "type": "string"
+      },
+      {
+        "name": "duration",
+        "optional": false,
+        "type": "number"
+      }
+    ]
+  },
+  {
+    "name": "range:switch",
+    "data": "RangeSwitchEventData",
+    "fields": [
+      {
+        "name": "active",
+        "optional": false,
+        "type": "'from' | 'to'"
+      },
+      {
+        "name": "disabledTime",
+        "optional": true,
+        "type": "{ hours: string[]; minutes: string[]; fromType?: string; fromHour?: number; } | null"
+      }
+    ]
+  },
+  {
+    "name": "range:validation",
+    "data": "RangeValidationEventData",
+    "fields": [
+      {
+        "name": "valid",
+        "optional": false,
+        "type": "boolean"
+      },
+      {
+        "name": "duration",
+        "optional": false,
+        "type": "number"
+      },
+      {
+        "name": "minDuration",
+        "optional": true,
+        "type": "number"
+      },
+      {
+        "name": "maxDuration",
+        "optional": true,
+        "type": "number"
+      }
+    ]
+  },
+  {
+    "name": "range:minute:commit",
+    "data": "RangeMinuteCommitEventData",
+    "fields": [
+      {
+        "name": "hour",
+        "optional": false,
+        "type": "string"
+      },
+      {
+        "name": "minutes",
+        "optional": false,
+        "type": "string"
+      },
+      {
+        "name": "type",
+        "optional": true,
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "name": "range:get-disabled-time",
+    "data": "RangeGetDisabledTimeEventData",
+    "fields": []
+  },
+  {
+    "name": "range:update-disabled",
+    "data": "RangeUpdateDisabledEventData",
+    "fields": []
+  },
+  {
+    "name": "wheel:scroll:start",
+    "data": "WheelScrollStartEventData",
+    "fields": [
+      {
+        "name": "column",
+        "optional": false,
+        "type": "'hours' | 'minutes' | 'ampm'"
+      }
+    ]
+  },
+  {
+    "name": "wheel:scroll:end",
+    "data": "WheelScrollEndEventData",
+    "fields": [
+      {
+        "name": "column",
+        "optional": false,
+        "type": "'hours' | 'minutes' | 'ampm'"
+      },
+      {
+        "name": "value",
+        "optional": false,
+        "type": "string"
+      },
+      {
+        "name": "previousValue",
+        "optional": false,
+        "type": "string | null"
+      }
+    ]
+  },
+  {
+    "name": "animation:clock",
+    "data": "Record<string, never>",
+    "fields": []
+  },
+  {
+    "name": "animation:start",
+    "data": "Record<string, never>",
+    "fields": []
+  },
+  {
+    "name": "animation:end",
+    "data": "Record<string, never>",
+    "fields": []
+  },
+  {
+    "name": "error",
+    "data": "ErrorEventData",
+    "fields": [
+      {
+        "name": "error",
+        "optional": false,
+        "type": "string"
+      },
+      {
+        "name": "rejectedHour",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "name": "rejectedMinute",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "name": "inputHour",
+        "optional": true,
+        "type": "string | number"
+      },
+      {
+        "name": "inputMinute",
+        "optional": true,
+        "type": "string | number"
+      },
+      {
+        "name": "inputType",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "name": "inputLength",
+        "optional": true,
+        "type": "string | number"
+      }
+    ]
+  }
+]

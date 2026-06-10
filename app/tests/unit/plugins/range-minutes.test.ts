@@ -26,12 +26,13 @@ function createRenderConfig(): RenderConfig {
 const MINUTES = Array.from({ length: 12 }, (_, i) => (i * 5).toString().padStart(2, '0'));
 const TIP_CLASS = 'tp-ui-clock-minutes';
 const DISABLED_CLASS = 'tp-ui-tips-disabled';
+const TIP_SELECTOR = '.tp-ui-value-tips, .tp-ui-value-tips-24h';
 
 function getDisabledTips(wrapper: HTMLElement): string[] {
-  const tips = wrapper.querySelectorAll(`.${DISABLED_CLASS}`);
+  const tips = wrapper.querySelectorAll(TIP_SELECTOR);
   const values: string[] = [];
   tips.forEach((el) => {
-    if (el.getAttribute('role') === 'option') {
+    if (el.classList.contains(DISABLED_CLASS)) {
       values.push(el.textContent || '');
     }
   });
@@ -39,9 +40,13 @@ function getDisabledTips(wrapper: HTMLElement): string[] {
 }
 
 function getEnabledTips(wrapper: HTMLElement): string[] {
-  const tips = wrapper.querySelectorAll('[role="option"]:not(.tp-ui-tips-disabled)');
+  const tips = wrapper.querySelectorAll(TIP_SELECTOR);
   const values: string[] = [];
-  tips.forEach((el) => values.push(el.textContent || ''));
+  tips.forEach((el) => {
+    if (!el.classList.contains(DISABLED_CLASS)) {
+      values.push(el.textContent || '');
+    }
+  });
   return values;
 }
 
@@ -235,11 +240,11 @@ describe('Range minutes disabling on clock tips', () => {
 
       const wrappers = config.tipsWrapper.querySelectorAll(`.${TIP_CLASS}`);
       const firstWrapper = wrappers[0];
-      const innerTip = firstWrapper?.querySelector('[role="option"]');
+      const innerTip = firstWrapper?.querySelector(TIP_SELECTOR);
 
       expect(firstWrapper?.classList.contains(DISABLED_CLASS)).toBe(true);
       expect(innerTip?.classList.contains(DISABLED_CLASS)).toBe(true);
-      expect(innerTip?.getAttribute('aria-disabled')).toBe('true');
+      expect(innerTip?.getAttribute('aria-disabled')).toBeNull();
       expect(innerTip?.getAttribute('tabindex')).toBe('-1');
     });
 
@@ -256,7 +261,7 @@ describe('Range minutes disabling on clock tips', () => {
 
       const wrappers = config.tipsWrapper.querySelectorAll(`.${TIP_CLASS}`);
       const fifthWrapper = wrappers[1];
-      const innerTip = fifthWrapper?.querySelector('[role="option"]');
+      const innerTip = fifthWrapper?.querySelector(TIP_SELECTOR);
 
       expect(fifthWrapper?.classList.contains(DISABLED_CLASS)).toBe(false);
       expect(innerTip?.classList.contains(DISABLED_CLASS)).toBe(false);

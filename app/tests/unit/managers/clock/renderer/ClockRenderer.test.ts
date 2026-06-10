@@ -129,7 +129,6 @@ describe('ClockRenderer', () => {
       renderer.setActiveValue('10');
 
       expect(tip.classList.contains('active')).toBe(true);
-      expect(tip.getAttribute('aria-selected')).toBe('true');
     });
 
     it('should remove active class from non-matching tips', () => {
@@ -197,6 +196,35 @@ describe('ClockRenderer', () => {
 
       const disabledTips = tipsWrapper.querySelectorAll('.tp-ui-tips-disabled');
       expect(disabledTips.length).toBeGreaterThan(0);
+    });
+
+    it('should render decorative tips without listbox option semantics', () => {
+      const renderer = new ClockRenderer(config);
+      const hours = ['12', '1', '2', '3'];
+
+      renderer.renderTips(hours, 'tp-ui-hour-time-12', 'hours', null, '12h', true, undefined, 'AM');
+
+      const innerTips = tipsWrapper.querySelectorAll('.tp-ui-value-tips');
+      expect(innerTips.length).toBe(4);
+
+      innerTips.forEach((tip) => {
+        expect(tip.getAttribute('role')).toBeNull();
+        expect(tip.getAttribute('aria-selected')).toBeNull();
+        expect(tip.getAttribute('aria-disabled')).toBeNull();
+        expect(tip.getAttribute('tabindex')).toBe('-1');
+      });
+    });
+
+    it('should mark disabled hours via class without aria-disabled', () => {
+      const renderer = new ClockRenderer(config);
+      const hours = ['12', '1', '2', '3'];
+      const disabledTime = { hours: ['3'] };
+
+      renderer.renderTips(hours, 'tp-ui-hour-time-12', 'hours', disabledTime, '12h', true, undefined, 'AM');
+
+      const disabledInner = tipsWrapper.querySelector('.tp-ui-value-tips.tp-ui-tips-disabled');
+      expect(disabledInner).not.toBeNull();
+      expect(disabledInner?.getAttribute('aria-disabled')).toBeNull();
     });
 
     it('should clear before rendering when clearBefore is true', () => {

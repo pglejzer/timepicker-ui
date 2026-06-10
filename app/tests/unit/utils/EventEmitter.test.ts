@@ -149,5 +149,152 @@ describe('EventEmitter', () => {
       expect(emitter.hasListeners('testEvent')).toBe(false);
     });
   });
+
+  describe('once off-by-reference', () => {
+    it('off() removes a once-registered handler when called with the original reference', () => {
+      const emitter = new EventEmitter<{ ping: { n: number } }>();
+      let calls = 0;
+      const handler = () => { calls++; };
+      emitter.once('ping', handler);
+      emitter.off('ping', handler);
+      emitter.emit('ping', { n: 1 });
+      expect(calls).toBe(0);
+    });
+  });
+
+  describe('once cross-event wrapper isolation (regression)', () => {
+    it('off("a", fn) after once on both "a" and "b" stops "a" but keeps "b" firing', () => {
+      // Core regression: same handler used as `once` on two events must not collide.
+      // Before the per-event WeakMap fix, the "a" wrapper leaked and could never be
+      // removed by off(), and/or removing one event clobbered the other.
+      const fn = jest.fn();
+
+      emitter.once('testEvent', fn);
+      emitter.once('anotherEvent', fn);
+
+      emitter.off('testEvent', fn);
+
+      emitter.emit('testEvent', { value: 'a' });
+      expect(fn).not.toHaveBeenCalled();
+
+      emitter.emit('anotherEvent', { count: 1 });
+      expect(fn).toHaveBeenCalledTimes(1);
+      expect(fn).toHaveBeenCalledWith({ count: 1 });
+    });
+
+    it('removing the OTHER event leaves the first event working', () => {
+      const fn = jest.fn();
+
+      emitter.once('testEvent', fn);
+      emitter.once('anotherEvent', fn);
+
+      emitter.off('anotherEvent', fn);
+
+      emitter.emit('anotherEvent', { count: 99 });
+      expect(fn).not.toHaveBeenCalled();
+
+      emitter.emit('testEvent', { value: 'still-here' });
+      expect(fn).toHaveBeenCalledTimes(1);
+      expect(fn).toHaveBeenCalledWith({ value: 'still-here' });
+    });
+
+    it('same-event double-once: off() removes ALL duplicate once wrappers for the same event (leak fixed)', () => {
+      // Regression for the residual same-event leak. off(event, handler) now scans
+      // the Set and removes every registration tagged with __originalHandler === fn,
+      // so registering once('a', fn) twice and then off('a', fn) leaves nothing.
+      // Previously the earlier wrapper leaked and kept firing on every emit.
+      const fn = jest.fn();
+
+      emitter.once('testEvent', fn);
+      emitter.once('testEvent', fn);
+
+      emitter.off('testEvent', fn);
+
+      // Both wrappers are gone — no emit, no matter how many, ever fires fn.
+      emitter.emit('testEvent', { value: 'gone' });
+      emitter.emit('testEvent', { value: 'again' });
+      emitter.emit('testEvent', { value: 'third' });
+      expect(fn).not.toHaveBeenCalled();
+    });
+
+    it('same-event double-once without off(): each wrapper fires exactly once, then self-removes', () => {
+      // once('a', fn) twice with no explicit off(): a single emit fires both
+      // wrappers (2 calls), each self-removes, so a second emit fires nothing.
+      const fn = jest.fn();
+
+      emitter.once('testEvent', fn);
+      emitter.once('testEvent', fn);
+
+      emitter.emit('testEvent', { value: 'first' });
+      expect(fn).toHaveBeenCalledTimes(2);
+
+      emitter.emit('testEvent', { value: 'second' });
+      expect(fn).toHaveBeenCalledTimes(2);
+    });
+
+    it('on() + once() with same fn then off(): off() removes BOTH the persistent listener and the once wrapper', () => {
+      // off(event, fn) matches the persistent on() registration by strict equality
+      // AND the once() wrapper by its __originalHandler tag, so a single off()
+      // wipes every registration of fn for that event.
+      const fn = jest.fn();
+
+      emitter.on('testEvent', fn);
+      emitter.once('testEvent', fn);
+
+      emitter.off('testEvent', fn);
+
+      emitter.emit('testEvent', { value: 'gone' });
+      expect(fn).not.toHaveBeenCalled();
+    });
+
+    it('auto-fire cleanup: once fires exactly once across repeated emits', () => {
+      const fn = jest.fn();
+
+      emitter.once('testEvent', fn);
+
+      emitter.emit('testEvent', { value: 'first' });
+      emitter.emit('testEvent', { value: 'second' });
+
+      expect(fn).toHaveBeenCalledTimes(1);
+      expect(fn).toHaveBeenCalledWith({ value: 'first' });
+    });
+
+    it('off(event) with no handler clears the event and does not break a later once()', () => {
+      const fn1 = jest.fn();
+      const fn2 = jest.fn();
+
+      emitter.once('testEvent', fn1);
+      emitter.off('testEvent');
+
+      emitter.emit('testEvent', { value: 'cleared' });
+      expect(fn1).not.toHaveBeenCalled();
+
+      // A fresh once registration on the same event must still work after the
+      // whole-event clear wiped the per-event wrapper map.
+      emitter.once('testEvent', fn2);
+      emitter.emit('testEvent', { value: 'fresh' });
+
+      expect(fn2).toHaveBeenCalledTimes(1);
+      expect(fn2).toHaveBeenCalledWith({ value: 'fresh' });
+    });
+
+    it('on() + once() with the same fn on the same event: persistent listener survives once auto-removal', () => {
+      // `on` registers fn directly; `once` registers a separate wrapper for fn.
+      // They are distinct entries in the Set, so the once auto-removal only
+      // strips the wrapper and the persistent `on` listener keeps firing.
+      const fn = jest.fn();
+
+      emitter.on('testEvent', fn);
+      emitter.once('testEvent', fn);
+
+      emitter.emit('testEvent', { value: 'one' });
+      // first emit: persistent on() + once() wrapper both invoke fn
+      expect(fn).toHaveBeenCalledTimes(2);
+
+      emitter.emit('testEvent', { value: 'two' });
+      // once is gone; only the persistent on() listener fires
+      expect(fn).toHaveBeenCalledTimes(3);
+    });
+  });
 });
 

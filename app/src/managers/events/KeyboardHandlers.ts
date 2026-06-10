@@ -34,6 +34,7 @@ export class KeyboardHandlers {
 
     const handler = (e: KeyboardEvent): void => {
       if (this.core.isDestroyed) return;
+      if (!this.core.isOpen) return;
       if (e.key === 'Escape') {
         this.emitter.emit('cancel', {});
       }
@@ -47,36 +48,29 @@ export class KeyboardHandlers {
     const hour = this.core.getHour();
     const minutes = this.core.getMinutes();
 
+    const SPIN_KEYS = ['ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'];
+
     if (hour) {
       const hourKeyHandler = (e: KeyboardEvent): void => {
         if (this.core.isDestroyed) return;
-        if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+        if (!SPIN_KEYS.includes(e.key)) return;
 
         e.preventDefault();
         const currentValue = parseInt(hour.value) || 0;
         const max = parseInt(hour.getAttribute('max') || '23');
         const is12h = this.core.options.clock.type === '12h';
+        const min = is12h ? 1 : 0;
+        const pageStep = 3;
 
-        let newValue: number;
-        if (e.key === 'ArrowUp') {
-          if (is12h) {
-            newValue = currentValue >= 12 ? 1 : currentValue + 1;
-          } else {
-            newValue = currentValue >= max ? 0 : currentValue + 1;
-          }
-        } else {
-          if (is12h) {
-            newValue = currentValue <= 1 ? 12 : currentValue - 1;
-          } else {
-            newValue = currentValue <= 0 ? max : currentValue - 1;
-          }
-        }
+        const newValue = this.computeSpinValue(e.key, currentValue, min, max, pageStep);
 
         hour.value = newValue.toString().padStart(2, '0');
         hour.setAttribute('aria-valuenow', hour.value);
+        hour.setAttribute('aria-valuetext', hour.value);
 
         const modal = this.core.getModalElement();
-        announceToScreenReader(modal, `Hour: ${hour.value}`);
+        const prefix = this.core.options.labels.announceHour ?? 'Hour';
+        announceToScreenReader(modal, `${prefix}: ${hour.value}`);
 
         this.emitter.emit('animation:clock', {});
         this.emitter.emit('select:hour', { hour: hour.value });
@@ -97,25 +91,23 @@ export class KeyboardHandlers {
     if (minutes) {
       const minutesKeyHandler = (e: KeyboardEvent): void => {
         if (this.core.isDestroyed) return;
-        if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+        if (!SPIN_KEYS.includes(e.key)) return;
 
         e.preventDefault();
         const currentValue = parseInt(minutes.value) || 0;
         const max = 59;
         const min = 0;
+        const pageStep = 5;
 
-        let newValue: number;
-        if (e.key === 'ArrowUp') {
-          newValue = currentValue >= max ? min : currentValue + 1;
-        } else {
-          newValue = currentValue <= min ? max : currentValue - 1;
-        }
+        const newValue = this.computeSpinValue(e.key, currentValue, min, max, pageStep);
 
         minutes.value = newValue.toString().padStart(2, '0');
         minutes.setAttribute('aria-valuenow', minutes.value);
+        minutes.setAttribute('aria-valuetext', minutes.value);
 
         const modal = this.core.getModalElement();
-        announceToScreenReader(modal, `Minutes: ${minutes.value}`);
+        const prefix = this.core.options.labels.announceMinute ?? 'Minutes';
+        announceToScreenReader(modal, `${prefix}: ${minutes.value}`);
 
         this.emitter.emit('animation:clock', {});
         this.emitter.emit('select:minute', { minutes: minutes.value });
@@ -134,6 +126,31 @@ export class KeyboardHandlers {
     }
   }
 
+  private computeSpinValue(
+    key: string,
+    currentValue: number,
+    min: number,
+    max: number,
+    pageStep: number,
+  ): number {
+    switch (key) {
+      case 'ArrowUp':
+        return currentValue >= max ? min : currentValue + 1;
+      case 'ArrowDown':
+        return currentValue <= min ? max : currentValue - 1;
+      case 'Home':
+        return min;
+      case 'End':
+        return max;
+      case 'PageUp':
+        return Math.min(max, currentValue + pageStep);
+      case 'PageDown':
+        return Math.max(min, currentValue - pageStep);
+      default:
+        return currentValue;
+    }
+  }
+
   focusTrapHandler(): void {
     if (isDocument() === false) {
       return;
@@ -146,9 +163,21 @@ export class KeyboardHandlers {
       if (this.core.isDestroyed) return;
       if (e.key !== 'Tab') return;
 
-      const focusableElements = wrapper.querySelectorAll<HTMLElement>(
+      const candidates = wrapper.querySelectorAll<HTMLElement>(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
+
+      const focusableElements: HTMLElement[] = [];
+      candidates.forEach((el) => {
+        if (el.getAttribute('aria-disabled') === 'true') return;
+        if (el.hasAttribute('disabled')) return;
+        if (el.hidden) return;
+        if (el.getAttribute('aria-hidden') === 'true') return;
+        if (el.offsetParent === null && el.getClientRects().length === 0) return;
+        focusableElements.push(el);
+      });
+
+      if (focusableElements.length === 0) return;
 
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];

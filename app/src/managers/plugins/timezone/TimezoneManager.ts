@@ -161,7 +161,7 @@ export default class TimezoneManager {
           this.dropdown.setOpen(true);
         } else {
           this.keyboard.moveDown(options.length);
-          this.keyboard.updateVisualFocus(options);
+          this.keyboard.updateVisualFocus(options, dropdownEl);
         }
         break;
 
@@ -169,7 +169,7 @@ export default class TimezoneManager {
         e.preventDefault();
         if (isOpen) {
           this.keyboard.moveUp();
-          this.keyboard.updateVisualFocus(options);
+          this.keyboard.updateVisualFocus(options, dropdownEl);
         }
         break;
 
@@ -177,7 +177,7 @@ export default class TimezoneManager {
         if (isOpen) {
           e.preventDefault();
           this.keyboard.moveToFirst();
-          this.keyboard.updateVisualFocus(options);
+          this.keyboard.updateVisualFocus(options, dropdownEl);
         }
         break;
 
@@ -185,7 +185,7 @@ export default class TimezoneManager {
         if (isOpen) {
           e.preventDefault();
           this.keyboard.moveToLast(options.length);
-          this.keyboard.updateVisualFocus(options);
+          this.keyboard.updateVisualFocus(options, dropdownEl);
         }
         break;
     }

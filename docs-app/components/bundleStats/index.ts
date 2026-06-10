@@ -1,9 +1,10 @@
 export { BundleCard } from "./BundleCard";
 export { ComparisonSection } from "./ComparisonSection";
-export { ComparisonMetric } from "./ComparisonMetric";
+export { ComparisonMetric, type BadgeVariant } from "./ComparisonMetric";
 export { OptimizationCard } from "./OptimizationCard";
 export { SummaryStats } from "./SummaryStats";
 export { TabButton } from "./TabButton";
-export { BarChart } from "./BarChart";
+export { BarChart, type GroupedDatum } from "./BarChart";
+export { CompositionBar, type CompositionSegment } from "./CompositionBar";
 export { CriteriaItem } from "./CriteriaItem";
 export * from "./types";
