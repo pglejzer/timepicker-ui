@@ -30,6 +30,27 @@ describe('options defaults', () => {
       expect(DEFAULT_OPTIONS.labels.mobileTime).toBe('Enter Time');
     });
 
+    it('should have all 16 a11y/localization label defaults in English', () => {
+      const { labels } = DEFAULT_OPTIONS;
+
+      expect(labels.hourLabel).toBe('Hour');
+      expect(labels.minuteLabel).toBe('Minute');
+      expect(labels.clockLabel).toBe('Clock');
+      expect(labels.periodLabel).toBe('Period');
+      expect(labels.timeLabel).toBe('Time');
+      expect(labels.format24Label).toBe('24-hour');
+      expect(labels.rangeSelectionLabel).toBe('Range selection');
+      expect(labels.switchToKeyboardLabel).toBe('Switch to keyboard input');
+      expect(labels.switchToClockLabel).toBe('Switch to clock');
+      expect(labels.toggleLabel).toBe('Toggle');
+      expect(labels.timezoneSelectorLabel).toBe('Timezone');
+      expect(labels.announceHour).toBe('Hour');
+      expect(labels.announceMinute).toBe('Minutes');
+      expect(labels.announceAmSelected).toBe('AM selected');
+      expect(labels.announcePmSelected).toBe('PM selected');
+      expect(labels.invalidTimeFormat).toBe('Invalid time format');
+    });
+
     it('should have behavior options', () => {
       expect(DEFAULT_OPTIONS.behavior).toBeDefined();
       expect(DEFAULT_OPTIONS.behavior.focusInputAfterClose).toBe(false);
@@ -97,6 +118,44 @@ describe('options defaults', () => {
       expect(result.labels.am).toBe('A.M.');
       expect(result.labels.pm).toBe('P.M.');
       expect(result.labels.ok).toBe('OK');
+    });
+
+    it('should default all 16 a11y/localization labels when not provided', () => {
+      const result = mergeOptions({});
+
+      expect(result.labels.hourLabel).toBe('Hour');
+      expect(result.labels.minuteLabel).toBe('Minute');
+      expect(result.labels.clockLabel).toBe('Clock');
+      expect(result.labels.periodLabel).toBe('Period');
+      expect(result.labels.timeLabel).toBe('Time');
+      expect(result.labels.format24Label).toBe('24-hour');
+      expect(result.labels.rangeSelectionLabel).toBe('Range selection');
+      expect(result.labels.switchToKeyboardLabel).toBe('Switch to keyboard input');
+      expect(result.labels.switchToClockLabel).toBe('Switch to clock');
+      expect(result.labels.toggleLabel).toBe('Toggle');
+      expect(result.labels.timezoneSelectorLabel).toBe('Timezone');
+      expect(result.labels.announceHour).toBe('Hour');
+      expect(result.labels.announceMinute).toBe('Minutes');
+      expect(result.labels.announceAmSelected).toBe('AM selected');
+      expect(result.labels.announcePmSelected).toBe('PM selected');
+      expect(result.labels.invalidTimeFormat).toBe('Invalid time format');
+    });
+
+    it('should merge user overrides for the new labels while keeping other defaults', () => {
+      const result = mergeOptions({
+        labels: {
+          hourLabel: 'Godzina',
+          announceMinute: 'Minuty',
+          invalidTimeFormat: 'Zly format',
+        },
+      });
+
+      expect(result.labels.hourLabel).toBe('Godzina');
+      expect(result.labels.announceMinute).toBe('Minuty');
+      expect(result.labels.invalidTimeFormat).toBe('Zly format');
+      expect(result.labels.minuteLabel).toBe('Minute');
+      expect(result.labels.toggleLabel).toBe('Toggle');
+      expect(result.labels.am).toBe('AM');
     });
 
     it('should merge behavior options', () => {

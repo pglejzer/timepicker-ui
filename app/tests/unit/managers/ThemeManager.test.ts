@@ -68,6 +68,97 @@ describe('ThemeManager', () => {
 
       customThemeManager.destroy();
     });
+
+    it('should set data-theme to blueprint on the modal', () => {
+      const customOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          theme: 'blueprint' as const,
+        },
+      };
+
+      const customCore = new CoreState(mockElement, customOptions, 'test-blueprint-id');
+      const customThemeManager = new ThemeManager(customCore, emitter);
+
+      const modal = document.createElement('div') as HTMLDivElement;
+      jest.spyOn(customCore, 'getModalElement').mockReturnValue(modal);
+
+      customThemeManager.setTheme();
+
+      expect(modal.getAttribute('data-theme')).toBe('blueprint');
+
+      customThemeManager.destroy();
+    });
+
+    it('should set data-theme to blueprint-dark on the modal', () => {
+      const customOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          theme: 'blueprint-dark' as const,
+        },
+      };
+
+      const customCore = new CoreState(mockElement, customOptions, 'test-blueprint-dark-id');
+      const customThemeManager = new ThemeManager(customCore, emitter);
+
+      const modal = document.createElement('div') as HTMLDivElement;
+      jest.spyOn(customCore, 'getModalElement').mockReturnValue(modal);
+
+      customThemeManager.setTheme();
+
+      expect(modal.getAttribute('data-theme')).toBe('blueprint-dark');
+
+      customThemeManager.destroy();
+    });
+  });
+
+  describe('all 12 themes', () => {
+    const THEMES = [
+      'basic',
+      'crane',
+      'crane-straight',
+      'm2',
+      'm3-green',
+      'dark',
+      'glassmorphic',
+      'pastel',
+      'ai',
+      'cyberpunk',
+      'blueprint',
+      'blueprint-dark',
+    ] as const;
+
+    it('exposes 12 themes including both blueprint variants', () => {
+      expect(THEMES).toHaveLength(12);
+      expect(THEMES).toContain('blueprint');
+      expect(THEMES).toContain('blueprint-dark');
+    });
+
+    it('applies each theme value to data-theme on the modal', () => {
+      THEMES.forEach((theme) => {
+        const customOptions = {
+          ...DEFAULT_OPTIONS,
+          ui: {
+            ...DEFAULT_OPTIONS.ui,
+            theme,
+          },
+        };
+
+        const customCore = new CoreState(mockElement, customOptions, `test-theme-${theme}`);
+        const customThemeManager = new ThemeManager(customCore, emitter);
+
+        const modal = document.createElement('div') as HTMLDivElement;
+        jest.spyOn(customCore, 'getModalElement').mockReturnValue(modal);
+
+        customThemeManager.setTheme();
+
+        expect(modal.getAttribute('data-theme')).toBe(theme);
+
+        customThemeManager.destroy();
+      });
+    });
   });
 
   describe('setInputClassToInputElement', () => {

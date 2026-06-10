@@ -345,6 +345,80 @@ describe('ModalManager', () => {
     });
   });
 
+  describe('scroll-lock reference counting', () => {
+    const lockOptions = {
+      ...DEFAULT_OPTIONS,
+      ui: {
+        ...DEFAULT_OPTIONS.ui,
+        enableScrollbar: false,
+      },
+    };
+
+    it('leaves body scrollable after rapid open/close cycles on one instance', () => {
+      document.body.style.overflowY = 'scroll';
+
+      const core = new CoreState(mockElement, lockOptions, 'test-refcount-single');
+      const manager = new ModalManager(core, emitter);
+
+      for (let i = 0; i < 5; i += 1) {
+        manager.lockScroll();
+        expect(document.body.style.overflowY).toBe('hidden');
+        manager.unlockScroll();
+        expect(document.body.style.overflowY).toBe('scroll');
+      }
+
+      expect(document.body.style.overflowY).not.toBe('hidden');
+
+      manager.destroy();
+    });
+
+    it('keeps the lock while a second picker is still open and only releases on the last close', () => {
+      document.body.style.overflowY = 'scroll';
+
+      const coreA = new CoreState(mockElement, lockOptions, 'test-refcount-a');
+      const coreB = new CoreState(mockElement, lockOptions, 'test-refcount-b');
+      const managerA = new ModalManager(coreA, emitter);
+      const managerB = new ModalManager(coreB, emitter);
+
+      managerA.lockScroll();
+      managerB.lockScroll();
+      expect(document.body.style.overflowY).toBe('hidden');
+
+      managerA.unlockScroll();
+      expect(document.body.style.overflowY).toBe('hidden');
+
+      managerB.unlockScroll();
+      expect(document.body.style.overflowY).toBe('scroll');
+
+      expect(document.body.style.overflowY).not.toBe('hidden');
+
+      managerA.destroy();
+      managerB.destroy();
+    });
+
+    it('does not double-release when unlockScroll is called more than the matching lock', () => {
+      document.body.style.overflowY = 'scroll';
+
+      const coreA = new CoreState(mockElement, lockOptions, 'test-refcount-extra-a');
+      const coreB = new CoreState(mockElement, lockOptions, 'test-refcount-extra-b');
+      const managerA = new ModalManager(coreA, emitter);
+      const managerB = new ModalManager(coreB, emitter);
+
+      managerA.lockScroll();
+      managerB.lockScroll();
+
+      managerA.unlockScroll();
+      managerA.unlockScroll();
+      expect(document.body.style.overflowY).toBe('hidden');
+
+      managerB.unlockScroll();
+      expect(document.body.style.overflowY).toBe('scroll');
+
+      managerA.destroy();
+      managerB.destroy();
+    });
+  });
+
   describe('setScrollbarOrNot with enableScrollbar true', () => {
     it('should restore scrollbar after timeout when enableScrollbar is true', () => {
       jest.useFakeTimers();

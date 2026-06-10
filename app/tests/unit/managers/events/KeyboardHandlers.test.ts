@@ -48,6 +48,7 @@ describe('KeyboardHandlers spinbutton navigation', () => {
     handlers.destroy();
     document.body.innerHTML = '';
     jest.restoreAllMocks();
+    jest.useRealTimers();
   });
 
   describe('hour input - 12h mode', () => {
@@ -129,6 +130,88 @@ describe('KeyboardHandlers spinbutton navigation', () => {
       hourInput.value = '22';
       dispatchKey(hourInput, 'PageUp');
       expect(hourInput.value).toBe('23');
+    });
+  });
+
+  describe('aria-valuetext sync', () => {
+    beforeEach(() => setup('12h'));
+
+    it('keeps hour aria-valuetext in sync with the value', () => {
+      dispatchKey(hourInput, 'ArrowUp');
+      expect(hourInput.getAttribute('aria-valuetext')).toBe('07');
+      expect(hourInput.getAttribute('aria-valuetext')).toBe(hourInput.value);
+
+      dispatchKey(hourInput, 'End');
+      expect(hourInput.getAttribute('aria-valuetext')).toBe('12');
+      expect(hourInput.getAttribute('aria-valuetext')).toBe(hourInput.value);
+    });
+
+    it('keeps minute aria-valuetext in sync with the value', () => {
+      dispatchKey(minuteInput, 'ArrowDown');
+      expect(minuteInput.getAttribute('aria-valuetext')).toBe('29');
+      expect(minuteInput.getAttribute('aria-valuetext')).toBe(minuteInput.value);
+
+      dispatchKey(minuteInput, 'Home');
+      expect(minuteInput.getAttribute('aria-valuetext')).toBe('00');
+      expect(minuteInput.getAttribute('aria-valuetext')).toBe(minuteInput.value);
+    });
+  });
+
+  describe('custom announce labels', () => {
+    let modal: HTMLElement;
+    let announcer: HTMLElement;
+
+    const setupWithAnnounce = (announceHour: string, announceMinute: string): void => {
+      jest.useFakeTimers();
+
+      document.body.innerHTML = `
+        <div>
+          <input type="number" class="tp-ui-hour" min="1" max="12" value="06" />
+          <input type="number" class="tp-ui-minutes" min="0" max="59" value="30" />
+        </div>
+      `;
+
+      hourInput = document.querySelector('.tp-ui-hour') as HTMLInputElement;
+      minuteInput = document.querySelector('.tp-ui-minutes') as HTMLInputElement;
+
+      modal = document.createElement('div');
+      announcer = document.createElement('div');
+      announcer.className = 'timepicker-announcer';
+      modal.appendChild(announcer);
+      document.body.appendChild(modal);
+
+      const options: TimepickerOptions = {
+        clock: { type: '12h' },
+        labels: { announceHour, announceMinute },
+      };
+      core = new CoreState(hourInput, mergeOptions(options), 'kbd-announce-instance');
+
+      jest.spyOn(core, 'getHour').mockReturnValue(hourInput);
+      jest.spyOn(core, 'getMinutes').mockReturnValue(minuteInput);
+      jest.spyOn(core, 'getActiveTypeMode').mockReturnValue(null);
+      jest.spyOn(core, 'getModalElement').mockReturnValue(modal as HTMLDivElement);
+
+      emitter = new EventEmitter<TimepickerEventMap>();
+      handlers = new KeyboardHandlers(core, emitter);
+      handlers.handleKeyboardInput();
+    };
+
+    it('announces the hour using the custom announceHour label', () => {
+      setupWithAnnounce('Godzina', 'Minuty');
+
+      dispatchKey(hourInput, 'ArrowUp');
+      jest.advanceTimersByTime(150);
+
+      expect(announcer.textContent).toBe('Godzina: 07');
+    });
+
+    it('announces the minute using the custom announceMinute label', () => {
+      setupWithAnnounce('Godzina', 'Minuty');
+
+      dispatchKey(minuteInput, 'ArrowUp');
+      jest.advanceTimersByTime(150);
+
+      expect(announcer.textContent).toBe('Minuty: 31');
     });
   });
 
