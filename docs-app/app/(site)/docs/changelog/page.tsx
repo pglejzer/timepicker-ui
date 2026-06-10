@@ -117,6 +117,11 @@ const CHANGELOG_440 = {
       description:
         "Fix the page scroll lock not releasing after rapid open/close cycles (or with multiple pickers on a page), which could leave the whole page unscrollable; body scroll locking is now reference-counted across instances",
     },
+    {
+      title: "theme-crane-straight.css export",
+      description:
+        "Added the missing theme-crane-straight.css entry to the package exports map, so the documented import 'timepicker-ui/theme-crane-straight.css' subpath now resolves instead of throwing ERR_PACKAGE_PATH_NOT_EXPORTED",
+    },
   ],
 };
 
@@ -561,10 +566,10 @@ export default function ChangelogPage() {
       />
 
       <InfoBox title="Current Version" variant="purple" className="mb-6">
-        <strong>v4.4.0</strong> - Released June 9, 2026
+        <strong>v4.4.0</strong> - Released June 10, 2026
       </InfoBox>
 
-      <Section icon={Sparkles} title="Version 4.4.0 - June 9, 2026">
+      <Section icon={Sparkles} title="Version 4.4.0 - June 10, 2026">
         <div className="space-y-4">
           <ChangeSection
             icon={Sparkles}

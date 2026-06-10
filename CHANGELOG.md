@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [4.4.0] - 2026-06-09
+## [4.4.0] - 2026-06-10
 
 ### Added
 
@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved focus-ring visibility with a new high-contrast focus halo, so the focused control is clearly distinguishable on every theme
 - Native browser spinner buttons no longer appear on the clock-mode time inputs in Firefox - number inputs now render cleanly and consistently across browsers (`-moz-appearance: textfield` + `-webkit-appearance` reset). Thanks to [@in-omnibus](https://github.com/in-omnibus) for reporting and proposing the fix ([#166](https://github.com/pglejzer/timepicker-ui/issues/166))
 - Fix the page scroll lock not releasing after rapid open/close cycles (or with multiple pickers on a page), which could leave the whole page unscrollable; body scroll locking is now reference-counted across instances
+- Missing `theme-crane-straight.css` entry in the package `exports` map - the documented `import 'timepicker-ui/theme-crane-straight.css'` subpath now resolves instead of throwing `ERR_PACKAGE_PATH_NOT_EXPORTED`
 
 ---
 

@@ -42,7 +42,7 @@ export default function WhatsNewPage() {
         className="mb-8"
       >
         <p className="mb-3">
-          <strong>June 9, 2026</strong> - Two new Blueprint themes, localizable
+          <strong>June 10, 2026</strong> - Two new Blueprint themes, localizable
           accessibility labels, and extended keyboard navigation
         </p>
         <p className="text-sm">What&apos;s new:</p>
