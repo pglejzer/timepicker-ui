@@ -34,7 +34,7 @@ picker.open(() => {
     description: "Close the timepicker modal.",
     code: `picker.close();
 
-picker.close(true)(() => {
+picker.close(true, () => {
   console.log('Picker closed with update');
 });`,
   },
@@ -47,7 +47,9 @@ picker.close(true)(() => {
   hour: '10',
   minutes: '30',
   type: 'AM',
-  time: '10:30 AM'
+  time: '10:30 AM',
+  degreesHours: 300,
+  degreesMinutes: 180
 }`,
   },
   {

@@ -15,7 +15,7 @@ import { InfoBox } from "@/components/info-box";
 export const metadata = {
   title: "Configuration",
   description:
-    "Configure timepicker-ui - clock, ui, labels, behavior and callback option groups for the zero-dependency, framework-agnostic, SSR-safe time picker.",
+    "Configure timepicker-ui - clock, ui, labels, behavior, callbacks, timezone, range, wheel and clearBehavior option groups for the zero-dependency, SSR-safe time picker.",
   alternates: {
     canonical: "/docs/configuration",
   },
@@ -142,7 +142,7 @@ const uiOptions = [
   {
     name: "clearButton",
     type: "boolean",
-    default: "true",
+    default: "false",
     description: "Show clear button",
   },
   {
@@ -392,9 +392,11 @@ export default function ConfigurationPage() {
       />
 
       <InfoBox title="v4.0.0 Breaking Change" variant="orange" className="mb-8">
-        Options are now organized into 5 logical groups: <code>clock</code>,{" "}
-        <code>ui</code>, <code>labels</code>, <code>behavior</code>, and{" "}
-        <code>callbacks</code>. See migration guide in the changelog.
+        Options are now organized into 9 logical groups: <code>clock</code>,{" "}
+        <code>ui</code>, <code>labels</code>, <code>behavior</code>,{" "}
+        <code>callbacks</code>, <code>timezone</code>, <code>range</code>,{" "}
+        <code>wheel</code>, and <code>clearBehavior</code>. See migration guide
+        in the changelog.
       </InfoBox>
 
       <Section icon={Clock} title="Clock Options">

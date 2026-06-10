@@ -193,8 +193,8 @@ body {
   );
 }
 
-/* Faint blueprint grid for atmospheric backgrounds (replaces dotted grid). */
-.blueprint {
+/* Faint docs-owned decorative grid for atmospheric backgrounds (replaces dotted grid). Namespaced to avoid colliding with library/third-party `blueprint` classes. */
+.bp-grid {
   background-image: linear-gradient(
       to right,
       hsl(var(--hairline) / 0.55) 1px,

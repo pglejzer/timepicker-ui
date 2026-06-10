@@ -48,7 +48,7 @@ export default function NotFound() {
     >
       {/* Atmosphere */}
       <div
-        className="blueprint pointer-events-none absolute inset-0 opacity-40"
+        className="bp-grid pointer-events-none absolute inset-0 opacity-40"
         aria-hidden="true"
       />
 

@@ -25,7 +25,7 @@ export default function AccessibilityPage() {
     <div>
       <PageHeader
         title="Accessibility"
-        description="Built with WCAG 2.1 compliance and full keyboard support"
+        description="Built with WCAG 2.2 AA compliance and full keyboard support"
         eyebrow="Guide"
       />
 
@@ -218,6 +218,32 @@ export default function AccessibilityPage() {
                 </div>
               </div>
               <div className="flex items-center justify-between border-b border-border pb-2">
+                <span className="text-sm text-muted-foreground">
+                  Jump to min / max value (hour/minute inputs)
+                </span>
+                <div className="flex gap-1">
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    Home
+                  </kbd>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    End
+                  </kbd>
+                </div>
+              </div>
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <span className="text-sm text-muted-foreground">
+                  Step in larger increments (hour ±3, minute ±5)
+                </span>
+                <div className="flex gap-1">
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    PgUp
+                  </kbd>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    PgDn
+                  </kbd>
+                </div>
+              </div>
+              <div className="flex items-center justify-between border-b border-border pb-2">
                 <span className="flex items-center gap-1 text-sm text-muted-foreground">
                   Switch view (hour
                   <ArrowLeftRight className="inline h-3 w-3" />
@@ -357,17 +383,23 @@ document.addEventListener('keydown', (e) => {
             <h3 className="font-semibold mb-3 text-foreground">ARIA Labels</h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  // Labels are announced by screen readers
-  okLabel: 'Confirm time selection',
-  cancelLabel: 'Cancel time selection',
-  
-  // Add custom aria-label to input
-  ariaLabel: 'Select appointment time'
+  labels: {
+    // Visible button text (also announced by screen readers)
+    ok: 'Confirm',
+    cancel: 'Cancel',
+
+    // Accessible names for the picker controls
+    clockLabel: 'Clock',
+    hourLabel: 'Hour',
+    minuteLabel: 'Minute',
+    periodLabel: 'Period',
+    timeLabel: 'Select appointment time'
+  }
 });
 
-// Or add to HTML
-<input 
-  type="time" 
+// Add a custom aria-label / hint directly on the input element
+<input
+  type="time"
   id="timepicker"
   aria-label="Select appointment time"
   aria-describedby="time-help"
@@ -457,8 +489,10 @@ document.addEventListener('keydown', (e) => {
 // Users cannot tab outside the timepicker when open
 
 const picker = new TimepickerUI(input, {
-  // Modal automatically manages focus
-  focusTrap: true  // Default behavior
+  behavior: {
+    // Modal automatically manages focus
+    focusTrap: true // Default behavior
+  }
 });
 
 picker.create();
@@ -491,30 +525,27 @@ picker.create();
             </h3>
             <CodeBlock
               code={`/* Default focus styles for all interactive elements */
-.timepicker-ui-hour-time-12:focus-visible,
-.timepicker-ui-minutes-time:focus-visible,
-.timepicker-ui-hour-time-24:focus-visible,
-.timepicker-ui-am:focus-visible,
-.timepicker-ui-pm:focus-visible,
-.timepicker-ui-cancel-btn:focus-visible,
-.timepicker-ui-ok-btn:focus-visible,
-.timepicker-ui-keyboard-icon-wrapper:focus-visible {
-  outline: 3px solid var(--timepicker-primary);
+.tp-ui-hour:focus-visible,
+.tp-ui-minutes:focus-visible,
+.tp-ui-am:focus-visible,
+.tp-ui-pm:focus-visible,
+.tp-ui-cancel-btn:focus-visible,
+.tp-ui-ok-btn:focus-visible,
+.tp-ui-keyboard-icon-wrapper:focus-visible {
+  outline: 3px solid var(--tp-primary);
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(98, 0, 238, 0.2);
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  .timepicker-ui-hour-time-12:focus-visible,
-  .timepicker-ui-minutes-time:focus-visible,
-  .timepicker-ui-hour-time-24:focus-visible,
-  .timepicker-ui-am:focus-visible,
-  .timepicker-ui-pm:focus-visible,
-  .timepicker-ui-cancel-btn:focus-visible,
-  .timepicker-ui-ok-btn:focus-visible {
+  .tp-ui-hour:focus-visible,
+  .tp-ui-minutes:focus-visible,
+  .tp-ui-am:focus-visible,
+  .tp-ui-pm:focus-visible,
+  .tp-ui-cancel-btn:focus-visible,
+  .tp-ui-ok-btn:focus-visible {
     outline-width: 4px;
-    font-weight: 700;
   }
 }
 
@@ -532,12 +563,15 @@ picker.create();
               code={`// Disabled times are properly marked and skipped
 
 const picker = new TimepickerUI(input, {
-  disabledTime: {
-    interval: true,
-    intervals: [
-      ['9:00 AM', '12:00 PM'],  // Disabled range
-      ['6:00 PM', '11:59 PM']   // Another disabled range
-    ]
+  clock: {
+    disabledTime: {
+      // Disable one or more time ranges (string or array of strings)
+      interval: ['9:00 AM - 12:00 PM', '6:00 PM - 11:59 PM'],
+
+      // Optionally disable specific hours / minutes outright
+      hours: [0, 1, 2],
+      minutes: [15, 45]
+    }
   }
 });
 
@@ -600,30 +634,30 @@ const picker = new TimepickerUI(input, {
               High Contrast Theme
             </h3>
             <CodeBlock
-              code={`/* High contrast accessible theme */
-[data-theme="high-contrast"] {
-  --timepicker-bg-color: #000000;
-  --timepicker-text-color: #ffffff;
-  --timepicker-primary-color: #ffff00;
-  --timepicker-border-color: #ffffff;
-  
+              code={`/* High contrast accessible override (CSS variables use the --tp- prefix) */
+.tp-ui-modal[data-theme="dark"] {
+  --tp-bg: #000000;
+  --tp-text: #ffffff;
+  --tp-primary: #ffff00;
+  --tp-border: #ffffff;
+
   /* Ensure all text meets 7:1 contrast ratio */
 }
 
 /* Respect user's contrast preference */
 @media (prefers-contrast: high) {
-  .timepicker-ui-wrapper {
+  .tp-ui-wrapper {
     border: 2px solid currentColor;
   }
-  
-  .timepicker-ui-clock-face__clock-number {
-    font-weight: 700;
+
+  .tp-ui-clock-face {
+    border: 2px solid currentColor;
   }
 }
 
 @media (prefers-contrast: more) {
   /* Enhanced contrast for users who need it */
-  .timepicker-ui-wrapper {
+  .tp-ui-wrapper {
     background: #000000;
     color: #ffffff;
   }
@@ -649,16 +683,16 @@ const picker = new TimepickerUI(input, {
             <CodeBlock
               code={`/* CSS: Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  .timepicker-ui-wrapper {
+  .tp-ui-wrapper {
     animation: none !important;
     transition: none !important;
   }
-  
-  .timepicker-ui-clock-face__clock-hand {
+
+  .tp-ui-clock-hand {
     transition: none !important;
   }
-  
-  .timepicker-ui-backdrop {
+
+  .tp-ui-modal {
     animation: none !important;
   }
 }
@@ -669,7 +703,9 @@ const prefersReducedMotion = window.matchMedia(
 ).matches;
 
 const picker = new TimepickerUI(input, {
-  animation: !prefersReducedMotion
+  ui: {
+    animation: !prefersReducedMotion
+  }
 });
 
 picker.create();`}
@@ -793,12 +829,12 @@ test('can navigate with keyboard', async () => {
             </p>
             <div className="space-y-2">
               <a
-                href="https://www.w3.org/WAI/WCAG21/quickref/"
+                href="https://www.w3.org/WAI/WCAG22/quickref/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block text-sm font-medium text-primary hover:underline"
               >
-                WCAG 2.1 Quick Reference
+                WCAG 2.2 Quick Reference
               </a>
               <a
                 href="https://webaim.org/resources/contrastchecker/"

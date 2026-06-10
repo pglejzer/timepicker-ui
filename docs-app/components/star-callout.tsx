@@ -40,7 +40,7 @@ export async function StarCallout() {
       aria-labelledby="star-callout-heading"
       className="relative overflow-hidden border-b border-border bg-muted/20"
     >
-      <div className="blueprint pointer-events-none absolute inset-0 -z-10 opacity-40" />
+      <div className="bp-grid pointer-events-none absolute inset-0 -z-10 opacity-40" />
       <div className="container mx-auto px-4 py-16 sm:py-20 md:px-6">
         <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           {/* Copy */}

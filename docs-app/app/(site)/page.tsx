@@ -211,7 +211,7 @@ export default function Home() {
     <main id="main-content" className="flex flex-col">
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border">
-        <div className="blueprint pointer-events-none absolute inset-0 -z-10 opacity-40" />
+        <div className="bp-grid pointer-events-none absolute inset-0 -z-10 opacity-40" />
         <div className="container mx-auto px-4 py-20 sm:py-28 md:px-6">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
@@ -476,7 +476,7 @@ picker.create();`}
 
       {/* CTA */}
       <section className="relative overflow-hidden">
-        <div className="blueprint pointer-events-none absolute inset-0 -z-10 opacity-40" />
+        <div className="bp-grid pointer-events-none absolute inset-0 -z-10 opacity-40" />
         <div className="container mx-auto px-4 py-20 text-center sm:py-28 md:px-6">
           <span className="nums text-4xl text-muted-foreground/40">00:00</span>
           <h2 className="display mx-auto mt-4 max-w-2xl text-3xl font-semibold sm:text-5xl">

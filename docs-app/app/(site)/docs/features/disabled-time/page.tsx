@@ -135,14 +135,12 @@ picker.create();`}
 
           <div className="rounded-lg border border-border bg-card p-6">
             <h3 className="font-semibold mb-3 text-foreground">
-              Using Minute Interval Helper
+              Using Minute Increments
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
   clock: {
-    disabledTime: {
-      interval: 15  // Only show minutes in 15-minute intervals
-    }
+    incrementMinutes: 15  // Only show minutes in 15-minute steps
   }
 });
 
@@ -150,7 +148,8 @@ picker.create();`}
               language="typescript"
             />
             <p className="text-sm text-muted-foreground mt-3">
-              Shorthand for 15-minute intervals (0, 15, 30, 45).
+              <code className="text-primary">clock.incrementMinutes</code>{" "}
+              limits selection to 15-minute steps (0, 15, 30, 45).
             </p>
           </div>
 
@@ -161,9 +160,7 @@ picker.create();`}
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
   clock: {
-    disabledTime: {
-      interval: 5  // Show minutes in 5-minute intervals
-    }
+    incrementMinutes: 5  // Show minutes in 5-minute steps
   }
 });
 
@@ -194,14 +191,14 @@ picker.create();`}
   clock: {
     disabledTime: {
       hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23],
-      interval: 30  // 30-minute intervals
+      interval: '12:00 PM - 1:00 PM'
     }
   }
 });
 
 picker.create();
 
-// Result: Can only select 9:00, 9:30, 10:00, 10:30... until 17:00, 17:30`}
+// Result: 9:00-17:59 is selectable, with the 12:00-1:00 PM lunch break disabled`}
               language="typescript"
             />
           </div>

@@ -166,42 +166,49 @@ export function TimepickerExample({
   }, [memoizedOptions, viewMode, pluginsKey]);
 
   // The live preview panel — shared by both the tabbed and code-less layouts.
+  // The outer @container makes everything respond to the card width (not the
+  // viewport), so the narrow 4-up homepage cards and the wide docs cards both
+  // lay out correctly.
   const preview = (
-    <div className="relative overflow-hidden bg-muted/20 p-8 sm:p-10">
-      {/* Atmospheric blueprint backdrop (theme-aware, non-interactive). */}
-      <div className="blueprint pointer-events-none absolute inset-0 opacity-[0.35]" />
-      <div className="relative mx-auto max-w-sm space-y-4">
-        <div>
-          <label
-            htmlFor={uniqueId}
-            className="eyebrow mb-2 block"
-          >
-            Select time
-          </label>
-          <input
-            ref={inputRef}
-            type="text"
-            id={uniqueId}
-            placeholder={inputPlaceholder}
-            className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/25"
-          />
+    <div className="@container">
+      <div className="relative overflow-hidden bg-muted/20 p-5 @sm:p-8 @md:p-10">
+        {/* Atmospheric decorative-grid backdrop (theme-aware, non-interactive). */}
+        <div className="bp-grid pointer-events-none absolute inset-0 opacity-[0.35]" />
+        <div className="relative mx-auto max-w-sm space-y-4">
+          <div>
+            <label htmlFor={uniqueId} className="eyebrow mb-2 block">
+              Select time
+            </label>
+            <input
+              ref={inputRef}
+              type="text"
+              id={uniqueId}
+              placeholder={inputPlaceholder}
+              className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/25"
+            />
+          </div>
+          {rangeValue && (
+            <div className="flex flex-col gap-1.5 rounded-lg border border-ok/30 bg-ok/10 px-3.5 py-3 text-sm @xs:flex-row @xs:items-center @xs:justify-between @xs:gap-3 @xs:py-2.5">
+              <span className="eyebrow text-ok">Range</span>
+              <span className="nums flex flex-wrap items-center gap-x-2 gap-y-1 text-foreground @xs:justify-end">
+                <span className="whitespace-nowrap">{rangeValue.from}</span>
+                <ArrowRight
+                  className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <span className="whitespace-nowrap">{rangeValue.to}</span>
+              </span>
+            </div>
+          )}
+          {currentValue && !rangeValue && (
+            <div className="flex flex-col gap-1 rounded-lg border border-primary/30 bg-primary/10 px-3.5 py-3 text-sm @xs:flex-row @xs:items-center @xs:justify-between @xs:gap-3 @xs:py-2.5">
+              <span className="eyebrow text-primary">Selected</span>
+              <span className="nums whitespace-nowrap text-foreground @xs:text-right">
+                {currentValue}
+              </span>
+            </div>
+          )}
         </div>
-        {rangeValue && (
-          <div className="flex items-center justify-between rounded-lg border border-ok/30 bg-ok/10 px-3 py-2.5 text-sm">
-            <span className="eyebrow text-ok">Range</span>
-            <span className="nums inline-flex items-center gap-1.5 text-foreground">
-              {rangeValue.from}
-              <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
-              {rangeValue.to}
-            </span>
-          </div>
-        )}
-        {currentValue && !rangeValue && (
-          <div className="flex items-center justify-between rounded-lg border border-primary/30 bg-primary/10 px-3 py-2.5 text-sm">
-            <span className="eyebrow text-primary">Selected</span>
-            <span className="nums text-foreground">{currentValue}</span>
-          </div>
-        )}
       </div>
     </div>
   );

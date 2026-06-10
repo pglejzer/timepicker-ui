@@ -65,8 +65,8 @@ export function Footer() {
 
   return (
     <footer className="relative overflow-hidden border-t border-border bg-muted/20">
-      {/* Atmospheric blueprint grid, consistent with hero/CTA. */}
-      <div className="blueprint pointer-events-none absolute inset-0 -z-10 opacity-30" />
+      {/* Atmospheric decorative grid, consistent with hero/CTA. */}
+      <div className="bp-grid pointer-events-none absolute inset-0 -z-10 opacity-30" />
 
       <div className="container mx-auto px-4 md:px-6">
         {/* Top plate: brand + live instrument readout */}

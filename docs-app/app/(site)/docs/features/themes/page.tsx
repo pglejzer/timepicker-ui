@@ -218,7 +218,7 @@ picker.update({
             </h3>
             <CodeBlock
               code={`import 'timepicker-ui/main.css';
-import 'timepicker-ui/theme-m3.css';
+import 'timepicker-ui/theme-m3-green.css';
 
 const picker = new TimepickerUI(input, {
   ui: {

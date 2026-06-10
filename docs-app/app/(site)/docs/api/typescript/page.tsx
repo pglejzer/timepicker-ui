@@ -15,123 +15,177 @@ export const metadata = {
 
 const mainInterfaces = [
   {
-    name: "OptionTypes",
-    description: "Configuration options for TimepickerUI instance",
-    code: `interface OptionTypes {
-  amLabel?: string;
-  animation?: boolean;
-  appendModalSelector?: string;
-  backdrop?: boolean;
-  cancelLabel?: string;
-  clockType?: '12h' | '24h';
-  cssClass?: string;
-  currentTime?: boolean | CurrentTimeConfig;
-  delayHandler?: number;
-  disabledTime?: DisabledTimeConfig;
-  editable?: boolean;
-  enableScrollbar?: boolean;
-  enableSwitchIcon?: boolean;
-  focusInputAfterCloseModal?: boolean;
-  focusTrap?: boolean;
-  hourMobileLabel?: string;
-  iconTemplate?: string;
-  iconTemplateMobile?: string;
-  id?: string;
-  incrementHours?: number;
-  incrementMinutes?: number;
-  inline?: InlineConfig;
-  minuteMobileLabel?: string;
-  mobile?: boolean;
-  mobileTimeLabel?: string;
-  okLabel?: string;
-  pmLabel?: string;
-  autoSwitchToMinutes?: boolean;
-  theme?: Theme;
-  timeLabel?: string;
-  
-  // Callbacks
-  onOpen?: (data: CallbackData) => void;
-  onCancel?: (data: CallbackData) => void;
-  onConfirm?: (data: CallbackData) => void;
-  onUpdate?: (data: CallbackData) => void;
-  onSelectHour?: (data: CallbackData) => void;
-  onSelectMinute?: (data: CallbackData) => void;
-  onSelectAM?: (data: CallbackData) => void;
-  onSelectPM?: (data: CallbackData) => void;
-  onError?: (data: CallbackData) => void;
+    name: "TimepickerOptions",
+    description:
+      "The grouped options object (v4.0.0+). Each group has its own exported interface: ClockOptions, UIOptions, LabelsOptions, BehaviorOptions, CallbacksOptions, TimezoneOptions, RangeOptions, WheelOptions, ClearBehaviorOptions.",
+    code: `interface TimepickerOptions {
+  clock?: ClockOptions;          // type, increments, disabledTime, currentTime, ...
+  ui?: UIOptions;                // theme, mode, animation, backdrop, inline, ...
+  labels?: LabelsOptions;        // all UI text and accessibility labels
+  behavior?: BehaviorOptions;    // focusTrap, focusInputAfterClose, delayHandler, id
+  callbacks?: CallbacksOptions;  // onConfirm, onCancel, onOpen, onUpdate, ...
+  timezone?: TimezoneOptions;    // timezone plugin config
+  range?: RangeOptions;          // range plugin config
+  wheel?: WheelOptions;          // wheel / compact-wheel mode config
+  clearBehavior?: ClearBehaviorOptions; // clear button behavior
+}
+
+// All group interfaces are exported:
+import type {
+  TimepickerOptions,
+  ClockOptions,
+  UIOptions,
+  LabelsOptions,
+  BehaviorOptions,
+  CallbacksOptions,
+  TimezoneOptions,
+  RangeOptions,
+  WheelOptions,
+  ClearBehaviorOptions,
+} from 'timepicker-ui';`,
+  },
+  {
+    name: "Event data types",
+    description:
+      "Each event/callback has its own payload type. All of them are exported from 'timepicker-ui'.",
+    code: `type OpenEventData = {
+  hour: string;
+  minutes: string;
+  type?: string;                 // 'AM' or 'PM' (12h mode)
+  degreesHours: number | null;
+  degreesMinutes: number | null;
+};
+
+type ConfirmEventData = {
+  hour?: string;
+  minutes?: string;
+  type?: string;
+  autoCommit?: boolean;          // true when triggered by wheel.commitOnScroll
+};
+
+type UpdateEventData = {
+  hour?: string;
+  minutes?: string;
+  type?: string;
+};
+
+type CancelEventData = Record<string, never>;   // empty payload
+
+type ClearEventData = {
+  previousValue: string | null;
+};
+
+type ErrorEventData = {
+  error: string;
+  rejectedHour?: string;
+  rejectedMinute?: string;
+  inputHour?: string | number;
+  inputMinute?: string | number;
+  inputType?: string;
+  inputLength?: string | number;
+};
+
+// Also exported: SelectHourEventData, SelectMinuteEventData,
+// SelectAMEventData, SelectPMEventData, ShowEventData, HideEventData,
+// SwitchViewEventData, TimezoneChangeEventData, RangeConfirmEventData,
+// RangeSwitchEventData, RangeValidationEventData,
+// WheelScrollStartEventData, WheelScrollEndEventData`,
+  },
+  {
+    name: "TimepickerEventMap",
+    description:
+      "Maps every event name to its payload type. picker.on / once / off are typed against this map, so handlers get the correct payload type automatically.",
+    code: `import type { TimepickerEventMap } from 'timepicker-ui';
+
+interface TimepickerEventMap {
+  open: OpenEventData;
+  cancel: CancelEventData;
+  confirm: ConfirmEventData;
+  clear: ClearEventData;
+  show: ShowEventData;
+  hide: HideEventData;
+  update: UpdateEventData;
+  'select:hour': SelectHourEventData;
+  'select:minute': SelectMinuteEventData;
+  'select:am': SelectAMEventData;
+  'select:pm': SelectPMEventData;
+  'switch:view': SwitchViewEventData;
+  'timezone:change': TimezoneChangeEventData;
+  'range:confirm': RangeConfirmEventData;
+  'range:switch': RangeSwitchEventData;
+  'range:validation': RangeValidationEventData;
+  'wheel:scroll:start': WheelScrollStartEventData;
+  'wheel:scroll:end': WheelScrollEndEventData;
+  error: ErrorEventData;
+  // ...plus internal animation/range coordination events
 }`,
   },
   {
-    name: "CallbackData",
-    description: "Data passed to callback functions",
-    code: `interface CallbackData {
-  hour?: string | null;
-  minutes?: string | null;
-  type?: string | null;
-  degreesHours?: number | null;
-  degreesMinutes?: number | null;
-  hourNotAccepted?: string | null;
-  minutesNotAccepted?: string | null;
-  eventType?: any;
-  error?: string;
-  currentHour?: string | number;
-  currentMin?: string | number;
-  currentType?: string;
-  currentLength?: string | number;
+    name: "Inline mode shape (ui.inline)",
+    description:
+      "Inline configuration shape, defined inline on UIOptions (not a separately exported type):",
+    code: `ui: {
+  inline?: {
+    enabled: boolean;
+    containerId: string;
+    showButtons?: boolean;
+    autoUpdate?: boolean;
+  };
 }`,
   },
   {
-    name: "InlineConfig",
-    description: "Configuration for inline mode",
-    code: `interface InlineConfig {
-  enabled: boolean;
-  containerId: string;
-  showButtons?: boolean;
-  autoUpdate?: boolean;
+    name: "Disabled time shape (clock.disabledTime)",
+    description:
+      "Disabled time configuration shape, defined inline on ClockOptions:",
+    code: `clock: {
+  disabledTime?: {
+    hours?: Array<string | number>;
+    minutes?: Array<string | number>;
+    interval?: string | string[];   // e.g. "10:00 AM - 12:00 PM"
+  };
 }`,
   },
   {
-    name: "DisabledTimeConfig",
-    description: "Configuration for disabled time ranges",
-    code: `interface DisabledTimeConfig {
-  hours?: Array<string | number>;
-  minutes?: Array<string | number>;
-  interval?: string | string[];
-}`,
-  },
-  {
-    name: "CurrentTimeConfig",
-    description: "Configuration for current time initialization",
-    code: `interface CurrentTimeConfig {
-  time?: Date;
-  updateInput?: boolean;
-  locales?: string | string[];
-  preventClockType?: boolean;
+    name: "Current time shape (clock.currentTime)",
+    description:
+      "Current time configuration shape, defined inline on ClockOptions:",
+    code: `clock: {
+  currentTime?:
+    | {
+        time?: Date;
+        updateInput?: boolean;
+        locales?: string | string[];
+        preventClockType?: boolean;
+      }
+    | boolean;
 }`,
   },
 ];
 
 const typeAliases = [
   {
-    name: "Theme",
-    description: "Available theme names",
-    code: `type Theme = 
+    name: "ui.theme",
+    description:
+      "Available theme names. The union is defined inline on UIOptions (the library does not export a separate Theme alias).",
+    code: `theme?:
   | 'basic'
   | 'crane'
   | 'crane-straight'
-  | 'm3-green'
   | 'm2'
+  | 'm3-green'
   | 'dark'
   | 'glassmorphic'
   | 'pastel'
   | 'ai'
   | 'cyberpunk'
-  | 'custom';`,
+  | 'blueprint'
+  | 'blueprint-dark';`,
   },
   {
-    name: "ClockType",
-    description: "Clock format types",
-    code: `type ClockType = '12h' | '24h';`,
+    name: "clock.type",
+    description:
+      "Clock format, defined inline on ClockOptions (no exported ClockType alias).",
+    code: `type?: '12h' | '24h';`,
   },
 ];
 
@@ -153,7 +207,7 @@ export default function TypeScriptPage() {
 
 // Types are automatically available
 import { TimepickerUI } from 'timepicker-ui';
-import type { OptionTypes, CallbackData } from 'timepicker-ui';`}
+import type { TimepickerOptions, ConfirmEventData } from 'timepicker-ui';`}
           language="typescript"
         />
       </Section>
@@ -175,7 +229,7 @@ import type { OptionTypes, CallbackData } from 'timepicker-ui';`}
         </div>
       </Section>
 
-      <Section icon={FileCode} title="Type Aliases">
+      <Section icon={FileCode} title="Inline Unions">
         <div className="space-y-6">
           {typeAliases.map((item) => (
             <div
@@ -204,13 +258,13 @@ import type { OptionTypes, CallbackData } from 'timepicker-ui';`}
             </h3>
             <CodeBlock
               code={`import { TimepickerUI } from 'timepicker-ui';
-import type { OptionTypes, CallbackData } from 'timepicker-ui';
+import type { TimepickerOptions, ConfirmEventData } from 'timepicker-ui';
 
-const options: OptionTypes = {
+const options: TimepickerOptions = {
   ui: { theme: 'dark' },
   clock: { type: '24h' },
   callbacks: {
-    onConfirm: (data: CallbackData) => {
+    onConfirm: (data: ConfirmEventData) => {
       console.log(\`Time: \${data.hour}:\${data.minutes}\`);
     }
   }
@@ -227,12 +281,47 @@ if (input) {
 
           <div>
             <h3 className="text-lg font-semibold mb-4 text-foreground">
+              Typed Event Subscriptions
+            </h3>
+            <CodeBlock
+              code={`import { TimepickerUI } from 'timepicker-ui';
+
+const picker = new TimepickerUI('#timepicker');
+picker.create();
+
+// picker.on is typed against TimepickerEventMap -
+// the handler payload type is inferred from the event name
+picker.on('confirm', (data) => {
+  // data: ConfirmEventData
+  console.log(data.hour, data.minutes, data.type, data.autoCommit);
+});
+
+picker.on('update', (data) => {
+  // data: UpdateEventData
+  console.log(data.hour, data.minutes, data.type);
+});
+
+picker.on('error', (data) => {
+  // data: ErrorEventData
+  console.error(data.error, data.rejectedHour, data.rejectedMinute);
+});
+
+picker.once('open', (data) => {
+  // data: OpenEventData
+  console.log(data.degreesHours, data.degreesMinutes);
+});`}
+              language="typescript"
+            />
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-foreground">
               React with TypeScript
             </h3>
             <CodeBlock
               code={`import { useEffect, useRef } from 'react';
 import { TimepickerUI } from 'timepicker-ui';
-import type { OptionTypes } from 'timepicker-ui';
+import type { TimepickerOptions } from 'timepicker-ui';
 
 interface TimePickerProps {
   onTimeSelect?: (time: string) => void;
@@ -245,7 +334,7 @@ export function TimePicker({ onTimeSelect, theme = 'basic' }: TimePickerProps) {
   useEffect(() => {
     if (!inputRef.current) return;
 
-    const options: OptionTypes = {
+    const options: TimepickerOptions = {
       ui: { theme },
       callbacks: {
         onConfirm: (data) => {
@@ -274,18 +363,16 @@ export function TimePicker({ onTimeSelect, theme = 'basic' }: TimePickerProps) {
               Error Handling
             </h3>
             <CodeBlock
-              code={`import type { CallbackData } from 'timepicker-ui';
+              code={`import type { ConfirmEventData, ErrorEventData } from 'timepicker-ui';
 import { TimepickerUI } from 'timepicker-ui';
 
 const picker = new TimepickerUI('#timepicker', {
   callbacks: {
-    onError: (data: CallbackData) => {
-      if (data.error) {
-        console.error('Timepicker error:', data.error);
-        alert(\`Invalid time format: \${data.error}\`);
-      }
+    onError: (data: ErrorEventData) => {
+      console.error('Timepicker error:', data.error);
+      alert(\`Invalid time format: \${data.error}\`);
     },
-    onConfirm: (data: CallbackData) => {
+    onConfirm: (data: ConfirmEventData) => {
       console.log('Time confirmed:', \`\${data.hour}:\${data.minutes}\`);
     }
   }
@@ -299,12 +386,11 @@ const picker = new TimepickerUI('#timepicker', {
               Extending Types
             </h3>
             <CodeBlock
-              code={`import type { OptionTypes, CallbackData } from 'timepicker-ui';
+              code={`import type { TimepickerOptions, ConfirmEventData } from 'timepicker-ui';
 import { TimepickerUI } from 'timepicker-ui';
 
 // Extend options with custom properties
-interface CustomTimepickerOptions extends OptionTypes {
-  customProperty?: string;
+interface CustomTimepickerOptions extends TimepickerOptions {
   analyticsEnabled?: boolean;
 }
 
@@ -317,25 +403,26 @@ class CustomTimepicker {
     input: HTMLInputElement,
     options: CustomTimepickerOptions
   ) {
-    this.analyticsEnabled = options.analyticsEnabled ?? false;
-    
-    const pickerOptions: OptionTypes = {
-      ...options,
+    const { analyticsEnabled, ...pickerOptions } = options;
+    this.analyticsEnabled = analyticsEnabled ?? false;
+
+    const finalOptions: TimepickerOptions = {
+      ...pickerOptions,
       callbacks: {
-        ...options.callbacks,
-        onConfirm: (data: CallbackData) => {
+        ...pickerOptions.callbacks,
+        onConfirm: (data: ConfirmEventData) => {
           if (this.analyticsEnabled) {
             this.trackEvent('time_confirmed', data);
           }
-          options.callbacks?.onConfirm?.(data);
+          pickerOptions.callbacks?.onConfirm?.(data);
         }
       }
     };
 
-    this.picker = new TimepickerUI(input, pickerOptions);
+    this.picker = new TimepickerUI(input, finalOptions);
   }
 
-  private trackEvent(event: string, data: CallbackData) {
+  private trackEvent(event: string, data: ConfirmEventData) {
     console.log('Analytics:', event, data);
   }
 

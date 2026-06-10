@@ -66,8 +66,13 @@ pnpm add timepicker-ui`}
           For quick prototyping, use the CDN version:
         </p>
         <CodeBlock
-          code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker-ui@3.2.0/dist/css/main.css">
-<script src="https://cdn.jsdelivr.net/npm/timepicker-ui@3.2.0/dist/index.js"></script>`}
+          code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker-ui@4.4.0/dist/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/timepicker-ui@4.4.0/dist/index.umd.js"></script>
+<script>
+  // The UMD build exposes the class as the global TimepickerUI
+  const picker = new TimepickerUI('#timepicker');
+  picker.create();
+</script>`}
           language="html"
         />
       </Section>

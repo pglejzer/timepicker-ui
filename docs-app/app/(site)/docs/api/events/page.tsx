@@ -48,21 +48,40 @@ const availableEvents = [
   console.log('Hour:', data.hour);
   console.log('Minutes:', data.minutes);
   console.log('Type:', data.type); // 'AM' or 'PM' (12h mode)
+  console.log('Auto commit:', data.autoCommit);
+  // autoCommit is true when the confirm was triggered
+  // by wheel.commitOnScroll instead of the OK button
 });`,
   },
   {
     name: "cancel",
-    description: "Triggered when user cancels or closes picker.",
-    code: `picker.on('cancel', (data) => {
+    description:
+      "Triggered when user cancels or closes picker. The payload is empty.",
+    code: `picker.on('cancel', () => {
   console.log('Cancelled');
-  console.log('Not accepted:', data.hourNotAccepted, data.minutesNotAccepted);
 });`,
   },
   {
     name: "open",
     description: "Triggered when picker opens.",
-    code: `picker.on('open', () => {
+    code: `picker.on('open', (data) => {
   console.log('Picker opened');
+  console.log(data.hour, data.minutes, data.type);
+  console.log(data.degreesHours, data.degreesMinutes);
+});`,
+  },
+  {
+    name: "show",
+    description: "Triggered when the modal becomes visible. Empty payload.",
+    code: `picker.on('show', () => {
+  console.log('Modal shown');
+});`,
+  },
+  {
+    name: "hide",
+    description: "Triggered when the modal is hidden. Empty payload.",
+    code: `picker.on('hide', () => {
+  console.log('Modal hidden');
 });`,
   },
   {
@@ -70,7 +89,7 @@ const availableEvents = [
     description: "Triggered when time value changes during interaction.",
     code: `picker.on('update', (data) => {
   console.log('Time updated:', data.hour, data.minutes);
-  console.log('Degrees:', data.degreesHours, data.degreesMinutes);
+  console.log('Type:', data.type); // 'AM' or 'PM' (12h mode)
 });`,
   },
   {
@@ -102,11 +121,21 @@ const availableEvents = [
 });`,
   },
   {
+    name: "switch:view",
+    description:
+      "Triggered when switching between clock and keyboard view. Empty payload.",
+    code: `picker.on('switch:view', () => {
+  console.log('View switched');
+});`,
+  },
+  {
     name: "error",
     description: "Triggered when validation error occurs.",
     code: `picker.on('error', (data) => {
   console.error('Error:', data.error);
-  console.log('Current values:', data.currentHour, data.currentMin);
+  console.log('Rejected:', data.rejectedHour, data.rejectedMinute);
+  console.log('Input values:', data.inputHour, data.inputMinute);
+  console.log('Input type/length:', data.inputType, data.inputLength);
 });`,
   },
   {
@@ -115,6 +144,48 @@ const availableEvents = [
     code: `picker.on('clear', (data) => {
   console.log('Time cleared. Previous value:', data.previousValue);
 });`,
+  },
+  {
+    name: "timezone:change",
+    description:
+      "Triggered when the timezone is changed (timezone plugin only).",
+    code: `picker.on('timezone:change', (data) => {
+  console.log('Timezone:', data.timezone);
+});`,
+  },
+  {
+    name: "range:confirm",
+    description: "Triggered when a time range is confirmed (range mode only).",
+    code: `picker.on('range:confirm', (data) => {
+  console.log('From:', data.from, 'To:', data.to);
+  console.log('Duration (minutes):', data.duration);
+});`,
+  },
+  {
+    name: "range:switch",
+    description:
+      "Triggered when switching between the from/to segments (range mode only).",
+    code: `picker.on('range:switch', (data) => {
+  console.log('Active segment:', data.active); // 'from' | 'to'
+  console.log('Disabled time:', data.disabledTime);
+});`,
+  },
+  {
+    name: "range:validation",
+    description:
+      "Triggered when the range duration is validated (range mode only).",
+    code: `picker.on('range:validation', (data) => {
+  console.log('Valid:', data.valid, 'Duration:', data.duration);
+  console.log('Limits:', data.minDuration, data.maxDuration);
+});`,
+  },
+  {
+    name: "animation:clock / animation:start / animation:end",
+    description:
+      "Animation coordination events fired around open/close and clock transitions. Empty payloads.",
+    code: `picker.on('animation:start', () => console.log('Animation started'));
+picker.on('animation:end', () => console.log('Animation finished'));
+picker.on('animation:clock', () => console.log('Clock animation'));`,
   },
   {
     name: "wheel:scroll:start",
@@ -189,6 +260,7 @@ const callbacks = [
   callbacks: {
     onSelectHour: (data) => {
       console.log('Hour:', data.hour);
+    }
   }
 });`,
   },
@@ -196,8 +268,10 @@ const callbacks = [
     name: "onSelectMinute",
     description: "Triggered when minute is selected.",
     code: `new TimepickerUI(input, {
-  onSelectMinute: (data) => {
-    console.log('Minute:', data.minutes);
+  callbacks: {
+    onSelectMinute: (data) => {
+      console.log('Minute:', data.minutes);
+    }
   }
 });`,
   },
@@ -205,8 +279,10 @@ const callbacks = [
     name: "onSelectAM",
     description: "Triggered when AM is selected.",
     code: `new TimepickerUI(input, {
-  onSelectAM: (data) => {
-    console.log('AM selected');
+  callbacks: {
+    onSelectAM: () => {
+      console.log('AM selected');
+    }
   }
 });`,
   },
@@ -214,8 +290,10 @@ const callbacks = [
     name: "onSelectPM",
     description: "Triggered when PM is selected.",
     code: `new TimepickerUI(input, {
-  onSelectPM: (data) => {
-    console.log('PM selected');
+  callbacks: {
+    onSelectPM: () => {
+      console.log('PM selected');
+    }
   }
 });`,
   },
@@ -223,8 +301,55 @@ const callbacks = [
     name: "onError",
     description: "Triggered on validation error.",
     code: `new TimepickerUI(input, {
-  onError: (data) => {
-    console.error('Error:', data.error);
+  callbacks: {
+    onError: (data) => {
+      console.error('Error:', data.error);
+    }
+  }
+});`,
+  },
+  {
+    name: "onTimezoneChange",
+    description: "Triggered when timezone is changed (timezone plugin only).",
+    code: `new TimepickerUI(input, {
+  callbacks: {
+    onTimezoneChange: (data) => {
+      console.log('Timezone:', data.timezone);
+    }
+  }
+});`,
+  },
+  {
+    name: "onRangeConfirm",
+    description: "Triggered when a range is confirmed (range mode only).",
+    code: `new TimepickerUI(input, {
+  callbacks: {
+    onRangeConfirm: (data) => {
+      console.log('Range:', data.from, '-', data.to, data.duration);
+    }
+  }
+});`,
+  },
+  {
+    name: "onRangeSwitch",
+    description:
+      "Triggered when switching between from/to segments (range mode only).",
+    code: `new TimepickerUI(input, {
+  callbacks: {
+    onRangeSwitch: (data) => {
+      console.log('Active segment:', data.active);
+    }
+  }
+});`,
+  },
+  {
+    name: "onRangeValidation",
+    description: "Triggered on range validation (range mode only).",
+    code: `new TimepickerUI(input, {
+  callbacks: {
+    onRangeValidation: (data) => {
+      console.log('Valid:', data.valid, 'Duration:', data.duration);
+    }
   }
 });`,
   },
@@ -271,7 +396,11 @@ export default function EventsPage() {
       <Section icon={Bell} title="Available Events">
         <p className="text-muted-foreground mb-6">
           All events you can subscribe to. These events work in both{" "}
-          <strong>clock</strong> (default) and <strong>wheel</strong> mode.
+          <strong>clock</strong> (default) and <strong>wheel</strong> mode. A
+          few additional events (<code className="text-sm">range:get-disabled-time</code>,{" "}
+          <code className="text-sm">range:update-disabled</code>,{" "}
+          <code className="text-sm">range:minute:commit</code>) are internal
+          coordination events and not part of the public contract.
         </p>
         <div className="space-y-8">
           {availableEvents.map((event) => (
@@ -338,24 +467,53 @@ picker.on('confirm', (data) => {
 
       <Section icon={Database} title="Event Data">
         <p className="text-muted-foreground mb-4">
-          Event callbacks receive data object with the following structure:
+          Every event has its own payload type, exported from{" "}
+          <code className="text-sm">timepicker-ui</code>. The most important
+          ones:
         </p>
         <CodeBlock
-          code={`interface CallbackData {
-  hour?: string | null;
-  minutes?: string | null;
-  type?: string | null;          // 'AM' or 'PM' (12h mode)
-  degreesHours?: number | null;
-  degreesMinutes?: number | null;
-  hourNotAccepted?: string | null;     // For cancel events
-  minutesNotAccepted?: string | null;  // For cancel events
-  eventType?: any;               // Mouse/touch event type
-  error?: string;                // Error message
-  currentHour?: string | number;
-  currentMin?: string | number;
-  currentType?: string;
-  currentLength?: string | number;
-}`}
+          code={`type OpenEventData = {
+  hour: string;
+  minutes: string;
+  type?: string;                 // 'AM' or 'PM' (12h mode)
+  degreesHours: number | null;
+  degreesMinutes: number | null;
+};
+
+type ConfirmEventData = {
+  hour?: string;
+  minutes?: string;
+  type?: string;
+  autoCommit?: boolean;          // true when triggered by wheel.commitOnScroll
+};
+
+type UpdateEventData = {
+  hour?: string;
+  minutes?: string;
+  type?: string;
+};
+
+type CancelEventData = Record<string, never>;  // empty payload
+
+type ClearEventData = {
+  previousValue: string | null;
+};
+
+type ErrorEventData = {
+  error: string;
+  rejectedHour?: string;
+  rejectedMinute?: string;
+  inputHour?: string | number;
+  inputMinute?: string | number;
+  inputType?: string;
+  inputLength?: string | number;
+};
+
+// Also exported: SelectHourEventData, SelectMinuteEventData,
+// SelectAMEventData, SelectPMEventData, ShowEventData, HideEventData,
+// SwitchViewEventData, TimezoneChangeEventData, RangeConfirmEventData,
+// RangeSwitchEventData, RangeValidationEventData,
+// WheelScrollStartEventData, WheelScrollEndEventData`}
           language="typescript"
         />
       </Section>
@@ -380,9 +538,8 @@ picker.on('confirm', (data) => {
   });
 });
 
-picker.on('cancel', (data) => {
+picker.on('cancel', () => {
   console.log('User cancelled');
-  console.log('Not accepted:', data.hourNotAccepted, data.minutesNotAccepted);
 });
 
 picker.on('update', (data) => {

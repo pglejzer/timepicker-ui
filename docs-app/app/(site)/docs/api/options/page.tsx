@@ -11,6 +11,8 @@ import {
   Sliders,
   Bell,
   Trash2,
+  Globe,
+  ArrowLeftRight,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -144,7 +146,7 @@ const uiOptions = [
   {
     name: "clearButton",
     type: "boolean",
-    default: "true",
+    default: "false",
     description: "Show clear button to reset time selection",
   },
   {
@@ -247,6 +249,164 @@ const labelsOptions = [
     default: '"Clear"',
     description: "Text for clear button",
   },
+  {
+    name: "hourLabel",
+    type: "string",
+    default: '"Hour"',
+    description: "Accessible label for the hour spinbutton",
+  },
+  {
+    name: "minuteLabel",
+    type: "string",
+    default: '"Minute"',
+    description: "Accessible label for the minute spinbutton",
+  },
+  {
+    name: "clockLabel",
+    type: "string",
+    default: '"Clock"',
+    description: "Accessible label for the analog clock face group",
+  },
+  {
+    name: "periodLabel",
+    type: "string",
+    default: '"Period"',
+    description: "Accessible label for the AM/PM period group",
+  },
+  {
+    name: "timeLabel",
+    type: "string",
+    default: '"Time"',
+    description: "Accessible label for the time wrapper group / tips",
+  },
+  {
+    name: "format24Label",
+    type: "string",
+    default: '"24-hour"',
+    description: "Accessible label for the 24-hour tips group",
+  },
+  {
+    name: "rangeSelectionLabel",
+    type: "string",
+    default: '"Range selection"',
+    description: "Accessible label for the range selection tablist",
+  },
+  {
+    name: "switchToKeyboardLabel",
+    type: "string",
+    default: '"Switch to keyboard input"',
+    description: "Accessible label for the keyboard-input switch icon",
+  },
+  {
+    name: "switchToClockLabel",
+    type: "string",
+    default: '"Switch to clock"',
+    description: "Accessible label for the clock-view switch icon",
+  },
+  {
+    name: "toggleLabel",
+    type: "string",
+    default: '"Toggle"',
+    description: "Accessible label for the generic view toggle button",
+  },
+  {
+    name: "timezoneSelectorLabel",
+    type: "string",
+    default: '"Timezone"',
+    description: "Accessible label for the timezone selector",
+  },
+  {
+    name: "announceHour",
+    type: "string",
+    default: '"Hour"',
+    description: "Screen-reader announcement prefix for the selected hour",
+  },
+  {
+    name: "announceMinute",
+    type: "string",
+    default: '"Minutes"',
+    description: "Screen-reader announcement prefix for the selected minutes",
+  },
+  {
+    name: "announceAmSelected",
+    type: "string",
+    default: '"AM selected"',
+    description: "Screen-reader announcement when AM is selected",
+  },
+  {
+    name: "announcePmSelected",
+    type: "string",
+    default: '"PM selected"',
+    description: "Screen-reader announcement when PM is selected",
+  },
+  {
+    name: "invalidTimeFormat",
+    type: "string",
+    default: '"Invalid time format"',
+    description: "Error/announcement text for an invalid time format",
+  },
+];
+
+const timezoneOptions = [
+  {
+    name: "enabled",
+    type: "boolean",
+    default: "false",
+    description: "Enable timezone selector UI",
+  },
+  {
+    name: "default",
+    type: "string",
+    default: "undefined",
+    description:
+      'Default timezone ID (e.g. "America/New_York"); browser timezone if not set',
+  },
+  {
+    name: "whitelist",
+    type: "readonly string[]",
+    default: "undefined",
+    description:
+      "Whitelist of allowed timezone IDs; curated list of common timezones if not set",
+  },
+  {
+    name: "label",
+    type: "string",
+    default: '"Timezone"',
+    description: "Label for the timezone selector",
+  },
+];
+
+const rangeOptions = [
+  {
+    name: "enabled",
+    type: "boolean",
+    default: "false",
+    description: "Enable range mode (from-to selection)",
+  },
+  {
+    name: "minDuration",
+    type: "number",
+    default: "undefined",
+    description: "Minimum duration in minutes",
+  },
+  {
+    name: "maxDuration",
+    type: "number",
+    default: "undefined",
+    description: "Maximum duration in minutes",
+  },
+  {
+    name: "fromLabel",
+    type: "string",
+    default: '"From"',
+    description: 'Label for the "from" segment',
+  },
+  {
+    name: "toLabel",
+    type: "string",
+    default: '"To"',
+    description: 'Label for the "to" segment',
+  },
 ];
 
 const behaviorOptions = [
@@ -279,57 +439,82 @@ const behaviorOptions = [
 const callbacksOptions = [
   {
     name: "onConfirm",
-    type: "(data: CallbackData) => void",
+    type: "(data: ConfirmEventData) => void",
     default: "undefined",
     description: "Triggered when user confirms time selection",
   },
   {
     name: "onCancel",
-    type: "(data: CallbackData) => void",
+    type: "(data: CancelEventData) => void",
     default: "undefined",
     description: "Triggered when user cancels",
   },
   {
     name: "onOpen",
-    type: "() => void",
+    type: "(data: OpenEventData) => void",
     default: "undefined",
     description: "Triggered when picker opens",
   },
   {
     name: "onUpdate",
-    type: "(data: CallbackData) => void",
+    type: "(data: UpdateEventData) => void",
     default: "undefined",
     description: "Triggered during time changes",
   },
   {
     name: "onSelectHour",
-    type: "(data: CallbackData) => void",
+    type: "(data: SelectHourEventData) => void",
     default: "undefined",
     description: "Triggered when hour is selected",
   },
   {
     name: "onSelectMinute",
-    type: "(data: CallbackData) => void",
+    type: "(data: SelectMinuteEventData) => void",
     default: "undefined",
     description: "Triggered when minute is selected",
   },
   {
     name: "onSelectAM",
-    type: "() => void",
+    type: "(data: SelectAMEventData) => void",
     default: "undefined",
     description: "Triggered when AM is selected",
   },
   {
     name: "onSelectPM",
-    type: "() => void",
+    type: "(data: SelectPMEventData) => void",
     default: "undefined",
     description: "Triggered when PM is selected",
   },
   {
     name: "onError",
-    type: "(data: CallbackData) => void",
+    type: "(data: ErrorEventData) => void",
     default: "undefined",
     description: "Triggered when validation error occurs",
+  },
+  {
+    name: "onTimezoneChange",
+    type: "(data: TimezoneChangeEventData) => void",
+    default: "undefined",
+    description: "Triggered when timezone is changed (timezone plugin only)",
+  },
+  {
+    name: "onRangeConfirm",
+    type: "(data: RangeConfirmEventData) => void",
+    default: "undefined",
+    description: "Triggered when a range is confirmed (range mode only)",
+  },
+  {
+    name: "onRangeSwitch",
+    type: "(data: RangeSwitchEventData) => void",
+    default: "undefined",
+    description:
+      "Triggered when switching between from/to segments (range mode only)",
+  },
+  {
+    name: "onRangeValidation",
+    type: "(data: RangeValidationEventData) => void",
+    default: "undefined",
+    description: "Triggered on range validation (range mode only)",
   },
   {
     name: "onClear",
@@ -428,11 +613,14 @@ export default function OptionsPage() {
 
       <InfoBox title="Important notice" variant="emerald" className="mb-8">
         <strong>v4.0.0 Breaking Change:</strong> Options are now organized into
-        5 logical groups:
+        9 logical groups:
         <code className="mx-1">clock</code>, <code className="mx-1">ui</code>,{" "}
         <code className="mx-1">labels</code>,
-        <code className="mx-1">behavior</code>, and{" "}
-        <code className="mx-1">callbacks</code>. See the{" "}
+        <code className="mx-1">behavior</code>,{" "}
+        <code className="mx-1">callbacks</code>,{" "}
+        <code className="mx-1">timezone</code>,{" "}
+        <code className="mx-1">range</code>, <code className="mx-1">wheel</code>
+        , and <code className="mx-1">clearBehavior</code>. See the{" "}
         <Link href="/docs/changelog" className="text-primary underline">
           changelog
         </Link>{" "}
@@ -463,7 +651,10 @@ export default function OptionsPage() {
 
       <Section icon={Type} title="Labels Options">
         <p className="text-muted-foreground mb-4">
-          Customize all text labels for localization:
+          Customize all text labels for localization. The accessibility labels
+          (from <code className="text-primary">hourLabel</code> to{" "}
+          <code className="text-primary">invalidTimeFormat</code>) are new in
+          v4.4.0:
         </p>
         <OptionsTable options={labelsOptions} />
       </Section>
@@ -480,6 +671,22 @@ export default function OptionsPage() {
           Event handlers and lifecycle callbacks:
         </p>
         <OptionsTable options={callbacksOptions} />
+      </Section>
+
+      <Section icon={Globe} title="Timezone Options">
+        <p className="text-muted-foreground mb-4">
+          Optional timezone selector (requires the timezone plugin) via{" "}
+          <code className="text-primary">timezone</code>:
+        </p>
+        <OptionsTable options={timezoneOptions} />
+      </Section>
+
+      <Section icon={ArrowLeftRight} title="Range Options">
+        <p className="text-muted-foreground mb-4">
+          Optional from-to range selection (requires the range plugin) via{" "}
+          <code className="text-primary">range</code>:
+        </p>
+        <OptionsTable options={rangeOptions} />
       </Section>
 
       <Section icon={Trash2} title="Clear Behavior Options">
@@ -570,9 +777,9 @@ export default function OptionsPage() {
           code={`const picker = new TimepickerUI(input, {
   clock: {
     disabledTime: {
-      hours: [1, 3, 5, 8],              // Disable specific hours
-      minutes: [15, 30, 45],            // Disable specific minutes
-      interval: 15,                     // Or use interval shorthand (15, 30, etc.)
+      hours: [1, 3, 5, 8],                    // Disable specific hours
+      minutes: [15, 30, 45],                  // Disable specific minutes
+      interval: '10:00 AM - 12:00 PM',        // Or disable a whole time interval (string or string[])
     }
   },
   wheel: {
@@ -616,7 +823,7 @@ export default function OptionsPage() {
     autoSwitchToMinutes: true,
     disabledTime: {
       hours: [0, 1, 2, 3],
-      interval: 15
+      interval: '10:00 - 12:00'
     },
     currentTime: {
       updateInput: true,

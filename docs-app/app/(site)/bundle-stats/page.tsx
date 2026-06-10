@@ -137,7 +137,7 @@ export default function BundleStatsPage() {
     <main id="main-content" className="flex flex-col">
       {/* Header */}
       <section className="relative overflow-hidden border-b border-border">
-        <div className="blueprint pointer-events-none absolute inset-0 -z-10 opacity-40" />
+        <div className="bp-grid pointer-events-none absolute inset-0 -z-10 opacity-40" />
         <div className="container mx-auto px-4 py-14 sm:py-16 md:px-6">
           <p className="eyebrow reveal">Telemetry · gzip + brotli</p>
           <h1
