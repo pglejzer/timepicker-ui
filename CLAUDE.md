@@ -26,7 +26,7 @@ This project uses the maister plugin for structured development workflows. When 
 
 ## What This Is
 
-`timepicker-ui` — a zero-dependency, framework-agnostic time picker library (v4.3.0). Supports analog clock, scroll wheel, and compact-wheel UI modes. SSR-safe. Published to npm as `timepicker-ui`. Three optional plugins (range, timezone, wheel) are tree-shaken out unless imported. 10 built-in CSS themes.
+`timepicker-ui` — a zero-dependency, framework-agnostic time picker library (v4.4.0). Supports analog clock, scroll wheel, and compact-wheel UI modes. SSR-safe. Published to npm as `timepicker-ui`. Three optional plugins (range, timezone, wheel) are tree-shaken out unless imported. 12 built-in CSS themes.
 
 ## Repository Layout
 
@@ -201,17 +201,17 @@ Options are merged via `mergeOptions()` in `app/src/utils/options/`.
 
 1. **tsup** (`app/tsup.config.ts`) — compiles TypeScript → ESM (`.js`) + CJS (`.cjs`), minified, target ES2022. Four entry points: `index`, `plugins/range`, `plugins/timezone`, `plugins/wheel`. Output goes to `../dist/`. SVG files are loaded as text strings.
 2. **rollup** (`app/rollup.config.js`) — two jobs:
-   - SCSS → CSS: compiles `app/src/styles/` to `dist/css/` (index.css, main.css, 9 theme files)
+   - SCSS → CSS: compiles `app/src/styles/` to `dist/css/` (index.css, main.css, 11 theme files)
    - TypeScript → `.d.ts`: generates declaration bundles via `rollup-plugin-dts`
 3. **webpack** (`app/webpack.config.js`) — only for the local dev server (`npm run start`), not used in production build.
 
 ### CSS and theming
 
 - `main.css` — core styles required for all modes
-- `index.css` — includes main.css + default theme
+- `index.css` — includes main.css + all themes (largest bundle)
 - Theme files are standalone: `theme-dark.css`, `theme-crane.css`, `theme-m3-green.css`, etc.
 - SCSS source: `app/src/styles/` with variables in `variables.scss`, mixins in `_mixins.scss`, effects in `_effects.scss`
-- Available themes: basic, crane, crane-straight, m2, m3-green, dark, glassmorphic, pastel, ai, cyberpunk
+- Available themes: basic, crane, crane-straight, m2, m3-green, dark, glassmorphic, pastel, ai, cyberpunk, blueprint, blueprint-dark
 - CSS class prefix: `tp-ui-` (e.g., `tp-ui-wrapper`, `tp-ui-clock-face`, `tp-ui-range-from`)
 
 ### DOM structure

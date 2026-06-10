@@ -5,9 +5,9 @@ the root `CLAUDE.md` (full repo map + commands). When this file and `CLAUDE.md`
 disagree, `CLAUDE.md` wins - flag the drift instead of silently following one.
 
 `timepicker-ui` is a **zero-dependency, framework-agnostic, SSR-safe** time picker
-(v4.3.0, published to npm). Analog clock, scroll wheel, and compact-wheel UI modes.
+(v4.4.0, published to npm). Analog clock, scroll wheel, and compact-wheel UI modes.
 Three optional plugins (range, timezone, wheel) tree-shaken out unless imported.
-10 built-in CSS themes. **All source/build/test work happens in `app/`.**
+12 built-in CSS themes. **All source/build/test work happens in `app/`.**
 
 ## 1. Composition pattern - TimepickerUI
 
