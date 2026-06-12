@@ -22,18 +22,19 @@ Default production URL: `https://timepicker-ui.vercel.app` (use unless the user 
 
 ### Phase 1 — Audit (read-only)
 Dispatch the `seo-optimizer` subagent (Task tool, `subagent_type: seo-optimizer`) in **audit
-mode**. Brief it with: the production URL, the focus area (if any), and a reminder that the
-known gaps as of init are — no `sitemap.ts` / `robots.ts` / `manifest.ts`, ~62 of ~90 routes
-missing metadata, and root metadata lacking `metadataBase` / canonical / Twitter / OG image /
-JSON-LD. Ask it to return a prioritized, file-level change plan grouped into:
+mode**. Brief it with the production URL and the focus area (if any), and tell it to discover
+the current SEO state for itself rather than trusting any baseline — what was missing last run
+may already be fixed. Ask it to return a prioritized, file-level change plan grouped into:
 1. Technical files (sitemap / robots / manifest / metadataBase)
 2. Per-page metadata (the missing routes)
 3. Root + Open Graph / Twitter (+ OG image)
 4. JSON-LD structured data
 5. On-page / performance flags
 
-The subagent may use WebSearch/WebFetch to confirm current Next 16 APIs and keyword/competitor
-positioning. It makes NO edits in this phase.
+The subagent MUST first derive today's real date (`date +%Y-%m-%d`) and web-search the current
+SEO best practices for that date's year — Next.js APIs, Google ranking/AI-slop guidance, OG and
+JSON-LD specs — rather than optimizing from memory. Live sources win over anything hardcoded.
+It makes NO edits in this phase.
 
 ### Phase 2 — Present & approve (gate)
 Relay the audit plan to the user concisely (counts + the concrete titles/descriptions and
@@ -44,7 +45,8 @@ it matters, which items) to apply. This is a mandatory gate — do not skip it u
 ### Phase 3 — Apply
 Dispatch the `seo-optimizer` subagent again in **apply mode** with the exact approved list
 (files + the decided titles/descriptions/structured-data). It implements the changes under
-`docs-app/` using real Next 16 typed APIs, keeping titles/descriptions unique and on-keyword.
+`docs-app/` using real Next 16 typed APIs, keeping titles/descriptions unique, on-keyword, and
+written like a human — short, specific, no AI slop, and no long dashes (`—`/`–`) in the copy.
 
 ### Phase 4 — Verify & report
 - Offer to run `cd docs-app && npm run build` to confirm the site still builds (don't assume —
@@ -58,6 +60,10 @@ Dispatch the `seo-optimizer` subagent again in **apply mode** with the exact app
 ## Guardrails
 - The subagent edits ONLY `docs-app/`; it never touches the library in `app/` or `dist/`.
 - Don't regress existing good metadata — extend it.
+- Best practices are re-derived live every run from today's real date, never from memory or a
+  hardcoded year. A run today and a run months from now both research the *current* guidance.
+- The generated SEO copy is human, short, and slop-free: no filler openers or empty
+  intensifiers, no keyword stuffing, and no long dashes (`—`/`–`) — use short hyphens.
 - Keep this skill and the agent file in CRLF; for `docs-app/` source files, match docs-app's
   own conventions.
 - One run optimizes; it does not redesign the site. Visual/content rewrites beyond SEO copy

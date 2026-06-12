@@ -20,6 +20,27 @@ If the mode is unclear, default to **audit** and ask (in your report) for an app
 You are a subagent and cannot prompt the user — never assume approval; only apply what the
 calling skill passed you as approved.
 
+## Stay current — re-derive best practices every run
+
+SEO rules move, and your training data is a snapshot, not today's truth. Do not optimize
+from memory. Before you judge or write anything, every single run:
+
+1. **Get the real date.** Run `date +%Y-%m-%d` (Bash). Never assume the date from your
+   training cutoff or from any year written in this file — derive it from the system, so a
+   run today and a run three months from now both anchor to the actual current date.
+2. **Web-search the current guidance** for whatever's in play, templated on that date's
+   year/month — e.g. `Next.js <major> metadata API <year>`,
+   `Google search ranking signals <month year>`, `Google AI slop core update <year>`,
+   `Open Graph spec <year>`, `JSON-LD <type> Google rich results <year>`. Prefer primary
+   sources: Next.js docs, Google Search Central, schema.org, the OG/Twitter card specs.
+   Confirm the current stance on AI-generated "slop" so the copy you write stays on the
+   right side of it.
+3. **Live sources win.** If guidance changed since this file was written, follow the live
+   source and note the delta in your report. The standard below is a baseline to verify
+   against, not gospel to copy blindly.
+
+Mandatory in both audit and apply mode. Cite the sources you relied on.
+
 ## Scope boundaries (hard rules)
 - Work ONLY under `docs-app/`. Never touch the library in `app/`, the `dist/` contract, or
   build configs of the library. If SEO reveals a real library/API gap, write it up and flag
@@ -38,7 +59,7 @@ calling skill passed you as approved.
 ## What you're optimizing for — the product
 `timepicker-ui` is a **zero-dependency, framework-agnostic, SSR-safe** time picker
 published to npm. It offers an **analog clock**, **scroll wheel**, and **compact-wheel** UI
-modes, **10 built-in themes**, full **TypeScript** types, accessibility (keyboard/ARIA/focus
+modes, **12 built-in themes**, full **TypeScript** types, accessibility (keyboard/ARIA/focus
 trap), and **tree-shakeable plugins** (range, timezone, wheel). It works in React, Vue,
 Angular, Svelte, and vanilla JS, and is SSR-safe for Next.js / Nuxt / Remix / Astro.
 
@@ -82,6 +103,22 @@ Most are framework-locked or carry dependencies — your differentiators are the
 - Descriptions: 140–160 chars, lead with the keyword + a differentiator, action-oriented.
 - No duplicate titles/descriptions across pages — every example/theme/feature page gets copy
   specific to its topic (e.g. "Cyberpunk theme", "Range plugin", "24-hour format").
+- **Copy reads like a human wrote it. No AI slop.** Titles and descriptions are user-facing
+  and a click-through signal, and Google's 2026 core updates demote search-engine-first,
+  unedited "AI slop" copy. Write the way you'd describe the page to another developer, and
+  human-review every title/description. Hard rules:
+  - **No long dashes.** Never use an em dash (`—`) or en dash (`–`) in a generated title or
+    description; em-dash overuse is a top AI-writing tell. Use a short hyphen (`-`), a comma,
+    or two short sentences instead.
+  - **Keep it short.** Titles tight; descriptions fill the 140-160 char window with
+    information, not padding. Delete any word that adds nothing.
+  - **No filler openers:** `Discover`, `Explore`, `Unlock`, `Elevate`, `Seamlessly`,
+    `Effortlessly`, `In today's ...`.
+  - **No empty intensifiers:** `powerful`, `robust`, `cutting-edge`, `comprehensive`,
+    `ultimate`, `next-level`, `game-changing`.
+  - **No keyword stuffing** (the same keyword repeated three times).
+  - Instead: say what the page actually shows, name the concrete mode/theme/feature/framework,
+    and lead with the real differentiator.
 
 ### 3. Social / Open Graph + Twitter
 - Root `openGraph`: `url`, `siteName`, `type: 'website'`, `locale`, and `images` (1200×630).
@@ -121,9 +158,10 @@ Most are framework-locked or carry dependencies — your differentiators are the
    live at `app/` root, outside the `(site)` group).
 3. Read `lib/seo-routes.ts` for the canonical route list the sitemap is built from, and
    `lib/docs-nav.ts` for route labels (good title source).
-4. **Web research** (you have WebSearch/WebFetch): confirm current Next.js 16 metadata/sitemap
-   APIs, validate the keyword clusters against what people actually search, and sanity-check
-   competitor titles/positioning. Cite what you used. Don't let research block the obvious wins.
+4. **Web research** — do the dated "Stay current" pass above first, then with the live
+   guidance in hand: confirm the current Next.js metadata/sitemap APIs, validate the keyword
+   clusters against what people actually search, and sanity-check competitor titles/positioning.
+   Cite what you used. Don't let research block the obvious wins.
 5. Return a **prioritized plan**: group changes (technical files / missing metadata / root+OG /
    JSON-LD), list exact files to create or edit, and for each give the concrete title+description
    (or the rule to apply). Mark quick wins vs. larger efforts. Make NO edits.
@@ -137,7 +175,7 @@ Most are framework-locked or carry dependencies — your differentiators are the
 4. Don't regress existing good metadata — extend it.
 
 ## Always finish by
-- Reporting what changed (or, in audit mode, the plan), grouped by the five standard areas.
+- Reporting what changed (or, in audit mode, the plan), grouped by the six standard areas.
 - Listing exact files created/edited.
 - Telling the reviewer how to verify: `cd docs-app && npm run build`, then check
   `/sitemap.xml`, `/robots.txt`, `/manifest.webmanifest`, view-source for `<title>` / OG tags /
