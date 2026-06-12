@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "timepicker-ui — zero-dependency time picker",
+    name: "timepicker-ui - zero-dependency time picker",
     short_name: "timepicker-ui",
     description:
       "Zero-dependency, framework-agnostic, SSR-safe time picker with analog clock, scroll wheel and compact-wheel modes, 12 themes and TypeScript types.",

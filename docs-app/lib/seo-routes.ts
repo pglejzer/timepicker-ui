@@ -74,6 +74,8 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/examples/themes/pastel", tier: "leaf" },
   { path: "/examples/themes/ai", tier: "leaf" },
   { path: "/examples/themes/cyberpunk", tier: "leaf" },
+  { path: "/examples/themes/blueprint", tier: "leaf" },
+  { path: "/examples/themes/blueprint-dark", tier: "leaf" },
 
   // examples — features
   { path: "/examples/features/inline-mode", tier: "leaf" },
