@@ -38,6 +38,73 @@ export function SoftwareApplicationJsonLd() {
   );
 }
 
+/**
+ * FAQPage structured data. Only render this on pages whose visible content
+ * contains the exact same questions and answers - the markup must mirror what
+ * users see. Server component, JSON stringified from static props.
+ */
+export function JsonLdFaq({
+  questions,
+}: {
+  questions: { question: string; answer: string }[];
+}) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: questions.map((q) => ({
+      "@type": "Question" as const,
+      name: q.question,
+      acceptedAnswer: {
+        "@type": "Answer" as const,
+        text: q.answer,
+      },
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
+/**
+ * TechArticle structured data for long-form docs/guide pages. Headline and
+ * description should mirror the page's own metadata. Server component, JSON
+ * stringified from static props.
+ */
+export function JsonLdTechArticle({
+  pathname,
+  headline,
+  description,
+}: {
+  pathname: string;
+  headline: string;
+  description: string;
+}) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline,
+    description,
+    url: `${SITE_URL}${pathname}`,
+    mainEntityOfPage: `${SITE_URL}${pathname}`,
+    inLanguage: "en",
+    author: {
+      "@type": "Person",
+      name: "Piotr Glejzer",
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
 const SEGMENT_LABELS: Record<string, string> = {
   docs: "Docs",
   examples: "Examples",
