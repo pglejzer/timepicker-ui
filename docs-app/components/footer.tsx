@@ -180,6 +180,16 @@ export function Footer() {
               className="transition-colors hover:text-foreground"
             >
               Piotr Glejzer
+            </a>{" "}
+            ·{" "}
+            <a
+              href="https://typujmecz.pl"
+              target="_blank"
+              rel="noopener"
+              aria-label="typujmecz.pl, another project by the author (opens in new tab)"
+              className="rounded-sm transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              typujmecz.pl
             </a>
           </span>
           <div className="flex items-center gap-5">
@@ -207,4 +217,3 @@ export function Footer() {
     </footer>
   );
 }
-
