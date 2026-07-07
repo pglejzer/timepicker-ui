@@ -1,17 +1,16 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import { Code2, FileCode, Package } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "TypeScript",
   description:
     "TypeScript reference for timepicker-ui - first-class types and interfaces for options, values and events in the zero-dependency, framework-agnostic time picker.",
-  alternates: {
-    canonical: "/docs/api/typescript",
-  },
-};
+  path: "/docs/api/typescript",
+});
 
 const mainInterfaces = [
   {

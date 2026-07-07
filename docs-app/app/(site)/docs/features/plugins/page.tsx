@@ -1,16 +1,15 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { Package, Zap, Clock, Globe, Disc3, Check } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Plugins",
   description:
     "Tree-shakeable plugins for timepicker-ui - range (time range picker), timezone selector and scroll wheel mode. Zero-dependency, framework-agnostic and SSR-safe.",
-  alternates: {
-    canonical: "/docs/features/plugins",
-  },
-};
+  path: "/docs/features/plugins",
+});
 
 export default function PluginsPage() {
   return (

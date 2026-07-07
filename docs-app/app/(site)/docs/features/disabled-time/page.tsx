@@ -1,17 +1,16 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { LinkCard } from "@/components/link-card";
 import { Ban, Clock, Calendar, AlertCircle, Check } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Disabled Time",
   description:
     "Disable specific hours, minutes or intervals in timepicker-ui to restrict selectable times. Zero-dependency, framework-agnostic, accessible and SSR-safe.",
-  alternates: {
-    canonical: "/docs/features/disabled-time",
-  },
-};
+  path: "/docs/features/disabled-time",
+});
 
 export default function DisabledTimePage() {
   return (
@@ -22,7 +21,11 @@ export default function DisabledTimePage() {
         eyebrow="Feature"
       />
 
-      <Section icon={Ban} title="Overview">
+      <Section
+        icon={Ban}
+        title="How does disabling times work in timepicker-ui?"
+        description="Add a clock.disabledTime config to block specific hours, minutes or intervals. Blocked values are dimmed, cannot be selected, and are skipped during keyboard navigation."
+      >
         <p className="text-muted-foreground mb-4">
           The disabled time feature allows you to prevent users from selecting
           certain time values. This is useful for business hours restrictions,
@@ -55,7 +58,11 @@ export default function DisabledTimePage() {
         </div>
       </Section>
 
-      <Section icon={Clock} title="Disable Hours">
+      <Section
+        icon={Clock}
+        title="How do I disable specific hours?"
+        description="Pass an array of hours to clock.disabledTime.hours. For example, clock: { disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] } } leaves only 9 to 23 selectable."
+      >
         <p className="text-muted-foreground mb-4">
           Restrict which hours can be selected by providing an array of hour
           values:
@@ -106,7 +113,11 @@ picker.create();`}
         </div>
       </Section>
 
-      <Section icon={Calendar} title="Disable Minutes">
+      <Section
+        icon={Calendar}
+        title="How do I limit which minutes can be selected?"
+        description="List the minutes to block in clock.disabledTime.minutes, or set clock.incrementMinutes to a step like 15 so only 0, 15, 30 and 45 are offered."
+      >
         <p className="text-muted-foreground mb-4">
           Control which minute values are available:
         </p>

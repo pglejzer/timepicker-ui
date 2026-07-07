@@ -1,16 +1,15 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Bell, Zap, Database, AlertCircle, X } from "lucide-react";
 import { Section } from "@/components/section";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Events",
   description:
     "Events reference for timepicker-ui - subscribe to open, confirm, cancel, clear and selection events via on/once/off on the zero-dependency time picker.",
-  alternates: {
-    canonical: "/docs/api/events",
-  },
-};
+  path: "/docs/api/events",
+});
 
 const eventEmitterMethods = [
   {

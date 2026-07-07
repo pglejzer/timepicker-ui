@@ -1,17 +1,16 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { LinkCard } from "@/components/link-card";
 import { Eye, Code, Settings, Check } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Inline Mode",
   description:
     "Inline mode in timepicker-ui - render an always-visible time picker with no modal or backdrop. Zero-dependency, framework-agnostic, accessible and SSR-safe.",
-  alternates: {
-    canonical: "/docs/features/inline-mode",
-  },
-};
+  path: "/docs/features/inline-mode",
+});
 
 export default function InlineModePage() {
   return (

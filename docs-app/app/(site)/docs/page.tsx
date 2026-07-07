@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { buildMetadata } from "@/lib/metadata";
 import {
   ArrowRight,
   Check,
@@ -8,14 +9,12 @@ import {
   Braces,
 } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Documentation",
   description:
     "Documentation for timepicker-ui - install, configure and use the zero-dependency, framework-agnostic, SSR-safe time picker with TypeScript types.",
-  alternates: {
-    canonical: "/docs",
-  },
-};
+  path: "/docs",
+});
 
 const cards = [
   {

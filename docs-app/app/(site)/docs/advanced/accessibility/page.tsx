@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import {
@@ -11,14 +12,12 @@ import {
   ArrowLeftRight,
 } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Accessibility",
   description:
     "Accessibility in timepicker-ui - full keyboard navigation, ARIA roles, focus trap and screen-reader support. Zero-dependency, framework-agnostic and SSR-safe.",
-  alternates: {
-    canonical: "/docs/advanced/accessibility",
-  },
-};
+  path: "/docs/advanced/accessibility",
+});
 
 export default function AccessibilityPage() {
   return (
@@ -31,8 +30,8 @@ export default function AccessibilityPage() {
 
       <Section icon={Eye} title="ARIA Support">
         <p className="text-muted-foreground mb-4">
-          Timepicker-UI includes comprehensive ARIA attributes for screen reader
-          compatibility:
+          Timepicker-UI includes ARIA roles, live-region announcements and focus
+          management for screen reader compatibility:
         </p>
         <div className="rounded-lg border border-border bg-card p-6">
           <ul className="space-y-2 text-muted-foreground">

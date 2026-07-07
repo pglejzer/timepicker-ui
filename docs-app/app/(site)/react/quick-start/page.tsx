@@ -1,16 +1,15 @@
 import Link from "next/link";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Code2, ArrowRight, Zap, Package } from "lucide-react";
 import { CodeBlock } from "@/components/code-block";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "React Quick Start",
   description:
     "React time picker quick start - render your first timepicker-ui-react component in minutes. Zero-dependency, SSR-safe and fully typed, with copy-paste JSX.",
-  alternates: {
-    canonical: "/react/quick-start",
-  },
-};
+  path: "/react/quick-start",
+});
 
 export default function QuickStartPage() {
   return (

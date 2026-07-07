@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import { PageHeader } from "@/components/page-header";
@@ -14,14 +15,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Migration Guide v3 to v4",
   description:
     "Upgrade timepicker-ui from v3.x to v4.0.0 - the new grouped options structure, renamed APIs and breaking changes explained step by step, with code examples.",
-  alternates: {
-    canonical: "/docs/migration-guide",
-  },
-};
+  path: "/docs/migration-guide",
+});
 
 export default function MigrationGuidePage() {
   return (

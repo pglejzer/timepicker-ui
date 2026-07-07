@@ -1,17 +1,16 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { LinkCard } from "@/components/link-card";
 import { Palette, Paintbrush, Wand2 } from "lucide-react";
 import { Section } from "@/components/section";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Custom Styling",
   description:
     "Customize timepicker-ui with CSS variables and the tp-ui class contract - colors, sizing and themes. Zero-dependency, framework-agnostic and SSR-safe.",
-  alternates: {
-    canonical: "/docs/advanced/styling",
-  },
-};
+  path: "/docs/advanced/styling",
+});
 
 export default function StylingPage() {
   return (

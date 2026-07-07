@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/metadata";
 import { JsonLdBreadcrumb } from "@/components/json-ld";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Increment Steps Example",
   description:
     "Increment steps example - set minute step intervals (5, 10, 15…) in timepicker-ui. Zero-dependency, framework-agnostic and SSR-safe, with copy-paste code.",
-  alternates: {
-    canonical: "/examples/features/increment",
-  },
-};
+  path: "/examples/features/increment",
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

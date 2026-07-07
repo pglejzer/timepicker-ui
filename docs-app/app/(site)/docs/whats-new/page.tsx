@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import { PageHeader } from "@/components/page-header";
@@ -12,14 +13,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "What's New",
   description:
     "What's new in timepicker-ui - the latest features, improvements and fixes for the zero-dependency, framework-agnostic, SSR-safe time picker library.",
-  alternates: {
-    canonical: "/docs/whats-new",
-  },
-};
+  path: "/docs/whats-new",
+});
 
 export default function WhatsNewPage() {
   return (

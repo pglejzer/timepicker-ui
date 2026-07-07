@@ -1,4 +1,5 @@
 import { Section } from "@/components/section";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { InfoBox } from "@/components/info-box";
 import {
@@ -14,14 +15,12 @@ import {
 } from "lucide-react";
 import { CodeBlock } from "@/components/code-block";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Changelog",
   description:
     "Changelog for timepicker-ui - every notable release, feature and fix for the zero-dependency, framework-agnostic, SSR-safe time picker, listed by version.",
-  alternates: {
-    canonical: "/docs/changelog",
-  },
-};
+  path: "/docs/changelog",
+});
 
 interface ChangeItemProps {
   title: string;
@@ -1153,7 +1152,7 @@ Examples:
               {
                 title: "SSR Compatible",
                 description:
-                  "Works seamlessly with Next.js, Nuxt, Remix, Astro",
+                  "Works with Next.js, Nuxt, Remix, Astro.",
               },
               {
                 title: "Type Safety",

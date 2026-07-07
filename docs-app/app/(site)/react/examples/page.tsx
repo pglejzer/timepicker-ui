@@ -63,7 +63,7 @@ export default function ReactExamplesIndexPage() {
     <div>
       <PageHeader
         title="React Examples"
-        description="Comprehensive examples showing how to use timepicker-ui-react in different scenarios"
+        description="React examples for controlled value, callbacks, themes, forms and features."
         eyebrow="React · Example"
       />
 

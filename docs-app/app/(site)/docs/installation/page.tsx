@@ -1,18 +1,17 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import { Terminal, Package, FileCode, Globe } from "lucide-react";
 import Link from "next/link";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Installation",
   description:
     "Install timepicker-ui via npm, yarn, pnpm or CDN. Zero-dependency, framework-agnostic and SSR-safe - works in React, Vue, Angular, Svelte and vanilla JS.",
-  alternates: {
-    canonical: "/docs/installation",
-  },
-};
+  path: "/docs/installation",
+});
 
 export default function InstallationPage() {
   return (

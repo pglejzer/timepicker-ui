@@ -1,17 +1,16 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { LinkCard } from "@/components/link-card";
 import { Palette, Sparkles, Moon, Zap } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Themes",
   description:
     "12 built-in themes for timepicker-ui - Basic, Crane, Material 2/3, Dark, Glassmorphic, Pastel, AI, Cyberpunk and the new Blueprint pair. Zero-dependency and SSR-safe.",
-  alternates: {
-    canonical: "/docs/features/themes",
-  },
-};
+  path: "/docs/features/themes",
+});
 
 type Theme = {
   name: string;

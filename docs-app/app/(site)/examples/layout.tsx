@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/metadata";
 import { ExamplesSidebar } from "@/components/examples-sidebar";
 import { MobileSidebar } from "@/components/mobile-sidebar";
 import { DocsToc, DocsTocInline } from "@/components/docs-toc";
@@ -6,20 +7,15 @@ import { DocsToc, DocsTocInline } from "@/components/docs-toc";
 // Server layout: carries the /examples section-index metadata (leaf routes
 // override it via their own layouts). BreadcrumbList JSON-LD is emitted per
 // leaf to avoid duplicate breadcrumbs on nested example pages.
-export const metadata: Metadata = {
-  // Re-establish a branded title template for the whole /examples section so
-  // leaf routes render "<Leaf> - timepicker-ui" (a plain string here would
-  // otherwise stop the root template from reaching nested pages).
-  title: {
-    default: "Examples",
-    template: "%s - timepicker-ui",
-  },
+// section: true re-establishes the branded title template for the whole
+// /examples section, so leaf routes still render "<Leaf> - timepicker-ui".
+export const metadata: Metadata = buildMetadata({
+  title: "Examples",
+  section: true,
   description:
     "Live, copy-paste timepicker-ui examples - analog clock, scroll wheel and compact-wheel modes, 12 themes, plugins and features. Zero-dependency and SSR-safe.",
-  alternates: {
-    canonical: "/examples",
-  },
-};
+  path: "/examples",
+});
 
 export default function ExamplesLayout({
   children,

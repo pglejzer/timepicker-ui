@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import {
   ArrowRight,
@@ -10,14 +11,12 @@ import {
   Package,
 } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "React Time Picker",
   description:
     "React time picker - the official timepicker-ui-react wrapper. Zero-dependency, SSR-safe and fully typed for React, with analog clock, wheel modes and 12 themes.",
-  alternates: {
-    canonical: "/react",
-  },
-};
+  path: "/react",
+});
 
 export default function ReactPage() {
   return (

@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { LinkCard } from "@/components/link-card";
@@ -10,14 +11,12 @@ import {
   Check,
 } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Validation",
   description:
     "Validation in timepicker-ui - enforce allowed times, show inline errors and add custom rules. Zero-dependency, framework-agnostic, accessible and SSR-safe.",
-  alternates: {
-    canonical: "/docs/features/validation",
-  },
-};
+  path: "/docs/features/validation",
+});
 
 export default function ValidationPage() {
   return (

@@ -1,17 +1,16 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { LinkCard } from "@/components/link-card";
 import { Smartphone, Hand, Maximize, Check } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Mobile Support",
   description:
     "Mobile support in timepicker-ui - a touch-optimized, native-style time picker view for phones and tablets. Zero-dependency, framework-agnostic and SSR-safe.",
-  alternates: {
-    canonical: "/docs/features/mobile",
-  },
-};
+  path: "/docs/features/mobile",
+});
 
 export default function MobilePage() {
   return (

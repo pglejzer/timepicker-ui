@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/metadata";
 import { JsonLdBreadcrumb } from "@/components/json-ld";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Blueprint Theme Example",
   description:
     "Blueprint theme for timepicker-ui, a light technical look with a cobalt accent and hairline borders. Zero-dependency, SSR-safe, with copy-paste example code.",
-  alternates: {
-    canonical: "/examples/themes/blueprint",
-  },
-};
+  path: "/examples/themes/blueprint",
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

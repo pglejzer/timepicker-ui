@@ -1,16 +1,15 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Zap } from "lucide-react";
 import { MethodCard } from "@/components/method-card";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Methods",
   description:
     "Methods reference for timepicker-ui - create, open, close, getValue, setValue, update, destroy and static helpers for the zero-dependency, SSR-safe time picker.",
-  alternates: {
-    canonical: "/docs/api/methods",
-  },
-};
+  path: "/docs/api/methods",
+});
 
 const methods = [
   {

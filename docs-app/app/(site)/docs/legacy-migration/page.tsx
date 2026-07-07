@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import { PageHeader } from "@/components/page-header";
@@ -13,14 +14,12 @@ import {
   Settings,
 } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Legacy Migration Guide v2 to v3",
   description:
     "Upgrade timepicker-ui from v2.x to v3.x - the legacy migration guide covering breaking changes, renamed options and updated initialization, with code examples.",
-  alternates: {
-    canonical: "/docs/legacy-migration",
-  },
-};
+  path: "/docs/legacy-migration",
+});
 
 export default function LegacyMigrationPage() {
   return (

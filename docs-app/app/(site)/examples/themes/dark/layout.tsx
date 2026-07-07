@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/metadata";
 import { JsonLdBreadcrumb } from "@/components/json-ld";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Dark Theme Example",
   description:
     "Dark theme time picker example - a dark-mode analog clock with timepicker-ui. Zero-dependency, framework-agnostic, accessible and SSR-safe, with example code.",
-  alternates: {
-    canonical: "/examples/themes/dark",
-  },
-};
+  path: "/examples/themes/dark",
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

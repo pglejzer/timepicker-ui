@@ -16,7 +16,7 @@ export default function BlueprintThemePage() {
 
       <Section icon={Ruler} title="Blueprint Theme">
         <p className="text-muted-foreground mb-4">
-          A clean, technical aesthetic on white surfaces — vivid cobalt accent
+          A clean, technical aesthetic on white surfaces, vivid cobalt accent
           and crisp hairline borders that match the docs&apos; own look:
         </p>
         <TimepickerExample

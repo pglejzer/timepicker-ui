@@ -1,15 +1,14 @@
 import Link from "next/link";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Download, ArrowRight, Code2, AlertCircle } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "React Installation",
   description:
     "Install timepicker-ui-react - the official React time picker wrapper. Zero-dependency, SSR-safe and fully typed, works with Next.js, Remix and Vite.",
-  alternates: {
-    canonical: "/react/installation",
-  },
-};
+  path: "/react/installation",
+});
 
 export default function InstallationPage() {
   return (

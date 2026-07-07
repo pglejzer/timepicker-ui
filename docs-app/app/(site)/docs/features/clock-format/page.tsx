@@ -1,17 +1,16 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import { Clock, Sun, Moon } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "12h / 24h Format",
   description:
     "Use 12-hour or 24-hour clock format in timepicker-ui - switch between AM/PM and military time. Zero-dependency, framework-agnostic, SSR-safe and fully typed.",
-  alternates: {
-    canonical: "/docs/features/clock-format",
-  },
-};
+  path: "/docs/features/clock-format",
+});
 
 export default function ClockFormatPage() {
   return (
@@ -22,7 +21,11 @@ export default function ClockFormatPage() {
         eyebrow="Feature"
       />
 
-      <Section icon={Sun} title="12-Hour Format (Default)">
+      <Section
+        icon={Sun}
+        title="How do I use 12-hour (AM/PM) format?"
+        description="12-hour format is the default. It shows hours 1 to 12 with AM and PM buttons, and getValue().time returns a string such as 10:30 AM. Set clock.type to '12h' to be explicit."
+      >
         <p className="text-muted-foreground mb-4">
           The default clock format with AM/PM indicators:
         </p>
@@ -54,7 +57,11 @@ picker.create();`}
         </div>
       </Section>
 
-      <Section icon={Moon} title="24-Hour Format">
+      <Section
+        icon={Moon}
+        title="How do I switch to 24-hour format?"
+        description="Pass clock: { type: '24h' } to the constructor. Hours then run 0 to 23 with no AM/PM, and getValue().time returns a string such as 14:30."
+      >
         <p className="text-muted-foreground mb-4">
           Military time format without AM/PM:
         </p>
@@ -86,7 +93,11 @@ picker.create();`}
         </div>
       </Section>
 
-      <Section icon={Clock} title="Dynamic Switching">
+      <Section
+        icon={Clock}
+        title="Can I change the clock format at runtime?"
+        description="Yes. Call picker.update({ options: { clock: { type: '24h' } }, create: true }) to switch format after the picker is created."
+      >
         <p className="text-muted-foreground mb-4">
           Change clock format dynamically using the update method:
         </p>

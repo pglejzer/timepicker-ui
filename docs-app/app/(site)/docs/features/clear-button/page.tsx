@@ -1,17 +1,16 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
 import { Trash2, Settings, Bell, Code2 } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Clear Button",
   description:
     "Add a clear button to reset the selected time in timepicker-ui, with optional plugin clear handling. Zero-dependency, framework-agnostic and SSR-safe.",
-  alternates: {
-    canonical: "/docs/features/clear-button",
-  },
-};
+  path: "/docs/features/clear-button",
+});
 
 export default function ClearButtonPage() {
   return (

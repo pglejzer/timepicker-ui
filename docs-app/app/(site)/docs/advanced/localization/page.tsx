@@ -1,17 +1,16 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { LinkCard } from "@/components/link-card";
 import { Globe, Languages, Type, MapPin } from "lucide-react";
 import { Section } from "@/components/section";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Localization",
   description:
     "Localize timepicker-ui for any language - translate every label and AM/PM text for global apps. Zero-dependency, framework-agnostic, accessible and SSR-safe.",
-  alternates: {
-    canonical: "/docs/advanced/localization",
-  },
-};
+  path: "/docs/advanced/localization",
+});
 
 export default function LocalizationPage() {
   return (

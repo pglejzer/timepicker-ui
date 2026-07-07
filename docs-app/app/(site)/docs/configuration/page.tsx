@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/components/code-block";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import {
@@ -12,14 +13,12 @@ import {
 } from "lucide-react";
 import { InfoBox } from "@/components/info-box";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Configuration",
   description:
     "Configure timepicker-ui - clock, ui, labels, behavior, callbacks, timezone, range, wheel and clearBehavior option groups for the zero-dependency, SSR-safe time picker.",
-  alternates: {
-    canonical: "/docs/configuration",
-  },
-};
+  path: "/docs/configuration",
+});
 
 const clockOptions = [
   {

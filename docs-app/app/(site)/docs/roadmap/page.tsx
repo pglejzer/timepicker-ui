@@ -1,4 +1,5 @@
 import { Section } from "@/components/section";
+import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { InfoBox } from "@/components/info-box";
 import {
@@ -12,14 +13,12 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Roadmap",
   description:
     "Roadmap for timepicker-ui - planned features, enhancements and direction for the zero-dependency, framework-agnostic, SSR-safe time picker library.",
-  alternates: {
-    canonical: "/docs/roadmap",
-  },
-};
+  path: "/docs/roadmap",
+});
 
 interface FeatureCardProps {
   title: string;
