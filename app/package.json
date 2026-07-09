@@ -85,7 +85,7 @@
     "css-modules-typescript-loader": "^4.0.1",
     "esbuild-visualizer": "^0.7.0",
     "eslint": "^9.31.0",
-    "eslint-config-eslint": "^11.0.0",
+    "eslint-config-eslint": "^14.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.3",
