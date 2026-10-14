@@ -23,10 +23,11 @@ const createMockCoreState = (enabled = true, clockType: '12h' | '24h' = '12h') =
     getInput: jest.fn().mockReturnValue({ value: '' }),
     getHour: jest.fn().mockReturnValue(createMockInput()),
     getMinutes: jest.fn().mockReturnValue(createMockInput()),
-    getActiveTypeMode: jest.fn().mockReturnValue({ textContent: 'AM' }),
+    getActiveType: jest.fn().mockReturnValue('AM'),
     getAM: jest.fn().mockReturnValue(createMockDiv()),
     getPM: jest.fn().mockReturnValue(createMockDiv()),
     getOkButton: jest.fn().mockReturnValue(createMockButton()),
+    isOpen: true,
     options: {
       range: { enabled, minDuration: undefined, maxDuration: undefined },
       clock: { type: clockType },
@@ -334,7 +335,7 @@ describe('RangeManager', () => {
 
       emitter.emit('range:minute:commit', { hour: '10', minutes: '00', type: 'PM' });
 
-      mockCore.getActiveTypeMode.mockReturnValue({ textContent: 'AM' });
+      mockCore.getActiveType.mockReturnValue('AM');
       expect(() => emitter.emit('select:am', undefined)).not.toThrow();
     });
 
@@ -344,7 +345,7 @@ describe('RangeManager', () => {
 
       emitter.emit('range:minute:commit', { hour: '10', minutes: '00', type: 'AM' });
 
-      mockCore.getActiveTypeMode.mockReturnValue({ textContent: 'PM' });
+      mockCore.getActiveType.mockReturnValue('PM');
       expect(() => emitter.emit('select:pm', undefined)).not.toThrow();
     });
 
@@ -363,8 +364,9 @@ describe('RangeManager', () => {
       emitter.emit('range:minute:commit', { hour: '10', minutes: '00', type: 'AM' });
       emitter.emit('range:minute:commit', { hour: '11', minutes: '00', type: 'AM' });
 
-      mockCore.getActiveTypeMode.mockReturnValue({ textContent: 'PM' });
+      mockCore.getActiveType.mockReturnValue('PM');
       expect(() => emitter.emit('select:pm', undefined)).not.toThrow();
+      expect(manager.getToValue()?.type).toBe('PM');
     });
   });
 
@@ -488,6 +490,30 @@ describe('RangeManager', () => {
       key(fromTab, ' ');
 
       expect(manager.getActivePart()).toBe('from');
+    });
+
+    it.each(['Enter', ' '])('activates the from tab on %p and prevents the default action', (k) => {
+      const manager = initWithEnabledToTab();
+      expect(manager.getActivePart()).toBe('to');
+      const fromTab = modal.querySelector('.tp-ui-range-from') as HTMLElement;
+      const event = new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true });
+
+      fromTab.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(manager.getActivePart()).toBe('from');
+    });
+
+    it('ignores the legacy Spacebar key on a tab and leaves its default action alone', () => {
+      const manager = initWithEnabledToTab();
+      expect(manager.getActivePart()).toBe('to');
+      const fromTab = modal.querySelector('.tp-ui-range-from') as HTMLElement;
+      const event = new KeyboardEvent('keydown', { key: 'Spacebar', bubbles: true, cancelable: true });
+
+      fromTab.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(false);
+      expect(manager.getActivePart()).toBe('to');
     });
 
     it('skips the disabled to tab on ArrowRight', () => {

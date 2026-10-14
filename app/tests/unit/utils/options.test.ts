@@ -55,7 +55,7 @@ describe('options defaults', () => {
       expect(DEFAULT_OPTIONS.behavior).toBeDefined();
       expect(DEFAULT_OPTIONS.behavior.focusInputAfterClose).toBe(false);
       expect(DEFAULT_OPTIONS.behavior.focusTrap).toBe(true);
-      expect(DEFAULT_OPTIONS.behavior.delayHandler).toBe(300);
+      expect(DEFAULT_OPTIONS.behavior.delayHandler).toBe(0);
     });
 
     it('should have callbacks options', () => {
@@ -160,10 +160,10 @@ describe('options defaults', () => {
 
     it('should merge behavior options', () => {
       const result = mergeOptions({
-        behavior: { focusInputAfterClose: true, delayHandler: 500 },
+        behavior: { focusInputAfterClose: false, delayHandler: 500 },
       });
 
-      expect(result.behavior.focusInputAfterClose).toBe(true);
+      expect(result.behavior.focusInputAfterClose).toBe(false);
       expect(result.behavior.delayHandler).toBe(500);
       expect(result.behavior.focusTrap).toBe(true);
     });

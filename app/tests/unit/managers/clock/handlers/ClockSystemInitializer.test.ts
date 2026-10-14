@@ -2,6 +2,7 @@ import { ClockSystemInitializer } from '../../../../../src/managers/clock/handle
 import { CoreState } from '../../../../../src/timepicker/CoreState';
 import { EventEmitter, type TimepickerEventMap } from '../../../../../src/utils/EventEmitter';
 import { DEFAULT_OPTIONS } from '../../../../../src/utils/options/defaults';
+import type { ClockSystem } from '@/managers/clock/ClockSystem';
 
 describe('ClockSystemInitializer', () => {
   let coreState: CoreState;
@@ -150,9 +151,10 @@ describe('ClockSystemInitializer', () => {
       init24h.destroy();
     });
 
-    it('should return AM when activeTypeMode text is AM', () => {
+    it('should return AM when the active period button has data-type AM, whatever its label', () => {
       const mockActiveMode = document.createElement('button');
-      mockActiveMode.textContent = 'AM';
+      mockActiveMode.textContent = 'rano';
+      mockActiveMode.dataset.type = 'AM';
       jest.spyOn(coreState, 'getActiveTypeMode').mockReturnValue(mockActiveMode);
 
       const newInit = new ClockSystemInitializer(coreState, emitter);
@@ -160,10 +162,14 @@ describe('ClockSystemInitializer', () => {
       newInit.destroy();
     });
 
-    it('should return PM when activeTypeMode text is PM', () => {
+    it('should return PM from data-type even when the AM fallback would say AM', () => {
       const mockActiveMode = document.createElement('button');
-      mockActiveMode.textContent = 'PM';
+      mockActiveMode.textContent = 'wieczorem';
+      mockActiveMode.dataset.type = 'PM';
       jest.spyOn(coreState, 'getActiveTypeMode').mockReturnValue(mockActiveMode);
+      const mockAM = document.createElement('div');
+      mockAM.classList.add('active');
+      jest.spyOn(coreState, 'getAM').mockReturnValue(mockAM);
 
       const newInit = new ClockSystemInitializer(coreState, emitter);
       expect(newInit.getAmPmValue()).toBe('PM');
@@ -281,6 +287,104 @@ describe('ClockSystemInitializer', () => {
       initializer.destroy();
 
       expect(initializer.getClockSystem()).toBeNull();
+    });
+
+    describe('when called again', () => {
+      const currentSystem = (): ClockSystem => {
+        const system = initializer.getClockSystem();
+        if (!system) throw new Error('the clock system was not created');
+        return system;
+      };
+
+      const sizeFace = (face: HTMLElement): void => {
+        Object.defineProperty(face, 'offsetWidth', { value: 200, configurable: true });
+        Object.defineProperty(face, 'offsetHeight', { value: 200, configurable: true });
+        jest.spyOn(face, 'getBoundingClientRect').mockReturnValue({
+          left: 0,
+          top: 0,
+          right: 200,
+          bottom: 200,
+          width: 200,
+          height: 200,
+          x: 0,
+          y: 0,
+          toJSON: () => ({}),
+        });
+      };
+
+      const pressAtTwelve = (face: HTMLElement): MouseEvent => {
+        const event = new MouseEvent('mousedown', {
+          clientX: 100,
+          clientY: 20,
+          bubbles: true,
+          cancelable: true,
+        });
+        face.dispatchEvent(event);
+        return event;
+      };
+
+      afterEach(() => {
+        jest.useRealTimers();
+      });
+
+      it('should destroy the previous clock system once and stop listening on its face', () => {
+        sizeFace(clockFace);
+        initializer.initialize();
+        const first = currentSystem();
+        const destroySpy = jest.spyOn(first, 'destroy');
+        const secondFace = document.createElement('div');
+        sizeFace(secondFace);
+        jest.spyOn(coreState, 'getClockFace').mockReturnValue(secondFace);
+
+        initializer.initialize();
+
+        expect(destroySpy).toHaveBeenCalledTimes(1);
+        expect(currentSystem()).not.toBe(first);
+
+        const onUpdate = jest.fn();
+        emitter.on('update', onUpdate);
+
+        expect(pressAtTwelve(clockFace).defaultPrevented).toBe(false);
+        expect(onUpdate).not.toHaveBeenCalled();
+
+        expect(pressAtTwelve(secondFace).defaultPrevented).toBe(true);
+        expect(onUpdate).toHaveBeenCalledTimes(1);
+      });
+
+      it('should drop the document listeners of a drag that was in progress', () => {
+        jest.useFakeTimers();
+        sizeFace(clockFace);
+        const onUpdate = jest.fn();
+        emitter.on('update', onUpdate);
+        initializer.initialize();
+        pressAtTwelve(clockFace);
+        expect(onUpdate).toHaveBeenCalledTimes(1);
+        onUpdate.mockClear();
+        const removeListenerSpy = jest.spyOn(document, 'removeEventListener');
+
+        initializer.initialize();
+
+        ['mousemove', 'mouseup', 'touchmove', 'touchend'].forEach((type) => {
+          expect(removeListenerSpy).toHaveBeenCalledWith(type, expect.any(Function));
+        });
+
+        document.dispatchEvent(new MouseEvent('mousemove', { clientX: 180, clientY: 100, bubbles: true }));
+        jest.runOnlyPendingTimers();
+        document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+
+        expect(onUpdate).not.toHaveBeenCalled();
+      });
+
+      it('should destroy the previous clock system and keep none when the face is gone', () => {
+        initializer.initialize();
+        const destroySpy = jest.spyOn(currentSystem(), 'destroy');
+        jest.spyOn(coreState, 'getClockFace').mockReturnValue(null);
+
+        initializer.initialize();
+
+        expect(destroySpy).toHaveBeenCalledTimes(1);
+        expect(initializer.getClockSystem()).toBeNull();
+      });
     });
   });
 

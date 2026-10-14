@@ -1,4 +1,5 @@
 import TimepickerUI from '../../../src/timepicker/TimepickerUI';
+import { TIMINGS } from '../../../src/constants/timings';
 import type { TimepickerOptions } from '../../../src/types/options';
 
 describe('TimepickerUI.getValue()', () => {
@@ -6,6 +7,7 @@ describe('TimepickerUI.getValue()', () => {
   let input: HTMLInputElement;
 
   beforeEach(() => {
+    jest.useFakeTimers();
     container = document.createElement('div');
     input = document.createElement('input');
     input.type = 'text';
@@ -16,6 +18,8 @@ describe('TimepickerUI.getValue()', () => {
   });
 
   afterEach(() => {
+    TimepickerUI.destroyAll();
+    jest.useRealTimers();
     document.body.innerHTML = '';
   });
 
@@ -51,16 +55,16 @@ describe('TimepickerUI.getValue()', () => {
     timepicker.create();
 
     timepicker.open();
+    jest.advanceTimersByTime(100);
+    timepicker.close();
+    jest.advanceTimersByTime(TIMINGS.MODAL_EXIT);
+    expect(document.querySelector('.tp-ui-modal')).toBeNull();
 
-    setTimeout(() => {
-      timepicker.close();
+    const result = timepicker.getValue();
 
-      const result = timepicker.getValue();
-
-      expect(result.hour).toBe('11');
-      expect(result.minutes).toBe('45');
-      expect(result.time).toBe('11:45');
-    }, 100);
+    expect(result.hour).toBe('11');
+    expect(result.minutes).toBe('45');
+    expect(result.time).toBe('11:45');
   });
 
   test('returns correct value when called from external button', () => {
@@ -105,16 +109,16 @@ describe('TimepickerUI.getValue()', () => {
     timepicker.create();
 
     timepicker.open();
+    jest.advanceTimersByTime(100);
+    timepicker.close();
+    jest.advanceTimersByTime(TIMINGS.MODAL_EXIT);
+    expect(document.querySelector('.tp-ui-modal')).toBeNull();
 
-    setTimeout(() => {
-      timepicker.close();
+    input.value = '13:30';
 
-      input.value = '13:30';
-
-      const result = timepicker.getValue();
-      expect(result.hour).toBe('13');
-      expect(result.minutes).toBe('30');
-    }, 100);
+    const result = timepicker.getValue();
+    expect(result.hour).toBe('13');
+    expect(result.minutes).toBe('30');
   });
 });
 

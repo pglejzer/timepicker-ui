@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import TimepickerUI from '../../../src/timepicker/TimepickerUI';
 import TimepickerUIDefault from '../../../src/timepicker/index';
 
@@ -427,8 +426,12 @@ describe('TimepickerUI', () => {
     it('should handle invalid time format gracefully', () => {
       const timepicker = new TimepickerUI(input);
       timepicker.create();
+      const onError = jest.fn();
+      timepicker.on('error', onError);
 
       expect(() => timepicker.setValue('invalid')).not.toThrow();
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(onError).toHaveBeenCalledWith({ error: 'Invalid 12h format. Expected HH:MM AM/PM' });
 
       timepicker.destroy();
     });
@@ -476,8 +479,12 @@ describe('TimepickerUI', () => {
     it('should handle invalid 24h format gracefully', () => {
       const timepicker = new TimepickerUI(input, { clock: { type: '24h' } });
       timepicker.create();
+      const onError = jest.fn();
+      timepicker.on('error', onError);
 
       expect(() => timepicker.setValue('25:00')).not.toThrow();
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(onError).toHaveBeenCalledWith({ error: 'Invalid 24h format. Expected HH:MM' });
 
       timepicker.destroy();
     });
@@ -485,8 +492,12 @@ describe('TimepickerUI', () => {
     it('should handle invalid 12h format gracefully', () => {
       const timepicker = new TimepickerUI(input);
       timepicker.create();
+      const onError = jest.fn();
+      timepicker.on('error', onError);
 
       expect(() => timepicker.setValue('13:00 AM')).not.toThrow();
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(onError).toHaveBeenCalledWith({ error: 'Invalid 12h format. Expected HH:MM AM/PM' });
 
       timepicker.destroy();
     });
@@ -694,13 +705,22 @@ describe('TimepickerUI', () => {
   });
 
   describe('inline mode', () => {
-    it('should throw when containerId is missing in inline mode', () => {
+    const addInlineHost = (): HTMLElement => {
+      const host = document.createElement('div');
+      host.id = 'inline-container';
+      document.body.appendChild(host);
+      return host;
+    };
+
+    const inlineModalIn = (host: HTMLElement): Element | null =>
+      host.querySelector('.tp-ui-modal.tp-ui--inline');
+
+    it('should throw when inline mode has neither container nor containerId', () => {
       expect(() => {
         new TimepickerUI(input, {
-          // @ts-ignore
           ui: { inline: { enabled: true } },
         });
-      }).toThrow('inline.containerId is required');
+      }).toThrow('inline.container is required');
     });
 
     it('should throw when container element not found', () => {
@@ -708,7 +728,15 @@ describe('TimepickerUI', () => {
         new TimepickerUI(input, {
           ui: { inline: { enabled: true, containerId: 'non-existent-container' } },
         });
-      }).toThrow('Container element with id "non-existent-container" not found');
+      }).toThrow('Inline container not found');
+    });
+
+    it('should throw when inline.container matches no element', () => {
+      expect(() => {
+        new TimepickerUI(input, {
+          ui: { inline: { enabled: true, container: '#non-existent-container' } },
+        });
+      }).toThrow('Inline container not found');
     });
 
     it('should create inline timepicker when container exists', () => {
@@ -723,6 +751,231 @@ describe('TimepickerUI', () => {
       expect(timepicker).toBeInstanceOf(TimepickerUI);
 
       timepicker.destroy();
+    });
+
+    it.each<{ name: string; container: (host: HTMLElement) => string | HTMLElement }>([
+      { name: 'a selector', container: () => '#inline-container' },
+      { name: 'an element', container: (host) => host },
+    ])('renders inline into a container given as $name', ({ container: containerFor }) => {
+      const host = addInlineHost();
+      const timepicker = new TimepickerUI(input, {
+        ui: { animation: false, inline: { enabled: true, container: containerFor(host) } },
+      });
+
+      timepicker.create();
+
+      expect(inlineModalIn(host)).not.toBeNull();
+    });
+
+    it('still accepts inline.containerId', () => {
+      const host = addInlineHost();
+      const timepicker = new TimepickerUI(input, {
+        ui: { animation: false, inline: { enabled: true, containerId: 'inline-container' } },
+      });
+
+      timepicker.create();
+
+      expect(inlineModalIn(host)).not.toBeNull();
+    });
+  });
+
+  describe('modal placement', () => {
+    const addModalHost = (): HTMLElement => {
+      const host = document.createElement('section');
+      host.id = 'modal-host';
+      document.body.appendChild(host);
+      return host;
+    };
+
+    it('appends the modal to an element passed as ui.appendTo', () => {
+      const host = addModalHost();
+      const timepicker = new TimepickerUI(input, { ui: { animation: false, appendTo: host } });
+      timepicker.create();
+
+      timepicker.open();
+
+      expect(document.querySelectorAll('.tp-ui-modal')).toHaveLength(1);
+      expect(document.querySelector('.tp-ui-modal')?.parentElement).toBe(host);
+    });
+
+    it('still appends the modal to the element matched by ui.appendModalSelector', () => {
+      const host = addModalHost();
+      const timepicker = new TimepickerUI(input, {
+        ui: { animation: false, appendModalSelector: '#modal-host' },
+      });
+      timepicker.create();
+
+      timepicker.open();
+
+      expect(document.querySelector('.tp-ui-modal')?.parentElement).toBe(host);
+    });
+  });
+
+  describe('setOptions', () => {
+    it('applies options like update', () => {
+      const otherInput = document.createElement('input');
+      document.body.appendChild(otherInput);
+      const viaSetOptions = new TimepickerUI(input);
+      const viaUpdate = new TimepickerUI(otherInput);
+      viaSetOptions.create();
+      viaUpdate.create();
+
+      viaSetOptions.setOptions({ ui: { viewSwitch: true }, labels: { hour: 'Godzina' } });
+      viaUpdate.update({ options: { ui: { viewSwitch: true }, labels: { hour: 'Godzina' } } });
+
+      expect(viaSetOptions.options.ui.enableSwitchIcon).toBe(true);
+      expect(viaSetOptions.options.labels.hourLabel).toBe('Godzina');
+      expect(viaSetOptions.options).toEqual(viaUpdate.options);
+    });
+
+    it('a new name passed to setOptions overrides an old name from the constructor', () => {
+      const timepicker = new TimepickerUI(input, { ui: { enableSwitchIcon: true } });
+      timepicker.create();
+
+      timepicker.setOptions({ ui: { viewSwitch: false } });
+
+      expect(timepicker.options.ui.enableSwitchIcon).toBe(false);
+
+      timepicker.setOptions({ ui: { enableSwitchIcon: true } });
+
+      expect(timepicker.options.ui.enableSwitchIcon).toBe(true);
+    });
+
+    it('turns options off with a new name over old values from the constructor', () => {
+      const timepicker = new TimepickerUI(input, {
+        clock: { type: '24h', currentTime: true, smoothHourSnap: false },
+        ui: { mobile: true },
+      });
+      timepicker.create();
+
+      timepicker.setOptions({
+        clock: { defaultTime: undefined, discreteHourJump: false },
+        ui: { initialView: 'clock' },
+      });
+
+      expect(timepicker.options.clock.currentTime).toBeUndefined();
+      expect(timepicker.options.clock.smoothHourSnap).toBe(true);
+      expect(timepicker.options.ui.mobile).toBe(false);
+    });
+
+    it('re-renders an open picker with the new options', () => {
+      const timepicker = new TimepickerUI(input, { ui: { animation: false } });
+      timepicker.create();
+      timepicker.open();
+
+      timepicker.setOptions({ labels: { ok: 'Zapisz' } });
+
+      expect(document.querySelectorAll('.tp-ui-modal')).toHaveLength(1);
+      expect(document.querySelector('.tp-ui-modal .tp-ui-ok-btn')?.textContent).toBe('Zapisz');
+    });
+  });
+
+  describe('clock.type auto', () => {
+    const mockLocaleHour12 = (hour12: boolean): void => {
+      const format = { resolvedOptions: () => ({ hour12 }) } as unknown as Intl.DateTimeFormat;
+      jest.spyOn(Intl, 'DateTimeFormat').mockImplementation(() => format);
+    };
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it.each([
+      { hour12: true, type: '12h', other: '24h' as const },
+      { hour12: false, type: '24h', other: '12h' as const },
+    ])(
+      'follows a $type locale when the picker is created and when its options are set',
+      ({ hour12, type, other }) => {
+        mockLocaleHour12(hour12);
+        const timepicker = new TimepickerUI(input, { clock: { type: 'auto' } });
+        timepicker.create();
+
+        expect(timepicker.options.clock.type).toBe(type);
+
+        timepicker.setOptions({ clock: { type: other } });
+        timepicker.setOptions({ clock: { type: 'auto' } });
+
+        expect(timepicker.options.clock.type).toBe(type);
+      },
+    );
+  });
+
+  describe('select:period', () => {
+    it('emits select:period with the selected period next to select:am and select:pm', () => {
+      const onSelectPeriod = jest.fn();
+      const timepicker = new TimepickerUI(input, { ui: { animation: false }, callbacks: { onSelectPeriod } });
+      timepicker.create();
+      timepicker.open();
+      const period = jest.fn();
+      const pm = jest.fn();
+      const am = jest.fn();
+      timepicker.on('select:period', period);
+      timepicker.on('select:pm', pm);
+      timepicker.on('select:am', am);
+
+      (document.querySelector('.tp-ui-modal .tp-ui-pm') as HTMLElement).click();
+
+      expect(pm).toHaveBeenCalledTimes(1);
+      expect(period).toHaveBeenCalledTimes(1);
+      expect(period).toHaveBeenCalledWith({ type: 'PM' });
+      expect(onSelectPeriod).toHaveBeenCalledWith({ type: 'PM' });
+
+      (document.querySelector('.tp-ui-modal .tp-ui-am') as HTMLElement).click();
+
+      expect(am).toHaveBeenCalledTimes(1);
+      expect(period).toHaveBeenCalledTimes(2);
+      expect(period).toHaveBeenLastCalledWith({ type: 'AM' });
+      expect(onSelectPeriod).toHaveBeenLastCalledWith({ type: 'AM' });
+    });
+  });
+
+  describe('switch:face', () => {
+    it('emits switch:face when a field click changes the face, and not for the face already shown', () => {
+      input.value = '10:30:15';
+      const onSwitchFace = jest.fn();
+      const timepicker = new TimepickerUI(input, {
+        clock: { type: '24h', showSeconds: true },
+        ui: { animation: false },
+        callbacks: { onSwitchFace },
+      });
+      timepicker.create();
+      timepicker.open();
+      const switchFace = jest.fn();
+      timepicker.on('switch:face', switchFace);
+      const click = (selector: string): void =>
+        (document.querySelector(`.tp-ui-modal ${selector}`) as HTMLElement).click();
+
+      click('.tp-ui-hour');
+
+      expect(switchFace).not.toHaveBeenCalled();
+
+      click('.tp-ui-minutes');
+      click('.tp-ui-minutes');
+      click('.tp-ui-seconds');
+      click('.tp-ui-hour');
+
+      expect(switchFace.mock.calls).toEqual([
+        [{ face: 'minutes' }],
+        [{ face: 'seconds' }],
+        [{ face: 'hours' }],
+      ]);
+      expect(onSwitchFace.mock.calls).toEqual(switchFace.mock.calls);
+    });
+  });
+
+  describe('labels.second', () => {
+    it('names the seconds field', () => {
+      const timepicker = new TimepickerUI(input, {
+        clock: { showSeconds: true },
+        ui: { animation: false },
+        labels: { second: 'Sekunda' },
+      });
+      timepicker.create();
+
+      timepicker.open();
+      const seconds = document.querySelector('.tp-ui-modal .tp-ui-seconds');
+
+      expect(seconds?.getAttribute('aria-label')).toBe('Sekunda');
     });
   });
 
@@ -835,17 +1088,18 @@ describe('TimepickerUI', () => {
   });
 
   describe('internal event handling edge cases', () => {
-    it('should not mount on show event when destroyed', () => {
+    it('should not mount on open:request when destroyed', () => {
       const timepicker = new TimepickerUI(input);
       timepicker.create();
       timepicker.destroy();
 
       expect(() => {
         (timepicker as unknown as { emitter: { emit: (event: string, data: unknown) => void } }).emitter.emit(
-          'show',
+          'open:request',
           undefined,
         );
       }).not.toThrow();
+      expect(document.querySelector('.tp-ui-modal')).toBeNull();
     });
 
     it('should not unmount on cancel event when destroyed', () => {

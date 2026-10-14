@@ -1,5 +1,8 @@
 import ClearButtonManager from '../../../src/managers/ClearButtonManager';
 import { CoreState } from '../../../src/timepicker/CoreState';
+import { setupCallbackBridge } from '../../../src/timepicker/LifecycleCallbacks';
+import TimepickerUI from '../../../src/timepicker/TimepickerUI';
+import { TIMINGS } from '../../../src/constants/timings';
 import { EventEmitter, type TimepickerEventMap } from '../../../src/utils/EventEmitter';
 import { DEFAULT_OPTIONS } from '../../../src/utils/options/defaults';
 import { getModalTemplate } from '../../../src/utils/template';
@@ -71,6 +74,14 @@ function getHourInput(): HTMLInputElement {
 
 function getMinuteInput(): HTMLInputElement {
   return getModal().querySelector('.tp-ui-minutes')!;
+}
+
+function getSecondsInput(): HTMLInputElement {
+  return getModal().querySelector('.tp-ui-seconds')!;
+}
+
+function ariaValues(field: HTMLInputElement): { now: string | null; text: string | null } {
+  return { now: field.getAttribute('aria-valuenow'), text: field.getAttribute('aria-valuetext') };
 }
 
 function getClockHand(): HTMLElement {
@@ -152,6 +163,7 @@ describe('ClearButtonManager', () => {
 
     core = new CoreState(element, options, INSTANCE_ID);
     emitter = new EventEmitter();
+    setupCallbackBridge(core, emitter);
 
     mountModal(options);
 
@@ -217,7 +229,7 @@ describe('ClearButtonManager', () => {
       expect(getAMButton()!.getAttribute('aria-pressed')).toBe('false');
     });
 
-    it('should remove aria-valuenow from hour and minute inputs', () => {
+    it('should reset the hour spinbutton to aria-valuenow 12 / aria-valuetext 12 and the minutes to 0 / 00', () => {
       setup();
       simulateOpenWithValue(input, core, emitter, '03:30 PM', '03', '30', 'PM');
       getHourInput().setAttribute('aria-valuenow', '3');
@@ -225,8 +237,22 @@ describe('ClearButtonManager', () => {
 
       getClearBtn().click();
 
-      expect(getHourInput().hasAttribute('aria-valuenow')).toBe(false);
-      expect(getMinuteInput().hasAttribute('aria-valuenow')).toBe(false);
+      expect(ariaValues(getHourInput())).toEqual({ now: '12', text: '12' });
+      expect(ariaValues(getMinuteInput())).toEqual({ now: '0', text: '00' });
+    });
+
+    it('should reset the seconds spinbutton to aria-valuenow 0 / aria-valuetext 00 when seconds are shown', () => {
+      setup({ clock: { type: '24h', showSeconds: true } });
+      simulateOpenWithValue(input, core, emitter, '15:30:45', '15', '30');
+      const seconds = getSecondsInput();
+      seconds.value = '45';
+      seconds.setAttribute('aria-valuenow', '45');
+      seconds.setAttribute('aria-valuetext', '45');
+
+      getClearBtn().click();
+
+      expect(seconds.value).toBe('00');
+      expect(ariaValues(seconds)).toEqual({ now: '0', text: '00' });
     });
 
     it('should set degrees to null in core state', () => {
@@ -496,13 +522,39 @@ describe('ClearButtonManager', () => {
       const tipsWrapper = getModal().querySelector('.tp-ui-tips-wrapper')!;
       const tip = document.createElement('div');
       tip.classList.add('tp-ui-value-tips', 'active');
-      tip.setAttribute('aria-selected', 'true');
       tipsWrapper.appendChild(tip);
 
       getClearBtn().click();
 
       expect(tip.classList.contains('active')).toBe(false);
-      expect(tip.hasAttribute('aria-selected')).toBe(false);
+    });
+
+    it('should write nothing to tips that were not active', () => {
+      setup();
+      simulateOpenWithValue(input, core, emitter, '03:30 PM', '03', '30', 'PM');
+      const tipsWrapper = getModal().querySelector('.tp-ui-tips-wrapper')!;
+      const tips = ['12', '1', '2', '3'].map((value) => {
+        const tip = document.createElement('span');
+        tip.className = value === '3' ? 'tp-ui-value-tips active' : 'tp-ui-value-tips';
+        tip.textContent = value;
+        tipsWrapper.appendChild(tip);
+        return tip;
+      });
+      const [, , , activeTip] = tips;
+      const observer = new MutationObserver(() => {});
+      observer.observe(tipsWrapper, { attributes: true, subtree: true, attributeOldValue: true });
+
+      getClearBtn().click();
+
+      const records = observer.takeRecords();
+      observer.disconnect();
+      tips
+        .filter((tip) => tip !== activeTip)
+        .forEach((tip) => expect(records.filter((record) => record.target === tip)).toHaveLength(0));
+      expect(records).toHaveLength(1);
+      expect(records[0].target).toBe(activeTip);
+      expect(records[0].attributeName).toBe('class');
+      expect(activeTip.classList.contains('active')).toBe(false);
     });
   });
 
@@ -651,6 +703,100 @@ describe('ClearButtonManager', () => {
 
       expect(getOkBtn().classList.contains('disabled')).toBe(false);
     });
+  });
+});
+
+describe('callbacks.onClear through the public TimepickerUI API', () => {
+  let input: HTMLInputElement;
+
+  function createPicker(onClear: jest.Mock): TimepickerUI {
+    const picker = new TimepickerUI(input, {
+      clock: { type: '12h' },
+      ui: { clearButton: true, animation: false },
+      callbacks: { onClear },
+    });
+    picker.create();
+    picker.setValue('08:45 AM');
+    return picker;
+  }
+
+  function clickClear(): void {
+    const clear = document.querySelector('.tp-ui-modal .tp-ui-clear-btn') as HTMLElement;
+    expect(clear.getAttribute('aria-disabled')).toBe('false');
+    clear.click();
+  }
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+    input = document.createElement('input');
+    document.body.appendChild(input);
+  });
+
+  afterEach(() => {
+    TimepickerUI.destroyAll();
+    jest.useRealTimers();
+    document.body.innerHTML = '';
+  });
+
+  it('should fire onClear exactly once with the previous value when the user clicks Clear', () => {
+    const onClear = jest.fn();
+    const picker = createPicker(onClear);
+    picker.open();
+
+    clickClear();
+
+    expect(onClear).toHaveBeenCalledTimes(1);
+    expect(onClear).toHaveBeenCalledWith({ previousValue: '08:45 AM' });
+    expect(input.value).toBe('');
+  });
+
+  it('should still fire onClear exactly once after the picker was closed and reopened', () => {
+    const onClear = jest.fn();
+    const picker = createPicker(onClear);
+    picker.open();
+    picker.close();
+    jest.advanceTimersByTime(TIMINGS.MODAL_EXIT);
+    expect(document.querySelector('.tp-ui-modal')).toBeNull();
+    picker.open();
+
+    clickClear();
+
+    expect(onClear).toHaveBeenCalledTimes(1);
+    expect(onClear).toHaveBeenCalledWith({ previousValue: '08:45 AM' });
+  });
+
+  it('should touch only the old active tip and the neutral 12 tip, without rebuilding the tips', () => {
+    const picker = createPicker(jest.fn());
+    picker.open();
+    jest.advanceTimersByTime(TIMINGS.TIPS_ANIMATION);
+    const tipsWrapper = document.querySelector('.tp-ui-modal .tp-ui-tips-wrapper') as HTMLElement;
+    const tips = [...tipsWrapper.querySelectorAll<HTMLElement>('.tp-ui-value-tips')];
+    const tipFor = (value: string): HTMLElement =>
+      tips.find((tip) => tip.textContent === value) as HTMLElement;
+    expect(tips).toHaveLength(12);
+    expect(tipFor('8').classList.contains('active')).toBe(true);
+    const observer = new MutationObserver(() => {});
+    observer.observe(tipsWrapper, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+      attributeOldValue: true,
+    });
+
+    clickClear();
+
+    const records = observer.takeRecords();
+    observer.disconnect();
+    const changedTargets = new Set(records.map((record) => record.target));
+    expect(records.filter((record) => record.type === 'childList')).toHaveLength(0);
+    expect(records.every((record) => record.attributeName === 'class')).toBe(true);
+    expect(changedTargets.size).toBe(2);
+    expect(changedTargets.has(tipFor('8'))).toBe(true);
+    expect(changedTargets.has(tipFor('12'))).toBe(true);
+    const activeTips = tips.filter((tip) => tip.classList.contains('active'));
+    expect(activeTips).toHaveLength(1);
+    expect(activeTips[0]).toBe(tipFor('12'));
+    tips.forEach((tip) => expect(tip).not.toHaveAttribute('aria-selected'));
   });
 });
 

@@ -132,6 +132,7 @@ describe('Wheel + hideDisabledOptions (pointer drag & touch)', () => {
     });
 
     core = new CoreState(element, options, INSTANCE_ID);
+    core.setIsOpen(true);
     core.setDisabledTime({
       value: {
         hours: DISABLED_HOURS,

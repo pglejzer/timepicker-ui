@@ -1,4 +1,5 @@
 import ThemeManager from '../../../src/managers/ThemeManager';
+import TimepickerUI from '../../../src/timepicker/TimepickerUI';
 import { CoreState } from '../../../src/timepicker/CoreState';
 import { EventEmitter, type TimepickerEventMap } from '../../../src/utils/EventEmitter';
 import { DEFAULT_OPTIONS } from '../../../src/utils/options/defaults';
@@ -31,89 +32,6 @@ describe('ThemeManager', () => {
     });
   });
 
-  describe('setTheme', () => {
-    it('should do nothing when modal is null', () => {
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(null);
-
-      expect(() => themeManager.setTheme()).not.toThrow();
-    });
-
-    it('should set data-theme attribute on modal', () => {
-      const modal = document.createElement('div') as HTMLDivElement;
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
-
-      themeManager.setTheme();
-
-      expect(modal.getAttribute('data-theme')).toBe('basic');
-    });
-
-    it('should set custom theme on modal', () => {
-      const customOptions = {
-        ...DEFAULT_OPTIONS,
-        ui: {
-          ...DEFAULT_OPTIONS.ui,
-          theme: 'm3-green' as const,
-        },
-      };
-
-      const customCore = new CoreState(mockElement, customOptions, 'test-custom-theme-id');
-      const customThemeManager = new ThemeManager(customCore, emitter);
-
-      const modal = document.createElement('div') as HTMLDivElement;
-      jest.spyOn(customCore, 'getModalElement').mockReturnValue(modal);
-
-      customThemeManager.setTheme();
-
-      expect(modal.getAttribute('data-theme')).toBe('m3-green');
-
-      customThemeManager.destroy();
-    });
-
-    it('should set data-theme to blueprint on the modal', () => {
-      const customOptions = {
-        ...DEFAULT_OPTIONS,
-        ui: {
-          ...DEFAULT_OPTIONS.ui,
-          theme: 'blueprint' as const,
-        },
-      };
-
-      const customCore = new CoreState(mockElement, customOptions, 'test-blueprint-id');
-      const customThemeManager = new ThemeManager(customCore, emitter);
-
-      const modal = document.createElement('div') as HTMLDivElement;
-      jest.spyOn(customCore, 'getModalElement').mockReturnValue(modal);
-
-      customThemeManager.setTheme();
-
-      expect(modal.getAttribute('data-theme')).toBe('blueprint');
-
-      customThemeManager.destroy();
-    });
-
-    it('should set data-theme to blueprint-dark on the modal', () => {
-      const customOptions = {
-        ...DEFAULT_OPTIONS,
-        ui: {
-          ...DEFAULT_OPTIONS.ui,
-          theme: 'blueprint-dark' as const,
-        },
-      };
-
-      const customCore = new CoreState(mockElement, customOptions, 'test-blueprint-dark-id');
-      const customThemeManager = new ThemeManager(customCore, emitter);
-
-      const modal = document.createElement('div') as HTMLDivElement;
-      jest.spyOn(customCore, 'getModalElement').mockReturnValue(modal);
-
-      customThemeManager.setTheme();
-
-      expect(modal.getAttribute('data-theme')).toBe('blueprint-dark');
-
-      customThemeManager.destroy();
-    });
-  });
-
   describe('all 12 themes', () => {
     const THEMES = [
       'basic',
@@ -136,27 +54,25 @@ describe('ThemeManager', () => {
       expect(THEMES).toContain('blueprint-dark');
     });
 
-    it('applies each theme value to data-theme on the modal', () => {
-      THEMES.forEach((theme) => {
-        const customOptions = {
-          ...DEFAULT_OPTIONS,
-          ui: {
-            ...DEFAULT_OPTIONS.ui,
-            theme,
-          },
-        };
+    describe('through the ui.theme option', () => {
+      beforeEach(() => {
+        jest.useFakeTimers();
+      });
 
-        const customCore = new CoreState(mockElement, customOptions, `test-theme-${theme}`);
-        const customThemeManager = new ThemeManager(customCore, emitter);
+      afterEach(() => {
+        TimepickerUI.destroyAll();
+        jest.useRealTimers();
+      });
 
-        const modal = document.createElement('div') as HTMLDivElement;
-        jest.spyOn(customCore, 'getModalElement').mockReturnValue(modal);
+      it.each(THEMES)('should open the modal with data-theme set to ui.theme (%s)', (theme) => {
+        const input = document.createElement('input');
+        document.body.appendChild(input);
+        const picker = new TimepickerUI(input, { ui: { theme, animation: false } });
 
-        customThemeManager.setTheme();
+        picker.create();
+        picker.open();
 
-        expect(modal.getAttribute('data-theme')).toBe(theme);
-
-        customThemeManager.destroy();
+        expect(document.querySelector('.tp-ui-modal')?.getAttribute('data-theme')).toBe(theme);
       });
     });
   });

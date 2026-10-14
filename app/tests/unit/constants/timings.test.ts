@@ -1,5 +1,13 @@
-import { TIMINGS, type TimingsKey } from '../../../src/constants/timings';
+import { TIMINGS } from '../../../src/constants/timings';
 import * as constantsIndex from '../../../src/constants/index';
+
+const REMOVED_KEYS = [
+  'DEFAULT_DELAY',
+  'MODAL_ANIMATION',
+  'SCROLLBAR_UNLOCK_DELAY',
+  'SCROLLBAR_RESTORE',
+  'MODAL_REMOVE',
+];
 
 describe('TIMINGS constants', () => {
   it('should export TIMINGS object', () => {
@@ -11,24 +19,8 @@ describe('TIMINGS constants', () => {
     expect(constantsIndex.TIMINGS).toBe(TIMINGS);
   });
 
-  it('should have DEFAULT_DELAY constant', () => {
-    expect(TIMINGS.DEFAULT_DELAY).toBe(300);
-  });
-
-  it('should have MODAL_ANIMATION constant', () => {
-    expect(TIMINGS.MODAL_ANIMATION).toBe(150);
-  });
-
-  it('should have SCROLLBAR_RESTORE constant', () => {
-    expect(TIMINGS.SCROLLBAR_RESTORE).toBe(400);
-  });
-
-  it('should have MODAL_REMOVE constant', () => {
-    expect(TIMINGS.MODAL_REMOVE).toBe(300);
-  });
-
-  it('should have CLOCK_ANIMATION constant', () => {
-    expect(TIMINGS.CLOCK_ANIMATION).toBe(600);
+  it('should time the modal exit fade at 150ms', () => {
+    expect(TIMINGS.MODAL_EXIT).toBe(150);
   });
 
   it('should have TIPS_ANIMATION constant', () => {
@@ -47,28 +39,38 @@ describe('TIMINGS constants', () => {
     expect(TIMINGS.DROPDOWN_CLICK_DELAY).toBe(10);
   });
 
-  it('should have all expected keys', () => {
-    const expectedKeys: TimingsKey[] = [
-      'DEFAULT_DELAY',
-      'MODAL_ANIMATION',
-      'SCROLLBAR_RESTORE',
-      'MODAL_REMOVE',
-      'CLOCK_ANIMATION',
+  it('should have ANNOUNCE_DELAY constant', () => {
+    expect(TIMINGS.ANNOUNCE_DELAY).toBe(100);
+  });
+
+  it('should have COMMIT_ON_SCROLL_DELAY constant', () => {
+    expect(TIMINGS.COMMIT_ON_SCROLL_DELAY).toBe(400);
+  });
+
+  it('should have exactly the expected numeric keys', () => {
+    const expectedKeys: Array<keyof typeof TIMINGS> = [
+      'MODAL_EXIT',
       'TIPS_ANIMATION',
       'MOBILE_TOGGLE',
       'CLOCK_SCALE_DELAY',
+      'WRAPPER_TRANSITION',
       'DROPDOWN_CLICK_DELAY',
+      'ANNOUNCE_DELAY',
+      'COMMIT_ON_SCROLL_DELAY',
     ];
 
+    expect(Object.keys(TIMINGS).sort()).toEqual([...expectedKeys].sort());
     expectedKeys.forEach((key) => {
-      expect(TIMINGS).toHaveProperty(key);
       expect(typeof TIMINGS[key]).toBe('number');
     });
   });
 
+  it.each(REMOVED_KEYS)('should no longer define the open/close timer %s', (key) => {
+    expect(TIMINGS).not.toHaveProperty(key);
+  });
+
   it('should be immutable (readonly)', () => {
     const timingsCopy = { ...TIMINGS };
-    expect(timingsCopy.DEFAULT_DELAY).toBe(TIMINGS.DEFAULT_DELAY);
+    expect(timingsCopy.MODAL_EXIT).toBe(TIMINGS.MODAL_EXIT);
   });
 });
-

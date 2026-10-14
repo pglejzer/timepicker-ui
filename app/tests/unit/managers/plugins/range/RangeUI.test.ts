@@ -282,6 +282,41 @@ describe('RangeUI', () => {
       expect(pmBtn.classList.contains('active')).toBe(false);
     });
 
+    it.each<[string, string | undefined, [boolean, string], [boolean, string]]>([
+      ['AM', 'AM', [true, 'true'], [false, 'false']],
+      ['PM', 'PM', [false, 'false'], [true, 'true']],
+      ['no period', undefined, [false, 'false'], [false, 'false']],
+    ])(
+      'should press only the matching AM/PM toggle for a saved part with %s in 12h mode',
+      (_label, type, expectedAm, expectedPm) => {
+        state.setFromValue({ hour: '10', minutes: '30', type });
+        const hourInput = document.createElement('input');
+        const minutesInput = document.createElement('input');
+        const amBtn = document.createElement('div');
+        const pmBtn = document.createElement('div');
+        [amBtn, pmBtn].forEach((btn) => {
+          btn.classList.add('active');
+          btn.setAttribute('aria-pressed', 'true');
+        });
+        minutesInput.blur = jest.fn();
+        hourInput.click = jest.fn();
+        mockCore.getHour.mockReturnValue(hourInput);
+        mockCore.getMinutes.mockReturnValue(minutesInput);
+        mockCore.getAM.mockReturnValue(amBtn);
+        mockCore.getPM.mockReturnValue(pmBtn);
+        const toggleState = (btn: HTMLElement): [boolean, string | null] => [
+          btn.classList.contains('active'),
+          btn.getAttribute('aria-pressed'),
+        ];
+
+        const ui = new RangeUI(mockCore as never, state);
+        ui.syncClockToActivePart();
+
+        expect(toggleState(amBtn)).toEqual(expectedAm);
+        expect(toggleState(pmBtn)).toEqual(expectedPm);
+      },
+    );
+
     it('should click hour input to focus', () => {
       const hourInput = document.createElement('input') as HTMLInputElement;
       const minutesInput = document.createElement('input') as HTMLInputElement;
@@ -294,6 +329,41 @@ describe('RangeUI', () => {
       ui.syncClockToActivePart();
 
       expect(hourInput.click).toHaveBeenCalled();
+    });
+
+    it('should keep the hour, minute and second spinbutton ARIA in sync with the active part when seconds are shown', () => {
+      const secondsState = new RangeState('24h', undefined, undefined, emitter, true);
+      secondsState.setFromValue({ hour: '09', minutes: '05', seconds: '07' });
+      secondsState.setToValue({ hour: '17', minutes: '30', seconds: '00' });
+      const fields = {
+        hour: document.createElement('input'),
+        minutes: document.createElement('input'),
+        seconds: document.createElement('input'),
+      };
+      const core = {
+        ...mockCore,
+        getHour: jest.fn(() => fields.hour),
+        getMinutes: jest.fn(() => fields.minutes),
+        getSeconds: jest.fn(() => fields.seconds),
+        options: { clock: { type: '24h' } },
+      };
+      const ariaOf = (): Record<string, [string | null, string | null]> =>
+        Object.fromEntries(
+          Object.entries(fields).map(([name, input]) => [
+            name,
+            [input.getAttribute('aria-valuenow'), input.getAttribute('aria-valuetext')],
+          ]),
+        );
+      const ui = new RangeUI(core as never, secondsState);
+
+      ui.syncClockToActivePart();
+      const fromPart = ariaOf();
+      secondsState.setActivePart('to');
+      ui.syncClockToActivePart();
+      const toPart = ariaOf();
+
+      expect(fromPart).toEqual({ hour: ['9', '09'], minutes: ['5', '05'], seconds: ['7', '07'] });
+      expect(toPart).toEqual({ hour: ['17', '17'], minutes: ['30', '30'], seconds: ['0', '00'] });
     });
   });
 

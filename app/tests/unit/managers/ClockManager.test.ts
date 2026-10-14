@@ -1,7 +1,7 @@
 import ClockManager from '../../../src/managers/ClockManager';
 import { CoreState } from '../../../src/timepicker/CoreState';
 import { EventEmitter, type TimepickerEventMap } from '../../../src/utils/EventEmitter';
-import { DEFAULT_OPTIONS } from '../../../src/utils/options/defaults';
+import { DEFAULT_OPTIONS, mergeOptions } from '../../../src/utils/options/defaults';
 
 describe('ClockManager', () => {
   let coreState: CoreState;
@@ -305,205 +305,59 @@ describe('ClockManager', () => {
     });
   });
 
-  describe('removeCircleClockClasses24h', () => {
-    it('should remove 24h classes from circle and clock hand', () => {
-      const circle = document.createElement('div');
-      const clockHand = document.createElement('div');
-
-      circle.classList.add('tp-ui-circle-hand-24h');
-      clockHand.classList.add('tp-ui-clock-hand-24h');
-
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
-      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
-
-      clockManager.removeCircleClockClasses24h();
-
-      expect(circle.classList.contains('tp-ui-circle-hand-24h')).toBe(false);
-      expect(clockHand.classList.contains('tp-ui-clock-hand-24h')).toBe(false);
-    });
-
-    it('should handle null elements', () => {
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(null);
-      jest.spyOn(coreState, 'getClockHand').mockReturnValue(null);
-
-      expect(() => clockManager.removeCircleClockClasses24h()).not.toThrow();
-    });
-  });
-
-  describe('setCircleClockClasses24h', () => {
-    it('should add 24h classes to circle and clock hand', () => {
-      const circle = document.createElement('div');
-      const clockHand = document.createElement('div');
-
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
-      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
-
-      clockManager.setCircleClockClasses24h();
-
-      expect(circle.classList.contains('tp-ui-circle-hand-24h')).toBe(true);
-      expect(clockHand.classList.contains('tp-ui-clock-hand-24h')).toBe(true);
-    });
-
-    it('should handle null circle', () => {
-      const clockHand = document.createElement('div');
-
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(null);
-      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
-
-      expect(() => clockManager.setCircleClockClasses24h()).not.toThrow();
-    });
-
-    it('should handle null clockHand', () => {
-      const circle = document.createElement('div');
-
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
-      jest.spyOn(coreState, 'getClockHand').mockReturnValue(null);
-
-      clockManager.setCircleClockClasses24h();
-
-      expect(circle.classList.contains('tp-ui-circle-hand-24h')).toBe(true);
-    });
-  });
-
   describe('setOnStartCSSClassesIfClockType24h', () => {
-    it('should do nothing for 12h clock type', () => {
-      const circle = document.createElement('div');
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
-
-      clockManager.setOnStartCSSClassesIfClockType24h();
-
-      expect(circle.classList.contains('tp-ui-circle-hand-24h')).toBe(false);
-    });
-
-    it('should set classes for 24h clock type with hour > 12', () => {
-      const options24h = {
-        ...DEFAULT_OPTIONS,
-        clock: {
-          ...DEFAULT_OPTIONS.clock,
-          type: '24h' as const,
-        },
-      };
-
-      const core24h = new CoreState(mockElement, options24h, 'test-24h-id');
-      const manager24h = new ClockManager(core24h, emitter);
-
-      const input = document.createElement('input') as HTMLInputElement;
-      input.value = '14:30';
-
+    const innerRingClassesAfterStart = (
+      type: '12h' | '24h',
+      inputValue: string,
+    ): { circle: boolean; hand: boolean } => {
+      const core = new CoreState(mockElement, mergeOptions({ clock: { type } }), 'test-24h-id');
+      const manager = new ClockManager(core, emitter);
+      const input = document.createElement('input');
+      input.value = inputValue;
       const circle = document.createElement('div');
       const clockHand = document.createElement('div');
+      jest.spyOn(core, 'getInput').mockReturnValue(input);
+      jest.spyOn(core, 'getCircle').mockReturnValue(circle);
+      jest.spyOn(core, 'getClockHand').mockReturnValue(clockHand);
 
-      jest.spyOn(core24h, 'getInput').mockReturnValue(input);
-      jest.spyOn(core24h, 'getCircle').mockReturnValue(circle);
-      jest.spyOn(core24h, 'getClockHand').mockReturnValue(clockHand);
+      manager.setOnStartCSSClassesIfClockType24h();
+      manager.destroy();
 
-      manager24h.setOnStartCSSClassesIfClockType24h();
+      return {
+        circle: circle.classList.contains('tp-ui-circle-hand-24h'),
+        hand: clockHand.classList.contains('tp-ui-clock-hand-24h'),
+      };
+    };
 
-      expect(circle.classList.contains('tp-ui-circle-hand-24h')).toBe(true);
+    it.each(['14:30', '23:00', '00:00', '00:30'])(
+      'should add both the circle and the hand 24h classes for a 24h start time of %s',
+      (value) => {
+        expect(innerRingClassesAfterStart('24h', value)).toEqual({ circle: true, hand: true });
+      },
+    );
 
-      manager24h.destroy();
+    it.each(['01:00', '09:30', '12:00'])(
+      'should add neither 24h class for a 24h start time of %s',
+      (value) => {
+        expect(innerRingClassesAfterStart('24h', value)).toEqual({ circle: false, hand: false });
+      },
+    );
+
+    it('should add neither 24h class for a 12h clock', () => {
+      expect(innerRingClassesAfterStart('12h', '14:30')).toEqual({ circle: false, hand: false });
     });
 
-    it('should set classes for 24h clock type with hour 0', () => {
-      const options24h = {
-        ...DEFAULT_OPTIONS,
-        clock: {
-          ...DEFAULT_OPTIONS.clock,
-          type: '24h' as const,
-        },
-      };
-
-      const core24h = new CoreState(mockElement, options24h, 'test-24h-id');
-      const manager24h = new ClockManager(core24h, emitter);
-
-      const input = document.createElement('input') as HTMLInputElement;
-      input.value = '00:30';
-
-      const circle = document.createElement('div');
-      const clockHand = document.createElement('div');
-
-      jest.spyOn(core24h, 'getInput').mockReturnValue(input);
-      jest.spyOn(core24h, 'getCircle').mockReturnValue(circle);
-      jest.spyOn(core24h, 'getClockHand').mockReturnValue(clockHand);
-
-      manager24h.setOnStartCSSClassesIfClockType24h();
-
-      expect(circle.classList.contains('tp-ui-circle-hand-24h')).toBe(true);
-
-      manager24h.destroy();
-    });
-
-    it('should not set classes for 24h clock type with hour <= 12 and > 0', () => {
-      const options24h = {
-        ...DEFAULT_OPTIONS,
-        clock: {
-          ...DEFAULT_OPTIONS.clock,
-          type: '24h' as const,
-        },
-      };
-
-      const core24h = new CoreState(mockElement, options24h, 'test-24h-id');
-      const manager24h = new ClockManager(core24h, emitter);
-
-      const input = document.createElement('input') as HTMLInputElement;
-      input.value = '09:30';
-
-      const circle = document.createElement('div');
-      const clockHand = document.createElement('div');
-
-      jest.spyOn(core24h, 'getInput').mockReturnValue(input);
-      jest.spyOn(core24h, 'getCircle').mockReturnValue(circle);
-      jest.spyOn(core24h, 'getClockHand').mockReturnValue(clockHand);
-
-      manager24h.setOnStartCSSClassesIfClockType24h();
-
-      expect(circle.classList.contains('tp-ui-circle-hand-24h')).toBe(false);
-
-      manager24h.destroy();
+    it('should add neither 24h class for an empty input', () => {
+      expect(innerRingClassesAfterStart('24h', '')).toEqual({ circle: false, hand: false });
     });
 
     it('should return early when input is null', () => {
-      const options24h = {
-        ...DEFAULT_OPTIONS,
-        clock: {
-          ...DEFAULT_OPTIONS.clock,
-          type: '24h' as const,
-        },
-      };
-
-      const core24h = new CoreState(mockElement, options24h, 'test-24h-id');
+      const core24h = new CoreState(mockElement, mergeOptions({ clock: { type: '24h' } }), 'test-24h-id');
       const manager24h = new ClockManager(core24h, emitter);
 
       jest.spyOn(core24h, 'getInput').mockReturnValue(null);
 
       expect(() => manager24h.setOnStartCSSClassesIfClockType24h()).not.toThrow();
-
-      manager24h.destroy();
-    });
-
-    it('should not set classes when input value is empty', () => {
-      const options24h = {
-        ...DEFAULT_OPTIONS,
-        clock: {
-          ...DEFAULT_OPTIONS.clock,
-          type: '24h' as const,
-        },
-      };
-
-      const core24h = new CoreState(mockElement, options24h, 'test-24h-id');
-      const manager24h = new ClockManager(core24h, emitter);
-
-      const input = document.createElement('input') as HTMLInputElement;
-      input.value = '';
-
-      const circle = document.createElement('div');
-
-      jest.spyOn(core24h, 'getInput').mockReturnValue(input);
-      jest.spyOn(core24h, 'getCircle').mockReturnValue(circle);
-
-      manager24h.setOnStartCSSClassesIfClockType24h();
-
-      expect(circle.classList.contains('tp-ui-circle-hand-24h')).toBe(false);
 
       manager24h.destroy();
     });
@@ -553,239 +407,195 @@ describe('ClockManager', () => {
     });
   });
 
-  describe('setBgColorToCircleWithMinutesTips', () => {
-    it('should not modify if minutes or circle is null', () => {
-      jest.spyOn(coreState, 'getMinutes').mockReturnValue(null);
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(null);
+  describe('with a mounted clock face', () => {
+    const mountClock = (
+      instanceId: string,
+      hour: string,
+      minutes: string,
+      with24hRing = false,
+    ): HTMLElement => {
+      const modal = document.createElement('div');
+      modal.dataset.ownerId = instanceId;
+      modal.innerHTML = `
+        <input class="tp-ui-hour" value="${hour}" />
+        <input class="tp-ui-minutes" value="${minutes}" />
+        <div class="tp-ui-clock-face">
+          <div class="tp-ui-clock-hand"><div class="tp-ui-circle-hand"></div></div>
+          <div class="tp-ui-tips-wrapper"></div>
+          ${with24hRing ? '<div class="tp-ui-tips-wrapper-24h"></div>' : ''}
+        </div>
+      `;
+      document.body.appendChild(modal);
+      return modal;
+    };
 
-      expect(() => clockManager.setBgColorToCircleWithMinutesTips()).not.toThrow();
+    const activeTips = (modal: HTMLElement): Array<string | null> =>
+      [...modal.querySelectorAll('.tp-ui-value-tips.active, .tp-ui-value-tips-24h.active')].map(
+        (tip) => tip.textContent,
+      );
+
+    const handAngle = (modal: HTMLElement): number => {
+      const hand = modal.querySelector('.tp-ui-clock-hand') as HTMLElement;
+      const match = /rotateZ\((-?[\d.]+)deg\)/.exec(hand.style.transform);
+      return ((Number(match?.[1]) % 360) + 360) % 360;
+    };
+
+    const innerRing = (modal: HTMLElement): { circle: boolean; hand: boolean } => ({
+      circle: modal.querySelector('.tp-ui-circle-hand')!.classList.contains('tp-ui-circle-hand-24h'),
+      hand: modal.querySelector('.tp-ui-clock-hand')!.classList.contains('tp-ui-clock-hand-24h'),
     });
 
-    it('should remove small-circle class for 5-step minutes', () => {
-      const minutes = document.createElement('input') as HTMLInputElement;
-      minutes.value = '30';
-      const circle = document.createElement('div');
-      circle.classList.add('small-circle');
+    describe('syncClockValue', () => {
+      it('should return false before the clock system is initialized', () => {
+        expect(clockManager.syncClockValue('03', '45', 'PM')).toBe(false);
+      });
 
-      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutes);
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
+      it('should return true and move the hand and the active tip to the synced hour', () => {
+        const modal = mountClock(coreState.instanceId, '09', '30');
+        clockManager.initializeClockSystem();
+        expect(activeTips(modal)).toEqual(['9']);
 
-      clockManager.setBgColorToCircleWithMinutesTips();
+        expect(clockManager.syncClockValue('03', '45', 'PM')).toBe(true);
 
-      expect(circle.classList.contains('small-circle')).toBe(false);
+        expect(activeTips(modal)).toEqual(['3']);
+        expect(handAngle(modal)).toBe(90);
+      });
+
+      it('should move a 24h hand onto the inner ring for an hour past 12 and back off it', () => {
+        const core24h = new CoreState(mockElement, mergeOptions({ clock: { type: '24h' } }), 'sync-24h');
+        const manager24h = new ClockManager(core24h, emitter);
+        const modal = mountClock('sync-24h', '09', '30', true);
+        manager24h.initializeClockSystem();
+
+        manager24h.syncClockValue('15', '00');
+        expect(activeTips(modal)).toEqual(['15']);
+        expect(innerRing(modal)).toEqual({ circle: true, hand: true });
+
+        manager24h.syncClockValue('09', '00');
+        expect(activeTips(modal)).toEqual(['9']);
+        expect(innerRing(modal)).toEqual({ circle: false, hand: false });
+
+        manager24h.destroy();
+      });
+
+      describe('ring class writes on a 24h clock', () => {
+        let emitter24h: EventEmitter<TimepickerEventMap>;
+        let manager24h: ClockManager;
+
+        const mountAt15 = (): HTMLElement => {
+          emitter24h = new EventEmitter<TimepickerEventMap>();
+          const core24h = new CoreState(mockElement, mergeOptions({ clock: { type: '24h' } }), 'sync-24h');
+          manager24h = new ClockManager(core24h, emitter24h);
+          const modal = mountClock('sync-24h', '15', '30', true);
+          manager24h.initializeClockSystem();
+          return modal;
+        };
+
+        type RingRecords = Record<'circle' | 'hand', number>;
+
+        const ringClassRecords = (modal: HTMLElement, sync: () => void): RingRecords => {
+          const circle = modal.querySelector('.tp-ui-circle-hand')!;
+          const hand = modal.querySelector('.tp-ui-clock-hand')!;
+          const observer = new MutationObserver(() => {});
+          [circle, hand].forEach((target) =>
+            observer.observe(target, { attributes: true, attributeFilter: ['class'] }),
+          );
+
+          sync();
+
+          const records = observer.takeRecords();
+          observer.disconnect();
+          return {
+            circle: records.filter((record) => record.target === circle).length,
+            hand: records.filter((record) => record.target === hand).length,
+          };
+        };
+
+        afterEach(() => {
+          manager24h.destroy();
+        });
+
+        it('should write no ring class when the shown hour face stays on the inner ring', () => {
+          const modal = mountAt15();
+          expect(innerRing(modal)).toEqual({ circle: true, hand: true });
+
+          const records = ringClassRecords(modal, () => manager24h.syncClockValue('14', '30'));
+
+          expect(records).toEqual({ circle: 0, hand: 0 });
+          expect(innerRing(modal)).toEqual({ circle: true, hand: true });
+          expect(handAngle(modal)).toBe(60);
+        });
+
+        it('should write no ring class and keep the outer ring while the minute face is shown', () => {
+          const modal = mountAt15();
+          emitter24h.emit('select:minute', { minutes: '30' });
+          expect(innerRing(modal)).toEqual({ circle: false, hand: false });
+
+          const records = ringClassRecords(modal, () => manager24h.syncClockValue('14', '30'));
+
+          expect(records).toEqual({ circle: 0, hand: 0 });
+          expect(innerRing(modal)).toEqual({ circle: false, hand: false });
+        });
+
+        it('should write each ring class once when the shown hour moves to the outer ring', () => {
+          const modal = mountAt15();
+
+          const records = ringClassRecords(modal, () => manager24h.syncClockValue('09', '30'));
+
+          expect(records).toEqual({ circle: 1, hand: 1 });
+          expect(innerRing(modal)).toEqual({ circle: false, hand: false });
+          expect(handAngle(modal)).toBe(270);
+        });
+      });
     });
 
-    it('should not modify for non-5-step minutes', () => {
-      const minutes = document.createElement('input') as HTMLInputElement;
-      minutes.value = '07';
-      const circle = document.createElement('div');
+    describe('selection events', () => {
+      it('should switch to the minutes face on select:minute while the hour face is shown', () => {
+        const modal = mountClock(coreState.instanceId, '09', '30');
+        clockManager.initializeClockSystem();
+        const onAnimation = jest.fn();
+        emitter.on('animation:clock', onAnimation);
 
-      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutes);
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
+        emitter.emit('select:minute', { minutes: '40' });
 
-      clockManager.setBgColorToCircleWithMinutesTips();
+        expect(onAnimation).toHaveBeenCalledTimes(1);
+        expect(modal.querySelectorAll('.tp-ui-minutes-time')).toHaveLength(12);
+        expect(modal.querySelectorAll('.tp-ui-hour-time-12')).toHaveLength(0);
+        expect(activeTips(modal)).toEqual(['40']);
+        expect(handAngle(modal)).toBe(240);
+      });
 
-      expect(circle.classList.contains('small-circle')).toBe(false);
-    });
-  });
+      it('should switch back to the hour face on select:hour while the minutes face is shown', () => {
+        const modal = mountClock(coreState.instanceId, '09', '30');
+        clockManager.initializeClockSystem();
+        emitter.emit('select:minute', { minutes: '40' });
+        const onAnimation = jest.fn();
+        emitter.on('animation:clock', onAnimation);
 
-  describe('removeBgColorToCirleWithMinutesTips', () => {
-    it('should not modify if minutes or circle is null', () => {
-      jest.spyOn(coreState, 'getMinutes').mockReturnValue(null);
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(null);
+        emitter.emit('select:hour', { hour: '03' });
 
-      expect(() => clockManager.removeBgColorToCirleWithMinutesTips()).not.toThrow();
-    });
+        expect(onAnimation).toHaveBeenCalledTimes(1);
+        expect(modal.querySelectorAll('.tp-ui-hour-time-12')).toHaveLength(12);
+        expect(activeTips(modal)).toEqual(['3']);
+        expect(handAngle(modal)).toBe(90);
+      });
 
-    it('should add small-circle class for non-5-step minutes', () => {
-      const minutes = document.createElement('input') as HTMLInputElement;
-      minutes.value = '07';
-      const circle = document.createElement('div');
+      it('should step the shown hour face in place on select:hour, without animation:clock', () => {
+        const modal = mountClock(coreState.instanceId, '09', '30');
+        clockManager.initializeClockSystem();
+        const tipsBefore = [...modal.querySelectorAll('.tp-ui-value-tips')];
+        const onAnimation = jest.fn();
+        emitter.on('animation:clock', onAnimation);
 
-      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutes);
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
+        emitter.emit('select:hour', { hour: '10' });
 
-      clockManager.removeBgColorToCirleWithMinutesTips();
-
-      expect(circle.classList.contains('small-circle')).toBe(true);
-    });
-
-    it('should not add small-circle class for 5-step minutes', () => {
-      const minutes = document.createElement('input') as HTMLInputElement;
-      minutes.value = '15';
-      const circle = document.createElement('div');
-
-      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutes);
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
-
-      clockManager.removeBgColorToCirleWithMinutesTips();
-
-      expect(circle.classList.contains('small-circle')).toBe(false);
-    });
-  });
-
-  describe('setMinutesToClock', () => {
-    it('should not throw when clock system is null', () => {
-      expect(() => clockManager.setMinutesToClock('30')).not.toThrow();
-    });
-
-    it('should set minutes when clock system exists', () => {
-      const clockFace = document.createElement('div');
-      const clockHand = document.createElement('div');
-      const circle = document.createElement('div');
-      const tipsWrapper = document.createElement('div');
-      const hour = document.createElement('input') as HTMLInputElement;
-      const minutes = document.createElement('input') as HTMLInputElement;
-
-      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
-      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
-      jest.spyOn(coreState, 'getTipsWrapper').mockReturnValue(tipsWrapper);
-      jest.spyOn(coreState, 'getTipsWrapperFor24h').mockReturnValue(null);
-      jest.spyOn(coreState, 'getHour').mockReturnValue(hour);
-      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutes);
-      jest.spyOn(coreState, 'getActiveTypeMode').mockReturnValue(null);
-      jest.spyOn(coreState, 'getAM').mockReturnValue(null);
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(null);
-
-      clockManager.initializeClockSystem();
-
-      expect(() => clockManager.setMinutesToClock('45')).not.toThrow();
-    });
-  });
-
-  describe('setHoursToClock', () => {
-    it('should not throw when clock system is null', () => {
-      expect(() => clockManager.setHoursToClock('09')).not.toThrow();
-    });
-
-    it('should set hours when clock system exists', () => {
-      const clockFace = document.createElement('div');
-      const clockHand = document.createElement('div');
-      const circle = document.createElement('div');
-      const tipsWrapper = document.createElement('div');
-      const hour = document.createElement('input') as HTMLInputElement;
-      const minutes = document.createElement('input') as HTMLInputElement;
-
-      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
-      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
-      jest.spyOn(coreState, 'getTipsWrapper').mockReturnValue(tipsWrapper);
-      jest.spyOn(coreState, 'getTipsWrapperFor24h').mockReturnValue(null);
-      jest.spyOn(coreState, 'getHour').mockReturnValue(hour);
-      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutes);
-      jest.spyOn(coreState, 'getActiveTypeMode').mockReturnValue(null);
-      jest.spyOn(coreState, 'getAM').mockReturnValue(null);
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(null);
-
-      clockManager.initializeClockSystem();
-
-      expect(() => clockManager.setHoursToClock('10')).not.toThrow();
-    });
-  });
-
-  describe('setTransformToCircleWithSwitchesHour', () => {
-    it('should not throw when clock system is null', () => {
-      expect(() => clockManager.setTransformToCircleWithSwitchesHour('09')).not.toThrow();
-    });
-
-    it('should not throw with null value', () => {
-      expect(() => clockManager.setTransformToCircleWithSwitchesHour(null)).not.toThrow();
-    });
-  });
-
-  describe('setTransformToCircleWithSwitchesMinutes', () => {
-    it('should not throw when clock system is null', () => {
-      expect(() => clockManager.setTransformToCircleWithSwitchesMinutes('30')).not.toThrow();
-    });
-
-    it('should not throw with null value', () => {
-      expect(() => clockManager.setTransformToCircleWithSwitchesMinutes(null)).not.toThrow();
-    });
-  });
-
-  describe('updateAmPm', () => {
-    it('should not throw when clock system is null', () => {
-      expect(() => clockManager.updateAmPm()).not.toThrow();
-    });
-
-    it('should not update for 24h clock type', () => {
-      const options24h = {
-        ...DEFAULT_OPTIONS,
-        clock: {
-          ...DEFAULT_OPTIONS.clock,
-          type: '24h' as const,
-        },
-      };
-
-      const core24h = new CoreState(mockElement, options24h, 'test-24h-id');
-      const manager24h = new ClockManager(core24h, emitter);
-
-      expect(() => manager24h.updateAmPm()).not.toThrow();
-
-      manager24h.destroy();
-    });
-  });
-
-  describe('toggleClassActiveToValueTips', () => {
-    it('should not throw when allValueTips is empty', () => {
-      jest.spyOn(coreState, 'getAllValueTips').mockReturnValue([]);
-
-      expect(() => clockManager.toggleClassActiveToValueTips('09')).not.toThrow();
-    });
-
-    it('should return early when clock system exists', () => {
-      const clockFace = document.createElement('div');
-      const clockHand = document.createElement('div');
-      const circle = document.createElement('div');
-      const tipsWrapper = document.createElement('div');
-      const hour = document.createElement('input') as HTMLInputElement;
-      const minutes = document.createElement('input') as HTMLInputElement;
-
-      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
-      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(circle);
-      jest.spyOn(coreState, 'getTipsWrapper').mockReturnValue(tipsWrapper);
-      jest.spyOn(coreState, 'getTipsWrapperFor24h').mockReturnValue(null);
-      jest.spyOn(coreState, 'getHour').mockReturnValue(hour);
-      jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutes);
-      jest.spyOn(coreState, 'getActiveTypeMode').mockReturnValue(null);
-      jest.spyOn(coreState, 'getAM').mockReturnValue(null);
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(null);
-
-      clockManager.initializeClockSystem();
-
-      const getAllSpy = jest.spyOn(coreState, 'getAllValueTips');
-
-      clockManager.toggleClassActiveToValueTips('09');
-
-      expect(getAllSpy).not.toHaveBeenCalled();
-    });
-
-    it('should toggle active class on matching tip', () => {
-      const tip1 = document.createElement('div') as HTMLDivElement;
-      tip1.innerText = '9';
-      const tip2 = document.createElement('div') as HTMLDivElement;
-      tip2.innerText = '10';
-      tip2.classList.add('active');
-
-      jest.spyOn(coreState, 'getAllValueTips').mockReturnValue([tip1, tip2]);
-
-      clockManager.toggleClassActiveToValueTips(9);
-
-      expect(tip1.classList.contains('active')).toBe(true);
-      expect(tip2.classList.contains('active')).toBe(false);
-    });
-
-    it('should not add active class when no matching tip', () => {
-      const tip1 = document.createElement('div') as HTMLDivElement;
-      tip1.innerText = '1';
-
-      jest.spyOn(coreState, 'getAllValueTips').mockReturnValue([tip1]);
-
-      clockManager.toggleClassActiveToValueTips(9);
-
-      expect(tip1.classList.contains('active')).toBe(false);
+        expect(onAnimation).not.toHaveBeenCalled();
+        const tipsAfter = [...modal.querySelectorAll('.tp-ui-value-tips')];
+        expect(tipsAfter).toHaveLength(tipsBefore.length);
+        tipsAfter.forEach((tip, index) => expect(tip).toBe(tipsBefore[index]));
+        expect(activeTips(modal)).toEqual(['10']);
+        expect(handAngle(modal)).toBe(300);
+      });
     });
   });
 

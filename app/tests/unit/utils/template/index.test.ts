@@ -71,12 +71,13 @@ describe('getModalTemplate accessibility semantics', () => {
       expect(pm.getAttribute('aria-pressed')).toBe('false');
     });
 
-    it('keeps aria-pressed on the view-switch toggle', () => {
+    it('does NOT set aria-pressed anywhere in the view-switch control (its label names the action)', () => {
       const dom = render({ clock: { type: '12h' }, ui: { enableSwitchIcon: true } });
 
-      const toggle = dom.querySelector('.tp-ui-keyboard-icon-wrapper') as HTMLElement;
-      expect(toggle).not.toBeNull();
-      expect(toggle.getAttribute('aria-pressed')).toBe('false');
+      const control = dom.querySelector('.tp-ui-keyboard-icon-wrapper') as HTMLElement;
+      expect(control).not.toBeNull();
+      expect(control.hasAttribute('aria-pressed')).toBe(false);
+      expect(control.querySelectorAll('[aria-pressed]')).toHaveLength(0);
     });
   });
 
@@ -94,12 +95,12 @@ describe('getModalTemplate accessibility semantics', () => {
 
       const hour = dom.querySelector('input[name="hour"]') as HTMLInputElement;
       const minutes = dom.querySelector('input[name="minutes"]') as HTMLInputElement;
-      const clockFace = dom.querySelector('.tp-ui-clock-face') as HTMLElement;
+      const clockGroup = dom.querySelector('.tp-ui-body') as HTMLElement;
       const periodGroup = dom.querySelector('.tp-ui-wrapper-type-time') as HTMLElement;
 
       expect(hour.getAttribute('aria-label')).toBe('Godzina');
       expect(minutes.getAttribute('aria-label')).toBe('Minuta');
-      expect(clockFace.getAttribute('aria-label')).toBe('Tarcza zegara');
+      expect(clockGroup.getAttribute('aria-label')).toBe('Tarcza zegara');
       expect(periodGroup.getAttribute('aria-label')).toBe('Pora dnia');
     });
 
@@ -130,7 +131,7 @@ describe('getModalTemplate accessibility semantics', () => {
       expect(timeGroup.getAttribute('aria-label')).not.toBe(heading.textContent);
     });
 
-    it('uses custom switch/toggle labels on the view-switch controls', () => {
+    it('names the view-switch button with the custom switch label and leaves its wrapper unnamed', () => {
       const dom = render({
         clock: { type: '12h' },
         ui: { enableSwitchIcon: true },
@@ -140,11 +141,24 @@ describe('getModalTemplate accessibility semantics', () => {
         },
       });
 
-      const toggle = dom.querySelector('.tp-ui-keyboard-icon-wrapper') as HTMLElement;
+      const wrapper = dom.querySelector('.tp-ui-keyboard-icon-wrapper') as HTMLElement;
       const keyboardIcon = dom.querySelector('.tp-ui-keyboard-icon') as HTMLElement;
 
-      expect(toggle.getAttribute('aria-label')).toBe('Przelacz widok');
+      expect(wrapper.hasAttribute('aria-label')).toBe(false);
       expect(keyboardIcon.getAttribute('aria-label')).toBe('Przelacz na klawiature');
+    });
+
+    it('names the mobile view-switch button with the custom switch-to-clock label', () => {
+      const dom = render({
+        clock: { type: '12h' },
+        ui: { enableSwitchIcon: true, mobile: true },
+        labels: { switchToClockLabel: 'Pokaz tarcze' },
+      });
+
+      const clockIcon = dom.querySelector('button.tp-ui-keyboard-icon') as HTMLElement;
+
+      expect(clockIcon).not.toBeNull();
+      expect(clockIcon.getAttribute('aria-label')).toBe('Pokaz tarcze');
     });
 
     it('uses custom rangeSelectionLabel on the range tablist when range is enabled', () => {
@@ -177,15 +191,62 @@ describe('getModalTemplate accessibility semantics', () => {
   });
 
   describe('clock face semantics', () => {
-    it('marks the tips wrapper aria-hidden and the clock face as group', () => {
+    it('names the clock body as a group with labels.clockLabel', () => {
       const dom = render({ clock: { type: '12h' } });
 
-      const clockFace = dom.querySelector('.tp-ui-clock-face') as HTMLElement;
-      const tipsWrapper = dom.querySelector('.tp-ui-tips-wrapper') as HTMLElement;
+      const clockGroup = dom.querySelector('.tp-ui-body') as HTMLElement;
 
-      expect(clockFace.getAttribute('role')).toBe('group');
-      expect(tipsWrapper.getAttribute('aria-hidden')).toBe('true');
-      expect(tipsWrapper.getAttribute('role')).toBeNull();
+      expect(clockGroup.getAttribute('role')).toBe('group');
+      expect(clockGroup.getAttribute('aria-label')).toBe('Clock');
     });
+
+    it.each(['12h', '24h'] as const)(
+      'renders the %s dial as a focusable slider without a static name or value',
+      (type) => {
+        const dom = render({ clock: { type } });
+
+        const clockFace = dom.querySelector('.tp-ui-clock-face') as HTMLElement;
+
+        expect(clockFace.getAttribute('role')).toBe('slider');
+        expect(clockFace.getAttribute('tabindex')).toBe('0');
+        ['aria-label', 'aria-valuemin', 'aria-valuemax', 'aria-valuenow', 'aria-valuetext'].forEach((name) => {
+          expect(clockFace.hasAttribute(name)).toBe(false);
+        });
+      },
+    );
+
+    it.each([
+      ['12h', 1],
+      ['24h', 2],
+    ] as const)('marks every %s tips wrapper aria-hidden without a role', (type, count) => {
+      const dom = render({ clock: { type } });
+
+      const tipsWrappers = dom.querySelectorAll('.tp-ui-tips-wrapper, .tp-ui-tips-wrapper-24h');
+
+      expect(tipsWrappers).toHaveLength(count);
+      tipsWrappers.forEach((wrapper) => {
+        expect(wrapper.getAttribute('aria-hidden')).toBe('true');
+        expect(wrapper.getAttribute('role')).toBeNull();
+      });
+    });
+  });
+});
+
+describe('getModalTemplate modal transition style', () => {
+  const modalOf = (options: TimepickerOptions): HTMLElement =>
+    render(options).querySelector('.tp-ui-modal') as HTMLElement;
+
+  it.each<[string, TimepickerOptions]>([
+    ['by default', {}],
+    ['with ui.animation: true', { ui: { animation: true } }],
+  ])('leaves the transition to the stylesheet %s (no inline style)', (_name, options) => {
+    expect(modalOf(options).hasAttribute('style')).toBe(false);
+  });
+
+  it.each<[string, TimepickerOptions]>([
+    ['the clock', { ui: { animation: false } }],
+    ['the mobile view', { ui: { mobile: true, animation: false } }],
+  ])('turns the transition off inline for %s when ui.animation is false', (_name, options) => {
+    expect(modalOf(options).getAttribute('style')).toBe('transition:none');
   });
 });

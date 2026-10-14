@@ -1,7 +1,10 @@
 import EventManager from '../../../src/managers/EventManager';
+import ClearButtonManager from '../../../src/managers/ClearButtonManager';
 import { CoreState } from '../../../src/timepicker/CoreState';
 import { EventEmitter, type TimepickerEventMap } from '../../../src/utils/EventEmitter';
-import { DEFAULT_OPTIONS } from '../../../src/utils/options/defaults';
+import { DEFAULT_OPTIONS, mergeOptions } from '../../../src/utils/options/defaults';
+import type { TimepickerOptions } from '../../../src/types/options';
+import type { UpdateEventData } from '../../../src/types/types';
 
 describe('EventManager', () => {
   let coreState: CoreState;
@@ -46,7 +49,7 @@ describe('EventManager', () => {
       expect(() => eventManager.handleOpenOnClick()).not.toThrow();
     });
 
-    it('should attach click handler to open elements', () => {
+    it('should emit show and then open:request when an open element is clicked', () => {
       const openBtn = document.createElement('button');
       openBtn.classList.add('timepicker-ui-open-element');
       openBtn.setAttribute('data-open', 'test');
@@ -60,6 +63,7 @@ describe('EventManager', () => {
       openBtn.click();
 
       expect(emitSpy).toHaveBeenCalledWith('show', {});
+      expect(emitSpy.mock.calls.map(([event]) => event)).toEqual(['show', 'open:request']);
     });
 
     it('should not emit when destroyed', () => {
@@ -85,7 +89,7 @@ describe('EventManager', () => {
       expect(() => eventManager.handleOpenOnEnterFocus()).not.toThrow();
     });
 
-    it('should emit show on Enter key', () => {
+    it('should emit show and then open:request on Enter key', () => {
       jest.spyOn(coreState, 'getInput').mockReturnValue(mockInput);
       const emitSpy = jest.spyOn(emitter, 'emit');
 
@@ -95,6 +99,35 @@ describe('EventManager', () => {
       mockInput.dispatchEvent(enterEvent);
 
       expect(emitSpy).toHaveBeenCalledWith('show', {});
+      expect(emitSpy.mock.calls.map(([event]) => event)).toEqual(['show', 'open:request']);
+    });
+
+    it('should not emit on Enter when the picker is already open', () => {
+      jest.spyOn(coreState, 'getInput').mockReturnValue(mockInput);
+      coreState.setIsOpen(true);
+      const emitSpy = jest.spyOn(emitter, 'emit');
+
+      eventManager.handleOpenOnEnterFocus();
+
+      mockInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+      expect(emitSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not emit on Enter while the closed picker still has its modal in the DOM', () => {
+      jest.spyOn(coreState, 'getInput').mockReturnValue(mockInput);
+      coreState.setIsOpen(false);
+      coreState.setIsModalRemove(false);
+      const emitSpy = jest.spyOn(emitter, 'emit');
+
+      eventManager.handleOpenOnEnterFocus();
+
+      mockInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(emitSpy).not.toHaveBeenCalled();
+
+      coreState.setIsModalRemove(true);
+      mockInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(emitSpy.mock.calls.map(([event]) => event)).toEqual(['show', 'open:request']);
     });
 
     it('should not emit on other keys', () => {
@@ -168,7 +201,7 @@ describe('EventManager', () => {
       const minutesInput = document.createElement('input') as HTMLInputElement;
       minutesInput.value = '30';
       const amButton = document.createElement('button');
-      amButton.textContent = 'AM';
+      amButton.dataset.type = 'AM';
       amButton.classList.add('active');
 
       jest.spyOn(coreState, 'getOkButton').mockReturnValue(okBtn);
@@ -261,6 +294,76 @@ describe('EventManager', () => {
       expect(emitSpy).not.toHaveBeenCalled();
     });
 
+    describe('press that moves between the dialog and the backdrop', () => {
+      const mountModal = (): { modal: HTMLDivElement; content: HTMLDivElement } => {
+        const modal = document.createElement('div');
+        const content = document.createElement('div');
+        modal.appendChild(content);
+        jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+        return { modal, content };
+      };
+
+      const press = (down: HTMLElement, up: HTMLElement, modal: HTMLElement): void => {
+        down.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+        up.dispatchEvent(new Event('pointerup', { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      };
+
+      it('should not emit cancel when a press inside the dialog is released over the backdrop', () => {
+        const { modal, content } = mountModal();
+        const emitSpy = jest.spyOn(emitter, 'emit');
+
+        eventManager.handleBackdropClick();
+        press(content, modal, modal);
+
+        expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
+      });
+
+      it('should not emit cancel when a press on the backdrop is released inside the dialog', () => {
+        const { modal, content } = mountModal();
+        const emitSpy = jest.spyOn(emitter, 'emit');
+
+        eventManager.handleBackdropClick();
+        press(modal, content, modal);
+
+        expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
+      });
+
+      it('should emit cancel when the press starts and ends on the backdrop', () => {
+        const { modal } = mountModal();
+        const emitSpy = jest.spyOn(emitter, 'emit');
+
+        eventManager.handleBackdropClick();
+        press(modal, modal, modal);
+
+        expect(emitSpy).toHaveBeenCalledWith('cancel', {});
+      });
+
+      it('should not emit cancel when a click inside the dialog comes before the release click', () => {
+        const { modal, content } = mountModal();
+        const emitSpy = jest.spyOn(emitter, 'emit');
+
+        eventManager.handleBackdropClick();
+        content.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+        modal.dispatchEvent(new Event('pointerup', { bubbles: true }));
+        content.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+        expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
+      });
+
+      it('should still close on a backdrop click that follows a drag released over the backdrop', () => {
+        const { modal, content } = mountModal();
+        const emitSpy = jest.spyOn(emitter, 'emit');
+
+        eventManager.handleBackdropClick();
+        press(content, modal, modal);
+        press(modal, modal, modal);
+
+        expect(emitSpy.mock.calls.filter(([event]) => event === 'cancel')).toHaveLength(1);
+      });
+    });
+
     it('should not emit when destroyed', () => {
       const modal = document.createElement('div');
       jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
@@ -276,6 +379,54 @@ describe('EventManager', () => {
 
       expect(emitSpy).not.toHaveBeenCalled();
     });
+  });
+
+  describe('handlePointerModality', () => {
+    const POINTER = 'tp-ui-pointer';
+
+    const mountModal = (): { modal: HTMLDivElement; child: HTMLButtonElement } => {
+      const modal = document.createElement('div');
+      const child = document.createElement('button');
+      modal.appendChild(child);
+      document.body.appendChild(modal);
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+      return { modal, child };
+    };
+
+    const pointerDown = (target: HTMLElement): void => {
+      target.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    };
+
+    it('should do nothing when no modal exists', () => {
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(null);
+      expect(() => eventManager.handlePointerModality()).not.toThrow();
+    });
+
+    it('should add the pointer class to the modal on pointerdown inside it', () => {
+      const { modal, child } = mountModal();
+
+      eventManager.handlePointerModality();
+      pointerDown(child);
+
+      expect(modal.classList.contains(POINTER)).toBe(true);
+    });
+
+    it.each(['detach', 'destroy'] as const)(
+      'should stop tracking the pointer class after %s()',
+      (teardown) => {
+        const { modal, child } = mountModal();
+        eventManager.handlePointerModality();
+
+        eventManager[teardown]();
+
+        pointerDown(child);
+        expect(modal.classList.contains(POINTER)).toBe(false);
+
+        modal.classList.add(POINTER);
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
+        expect(modal.classList.contains(POINTER)).toBe(true);
+      },
+    );
   });
 
   describe('handleEscClick', () => {
@@ -354,6 +505,8 @@ describe('EventManager', () => {
 
       expect(amBtn.classList.contains('active')).toBe(true);
       expect(pmBtn.classList.contains('active')).toBe(false);
+      expect(amBtn.getAttribute('aria-pressed')).toBe('true');
+      expect(pmBtn.getAttribute('aria-pressed')).toBe('false');
       expect(emitSpy).toHaveBeenCalledWith('select:am', {});
     });
 
@@ -424,6 +577,8 @@ describe('EventManager', () => {
 
       expect(pmBtn.classList.contains('active')).toBe(true);
       expect(amBtn.classList.contains('active')).toBe(false);
+      expect(pmBtn.getAttribute('aria-pressed')).toBe('true');
+      expect(amBtn.getAttribute('aria-pressed')).toBe('false');
       expect(emitSpy).toHaveBeenCalledWith('select:pm', {});
     });
 
@@ -501,7 +656,7 @@ describe('EventManager', () => {
       const minutesInput = document.createElement('input') as HTMLInputElement;
       minutesInput.value = '30';
       const typeMode = document.createElement('button') as HTMLButtonElement;
-      typeMode.textContent = 'AM';
+      typeMode.dataset.type = 'AM';
 
       jest.spyOn(coreState, 'getHour').mockReturnValue(hourInput);
       jest.spyOn(coreState, 'getMinutes').mockReturnValue(minutesInput);
@@ -1024,21 +1179,6 @@ describe('EventManager', () => {
     });
   });
 
-  describe('handleMoveHand', () => {
-    it('should attach drag handlers', () => {
-      expect(() => eventManager.handleMoveHand()).not.toThrow();
-    });
-
-    it('should not do anything when destroyed', () => {
-      Object.defineProperty(coreState, 'isDestroyed', { value: true, writable: true });
-
-      eventManager.handleMoveHand();
-
-      const mouseEvent = new MouseEvent('mousedown');
-      document.dispatchEvent(mouseEvent);
-    });
-  });
-
   describe('handleSwitchViewButton', () => {
     it('should do nothing when no switch button exists', () => {
       jest.spyOn(coreState, 'getKeyboardClockIcon').mockReturnValue(null);
@@ -1096,6 +1236,206 @@ describe('EventManager', () => {
 
       expect(() => eventManager.destroy()).not.toThrow();
     });
+  });
+});
+
+describe('EventManager blocks OK on a disabled time', () => {
+  type DisabledValue = NonNullable<CoreState['disabledTime']>['value'];
+
+  interface Header {
+    hour: string;
+    minutes: string;
+    period?: 'AM' | 'PM';
+  }
+
+  const OWNER_ID = 'ok-guard-instance';
+  const BLOCKED_AT_TEN: DisabledValue = { hours: ['10'] };
+
+  let core: CoreState;
+  let emitter: EventEmitter<TimepickerEventMap>;
+  let manager: EventManager;
+  let clearButtonManager: ClearButtonManager | null = null;
+  let okButton: HTMLElement;
+  let hourInput: HTMLInputElement;
+  let confirmSpy: jest.Mock;
+
+  const periodButtons = (period: Header['period']): string => {
+    if (!period) return '';
+    const active = (type: 'AM' | 'PM'): string => (type === period ? ' active' : '');
+    return `
+      <div class="tp-ui-type-mode tp-ui-am${active('AM')}" role="button" tabindex="0" data-type="AM">AM</div>
+      <div class="tp-ui-type-mode tp-ui-pm${active('PM')}" role="button" tabindex="0" data-type="PM">PM</div>
+    `;
+  };
+
+  const mount = (options: TimepickerOptions, disabled: DisabledValue, header: Header): void => {
+    const host = document.createElement('div');
+    const input = document.createElement('input');
+    input.value = `${header.hour}:${header.minutes}`;
+    host.appendChild(input);
+    document.body.appendChild(host);
+
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      `
+      <div class="tp-ui-modal" data-owner-id="${OWNER_ID}">
+        <div class="tp-ui-wrapper" tabindex="0">
+          <input class="tp-ui-hour" type="number" value="${header.hour}" />
+          <input class="tp-ui-minutes" type="number" value="${header.minutes}" />
+          ${periodButtons(header.period)}
+          <div class="tp-ui-clear-btn" role="button" tabindex="0">Clear</div>
+          <div class="tp-ui-ok-btn" role="button" tabindex="0">OK</div>
+        </div>
+        <div class="timepicker-announcer"></div>
+      </div>
+    `,
+    );
+
+    core = new CoreState(host, mergeOptions(options), OWNER_ID);
+    core.setDisabledTime({ value: disabled });
+    emitter = new EventEmitter<TimepickerEventMap>();
+    manager = new EventManager(core, emitter);
+
+    okButton = core.getOkButton() as HTMLElement;
+    hourInput = core.getHour() as HTMLInputElement;
+    confirmSpy = jest.fn();
+    emitter.on('confirm', confirmSpy);
+  };
+
+  const press = (el: HTMLElement, key: string): void => {
+    el.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+  };
+
+  const okState = (): { ariaDisabled: string | null; disabledClass: boolean } => ({
+    ariaDisabled: okButton.getAttribute('aria-disabled'),
+    disabledClass: okButton.classList.contains('disabled'),
+  });
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    manager.destroy();
+    clearButtonManager?.destroy();
+    clearButtonManager = null;
+    document.body.innerHTML = '';
+    jest.useRealTimers();
+  });
+
+  it('blocks OK at bind when the header time is disabled and unblocks it after an update to an enabled time', () => {
+    mount({ clock: { type: '24h' } }, BLOCKED_AT_TEN, { hour: '10', minutes: '15' });
+
+    manager.handleOkButton();
+
+    expect(okState()).toEqual({ ariaDisabled: 'true', disabledClass: true });
+
+    hourInput.value = '11';
+    emitter.emit('update', { hour: '11', minutes: '15' });
+
+    expect(okState()).toEqual({ ariaDisabled: 'false', disabledClass: false });
+  });
+
+  it.each<[string, (el: HTMLElement) => void]>([
+    ['click', (el) => el.click()],
+    ['Enter', (el) => press(el, 'Enter')],
+    ['Space', (el) => press(el, ' ')],
+  ])('emits no confirm on %s while OK is blocked', (_, activate) => {
+    mount({ clock: { type: '24h' } }, BLOCKED_AT_TEN, { hour: '10', minutes: '15' });
+    manager.handleOkButton();
+
+    activate(okButton);
+
+    expect(confirmSpy).not.toHaveBeenCalled();
+  });
+
+  it('confirms the header time once it is enabled again', () => {
+    mount({ clock: { type: '24h' } }, BLOCKED_AT_TEN, { hour: '10', minutes: '15' });
+    manager.handleOkButton();
+
+    hourInput.value = '11';
+    emitter.emit('update', { hour: '11', minutes: '15' });
+    press(okButton, 'Enter');
+
+    expect(confirmSpy).toHaveBeenCalledTimes(1);
+    expect(confirmSpy).toHaveBeenCalledWith({ hour: '11', minutes: '15', type: undefined });
+  });
+
+  it('follows the AM/PM toggle when an interval disables only the PM time', () => {
+    mount(
+      { clock: { type: '12h' } },
+      { isInterval: true, clockType: '12h', intervals: ['10:00 PM - 11:00 PM'] },
+      { hour: '10', minutes: '00', period: 'AM' },
+    );
+    manager.handleOkButton();
+    manager.handleAmClick();
+    manager.handlePmClick();
+
+    expect(okState().ariaDisabled).not.toBe('true');
+    expect(okState().disabledClass).toBe(false);
+
+    (core.getPM() as HTMLElement).click();
+    expect(okState()).toEqual({ ariaDisabled: 'true', disabledClass: true });
+
+    (core.getAM() as HTMLElement).click();
+    expect(okState()).toEqual({ ariaDisabled: 'false', disabledClass: false });
+  });
+
+  it('never touches OK when range is enabled', () => {
+    mount({ clock: { type: '24h' }, range: { enabled: true } }, BLOCKED_AT_TEN, {
+      hour: '10',
+      minutes: '15',
+    });
+
+    manager.handleOkButton();
+    expect(okState()).toEqual({ ariaDisabled: null, disabledClass: false });
+
+    emitter.emit('update', { hour: '10', minutes: '15' });
+    expect(okState()).toEqual({ ariaDisabled: null, disabledClass: false });
+  });
+
+  it('keeps OK disabled through Clear and re-enables it once an enabled time is chosen', () => {
+    mount({ clock: { type: '24h' }, ui: { clearButton: true } }, BLOCKED_AT_TEN, {
+      hour: '10',
+      minutes: '15',
+    });
+    manager.handleOkButton();
+    manager.handleHourEvents();
+    manager.handleMinutesEvents();
+    manager.handleKeyboardInput();
+    clearButtonManager = new ClearButtonManager(core, emitter);
+    clearButtonManager.init();
+
+    expect(okState()).toEqual({ ariaDisabled: 'true', disabledClass: true });
+
+    (document.querySelector('.tp-ui-clear-btn') as HTMLElement).click();
+
+    expect(hourInput.value).toBe('12');
+    expect(okState()).toEqual({ ariaDisabled: 'true', disabledClass: true });
+    okButton.click();
+    expect(confirmSpy).not.toHaveBeenCalled();
+
+    press(hourInput, 'ArrowUp');
+
+    expect(hourInput.value).toBe('13');
+    expect(okState()).toEqual({ ariaDisabled: 'false', disabledClass: false });
+    okButton.click();
+    expect(confirmSpy).toHaveBeenCalledWith({ hour: '13', minutes: '00', type: undefined });
+  });
+
+  it.each<[string, UpdateEventData]>([
+    ['an empty payload', {}],
+    ['a payload without an hour', { minutes: '15' }],
+  ])('ignores an update with %s', (_, payload) => {
+    mount({ clock: { type: '24h' } }, BLOCKED_AT_TEN, { hour: '10', minutes: '15' });
+    manager.handleOkButton();
+    hourInput.value = '11';
+
+    emitter.emit('update', payload);
+    expect(okState()).toEqual({ ariaDisabled: 'true', disabledClass: true });
+
+    emitter.emit('update', { hour: '11', minutes: '15' });
+    expect(okState()).toEqual({ ariaDisabled: 'false', disabledClass: false });
   });
 });
 

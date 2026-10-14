@@ -457,13 +457,17 @@ describe('CoreState', () => {
       expect(coreState.getKeyboardClockIcon()).toBeNull();
     });
 
-    it('should return keyboard icon element', () => {
+    it('should return the keyboard icon button, not its wrapper', () => {
       const modalEl = document.createElement('div');
       modalEl.setAttribute('data-owner-id', 'test-instance-id');
 
+      const wrapper = document.createElement('div');
+      wrapper.className = 'tp-ui-keyboard-icon-wrapper';
       const icon = document.createElement('button');
-      icon.className = 'tp-ui-keyboard-icon-wrapper';
-      modalEl.appendChild(icon);
+      icon.type = 'button';
+      icon.className = 'tp-ui-keyboard-icon';
+      wrapper.appendChild(icon);
+      modalEl.appendChild(wrapper);
       document.body.appendChild(modalEl);
 
       expect(coreState.getKeyboardClockIcon()).toBe(icon);

@@ -1,5 +1,15 @@
 import { TimezoneKeyboard } from '../../../../../src/managers/plugins/timezone/TimezoneKeyboard';
 
+const OPTIONS_COUNT = 10;
+
+const keyboardFocusedAt = (index: number, optionsCount: number = OPTIONS_COUNT): TimezoneKeyboard => {
+  const keyboard = new TimezoneKeyboard();
+  for (let step = 0; step <= index; step++) {
+    keyboard.moveDown(optionsCount);
+  }
+  return keyboard;
+};
+
 describe('TimezoneKeyboard', () => {
   describe('constructor', () => {
     it('should create with initial index -1', () => {
@@ -11,39 +21,26 @@ describe('TimezoneKeyboard', () => {
 
   describe('getFocusedIndex', () => {
     it('should return current focused index', () => {
-      const keyboard = new TimezoneKeyboard();
-      keyboard.setFocusedIndex(5);
+      const keyboard = keyboardFocusedAt(5);
 
       expect(keyboard.getFocusedIndex()).toBe(5);
     });
   });
 
-  describe('setFocusedIndex', () => {
-    it('should set focused index', () => {
-      const keyboard = new TimezoneKeyboard();
-
-      keyboard.setFocusedIndex(3);
-
-      expect(keyboard.getFocusedIndex()).toBe(3);
-    });
-  });
-
   describe('moveDown', () => {
     it('should increment focused index', () => {
-      const keyboard = new TimezoneKeyboard();
-      keyboard.setFocusedIndex(2);
+      const keyboard = keyboardFocusedAt(2);
 
-      const result = keyboard.moveDown(10);
+      const result = keyboard.moveDown(OPTIONS_COUNT);
 
       expect(result).toBe(3);
       expect(keyboard.getFocusedIndex()).toBe(3);
     });
 
     it('should not exceed options count', () => {
-      const keyboard = new TimezoneKeyboard();
-      keyboard.setFocusedIndex(9);
+      const keyboard = keyboardFocusedAt(9);
 
-      const result = keyboard.moveDown(10);
+      const result = keyboard.moveDown(OPTIONS_COUNT);
 
       expect(result).toBe(9);
     });
@@ -51,7 +48,7 @@ describe('TimezoneKeyboard', () => {
     it('should move from -1 to 0', () => {
       const keyboard = new TimezoneKeyboard();
 
-      const result = keyboard.moveDown(10);
+      const result = keyboard.moveDown(OPTIONS_COUNT);
 
       expect(result).toBe(0);
     });
@@ -59,8 +56,7 @@ describe('TimezoneKeyboard', () => {
 
   describe('moveUp', () => {
     it('should decrement focused index', () => {
-      const keyboard = new TimezoneKeyboard();
-      keyboard.setFocusedIndex(5);
+      const keyboard = keyboardFocusedAt(5);
 
       const result = keyboard.moveUp();
 
@@ -69,8 +65,7 @@ describe('TimezoneKeyboard', () => {
     });
 
     it('should not go below 0', () => {
-      const keyboard = new TimezoneKeyboard();
-      keyboard.setFocusedIndex(0);
+      const keyboard = keyboardFocusedAt(0);
 
       const result = keyboard.moveUp();
 
@@ -80,8 +75,7 @@ describe('TimezoneKeyboard', () => {
 
   describe('moveToFirst', () => {
     it('should set focused index to 0', () => {
-      const keyboard = new TimezoneKeyboard();
-      keyboard.setFocusedIndex(5);
+      const keyboard = keyboardFocusedAt(5);
 
       const result = keyboard.moveToFirst();
 
@@ -94,7 +88,7 @@ describe('TimezoneKeyboard', () => {
     it('should set focused index to last item', () => {
       const keyboard = new TimezoneKeyboard();
 
-      const result = keyboard.moveToLast(10);
+      const result = keyboard.moveToLast(OPTIONS_COUNT);
 
       expect(result).toBe(9);
       expect(keyboard.getFocusedIndex()).toBe(9);
@@ -103,8 +97,7 @@ describe('TimezoneKeyboard', () => {
 
   describe('reset', () => {
     it('should reset focused index to -1', () => {
-      const keyboard = new TimezoneKeyboard();
-      keyboard.setFocusedIndex(5);
+      const keyboard = keyboardFocusedAt(5);
 
       keyboard.reset();
 
@@ -114,14 +107,12 @@ describe('TimezoneKeyboard', () => {
 
   describe('updateVisualFocus', () => {
     it('should set data-focused on correct option', () => {
-      const keyboard = new TimezoneKeyboard();
-      keyboard.setFocusedIndex(1);
-
       const options = [
         document.createElement('div'),
         document.createElement('div'),
         document.createElement('div'),
       ];
+      const keyboard = keyboardFocusedAt(1, options.length);
 
       options.forEach((opt) => {
         opt.scrollIntoView = jest.fn();
@@ -135,10 +126,8 @@ describe('TimezoneKeyboard', () => {
     });
 
     it('should scroll focused option into view', () => {
-      const keyboard = new TimezoneKeyboard();
-      keyboard.setFocusedIndex(1);
-
       const options = [document.createElement('div'), document.createElement('div')];
+      const keyboard = keyboardFocusedAt(1, options.length);
 
       options.forEach((opt) => {
         opt.scrollIntoView = jest.fn();
@@ -170,10 +159,8 @@ describe('TimezoneKeyboard', () => {
     });
 
     it('should set aria-activedescendant on the dropdown to the focused option id', () => {
-      const keyboard = new TimezoneKeyboard();
-      keyboard.setFocusedIndex(1);
-
       const options = [document.createElement('div'), document.createElement('div')];
+      const keyboard = keyboardFocusedAt(1, options.length);
       options[0].id = 'tp-tz-opt-0';
       options[1].id = 'tp-tz-opt-1';
       options.forEach((opt) => {
@@ -199,4 +186,3 @@ describe('TimezoneKeyboard', () => {
     });
   });
 });
-

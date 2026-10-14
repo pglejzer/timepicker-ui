@@ -1,8 +1,9 @@
 import ValidationManager from '../../../src/managers/ValidationManager';
 import { CoreState } from '../../../src/timepicker/CoreState';
 import { EventEmitter, type TimepickerEventMap } from '../../../src/utils/EventEmitter';
-import { DEFAULT_OPTIONS } from '../../../src/utils/options/defaults';
+import { DEFAULT_OPTIONS, mergeOptions } from '../../../src/utils/options/defaults';
 import { TimepickerError } from '../../../src/utils/errors';
+import { TIMINGS } from '../../../src/constants/timings';
 
 describe('ValidationManager', () => {
   let coreState: CoreState;
@@ -156,6 +157,186 @@ describe('ValidationManager', () => {
       validationManager.removeErrorHandler();
 
       expect(mockInput.nextElementSibling?.classList.contains('tp-ui-invalid-text')).toBeFalsy();
+    });
+
+    it.each<[string, (input: HTMLInputElement) => void]>([
+      ['a bare valid input', () => {}],
+      [
+        'a valid input with other classes and a developer aria-describedby',
+        (input) => {
+          input.className = 'tp-ui-input';
+          input.setAttribute('aria-describedby', 'hint');
+        },
+      ],
+    ])('writes nothing to %s', (_, prepare) => {
+      mockInput.value = '09:30 AM';
+      prepare(mockInput);
+      const observer = new MutationObserver(() => {});
+      observer.observe(mockInput, { attributes: true, attributeOldValue: true });
+
+      validationManager.removeErrorHandler();
+
+      const records = observer.takeRecords();
+      observer.disconnect();
+      expect(records).toHaveLength(0);
+    });
+  });
+
+  describe('linking the error message to the input', () => {
+    const errorId = 'tp-ui-invalid-text-test-instance-id';
+    const describedBy = (): string | null => mockInput.getAttribute('aria-describedby');
+
+    beforeEach(() => {
+      mockInput.value = 'invalid';
+    });
+
+    it('gives the error message an id derived from the instance id', () => {
+      validationManager.setErrorHandler();
+
+      expect(mockInput.nextElementSibling?.id).toBe(errorId);
+    });
+
+    it('marks the input invalid and points aria-describedby at the error message', () => {
+      validationManager.setErrorHandler();
+
+      expect(mockInput.getAttribute('aria-invalid')).toBe('true');
+      expect(describedBy()?.split(' ')).toContain(errorId);
+    });
+
+    it('appends the error id after an existing token and restores that token on removal', () => {
+      mockInput.setAttribute('aria-describedby', 'hint');
+
+      validationManager.setErrorHandler();
+      expect(describedBy()).toBe(`hint ${errorId}`);
+
+      validationManager.removeErrorHandler();
+      expect(describedBy()).toBe('hint');
+      expect(mockInput.hasAttribute('aria-invalid')).toBe(false);
+    });
+
+    it('keeps a single error id token when the error is set twice', () => {
+      mockInput.setAttribute('aria-describedby', 'hint');
+
+      validationManager.setErrorHandler();
+      validationManager.setErrorHandler();
+
+      expect(describedBy()).toBe(`hint ${errorId}`);
+    });
+
+    it.each<[string, () => void]>([
+      ['removeErrorHandler without a prior error', () => validationManager.removeErrorHandler()],
+      [
+        'setErrorHandler on a valid value',
+        () => {
+          mockInput.value = '09:30 AM';
+          validationManager.setErrorHandler();
+        },
+      ],
+    ])('leaves developer-set aria-invalid and aria-describedby alone on %s', (_, act) => {
+      mockInput.setAttribute('aria-invalid', 'true');
+      mockInput.setAttribute('aria-describedby', 'hint');
+
+      act();
+
+      expect(mockInput.getAttribute('aria-invalid')).toBe('true');
+      expect(describedBy()).toBe('hint');
+    });
+
+    it('removes both attributes when the error id was the only token', () => {
+      validationManager.setErrorHandler();
+      validationManager.removeErrorHandler();
+
+      expect(mockInput.hasAttribute('aria-describedby')).toBe(false);
+      expect(mockInput.hasAttribute('aria-invalid')).toBe(false);
+    });
+
+    it('adds no aria attributes when range is enabled', () => {
+      const rangeCore = new CoreState(mockElement, mergeOptions({ range: { enabled: true } }), 'range-aria');
+      const rangeManager = new ValidationManager(rangeCore, emitter);
+
+      expect(rangeManager.setErrorHandler()).toBe(true);
+      expect(mockInput.hasAttribute('aria-invalid')).toBe(false);
+      expect(mockInput.hasAttribute('aria-describedby')).toBe(false);
+
+      rangeManager.destroy();
+    });
+  });
+
+  describe('announcing the error inside the dialog', () => {
+    const label = DEFAULT_OPTIONS.labels.invalidTimeFormat;
+    let wrapper: HTMLElement;
+    let announcer: HTMLElement;
+
+    const managerWithModal = (focusTrap: boolean, ownerId: string): ValidationManager => {
+      document.body.insertAdjacentHTML(
+        'beforeend',
+        `<div class="tp-ui-modal" data-owner-id="${ownerId}">
+          <div class="tp-ui-wrapper" tabindex="0"></div>
+          <div class="timepicker-announcer" role="status"></div>
+        </div>`,
+      );
+      wrapper = document.querySelector(`[data-owner-id="${ownerId}"] .tp-ui-wrapper`) as HTMLElement;
+      announcer = document.querySelector(`[data-owner-id="${ownerId}"] .timepicker-announcer`) as HTMLElement;
+
+      const core = new CoreState(mockElement, mergeOptions({ behavior: { focusTrap } }), ownerId);
+      return new ValidationManager(core, emitter);
+    };
+
+    const focusIntoDialog = (): void => {
+      wrapper.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    };
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+      mockInput.value = 'invalid';
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('announces the label after ANNOUNCE_DELAY when focusTrap is off', () => {
+      const manager = managerWithModal(false, 'announce-no-trap');
+
+      manager.setErrorHandler();
+      jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY);
+
+      expect(announcer.textContent).toBe(label);
+      manager.destroy();
+    });
+
+    it('waits for focus to enter the dialog when focusTrap is on', () => {
+      const manager = managerWithModal(true, 'announce-trap');
+
+      manager.setErrorHandler();
+      jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY * 5);
+      expect(announcer.textContent).toBe('');
+
+      focusIntoDialog();
+      jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY);
+
+      expect(announcer.textContent).toBe(label);
+      manager.destroy();
+    });
+
+    it('announces only on the first focusin', () => {
+      const manager = managerWithModal(true, 'announce-once');
+
+      manager.setErrorHandler();
+      focusIntoDialog();
+      jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY);
+      announcer.textContent = 'Hour: 10';
+
+      focusIntoDialog();
+      jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY);
+
+      expect(announcer.textContent).toBe('Hour: 10');
+      manager.destroy();
+    });
+
+    it('does not throw without a modal and still marks the input invalid', () => {
+      expect(() => validationManager.setErrorHandler()).not.toThrow();
+      expect(mockInput.getAttribute('aria-invalid')).toBe('true');
     });
   });
 

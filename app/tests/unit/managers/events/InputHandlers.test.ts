@@ -296,6 +296,36 @@ describe('InputHandlers', () => {
     });
   });
 
+  describe('spinbutton ARIA on blur', () => {
+    const ariaOf = (input: HTMLInputElement): { now: string | null; text: string | null } => ({
+      now: input.getAttribute('aria-valuenow'),
+      text: input.getAttribute('aria-valuetext'),
+    });
+
+    it('should remove aria-valuenow and aria-valuetext when an editable hour is left empty', () => {
+      hourInput.removeAttribute('readonly');
+      hourInput.setAttribute('aria-valuenow', '12');
+      hourInput.setAttribute('aria-valuetext', '12');
+      hourInput.value = '';
+
+      inputHandlers.handleHourEvents();
+      hourInput.dispatchEvent(new FocusEvent('blur'));
+
+      expect(ariaOf(hourInput)).toEqual({ now: null, text: null });
+    });
+
+    it('should clamp a typed 75 minute to 59 with aria-valuetext 59', () => {
+      minuteInput.removeAttribute('readonly');
+      minuteInput.value = '75';
+
+      inputHandlers.handleMinutesEvents();
+      minuteInput.dispatchEvent(new FocusEvent('blur'));
+
+      expect(minuteInput.value).toBe('59');
+      expect(ariaOf(minuteInput)).toEqual({ now: '59', text: '59' });
+    });
+  });
+
   describe('destroy', () => {
     it('should remove all event listeners', () => {
       const hourRemoveSpy = jest.spyOn(hourInput, 'removeEventListener');
@@ -319,6 +349,132 @@ describe('InputHandlers', () => {
 
       expect(() => inputHandlers.destroy()).not.toThrow();
     });
+  });
+});
+
+describe('InputHandlers snaps a typed value to the nearest enabled time on blur', () => {
+  type DisabledValue = NonNullable<CoreState['disabledTime']>['value'];
+
+  let core: CoreState;
+  let emitter: EventEmitter<TimepickerEventMap>;
+  let handlers: InputHandlers;
+  let hourInput: HTMLInputElement;
+  let minuteInput: HTMLInputElement;
+  let emitSpy: jest.SpyInstance;
+
+  const setup = (
+    clockType: '12h' | '24h',
+    disabled: DisabledValue,
+    header: { hour: string; minutes: string },
+  ): void => {
+    document.body.innerHTML = `
+      <div>
+        <input type="number" class="tp-ui-hour" value="${header.hour}" />
+        <input type="number" class="tp-ui-minutes" value="${header.minutes}" />
+        <div class="tp-ui-type-mode tp-ui-am active" data-type="AM">AM</div>
+      </div>
+    `;
+
+    hourInput = document.querySelector('.tp-ui-hour') as HTMLInputElement;
+    minuteInput = document.querySelector('.tp-ui-minutes') as HTMLInputElement;
+    const activePeriod =
+      clockType === '12h' ? (document.querySelector('.tp-ui-am') as HTMLButtonElement) : null;
+
+    const options: TimepickerOptions = { clock: { type: clockType }, ui: { editable: true, mobile: false } };
+    core = new CoreState(hourInput, mergeOptions(options), 'input-disabled-instance');
+    core.setDisabledTime({ value: disabled });
+
+    jest.spyOn(core, 'getHour').mockReturnValue(hourInput);
+    jest.spyOn(core, 'getMinutes').mockReturnValue(minuteInput);
+    jest.spyOn(core, 'getActiveTypeMode').mockReturnValue(activePeriod);
+
+    emitter = new EventEmitter<TimepickerEventMap>();
+    handlers = new InputHandlers(core, emitter);
+    handlers.handleHourEvents();
+    handlers.handleMinutesEvents();
+    emitSpy = jest.spyOn(emitter, 'emit');
+  };
+
+  const typeAndBlur = (input: HTMLInputElement, value: string): void => {
+    input.value = value;
+    input.dispatchEvent(new FocusEvent('blur'));
+  };
+
+  const spinState = (input: HTMLInputElement): Record<string, string | null> => ({
+    value: input.value,
+    now: input.getAttribute('aria-valuenow'),
+    text: input.getAttribute('aria-valuetext'),
+  });
+
+  const selections = (): unknown[][] =>
+    emitSpy.mock.calls.filter(([event]: [string]) => event !== 'animation:clock');
+
+  afterEach(() => {
+    handlers.destroy();
+    document.body.innerHTML = '';
+    jest.restoreAllMocks();
+  });
+
+  it('moves a disabled typed hour to the next enabled hour and emits the snapped value', () => {
+    setup('12h', { hours: ['3'] }, { hour: '12', minutes: '00' });
+
+    typeAndBlur(hourInput, '3');
+
+    expect(spinState(hourInput)).toEqual({ value: '04', now: '4', text: '04' });
+    expect(selections()).toEqual([
+      ['select:hour', { hour: '04' }],
+      ['update', { hour: '04', minutes: '00', type: 'AM' }],
+    ]);
+  });
+
+  it('12h: falls back to the lower neighbour when the higher one wraps onto a disabled hour', () => {
+    setup('12h', { hours: ['12', '1'] }, { hour: '06', minutes: '00' });
+
+    typeAndBlur(hourInput, '12');
+
+    expect(spinState(hourInput)).toEqual({ value: '11', now: '11', text: '11' });
+    expect(selections()).toEqual([
+      ['select:hour', { hour: '11' }],
+      ['update', { hour: '11', minutes: '00', type: 'AM' }],
+    ]);
+  });
+
+  it('moves a typed minute out of a disabled interval to the nearest enabled minute', () => {
+    setup('24h', { isInterval: true, clockType: '24h', intervals: ['10:00 - 10:30'] }, {
+      hour: '10',
+      minutes: '45',
+    });
+
+    typeAndBlur(minuteInput, '15');
+
+    expect(spinState(minuteInput)).toEqual({ value: '31', now: '31', text: '31' });
+    expect(selections()).toEqual([
+      ['select:minute', { minutes: '31' }],
+      ['update', { hour: '10', minutes: '31', type: undefined }],
+    ]);
+  });
+
+  it('keeps the clamped value when every hour is disabled', () => {
+    const allHours = Array.from({ length: 12 }, (_, index) => String(index + 1));
+    setup('12h', { hours: allHours }, { hour: '06', minutes: '00' });
+
+    typeAndBlur(hourInput, '25');
+
+    expect(spinState(hourInput)).toEqual({ value: '12', now: '12', text: '12' });
+    expect(selections()).toEqual([
+      ['select:hour', { hour: '12' }],
+      ['update', { hour: '12', minutes: '00', type: 'AM' }],
+    ]);
+  });
+
+  it('leaves a readonly field untouched', () => {
+    setup('12h', { hours: ['3'] }, { hour: '12', minutes: '00' });
+    hourInput.setAttribute('readonly', '');
+
+    typeAndBlur(hourInput, '3');
+
+    expect(spinState(hourInput)).toEqual({ value: '3', now: null, text: null });
+    expect(emitSpy).not.toHaveBeenCalled();
   });
 });
 

@@ -1,4 +1,5 @@
 import { MinuteEngine } from '../../../../../src/managers/clock/engine/MinuteEngine';
+import type { DisabledTimeConfig, FaceContext } from '../../../../../src/managers/clock/types';
 
 describe('MinuteEngine', () => {
   describe('angleToIndex', () => {
@@ -201,7 +202,7 @@ describe('MinuteEngine', () => {
         const disabledTime = {
           rangeFromType: 'AM',
           rangeFromHour: 10,
-          minutes: ['29'],
+          rangeFromMinute: 30,
         };
 
         const result = MinuteEngine.isDisabled('15', '10', 'AM', disabledTime, '12h');
@@ -212,7 +213,7 @@ describe('MinuteEngine', () => {
         const disabledTime = {
           rangeFromType: 'AM',
           rangeFromHour: 10,
-          minutes: ['29'],
+          rangeFromMinute: 30,
         };
 
         const result = MinuteEngine.isDisabled('35', '10', 'AM', disabledTime, '12h');
@@ -233,7 +234,7 @@ describe('MinuteEngine', () => {
         const disabledTime = {
           rangeFromType: 'AM',
           rangeFromHour: 12,
-          minutes: ['29'],
+          rangeFromMinute: 30,
         };
 
         const result = MinuteEngine.isDisabled('15', '12', 'AM', disabledTime, '12h');
@@ -242,9 +243,17 @@ describe('MinuteEngine', () => {
     });
   });
 
-  describe('findNearestValid', () => {
+  describe('findNearestValidIndex for minutes', () => {
+    const minuteContext = (disabledTime: DisabledTimeConfig | null): FaceContext => ({
+      hour: '10',
+      minute: '00',
+      amPm: 'AM',
+      disabledTime,
+      clockType: '12h',
+    });
+
     it('should return same index when not disabled', () => {
-      const result = MinuteEngine.findNearestValid(30, '10', 'AM', null, '12h');
+      const result = MinuteEngine.findNearestValidIndex(30, 'minutes', minuteContext(null));
       expect(result).toBe(30);
     });
 
@@ -253,7 +262,7 @@ describe('MinuteEngine', () => {
         minutes: ['30'],
       };
 
-      const result = MinuteEngine.findNearestValid(30, '10', 'AM', disabledTime, '12h');
+      const result = MinuteEngine.findNearestValidIndex(30, 'minutes', minuteContext(disabledTime));
       expect(result).not.toBe(30);
     });
 
@@ -262,7 +271,7 @@ describe('MinuteEngine', () => {
         minutes: ['30', '31'],
       };
 
-      const result = MinuteEngine.findNearestValid(30, '10', 'AM', disabledTime, '12h');
+      const result = MinuteEngine.findNearestValidIndex(30, 'minutes', minuteContext(disabledTime));
       expect(result).toBe(29);
     });
 
@@ -271,7 +280,7 @@ describe('MinuteEngine', () => {
         minutes: ['59'],
       };
 
-      const result = MinuteEngine.findNearestValid(59, '10', 'AM', disabledTime, '12h');
+      const result = MinuteEngine.findNearestValidIndex(59, 'minutes', minuteContext(disabledTime));
       expect(result).not.toBe(59);
     });
   });

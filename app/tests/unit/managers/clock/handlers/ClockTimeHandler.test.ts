@@ -1,43 +1,36 @@
 import { ClockTimeHandler } from '../../../../../src/managers/clock/handlers/ClockTimeHandler';
-import { ClockStyleHandler } from '../../../../../src/managers/clock/handlers/ClockStyleHandler';
 import type { ClockSystem } from '../../../../../src/managers/clock/ClockSystem';
+
+type ClockType = '12h' | '24h';
 
 describe('ClockTimeHandler', () => {
   let mockClockSystem: Partial<ClockSystem>;
-  let mockStyleHandler: Partial<ClockStyleHandler>;
   let getAmPmValueMock: jest.Mock;
   let handler: ClockTimeHandler;
+
+  const createHandler = (getClockType: () => ClockType): ClockTimeHandler =>
+    new ClockTimeHandler(() => mockClockSystem as ClockSystem, getAmPmValueMock, getClockType);
+
+  const createDetachedHandler = (): ClockTimeHandler =>
+    new ClockTimeHandler(() => null, getAmPmValueMock, () => '12h');
 
   beforeEach(() => {
     mockClockSystem = {
       setMinute: jest.fn(),
+      setSecond: jest.fn(),
       setHour: jest.fn(),
       setAmPm: jest.fn(),
       switchToMinutes: jest.fn(),
+      switchToSeconds: jest.fn(),
       switchToHours: jest.fn(),
-    };
-
-    mockStyleHandler = {
-      removeBgColorToCirleWithMinutesTips: jest.fn(),
     };
 
     getAmPmValueMock = jest.fn().mockReturnValue('AM');
 
-    handler = new ClockTimeHandler(
-      () => mockClockSystem as ClockSystem,
-      mockStyleHandler as ClockStyleHandler,
-      getAmPmValueMock,
-      '12h',
-    );
+    handler = createHandler(() => '12h');
   });
 
   describe('setMinutesToClock', () => {
-    it('should call removeBgColorToCirleWithMinutesTips', () => {
-      handler.setMinutesToClock('30');
-
-      expect(mockStyleHandler.removeBgColorToCirleWithMinutesTips).toHaveBeenCalled();
-    });
-
     it('should call setMinute with value', () => {
       handler.setMinutesToClock('45');
 
@@ -58,14 +51,7 @@ describe('ClockTimeHandler', () => {
     });
 
     it('should not throw when clockSystem is null', () => {
-      const nullHandler = new ClockTimeHandler(
-        () => null,
-        mockStyleHandler as ClockStyleHandler,
-        getAmPmValueMock,
-        '12h',
-      );
-
-      expect(() => nullHandler.setMinutesToClock('30')).not.toThrow();
+      expect(() => createDetachedHandler().setMinutesToClock('30')).not.toThrow();
     });
   });
 
@@ -90,82 +76,41 @@ describe('ClockTimeHandler', () => {
     });
 
     it('should not throw when clockSystem is null', () => {
-      const nullHandler = new ClockTimeHandler(
-        () => null,
-        mockStyleHandler as ClockStyleHandler,
-        getAmPmValueMock,
-        '12h',
-      );
-
-      expect(() => nullHandler.setHoursToClock('09')).not.toThrow();
+      expect(() => createDetachedHandler().setHoursToClock('09')).not.toThrow();
     });
   });
 
-  describe('setTransformToCircleWithSwitchesHour', () => {
-    it('should call setHour with value', () => {
-      handler.setTransformToCircleWithSwitchesHour('11');
+  describe('setSecondsToClock', () => {
+    it('should set the second and then show the seconds face', () => {
+      handler.setSecondsToClock('15');
 
-      expect(mockClockSystem.setHour).toHaveBeenCalledWith('11');
+      expect(mockClockSystem.setSecond).toHaveBeenCalledWith('15');
+      expect(mockClockSystem.switchToSeconds).toHaveBeenCalledTimes(1);
+      expect((mockClockSystem.setSecond as jest.Mock).mock.invocationCallOrder[0]).toBeLessThan(
+        (mockClockSystem.switchToSeconds as jest.Mock).mock.invocationCallOrder[0],
+      );
+      expect(mockClockSystem.switchToMinutes).not.toHaveBeenCalled();
     });
 
-    it('should not call setHour when value is null', () => {
-      handler.setTransformToCircleWithSwitchesHour(null);
+    it('should only show the seconds face when value is null', () => {
+      handler.setSecondsToClock(null);
 
-      expect(mockClockSystem.setHour).not.toHaveBeenCalled();
+      expect(mockClockSystem.setSecond).not.toHaveBeenCalled();
+      expect(mockClockSystem.switchToSeconds).toHaveBeenCalledTimes(1);
     });
 
     it('should not throw when clockSystem is null', () => {
-      const nullHandler = new ClockTimeHandler(
-        () => null,
-        mockStyleHandler as ClockStyleHandler,
-        getAmPmValueMock,
-        '12h',
-      );
-
-      expect(() => nullHandler.setTransformToCircleWithSwitchesHour('11')).not.toThrow();
-    });
-  });
-
-  describe('setTransformToCircleWithSwitchesMinutes', () => {
-    it('should call setMinute with value', () => {
-      handler.setTransformToCircleWithSwitchesMinutes('25');
-
-      expect(mockClockSystem.setMinute).toHaveBeenCalledWith('25');
-    });
-
-    it('should not call setMinute when value is null', () => {
-      handler.setTransformToCircleWithSwitchesMinutes(null);
-
-      expect(mockClockSystem.setMinute).not.toHaveBeenCalled();
-    });
-
-    it('should not throw when clockSystem is null', () => {
-      const nullHandler = new ClockTimeHandler(
-        () => null,
-        mockStyleHandler as ClockStyleHandler,
-        getAmPmValueMock,
-        '12h',
-      );
-
-      expect(() => nullHandler.setTransformToCircleWithSwitchesMinutes('25')).not.toThrow();
+      expect(() => createDetachedHandler().setSecondsToClock('15')).not.toThrow();
     });
   });
 
   describe('updateAmPm', () => {
-    it('should call setAmPm with AM value', () => {
-      getAmPmValueMock.mockReturnValue('AM');
+    it.each(['AM', 'PM'])('should call setAmPm with %s', (period) => {
+      getAmPmValueMock.mockReturnValue(period);
 
       handler.updateAmPm();
 
-      expect(mockClockSystem.setAmPm).toHaveBeenCalledWith('AM');
-    });
-
-    it('should call setAmPm with PM value', () => {
-      getAmPmValueMock.mockReturnValue('PM');
-
-      handler.updateAmPm();
-
-      expect(mockClockSystem.setAmPm).toHaveBeenCalledWith('PM');
+      expect(mockClockSystem.setAmPm).toHaveBeenCalledWith(period);
     });
 
     it('should not call setAmPm when value is empty string', () => {
@@ -176,29 +121,30 @@ describe('ClockTimeHandler', () => {
       expect(mockClockSystem.setAmPm).not.toHaveBeenCalled();
     });
 
-    it('should not call setAmPm when clockType is 24h', () => {
-      const handler24h = new ClockTimeHandler(
-        () => mockClockSystem as ClockSystem,
-        mockStyleHandler as ClockStyleHandler,
-        getAmPmValueMock,
-        '24h',
-      );
-
-      handler24h.updateAmPm();
+    it('should not call setAmPm when the clock type is 24h', () => {
+      createHandler(() => '24h').updateAmPm();
 
       expect(mockClockSystem.setAmPm).not.toHaveBeenCalled();
     });
 
-    it('should not throw when clockSystem is null', () => {
-      const nullHandler = new ClockTimeHandler(
-        () => null,
-        mockStyleHandler as ClockStyleHandler,
-        getAmPmValueMock,
-        '12h',
-      );
+    it('should read the clock type on every call and call setAmPm once it changes from 24h to 12h', () => {
+      let clockType: ClockType = '24h';
+      const switchingHandler = createHandler(() => clockType);
+      getAmPmValueMock.mockReturnValue('PM');
 
-      expect(() => nullHandler.updateAmPm()).not.toThrow();
+      switchingHandler.updateAmPm();
+
+      expect(mockClockSystem.setAmPm).not.toHaveBeenCalled();
+
+      clockType = '12h';
+      switchingHandler.updateAmPm();
+
+      expect(mockClockSystem.setAmPm).toHaveBeenCalledTimes(1);
+      expect(mockClockSystem.setAmPm).toHaveBeenCalledWith('PM');
+    });
+
+    it('should not throw when clockSystem is null', () => {
+      expect(() => createDetachedHandler().updateAmPm()).not.toThrow();
     });
   });
 });
-

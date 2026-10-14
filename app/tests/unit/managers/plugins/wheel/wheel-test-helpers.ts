@@ -152,6 +152,7 @@ function setupWheelTestContext(
     clock: { type: clockType },
   });
   const core = new CoreState(element, options, instanceId);
+  core.setIsOpen(true);
 
   const modal = createModalWithWheel(instanceId, clockType);
   document.body.appendChild(modal);
@@ -161,6 +162,32 @@ function setupWheelTestContext(
   return { element, modal, core, emitter };
 }
 
-export { createModalWithWheel, createWheelOptions, setupWheelTestContext, WHEEL_ITEM_HEIGHT_PX };
-export type { WheelTestContext };
+type WheelColumnName = 'hours' | 'minutes' | 'ampm';
+
+function mockWheelItemHeight(height: number = WHEEL_ITEM_HEIGHT_PX): jest.SpyInstance {
+  const realRect = Element.prototype.getBoundingClientRect;
+  return jest
+    .spyOn(Element.prototype, 'getBoundingClientRect')
+    .mockImplementation(function (this: Element): DOMRect {
+      if (!this.classList.contains('tp-ui-wheel-item')) return realRect.call(this);
+      return { x: 0, y: 0, top: 0, left: 0, right: 80, bottom: height, width: 80, height, toJSON: () => ({}) };
+    });
+}
+
+function selectedWheelValue(column: WheelColumnName): string | null {
+  const selected = document.querySelector(
+    `.tp-ui-modal .tp-ui-wheel-${column} .tp-ui-wheel-item[aria-selected="true"]`,
+  );
+  return selected?.getAttribute('data-value') ?? null;
+}
+
+export {
+  createModalWithWheel,
+  createWheelOptions,
+  setupWheelTestContext,
+  mockWheelItemHeight,
+  selectedWheelValue,
+  WHEEL_ITEM_HEIGHT_PX,
+};
+export type { WheelTestContext, WheelColumnName };
 

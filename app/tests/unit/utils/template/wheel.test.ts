@@ -1,4 +1,5 @@
 import { getWheelTemplate } from '../../../../src/utils/template/wheel';
+import { mergeOptions } from '../../../../src/utils/options/defaults';
 
 describe('getWheelTemplate', () => {
   describe('12h mode', () => {
@@ -149,16 +150,17 @@ describe('getWheelTemplate', () => {
       });
     });
 
-    it('should set aria-label on items', () => {
-      const html = getWheelTemplate('12h', 1);
+    it('should label items with the merged hour and minute labels the plugin passes', () => {
+      const { labels } = mergeOptions({ labels: { hourLabel: 'Godzina', minuteLabel: 'Minuta' } });
+      const html = getWheelTemplate('12h', 1, false, 'tp', labels);
       const container = document.createElement('div');
       container.innerHTML = html;
 
       const firstHour = container.querySelector('.tp-ui-wheel-hours .tp-ui-wheel-item');
-      expect(firstHour?.getAttribute('aria-label')).toBe('Hour 01');
+      expect(firstHour?.getAttribute('aria-label')).toBe('Godzina 01');
 
       const firstMinute = container.querySelector('.tp-ui-wheel-minutes .tp-ui-wheel-item');
-      expect(firstMinute?.getAttribute('aria-label')).toBe('Minute 00');
+      expect(firstMinute?.getAttribute('aria-label')).toBe('Minuta 00');
     });
 
     it('should mark separator and highlight as aria-hidden', () => {

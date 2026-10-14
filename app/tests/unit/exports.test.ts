@@ -76,7 +76,7 @@ describe('Module Exports', () => {
       const constantsModule = await import('../../src/constants/index');
 
       expect(constantsModule.TIMINGS).toBeDefined();
-      expect(constantsModule.TIMINGS.MODAL_REMOVE).toBeDefined();
+      expect(constantsModule.TIMINGS.MODAL_EXIT).toBeDefined();
     });
   });
 });
