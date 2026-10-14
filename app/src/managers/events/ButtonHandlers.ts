@@ -1,11 +1,21 @@
-import { announceToScreenReader, updateAriaPressed, bindActivate } from '../../utils/accessibility';
+import {
+  announceToScreenReader,
+  setActivePeriod,
+  bindActivate,
+  setElementDisabled,
+} from '../../utils/accessibility';
+import { bindEmitter, requestOpen, runCleanups } from '../../utils/managerHelpers';
 import type { CoreState } from '../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../utils/EventEmitter';
+import type { ConfirmEventData } from '../../types/types';
+import { buildUpdatePayload, isTimeDisabled } from './timeFields';
 
 export class ButtonHandlers {
   private core: CoreState;
   private emitter: EventEmitter<TimepickerEventMap>;
   private cleanupHandlers: Array<() => void> = [];
+  private persistentCleanups: Array<() => void> = [];
+  private okBlocked = false;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -18,11 +28,11 @@ export class ButtonHandlers {
 
     const handler = (): void => {
       if (this.core.isDestroyed) return;
-      this.emitter.emit('show', {});
+      requestOpen(this.emitter);
     };
 
     openElements.forEach((el) => {
-      this.cleanupHandlers.push(bindActivate(el as HTMLElement, handler));
+      this.persistentCleanups.push(bindActivate(el as HTMLElement, handler));
     });
   }
 
@@ -46,40 +56,54 @@ export class ButtonHandlers {
       if (this.core.isDestroyed) return;
       if (okButton.getAttribute('aria-disabled') === 'true') return;
 
-      const hour = this.core.getHour();
-      const minutes = this.core.getMinutes();
-
-      if (hour && minutes) {
-        const activeTypeMode = this.core.getActiveTypeMode();
-        this.emitter.emit('confirm', {
-          hour: hour.value,
-          minutes: minutes.value,
-          type: activeTypeMode?.textContent || undefined,
-        });
+      if (this.core.getHour() && this.core.getMinutes()) {
+        this.emitter.emit('confirm', buildUpdatePayload(this.core));
         return;
       }
 
       const modal = this.core.getModalElement();
       if (modal) {
-        const centerHour = modal.querySelector<HTMLDivElement>(
-          '.tp-ui-wheel-hours .tp-ui-wheel-item.is-center',
-        );
-        const centerMinute = modal.querySelector<HTMLDivElement>(
-          '.tp-ui-wheel-minutes .tp-ui-wheel-item.is-center',
-        );
-        const centerAmpm = modal.querySelector<HTMLDivElement>(
-          '.tp-ui-wheel-ampm .tp-ui-wheel-item.is-center',
-        );
-
-        this.emitter.emit('confirm', {
-          hour: centerHour?.getAttribute('data-value') ?? undefined,
-          minutes: centerMinute?.getAttribute('data-value') ?? undefined,
-          type: centerAmpm?.getAttribute('data-value') ?? undefined,
-        });
+        this.emitter.emit('confirm', this.readWheelCenter(modal));
       }
     };
 
     this.cleanupHandlers.push(bindActivate(okButton as HTMLElement, handler));
+    this.blockOkOnDisabledTime(okButton);
+  }
+
+  private blockOkOnDisabledTime(okButton: HTMLElement): void {
+    if (this.core.options.range?.enabled) return;
+
+    const sync = (): void => {
+      const blocked = isTimeDisabled(this.core);
+      if (!blocked && !this.okBlocked) return;
+      this.okBlocked = blocked;
+      setElementDisabled(okButton, blocked);
+    };
+
+    sync();
+    bindEmitter(this.emitter, this.cleanupHandlers, 'update', ({ hour }) => {
+      if (hour) sync();
+    });
+  }
+
+  private readWheelCenter(modal: HTMLElement): ConfirmEventData {
+    const center = (column: string): string | undefined => {
+      const item = modal.querySelector(`.tp-ui-wheel-${column} .tp-ui-wheel-item.is-center`);
+      return item?.getAttribute('data-value') ?? undefined;
+    };
+
+    const selection: ConfirmEventData = {
+      hour: center('hours'),
+      minutes: center('minutes'),
+      type: center('ampm'),
+    };
+
+    if (this.core.options.clock.showSeconds) {
+      selection.seconds = center('seconds');
+    }
+
+    return selection;
   }
 
   handleAmClick(): void {
@@ -88,25 +112,13 @@ export class ButtonHandlers {
 
     const handler = (): void => {
       if (this.core.isDestroyed) return;
-      const PM = this.core.getPM();
-      AM.classList.add('active');
-      PM?.classList.remove('active');
-
-      updateAriaPressed(AM, true);
-      updateAriaPressed(PM, false);
+      setActivePeriod(AM, this.core.getPM(), 'AM');
 
       const modal = this.core.getModalElement();
-      announceToScreenReader(modal, this.core.options.labels.announceAmSelected ?? 'AM selected');
+      announceToScreenReader(modal, this.core.options.labels.announceAmSelected!);
 
       this.emitter.emit('select:am', {});
-
-      const hour = this.core.getHour();
-      const minutes = this.core.getMinutes();
-      this.emitter.emit('update', {
-        hour: hour?.value,
-        minutes: minutes?.value,
-        type: 'AM',
-      });
+      this.emitter.emit('update', { ...buildUpdatePayload(this.core), type: 'AM' });
     };
 
     this.cleanupHandlers.push(bindActivate(AM, handler));
@@ -118,25 +130,13 @@ export class ButtonHandlers {
 
     const handler = (): void => {
       if (this.core.isDestroyed) return;
-      const AM = this.core.getAM();
-      PM.classList.add('active');
-      AM?.classList.remove('active');
-
-      updateAriaPressed(PM, true);
-      updateAriaPressed(AM, false);
+      setActivePeriod(this.core.getAM(), PM, 'PM');
 
       const modal = this.core.getModalElement();
-      announceToScreenReader(modal, this.core.options.labels.announcePmSelected ?? 'PM selected');
+      announceToScreenReader(modal, this.core.options.labels.announcePmSelected!);
 
       this.emitter.emit('select:pm', {});
-
-      const hour = this.core.getHour();
-      const minutes = this.core.getMinutes();
-      this.emitter.emit('update', {
-        hour: hour?.value,
-        minutes: minutes?.value,
-        type: 'PM',
-      });
+      this.emitter.emit('update', { ...buildUpdatePayload(this.core), type: 'PM' });
     };
 
     this.cleanupHandlers.push(bindActivate(PM, handler));
@@ -151,11 +151,15 @@ export class ButtonHandlers {
       this.emitter.emit('switch:view', {});
     };
 
-    this.cleanupHandlers.push(bindActivate(switchButton as HTMLElement, handler));
+    this.cleanupHandlers.push(bindActivate(switchButton, handler));
+  }
+
+  detach(): void {
+    runCleanups(this.cleanupHandlers);
   }
 
   destroy(): void {
-    this.cleanupHandlers.forEach((cleanup) => cleanup());
-    this.cleanupHandlers = [];
+    this.detach();
+    runCleanups(this.persistentCleanups);
   }
 }

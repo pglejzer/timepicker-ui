@@ -64,6 +64,7 @@ describe('WheelEventHandler edge cases', () => {
       document.body.appendChild(element);
 
       const core = new CoreState(element, commitOpts, 'commit-test');
+      core.setIsOpen(true);
       const modal = document.createElement('div');
       modal.setAttribute('data-owner-id', 'commit-test');
 

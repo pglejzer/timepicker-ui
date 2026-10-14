@@ -124,7 +124,7 @@ new TimepickerUI('#wheel-step', {
           analog clock with scroll wheels
         </li>
         <li>Works with all themes via CSS variables</li>
-        <li>AM/PM column appears automatically in 12h mode</li>
+        <li>In 12h mode AM/PM stays in the header; <code class="bg-sky-100 dark:bg-sky-800 px-1 rounded">compact-wheel</code> adds an AM/PM column</li>
         <li>
           <code class="bg-sky-100 dark:bg-sky-800 px-1 rounded">clock.incrementMinutes</code> controls the
           minute step between wheel items
@@ -257,7 +257,7 @@ new TimepickerUI('#wheel-step', {
 
 wheelThemeList.forEach((theme) => {
   new TimepickerUI(`#wheel-theme-${theme}`, {
-    ui: { mode: 'wheel', theme, enableSwitchIcon: true },
+    ui: { mode: 'wheel', theme, viewSwitch: true },
   }).create();
 });</code></pre>
       </div>
@@ -478,7 +478,7 @@ new TimepickerUI('#compact-wheel-step', {
 
 compactThemeList.forEach((theme) => {
   new TimepickerUI(`#compact-theme-${theme}`, {
-    ui: { mode: 'compact-wheel', theme, enableSwitchIcon: true },
+    ui: { mode: 'compact-wheel', theme, viewSwitch: true },
   }).create();
 });</code></pre>
       </div>
@@ -840,7 +840,7 @@ new TimepickerUI('#wheel-disabled-minutes', {
 new TimepickerUI('#wheel-disabled-interval-12h', {
   clock: {
     type: '12h',
-    disabledTime: { interval: '10:00 AM - 2:00 PM' }
+    disabledTime: { ranges: '10:00 AM - 2:00 PM' }
   },
   ui: { mode: 'wheel' }
 }).create();
@@ -849,7 +849,7 @@ new TimepickerUI('#wheel-disabled-interval-12h', {
 new TimepickerUI('#wheel-disabled-interval-24h', {
   clock: {
     type: '24h',
-    disabledTime: { interval: '12:00 - 18:00' }
+    disabledTime: { ranges: '12:00 - 18:00' }
   },
   ui: { mode: 'wheel' }
 }).create();
@@ -859,7 +859,7 @@ new TimepickerUI('#wheel-disabled-intervals-12h', {
   clock: {
     type: '12h',
     disabledTime: {
-      interval: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM']
+      ranges: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM']
     }
   },
   ui: { mode: 'wheel' }
@@ -870,7 +870,7 @@ new TimepickerUI('#wheel-disabled-intervals-24h', {
   clock: {
     type: '24h',
     disabledTime: {
-      interval: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59']
+      ranges: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59']
     }
   },
   ui: { mode: 'wheel' }
@@ -890,7 +890,7 @@ new TimepickerUI('#wheel-hide-disabled-hours', {
 new TimepickerUI('#wheel-hide-disabled-interval', {
   clock: {
     type: '24h',
-    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'] }
+    disabledTime: { ranges: ['00:00 - 08:00', '18:00 - 23:59'] }
   },
   ui: { mode: 'wheel' },
   wheel: { hideDisabled: true }
@@ -906,7 +906,7 @@ new TimepickerUI('#wheel-hide-disabled-interval', {
           completely remove them from the wheel
         </li>
         <li>
-          When using <code class="bg-red-100 dark:bg-red-800 px-1 rounded">interval</code>, the
+          When using <code class="bg-red-100 dark:bg-red-800 px-1 rounded">ranges</code>, the
           <code class="bg-red-100 dark:bg-red-800 px-1 rounded">hours</code> and
           <code class="bg-red-100 dark:bg-red-800 px-1 rounded">minutes</code> keys are ignored
         </li>
@@ -1069,7 +1069,7 @@ new TimepickerUI('#compact-disabled-minutes', {
 new TimepickerUI('#compact-disabled-interval-12h', {
   clock: {
     type: '12h',
-    disabledTime: { interval: '10:00 AM - 2:00 PM' }
+    disabledTime: { ranges: '10:00 AM - 2:00 PM' }
   },
   ui: { mode: 'compact-wheel' }
 }).create();
@@ -1078,7 +1078,7 @@ new TimepickerUI('#compact-disabled-interval-12h', {
 new TimepickerUI('#compact-disabled-interval-24h', {
   clock: {
     type: '24h',
-    disabledTime: { interval: '12:00 - 18:00' }
+    disabledTime: { ranges: '12:00 - 18:00' }
   },
   ui: { mode: 'compact-wheel' }
 }).create();
@@ -1088,7 +1088,7 @@ new TimepickerUI('#compact-disabled-intervals-12h', {
   clock: {
     type: '12h',
     disabledTime: {
-      interval: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM']
+      ranges: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM']
     }
   },
   ui: { mode: 'compact-wheel' }
@@ -1099,7 +1099,7 @@ new TimepickerUI('#compact-disabled-intervals-24h', {
   clock: {
     type: '24h',
     disabledTime: {
-      interval: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59']
+      ranges: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59']
     }
   },
   ui: { mode: 'compact-wheel' }
@@ -1119,7 +1119,7 @@ new TimepickerUI('#compact-hide-disabled-hours', {
 new TimepickerUI('#compact-hide-disabled-interval', {
   clock: {
     type: '24h',
-    disabledTime: { interval: ['00:00 - 08:00', '18:00 - 23:59'] }
+    disabledTime: { ranges: ['00:00 - 08:00', '18:00 - 23:59'] }
   },
   ui: { mode: 'compact-wheel' },
   wheel: { hideDisabled: true }

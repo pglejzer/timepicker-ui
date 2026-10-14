@@ -1,6 +1,15 @@
-import type { ClockType, ClockMode, DisabledTimeConfig, ClockState, RenderConfig } from './types';
+import type {
+  ClockType,
+  ClockMode,
+  AmPmType,
+  DisabledTimeConfig,
+  ClockState,
+  RenderConfig,
+  SixtyMode,
+} from './types';
 import { ClockRenderer } from './renderer/ClockRenderer';
 import { ClockController, type ClockControllerCallbacks } from './controller/ClockController';
+import { ClockEngine } from './engine/ClockEngine';
 import { DragHandlers, type DragHandlersConfig } from './handlers/DragHandlers';
 import { HOURS_12, HOURS_24, MINUTES_STEP_5 } from '../../utils/template';
 
@@ -14,13 +23,17 @@ export interface ClockSystemConfig {
   disabledTime: DisabledTimeConfig | null;
   initialHour: string;
   initialMinute: string;
+  initialSecond?: string;
   initialAmPm: '' | 'AM' | 'PM';
   theme?: string;
   incrementHours?: number;
   incrementMinutes?: number;
+  incrementSeconds?: number;
   smoothHourSnap?: boolean;
+  showSeconds?: boolean;
   onHourChange?: (hour: string) => void;
   onMinuteChange?: (minute: string) => void;
+  onSecondChange?: (second: string) => void;
   timepicker: unknown;
   dragConfig?: DragHandlersConfig;
 }
@@ -47,22 +60,27 @@ export class ClockSystem {
       clockHand: config.clockHand,
       circle: config.circle,
       theme: config.theme,
+      showSeconds: config.showSeconds,
     };
 
     this.renderer = new ClockRenderer(renderConfig);
 
+    const initialSecond = config.initialSecond || '00';
     const initialState: ClockState = {
       hour: config.initialHour,
       minute: config.initialMinute,
+      second: initialSecond,
       amPm: config.initialAmPm,
-      hourAngle: this.calculateInitialAngle('hours', config.initialHour),
-      minuteAngle: this.calculateInitialAngle('minutes', config.initialMinute),
+      hourAngle: ClockEngine.valueToAngle(config.initialHour, 'hours', config.clockType),
+      minuteAngle: ClockEngine.valueToAngle(config.initialMinute, 'minutes', config.clockType),
+      secondAngle: ClockEngine.valueToAngle(initialSecond, 'seconds', config.clockType),
       mode: 'hours',
     };
 
     const callbacks: ClockControllerCallbacks = {
       onHourChange: config.onHourChange,
       onMinuteChange: config.onMinuteChange,
+      onSecondChange: config.onSecondChange,
     };
 
     this.controller = new ClockController(
@@ -74,6 +92,8 @@ export class ClockSystem {
       config.incrementMinutes || 1,
       config.smoothHourSnap ?? true,
       callbacks,
+      config.incrementSeconds || 1,
+      config.showSeconds ?? false,
     );
 
     this.dragHandlers = new DragHandlers(this.controller, config.clockFace, config.dragConfig || {});
@@ -92,22 +112,15 @@ export class ClockSystem {
     }
 
     this.renderHourTips();
-
-    const state = this.controller.getState();
-    this.renderer.setActiveValue(state.hour);
+    this.controller.followHand('hours');
   }
 
   switchToMinutes(): void {
-    this.controller.switchMode('minutes');
+    this.switchToSixty('minutes');
+  }
 
-    if (this.tipsWrapperFor24h) {
-      this.tipsWrapperFor24h.classList.add('none');
-    }
-
-    this.renderMinuteTips();
-
-    const state = this.controller.getState();
-    this.renderer.setActiveValue(state.minute);
+  switchToSeconds(): void {
+    this.switchToSixty('seconds');
   }
 
   setHour(value: string): void {
@@ -118,17 +131,42 @@ export class ClockSystem {
     this.controller.setValue('minutes', value);
   }
 
+  setSecond(value: string): void {
+    this.controller.setValue('seconds', value);
+  }
+
+  setValueIfShown(mode: ClockMode, value: string): boolean {
+    const isShown = this.controller.getState().mode === mode;
+    if (isShown) {
+      this.controller.setValue(mode, value);
+    }
+    return isShown;
+  }
+
   setAmPm(amPm: 'AM' | 'PM'): void {
     this.controller.setAmPm(amPm);
-    const state = this.controller.getState();
-    if (state.mode === 'hours') {
-      this.renderHourTips();
-      this.renderer.setHandAngle(state.hourAngle);
-      this.renderer.setActiveValue(state.hour);
+    this.refreshFace();
+  }
+
+  syncValue(value: { hour: string; minute: string; second?: string; amPm: AmPmType }): void {
+    this.controller.setValue('hours', value.hour);
+    this.controller.setValue('minutes', value.minute);
+    if (value.second) {
+      this.controller.setValue('seconds', value.second);
+    }
+    if (value.amPm && this.clockType === '12h') {
+      this.controller.setAmPm(value.amPm);
+    }
+    this.refreshFace();
+  }
+
+  private refreshFace(): void {
+    const { mode } = this.controller.getState();
+
+    if (mode === 'hours') {
+      this.switchToHours();
     } else {
-      this.renderMinuteTips();
-      this.renderer.setHandAngle(state.minuteAngle);
-      this.renderer.setActiveValue(state.minute);
+      this.switchToSixty(mode);
     }
   }
 
@@ -140,6 +178,10 @@ export class ClockSystem {
     return this.controller.getMinute();
   }
 
+  getSecond(): string {
+    return this.controller.getSecond();
+  }
+
   getAmPm(): string {
     return this.controller.getAmPm();
   }
@@ -147,13 +189,24 @@ export class ClockSystem {
   updateDisabledTime(disabledTime: DisabledTimeConfig | null): void {
     this.disabledTime = disabledTime;
     this.controller.updateDisabledTime(disabledTime);
-    const state = this.controller.getState();
+    const { mode } = this.controller.getState();
 
-    if (state.mode === 'hours') {
+    if (mode === 'hours') {
       this.renderHourTips();
     } else {
-      this.renderMinuteTips();
+      this.renderSixtyTips(mode);
     }
+  }
+
+  private switchToSixty(unit: SixtyMode): void {
+    this.controller.switchMode(unit);
+
+    if (this.tipsWrapperFor24h) {
+      this.tipsWrapperFor24h.classList.add('none');
+    }
+
+    this.renderSixtyTips(unit);
+    this.controller.followHand(unit);
   }
 
   private renderHourTips(): void {
@@ -198,32 +251,21 @@ export class ClockSystem {
     }
   }
 
-  private renderMinuteTips(): void {
-    const state = this.controller.getState();
-    const amPm = state.amPm;
-    const currentHour = state.hour;
+  private renderSixtyTips(unit: SixtyMode): void {
+    const { amPm, hour, minute } = this.controller.getState();
 
     this.renderer.renderTips(
       MINUTES_STEP_5,
       'tp-ui-minutes-time',
-      'minutes',
+      unit,
       this.disabledTime,
       this.clockType,
       true,
       undefined,
       amPm,
-      currentHour,
+      hour,
+      minute,
     );
-  }
-
-  private calculateInitialAngle(mode: ClockMode, value: string): number {
-    const numValue = parseInt(value, 10);
-
-    if (mode === 'hours') {
-      return (numValue % 12) * 30;
-    } else {
-      return numValue * 6;
-    }
   }
 
   destroy(): void {

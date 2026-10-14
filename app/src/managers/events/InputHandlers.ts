@@ -1,6 +1,25 @@
-import { clampHourValue, clampMinuteValue } from '../../utils/input/clamp';
+import { clampHourValue, clampMinuteValue, clampSecondValue } from '../../utils/input/clamp';
+import { runCleanups } from '../../utils/managerHelpers';
+import { setSpinbuttonValue } from '../../utils/accessibility';
+import { pad } from '../../utils/time/parse';
+import { findNearestEnabled } from '../../utils/time/rules';
 import type { CoreState } from '../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../utils/EventEmitter';
+import {
+  activateField,
+  buildUpdatePayload,
+  disabledCheckFor,
+  emitSelect,
+  fieldBounds,
+  getTimeInput,
+  type TimeField,
+} from './timeFields';
+
+const CLAMPS: Readonly<Record<TimeField, (value: string, is12h: boolean) => string>> = {
+  hour: clampHourValue,
+  minutes: clampMinuteValue,
+  seconds: clampSecondValue,
+};
 
 export class InputHandlers {
   private core: CoreState;
@@ -13,110 +32,61 @@ export class InputHandlers {
   }
 
   handleHourEvents(): void {
-    const hour = this.core.getHour();
-    if (!hour) return;
-
-    const handler = (): void => {
-      if (this.core.isDestroyed) return;
-      hour.classList.add('active');
-      const minutes = this.core.getMinutes();
-      minutes?.classList.remove('active');
-      this.emitter.emit('select:hour', { hour: hour.value });
-
-      const activeTypeMode = this.core.getActiveTypeMode();
-      this.emitter.emit('update', {
-        hour: hour.value,
-        minutes: minutes?.value,
-        type: activeTypeMode?.textContent || undefined,
-      });
-    };
-
-    hour.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => hour.removeEventListener('click', handler));
-
-    let previousValue = hour.value;
-    const blurHandler = (): void => {
-      if (this.core.isDestroyed) return;
-
-      if (hour.hasAttribute('readonly')) return;
-
-      const is12h = this.core.options.clock.type === '12h';
-      const clampedValue = clampHourValue(hour.value, is12h);
-      hour.value = clampedValue;
-      hour.setAttribute('aria-valuenow', clampedValue);
-
-      if (hour.value !== previousValue) {
-        previousValue = hour.value;
-        this.emitter.emit('animation:clock', {});
-        this.emitter.emit('select:hour', { hour: hour.value });
-
-        const minutes = this.core.getMinutes();
-        const activeTypeMode = this.core.getActiveTypeMode();
-        this.emitter.emit('update', {
-          hour: hour.value,
-          minutes: minutes?.value,
-          type: activeTypeMode?.textContent || undefined,
-        });
-      }
-    };
-
-    hour.addEventListener('blur', blurHandler);
-    this.cleanupHandlers.push(() => hour.removeEventListener('blur', blurHandler));
+    this.bindTimeField('hour');
   }
 
   handleMinutesEvents(): void {
-    const minutes = this.core.getMinutes();
-    if (!minutes) return;
+    this.bindTimeField('minutes');
+  }
 
-    const handler = (): void => {
+  handleSecondsEvents(): void {
+    this.bindTimeField('seconds');
+  }
+
+  private bindTimeField(field: TimeField): void {
+    const input = getTimeInput(this.core, field);
+    if (!input) return;
+
+    const clickHandler = (): void => {
       if (this.core.isDestroyed) return;
-      minutes.classList.add('active');
-      const hour = this.core.getHour();
-      hour?.classList.remove('active');
-      this.emitter.emit('select:minute', { minutes: minutes.value });
-
-      const activeTypeMode = this.core.getActiveTypeMode();
-      this.emitter.emit('update', {
-        hour: hour?.value,
-        minutes: minutes.value,
-        type: activeTypeMode?.textContent || undefined,
-      });
+      activateField(this.core, field);
+      emitSelect(this.emitter, field, input.value);
+      this.emitter.emit('update', buildUpdatePayload(this.core));
     };
 
-    minutes.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => minutes.removeEventListener('click', handler));
+    input.addEventListener('click', clickHandler);
+    this.cleanupHandlers.push(() => input.removeEventListener('click', clickHandler));
 
-    let previousValue = minutes.value;
+    let previousValue = input.value;
     const blurHandler = (): void => {
       if (this.core.isDestroyed) return;
+      if (input.hasAttribute('readonly')) return;
 
-      if (minutes.hasAttribute('readonly')) return;
+      const clamped = CLAMPS[field](input.value, this.core.options.clock.type === '12h');
+      setSpinbuttonValue(input, clamped && this.nearestEnabled(field, Number(clamped)));
 
-      const clampedValue = clampMinuteValue(minutes.value);
-      minutes.value = clampedValue;
-      minutes.setAttribute('aria-valuenow', clampedValue);
+      if (input.value === previousValue) return;
 
-      if (minutes.value !== previousValue) {
-        previousValue = minutes.value;
-        this.emitter.emit('animation:clock', {});
-        this.emitter.emit('select:minute', { minutes: minutes.value });
-
-        const hour = this.core.getHour();
-        const activeTypeMode = this.core.getActiveTypeMode();
-        this.emitter.emit('update', {
-          hour: hour?.value,
-          minutes: minutes.value,
-          type: activeTypeMode?.textContent || undefined,
-        });
-      }
+      previousValue = input.value;
+      this.emitter.emit('animation:clock', {});
+      emitSelect(this.emitter, field, input.value);
+      this.emitter.emit('update', buildUpdatePayload(this.core));
     };
 
-    minutes.addEventListener('blur', blurHandler);
-    this.cleanupHandlers.push(() => minutes.removeEventListener('blur', blurHandler));
+    input.addEventListener('blur', blurHandler);
+    this.cleanupHandlers.push(() => input.removeEventListener('blur', blurHandler));
+  }
+
+  private nearestEnabled(field: TimeField, value: number): string {
+    const [min, max] = fieldBounds(this.core, field);
+    return pad(findNearestEnabled(value, min, max, disabledCheckFor(this.core, field)));
+  }
+
+  detach(): void {
+    runCleanups(this.cleanupHandlers);
   }
 
   destroy(): void {
-    this.cleanupHandlers.forEach((cleanup) => cleanup());
-    this.cleanupHandlers = [];
+    this.detach();
   }
 }

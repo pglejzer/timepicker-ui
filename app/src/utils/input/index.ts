@@ -1,14 +1,30 @@
 import type { ClockOptions } from '../../types/options';
+import { parseTime, pad, fromHours24, type TimeValue } from '../time/parse';
+import { localeClockType } from '../time/locale';
 
 export type InputValueResult = {
   hour: string;
   minutes: string;
+  seconds?: string;
   type?: string;
   error?: string;
   currentHour?: string | number;
   currentMin?: string | number;
+  currentSec?: string | number;
   currentType?: string;
   currentLength?: number;
+};
+
+const MAX_12H_LENGTH = 8;
+const MAX_12H_LENGTH_WITH_SECONDS = 11;
+
+const toResult = ({ hour, minutes, seconds, type }: TimeValue): InputValueResult =>
+  seconds === undefined ? { hour, minutes, type } : { hour, minutes, seconds, type };
+
+const fromDate = (date: Date, clockType: string | undefined, showSeconds: boolean): InputValueResult => {
+  const minutes = pad(date.getMinutes());
+  const seconds = showSeconds ? pad(date.getSeconds()) : undefined;
+  return toResult(fromHours24(date.getHours(), { minutes, seconds }, clockType === '24h' ? '24h' : '12h'));
 };
 
 export const getInputValue = (
@@ -16,72 +32,57 @@ export const getInputValue = (
   clockType?: string,
   currentTime?: ClockOptions['currentTime'],
   updateOptions?: boolean,
+  showSeconds = false,
 ): InputValueResult => {
-  const defaultReturn = { hour: '12', minutes: '00', type: clockType === '24h' ? undefined : 'PM' };
+  const defaultReturn = toResult({
+    hour: '12',
+    minutes: '00',
+    seconds: showSeconds ? '00' : undefined,
+    type: clockType === '24h' ? undefined : 'PM',
+  });
   if (!el) return defaultReturn;
   const value = el.value.trim();
   if (!currentTime && !value) return defaultReturn;
 
   if (typeof currentTime === 'boolean' && currentTime) {
-    const date = new Date();
-    const [rawHour, rawRest] = date.toLocaleTimeString().split(':');
-    const hour = rawHour.padStart(2, '0');
-    if (/[a-z]/i.test(rawRest) && clockType === '12h') {
-      const [minutes, type] = rawRest.split(' ');
-      return { hour, minutes, type };
-    }
-    return { hour, minutes: rawRest, type: undefined };
+    return fromDate(new Date(), clockType, showSeconds);
   }
 
   if (typeof currentTime === 'object') {
-    const { time, locales, preventClockType } = currentTime;
-    const cTime = time ?? new Date();
+    const { time, preventClockType } = currentTime;
+    const date = new Date(time ?? new Date());
 
     if (preventClockType && updateOptions) {
-      const [h, rest] = new Date(cTime).toLocaleTimeString().split(':');
-      if (/[a-z]/i.test(rest)) {
-        const [minutes, type] = rest.split(' ');
-        return { hour: h, minutes, type };
-      }
-      return { hour: h.padStart(2, '0'), minutes: rest, type: undefined };
+      return fromDate(date, localeClockType(), showSeconds);
     }
 
-    const timeString = new Date(cTime).toLocaleTimeString(locales || 'en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: clockType === '12h',
-    });
-
-    const [rawHour, rawRest] = timeString.split(':');
-
-    if (clockType === '12h' && /[a-z]/i.test(rawRest)) {
-      const parts = rawRest.trim().split(' ');
-      const minutes = parts[0];
-      const type = parts[1] || 'AM';
-      return { hour: rawHour, minutes, type };
-    }
-
-    return { hour: rawHour, minutes: rawRest.replace(/\D/g, ''), type: undefined };
+    return fromDate(date, clockType, showSeconds);
   }
 
+  const parsed = parseTime(value, { clockType: clockType === '24h' ? '24h' : '12h', showSeconds });
+  if (parsed) return toResult(parsed);
+
   const [hourPart, type] = value.split(' ');
-  const [hStr = '', mStr = ''] = hourPart.split(':');
+  const [hStr = '', mStr = '', sStr = ''] = hourPart.split(':');
 
   const hour = hStr.replace(/\D/g, '');
   const minutes = mStr.replace(/\D/g, '');
+  const seconds = showSeconds ? sStr.replace(/\D/g, '') : '';
 
-  const result = {
+  const result: InputValueResult = {
     hour: hour.padStart(2, '0'),
     minutes: minutes.padStart(2, '0'),
     type: clockType === '12h' ? type : undefined,
   };
+  if (showSeconds) result.seconds = seconds.padStart(2, '0');
 
-  if (hour.length > 2 || minutes.length > 2) {
+  if (hour.length > 2 || minutes.length > 2 || seconds.length > 2) {
     return {
       ...result,
       error: 'Invalid input: too many digits.',
       currentHour: hStr,
       currentMin: mStr,
+      ...(showSeconds ? { currentSec: sStr } : {}),
     };
   }
 
@@ -93,7 +94,8 @@ export const getInputValue = (
   }
 
   if (value.includes(' ')) {
-    if (!type || value.length > 8 || (type !== 'AM' && type !== 'PM')) {
+    const maxLength = showSeconds ? MAX_12H_LENGTH_WITH_SECONDS : MAX_12H_LENGTH;
+    if (!type || value.length > maxLength || (type !== 'AM' && type !== 'PM')) {
       return {
         ...result,
         error: `Invalid AM/PM format or length.`,
@@ -105,24 +107,29 @@ export const getInputValue = (
 
   const h = Number(hour);
   const m = Number(minutes);
+  const s = Number(seconds);
+  const isSixtyValid = m >= 0 && m <= 59 && s >= 0 && s <= 59;
+  const secondInfo = showSeconds ? { currentSec: s } : {};
 
   if (clockType === '12h') {
-    if (h < 1 || h > 12 || m < 0 || m > 59 || (type !== 'AM' && type !== 'PM')) {
+    if (h < 1 || h > 12 || !isSixtyValid || (type !== 'AM' && type !== 'PM')) {
       return {
         ...result,
         error: `Invalid 12h time.`,
         currentHour: h,
         currentMin: m,
+        ...secondInfo,
         currentType: type,
       };
     }
   } else {
-    if (h < 0 || h > 23 || m < 0 || m > 59) {
+    if (h < 0 || h > 23 || !isSixtyValid) {
       return {
         ...result,
         error: `Invalid 24h time.`,
         currentHour: h,
         currentMin: m,
+        ...secondInfo,
       };
     }
   }

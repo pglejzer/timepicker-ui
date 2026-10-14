@@ -5,9 +5,11 @@ const createMockCoreState = (
   enabled = true,
 ): {
   getModalElement: jest.Mock;
+  isOpen: boolean;
   options: { timezone: { enabled: boolean; whitelist?: string[] } };
 } => ({
   getModalElement: jest.fn(),
+  isOpen: true,
   options: { timezone: { enabled } },
 });
 

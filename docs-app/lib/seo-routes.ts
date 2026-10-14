@@ -29,6 +29,7 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/docs/installation", tier: "section" },
   { path: "/docs/quick-start", tier: "section" },
   { path: "/docs/configuration", tier: "section" },
+  { path: "/docs/migration-guide-v5", tier: "leaf" },
   { path: "/docs/migration-guide", tier: "leaf" },
   { path: "/docs/legacy-migration", tier: "leaf" },
   { path: "/docs/whats-new", tier: "leaf" },
@@ -43,6 +44,7 @@ export const seoRoutes: SeoRoute[] = [
 
   // docs — features
   { path: "/docs/features/clock-format", tier: "leaf" },
+  { path: "/docs/features/seconds", tier: "leaf" },
   { path: "/docs/features/themes", tier: "section" },
   { path: "/docs/features/inline-mode", tier: "leaf" },
   { path: "/docs/features/mobile", tier: "leaf" },
@@ -81,10 +83,12 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/examples/features/inline-mode", tier: "leaf" },
   { path: "/examples/features/mobile", tier: "leaf" },
   { path: "/examples/features/editable", tier: "leaf" },
+  { path: "/examples/features/open-from-button", tier: "leaf" },
   { path: "/examples/features/disabled-time", tier: "leaf" },
   { path: "/examples/features/custom-labels", tier: "leaf" },
   { path: "/examples/features/current-time", tier: "leaf" },
   { path: "/examples/features/increment", tier: "leaf" },
+  { path: "/examples/features/seconds", tier: "leaf" },
   { path: "/examples/features/focus-trap", tier: "leaf" },
   { path: "/examples/features/switch-icon", tier: "leaf" },
   { path: "/examples/features/smooth-hour-snap", tier: "leaf" },

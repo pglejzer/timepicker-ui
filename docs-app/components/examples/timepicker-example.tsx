@@ -118,9 +118,7 @@ export function TimepickerExample({
               if (rangeEnabled) return;
               const time =
                 data.hour && data.minutes
-                  ? `${data.hour}:${data.minutes}${
-                      data.type ? ` ${data.type}` : ""
-                    }`
+                  ? (pickerRef.current?.getValue().time ?? "")
                   : "";
               setCurrentValue(time);
               const originalCallback = (
@@ -184,7 +182,7 @@ export function TimepickerExample({
               type="text"
               id={uniqueId}
               placeholder={inputPlaceholder}
-              className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/25"
+              className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-ring/25"
             />
           </div>
           {rangeValue && (
@@ -241,7 +239,7 @@ export function TimepickerExample({
             tabIndex={viewMode === "preview" ? 0 : -1}
             onClick={() => setViewMode("preview")}
             onKeyDown={onTabKeyDown}
-            className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+            className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-xs transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
               viewMode === "preview"
                 ? "bg-card text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
@@ -260,7 +258,7 @@ export function TimepickerExample({
             tabIndex={viewMode === "code" ? 0 : -1}
             onClick={() => setViewMode("code")}
             onKeyDown={onTabKeyDown}
-            className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+            className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-xs transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
               viewMode === "code"
                 ? "bg-card text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
@@ -288,7 +286,6 @@ export function TimepickerExample({
         role="tabpanel"
         id={`${uniqueId}-panel-code`}
         aria-labelledby={`${uniqueId}-tab-code`}
-        tabIndex={0}
         hidden={viewMode !== "code"}
         className="p-3"
       >

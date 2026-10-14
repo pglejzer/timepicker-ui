@@ -16,10 +16,14 @@
   outline: none;
 }
 
+.tp-ui-wrapper {
+  font-family: var(--tp-font-family, 'Roboto', sans-serif);
+}
+
 .tp-ui-wrapper.expanded {
   will-change: width, height, flex-direction;
 
-  @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+  @media screen and (orientation: landscape) and (max-height: 480px) {
     flex-direction: row;
     height: 360px;
     width: 584px;
@@ -41,20 +45,20 @@
     height 400ms cubic-bezier(0.4, 0, 0.2, 1),
     flex-direction 0ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
-    width: 328px;
-    height: 258px;
+  @media screen and (orientation: landscape) and (max-height: 480px) {
+    width: var(--tp-mobile-landscape-width, 328px);
+    height: var(--tp-mobile-landscape-height, 258px);
     transition:
       width 400ms cubic-bezier(0.4, 0, 0.2, 1),
       height 400ms cubic-bezier(0.4, 0, 0.2, 1),
       flex-direction 0ms cubic-bezier(0.4, 0, 0.2, 1);
 
-    .tp-ui-tz-mode & {
-      height: 326px;
+    .tp-ui-range-mode & {
+      height: var(--tp-mobile-landscape-height-range, 287px);
     }
 
-    .tp-ui-range-mode & {
-      height: 287px;
+    .tp-ui-tz-mode & {
+      height: var(--tp-mobile-landscape-height-timezone, 326px);
     }
   }
 
@@ -76,6 +80,10 @@
     height 400ms cubic-bezier(0.4, 0, 0.2, 1),
     opacity 400ms cubic-bezier(0.4, 0, 0.2, 1),
     transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media screen and (orientation: landscape) and (max-height: 480px) {
+    transition: none;
+  }
 }
 
 .tp-ui-mobile-clock-wrapper.expanded {
@@ -83,13 +91,21 @@
   opacity: 1;
   transform: scale(1);
 
-  @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+  @media screen and (orientation: landscape) and (max-height: 480px) {
     height: 100%;
     width: 100%;
     transform-origin: left center;
-    transition:
-      height 400ms cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-      transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+.tp-ui-view-switching .tp-ui-wrapper > * {
+  @media screen and (orientation: landscape) and (max-height: 480px) {
+    animation: tp-view-fade var(--tp-duration-slow) var(--tp-easing-decelerate) both;
+  }
+}
+
+@keyframes tp-view-fade {
+  from {
+    opacity: 0;
   }
 }

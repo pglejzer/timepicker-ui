@@ -78,6 +78,11 @@ export function DocsSidebar() {
                           }`}
                         >
                           {link.title}
+                          {link.badge && (
+                            <span className="ml-2 rounded-full border border-[hsl(var(--warn)/0.25)] bg-[hsl(var(--warn)/0.06)] px-1.5 py-px text-[10px] font-medium text-[hsl(var(--warn))]">
+                              {link.badge}
+                            </span>
+                          )}
                         </Link>
                       </li>
                     );

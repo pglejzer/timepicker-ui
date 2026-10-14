@@ -1,9 +1,11 @@
 import { isDocument } from '../utils/node';
+import { mergeOptionGroups } from '../utils/options/defaults';
 import type { TimepickerOptions } from '../types/options';
 
 export interface CoreStateData {
   readonly degreesHours: number | null;
   readonly degreesMinutes: number | null;
+  readonly degreesSeconds: number | null;
   readonly options: Required<TimepickerOptions>;
   readonly element: HTMLElement;
   readonly instanceId: string;
@@ -16,6 +18,7 @@ export interface CoreStateData {
       clockType?: string;
       hours?: string[];
       minutes?: string[];
+      seconds?: string[];
     };
   } | null;
   readonly cloned: Node | null;
@@ -27,9 +30,11 @@ export interface CoreStateData {
   readonly isDestroyed: boolean;
 }
 
+/** @remarks This API changes in 5.0.0; see the roadmap. */
 export class CoreState {
   private _degreesHours: number | null = null;
   private _degreesMinutes: number | null = null;
+  private _degreesSeconds: number | null = null;
   private _options: Required<TimepickerOptions>;
   private _isMobileView = false;
   private _isTouchMouseMove = false;
@@ -40,6 +45,7 @@ export class CoreState {
   private _isInitialized = false;
   private _eventHandlersRegistered = false;
   private _isDestroyed = false;
+  private _modalElement: HTMLDivElement | null = null;
 
   public readonly element: HTMLElement;
   public readonly instanceId: string;
@@ -62,6 +68,9 @@ export class CoreState {
   }
   get degreesMinutes(): number | null {
     return this._degreesMinutes;
+  }
+  get degreesSeconds(): number | null {
+    return this._degreesSeconds;
   }
   get options(): Required<TimepickerOptions> {
     return this._options;
@@ -100,6 +109,9 @@ export class CoreState {
   setDegreesMinutes(value: number | null): void {
     this._degreesMinutes = value;
   }
+  setDegreesSeconds(value: number | null): void {
+    this._degreesSeconds = value;
+  }
   setOptions(options: Required<TimepickerOptions>): void {
     this._options = options;
   }
@@ -132,19 +144,13 @@ export class CoreState {
   }
 
   updateOptions(updates: Partial<TimepickerOptions>): void {
-    this._options = {
-      ...this._options,
-      clock: { ...this._options.clock, ...(updates.clock || {}) },
-      ui: { ...this._options.ui, ...(updates.ui || {}) },
-      labels: { ...this._options.labels, ...(updates.labels || {}) },
-      behavior: { ...this._options.behavior, ...(updates.behavior || {}) },
-      callbacks: { ...this._options.callbacks, ...(updates.callbacks || {}) },
-    };
+    this._options = mergeOptionGroups(this._options, updates);
   }
 
   reset(): void {
     this._degreesHours = null;
     this._degreesMinutes = null;
+    this._degreesSeconds = null;
     this._isTouchMouseMove = false;
     this._disabledTime = null;
     this._cloned = null;
@@ -153,6 +159,7 @@ export class CoreState {
     this._isInitialized = false;
     this._isDestroyed = true;
     this._eventHandlersRegistered = false;
+    this._modalElement = null;
   }
 
   private q<T extends Element = HTMLElement>(selector: string): T | null {
@@ -166,7 +173,20 @@ export class CoreState {
 
   getModalElement(): HTMLDivElement | null {
     if (isDocument() === false) return null;
-    return document.querySelector(`[data-owner-id="${this.instanceId}"]`);
+
+    const cached = this._modalElement;
+    if (cached?.isConnected && cached.dataset.ownerId === this.instanceId) return cached;
+
+    const candidates = document.querySelectorAll<HTMLDivElement>('[data-owner-id]');
+    for (let index = 0; index < candidates.length; index++) {
+      if (candidates[index].dataset.ownerId === this.instanceId) {
+        this._modalElement = candidates[index];
+        return this._modalElement;
+      }
+    }
+
+    this._modalElement = null;
+    return null;
   }
 
   getInput(): HTMLInputElement | null {
@@ -174,7 +194,10 @@ export class CoreState {
   }
 
   getClockFace(): HTMLDivElement | null {
-    return this.qMobile<HTMLDivElement>('.tp-ui-clock-face.mobile', '.tp-ui-clock-face:not(.mobile)');
+    return (
+      this.qMobile<HTMLDivElement>('.tp-ui-clock-face.mobile', '.tp-ui-clock-face:not(.mobile)') ??
+      this.q<HTMLDivElement>('.tp-ui-clock-face')
+    );
   }
 
   getClockHand(): HTMLDivElement | null {
@@ -209,6 +232,10 @@ export class CoreState {
     return this.q<HTMLInputElement>('.tp-ui-minutes');
   }
 
+  getSeconds(): HTMLInputElement | null {
+    return this.q<HTMLInputElement>('.tp-ui-seconds');
+  }
+
   getHour(): HTMLInputElement | null {
     return this.q<HTMLInputElement>('.tp-ui-hour');
   }
@@ -227,6 +254,10 @@ export class CoreState {
 
   getMinutesText(): HTMLDivElement | null {
     return this.q<HTMLDivElement>('.tp-ui-minute-text');
+  }
+
+  getSecondsText(): HTMLDivElement | null {
+    return this.q<HTMLDivElement>('.tp-ui-second-text');
   }
 
   getHeader(): HTMLDivElement | null {
@@ -272,16 +303,17 @@ export class CoreState {
     return null;
   }
 
-  getOpenElement(): NodeListOf<Element> | readonly [HTMLInputElement] {
-    const input = this.getInput();
-    const openData = this.getOpenElementData();
+  getOpenElement(): NodeListOf<Element> | ReadonlyArray<Element> {
+    const openers = Array.from(this.element.querySelectorAll<HTMLElement>('[data-open]'));
 
-    if (openData === null) {
+    if (openers.length === 0) {
+      const input = this.getInput();
       input?.setAttribute('data-open', 'tp-ui-input');
-      return [input as HTMLInputElement] as const;
+      return [input as HTMLInputElement];
     }
 
-    return openData.map((open) => this.element?.querySelectorAll(`[data-open='${open}']`))[0] ?? '';
+    const firstOpen = openers[0].dataset.open;
+    return openers.filter((opener) => opener.dataset.open === firstOpen);
   }
 
   getCancelButton(): HTMLButtonElement | null {
@@ -296,8 +328,13 @@ export class CoreState {
     return this.q<HTMLButtonElement>('.tp-ui-type-mode.active');
   }
 
+  getActiveType(): 'AM' | 'PM' | undefined {
+    const type = this.getActiveTypeMode()?.dataset.type;
+    return type === 'AM' || type === 'PM' ? type : undefined;
+  }
+
   getKeyboardClockIcon(): HTMLButtonElement | null {
-    return this.q<HTMLButtonElement>('.tp-ui-keyboard-icon-wrapper');
+    return this.q<HTMLButtonElement>('.tp-ui-keyboard-icon');
   }
 
   getFooter(): HTMLDivElement | null {

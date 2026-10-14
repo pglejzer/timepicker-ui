@@ -12,18 +12,24 @@ export default function MobilePage() {
     <div>
       <PageHeader
         title="Mobile Mode"
-        description="Optimized interface for mobile devices"
+        description={
+          <>
+            Open the picker in the keyboard view, where users type the time,
+            with <code>ui.initialView: &quot;keyboard&quot;</code>.
+          </>
+        }
         eyebrow="React · Features"
       />
 
-      <Section icon={Smartphone} title="Mobile View">
+      <Section icon={Smartphone} title="Keyboard View">
         <p className="text-muted-foreground mb-4">
-          Enable mobile-optimized UI with larger touch targets:
+          Open in the keyboard view, where the time is typed into the hour and
+          minute fields:
         </p>
         <div className="rounded-xl border border-border bg-card overflow-hidden">
           <div className="p-6 border-b border-border bg-muted/30">
             <h3 className="text-lg font-semibold text-foreground mb-2">
-              Mobile Mode
+              Keyboard View
             </h3>
             <p className="text-sm text-muted-foreground">
               Better for touch interactions
@@ -32,10 +38,10 @@ export default function MobilePage() {
           <div className="p-6">
             <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
               <Timepicker
-                placeholder="Mobile view"
+                placeholder="Keyboard view"
                 className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
                 options={{
-                  ui: { mobile: true },
+                  ui: { initialView: "keyboard" },
                 }}
               />
             </div>
@@ -46,7 +52,7 @@ function App() {
   return (
     <Timepicker
       options={{
-        ui: { mobile: true }
+        ui: { initialView: "keyboard" }
       }}
     />
   );
@@ -59,18 +65,19 @@ function App() {
 
       <Section icon={Smartphone} title="With Switch Icon">
         <p className="text-muted-foreground mb-4">
-          Add switch icon for better hour/minute navigation:
+          Add the switch icon with <code>ui.viewSwitch</code> to toggle between
+          the keyboard view and the clock face:
         </p>
         <div className="rounded-xl border border-border bg-card overflow-hidden">
           <div className="p-6">
             <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
               <Timepicker
-                placeholder="Mobile with icon"
+                placeholder="Keyboard view with icon"
                 className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
                 options={{
                   ui: {
-                    mobile: true,
-                    enableSwitchIcon: true,
+                    initialView: "keyboard",
+                    viewSwitch: true,
                   },
                 }}
               />
@@ -79,8 +86,8 @@ function App() {
               code={`<Timepicker
   options={{
     ui: {
-      mobile: true,
-      enableSwitchIcon: true
+      initialView: "keyboard",
+      viewSwitch: true
     }
   }}
 />`}
@@ -92,7 +99,7 @@ function App() {
 
       <Section icon={Smartphone} title="Responsive Design">
         <p className="text-muted-foreground mb-4">
-          Automatically switch to mobile mode based on screen size:
+          Open in the keyboard view on small screens:
         </p>
         <CodeBlock
           code={`import { Timepicker } from "timepicker-ui-react";
@@ -111,7 +118,7 @@ function ResponsiveTimepicker() {
   return (
     <Timepicker
       options={{
-        ui: { mobile: isMobile }
+        ui: { initialView: isMobile ? "keyboard" : "clock" }
       }}
     />
   );

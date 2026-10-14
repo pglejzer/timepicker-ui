@@ -2,20 +2,33 @@ import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 import type { TimepickerOptions } from '../types/options';
 
+export interface PluginSelection {
+  hour: string;
+  minutes: string;
+  seconds?: string;
+  type?: string;
+}
+
+/** @remarks This API changes in 5.0.0; see the roadmap. */
 export interface PluginManager {
   init(): void;
   destroy(): void;
   attachPopover?(): void;
   detachPopover?(): void;
-  scrollToValue?(hour: string, minute: string, type?: string): void;
+  scrollToValue?(hour: string, minute: string, type?: string, second?: string): void;
+  getSelection?(): PluginSelection | null;
 }
 
+/** @remarks This API changes in 5.0.0; see the roadmap. */
 export type PluginFactory = (core: CoreState, emitter: EventEmitter<TimepickerEventMap>) => PluginManager;
 
+/** @remarks This API changes in 5.0.0; see the roadmap. */
 export type TemplateProvider = (options: Required<TimepickerOptions>, instanceId: string) => string;
 
+/** @remarks This API changes in 5.0.0; see the roadmap. */
 export type ClearHandler = (core: CoreState, emitter: EventEmitter<TimepickerEventMap>) => void;
 
+/** @remarks This API changes in 5.0.0; see the roadmap. */
 export interface Plugin {
   name: string;
   factory: PluginFactory;
@@ -55,4 +68,5 @@ class PluginRegistryClass {
   }
 }
 
+/** @remarks This API changes in 5.0.0; see the roadmap. */
 export const PluginRegistry = new PluginRegistryClass();

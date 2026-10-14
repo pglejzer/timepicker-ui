@@ -121,6 +121,7 @@ describe('Wheel + interval disabled time (12h)', () => {
     });
 
     core = new CoreState(element, options, INSTANCE_ID);
+    core.setIsOpen(true);
     core.setDisabledTime({
       value: {
         isInterval: true,
@@ -273,6 +274,7 @@ describe('Wheel + interval disabled time (24h)', () => {
     });
 
     core = new CoreState(element, options, INSTANCE_ID);
+    core.setIsOpen(true);
     core.setDisabledTime({
       value: {
         isInterval: true,
@@ -344,6 +346,7 @@ describe('Wheel + multiple intervals', () => {
     });
 
     core = new CoreState(element, options, INSTANCE_ID);
+    core.setIsOpen(true);
     core.setDisabledTime({
       value: {
         isInterval: true,

@@ -1,6 +1,7 @@
 import { ClockStyleHandler } from '../../../../../src/managers/clock/handlers/ClockStyleHandler';
 import { CoreState } from '../../../../../src/timepicker/CoreState';
-import { DEFAULT_OPTIONS } from '../../../../../src/utils/options/defaults';
+import { DEFAULT_OPTIONS, mergeOptions } from '../../../../../src/utils/options/defaults';
+import type { TimepickerOptions } from '../../../../../src/types/options';
 
 describe('ClockStyleHandler', () => {
   let coreState: CoreState;
@@ -11,6 +12,20 @@ describe('ClockStyleHandler', () => {
   let mockHour: HTMLInputElement;
   let mockMinutes: HTMLInputElement;
   let mockInput: HTMLInputElement;
+
+  const stubDom = (core: CoreState): void => {
+    jest.spyOn(core, 'getCircle').mockReturnValue(mockCircle as HTMLDivElement);
+    jest.spyOn(core, 'getClockHand').mockReturnValue(mockClockHand as HTMLDivElement);
+    jest.spyOn(core, 'getHour').mockReturnValue(mockHour);
+    jest.spyOn(core, 'getMinutes').mockReturnValue(mockMinutes);
+    jest.spyOn(core, 'getInput').mockReturnValue(mockInput);
+  };
+
+  const handlerWith = (options: TimepickerOptions): { core: CoreState; handler: ClockStyleHandler } => {
+    const core = new CoreState(mockElement, mergeOptions(options), 'test-id');
+    stubDom(core);
+    return { core, handler: new ClockStyleHandler(core) };
+  };
 
   beforeEach(() => {
     mockElement = document.createElement('div');
@@ -28,11 +43,7 @@ describe('ClockStyleHandler', () => {
     document.body.appendChild(mockElement);
 
     coreState = new CoreState(mockElement, DEFAULT_OPTIONS, 'test-id');
-    jest.spyOn(coreState, 'getCircle').mockReturnValue(mockCircle as HTMLDivElement);
-    jest.spyOn(coreState, 'getClockHand').mockReturnValue(mockClockHand as HTMLDivElement);
-    jest.spyOn(coreState, 'getHour').mockReturnValue(mockHour);
-    jest.spyOn(coreState, 'getMinutes').mockReturnValue(mockMinutes);
-    jest.spyOn(coreState, 'getInput').mockReturnValue(mockInput);
+    stubDom(coreState);
 
     handler = new ClockStyleHandler(coreState);
   });
@@ -42,162 +53,55 @@ describe('ClockStyleHandler', () => {
     jest.restoreAllMocks();
   });
 
-  describe('removeCircleClockClasses24h', () => {
-    it('should remove 24h classes from circle and clockHand', () => {
-      mockCircle.classList.add('tp-ui-circle-hand-24h');
-      mockClockHand.classList.add('tp-ui-clock-hand-24h');
-
-      handler.removeCircleClockClasses24h();
-
-      expect(mockCircle.classList.contains('tp-ui-circle-hand-24h')).toBe(false);
-      expect(mockClockHand.classList.contains('tp-ui-clock-hand-24h')).toBe(false);
-    });
-
-    it('should not throw when circle is null', () => {
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(null);
-
-      expect(() => handler.removeCircleClockClasses24h()).not.toThrow();
-    });
-
-    it('should not throw when clockHand is null', () => {
-      jest.spyOn(coreState, 'getClockHand').mockReturnValue(null);
-
-      expect(() => handler.removeCircleClockClasses24h()).not.toThrow();
-    });
-  });
-
-  describe('setCircleClockClasses24h', () => {
-    it('should add 24h classes to circle and clockHand', () => {
-      handler.setCircleClockClasses24h();
-
-      expect(mockCircle.classList.contains('tp-ui-circle-hand-24h')).toBe(true);
-      expect(mockClockHand.classList.contains('tp-ui-clock-hand-24h')).toBe(true);
-    });
-
-    it('should not throw when circle is null', () => {
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(null);
-
-      expect(() => handler.setCircleClockClasses24h()).not.toThrow();
-    });
-
-    it('should not throw when clockHand is null', () => {
-      jest.spyOn(coreState, 'getClockHand').mockReturnValue(null);
-
-      expect(() => handler.setCircleClockClasses24h()).not.toThrow();
-    });
-  });
-
   describe('setOnStartCSSClassesIfClockType24h', () => {
-    it('should not add classes when clock type is 12h', () => {
-      handler.setOnStartCSSClassesIfClockType24h();
-
-      expect(mockCircle.classList.contains('tp-ui-circle-hand-24h')).toBe(false);
+    const innerRingClasses = (): { circle: boolean; hand: boolean } => ({
+      circle: mockCircle.classList.contains('tp-ui-circle-hand-24h'),
+      hand: mockClockHand.classList.contains('tp-ui-clock-hand-24h'),
     });
 
-    it('should add classes when clock type is 24h and hour > 12', () => {
-      Object.defineProperty(coreState.options.clock, 'type', { value: '24h' });
+    const runWith = (type: '12h' | '24h', inputValue: string): { circle: boolean; hand: boolean } => {
+      mockInput.value = inputValue;
+      handlerWith({ clock: { type } }).handler.setOnStartCSSClassesIfClockType24h();
+      return innerRingClasses();
+    };
+
+    it.each(['13:00', '14:30', '23:59', '00:00', '00:30'])(
+      'should add both the circle and the hand 24h classes for a 24h start time of %s',
+      (value) => {
+        expect(runWith('24h', value)).toEqual({ circle: true, hand: true });
+      },
+    );
+
+    it.each(['01:00', '09:30', '10:30', '12:00', '12:45'])(
+      'should add neither 24h class for a 24h start time of %s',
+      (value) => {
+        expect(runWith('24h', value)).toEqual({ circle: false, hand: false });
+      },
+    );
+
+    it('should add neither 24h class for a 12h clock, even when the input holds an hour past 12', () => {
+      expect(runWith('12h', '14:30')).toEqual({ circle: false, hand: false });
+    });
+
+    it('should add neither 24h class for a 24h clock with an empty input', () => {
+      expect(runWith('24h', '')).toEqual({ circle: false, hand: false });
+    });
+
+    it('should not throw and add neither class when the input is missing', () => {
+      const { core, handler: handler24h } = handlerWith({ clock: { type: '24h' } });
+      jest.spyOn(core, 'getInput').mockReturnValue(null);
+
+      expect(() => handler24h.setOnStartCSSClassesIfClockType24h()).not.toThrow();
+      expect(innerRingClasses()).toEqual({ circle: false, hand: false });
+    });
+
+    it('should not throw when the circle and the hand are missing', () => {
+      const { core, handler: handler24h } = handlerWith({ clock: { type: '24h' } });
+      jest.spyOn(core, 'getCircle').mockReturnValue(null);
+      jest.spyOn(core, 'getClockHand').mockReturnValue(null);
       mockInput.value = '14:30';
 
-      handler.setOnStartCSSClassesIfClockType24h();
-
-      expect(mockCircle.classList.contains('tp-ui-circle-hand-24h')).toBe(true);
-    });
-
-    it('should add classes when clock type is 24h and hour is 0', () => {
-      Object.defineProperty(coreState.options.clock, 'type', { value: '24h' });
-      mockInput.value = '00:30';
-
-      handler.setOnStartCSSClassesIfClockType24h();
-
-      expect(mockCircle.classList.contains('tp-ui-circle-hand-24h')).toBe(true);
-    });
-
-    it('should not add classes when hour is between 1 and 12', () => {
-      Object.defineProperty(coreState.options.clock, 'type', { value: '24h' });
-      mockInput.value = '10:30';
-
-      handler.setOnStartCSSClassesIfClockType24h();
-
-      expect(mockCircle.classList.contains('tp-ui-circle-hand-24h')).toBe(false);
-    });
-
-    it('should not throw when input is null', () => {
-      Object.defineProperty(coreState.options.clock, 'type', { value: '24h' });
-      jest.spyOn(coreState, 'getInput').mockReturnValue(null);
-
-      expect(() => handler.setOnStartCSSClassesIfClockType24h()).not.toThrow();
-    });
-
-    it('should not add classes when input value is empty', () => {
-      Object.defineProperty(coreState.options.clock, 'type', { value: '24h' });
-      mockInput.value = '';
-
-      handler.setOnStartCSSClassesIfClockType24h();
-
-      expect(mockCircle.classList.contains('tp-ui-circle-hand-24h')).toBe(false);
-    });
-  });
-
-  describe('setBgColorToCircleWithMinutesTips', () => {
-    it('should not throw when minutes is null', () => {
-      jest.spyOn(coreState, 'getMinutes').mockReturnValue(null);
-
-      expect(() => handler.setBgColorToCircleWithMinutesTips()).not.toThrow();
-    });
-
-    it('should not throw when circle is null', () => {
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(null);
-
-      expect(() => handler.setBgColorToCircleWithMinutesTips()).not.toThrow();
-    });
-
-    it('should remove small-circle class when minutes is in MINUTES_STEP_5', () => {
-      mockMinutes.value = '05';
-      mockCircle.classList.add('small-circle');
-
-      handler.setBgColorToCircleWithMinutesTips();
-
-      expect(mockCircle.classList.contains('small-circle')).toBe(false);
-    });
-
-    it('should not modify circle when minutes is not in MINUTES_STEP_5', () => {
-      mockMinutes.value = '07';
-      mockCircle.classList.add('small-circle');
-
-      handler.setBgColorToCircleWithMinutesTips();
-
-      expect(mockCircle.classList.contains('small-circle')).toBe(true);
-    });
-  });
-
-  describe('removeBgColorToCirleWithMinutesTips', () => {
-    it('should not throw when minutes is null', () => {
-      jest.spyOn(coreState, 'getMinutes').mockReturnValue(null);
-
-      expect(() => handler.removeBgColorToCirleWithMinutesTips()).not.toThrow();
-    });
-
-    it('should not throw when circle is null', () => {
-      jest.spyOn(coreState, 'getCircle').mockReturnValue(null);
-
-      expect(() => handler.removeBgColorToCirleWithMinutesTips()).not.toThrow();
-    });
-
-    it('should add small-circle class when minutes is not in MINUTES_STEP_5', () => {
-      mockMinutes.value = '07';
-
-      handler.removeBgColorToCirleWithMinutesTips();
-
-      expect(mockCircle.classList.contains('small-circle')).toBe(true);
-      expect(mockCircle.style.backgroundColor).toBe('');
-    });
-
-    it('should not add small-circle class when minutes is in MINUTES_STEP_5', () => {
-      mockMinutes.value = '05';
-
-      handler.removeBgColorToCirleWithMinutesTips();
-
-      expect(mockCircle.classList.contains('small-circle')).toBe(false);
+      expect(() => handler24h.setOnStartCSSClassesIfClockType24h()).not.toThrow();
     });
   });
 
@@ -209,15 +113,13 @@ describe('ClockStyleHandler', () => {
     });
 
     it('should not add class when mobile option is true', () => {
-      Object.defineProperty(coreState.options.ui, 'mobile', { value: true });
-
-      handler.setClassActiveToHourOnOpen();
+      handlerWith({ ui: { mobile: true } }).handler.setClassActiveToHourOnOpen();
 
       expect(mockHour.classList.contains('active')).toBe(false);
     });
 
     it('should not add class when isMobileView is true', () => {
-      Object.defineProperty(coreState, 'isMobileView', { value: true, writable: true });
+      coreState.setIsMobileView(true);
 
       handler.setClassActiveToHourOnOpen();
 
@@ -230,66 +132,4 @@ describe('ClockStyleHandler', () => {
       expect(() => handler.setClassActiveToHourOnOpen()).not.toThrow();
     });
   });
-
-  describe('toggleClassActiveToValueTips', () => {
-    let mockTips: HTMLElement[];
-
-    beforeEach(() => {
-      mockTips = [
-        document.createElement('span'),
-        document.createElement('span'),
-        document.createElement('span'),
-      ];
-      mockTips[0].innerText = '1';
-      mockTips[1].innerText = '2';
-      mockTips[2].innerText = '3';
-
-      jest.spyOn(coreState, 'getAllValueTips').mockReturnValue(mockTips as HTMLDivElement[]);
-    });
-
-    it('should not modify tips when hasClockSystem is true', () => {
-      mockTips[0].classList.add('active');
-
-      handler.toggleClassActiveToValueTips(true, '2');
-
-      expect(mockTips[0].classList.contains('active')).toBe(true);
-    });
-
-    it('should not throw when allValueTips is null', () => {
-      jest.spyOn(coreState, 'getAllValueTips').mockReturnValue([] as HTMLDivElement[]);
-
-      expect(() => handler.toggleClassActiveToValueTips(false, '1')).not.toThrow();
-    });
-
-    it('should add active class to matching tip', () => {
-      handler.toggleClassActiveToValueTips(false, '2');
-
-      expect(mockTips[1].classList.contains('active')).toBe(true);
-      expect(mockTips[1].getAttribute('aria-selected')).toBe('true');
-    });
-
-    it('should remove active class from other tips', () => {
-      mockTips[0].classList.add('active');
-
-      handler.toggleClassActiveToValueTips(false, '2');
-
-      expect(mockTips[0].classList.contains('active')).toBe(false);
-      expect(mockTips[0].getAttribute('aria-selected')).toBe('false');
-    });
-
-    it('should handle numeric value', () => {
-      handler.toggleClassActiveToValueTips(false, 3);
-
-      expect(mockTips[2].classList.contains('active')).toBe(true);
-    });
-
-    it('should not throw when value does not match any tip', () => {
-      expect(() => handler.toggleClassActiveToValueTips(false, '99')).not.toThrow();
-    });
-
-    it('should handle null value', () => {
-      expect(() => handler.toggleClassActiveToValueTips(false, null)).not.toThrow();
-    });
-  });
 });
-

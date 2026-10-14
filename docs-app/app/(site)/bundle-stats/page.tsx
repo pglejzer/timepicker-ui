@@ -19,6 +19,9 @@ import bundleData from "@/public/bundle-data.json";
 
 const BUNDLE_DATA: BundleData = bundleData as BundleData;
 
+const TAB_PANEL_FOCUS =
+  "rounded-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+
 export default function BundleStatsPage() {
   const [activeTab, setActiveTab] = useState<
     "rollup" | "vite" | "webpack" | "esbuild" | "comparison"
@@ -157,7 +160,10 @@ export default function BundleStatsPage() {
             className="reveal nums mt-5 text-xs text-muted-foreground"
             style={{ animationDelay: "180ms" }}
           >
-            Generated {new Date(data.timestamp).toLocaleString()}
+            Generated{" "}
+            <time dateTime={data.timestamp}>
+              {data.timestamp.slice(0, 10)}
+            </time>
           </p>
         </div>
       </section>
@@ -269,7 +275,7 @@ export default function BundleStatsPage() {
             id="panel-rollup"
             aria-labelledby="tab-rollup"
             tabIndex={0}
-            className="grid grid-cols-1 gap-6 lg:grid-cols-3"
+            className={`grid grid-cols-1 gap-6 lg:grid-cols-3 ${TAB_PANEL_FOCUS}`}
           >
             <BundleCard title="Core only" result={data.results.rollup.core} />
             <BundleCard title="Full static" result={data.results.rollup.full} />
@@ -283,7 +289,7 @@ export default function BundleStatsPage() {
             id="panel-vite"
             aria-labelledby="tab-vite"
             tabIndex={0}
-            className="grid grid-cols-1 gap-6 lg:grid-cols-3"
+            className={`grid grid-cols-1 gap-6 lg:grid-cols-3 ${TAB_PANEL_FOCUS}`}
           >
             <BundleCard title="Core only" result={data.results.vite.core} />
             <BundleCard title="Full static" result={data.results.vite.full} />
@@ -297,6 +303,7 @@ export default function BundleStatsPage() {
             id="panel-webpack"
             aria-labelledby="tab-webpack"
             tabIndex={0}
+            className={TAB_PANEL_FOCUS}
           >
             {webpackCore > 0 ? (
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -329,6 +336,7 @@ export default function BundleStatsPage() {
             id="panel-esbuild"
             aria-labelledby="tab-esbuild"
             tabIndex={0}
+            className={TAB_PANEL_FOCUS}
           >
             {esbuildCore > 0 ? (
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -361,7 +369,7 @@ export default function BundleStatsPage() {
             id="panel-comparison"
             aria-labelledby="tab-comparison"
             tabIndex={0}
-            className="grid grid-cols-1 gap-6 lg:grid-cols-2"
+            className={`grid grid-cols-1 gap-6 lg:grid-cols-2 ${TAB_PANEL_FOCUS}`}
           >
             <ComparisonSection
               eyebrow="Baseline"

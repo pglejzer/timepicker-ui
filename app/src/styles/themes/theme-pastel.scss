@@ -5,25 +5,27 @@
   --tp-input-bg: #fae3d9;
 
   --tp-text: #3b3b3b;
-  --tp-text-secondary: #a58f86;
+  --tp-text-secondary: #836b61;
   --tp-text-disabled: rgba(59, 59, 59, 0.6);
-  --tp-text-type-time: #a58f86;
-  --tp-text-icon: #a58f86;
+  --tp-text-type-time: #836b61;
+  --tp-text-icon: #836b61;
 
   --tp-am-pm-active: #ffb6b9;
-  --tp-am-pm-text-selected: white;
-  --tp-am-pm-text-unselected: #a58f86;
+  --tp-am-pm-text-selected: #3b3b3b;
+  --tp-am-pm-text-unselected: #836b61;
 
   --tp-primary: #ffb6b9;
-  --tp-on-primary: white;
+  --tp-on-primary: #3b3b3b;
   --tp-primary-container: #ffb6b9;
-  --tp-on-primary-container: white;
+  --tp-on-primary-container: #3b3b3b;
+  --tp-btn-text: #a8474e;
 
   --tp-tertiary-container: #ffb6b9;
-  --tp-on-tertiary-container: white;
+  --tp-on-tertiary-container: #3b3b3b;
 
   --tp-border: #efdcd2;
-  --tp-outline: #ff8a8f;
+  --tp-outline: #c9646a;
+  --tp-focus-ring: #a8474e;
   --tp-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   --tp-radius: 1.25rem;
 
@@ -33,5 +35,5 @@
   --tp-wheel-highlight-bg: rgba(255, 182, 185, 0.18);
   --tp-wheel-highlight-border: #efdcd2;
   --tp-wheel-text-color: #3b3b3b;
-  --tp-wheel-selected-color: #ff8a8f;
+  --tp-wheel-selected-color: #a8474e;
 }

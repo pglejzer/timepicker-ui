@@ -35,9 +35,8 @@
     enabled: true,
     minDuration: 30,
     maxDuration: 480,
-    fromLabel: 'Start',
-    toLabel: 'End',
   },
+  labels: { rangeFrom: 'Start', rangeTo: 'End' },
   callbacks: {
     onRangeConfirm: (data) => {
       console.log('Range confirmed:', data.from, '–', data.to);
@@ -104,9 +103,8 @@ rangePicker.create();</code></pre>
     enabled: true,
     minDuration: 60,
     maxDuration: 720,
-    fromLabel: 'Start',
-    toLabel: 'End',
   },
+  labels: { rangeFrom: 'Start', rangeTo: 'End' },
   callbacks: {
     onRangeConfirm: (data) => {
       console.log(data.from, '–', data.to);
@@ -158,9 +156,8 @@ range24hPicker.create();</code></pre>
   clock: { type: '12h' },
   range: {
     enabled: true,
-    fromLabel: 'From',
-    toLabel: 'To',
   },
+  labels: { rangeFrom: 'From', rangeTo: 'To' },
   callbacks: {
     onRangeConfirm: (data) => {
       console.log(data.from, '–', data.to);
@@ -220,14 +217,12 @@ range12hAmPmPicker.create();</code></pre>
   ui: {
     clearButton: true,
     theme: 'm3-green',
-    enableSwitchIcon: true,
+    viewSwitch: true,
   },
   range: {
     enabled: true,
-    fromLabel: 'From',
-    toLabel: 'To',
   },
-  labels: { clear: 'Clear' },
+  labels: { rangeFrom: 'From', rangeTo: 'To', clear: 'Clear' },
   callbacks: {
     onRangeConfirm: (data) => {
       console.log('Range confirmed:', data.from, '–', data.to);

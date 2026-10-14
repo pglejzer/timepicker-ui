@@ -1,12 +1,88 @@
 import { isDocument } from '../../utils/node';
-import { announceToScreenReader } from '../../utils/accessibility';
+import { isActivationKey, setSpinbuttonValue, syncClockSlider } from '../../utils/accessibility';
+import { requestOpen, runCleanups } from '../../utils/managerHelpers';
+import { pad } from '../../utils/time/parse';
 import type { CoreState } from '../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../utils/EventEmitter';
+import {
+  TIME_FIELD_NAMES,
+  activateField,
+  announceField,
+  buildUpdatePayload,
+  disabledCheckFor,
+  emitSelect,
+  fieldBounds,
+  getActiveField,
+  getTimeInput,
+  type TimeField,
+} from './timeFields';
+
+interface SpinRange {
+  min: number;
+  last: number;
+  step: number;
+  pageSteps: number;
+}
+
+type SpinMove = readonly [
+  direction: 1 | -1,
+  wraps: boolean,
+  target: (current: number, range: SpinRange) => number,
+];
+
+const STEP_UP: SpinMove = [1, true, (current, { step }) => Math.floor(current / step) * step + step];
+const STEP_DOWN: SpinMove = [-1, true, (current, { step }) => Math.ceil(current / step) * step - step];
+
+const SPIN_MOVES: Readonly<Record<string, SpinMove>> = {
+  ArrowUp: STEP_UP,
+  ArrowDown: STEP_DOWN,
+  Home: [1, false, (_, { min }) => min],
+  End: [-1, false, (_, { last }) => last],
+  PageUp: [
+    1,
+    false,
+    (current, { last, step, pageSteps }) =>
+      Math.min(last, Math.floor(current / step) * step + step * pageSteps),
+  ],
+  PageDown: [
+    -1,
+    false,
+    (current, { min, step, pageSteps }) => Math.max(min, Math.ceil(current / step) * step - step * pageSteps),
+  ],
+};
+
+const DIAL_MOVES: Readonly<Record<string, SpinMove>> = {
+  ...SPIN_MOVES,
+  ArrowRight: STEP_UP,
+  ArrowLeft: STEP_DOWN,
+};
+
+const findSpinValue = (
+  [direction, wraps, target]: SpinMove,
+  current: number,
+  range: SpinRange,
+  isDisabled: (value: number) => boolean,
+): number | null => {
+  const { min, last, step } = range;
+  let value = target(current, range);
+
+  for (let remaining = (last - min) / step; remaining >= 0; remaining--) {
+    if (value < min || value > last) {
+      if (!wraps) return null;
+      value = value < min ? last : min;
+    }
+    if (!isDisabled(value)) return value;
+    value += direction * step;
+  }
+
+  return null;
+};
 
 export class KeyboardHandlers {
   private core: CoreState;
   private emitter: EventEmitter<TimepickerEventMap>;
   private cleanupHandlers: Array<() => void> = [];
+  private persistentCleanups: Array<() => void> = [];
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -14,17 +90,15 @@ export class KeyboardHandlers {
   }
 
   handleOpenOnEnterFocus(): void {
-    const input = this.core.getInput();
-    if (!input) return;
-
-    const handler = (e: KeyboardEvent): void => {
-      if (e.key === 'Enter' && !this.core.isDestroyed && !this.core.isOpen) {
-        this.emitter.emit('show', {});
-      }
-    };
-
-    input.addEventListener('keydown', handler);
-    this.cleanupHandlers.push(() => input.removeEventListener('keydown', handler));
+    this.onKeydown(
+      this.core.getInput(),
+      (e) => {
+        if (e.key === 'Enter' && !this.core.isOpen && this.core.isModalRemove) {
+          requestOpen(this.emitter);
+        }
+      },
+      this.persistentCleanups,
+    );
   }
 
   handleEscClick(): void {
@@ -32,135 +106,94 @@ export class KeyboardHandlers {
       return;
     }
 
-    const handler = (e: KeyboardEvent): void => {
-      if (this.core.isDestroyed) return;
-      if (!this.core.isOpen) return;
-      if (e.key === 'Escape') {
+    this.onKeydown(document, (e) => {
+      if (this.core.isOpen && e.key === 'Escape') {
         this.emitter.emit('cancel', {});
       }
-    };
-
-    document.addEventListener('keydown', handler);
-    this.cleanupHandlers.push(() => document.removeEventListener('keydown', handler));
+    });
   }
 
   handleKeyboardInput(): void {
-    const hour = this.core.getHour();
-    const minutes = this.core.getMinutes();
+    TIME_FIELD_NAMES.forEach((field) =>
+      this.onKeydown(getTimeInput(this.core, field), (e) =>
+        this.stepField(field, SPIN_MOVES[e.key], e, true),
+      ),
+    );
 
-    const SPIN_KEYS = ['ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'];
-
-    if (hour) {
-      const hourKeyHandler = (e: KeyboardEvent): void => {
-        if (this.core.isDestroyed) return;
-        if (!SPIN_KEYS.includes(e.key)) return;
-
+    this.onKeydown(this.core.getClockFace(), (e) => {
+      const field = getActiveField(this.core);
+      if (isActivationKey(e.key)) {
         e.preventDefault();
-        const currentValue = parseInt(hour.value) || 0;
-        const max = parseInt(hour.getAttribute('max') || '23');
-        const is12h = this.core.options.clock.type === '12h';
-        const min = is12h ? 1 : 0;
-        const pageStep = 3;
+        this.advanceFace(field);
+      } else {
+        this.stepField(field, DIAL_MOVES[e.key], e, false);
+      }
+    });
 
-        const newValue = this.computeSpinValue(e.key, currentValue, min, max, pageStep);
-
-        hour.value = newValue.toString().padStart(2, '0');
-        hour.setAttribute('aria-valuenow', hour.value);
-        hour.setAttribute('aria-valuetext', hour.value);
-
-        const modal = this.core.getModalElement();
-        const prefix = this.core.options.labels.announceHour ?? 'Hour';
-        announceToScreenReader(modal, `${prefix}: ${hour.value}`);
-
-        this.emitter.emit('animation:clock', {});
-        this.emitter.emit('select:hour', { hour: hour.value });
-
-        const mins = this.core.getMinutes();
-        const activeTypeMode = this.core.getActiveTypeMode();
-        this.emitter.emit('update', {
-          hour: hour.value,
-          minutes: mins?.value,
-          type: activeTypeMode?.textContent || undefined,
-        });
-      };
-
-      hour.addEventListener('keydown', hourKeyHandler);
-      this.cleanupHandlers.push(() => hour.removeEventListener('keydown', hourKeyHandler));
-    }
-
-    if (minutes) {
-      const minutesKeyHandler = (e: KeyboardEvent): void => {
-        if (this.core.isDestroyed) return;
-        if (!SPIN_KEYS.includes(e.key)) return;
-
-        e.preventDefault();
-        const currentValue = parseInt(minutes.value) || 0;
-        const max = 59;
-        const min = 0;
-        const pageStep = 5;
-
-        const newValue = this.computeSpinValue(e.key, currentValue, min, max, pageStep);
-
-        minutes.value = newValue.toString().padStart(2, '0');
-        minutes.setAttribute('aria-valuenow', minutes.value);
-        minutes.setAttribute('aria-valuetext', minutes.value);
-
-        const modal = this.core.getModalElement();
-        const prefix = this.core.options.labels.announceMinute ?? 'Minutes';
-        announceToScreenReader(modal, `${prefix}: ${minutes.value}`);
-
-        this.emitter.emit('animation:clock', {});
-        this.emitter.emit('select:minute', { minutes: minutes.value });
-
-        const hr = this.core.getHour();
-        const activeTypeMode = this.core.getActiveTypeMode();
-        this.emitter.emit('update', {
-          hour: hr?.value,
-          minutes: minutes.value,
-          type: activeTypeMode?.textContent || undefined,
-        });
-      };
-
-      minutes.addEventListener('keydown', minutesKeyHandler);
-      this.cleanupHandlers.push(() => minutes.removeEventListener('keydown', minutesKeyHandler));
-    }
+    syncClockSlider(this.core.getModalElement());
   }
 
-  private computeSpinValue(
-    key: string,
-    currentValue: number,
-    min: number,
-    max: number,
-    pageStep: number,
-  ): number {
-    switch (key) {
-      case 'ArrowUp':
-        return currentValue >= max ? min : currentValue + 1;
-      case 'ArrowDown':
-        return currentValue <= min ? max : currentValue - 1;
-      case 'Home':
-        return min;
-      case 'End':
-        return max;
-      case 'PageUp':
-        return Math.min(max, currentValue + pageStep);
-      case 'PageDown':
-        return Math.max(min, currentValue - pageStep);
-      default:
-        return currentValue;
-    }
+  private advanceFace(field: TimeField): void {
+    const next = TIME_FIELD_NAMES[TIME_FIELD_NAMES.indexOf(field) + 1];
+    const autoSwitch = next === 'minutes' ? 'autoSwitchToMinutes' : 'autoSwitchToSeconds';
+    if (!next || this.core.options.clock[autoSwitch] === false) return;
+    getTimeInput(this.core, next)?.click();
+    announceField(this.core, next);
+  }
+
+  private onKeydown(
+    target: GlobalEventHandlers | null,
+    handler: (e: KeyboardEvent) => void,
+    cleanups: Array<() => void> = this.cleanupHandlers,
+  ): void {
+    if (!target) return;
+    const listener = (e: KeyboardEvent): void => {
+      if (!this.core.isDestroyed) handler(e);
+    };
+
+    target.addEventListener('keydown', listener);
+    cleanups.push(() => target.removeEventListener('keydown', listener));
+  }
+
+  private spinRange(field: TimeField): SpinRange {
+    const [min, max] = fieldBounds(this.core, field);
+    const { incrementHours, incrementMinutes, incrementSeconds } = this.core.options.clock;
+    const step = { hour: incrementHours, minutes: incrementMinutes, seconds: incrementSeconds }[field] || 1;
+    return {
+      min: Math.ceil(min / step) * step,
+      last: Math.floor(max / step) * step,
+      step,
+      pageSteps: field === 'hour' ? 3 : 5,
+    };
+  }
+
+  private stepField(field: TimeField, move: SpinMove | undefined, e: KeyboardEvent, announce: boolean): void {
+    const input = getTimeInput(this.core, field);
+    if (!move || !input) return;
+
+    e.preventDefault();
+    const next = findSpinValue(
+      move,
+      parseInt(input.value) || 0,
+      this.spinRange(field),
+      disabledCheckFor(this.core, field),
+    );
+    if (next === null) return;
+
+    const value = pad(next);
+    activateField(this.core, field);
+    setSpinbuttonValue(input, value);
+    if (announce) announceField(this.core, field);
+
+    emitSelect(this.emitter, field, value);
+    this.emitter.emit('update', buildUpdatePayload(this.core));
   }
 
   focusTrapHandler(): void {
-    if (isDocument() === false) {
-      return;
-    }
-
     const wrapper = this.core.getWrapper();
     if (!wrapper) return;
 
-    const handler = (e: KeyboardEvent): void => {
-      if (this.core.isDestroyed) return;
+    this.onKeydown(wrapper, (e) => {
       if (e.key !== 'Tab') return;
 
       const candidates = wrapper.querySelectorAll<HTMLElement>(
@@ -189,14 +222,15 @@ export class KeyboardHandlers {
         firstElement?.focus();
         e.preventDefault();
       }
-    };
+    });
+  }
 
-    wrapper.addEventListener('keydown', handler);
-    this.cleanupHandlers.push(() => wrapper.removeEventListener('keydown', handler));
+  detach(): void {
+    runCleanups(this.cleanupHandlers);
   }
 
   destroy(): void {
-    this.cleanupHandlers.forEach((cleanup) => cleanup());
-    this.cleanupHandlers = [];
+    this.detach();
+    runCleanups(this.persistentCleanups);
   }
 }

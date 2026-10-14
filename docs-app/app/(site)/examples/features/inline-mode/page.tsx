@@ -24,7 +24,7 @@ export default function InlineModePage() {
   ui: {
     inline: {
       enabled: true,
-      containerId: 'timepicker-container',
+      container: '#timepicker-container',
       autoUpdate: true
     },
     theme: 'dark'
@@ -36,7 +36,7 @@ picker.create();`}
             ui: {
               inline: {
                 enabled: true,
-                containerId: "timepicker-container-inline",
+                container: "#timepicker-container-inline",
                 autoUpdate: true,
               },
               theme: "dark",

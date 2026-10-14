@@ -1,0 +1,85 @@
+<section class="mb-12">
+  <div
+    id="seconds"
+    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
+  >
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Seconds</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Optional seconds unit (<code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">clock.showSeconds</code>,
+      off by default) in every mode, layout, plugin and theme. Every card prints the last event and, on
+      confirm, <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">getValue()</code>.
+    </p>
+
+    <div
+      class="mt-4 p-4 bg-sky-50 dark:bg-sky-900/20 rounded-lg border border-sky-200 dark:border-sky-800 text-sm text-sky-800 dark:text-sky-300"
+    >
+      <ul class="space-y-1 list-disc list-inside">
+        <li>
+          Values: 24h <code>14:30:15</code>, 12h <code>02:30:15 PM</code>; <code>HH:MM</code> means
+          <code>:00</code>.
+        </li>
+        <li>
+          <code>clock.incrementSeconds</code>: 1, 5, 10, 15, 20, 30 ·
+          <code>clock.autoSwitchToSeconds</code> (default <code>true</code>) ·
+          <code>clock.disabledTime.seconds</code> and <code>clock.disabledTime.ranges</code> with seconds.
+        </li>
+        <li>
+          Label: <code>labels.second</code> · event
+          <code>select:second</code> / <code>callbacks.onSelectSecond</code>.
+        </li>
+      </ul>
+    </div>
+
+    <div
+      id="seconds-examples"
+      class="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 min-w-0"
+    ></div>
+  </div>
+</section>
+
+<section class="mb-12">
+  <div
+    id="seconds-api-section"
+    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
+  >
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Seconds - API playground</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">getValue()</code>,
+      <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">setValue()</code> and
+      <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">update()</code> on a live picker
+      (<code>#seconds-api</code>, 24h).
+    </p>
+    <div id="seconds-api-playground" class="mt-6 space-y-3 max-w-2xl"></div>
+  </div>
+</section>
+
+<section class="mb-12">
+  <div
+    id="seconds-events-section"
+    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
+  >
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Seconds - event log</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Every event of <code>#seconds-events</code> (12h, clear button) plus
+      <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">callbacks.onSelectSecond</code>, newest first.
+    </p>
+    <div id="seconds-event-log" class="mt-6 space-y-3 max-w-2xl"></div>
+  </div>
+</section>
+
+<section class="mb-12">
+  <div
+    id="seconds-all-themes"
+    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
+  >
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Seconds - all themes</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Clock 12h, clock 24h, wheel 12h, compact-wheel 24h and popover 12h in each of the 12 themes. Input ids:
+      <code>#seconds-theme-&lt;theme&gt;-&lt;variant&gt;</code>.
+    </p>
+    <div
+      id="seconds-themes"
+      class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 min-w-0"
+    ></div>
+  </div>
+</section>

@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "React Mobile Mode Example",
   description:
-    "React mobile time picker - touch-optimized mobile view with timepicker-ui-react. Zero-dependency, SSR-safe and fully typed for React, with copy-paste JSX.",
+    "React mobile time picker - touch-optimized mobile view with timepicker-ui-react. SSR-safe and fully typed for React, with copy-paste JSX.",
   path: "/react/examples/features/mobile",
 });
 

@@ -130,6 +130,7 @@ describe('WheelManager', () => {
 
     const options = createWheelOptions();
     coreState = new CoreState(mockElement, options, INSTANCE_ID);
+    coreState.setIsOpen(true);
 
     modal = createModalWithWheel(INSTANCE_ID, '12h');
     document.body.appendChild(modal);
@@ -271,6 +272,7 @@ describe('WheelManager', () => {
     beforeEach(() => {
       const options = createWheelOptions({ clock: { type: '24h' } });
       coreState24h = new CoreState(mockElement, options, 'test-24h');
+      coreState24h.setIsOpen(true);
 
       modal24h = createModalWithWheel('test-24h', '24h');
       document.body.appendChild(modal24h);

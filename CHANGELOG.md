@@ -7,6 +7,168 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.5.0] - 2026-10-14
+
+### Check before upgrading
+
+These changes can affect an existing setup. Each one is described under Changed.
+
+- The `.tp-ui-ripple` / `.tp-ui-ripple-effect` classes and the `ripple` keyframes are removed
+- `--tp-wheel-highlight-radius`, `--tp-popover-radius` and `--tp-btn-radius` are no longer defined on `:root`
+- `--tp-focus-ring-halo` is no longer read, and `--tp-shadow-focus-ring` defaults to `none`
+- The AM/PM value is always `AM` / `PM`, whatever `labels.am` / `labels.pm` are set to
+- Out-of-range `clock.disabledTime.interval` edges such as `25:00` are now rejected and reported through `error` / `callbacks.onError`
+- `setValue()` with a string that is not a time now emits `error` / `callbacks.onError` instead of being ignored
+- The scroll lock now styles `<html>`, and `<body>` only when it scrolls. CSS that relied on the `padding-right` added to `body` should use `--tp-scrollbar-gap`
+- With CSS anchor positioning, the compact-wheel popover gets `tp-ui-popover-anchored` and no inline `top`, `left` or `width`. Review CSS that positions `.tp-ui-popover` by hand
+- With `ui.inline.showButtons: true`, inline OK and Cancel no longer remove the picker from its container
+- `behavior.delayHandler` defaults to `0` instead of `300`, so the picker closes without a pause
+
+### Security
+
+- Label text in `labels.*`, `range.fromLabel` / `range.toLabel` and `timezone.label` is now HTML-escaped, so it cannot inject markup. The icon options `ui.keyboardIcon` and `ui.clockIcon` (`ui.iconTemplate` / `ui.iconTemplateMobile`) still accept HTML
+
+### Added
+
+- Optional seconds: `clock.showSeconds: true` adds a seconds field, face and wheel column, and values become `HH:MM:SS` (`HH:MM:SS AM` in 12h). Off by default, with no change when off
+- `clock.incrementSeconds` (`1`, `5`, `10`, `15`, `20` or `30`, default `1`) sets the seconds step, and `clock.autoSwitchToSeconds` (default `true`) moves to the seconds face after a minute is picked
+- `clock.disabledTime.seconds` disables the listed seconds in every minute, and `clock.disabledTime.interval` edges can include seconds. Edges without seconds cover the whole minute, so existing intervals still work
+- `labels.second` (default `"Second"`) names the seconds field, its caption in the keyboard view, its wheel column and its announcement
+- `select:second` event and `callbacks.onSelectSecond`, with the `SelectSecondEventData` type
+- With seconds on, `getValue()` and the `open`, `confirm` and `update` payloads include `seconds`, the `error` payload includes `inputSecond`, and `setValue()` accepts `'14:30:15'`. Values without seconds read as `:00`
+- Range with seconds: `range:confirm` and `range:validation` include `durationSeconds`. `duration` stays in whole minutes, and `range.minDuration` / `range.maxDuration` are compared with the exact length
+- The modal gets the `tp-ui-has-seconds` class when seconds are shown, and new CSS tokens such as `--tp-wheel-column-width-seconds` size the seconds layout
+- Clearer option names, such as `ui.initialView: 'keyboard'` for `ui.mobile: true` and `ui.viewSwitch` for `ui.enableSwitchIcon`. The old names work until 5.0, and the [options page](https://timepicker-ui.vercel.app/docs/api/options) lists every pair
+- `setOptions()`, the `select:period` and `switch:face` events with `callbacks.onSelectPeriod` and `callbacks.onSwitchFace`, and `clock.type: 'auto'`, which picks 12h or 24h from the browser locale
+- `ui.appendTo` (where the modal goes) and `ui.inline.container` (where the inline picker renders) accept an element as well as a CSS selector
+- Keyboard control of the clock face: arrow keys, PageUp / PageDown and Home / End change the value, and Enter or Space moves to the next face. See the accessibility page
+- `--tp-mobile-landscape-width`, `--tp-mobile-landscape-height`, `--tp-mobile-landscape-height-range` and `--tp-mobile-landscape-height-timezone` set the mobile keyboard view size in landscape
+- `--tp-focus-ring` sets the focus ring color, falling back to `--tp-primary`
+- `labels.announceCleared` (default `"Time cleared"`) sets the text announced after Clear
+- `ui.inline.autoUpdate` now works: an inline picker updates its input as you pick
+- `callbacks.onShow`, `callbacks.onSwitchView`, `callbacks.onWheelScrollStart` and `callbacks.onWheelScrollEnd`, so every public event now has a matching callback
+- Material Design 3 press feedback: a ripple plus hover, focus and pressed state layers, tuned with `--tp-state-hover-opacity`, `--tp-state-focus-opacity`, `--tp-state-pressed-opacity` and `--tp-ripple-opacity`. With `prefers-reduced-motion`, a press shows the pressed layer without the ripple
+- `--tp-dropdown-option-hover-text` sets the text color of a hovered or focused timezone option
+- `--tp-scrollbar-gap` on `<html>` holds the removed scrollbar width while a picker locks the page. Use it to pad fixed or sticky elements
+- `--tp-popover-edge-margin` (default `4px`) sets the smallest gap between the compact-wheel popover and the viewport's side edges
+
+### Changed
+
+- The AM/PM value is always `AM` or `PM`. `labels.am` / `labels.pm` only change the shown and announced text, not the input value or `getValue().type`
+- `update({ options })` now applies every option group, including `range`, `timezone`, `wheel` and `clearBehavior`, and inline pickers re-render with new labels
+- Inline OK and Cancel (`ui.inline.showButtons: true`) keep the picker visible. OK writes the value to the input and emits `confirm`. Cancel restores the input's value and emits `cancel`. `close()` still removes it
+- `clock.disabledTime.interval` rejects out-of-range edges such as `13:00 PM` and reports them through `error` / `callbacks.onError`. On `create()` the picker does not open, and `update()` keeps the old options. Lowercase `am` / `pm` are accepted
+- `setValue()` converts a time in the other clock format (`'14:30'` becomes `02:30 PM` in 12h). A string that is not a time emits `error` / `callbacks.onError`. An empty string is still ignored
+- Clock and wheel modes now agree on disabled times at interval edges
+- Range "to" face: times before "from" and inside disabled intervals are both disabled, and in 12h mode `clock.disabledTime.hours` / `minutes` apply too
+- Text and focus contrast meet WCAG AA in `pastel`, `ai`, `m2`, `m3-green`, `crane` and `crane-straight`, and `dark` accents follow `--tp-primary`
+- Every control shows one 3px focus ring. The gap ring and halo are removed: `--tp-focus-ring-halo` is no longer read and `--tp-shadow-focus-ring` defaults to `none`
+- The picker sets `box-sizing: border-box` on its own elements, so it no longer depends on a page-wide reset
+- Hover on unselected AM/PM buttons and the view-switch icon now shows only the state layer
+- The warning-sign glyph before the validation message is removed. Screen readers read it aloud and it could not be turned off
+- `--tp-wheel-highlight-radius`, `--tp-popover-radius` and `--tp-btn-radius` are no longer defined on `:root`, so theme values reach them. Setting them still works, but reading them with `var()` outside the picker gets no value
+- The old ripple is replaced: `.tp-ui-ripple`, `.tp-ui-ripple-effect` and the `ripple` keyframes are removed. Move custom CSS to the new state and ripple tokens
+- The compact-wheel popover (`wheel.placement`) uses the Popover API and CSS anchor positioning, so a parent's `overflow: hidden` or `z-index` no longer clips or covers it. Browsers without anchor positioning use a script fallback
+- `--tp-popover-gap`, `--tp-popover-min-width` and `--tp-popover-max-width` now take effect. New popover styling hooks: the `tp-ui-popover-anchored` and `tp-ui-popover-constrained` classes and the `data-popover-request` attribute
+- The scroll lock (`ui.enableScrollbar: false`, the default) now sets `overflow-y: hidden` on `<html>`, and on `<body>` only when it scrolls. Only the element that lost its scrollbar gets `padding-right`
+- The legacy `'Spacebar'` key value no longer counts as Space. Only very old browsers, such as old Edge and Internet Explorer, send it
+- The picker opens and closes without a pause: it fades in over 200 ms and out over 150 ms, both starting on the click
+- With `prefers-reduced-motion` or `ui.animation: false`, the picker opens and closes at once, with no wait
+- `behavior.delayHandler` now defaults to `0` instead of `300`. Set it to `300` to keep the old pause before closing
+- In mobile landscape, switching between the keyboard and clock views no longer jumps: the picker resizes smoothly while its content cross-fades
+- `ui.animation: false` and `prefers-reduced-motion` now also stop the clock hand from animating when the face switches
+
+### Deprecated
+
+Each item below still works unless its entry says otherwise. All of them are removed in 5.0.
+
+- The old names of renamed options, such as `ui.mobile` or `labels.hourLabel`: use the new names listed on the [options page](https://timepicker-ui.vercel.app/docs/api/options). `select:am` / `select:pm`: use `select:period`. `update()`: use `setOptions()`
+- `OptionTypes` type: use `TimepickerOptions`
+- `clock.currentTime.locales`: has no effect, the library formats the value
+- `getValue().degreesHours` / `getValue().degreesMinutes`: internal clock-hand angles. Use `hour` / `minutes`
+- `labels.toggleLabel`: has no effect now that the view switch is one button. Use `labels.switchToKeyboard` / `labels.switchToClock`
+- `labels.format24Label` and `labels.timezoneSelectorLabel`: they never had an effect. The timezone selector label comes from `labels.timezone`
+- `focusInputAfterCloseModal` in the legacy option type: use `behavior.returnFocus`
+- The `hide` event and the `HideEventData` type: never emitted
+- The `range:get-disabled-time` and `range:update-disabled` events: never emitted
+- `ErrorEventData.rejectedHour` and `ErrorEventData.rejectedMinute`: always `undefined`
+
+### Fixed
+
+- Clicking a disabled hour no longer switches the clock to the minutes view
+- Reopening a picker, range pickers included, no longer stacks event handlers
+- `callbacks.onClear` fires once per clear instead of twice
+- `close(true)` commits the current selection to the input, like the OK button
+- Once OK, Cancel or Escape starts a close, further input is ignored: a double-click or second Escape no longer fires `confirm` / `cancel` twice
+- While the picker is closing, `getValue()` returns the input value and `destroy()` cancels the pending close
+- Enter or a click on the input while the picker fades out is ignored, instead of firing `show` / `callbacks.onShow` without opening the picker
+- Inline wheel pickers with `wheel.commitOnScroll`: Cancel right after a scroll no longer fires `confirm` / `callbacks.onConfirm` after `cancel`
+- Callbacks passed later through `update({ options: { callbacks } })` take effect, replaced callbacks stop firing, and inline pickers no longer fire `onOpen` again after `update()`
+- Changing `clock.type` or `clock.showSeconds` through `update()` rewrites the input in the new format, range values (`from - to`) included, so `getValue()` reads it correctly
+- `update()` on an open modal or popover re-renders it with the new options right away. An unconfirmed selection resets to the input value
+- When the user opens the picker, `show` / `callbacks.onShow` now fire before `open` / `callbacks.onOpen`. `picker.open()` still emits only `open`
+- Opening the picker on an invalid value shows and announces the error (`labels.invalidTimeFormat`) inside the dialog, and the input gets `aria-invalid` and `aria-describedby`
+- An invalid `clock.disabledTime`, including an interval without `-`, is reported through `error` / `callbacks.onError` instead of silently breaking the picker
+- The Clear button is enabled on the first open after page load
+- Opener elements with a quote or backslash in their `data-open` value no longer break the picker
+- Passing a wrapper element instead of the input to `new TimepickerUI()` makes the wrapper the picker root, so `data-open` buttons inside it open the picker
+- `setValue()` accepts zero-padded 12h hours such as `'03:45 PM'` and 12h values longer than 8 characters. While the clock is open, it updates the whole face, not only the hand
+- `getValue().degreesHours` / `degreesMinutes` and the `open` payload degrees now follow clicks and drags on the clock
+- `clock.currentTime: true` keeps the AM/PM part in 12h locales
+- `clock.smoothHourSnap`: on release, the hand animates to the hour instead of jumping. With reduced motion it moves without animation
+- Closing the picker during a clock drag, for example with Escape while the mouse button is held, no longer emits `update` events afterwards
+- Arrow keys on the minute field step by `clock.incrementMinutes`. Arrow keys and typed values on the time fields skip disabled times, and OK stays disabled while the shown time is disabled
+- `clock.incrementHours` now works with the default `clock.smoothHourSnap: true`, in wheel and compact-wheel modes, and with the hour field's arrow keys, PageUp / PageDown and Home / End
+- Holding an arrow key no longer freezes the clock hand
+- Key presses no longer slow down pages with several open or inline pickers
+- The view-switch control is one button with one Tab stop, a label that says what it does and stays localized, a focus ring and a 40px target
+- `ui.iconTemplateMobile` goes inside the view-switch button, like `ui.iconTemplate`, instead of replacing it on the first mobile render
+- Clock drag announcements use `labels.announceHour` / `labels.announceMinute`
+- The hour and minute fields' `aria-valuenow` / `aria-valuetext` and the AM/PM `aria-pressed` now stay in sync with the shown time
+- Empty range tabs no longer read the `--:--` placeholder aloud, also after Clear
+- After switching views, the decorative clock numbers stay hidden from screen readers, and on mobile the clock face is no longer hidden
+- After switching views, the hour and minute fields' accessible names follow the view: `labels.mobileHour` / `mobileMinute` in the keyboard view, `labels.hourLabel` / `minuteLabel` in the clock view
+- Focus rings show only during keyboard use, and now appear on the hour and minute fields in every theme, the mobile Cancel and Clear buttons and the timezone dropdown
+- High-contrast styles now apply with `prefers-contrast: more`. They used `prefers-contrast: high`, which browsers never match
+- Forced colors (Windows High Contrast): the selection stays visible in system colors, and disabled clock numbers use `GrayText`
+- `--tp-font-family` now sets the picker font as documented, and the time fields and buttons inherit it
+- Wheel: the `:` separator is visible in the `basic` and `m2` themes
+- Wheel: keyboard navigation skips disabled items, disabled options have `aria-disabled="true"`, and zero-padded `clock.disabledTime.minutes` strings such as `'05'` work
+- Wheel: the header hour and minute fields move the columns and stay in sync when disabled times move a column
+- Wheel: a time between a column's steps, such as `10:07` with `clock.incrementMinutes: 5`, now lands on the nearest item instead of a wrong one
+- `crane-straight`: the wheel selection highlight and the popover are square again, and the `m2` popover uses its 4px radius
+- Compact-wheel: the AM/PM column shows `labels.am` / `labels.pm` and opens on the input's period, and interval-disabled minutes follow the selected hour and period
+- Compact-wheel: `getValue()` while the picker is open returns the wheel selection
+- Compact-wheel: Clear no longer flips AM/PM, or jumps back to the input value with `clearBehavior.clearInput: false`
+- Compact-wheel: the popover is as wide as its columns, so 12h with seconds fits, and it scrolls inside a short viewport
+- Compact-wheel: with `wheel.placement: 'top'` or `'bottom'`, the popover switches sides when fewer than three wheel rows fit, instead of covering the input
+- Compact-wheel: with `dir="rtl"` set only on a container, the popover lines up with the input's right edge, with or without CSS anchor positioning
+- Compact-wheel: without CSS anchor positioning, the `--tp-popover-*` gap, margin and width tokens now work in `rem`, `em` or `calc()`, not only `px`
+- Types and docs: `wheel.placement` has no default (the JSDoc said `'auto'`). Without it, compact-wheel opens as a modal, as before
+- Range: a range can be completed with the keyboard alone, and focus moves to the hour field after the From time is committed
+- Range: OK stays disabled while the range is outside `range.minDuration` / `range.maxDuration`, also when picked with the pointer
+- Timezone: a `timezone.default` missing from the list falls back to the browser's zone if listed, otherwise the first option, instead of an empty label
+- Timezone: Clear resets the selected zone, and the trigger then shows `timezone.label` instead of the English "Timezone..." or `undefined...`
+- Timezone: screen readers no longer read "check mark" as part of the selected zone name
+- Timezone: the closed field is mirrored in right-to-left pages, with the arrow on the left
+- Contrast: hovered and focused timezone options in `crane` / `crane-straight` and the `pastel` footer buttons are now readable
+- Opening a modal picker no longer shifts the page sideways or overwrites its `padding-right`, and pages that scroll on `<html>` are locked too
+- Layout: the 12h header no longer overflows by 2px and fits phones 330px wide or narrower
+- Layout: inline pickers follow the theme's corner radius and no longer leave empty space: 500px in compact-wheel and mobile, or a 48px footer band with `ui.inline.showButtons: false`
+- Mobile landscape: the keyboard view size follows the orientation after rotating, and uses the taller timezone height when range and timezone are both on
+- After `update()` sets `ui.mobile: false`, the desktop time fields are no longer left editable
+- A press that starts inside the picker and ends over the backdrop, such as dragging the clock hand, no longer closes it
+- The landscape layout now applies to any landscape viewport up to 480px tall. Current large phones, such as the iPhone 16 Pro Max, got the portrait card cut off
+- When the clock switches faces, the highlighted number follows the hand instead of turning white before the hand arrives
+
+### Upcoming in 5.0
+
+5.0 will change how plugins are built and registered, and will rename the part of each CSS class after the `tp-ui-` prefix to follow Material Design component naming. It also removes the items deprecated above and other unused API, and ships with a migration guide. See the [roadmap](https://timepicker-ui.vercel.app/docs/roadmap) for details.
+
+In 5.0, `behavior.returnFocus` defaults to `true`: on close, focus goes back to the input, or to the `data-open` element that opened the picker. Set `behavior.returnFocus: true` now to return focus to the input.
+
+---
+
 ## [4.4.0] - 2026-06-10
 
 ### Added

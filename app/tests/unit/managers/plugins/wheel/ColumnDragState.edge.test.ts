@@ -56,20 +56,6 @@ describe('ColumnDragState edge cases', () => {
     });
   });
 
-  describe('scheduleSnapAfterWheel() replaced by destroy', () => {
-    it('should not fire callback if destroyed before debounce fires', () => {
-      jest.useFakeTimers();
-
-      const callback = jest.fn();
-      state.scheduleSnapAfterWheel(callback);
-      state.destroy();
-
-      jest.advanceTimersByTime(300);
-
-      expect(callback).not.toHaveBeenCalled();
-    });
-  });
-
   describe('multiple startDrag without endDrag', () => {
     it('should overwrite previous drag state', () => {
       state.startDrag(50, 1);

@@ -1,7 +1,37 @@
 import type { CoreState } from '../../../timepicker/CoreState';
+import type { TimeValue } from '../../../utils/time/parse';
 import type { WheelColumnType, WheelSelectionState, WheelScrollEndCallback } from './WheelTypes';
-import type { WheelRenderer } from './WheelRenderer';
+import { NEUTRAL_HOUR, NEUTRAL_ZERO, type WheelRenderer } from './WheelRenderer';
 import type { WheelDragHandler } from './WheelDragHandler';
+
+export const indexOfValue = (items: ArrayLike<Element>, value: string): number =>
+  Array.from(items).findIndex((item) => item.getAttribute('data-value') === value);
+
+const nearestEnabledIndex = (items: ArrayLike<Element>, value: string): number => {
+  const target = parseInt(value, 10);
+  let nearest = -1;
+  let nearestDistance = Infinity;
+  Array.from(items).forEach((item, index) => {
+    const distance = Math.abs(parseInt(item.getAttribute('data-value') ?? '', 10) - target);
+    if (distance <= nearestDistance && !item.classList.contains('is-disabled')) {
+      nearest = index;
+      nearestDistance = distance;
+    }
+  });
+  return nearest;
+};
+
+const findValueIndex = (items: ArrayLike<Element>, value: string, columnType: WheelColumnType): number => {
+  const index = indexOfValue(items, value);
+  return index < 0 && columnType !== 'ampm' ? nearestEnabledIndex(items, value) : index;
+};
+
+export const selectionToTime = ({ hour, minute, second, ampm }: WheelSelectionState): TimeValue => ({
+  hour,
+  minutes: minute,
+  seconds: second ?? undefined,
+  type: ampm ?? undefined,
+});
 
 export class WheelScrollHandler {
   private renderer: WheelRenderer;
@@ -38,7 +68,7 @@ export class WheelScrollHandler {
     this.onScrollStart = callback;
   }
 
-  scrollToValue(columnType: WheelColumnType, value: string): void {
+  scrollToValue(columnType: WheelColumnType, value: string, commit = false): void {
     const col = this.renderer.getColumnElement(columnType);
     if (!col || !this.dragHandler) return;
 
@@ -48,19 +78,21 @@ export class WheelScrollHandler {
     const items = this.renderer.getItems(columnType);
     if (!items) return;
 
-    let targetIndex = -1;
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].getAttribute('data-value') === value) {
-        targetIndex = i;
-        break;
-      }
-    }
-
+    const targetIndex = findValueIndex(items, value, columnType);
     if (targetIndex < 0) return;
 
-    const offset = targetIndex * itemHeight;
-    this.dragHandler.setScrollOffset(columnType, offset);
+    this.dragHandler.setScrollOffset(columnType, targetIndex * itemHeight);
     this.applyVisualClassesForIndex(columnType, targetIndex);
+
+    if (commit) {
+      this.onScrollEnd?.(columnType, items[targetIndex].getAttribute('data-value') ?? value);
+    }
+  }
+
+  resolveValue(columnType: WheelColumnType, value: string): string | null {
+    const items = this.renderer.getItems(columnType);
+    if (!items) return null;
+    return items[findValueIndex(items, value, columnType)]?.getAttribute('data-value') ?? null;
   }
 
   getSelectedValue(columnType: WheelColumnType): string | null {
@@ -79,19 +111,17 @@ export class WheelScrollHandler {
   }
 
   getCurrentSelection(): WheelSelectionState {
-    const hour = this.getSelectedValue('hours') ?? '12';
-    const minute = this.getSelectedValue('minutes') ?? '00';
+    const { clock } = this.core.options;
+    const hour = this.getSelectedValue('hours') ?? NEUTRAL_HOUR;
+    const minute = this.getSelectedValue('minutes') ?? NEUTRAL_ZERO;
+    const second = clock.showSeconds ? (this.getSelectedValue('seconds') ?? NEUTRAL_ZERO) : null;
     let ampm: string | null = null;
 
-    if (this.core.options.clock.type !== '24h') {
-      ampm = this.getSelectedValue('ampm');
-      if (ampm === null) {
-        const am = this.core.getAM();
-        ampm = am?.classList.contains('active') ? 'AM' : 'PM';
-      }
+    if (clock.type !== '24h') {
+      ampm = this.getSelectedValue('ampm') ?? this.renderer.getHeaderPeriod();
     }
 
-    return { hour, minute, ampm };
+    return { hour, minute, second, ampm };
   }
 
   findFirstAvailable(
@@ -137,15 +167,11 @@ export class WheelScrollHandler {
       return;
     }
 
-    if (this.onScrollEnd) {
-      this.onScrollEnd(columnType, value);
-    }
+    this.onScrollEnd?.(columnType, value);
   }
 
   emitScrollStart(columnType: WheelColumnType): void {
-    if (this.onScrollStart) {
-      this.onScrollStart(columnType);
-    }
+    this.onScrollStart?.(columnType);
   }
 
   updateVisualClasses(columnType: WheelColumnType): void {
@@ -192,51 +218,22 @@ export class WheelScrollHandler {
   private isValueDisabled(columnType: WheelColumnType, value: string): boolean {
     const items = this.renderer.getItems(columnType);
     if (!items) return false;
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].getAttribute('data-value') === value) {
-        return items[i].classList.contains('is-disabled');
-      }
-    }
-    return false;
+    return items[indexOfValue(items, value)]?.classList.contains('is-disabled') ?? false;
   }
 
   private scrollToNextValid(columnType: WheelColumnType, currentValue: string): void {
     const items = this.renderer.getItems(columnType);
     if (!items) return;
-    let currentIndex = -1;
 
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].getAttribute('data-value') === currentValue) {
-        currentIndex = i;
-        break;
-      }
-    }
-
+    const currentIndex = indexOfValue(items, currentValue);
     if (currentIndex < 0) return;
 
-    const maxOffset = items.length;
-    for (let offset = 1; offset <= maxOffset; offset++) {
-      const nextIndex = currentIndex + offset;
-      const prevIndex = currentIndex - offset;
-
-      if (nextIndex < items.length && !items[nextIndex].classList.contains('is-disabled')) {
-        const nextValue = items[nextIndex].getAttribute('data-value');
-        if (nextValue !== null) {
-          this.scrollToValue(columnType, nextValue);
-          if (this.onScrollEnd) {
-            this.onScrollEnd(columnType, nextValue);
-          }
-          return;
-        }
-      }
-
-      if (prevIndex >= 0 && !items[prevIndex].classList.contains('is-disabled')) {
-        const prevValue = items[prevIndex].getAttribute('data-value');
-        if (prevValue !== null) {
-          this.scrollToValue(columnType, prevValue);
-          if (this.onScrollEnd) {
-            this.onScrollEnd(columnType, prevValue);
-          }
+    for (let offset = 1; offset <= items.length; offset++) {
+      for (const index of [currentIndex + offset, currentIndex - offset]) {
+        const item: HTMLDivElement | undefined = items[index];
+        const value = item?.classList.contains('is-disabled') ? null : item?.getAttribute('data-value');
+        if (value) {
+          this.scrollToValue(columnType, value, true);
           return;
         }
       }

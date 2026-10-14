@@ -14,6 +14,11 @@
         "type": "string"
       },
       {
+        "name": "seconds",
+        "optional": true,
+        "type": "string"
+      },
+      {
         "name": "type",
         "optional": true,
         "type": "string"
@@ -50,6 +55,11 @@
         "type": "string"
       },
       {
+        "name": "seconds",
+        "optional": true,
+        "type": "string"
+      },
+      {
         "name": "type",
         "optional": true,
         "type": "string"
@@ -78,6 +88,11 @@
     "fields": []
   },
   {
+    "name": "open:request",
+    "data": "Record<string, never>",
+    "fields": []
+  },
+  {
     "name": "hide",
     "data": "HideEventData",
     "fields": []
@@ -93,6 +108,11 @@
       },
       {
         "name": "minutes",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "name": "seconds",
         "optional": true,
         "type": "string"
       },
@@ -126,6 +146,17 @@
     ]
   },
   {
+    "name": "select:second",
+    "data": "SelectSecondEventData",
+    "fields": [
+      {
+        "name": "seconds",
+        "optional": false,
+        "type": "string"
+      }
+    ]
+  },
+  {
     "name": "select:am",
     "data": "SelectAMEventData",
     "fields": []
@@ -136,9 +167,31 @@
     "fields": []
   },
   {
+    "name": "select:period",
+    "data": "SelectPeriodEventData",
+    "fields": [
+      {
+        "name": "type",
+        "optional": false,
+        "type": "'AM' | 'PM'"
+      }
+    ]
+  },
+  {
     "name": "switch:view",
     "data": "SwitchViewEventData",
     "fields": []
+  },
+  {
+    "name": "switch:face",
+    "data": "SwitchFaceEventData",
+    "fields": [
+      {
+        "name": "face",
+        "optional": false,
+        "type": "'hours' | 'minutes' | 'seconds'"
+      }
+    ]
   },
   {
     "name": "timezone:change",
@@ -169,6 +222,11 @@
         "name": "duration",
         "optional": false,
         "type": "number"
+      },
+      {
+        "name": "durationSeconds",
+        "optional": true,
+        "type": "number"
       }
     ]
   },
@@ -184,7 +242,7 @@
       {
         "name": "disabledTime",
         "optional": true,
-        "type": "{ hours: string[]; minutes: string[]; fromType?: string; fromHour?: number; } | null"
+        "type": "{ hours: string[]; minutes: string[]; seconds?: string[]; fromType?: string; fromHour?: number; fromMinute?: number; } | null"
       }
     ]
   },
@@ -200,6 +258,11 @@
       {
         "name": "duration",
         "optional": false,
+        "type": "number"
+      },
+      {
+        "name": "durationSeconds",
+        "optional": true,
         "type": "number"
       },
       {
@@ -229,6 +292,11 @@
         "type": "string"
       },
       {
+        "name": "seconds",
+        "optional": true,
+        "type": "string"
+      },
+      {
         "name": "type",
         "optional": true,
         "type": "string"
@@ -252,7 +320,7 @@
       {
         "name": "column",
         "optional": false,
-        "type": "'hours' | 'minutes' | 'ampm'"
+        "type": "'hours' | 'minutes' | 'seconds' | 'ampm'"
       }
     ]
   },
@@ -263,7 +331,7 @@
       {
         "name": "column",
         "optional": false,
-        "type": "'hours' | 'minutes' | 'ampm'"
+        "type": "'hours' | 'minutes' | 'seconds' | 'ampm'"
       },
       {
         "name": "value",
@@ -318,6 +386,11 @@
       },
       {
         "name": "inputMinute",
+        "optional": true,
+        "type": "string | number"
+      },
+      {
+        "name": "inputSecond",
         "optional": true,
         "type": "string | number"
       },

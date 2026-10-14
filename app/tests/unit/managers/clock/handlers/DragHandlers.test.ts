@@ -77,6 +77,87 @@ describe('DragHandlers', () => {
       expect(removeEventListenerSpy).toHaveBeenCalledWith('mousedown', expect.any(Function));
       expect(removeEventListenerSpy).toHaveBeenCalledWith('touchstart', expect.any(Function));
     });
+
+    describe('in the middle of a drag', () => {
+      const FRAME_MS = 16;
+
+      beforeEach(() => {
+        jest.useFakeTimers();
+      });
+
+      afterEach(() => {
+        jest.useRealTimers();
+      });
+
+      const startDragWithQueuedFrame = (): {
+        controller: ReturnType<typeof createMockController>;
+        handlers: DragHandlers;
+      } => {
+        const controller = createMockController();
+        const hourElement = document.createElement('input');
+        hourElement.classList.add('active');
+        const handlers = new DragHandlers(controller as never, clockFace, {
+          smoothHourSnap: true,
+          hourElement,
+        });
+        handlers.attach();
+
+        jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+          left: 0,
+          top: 0,
+          right: 200,
+          bottom: 200,
+          width: 200,
+          height: 200,
+          x: 0,
+          y: 0,
+          toJSON: () => ({}),
+        });
+
+        clockFace.dispatchEvent(new MouseEvent('mousedown', { clientX: 150, clientY: 100, bubbles: true }));
+        expect(controller.handlePointerMove).toHaveBeenCalledTimes(1);
+
+        document.dispatchEvent(new MouseEvent('mousemove', { clientX: 100, clientY: 150, bubbles: true }));
+        expect(jest.getTimerCount()).toBe(1);
+
+        return { controller, handlers };
+      };
+
+      it('should drop the queued frame and ignore the next mouseup after detach', () => {
+        const { controller, handlers } = startDragWithQueuedFrame();
+
+        handlers.detach();
+        expect(jest.getTimerCount()).toBe(0);
+        jest.advanceTimersByTime(FRAME_MS);
+
+        expect(controller.handlePointerMove).toHaveBeenCalledTimes(1);
+
+        document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+
+        expect(controller.handlePointerUp).not.toHaveBeenCalled();
+        expect(controller.snapToNearestHour).not.toHaveBeenCalled();
+      });
+
+      it('should run the queued frame and finish the drag on mouseup while still attached', () => {
+        const { controller, handlers } = startDragWithQueuedFrame();
+
+        jest.advanceTimersByTime(FRAME_MS);
+
+        expect(controller.handlePointerMove).toHaveBeenCalledTimes(2);
+        expect(controller.handlePointerMove).toHaveBeenLastCalledWith(
+          { x: 100, y: 150 },
+          { x: 100, y: 100 },
+          100,
+        );
+
+        document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+
+        expect(controller.handlePointerUp).toHaveBeenCalledTimes(1);
+        expect(controller.snapToNearestHour).toHaveBeenCalledTimes(1);
+
+        handlers.detach();
+      });
+    });
   });
 
   describe('block', () => {
@@ -236,7 +317,103 @@ describe('DragHandlers', () => {
       handlers.detach();
     });
 
-    it('should remove active class from hour when auto-switching to minutes', () => {
+    it('should blur the hour field when auto-switching to minutes', () => {
+      const controller = createMockController();
+      const hourElement = document.createElement('input') as HTMLInputElement;
+      hourElement.classList.add('active');
+      hourElement.blur = jest.fn();
+
+      const minutesElement = document.createElement('input') as HTMLInputElement;
+      minutesElement.click = jest.fn();
+      minutesElement.focus = jest.fn();
+
+      const handlers = new DragHandlers(controller as never, clockFace, {
+        autoSwitchToMinutes: true,
+        isMobileView: false,
+        hourElement,
+        minutesElement,
+      });
+
+      handlers.attach();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      const mousedownEvent = new MouseEvent('mousedown', {
+        clientX: 150,
+        clientY: 100,
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(mousedownEvent);
+
+      const mouseupEvent = new MouseEvent('mouseup', { bubbles: true });
+      document.dispatchEvent(mouseupEvent);
+
+      expect(hourElement.blur).toHaveBeenCalledTimes(1);
+
+      handlers.detach();
+    });
+
+    it('should hand off to minutes in order: click the minutes field, focus it, then blur the hour field', () => {
+      const controller = createMockController();
+      const hourElement = document.createElement('input') as HTMLInputElement;
+      hourElement.classList.add('active');
+      hourElement.blur = jest.fn();
+
+      const minutesElement = document.createElement('input') as HTMLInputElement;
+      minutesElement.click = jest.fn();
+      minutesElement.focus = jest.fn();
+
+      const handlers = new DragHandlers(controller as never, clockFace, {
+        autoSwitchToMinutes: true,
+        isMobileView: false,
+        hourElement,
+        minutesElement,
+      });
+
+      handlers.attach();
+
+      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        right: 200,
+        bottom: 200,
+        width: 200,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      const mousedownEvent = new MouseEvent('mousedown', {
+        clientX: 150,
+        clientY: 100,
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(mousedownEvent);
+
+      const mouseupEvent = new MouseEvent('mouseup', { bubbles: true });
+      document.dispatchEvent(mouseupEvent);
+
+      const [clickOrder] = (minutesElement.click as jest.Mock).mock.invocationCallOrder;
+      const [focusOrder] = (minutesElement.focus as jest.Mock).mock.invocationCallOrder;
+      const [blurOrder] = (hourElement.blur as jest.Mock).mock.invocationCallOrder;
+      expect(clickOrder).toBeLessThan(focusOrder);
+      expect(focusOrder).toBeLessThan(blurOrder);
+
+      handlers.detach();
+    });
+
+    it('should leave moving the active class to the minutes field click handler', () => {
       const controller = createMockController();
       const hourElement = document.createElement('input') as HTMLInputElement;
       hourElement.classList.add('active');
@@ -266,112 +443,19 @@ describe('DragHandlers', () => {
         toJSON: () => ({}),
       });
 
+      const mousedownEvent = new MouseEvent('mousedown', {
+        clientX: 150,
+        clientY: 100,
+        bubbles: true,
+      });
+      clockFace.dispatchEvent(mousedownEvent);
+
+      const mouseupEvent = new MouseEvent('mouseup', { bubbles: true });
+      document.dispatchEvent(mouseupEvent);
+
+      expect(minutesElement.click).toHaveBeenCalledTimes(1);
       expect(hourElement.classList.contains('active')).toBe(true);
-
-      const mousedownEvent = new MouseEvent('mousedown', {
-        clientX: 150,
-        clientY: 100,
-        bubbles: true,
-      });
-      clockFace.dispatchEvent(mousedownEvent);
-
-      const mouseupEvent = new MouseEvent('mouseup', { bubbles: true });
-      document.dispatchEvent(mouseupEvent);
-
-      expect(hourElement.classList.contains('active')).toBe(false);
-
-      handlers.detach();
-    });
-
-    it('should add active class to minutes when auto-switching from hours', () => {
-      const controller = createMockController();
-      const hourElement = document.createElement('input') as HTMLInputElement;
-      hourElement.classList.add('active');
-
-      const minutesElement = document.createElement('input') as HTMLInputElement;
-      minutesElement.click = jest.fn();
-      minutesElement.focus = jest.fn();
-
-      const handlers = new DragHandlers(controller as never, clockFace, {
-        autoSwitchToMinutes: true,
-        isMobileView: false,
-        hourElement,
-        minutesElement,
-      });
-
-      handlers.attach();
-
-      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
-        left: 0,
-        top: 0,
-        right: 200,
-        bottom: 200,
-        width: 200,
-        height: 200,
-        x: 0,
-        y: 0,
-        toJSON: () => ({}),
-      });
-
       expect(minutesElement.classList.contains('active')).toBe(false);
-
-      const mousedownEvent = new MouseEvent('mousedown', {
-        clientX: 150,
-        clientY: 100,
-        bubbles: true,
-      });
-      clockFace.dispatchEvent(mousedownEvent);
-
-      const mouseupEvent = new MouseEvent('mouseup', { bubbles: true });
-      document.dispatchEvent(mouseupEvent);
-
-      expect(minutesElement.classList.contains('active')).toBe(true);
-
-      handlers.detach();
-    });
-
-    it('should toggle active class between hour and minutes synchronously on auto-switch', () => {
-      const controller = createMockController();
-      const hourElement = document.createElement('input') as HTMLInputElement;
-      hourElement.classList.add('active');
-
-      const minutesElement = document.createElement('input') as HTMLInputElement;
-      minutesElement.click = jest.fn();
-      minutesElement.focus = jest.fn();
-
-      const handlers = new DragHandlers(controller as never, clockFace, {
-        autoSwitchToMinutes: true,
-        isMobileView: false,
-        hourElement,
-        minutesElement,
-      });
-
-      handlers.attach();
-
-      jest.spyOn(clockFace, 'getBoundingClientRect').mockReturnValue({
-        left: 0,
-        top: 0,
-        right: 200,
-        bottom: 200,
-        width: 200,
-        height: 200,
-        x: 0,
-        y: 0,
-        toJSON: () => ({}),
-      });
-
-      const mousedownEvent = new MouseEvent('mousedown', {
-        clientX: 150,
-        clientY: 100,
-        bubbles: true,
-      });
-      clockFace.dispatchEvent(mousedownEvent);
-
-      const mouseupEvent = new MouseEvent('mouseup', { bubbles: true });
-      document.dispatchEvent(mouseupEvent);
-
-      expect(hourElement.classList.contains('active')).toBe(false);
-      expect(minutesElement.classList.contains('active')).toBe(true);
 
       handlers.detach();
     });

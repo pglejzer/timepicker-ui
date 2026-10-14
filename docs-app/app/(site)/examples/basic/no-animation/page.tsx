@@ -16,7 +16,10 @@ export default function NoAnimationPage() {
 
       <Section icon={Zap} title="Disable Animation">
         <p className="text-muted-foreground mb-4">
-          Turn off animations for faster display:
+          With <code>ui.animation: false</code> the picker opens and closes at
+          once, with no fade. When the system asks for reduced motion (
+          <code>prefers-reduced-motion</code>), the picker does the same
+          without this option.
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
@@ -31,16 +34,16 @@ picker.create();`}
 
       <Section icon={Zap} title="Performance Mode">
         <p className="text-muted-foreground mb-4">
-          Optimize for performance with minimal effects:
+          No fade and no backdrop. <code>behavior.delayHandler</code> is{" "}
+          <code>0</code> by default, so the picker starts to close as soon as
+          you press OK or Cancel. Set it only if you need an extra wait before
+          closing.
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   ui: {
     animation: false,
     backdrop: false
-  },
-  behavior: {
-    delayHandler: 0
   }
 });
 picker.create();`}
@@ -48,9 +51,6 @@ picker.create();`}
             ui: {
               animation: false,
               backdrop: false,
-            },
-            behavior: {
-              delayHandler: 0,
             },
           }}
         />
@@ -62,15 +62,19 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  animation: false,
-  theme: 'cyberpunk',
-  backdrop: true
+  ui: {
+    animation: false,
+    theme: 'cyberpunk',
+    backdrop: true
+  }
 });
 picker.create();`}
           options={{
-            animation: false,
-            theme: "cyberpunk",
-            backdrop: true,
+            ui: {
+              animation: false,
+              theme: "cyberpunk",
+              backdrop: true,
+            },
           }}
         />
       </Section>
@@ -81,17 +85,25 @@ picker.create();`}
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  animation: false,
-  focusTrap: true,
-  focusInputAfterCloseModal: true,
-  backdrop: true
+  ui: {
+    animation: false,
+    backdrop: true
+  },
+  behavior: {
+    focusTrap: true,
+    returnFocus: true
+  }
 });
 picker.create();`}
           options={{
-            animation: false,
-            focusTrap: true,
-            focusInputAfterCloseModal: true,
-            backdrop: true,
+            ui: {
+              animation: false,
+              backdrop: true,
+            },
+            behavior: {
+              focusTrap: true,
+              returnFocus: true,
+            },
           }}
         />
       </Section>

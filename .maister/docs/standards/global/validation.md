@@ -1,10 +1,7 @@
 ## Validation
 
-### Server-Side Always
-Validate on the server; client-side validation alone is insufficient for security and data integrity.
-
-### Client-Side for Feedback
-Use client-side validation for immediate user feedback, but duplicate checks server-side.
+### At the Public API Boundary
+This is a client-side library with no server: validate options and time strings where they enter the public API and report problems through the `error` event.
 
 ### Validate Early
 Check inputs as early as possible and reject invalid data before processing.

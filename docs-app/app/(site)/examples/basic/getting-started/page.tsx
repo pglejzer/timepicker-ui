@@ -72,14 +72,16 @@ picker.create();`}
 
 const input = document.querySelector('#timepicker-input');
 const picker = new TimepickerUI(input, {
-  onOpen: (data) => {
-    console.log('Picker opened', data);
-  },
-  onConfirm: (data) => {
-    console.log('Time selected:', data.hour, data.minutes, data.type);
-  },
-  onCancel: (data) => {
-    console.log('Picker cancelled', data);
+  callbacks: {
+    onOpen: (data) => {
+      console.log('Picker opened', data);
+    },
+    onConfirm: (data) => {
+      console.log('Time selected:', data.hour, data.minutes, data.type);
+    },
+    onCancel: (data) => {
+      console.log('Picker cancelled', data);
+    }
   }
 });
 
@@ -88,6 +90,8 @@ picker.create();`}
             callbacks: {
               onOpen: (data: TimepickerEventData) =>
                 console.log("Picker opened", data),
+              onConfirm: (data: TimepickerEventData) =>
+                console.log("Time selected:", data.hour, data.minutes, data.type),
               onCancel: (data: TimepickerEventData) =>
                 console.log("Picker cancelled", data),
             },

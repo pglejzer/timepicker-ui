@@ -1,81 +1,58 @@
-import { isDocument } from './node';
+import { isElementDisabled, prefersReducedMotion } from './accessibility';
 
-type RippleTarget = HTMLElement & { _rippleHold?: boolean };
-const RIPPLE_CLASS = 'is-rippling';
-const HOLD_CLASS = 'ripple-hold';
-let activeRippleElement: RippleTarget | null = null;
+const PRESSED = 'is-pressed';
+const RIPPLING = 'is-rippling';
+const attachedRoots = new WeakSet<Document | HTMLElement>();
 
-function startRipple(e: PointerEvent) {
-  const target = e.target as HTMLElement;
-  const el = (
-    target.hasAttribute('data-md3-ripple') ? target : target.closest('[data-md3-ripple]')
-  ) as RippleTarget | null;
+const hostOf = (target: EventTarget | null): HTMLElement | null =>
+  target instanceof Element ? target.closest<HTMLElement>('[data-md3-ripple]') : null;
 
-  if (!el) return;
-  if (e.button !== 0 && e.pointerType === 'mouse') return;
+const release = (event: Event): void => {
+  hostOf(event.target)?.classList.remove(PRESSED);
+};
 
-  const rect = el.getBoundingClientRect();
-  const maxDim = Math.max(rect.width, rect.height);
-  const size = maxDim * 2;
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-
-  el.style.setProperty('--ripple-size', `${size}px`);
-  el.style.setProperty('--ripple-x', `${x}px`);
-  el.style.setProperty('--ripple-y', `${y}px`);
-
-  el.classList.remove(RIPPLE_CLASS, HOLD_CLASS);
-  void el.offsetWidth;
-  el.classList.add(RIPPLE_CLASS, HOLD_CLASS);
-  el._rippleHold = true;
-  activeRippleElement = el;
-}
-
-function endRipple(e: PointerEvent) {
-  const target = e.target as HTMLElement;
-  const el = (
-    target.hasAttribute('data-md3-ripple') ? target : target.closest('[data-md3-ripple]')
-  ) as RippleTarget | null;
-
-  const rippleEl = el || activeRippleElement;
-  if (!rippleEl) return;
-
-  rippleEl._rippleHold = false;
-  rippleEl.classList.remove(HOLD_CLASS);
-  setTimeout(() => {
-    rippleEl.classList.remove(RIPPLE_CLASS);
-    if (activeRippleElement === rippleEl) {
-      activeRippleElement = null;
-    }
-  }, 1000);
-}
-
-function handleMouseLeave(e: MouseEvent) {
-  const el = e.currentTarget as RippleTarget;
-  if (!el || !el._rippleHold) return;
-
-  el._rippleHold = false;
-  el.classList.remove(HOLD_CLASS);
-  setTimeout(() => {
-    el.classList.remove(RIPPLE_CLASS);
-    if (activeRippleElement === el) {
-      activeRippleElement = null;
-    }
-  }, 1000);
-}
-
-export function initMd3Ripple(root?: Document | HTMLElement) {
-  if (isDocument() === false) {
-    return;
+const fadeOut = (event: Event): void => {
+  if ((event as AnimationEvent).animationName === 'tp-ripple-fade') {
+    hostOf(event.target)?.classList.remove(RIPPLING);
   }
+};
 
-  const target = root || document;
-  target.addEventListener('pointerdown', startRipple as EventListener);
-  target.addEventListener('pointerup', endRipple as EventListener);
-  target.addEventListener('pointercancel', endRipple as EventListener);
+const press = (event: Event): void => {
+  const { pointerType, button, clientX, clientY } = event as PointerEvent;
+  const host = hostOf(event.target);
+  if (!host || isElementDisabled(host) || (pointerType === 'mouse' && button !== 0)) return;
 
-  const rippleElements = target.querySelectorAll('[data-md3-ripple]');
-  rippleElements.forEach((el) => {
-    el.addEventListener('mouseleave', handleMouseLeave as EventListener);
-  });
-}
+  host.classList.remove(RIPPLING);
+  const { left, top, width, height } = host.getBoundingClientRect();
+  host.style.setProperty('--ripple-x', `${clientX - left}px`);
+  host.style.setProperty('--ripple-y', `${clientY - top}px`);
+  host.style.setProperty('--ripple-size', `${Math.max(width, height) * 2}px`);
+  host.classList.add(PRESSED);
+  host.addEventListener('pointerleave', release, { once: true });
+
+  if (!prefersReducedMotion()) {
+    requestAnimationFrame(() => host.classList.add(RIPPLING));
+  }
+};
+
+const ROOT_LISTENERS: ReadonlyArray<[string, EventListener]> = [
+  ['pointerdown', press],
+  ['pointerup', release],
+  ['pointercancel', release],
+  ['animationend', fadeOut],
+];
+
+export const initMd3Ripple = (root: Document | HTMLElement): (() => void) => {
+  if (attachedRoots.has(root)) return () => {};
+
+  attachedRoots.add(root);
+  ROOT_LISTENERS.forEach(([type, listener]) => root.addEventListener(type, listener));
+
+  let attached = true;
+  return () => {
+    if (!attached) return;
+    attached = false;
+    attachedRoots.delete(root);
+    ROOT_LISTENERS.forEach(([type, listener]) => root.removeEventListener(type, listener));
+  };
+};

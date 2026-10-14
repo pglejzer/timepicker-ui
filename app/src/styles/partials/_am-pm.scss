@@ -18,13 +18,10 @@
   }
 
   &-wrapper-type-time.expanded:not(.mobile) {
-    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+    @media screen and (orientation: landscape) and (max-height: 480px) {
       flex-direction: row;
       width: 100%;
       margin-left: 0;
-      transition:
-        width 400ms cubic-bezier(0.4, 0, 0.2, 1),
-        margin 400ms cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
 
@@ -42,11 +39,7 @@
     border: var(--tp-border-width) solid var(--tp-border);
     transition:
       color 300ms ease,
-      background-color 300ms ease,
-      width 400ms cubic-bezier(0.4, 0, 0.2, 1),
-      height 400ms cubic-bezier(0.4, 0, 0.2, 1),
-      max-height 400ms cubic-bezier(0.4, 0, 0.2, 1),
-      border-radius 400ms cubic-bezier(0.4, 0, 0.2, 1);
+      background-color 300ms ease;
     cursor: pointer;
     width: 100%;
     height: 100%;
@@ -54,36 +47,23 @@
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
 
-    @media (hover: hover) and (pointer: fine) {
-      &:hover {
-        color: var(--tp-am-pm-text-unselected);
-        background-color: var(--tp-am-pm-active);
-      }
-    }
-
     &.active {
       color: var(--tp-am-pm-text-selected);
       background-color: var(--tp-am-pm-active);
       pointer-events: none;
-
-      @media (hover: hover) and (pointer: fine) {
-        &:hover {
-          color: var(--tp-am-pm-text-selected);
-        }
-      }
     }
   }
 
   &-am.expanded,
   &-pm.expanded {
-    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+    @media screen and (orientation: landscape) and (max-height: 480px) {
       width: 50%;
       height: var(--tp-size-am-pm-height-landscape);
     }
   }
 
   &-am.expanded {
-    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+    @media screen and (orientation: landscape) and (max-height: 480px) {
       border-right: unset;
       border-bottom: var(--tp-border-width) solid var(--tp-border);
     }
@@ -105,7 +85,7 @@
   }
 
   &-am.expanded {
-    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+    @media screen and (orientation: landscape) and (max-height: 480px) {
       border-top-left-radius: var(--tp-radius-sm);
       border-bottom-left-radius: var(--tp-radius-sm);
       border-top-right-radius: 0;
@@ -130,7 +110,7 @@
   }
 
   &-pm.expanded {
-    @media screen and (min-width: 320px) and (max-width: 825px) and (orientation: landscape) {
+    @media screen and (orientation: landscape) and (max-height: 480px) {
       border-bottom-right-radius: var(--tp-radius-sm);
       border-top-right-radius: var(--tp-radius-sm);
       border-bottom-left-radius: 0;

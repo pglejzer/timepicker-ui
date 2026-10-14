@@ -1,6 +1,7 @@
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 import { TIMINGS } from '../constants/timings';
+import { prefersReducedMotion } from '../utils/accessibility';
 
 export default class AnimationManager {
   private core: CoreState;
@@ -19,61 +20,32 @@ export default class AnimationManager {
     });
   }
 
-  private runWithAnimation(callback: () => void, delay = TIMINGS.MODAL_ANIMATION): void {
-    if (this.core.options.ui.animation) {
-      const t = setTimeout(callback, delay);
-      this.timeouts.push(t);
-    } else {
-      callback();
-    }
-  }
-
   private clearAllTimeouts(): void {
     this.timeouts.forEach(clearTimeout);
     this.timeouts = [];
   }
 
-  setAnimationToOpen(): void {
-    this.clearAllTimeouts();
-    const modalElement = this.core.getModalElement();
-    modalElement?.classList.add('opacity');
+  setAnimationToOpen(immediate = false): void {
+    const modal = this.core.getModalElement();
+    if (!modal) return;
 
-    this.runWithAnimation(() => {
-      this.core.getModalElement()?.classList.add('show');
-    });
+    if (!immediate && this.core.options.ui.animation) {
+      void modal.offsetHeight;
+    }
+
+    modal.classList.add('show');
   }
 
-  removeAnimationToClose(): void {
+  removeAnimationToClose(): number {
     this.clearAllTimeouts();
+    this.core.getModalElement()?.classList.remove('show');
 
-    const modalElement = this.core.getModalElement();
-    if (!modalElement) return;
-
-    this.runWithAnimation(() => {
-      const modal = this.core.getModalElement();
-      modal?.classList.remove('show');
-      modal?.classList.remove('opacity');
-    });
-  }
-
-  handleAnimationClock(): void {
-    if (!this.core.options.ui.animation) return;
-
-    this.runWithAnimation(() => {
-      const clockFace = this.core.getClockFace();
-      clockFace?.classList.add('tp-ui-clock-animation');
-
-      const t = setTimeout(() => {
-        this.core.getClockFace()?.classList.remove('tp-ui-clock-animation');
-      }, TIMINGS.CLOCK_ANIMATION);
-
-      this.timeouts.push(t);
-    });
+    return this.core.options.ui.animation && !prefersReducedMotion() ? TIMINGS.MODAL_EXIT : 0;
   }
 
   handleAnimationSwitchTipsMode(): void {
     const clockHand = this.core.getClockHand();
-    if (!clockHand) return;
+    if (!clockHand || !this.core.options.ui.animation || prefersReducedMotion()) return;
 
     this.emitter.emit('animation:start', {});
     clockHand.classList.add('tp-ui-tips-animation');

@@ -1,19 +1,19 @@
 import { ClockController } from '../../../../../src/managers/clock/controller/ClockController';
-import type { ClockState } from '../../../../../src/managers/clock/types';
+import type { ClockMode, ClockState } from '../../../../../src/managers/clock/types';
 
 const createMockRenderer = (): {
   setHandAngle: jest.Mock;
   setActiveValue: jest.Mock;
-  setCircleSize: jest.Mock;
   setCircle24hMode: jest.Mock;
   animateToAngle: jest.Mock;
+  followHand: jest.Mock;
   destroy: jest.Mock;
 } => ({
   setHandAngle: jest.fn(),
   setActiveValue: jest.fn(),
-  setCircleSize: jest.fn(),
   setCircle24hMode: jest.fn(),
   animateToAngle: jest.fn(),
+  followHand: jest.fn(),
   destroy: jest.fn(),
 });
 
@@ -152,7 +152,7 @@ describe('ClockController', () => {
   });
 
   describe('switchMode', () => {
-    it('should switch to hours mode', () => {
+    it('should move the hand to the hour and leave the highlight to followHand', () => {
       const renderer = createMockRenderer();
       const state = createInitialState();
       state.mode = 'minutes';
@@ -162,10 +162,14 @@ describe('ClockController', () => {
       controller.switchMode('hours');
 
       expect(renderer.setHandAngle).toHaveBeenCalled();
-      expect(renderer.setActiveValue).toHaveBeenCalledWith('12');
+      expect(renderer.setActiveValue).not.toHaveBeenCalled();
+
+      controller.followHand('hours');
+
+      expect(renderer.followHand).toHaveBeenCalledWith(expect.any(Function), '12');
     });
 
-    it('should switch to minutes mode', () => {
+    it('should move the hand to the minute and leave the highlight to followHand', () => {
       const renderer = createMockRenderer();
       const state = createInitialState();
 
@@ -174,7 +178,11 @@ describe('ClockController', () => {
       controller.switchMode('minutes');
 
       expect(renderer.setHandAngle).toHaveBeenCalled();
-      expect(renderer.setActiveValue).toHaveBeenCalledWith('00');
+      expect(renderer.setActiveValue).not.toHaveBeenCalled();
+
+      controller.followHand('minutes');
+
+      expect(renderer.followHand).toHaveBeenCalledWith(expect.any(Function), '00');
     });
 
     it('should handle 24h mode inner circle', () => {
@@ -193,6 +201,89 @@ describe('ClockController', () => {
       controller.switchMode('hours');
 
       expect(renderer.setCircle24hMode).toHaveBeenCalledWith(true);
+    });
+  });
+
+  describe('followHand', () => {
+    type MockRenderer = ReturnType<typeof createMockRenderer>;
+    type ValueAt = (angle: number) => string;
+
+    const createState = (overrides: Partial<ClockState>): ClockState => ({
+      hour: '12',
+      minute: '00',
+      second: '00',
+      amPm: 'AM',
+      hourAngle: 0,
+      minuteAngle: 0,
+      secondAngle: 0,
+      mode: 'hours',
+      ...overrides,
+    });
+
+    const followed = (renderer: MockRenderer): { valueAt: ValueAt; finalValue: string } => {
+      expect(renderer.followHand).toHaveBeenCalledTimes(1);
+      const [valueAt, finalValue] = renderer.followHand.mock.calls[0] as [ValueAt, string];
+      return { valueAt, finalValue };
+    };
+
+    it('hands the renderer the final 12h hour and maps hand angles to the nearest hour tip', () => {
+      const renderer = createMockRenderer();
+      const state = createState({ hour: '03', hourAngle: 90 });
+      const controller = new ClockController(renderer as never, state, '12h', null, 1, 1, true);
+
+      controller.followHand('hours');
+
+      const { valueAt, finalValue } = followed(renderer);
+      expect(finalValue).toBe('03');
+      expect([88, 14, 346, -90].map(valueAt)).toEqual(['03', '12', '12', '09']);
+    });
+
+    it('maps hand angles to the outer 24h ring when the final hour is 12 or less', () => {
+      const renderer = createMockRenderer();
+      const state = createState({ hour: '09', hourAngle: 270, amPm: '' });
+      const controller = new ClockController(renderer as never, state, '24h', null, 1, 1, true);
+
+      controller.followHand('hours');
+
+      const { valueAt, finalValue } = followed(renderer);
+      expect(finalValue).toBe('09');
+      expect([0, 90, 270].map(valueAt)).toEqual(['12', '03', '09']);
+    });
+
+    it('maps hand angles to the inner 24h ring when the final hour is past 12', () => {
+      const renderer = createMockRenderer();
+      const state = createState({ hour: '15', hourAngle: 90, amPm: '' });
+      const controller = new ClockController(renderer as never, state, '24h', null, 1, 1, true);
+
+      controller.followHand('hours');
+
+      const { valueAt, finalValue } = followed(renderer);
+      expect(finalValue).toBe('15');
+      expect([90, 0, 180].map(valueAt)).toEqual(['15', '00', '18']);
+    });
+
+    it('hands the renderer the final minute and maps hand angles to the nearest 5-minute tip', () => {
+      const renderer = createMockRenderer();
+      const state = createState({ minute: '30', minuteAngle: 180, mode: 'minutes' });
+      const controller = new ClockController(renderer as never, state, '12h', null, 1, 1, true);
+
+      controller.followHand('minutes');
+
+      const { valueAt, finalValue } = followed(renderer);
+      expect(finalValue).toBe('30');
+      expect([183, 14, 16].map(valueAt)).toEqual(['30', '00', '05']);
+    });
+
+    it('hands the renderer the final second and maps a negative hand angle onto the face', () => {
+      const renderer = createMockRenderer();
+      const state = createState({ second: '45', secondAngle: 270, mode: 'seconds', amPm: '' });
+      const controller = new ClockController(renderer as never, state, '24h', null, 1, 1, true, {}, 1, true);
+
+      controller.followHand('seconds');
+
+      const { valueAt, finalValue } = followed(renderer);
+      expect(finalValue).toBe('45');
+      expect([-90, 183, 16].map(valueAt)).toEqual(['45', '30', '05']);
     });
   });
 
@@ -229,6 +320,51 @@ describe('ClockController', () => {
 
       expect(renderer.setHandAngle).toHaveBeenCalled();
       expect(renderer.setActiveValue).toHaveBeenCalledWith('03');
+    });
+
+    describe('24h inner ring follows only the shown face', () => {
+      type MockRenderer = ReturnType<typeof createMockRenderer>;
+
+      const create24h = (mode: ClockMode): { controller: ClockController; renderer: MockRenderer } => {
+        const renderer = createMockRenderer();
+        const state: ClockState = {
+          hour: '09',
+          minute: '00',
+          second: '00',
+          amPm: '',
+          hourAngle: 270,
+          minuteAngle: 0,
+          secondAngle: 0,
+          mode,
+        };
+        const controller = new ClockController(renderer as never, state, '24h', null, 1, 1, true);
+        return { controller, renderer };
+      };
+
+      it('should leave the ring alone when the minute changes while the hour face is shown', () => {
+        const { controller, renderer } = create24h('hours');
+
+        controller.setValue('minutes', '30');
+
+        expect(renderer.setCircle24hMode).not.toHaveBeenCalled();
+      });
+
+      it('should leave the ring alone when the hour changes while the minute face is shown', () => {
+        const { controller, renderer } = create24h('minutes');
+
+        controller.setValue('hours', '14');
+
+        expect(renderer.setCircle24hMode).not.toHaveBeenCalled();
+      });
+
+      it('should move the ring inward once when the shown hour goes past 12', () => {
+        const { controller, renderer } = create24h('hours');
+
+        controller.setValue('hours', '14');
+
+        expect(renderer.setCircle24hMode).toHaveBeenCalledTimes(1);
+        expect(renderer.setCircle24hMode).toHaveBeenCalledWith(true);
+      });
     });
   });
 

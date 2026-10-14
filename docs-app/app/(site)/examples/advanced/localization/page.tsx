@@ -157,7 +157,7 @@ picker.create();`}
 
       <Section icon={Globe} title="Dynamic Language Switching">
         <p className="text-muted-foreground mb-4">
-          Switch languages dynamically using the update method:
+          Switch languages at runtime with <code>setOptions()</code>:
         </p>
         <TimepickerExample
           code={`import { TimepickerUI } from 'timepicker-ui';
@@ -175,14 +175,12 @@ picker.create();
 
 function changeLanguage(lang: string) {
   const t = translations[lang];
-  picker.update({
-    options: {
-      labels: {
-        ok: t.ok,
-        cancel: t.cancel,
-        am: t.am,
-        pm: t.pm
-      }
+  picker.setOptions({
+    labels: {
+      ok: t.ok,
+      cancel: t.cancel,
+      am: t.am,
+      pm: t.pm
     }
   });
 }
@@ -218,16 +216,18 @@ function LocalizedTimepicker() {
   useEffect(() => {
     if (!inputRef.current) return;
 
-    if (pickerRef.current) {
-      pickerRef.current.update({ options });
-    } else {
-      pickerRef.current = new TimepickerUI(inputRef.current, options);
-      pickerRef.current.create();
-    }
+    const picker = new TimepickerUI(inputRef.current, options);
+    picker.create();
+    pickerRef.current = picker;
 
     return () => {
-      pickerRef.current?.destroy();
+      picker.destroy();
+      pickerRef.current = null;
     };
+  }, []);
+
+  useEffect(() => {
+    pickerRef.current?.setOptions(options);
   }, [options]);
 
   return <input ref={inputRef} type="text" />;

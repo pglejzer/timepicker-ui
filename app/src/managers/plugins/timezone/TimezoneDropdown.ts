@@ -1,11 +1,13 @@
 import type { CoreState } from '../../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitter';
-import { getTimezoneList, type TimezoneInfo } from '../../../utils/timezone';
+import { getLocalTimezone, getTimezoneList, type TimezoneInfo } from '../../../utils/timezone';
+import { escapeHtml } from '../../../utils/template/escape';
 
 export class TimezoneDropdown {
   private readonly core: CoreState;
   private readonly emitter: EventEmitter<TimepickerEventMap>;
   private selectedTimezone: string | null = null;
+  private placeholder = '';
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -53,7 +55,7 @@ export class TimezoneDropdown {
     const optionsHtml = timezones
       .map(
         (tz: TimezoneInfo, index: number) =>
-          `<div class="tp-ui-timezone-option" role="option" id="${this.getOptionId(index)}" data-value="${tz.id}" aria-selected="false" tabindex="-1">${tz.label}</div>`,
+          `<div class="tp-ui-timezone-option" role="option" id="${escapeHtml(this.getOptionId(index))}" data-value="${escapeHtml(tz.id)}" aria-selected="false" tabindex="-1">${escapeHtml(tz.label)}</div>`,
       )
       .join('');
 
@@ -84,31 +86,16 @@ export class TimezoneDropdown {
 
   selectTimezone(timezoneId: string, emitEvent: boolean = true): void {
     this.selectedTimezone = timezoneId;
-
-    const dropdown = this.getDropdown();
-    const selectedDisplay = dropdown?.querySelector('.tp-ui-timezone-selected');
-    const menu = this.getMenu();
-
-    if (selectedDisplay && menu) {
-      const options = menu.querySelectorAll('.tp-ui-timezone-option');
-      let selectedLabel = '';
-
-      options.forEach((option) => {
-        const isSelected = option.getAttribute('data-value') === timezoneId;
-        option.setAttribute('data-selected', String(isSelected));
-        option.setAttribute('aria-selected', String(isSelected));
-        if (isSelected) {
-          selectedLabel = option.textContent || '';
-        }
-      });
-
-      selectedDisplay.textContent = selectedLabel;
-      selectedDisplay.removeAttribute('data-placeholder');
-    }
+    this.renderSelection();
 
     if (emitEvent) {
-      this.emitter.emit('timezone:change', { timezone: this.selectedTimezone });
+      this.emitter.emit('timezone:change', { timezone: timezoneId });
     }
+  }
+
+  clearSelection(): void {
+    this.selectedTimezone = null;
+    this.renderSelection();
   }
 
   getSelectedTimezone(): string | null {
@@ -116,19 +103,57 @@ export class TimezoneDropdown {
   }
 
   restorePreviousSelection(): void {
-    const dropdown = this.getDropdown();
-    const selectedDisplay = dropdown?.querySelector('.tp-ui-timezone-selected');
+    const selectedDisplay = this.getSelectedDisplay();
+    if (!selectedDisplay) return;
 
-    if (!dropdown || !selectedDisplay) return;
+    this.placeholder = selectedDisplay.getAttribute('data-placeholder') ?? this.placeholder;
 
     if (this.selectedTimezone) {
-      this.selectTimezone(this.selectedTimezone, false);
-    } else {
-      const defaultTz = this.core.options.timezone?.default;
-      if (defaultTz) {
-        this.selectTimezone(defaultTz);
-      }
+      this.renderSelection();
+      return;
     }
+
+    const defaultTz = this.core.options.timezone?.default;
+    if (defaultTz) {
+      this.selectTimezone(this.resolveListedTimezone(defaultTz));
+    }
+  }
+
+  private getSelectedDisplay(): HTMLElement | null {
+    return this.getDropdown()?.querySelector<HTMLElement>('.tp-ui-timezone-selected') ?? null;
+  }
+
+  private renderSelection(): void {
+    const selectedDisplay = this.getSelectedDisplay();
+    if (!selectedDisplay) return;
+
+    let selectedLabel = '';
+    this.getOptions().forEach((option) => {
+      const isSelected = option.getAttribute('data-value') === this.selectedTimezone;
+      option.setAttribute('data-selected', String(isSelected));
+      option.setAttribute('aria-selected', String(isSelected));
+      if (isSelected) {
+        selectedLabel = option.textContent || '';
+      }
+    });
+
+    if (this.selectedTimezone) {
+      selectedDisplay.textContent = selectedLabel;
+      selectedDisplay.removeAttribute('data-placeholder');
+    } else {
+      selectedDisplay.textContent = this.placeholder;
+      selectedDisplay.setAttribute('data-placeholder', this.placeholder);
+    }
+  }
+
+  private resolveListedTimezone(preferred: string): string {
+    const listed = this.getOptions().map((option) => option.getAttribute('data-value'));
+    if (listed.includes(preferred)) return preferred;
+
+    const local = getLocalTimezone();
+    if (listed.includes(local)) return local;
+
+    return listed[0] ?? preferred;
   }
 
   reset(): void {

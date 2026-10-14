@@ -1,0 +1,743 @@
+.stage {
+  --mp-font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mp-page: #faf9fc;
+  --mp-surface: #fff;
+  --mp-text: #252332;
+  --mp-muted: #746f82;
+  --mp-border: #e9e6ef;
+  --mp-subtle: #f5f2fa;
+  --mp-accent: #7450ca;
+  --mp-soft: #f0eafa;
+  --mp-on-accent: #fff;
+  --mp-app: #f8f7fa;
+  --mp-shadow: #39304d18;
+  --mp-scrim: #29213820;
+  --mp-track: #d8d2e5;
+  color-scheme: light;
+  container-type: inline-size;
+  padding: 12px;
+  border: 1px solid var(--mp-border);
+  border-radius: 16px;
+  background: var(--mp-page);
+  color: var(--mp-text);
+  font-family: var(--mp-font);
+  font-feature-settings: normal;
+  line-height: normal;
+}
+
+:global(.dark) .stage {
+  --mp-page: #141218;
+  --mp-surface: #1d1d24;
+  --mp-text: #f6f3ff;
+  --mp-muted: #b1abbe;
+  --mp-border: #3b3647;
+  --mp-subtle: #292431;
+  --mp-accent: #b899fa;
+  --mp-soft: #352842;
+  --mp-on-accent: #251739;
+  --mp-app: #17161d;
+  --mp-shadow: #0000004a;
+  --mp-scrim: #00000042;
+  --mp-track: #50455f;
+  color-scheme: dark;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+  margin: 0 0 12px;
+  padding: 12px;
+  color: var(--mp-muted);
+  font-size: 13px;
+}
+
+.switchLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+  cursor: pointer;
+}
+
+.switch {
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  width: 34px;
+  height: 20px;
+  margin: 0;
+  border: 0;
+  border-radius: 20px;
+  background: var(--mp-track);
+  box-shadow: inset 0 0 0 1px var(--mp-muted);
+  cursor: pointer;
+}
+
+.switch::before {
+  content: "";
+  position: absolute;
+  inset: 3px auto auto 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.switch:checked {
+  background: var(--mp-accent);
+  box-shadow: none;
+}
+
+.switch:checked::before {
+  transform: translateX(14px);
+}
+
+.switch:focus-visible {
+  outline: 2px solid var(--mp-accent);
+  outline-offset: 3px;
+}
+
+.comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 24px;
+  padding: 18px 10px 26px;
+}
+
+.example {
+  min-width: 0;
+}
+
+.exampleTitle {
+  margin: 0 0 18px;
+  color: var(--mp-muted);
+  font: 500 14px/1.4 var(--mp-font);
+  text-align: center;
+}
+
+.product {
+  color: var(--mp-text);
+  font: 400 14px/1.4 var(--mp-font);
+}
+
+.product :where(button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.product :where(svg:not(.ticks)) {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+}
+
+.desktop {
+  width: 340px;
+  max-width: 100%;
+  margin: auto;
+  padding-top: 24px;
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--mp-muted);
+  font-size: 12px;
+}
+
+.trigger {
+  justify-content: space-between;
+  width: 100%;
+  height: 46px;
+  padding: 0 15px;
+  border: 1px solid var(--mp-border);
+  border-radius: 12px;
+  background: var(--mp-surface);
+  box-shadow: 0 0 0 3px var(--mp-soft);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.trigger svg {
+  color: var(--mp-accent);
+}
+
+.panel {
+  position: relative;
+  margin-top: 10px;
+  padding: 18px 20px;
+  border: 1px solid var(--mp-border);
+  border-radius: 23px;
+  background: var(--mp-surface);
+  box-shadow: 0 12px 40px var(--mp-shadow);
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.iconButton {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  color: var(--mp-muted);
+}
+
+.times {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 14px 0 10px;
+}
+
+.timeGroup {
+  flex: 1;
+  min-width: 0;
+}
+
+.endpointLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 17px;
+  margin-bottom: 7px;
+  padding-left: 4px;
+  color: var(--mp-muted);
+  font-size: 12px;
+}
+
+.timeInputs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeEntry {
+  display: block;
+  width: calc((100% - 14px) / 2);
+  min-width: 0;
+  height: 55px;
+  padding: 3px 0;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--mp-text);
+  font: 500 29px/1.2 var(--mp-font);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1px;
+  text-align: center;
+}
+
+.timeEntry[data-active] {
+  background: var(--mp-soft);
+  color: var(--mp-accent);
+}
+
+.colon {
+  width: 10px;
+  padding-bottom: 3px;
+  color: var(--mp-muted);
+  font-size: 24px;
+  text-align: center;
+}
+
+.rangeDivider {
+  flex-shrink: 0;
+  width: 14px;
+  margin-top: 23px;
+  color: var(--mp-muted);
+}
+
+.rangeDivider svg {
+  width: 14px;
+  height: 14px;
+}
+
+.duration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 18px;
+  margin: 0 0 15px;
+  color: var(--mp-muted);
+  font-size: 12px;
+}
+
+.duration svg {
+  width: 13px;
+  height: 13px;
+}
+
+.clockHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  color: var(--mp-muted);
+  font-size: 11px;
+}
+
+.clockHeading > span:first-child {
+  color: var(--mp-accent);
+}
+
+.dial {
+  position: relative;
+  width: 264px;
+  max-width: 100%;
+  aspect-ratio: 1;
+  margin: auto;
+}
+
+.ticks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ticks line {
+  stroke: var(--mp-border);
+  stroke-width: 1;
+  stroke-linecap: round;
+}
+
+.ticks line[data-major] {
+  stroke: var(--mp-muted);
+  opacity: 0.5;
+}
+
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: calc(50% - 1px);
+  width: 2px;
+  border-radius: 3px;
+  background: var(--mp-accent);
+  transform-origin: bottom;
+}
+
+.handCenter {
+  position: absolute;
+  top: calc(50% - 4px);
+  left: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mp-accent);
+}
+
+.numbers button {
+  position: absolute;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--mp-surface);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  transform: translate(-50%, -50%);
+}
+
+.numbers button[data-inner] {
+  width: 30px;
+  height: 30px;
+  color: var(--mp-muted);
+  font-size: 11px;
+}
+
+.numbers button[aria-pressed="true"] {
+  background: var(--mp-accent);
+  color: var(--mp-on-accent);
+  box-shadow: 0 0 0 3px var(--mp-soft);
+}
+
+.zone {
+  margin: 14px 0 10px;
+}
+
+.zoneLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 7px;
+  color: var(--mp-muted);
+  font-size: 11px;
+}
+
+.zoneLabel svg {
+  width: 13px;
+  height: 13px;
+}
+
+.zone select {
+  width: 100%;
+  height: 42px;
+  padding: 0 10px;
+  border: 1px solid var(--mp-border);
+  border-radius: 11px;
+  background: var(--mp-subtle);
+  color: var(--mp-text);
+  font: 400 12px/1.4 var(--mp-font);
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 36px;
+  margin: 8px 0 12px;
+}
+
+.mode {
+  min-height: 36px;
+  padding: 0 9px;
+  border-radius: 9px;
+  color: var(--mp-muted);
+  font-size: 12px;
+}
+
+.step {
+  display: flex;
+  gap: 2px;
+}
+
+.step .iconButton {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--mp-border);
+}
+
+.cancel {
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 11px;
+  color: var(--mp-muted);
+}
+
+.confirm {
+  min-height: 44px;
+  padding: 0 17px;
+  border-radius: 12px;
+  background: var(--mp-accent);
+  color: var(--mp-on-accent);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.phone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  max-width: 100%;
+  min-height: 780px;
+  margin: auto;
+  overflow: hidden;
+  border: 1px solid var(--mp-border);
+  border-radius: 32px;
+  background: var(--mp-app);
+  box-shadow: 0 12px 40px var(--mp-shadow);
+}
+
+.status {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  height: 43px;
+  padding: 0 22px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status > div {
+  display: flex;
+  gap: 6px;
+}
+
+.status svg {
+  width: 14px;
+  height: 14px;
+}
+
+.phoneApp {
+  flex-shrink: 0;
+  min-height: 123px;
+  padding: 8px 21px 18px;
+}
+
+.appTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.scrim {
+  position: absolute;
+  inset: 43px 0 0;
+  z-index: 1;
+  background: var(--mp-scrim);
+}
+
+.mobilePanel {
+  z-index: 2;
+  margin-top: auto;
+  padding: 10px 18px 0;
+  border: 0;
+  border-top: 1px solid var(--mp-border);
+  border-radius: 27px 27px 0 0;
+  box-shadow: 0 -8px 30px var(--mp-shadow);
+}
+
+.handle {
+  width: 34px;
+  height: 4px;
+  margin: 0 auto 8px;
+  border-radius: 6px;
+  background: var(--mp-border);
+}
+
+.mobilePanel .heading {
+  font-size: 16px;
+}
+
+.mobilePanel .iconButton {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+}
+
+.mobilePanel .times {
+  gap: 7px;
+  margin: 10px 0 8px;
+}
+
+.mobilePanel .timeEntry {
+  height: 56px;
+  font-size: 31px;
+}
+
+.mobilePanel .duration {
+  margin-bottom: 12px;
+}
+
+.mobilePanel .clockHeading {
+  font-size: 12px;
+}
+
+.mobilePanel .dial {
+  width: 260px;
+}
+
+.mobilePanel .numbers button {
+  width: 44px;
+  height: 44px;
+  font-size: 15px;
+}
+
+.half {
+  display: flex;
+  gap: 4px;
+  width: 190px;
+  max-width: 100%;
+  margin: 6px auto 4px;
+  padding: 3px;
+  border-radius: 13px;
+  background: var(--mp-subtle);
+}
+
+.half button {
+  width: 50%;
+  height: 44px;
+  border-radius: 10px;
+  color: var(--mp-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.half button[aria-pressed="true"] {
+  background: var(--mp-surface);
+  color: var(--mp-text);
+  box-shadow: 0 2px 5px var(--mp-shadow);
+}
+
+.mobilePanel .zone {
+  margin: 12px 0 6px;
+}
+
+.mobilePanel .zoneLabel {
+  font-size: 12px;
+}
+
+.mobilePanel .zone select {
+  height: 46px;
+  font-size: 16px;
+}
+
+.mobilePanel .tools {
+  min-height: 44px;
+  margin: 6px 0 10px;
+}
+
+.mobilePanel .mode {
+  min-height: 44px;
+  font-size: 13px;
+}
+
+.mobilePanel .footer {
+  padding-top: 12px;
+}
+
+.mobilePanel .confirm {
+  flex: 1;
+  height: 50px;
+  border-radius: 14px;
+  font-size: 14px;
+}
+
+.mobilePanel .cancel {
+  height: 50px;
+  padding: 0 14px;
+}
+
+.homeBar {
+  width: 102px;
+  height: 4px;
+  margin: 12px auto 9px;
+  border-radius: 5px;
+  background: var(--mp-text);
+}
+
+.singleCopy {
+  display: none;
+}
+
+.stage:has(.rangeSwitch:not(:checked)) [data-range-only],
+.stage:has(.rangeSwitch:not(:checked)) .rangeCopy,
+.stage:has(.zoneSwitch:not(:checked)) [data-zone-only] {
+  display: none;
+}
+
+.stage:has(.rangeSwitch:not(:checked)) .singleCopy {
+  display: inline;
+}
+
+.stage:has(.rangeSwitch:not(:checked)) .times {
+  gap: 8px;
+  margin: 14px 0 18px;
+}
+
+.stage:has(.rangeSwitch:not(:checked)) .timeGroup {
+  flex: 0 1 218px;
+}
+
+.stage:has(.rangeSwitch:not(:checked)) .timeEntry {
+  width: 92px;
+  height: 72px;
+  border-radius: 15px;
+  font-size: 52px;
+}
+
+.stage:has(.rangeSwitch:not(:checked)) .timeInputs {
+  gap: 7px;
+}
+
+.stage:has(.rangeSwitch:not(:checked)) .colon {
+  width: 12px;
+  font-size: 34px;
+}
+
+.stage:has(.rangeSwitch:not(:checked)) .mobilePanel .timeEntry {
+  height: 72px;
+  font-size: 54px;
+}
+
+@container (max-width: 656px) {
+  .comparison {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding: 16px 8px 24px;
+  }
+
+  .desktop {
+    padding-top: 0;
+  }
+}
+
+@container (max-width: 336px) {
+  .comparison {
+    padding-inline: 4px;
+  }
+
+  .panel {
+    padding-inline: 16px;
+  }
+
+  .phone {
+    border-radius: 26px;
+  }
+
+  .mobilePanel .timeEntry {
+    font-size: 29px;
+  }
+
+  .times {
+    gap: 4px;
+  }
+
+  .rangeDivider {
+    width: 11px;
+  }
+
+  .mobilePanel .zone select {
+    font-size: 14px;
+  }
+}
+
+@media (forced-colors: active) {
+  .switch {
+    appearance: auto;
+    width: auto;
+    height: auto;
+    box-shadow: none;
+  }
+
+  .switch::before {
+    content: none;
+  }
+}

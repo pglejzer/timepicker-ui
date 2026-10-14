@@ -7,10 +7,6 @@ export class TimezoneKeyboard {
     return this.focusedIndex;
   }
 
-  setFocusedIndex(index: number): void {
-    this.focusedIndex = index;
-  }
-
   moveDown(optionsCount: number): number {
     this.focusedIndex = Math.min(this.focusedIndex + 1, optionsCount - 1);
     return this.focusedIndex;

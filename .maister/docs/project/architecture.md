@@ -54,7 +54,7 @@ Every manager follows one contract: constructor `(core: CoreState, emitter: Even
 ### Styles
 - **Location**: `app/src/styles/`
 - **Purpose**: SCSS source for core styles and 10 standalone themes, compiled to CSS by rollup.
-- **Key Files**: `index.scss`, `main.scss`, `variables.scss`, `_mixins.scss`, `themes/`
+- **Key Files**: `index.scss`, `main.scss`, `variables.scss`, `partials/`, `themes/`
 
 ## Data Flow
 
@@ -63,12 +63,12 @@ Every manager follows one contract: constructor `(core: CoreState, emitter: Even
 3. **Init / open** — `Lifecycle` orchestrates DOM creation (ModalManager), theming (ThemeManager), event binding (EventManager), and clock/wheel rendering (ClockManager / wheel plugin).
 4. **Interaction** — DOM events captured by EventManager / clock handlers emit internal events (`select:hour`, `select:minute`, `confirm`, `cancel`, etc.) on the bus.
 5. **Coordination** — managers react to events and read/write `CoreState`; they never reference each other directly.
-6. **Callback bridge** — `Lifecycle.setupCallbackBridge()` wires user `callbacks.*` options to internal events (e.g. `callbacks.onConfirm` → `emitter.on('confirm', …)`). Managers do not call user callbacks directly.
+6. **Callback bridge** — `setupCallbackBridge()` (`timepicker/LifecycleCallbacks.ts`) wires user `callbacks.*` options to internal events (e.g. `callbacks.onConfirm` → `emitter.on('confirm', …)`). Managers do not call user callbacks directly.
 7. **Destroy** — `Lifecycle` tears down listeners and DOM; each manager's `destroy()` is invoked; the instance is removed from `instanceRegistry`.
 
 ### Key internal events
 - Lifecycle: `show`, `open`, `cancel`, `confirm`, `clear`
-- Clock selection: `select:hour`, `select:minute`, `select:am`, `select:pm`
+- Clock selection: `select:hour`, `select:minute`, `select:second`, `select:am`, `select:pm`
 - Range: `range:confirm`, `range:switch`, `range:validation`
 - Timezone: `timezone:change`
 - Wheel: `wheel:scroll:start`, `wheel:scroll:end`

@@ -1,4 +1,4 @@
-import type { WheelRenderer } from './WheelRenderer';
+import { WHEEL_COLUMNS, type WheelRenderer } from './WheelRenderer';
 import type { WheelColumnType } from './WheelTypes';
 import { ColumnDragState } from './ColumnDragState';
 import {
@@ -51,8 +51,7 @@ export class WheelDragHandler {
 
     if (!isDocument()) return;
 
-    const columnTypes: readonly WheelColumnType[] = ['hours', 'minutes', 'ampm'];
-    columnTypes.forEach((type) => {
+    WHEEL_COLUMNS.forEach((type) => {
       const col = this.renderer.getColumnElement(type);
       if (!col) return;
 

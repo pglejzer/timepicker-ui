@@ -27,10 +27,11 @@ const createMockCoreState = (enabled = true, clockType: '12h' | '24h' = '12h', i
     getInput: jest.fn().mockReturnValue(mockInput),
     getHour: jest.fn().mockReturnValue(createMockInput()),
     getMinutes: jest.fn().mockReturnValue(createMockInput()),
-    getActiveTypeMode: jest.fn().mockReturnValue({ textContent: 'AM' }),
+    getActiveType: jest.fn().mockReturnValue('AM'),
     getAM: jest.fn().mockReturnValue(mockAm),
     getPM: jest.fn().mockReturnValue(mockPm),
     getOkButton: jest.fn().mockReturnValue(createMockButton()),
+    isOpen: true,
     options: {
       range: { enabled, minDuration: undefined, maxDuration: undefined },
       clock: { type: clockType },
@@ -170,7 +171,7 @@ describe('RangeManager AM/PM Sync - Regression Tests', () => {
 
       emitter.emit('range:minute:commit', { hour: '09', minutes: '00', type: 'AM' });
 
-      mockCore.getActiveTypeMode.mockReturnValue({ textContent: 'PM' });
+      mockCore.getActiveType.mockReturnValue('PM');
       emitter.emit('range:minute:commit', { hour: '06', minutes: '00', type: 'PM' });
 
       const toValue = manager.getToValue();
@@ -285,7 +286,7 @@ describe('RangeManager AM/PM Sync - Regression Tests', () => {
       manager.init();
 
       emitter.emit('range:minute:commit', { hour: '09', minutes: '00', type: undefined });
-      mockCore.getActiveTypeMode.mockReturnValue({ textContent: 'AM' });
+      mockCore.getActiveType.mockReturnValue('AM');
 
       let lastAmPmEvent: 'AM' | 'PM' | null = null;
       emitter.on('select:am', () => {
@@ -297,7 +298,24 @@ describe('RangeManager AM/PM Sync - Regression Tests', () => {
 
       emitter.emit('select:am', {});
 
+      expect(manager.getFromValue()?.type).toBe('AM');
       expect(manager.getActivePart()).toBe('to');
+    });
+
+    it('should ignore AM/PM selection while no period is active', () => {
+      mockCore = createMockCoreState(true, '12h', '');
+      mockCore.getModalElement.mockReturnValue(modal);
+
+      const manager = new RangeManager(mockCore as never, emitter);
+      manager.init();
+
+      emitter.emit('range:minute:commit', { hour: '09', minutes: '00', type: undefined });
+      mockCore.getActiveType.mockReturnValue(undefined);
+
+      emitter.emit('select:am', {});
+
+      expect(manager.getFromValue()?.type).toBeUndefined();
+      expect(manager.getActivePart()).toBe('from');
     });
   });
 });

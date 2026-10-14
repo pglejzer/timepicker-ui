@@ -1,7 +1,16 @@
 import { getInputValue } from '../../utils/input';
-import { selectorActive } from '../../utils/variables';
+import { getTimeFormat } from '../../utils/options/predicates';
+import { clockDegrees, convertTime, formatTime, parseTime, type TimeValue } from '../../utils/time/parse';
+import { setActivePeriod, setSpinbuttonValue } from '../../utils/accessibility';
+import type { TimepickerOptions } from '../../types/options';
 import type { CoreState } from '../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../utils/EventEmitter';
+import { TIME_FIELD_NAMES, getTimeInput } from '../events/timeFields';
+
+const RANGE_SEPARATOR = ' - ';
+const MAX_TIME_PARTS = 2;
+
+const isTimeValue = (value: TimeValue | null): value is TimeValue => value !== null;
 
 export class InputValueHandler {
   private core: CoreState;
@@ -24,10 +33,7 @@ export class InputValueHandler {
     const input = this.core.getInput();
     if (!input) return;
 
-    const { currentTime, clockType } = {
-      currentTime: this.core.options.clock.currentTime,
-      clockType: this.core.options.clock.type,
-    };
+    const { currentTime, type: clockType } = this.core.options.clock;
     const { type } = getInputValue(input, clockType, currentTime, true);
     this.core.updateOptions({ clock: { type: type ? '12h' : '24h' } });
   }
@@ -38,82 +44,61 @@ export class InputValueHandler {
     const input = this.core.getInput();
     if (!input) return;
 
-    const { hour, minutes, type } = getInputValue(
-      input,
-      this.core.options.clock.type,
-      this.core.options.clock.currentTime,
-    );
-
-    input.value = type ? `${hour}:${minutes} ${type}` : `${hour}:${minutes}`;
+    const { clock } = this.core.options;
+    const format = getTimeFormat(this.core.options);
+    const value = getInputValue(input, clock.type, clock.currentTime, undefined, format.showSeconds);
+    input.value = formatTime(value, format);
   }
 
-  getInputValueOnOpenAndSet(): void {
+  syncInputFormat(previousOptions: Required<TimepickerOptions>): void {
+    const previous = getTimeFormat(previousOptions);
+    const next = getTimeFormat(this.core.options);
+    if (previous.clockType === next.clockType && previous.showSeconds === next.showSeconds) return;
+
     const input = this.core.getInput();
     if (!input) return;
 
-    const value = getInputValue(input, this.core.options.clock.type, this.core.options.clock.currentTime);
-    const hour = this.core.getHour();
-    const minutes = this.core.getMinutes();
-    const activeTypeMode = this.core.getActiveTypeMode();
-    const AM = this.core.getAM();
+    const values = input.value.split(RANGE_SEPARATOR).map((part) => parseTime(part, previous));
+    if (values.length > MAX_TIME_PARTS || !values.every(isTimeValue)) return;
 
-    if (value === undefined) {
-      if (hour) hour.value = '12';
-      if (minutes) minutes.value = '00';
-
-      const eventData = {
-        hour: hour?.value || '12',
-        minutes: minutes?.value || '00',
-        type: activeTypeMode?.dataset.type,
-        degreesHours: this.core.degreesHours,
-        degreesMinutes: this.core.degreesMinutes,
-      };
-
-      this.emitter.emit('open', eventData);
-
-      const isRangeMode = this.core.options.range?.enabled === true;
-      if (this.core.options.clock.type !== '24h' && AM && !isRangeMode) {
-        AM.classList.add(selectorActive);
-      }
-      return;
-    }
-
-    let [hourValue, minutesValue, typeValue] = input.value.split(':').join(' ').split(' ');
-    if (input.value.length === 0) {
-      hourValue = value.hour as string;
-      minutesValue = value.minutes as string;
-      typeValue = value.type as string;
-    }
-
-    if (this.core.options.clock.type !== '24h' && !typeValue) {
-      typeValue = value.type || 'AM';
-    }
-
-    if (hour) hour.value = hourValue.padStart(2, '0');
-    if (minutes) minutes.value = minutesValue.padStart(2, '0');
-
-    const modal = this.core.getModalElement();
-    const typeMode = modal?.querySelector(`[data-type='${typeValue}']`) as HTMLElement;
-    if (this.core.options.clock.type !== '24h' && typeMode) {
-      typeMode.classList.add(selectorActive);
-    }
-
-    const eventData = {
-      ...value,
-      type: activeTypeMode?.dataset.type,
-      degreesHours: this.core.degreesHours,
-      degreesMinutes: this.core.degreesMinutes,
-    };
-
-    this.emitter.emit('open', eventData);
+    input.value = values
+      .map((value) => formatTime(convertTime(value, previous.clockType, next), next))
+      .join(RANGE_SEPARATOR);
   }
 
-  getInputValue(
-    el: HTMLInputElement,
-    clockType: string,
-    currentTime: typeof this.core.options.clock.currentTime,
-  ): ReturnType<typeof getInputValue> {
-    return getInputValue(el, clockType, currentTime);
+  getInputValueOnOpenAndSet(emitOpen = true): void {
+    const input = this.core.getInput();
+    if (!input) return;
+
+    const { clock } = this.core.options;
+    const format = getTimeFormat(this.core.options);
+    const currentTime = input.value.trim() ? undefined : clock.currentTime;
+    const value = getInputValue(input, clock.type, currentTime, undefined, format.showSeconds);
+
+    TIME_FIELD_NAMES.forEach((field) => {
+      const fieldValue = value[field];
+      if (fieldValue !== undefined) setSpinbuttonValue(getTimeInput(this.core, field), fieldValue);
+    });
+
+    if (format.clockType === '12h') {
+      this.activatePeriod(value.type ?? 'AM');
+    }
+
+    if (!emitOpen) return;
+
+    this.emitter.emit('open', {
+      ...value,
+      type: this.core.getActiveType(),
+      ...clockDegrees(value),
+    });
+  }
+
+  private activatePeriod(type: string): void {
+    if (type !== 'AM' && type !== 'PM') return;
+    const modal = this.core.getModalElement();
+    const periodButton = (period: string): HTMLElement | null | undefined =>
+      modal?.querySelector<HTMLElement>(`[data-type='${period}']`);
+    setActivePeriod(periodButton('AM'), periodButton('PM'), type);
   }
 
   destroy(): void {}

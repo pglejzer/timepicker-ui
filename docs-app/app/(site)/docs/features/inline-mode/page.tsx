@@ -52,11 +52,13 @@ export default function InlineModePage() {
 
       <Section icon={Code} title="Basic Usage">
         <p className="text-muted-foreground mb-4">
-          Enable inline mode by setting{" "}
+          Set{" "}
           <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-sm">
-            enableSwitchIcon: false
-          </code>
-          :
+            ui.inline.enabled
+          </code>{" "}
+          to <code>true</code> and pass the element to render into, or its
+          selector, as <code>ui.inline.container</code>. The picker renders
+          there when you call <code>create()</code>.
         </p>
         <div className="space-y-6">
           <div>
@@ -64,13 +66,8 @@ export default function InlineModePage() {
               HTML Structure
             </h3>
             <CodeBlock
-              code={`<div class="timepicker-container">
-  <input 
-    type="time" 
-    id="timepicker" 
-    class="timepicker-input"
-  />
-</div>`}
+              code={`<input type="text" id="timepicker" />
+<div id="timepicker-container"></div>`}
               language="html"
             />
           </div>
@@ -78,11 +75,16 @@ export default function InlineModePage() {
           <div>
             <h3 className="font-semibold mb-3 text-foreground">JavaScript</h3>
             <CodeBlock
-              code={`import TimepickerUI from 'timepicker-ui';
+              code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  ui: { enableSwitchIcon: false }
+  ui: {
+    inline: {
+      enabled: true,
+      container: '#timepicker-container'
+    }
+  }
 });
 
 picker.create();`}
@@ -90,6 +92,27 @@ picker.create();`}
             />
           </div>
         </div>
+        <ul className="mt-6 list-disc pl-6 space-y-2 text-muted-foreground">
+          <li>
+            <code>container</code> is required. The constructor throws if it
+            is missing or the element is not found.
+          </li>
+          <li>
+            <code>showButtons</code> (default <code>false</code>) shows the OK
+            and Cancel buttons. OK writes the time to the input and fires{" "}
+            <code>confirm</code> / <code>onConfirm</code>. Cancel resets the
+            picker to the input&apos;s value and fires <code>cancel</code> /{" "}
+            <code>onCancel</code>. The picker stays on the page in both cases.
+          </li>
+          <li>
+            <code>autoUpdate</code> (default <code>false</code>) writes the
+            time to the input while the user changes it.
+          </li>
+          <li>
+            Focus is not trapped in inline mode unless you set{" "}
+            <code>behavior.focusTrap</code> yourself.
+          </li>
+        </ul>
       </Section>
 
       <Section icon={Settings} title="Configuration Options">
@@ -103,7 +126,10 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  ui: { enableSwitchIcon: false, theme: 'basic' },
+  ui: {
+    inline: { enabled: true, container: '#timepicker-container' },
+    theme: 'basic'
+  },
   clock: { type: '12h' }
 });
 
@@ -119,9 +145,8 @@ picker.create();`}
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
   ui: {
-    enableSwitchIcon: false,
-    theme: 'cyberpunk',
-    animation: true
+    inline: { enabled: true, container: '#timepicker-container' },
+    theme: 'cyberpunk'
   },
   clock: { type: '24h' }
 });
@@ -137,8 +162,11 @@ picker.create();`}
             </h3>
             <CodeBlock
               code={`const picker = new TimepickerUI(input, {
-  ui: { enableSwitchIcon: false },
+  ui: {
+    inline: { enabled: true, container: '#timepicker-container' }
+  },
   clock: {
+    type: '24h',
     disabledTime: {
       hours: [0, 1, 2, 3, 4, 5, 22, 23],
       minutes: [15, 30, 45]
@@ -158,25 +186,21 @@ picker.create();`}
           Styling Inline Mode
         </h2>
         <p className="text-muted-foreground mb-4">
-          Position and style the inline timepicker using CSS:
+          In inline mode the picker&apos;s root (<code>.tp-ui-modal</code>)
+          gets the <code>tp-ui--inline</code> class. Its card,{" "}
+          <code>.tp-ui-wrapper</code>, stays in the page flow, is centered, and
+          fills the container up to 328px. These inline rules use{" "}
+          <code>!important</code>, so your overrides need it too.
         </p>
         <div className="space-y-6">
           <div className="rounded-lg border border-border bg-card p-6">
             <h3 className="font-semibold mb-3 text-foreground">
-              Center Alignment
+              Card Border Instead of Shadow
             </h3>
             <CodeBlock
-              code={`.timepicker-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-}
-
-.timepicker-ui-wrapper {
-  position: relative !important;
-  transform: none !important;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              code={`.tp-ui--inline .tp-ui-wrapper {
+  box-shadow: none !important;
+  border: 1px solid #e0e0e0;
 }`}
               language="css"
             />
@@ -187,16 +211,8 @@ picker.create();`}
               Sidebar Integration
             </h3>
             <CodeBlock
-              code={`.sidebar .timepicker-ui-wrapper {
-  position: relative !important;
-  width: 100%;
-  max-width: 280px;
-  margin: 20px auto;
-}
-
-.sidebar .timepicker-ui-clock-face {
-  width: 260px;
-  height: 260px;
+              code={`.sidebar .tp-ui--inline .tp-ui-wrapper {
+  margin: 20px auto !important;
 }`}
               language="css"
             />
@@ -209,40 +225,43 @@ picker.create();`}
           React Example
         </h2>
         <p className="text-muted-foreground mb-4">
-          Using inline mode in React components:
+          Using inline mode in React components. <code>container</code> takes
+          the element from a ref, so the container needs no id:
         </p>
         <CodeBlock
           code={`import { useEffect, useRef } from 'react';
-import TimepickerUI from 'timepicker-ui';
+import { TimepickerUI } from 'timepicker-ui';
 
 function InlineTimepicker() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (inputRef.current) {
-      const picker = new TimepickerUI(inputRef.current, {
-        ui: {
-          enableSwitchIcon: false,
-          theme: 'm3-green'
-        },
-        clock: { type: '12h' }
-      });
-      
-      picker.create();
+    if (!inputRef.current || !containerRef.current) return;
 
-      return () => {
-        picker.destroy();
-      };
-    }
+    const picker = new TimepickerUI(inputRef.current, {
+      ui: {
+        inline: {
+          enabled: true,
+          container: containerRef.current,
+          autoUpdate: true
+        },
+        theme: 'm3-green'
+      },
+      clock: { type: '12h' }
+    });
+
+    picker.create();
+
+    return () => {
+      picker.destroy();
+    };
   }, []);
 
   return (
-    <div className="flex justify-center p-8">
-      <input 
-        ref={inputRef}
-        type="time" 
-        className="sr-only"
-      />
+    <div className="p-8">
+      <input ref={inputRef} type="text" aria-label="Selected time" readOnly />
+      <div ref={containerRef} />
     </div>
   );
 }`}

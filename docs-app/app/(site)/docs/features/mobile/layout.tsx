@@ -4,7 +4,7 @@ const faqQuestions = [
   {
     question: "How does timepicker-ui handle mobile devices?",
     answer:
-      "The clock face scales to the screen, controls use touch-friendly hit targets, and drag gestures let you set the time. On small screens the picker opens as a full-screen modal.",
+      "By default the picker opens as a 328px card centered in the viewport, 315px wide on portrait screens 330px wide or less. On landscape screens up to 480px tall the clock view switches to a 584 by 360px horizontal layout. Touch works on the clock face (tap a number or drag the hand) and on the wheel columns (drag).",
   },
   {
     question: "What touch gestures does the mobile picker support?",
@@ -14,7 +14,7 @@ const faqQuestions = [
   {
     question: "How do I enable the mobile view?",
     answer:
-      "Set ui.mobile to true to force the touch-optimized view, or leave it off to let the picker adapt to the screen size automatically.",
+      "Set ui.initialView to 'keyboard'. The picker then opens in the keyboard input view, with hour and minute fields you type into instead of the clock face. Add ui.viewSwitch: true to show a button that switches between this view and the clock face. The view is not chosen by screen size: without ui.initialView, phones get the same clock or wheel view as desktops.",
   },
 ];
 

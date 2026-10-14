@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "Disabled Time Example",
   description:
-    "Disabled time example - block specific hours, minutes or intervals in timepicker-ui. Zero-dependency, framework-agnostic and SSR-safe, with copy-paste code.",
+    "Disabled time example - block specific hours, minutes or time ranges in timepicker-ui. Zero-dependency, framework-agnostic and SSR-safe, with copy-paste code.",
   path: "/examples/features/disabled-time",
 });
 

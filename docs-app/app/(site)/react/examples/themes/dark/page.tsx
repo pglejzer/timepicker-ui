@@ -41,6 +41,8 @@ export default function DarkThemePage() {
             </div>
             <CodeBlock
               code={`import { Timepicker } from "timepicker-ui-react";
+import "timepicker-ui/main.css";
+import "timepicker-ui/theme-dark.css";
 
 function App() {
   return (

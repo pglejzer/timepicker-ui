@@ -11,13 +11,16 @@ Applies when editing templates / managers / a11y utils. Standard: **WCAG 2.2 AA 
 Pairs with `.claude/rules/architecture.md`.
 
 - **Keyboard:** every actionable control works without a mouse and with **Enter and Space**
-  (`role="button"` divs use `bindActivate` from `utils/accessibility`). Spinbutton inputs handle
-  Arrow + Home/End + PageUp/PageDown. The modal traps focus and restores it on close; Escape
-  closes only when open. Follow the APG dialog / listbox / combobox / spinbutton / tablist patterns.
+  (`role="button"` divs use `bindActivate` from `utils/accessibility`). Spinbutton inputs and the clock
+  dial (`.tp-ui-clock-face`, APG slider) handle Arrow + Home/End + PageUp/PageDown. The modal traps focus and restores it on close; Escape
+  closes only when open. Follow the APG dialog / listbox / combobox / spinbutton / slider / tablist
+  patterns.
 - **ARIA:** modal is `role="dialog"` + `aria-modal` with an accessible name. Every control has an
   accessible name (icon-only buttons too). Keep state in sync: `aria-pressed` only on real toggles
-  (AM/PM, view switch - NOT OK/Cancel/Clear), `aria-selected`, `aria-disabled`,
-  `aria-valuenow/min/max/text` on spinbuttons, `aria-activedescendant` for the timezone listbox.
+  (AM/PM - NOT OK/Cancel/Clear, NOT the view switch: it is one native button whose label names the action, APG button pattern), `aria-selected`, `aria-disabled`,
+  `aria-valuenow/min/max/text` on spinbuttons and the dial (`syncClockSlider` mirrors the active
+  field; arrow steps on the focused slider are not also announced through the live region; the Enter/Space
+  face switch is, through `announceField`), `aria-activedescendant` for the timezone listbox.
 - **Screen reader:** announce meaningful transitions via `announceToScreenReader` (the
   `.timepicker-announcer` live region); validation errors use `role="alert"`.
 - **Text is localizable:** all visible/AT strings come from the `labels` group (with English

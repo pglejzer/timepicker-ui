@@ -60,17 +60,17 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Ban} title="Time Range Interval">
+      <Section icon={Ban} title="Time Range">
         <p className="text-muted-foreground mb-4">
-          Disable a time range (hours and minutes keys are ignored when interval
-          is set):
+          Disable a time range with <code>disabledTime.ranges</code> (the
+          hours, minutes and seconds lists are ignored when ranges is set):
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   clock: {
     type: '12h',
     disabledTime: {
-      interval: '10:00 AM - 2:00 PM'
+      ranges: '10:00 AM - 2:00 PM'
     }
   }
 });
@@ -79,7 +79,7 @@ picker.create();`}
             clock: {
               type: "12h",
               disabledTime: {
-                interval: "10:00 AM - 2:00 PM",
+                ranges: "10:00 AM - 2:00 PM",
               },
             },
           }}
@@ -95,7 +95,7 @@ picker.create();`}
   clock: {
     type: '12h',
     disabledTime: {
-      interval: [
+      ranges: [
         '9:00 AM - 11:00 AM',
         '1:00 PM - 3:00 PM',
         '5:00 PM - 7:00 PM'
@@ -108,7 +108,7 @@ picker.create();`}
             clock: {
               type: "12h",
               disabledTime: {
-                interval: [
+                ranges: [
                   "9:00 AM - 11:00 AM",
                   "1:00 PM - 3:00 PM",
                   "5:00 PM - 7:00 PM",
@@ -128,7 +128,7 @@ picker.create();`}
   clock: {
     type: '24h',
     disabledTime: {
-      interval: '00:00 - 08:00'
+      ranges: '00:00 - 08:00'
     }
   }
 });
@@ -137,7 +137,7 @@ picker.create();`}
             clock: {
               type: "24h",
               disabledTime: {
-                interval: "00:00 - 08:00",
+                ranges: "00:00 - 08:00",
               },
             },
           }}
@@ -146,7 +146,7 @@ picker.create();`}
 
       <Section icon={Ban} title="Dynamic DisabledTime Update">
         <p className="text-muted-foreground mb-4">
-          Update disabled times dynamically using the update() method:
+          Update disabled times at runtime with the setOptions() method:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
@@ -158,13 +158,10 @@ picker.create();`}
 picker.create();
 
 // Later, update disabled times
-picker.update({
-  options: {
-    clock: {
-      disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] }
-    }
-  },
-  create: true
+picker.setOptions({
+  clock: {
+    disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] }
+  }
 });`}
           options={{
             clock: {
@@ -177,56 +174,47 @@ picker.update({
         />
       </Section>
 
-      <Section icon={Ban} title="Dynamic Interval Update">
+      <Section icon={Ban} title="Dynamic Range Update">
         <p className="text-muted-foreground mb-4">
-          Update disabled intervals dynamically for shift scheduling or business
+          Update disabled ranges at runtime for shift scheduling or business
           rules:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   clock: {
     type: '24h',
-    disabledTime: { interval: '09:00 - 12:00' }
+    disabledTime: { ranges: '09:00 - 12:00' }
   }
 });
 picker.create();
 
-// Update to different interval
-picker.update({
-  options: {
-    clock: {
-      disabledTime: { interval: '14:00 - 18:00' }
-    }
-  },
-  create: true
+// Update to a different range
+picker.setOptions({
+  clock: {
+    disabledTime: { ranges: '14:00 - 18:00' }
+  }
 });
 
-// Update to multiple intervals
-picker.update({
-  options: {
-    clock: {
-      disabledTime: {
-        interval: ['00:00 - 08:00', '12:00 - 13:00', '18:00 - 23:59']
-      }
+// Update to multiple ranges
+picker.setOptions({
+  clock: {
+    disabledTime: {
+      ranges: ['00:00 - 08:00', '12:00 - 13:00', '18:00 - 23:59']
     }
-  },
-  create: true
+  }
 });
 
-// Switch from interval to hours
-picker.update({
-  options: {
-    clock: {
-      disabledTime: { hours: [20, 21, 22, 23] }
-    }
-  },
-  create: true
+// Switch from ranges to hours
+picker.setOptions({
+  clock: {
+    disabledTime: { hours: [20, 21, 22, 23] }
+  }
 });`}
           options={{
             clock: {
               type: "24h",
               disabledTime: {
-                interval: "09:00 - 12:00",
+                ranges: "09:00 - 12:00",
               },
             },
           }}

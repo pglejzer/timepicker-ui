@@ -68,16 +68,6 @@ describe('MobileViewHandler', () => {
     const tipsWrapper24h = document.createElement('div');
     tipsWrapper24h.className = 'tp-ui-tips-wrapper-24h';
 
-    const tip1 = document.createElement('div');
-    tip1.className = 'tp-ui-tip';
-    tip1.setAttribute('tabindex', '0');
-
-    const tip2 = document.createElement('div');
-    tip2.className = 'tp-ui-tip';
-    tip2.setAttribute('tabindex', '0');
-
-    tipsWrapper.appendChild(tip1);
-    tipsWrapper.appendChild(tip2);
     clockFace.appendChild(tipsWrapper);
     clockFace.appendChild(tipsWrapper24h);
 
@@ -95,10 +85,10 @@ describe('MobileViewHandler', () => {
     wrapperTypeTime.className = 'tp-ui-wrapper-type-time';
 
     const amButton = document.createElement('button');
-    amButton.className = 'tp-ui-am tp-ui-ripple';
+    amButton.className = 'tp-ui-am';
 
     const pmButton = document.createElement('button');
-    pmButton.className = 'tp-ui-pm tp-ui-ripple';
+    pmButton.className = 'tp-ui-pm';
 
     const inputWrapper1 = document.createElement('div');
     inputWrapper1.className = 'tp-ui-input-wrapper';
@@ -169,7 +159,7 @@ describe('MobileViewHandler', () => {
       expect(coreState.isMobileView).toBe(true);
     });
 
-    it('should enable editable when mobile is true', () => {
+    it('should leave the options untouched when mobile is true (ui.editable is not forced on)', () => {
       const mobileOptions = mergeOptions({
         ui: {
           mobile: true,
@@ -177,9 +167,15 @@ describe('MobileViewHandler', () => {
       });
       coreState = new CoreState(mockElement, mobileOptions, 'test-mobile');
       handler = new MobileViewHandler(coreState, emitter);
+      const optionsBefore = coreState.options;
+      const updateSpy = jest.spyOn(coreState, 'updateOptions');
 
       handler.checkMobileOption();
-      expect(coreState.options.ui.editable).toBe(true);
+
+      expect(coreState.isMobileView).toBe(true);
+      expect(updateSpy).not.toHaveBeenCalled();
+      expect(coreState.options).toBe(optionsBefore);
+      expect(coreState.options.ui.editable).toBe(false);
     });
   });
 
@@ -262,6 +258,21 @@ describe('MobileViewHandler', () => {
       handler.toggleMobileClockFace();
 
       expect(selectMinuteSpy).toHaveBeenCalledWith({ minutes: '00' });
+    });
+
+    it('should not add the legacy tp-ui-ripple class to AM/PM when expanding the clock', () => {
+      const modal = createMockModal();
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(coreState, 'getHour').mockReturnValue(modal.querySelector('.tp-ui-hour'));
+      jest.spyOn(coreState, 'getMinutes').mockReturnValue(modal.querySelector('.tp-ui-minutes'));
+      jest.spyOn(coreState, 'getClockFace').mockReturnValue(modal.querySelector('.tp-ui-clock-face'));
+      jest
+        .spyOn(coreState, 'getKeyboardClockIcon')
+        .mockReturnValue(modal.querySelector('.tp-ui-keyboard-icon'));
+
+      handler.toggleMobileClockFace();
+
+      expect(modal.querySelector('.tp-ui-ripple')).toBeNull();
     });
 
     it('should collapse clock face when expanded', () => {
@@ -366,57 +377,42 @@ describe('MobileViewHandler', () => {
       expect(() => handler.updateClockFaceAccessibility(true)).not.toThrow();
     });
 
-    it('should set aria-hidden to true when hidden', () => {
+    const createDial = (): { clockFace: HTMLDivElement; tipsWrappers: HTMLDivElement[] } => {
       const clockFace = document.createElement('div');
-      const tipsWrapper = document.createElement('div');
-      tipsWrapper.className = 'tp-ui-tips-wrapper';
-      const tipsWrapper24h = document.createElement('div');
-      tipsWrapper24h.className = 'tp-ui-tips-wrapper-24h';
-      const tip1 = document.createElement('div');
-      tip1.className = 'tp-ui-tip';
-      const tip2 = document.createElement('div');
-      tip2.className = 'tp-ui-tip';
+      clockFace.className = 'tp-ui-clock-face';
+      clockFace.setAttribute('role', 'slider');
+      clockFace.tabIndex = 0;
 
-      tipsWrapper.appendChild(tip1);
-      clockFace.appendChild(tipsWrapper);
-      clockFace.appendChild(tipsWrapper24h);
-      clockFace.appendChild(tip2);
+      const tipsWrappers = ['tp-ui-tips-wrapper', 'tp-ui-tips-wrapper-24h'].map((className) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = className;
+        clockFace.appendChild(wrapper);
+        return wrapper;
+      });
 
-      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace as HTMLDivElement);
+      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
+      return { clockFace, tipsWrappers };
+    };
+
+    it('should hide the dial from assistive technology and take it out of the tab order when hidden', () => {
+      const { clockFace, tipsWrappers } = createDial();
 
       handler.updateClockFaceAccessibility(true);
 
       expect(clockFace.getAttribute('aria-hidden')).toBe('true');
-      expect(tipsWrapper.getAttribute('aria-hidden')).toBe('true');
-      expect(tipsWrapper24h.getAttribute('aria-hidden')).toBe('true');
-      expect(tip1.getAttribute('tabindex')).toBe('-1');
-      expect(tip1.getAttribute('aria-hidden')).toBe('true');
-      expect(tip2.getAttribute('tabindex')).toBe('-1');
-      expect(tip2.getAttribute('aria-hidden')).toBe('true');
+      expect(clockFace.tabIndex).toBe(-1);
+      tipsWrappers.forEach((wrapper) => expect(wrapper).not.toHaveAttribute('aria-hidden'));
     });
 
-    it('should remove aria-hidden when not hidden', () => {
-      const clockFace = document.createElement('div');
-      clockFace.setAttribute('aria-hidden', 'true');
-      const tipsWrapper = document.createElement('div');
-      tipsWrapper.className = 'tp-ui-tips-wrapper';
-      tipsWrapper.setAttribute('aria-hidden', 'true');
-      const tip1 = document.createElement('div');
-      tip1.className = 'tp-ui-tip';
-      tip1.setAttribute('tabindex', '-1');
-      tip1.setAttribute('aria-hidden', 'true');
-
-      tipsWrapper.appendChild(tip1);
-      clockFace.appendChild(tipsWrapper);
-
-      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace as HTMLDivElement);
+    it('should expose the dial and put it back in the tab order when shown, leaving the tips wrappers alone', () => {
+      const { clockFace, tipsWrappers } = createDial();
+      handler.updateClockFaceAccessibility(true);
 
       handler.updateClockFaceAccessibility(false);
 
       expect(clockFace.hasAttribute('aria-hidden')).toBe(false);
-      expect(tipsWrapper.hasAttribute('aria-hidden')).toBe(false);
-      expect(tip1.getAttribute('tabindex')).toBe('0');
-      expect(tip1.hasAttribute('aria-hidden')).toBe(false);
+      expect(clockFace.tabIndex).toBe(0);
+      tipsWrappers.forEach((wrapper) => expect(wrapper).not.toHaveAttribute('aria-hidden'));
     });
   });
 

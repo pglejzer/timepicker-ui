@@ -2,13 +2,13 @@ import { TimepickerUI } from './setup';
 
 const blueprintLightPicker = new TimepickerUI('#blueprint-light', {
   clock: { type: '12h', autoSwitchToMinutes: true },
-  ui: { theme: 'blueprint', enableSwitchIcon: true },
+  ui: { theme: 'blueprint', viewSwitch: true },
 });
 blueprintLightPicker.create();
 
 const blueprintDark24hPicker = new TimepickerUI('#blueprint-dark-24h', {
   clock: { type: '24h' },
-  ui: { theme: 'blueprint-dark', enableSwitchIcon: true },
+  ui: { theme: 'blueprint-dark', viewSwitch: true },
 });
 blueprintDark24hPicker.create();
 
@@ -17,23 +17,22 @@ const blueprintDisabledPicker = new TimepickerUI('#blueprint-disabled', {
     type: '24h',
     disabledTime: {
       hours: [0, 1, 2, 3, 4, 5, 6],
-      interval: '12:00 - 13:00',
+      ranges: '12:00 - 13:00',
     },
   },
-  ui: { theme: 'blueprint', enableSwitchIcon: true },
+  ui: { theme: 'blueprint', viewSwitch: true },
 });
 blueprintDisabledPicker.create();
 
 const blueprintRangePicker = new TimepickerUI('#blueprint-range', {
   clock: { type: '24h' },
-  ui: { theme: 'blueprint-dark', enableSwitchIcon: true },
+  ui: { theme: 'blueprint-dark', viewSwitch: true },
   range: {
     enabled: true,
     minDuration: 60,
     maxDuration: 720,
-    fromLabel: 'Start',
-    toLabel: 'End',
   },
+  labels: { rangeFrom: 'Start', rangeTo: 'End' },
   callbacks: {
     onRangeConfirm: (data) => {
       const display = document.getElementById('blueprint-range-display');
@@ -47,7 +46,7 @@ blueprintRangePicker.create();
 
 const blueprintTimezonePicker = new TimepickerUI('#blueprint-timezone', {
   clock: { type: '12h' },
-  ui: { theme: 'blueprint', enableSwitchIcon: true },
+  ui: { theme: 'blueprint', viewSwitch: true },
   timezone: { enabled: true, default: 'Europe/Warsaw' },
 });
 blueprintTimezonePicker.create();
@@ -67,15 +66,15 @@ const blueprintEverythingPicker = new TimepickerUI('#blueprint-everything', {
   clock: {
     type: '24h',
     incrementMinutes: 5,
-    disabledTime: { interval: '22:00 - 06:00' },
+    disabledTime: { ranges: '22:00 - 06:00' },
   },
   ui: {
     theme: 'blueprint',
-    enableSwitchIcon: true,
+    viewSwitch: true,
     editable: true,
     clearButton: true,
   },
-  behavior: { focusTrap: true, focusInputAfterClose: true },
+  behavior: { focusTrap: true, returnFocus: true },
   labels: { clear: 'Clear' },
   callbacks: {
     onConfirm: (data) => {

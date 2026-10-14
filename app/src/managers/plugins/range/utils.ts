@@ -1,33 +1,38 @@
-import type { RangeValue, FormattedRange } from './types';
-import { parseTime12, parseTime24, timeToMinutes as sharedTimeToMinutes } from '../../../utils/time/parse';
+import type { RangeValue } from './types';
+import { parseTime, pad, timeToSeconds, SECONDS_PER_MINUTE, type ClockType } from '../../../utils/time/parse';
 
-export function parseTimeString(str: string): RangeValue | null {
-  if (!str || str === '--:--') return null;
-  const r12 = parseTime12(str);
-  if (r12) return { hour: r12.hour, minutes: r12.minutes, type: r12.type };
-  const lax12 = str.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
-  if (lax12) return { hour: lax12[1], minutes: lax12[2], type: lax12[3].toUpperCase() };
-  const r24 = parseTime24(str);
-  if (r24) return { hour: r24.hour, minutes: r24.minutes };
-  const lax24 = str.match(/^(\d{1,2}):(\d{2})$/);
-  if (lax24) return { hour: lax24[1], minutes: lax24[2] };
-  return null;
+export const PART_PLACEHOLDER = '--';
+
+export const isPlaceholder = (part: string): boolean => part.startsWith(PART_PLACEHOLDER);
+
+export function getTimePlaceholder(showSeconds = false): string {
+  return showSeconds ? '--:--:--' : '--:--';
 }
 
-export function formatDisplayTime(value: RangeValue): string {
-  const mins = value.minutes === '--' ? '--' : value.minutes.padStart(2, '0');
-  const time = `${value.hour}:${mins}`;
-  return value.type ? `${time} ${value.type}` : time;
+export function parseTimeString(str: string, showSeconds = false): RangeValue | null {
+  if (!str || isPlaceholder(str)) return null;
+  const parseAs = (clockType: ClockType): RangeValue | null => parseTime(str, { clockType, showSeconds });
+  return parseAs('12h') ?? parseAs('24h');
 }
 
-export function formatOutputTime(value: RangeValue): string {
-  const time = `${value.hour.padStart(2, '0')}:${value.minutes.padStart(2, '0')}`;
-  return value.type ? `${time} ${value.type}` : time;
+export function formatDisplayTime(value: RangeValue, showSeconds = false): string {
+  const time = `${value.hour}:${pad(value.minutes)}`;
+  const withSeconds = showSeconds ? `${time}:${pad(value.seconds ?? '0')}` : time;
+  return value.type ? `${withSeconds} ${value.type}` : withSeconds;
 }
 
-export function timeToMinutes(value: RangeValue | null, clockType: '12h' | '24h'): number {
-  if (!value) return 0;
-  return sharedTimeToMinutes(value, clockType);
+export function formatRangePart(value: RangeValue | null, showSeconds = false): string {
+  return value ? formatDisplayTime(value, showSeconds) : getTimePlaceholder(showSeconds);
+}
+
+export function calculateDurationSeconds(
+  fromValue: RangeValue | null,
+  toValue: RangeValue | null,
+  clockType: '12h' | '24h',
+): number {
+  if (!fromValue || !toValue) return 0;
+
+  return timeToSeconds(toValue, clockType) - timeToSeconds(fromValue, clockType);
 }
 
 export function calculateDuration(
@@ -35,12 +40,7 @@ export function calculateDuration(
   toValue: RangeValue | null,
   clockType: '12h' | '24h',
 ): number {
-  if (!fromValue || !toValue) return 0;
-
-  const fromMinutes = timeToMinutes(fromValue, clockType);
-  const toMinutes = timeToMinutes(toValue, clockType);
-
-  return toMinutes - fromMinutes;
+  return Math.floor(calculateDurationSeconds(fromValue, toValue, clockType) / SECONDS_PER_MINUTE);
 }
 
 export function isValueComplete(value: RangeValue | null, clockType: '12h' | '24h'): boolean {
@@ -53,27 +53,21 @@ export function isValueComplete(value: RangeValue | null, clockType: '12h' | '24
   return !!(value.hour && value.minutes);
 }
 
-export function formatRange(fromValue: RangeValue | null, toValue: RangeValue | null): FormattedRange | null {
-  if (!fromValue || !toValue) return null;
-
-  return {
-    from: formatOutputTime(fromValue),
-    to: formatOutputTime(toValue),
-  };
-}
-
-export function parseRangeInput(inputValue: string): { from: RangeValue | null; to: RangeValue | null } {
+export function parseRangeInput(
+  inputValue: string,
+  showSeconds = false,
+): { from: RangeValue | null; to: RangeValue | null } {
   if (!inputValue || !inputValue.includes(' - ')) {
     return { from: null, to: null };
   }
 
   const parts = inputValue.split(' - ').map((p) => p.trim());
-  if (parts.length !== 2 || parts[0] === '--:--' || parts[1] === '--:--') {
+  if (parts.length !== 2 || parts.some(isPlaceholder)) {
     return { from: null, to: null };
   }
 
   return {
-    from: parseTimeString(parts[0]),
-    to: parseTimeString(parts[1]),
+    from: parseTimeString(parts[0], showSeconds),
+    to: parseTimeString(parts[1], showSeconds),
   };
 }

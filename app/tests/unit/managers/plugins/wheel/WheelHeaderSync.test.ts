@@ -136,6 +136,7 @@ describe('Wheel header sync on disabled skip', () => {
     });
 
     core = new CoreState(element, options, INSTANCE_ID);
+    core.setIsOpen(true);
     core.setDisabledTime({
       value: {
         minutes: DISABLED_MINUTES,
@@ -274,6 +275,7 @@ describe('Wheel commitOnScroll after disabled skip', () => {
     });
 
     core = new CoreState(element, options, INSTANCE_ID);
+    core.setIsOpen(true);
     core.setDisabledTime({
       value: {
         minutes: DISABLED_MINUTES,

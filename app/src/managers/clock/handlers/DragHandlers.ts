@@ -4,10 +4,12 @@ import { isDocument, isNode } from '../../../utils/node';
 
 export interface DragHandlersConfig {
   autoSwitchToMinutes?: boolean;
+  autoSwitchToSeconds?: boolean;
   isMobileView?: boolean;
   smoothHourSnap?: boolean;
   hourElement?: HTMLInputElement | null;
   minutesElement?: HTMLInputElement | null;
+  secondsElement?: HTMLInputElement | null;
   onMinuteCommit?: () => void;
 }
 
@@ -21,6 +23,7 @@ export class DragHandlers {
   private cachedCenter: Point | null = null;
   private cachedRadius: number | null = null;
   private rafId: number | null = null;
+  private hadValidSelection: boolean = false;
 
   constructor(controller: ClockController, clockFace: HTMLElement, config: DragHandlersConfig = {}) {
     this.controller = controller;
@@ -37,6 +40,8 @@ export class DragHandlers {
     this.clockFace.removeEventListener('mousedown', this.handlePointerDown);
     this.clockFace.removeEventListener('touchstart', this.handlePointerDown);
     this.removeGlobalListeners();
+    this.cancelPendingFrame();
+    this.isActive = false;
   }
 
   block(): void {
@@ -52,14 +57,13 @@ export class DragHandlers {
       return;
     }
 
-    const target = event.target as Element;
-
-    if (target && target.classList && target.classList.contains('tp-ui-tips-disabled')) {
+    if (this.isDisabledTarget(event.target as Element | null)) {
       return;
     }
 
     event.preventDefault();
     this.isActive = true;
+    this.hadValidSelection = false;
 
     this.cachedRect = this.clockFace.getBoundingClientRect();
     this.cachedCenter = this.getClockCenter();
@@ -76,8 +80,7 @@ export class DragHandlers {
   private handlePointerMove = (event: MouseEvent | TouchEvent): void => {
     if (!this.isActive || this.isBlocked) return;
 
-    const target = this.getTargetElement(event);
-    if (target && target.classList && target.classList.contains('tp-ui-tips-disabled')) {
+    if (this.isDisabledTarget(this.getTargetElement(event))) {
       return;
     }
 
@@ -96,18 +99,22 @@ export class DragHandlers {
   private handlePointerUp = (): void => {
     if (!this.isActive) return;
 
-    if (this.rafId !== null) {
-      cancelAnimationFrame(this.rafId);
-      this.rafId = null;
-    }
-
+    this.cancelPendingFrame();
     this.isActive = false;
     this.cachedRect = null;
     this.cachedCenter = null;
     this.cachedRadius = null;
     this.controller.handlePointerUp();
 
-    const { autoSwitchToMinutes, isMobileView, smoothHourSnap, hourElement, minutesElement } = this.config;
+    const {
+      autoSwitchToMinutes,
+      autoSwitchToSeconds,
+      isMobileView,
+      smoothHourSnap,
+      hourElement,
+      minutesElement,
+      secondsElement,
+    } = this.config;
 
     if (smoothHourSnap && hourElement?.classList.contains('active')) {
       this.controller.snapToNearestHour();
@@ -115,23 +122,44 @@ export class DragHandlers {
 
     this.removeGlobalListeners();
 
+    if (!this.hadValidSelection) {
+      return;
+    }
+
     if (autoSwitchToMinutes && hourElement?.classList.contains('active') && !isMobileView) {
-      hourElement.classList.remove('active');
-      minutesElement?.classList.add('active');
-      minutesElement?.click();
-      minutesElement?.focus();
-      hourElement.blur();
-    } else if (minutesElement?.classList.contains('active') && this.config.onMinuteCommit) {
+      this.activate(hourElement, minutesElement);
+    } else if (minutesElement?.classList.contains('active') && secondsElement) {
+      if (autoSwitchToSeconds !== false && !isMobileView) {
+        this.activate(minutesElement, secondsElement);
+      }
+    } else if (this.isLastUnitActive() && this.config.onMinuteCommit) {
       this.config.onMinuteCommit();
     }
   };
+
+  private activate(from: HTMLElement, to: HTMLElement | null | undefined): void {
+    to?.click();
+    to?.focus();
+    from.blur();
+  }
+
+  private isLastUnitActive(): boolean {
+    const { minutesElement, secondsElement } = this.config;
+    return !!(secondsElement ?? minutesElement)?.classList.contains('active');
+  }
 
   private processPointerEvent(event: MouseEvent | TouchEvent): void {
     const point = this.getPointerPosition(event);
     const center = this.cachedCenter || this.getClockCenter();
     const radius = this.cachedRadius || this.getClockRadius();
 
-    this.controller.handlePointerMove(point, center, radius);
+    if (this.controller.handlePointerMove(point, center, radius) !== false) {
+      this.hadValidSelection = true;
+    }
+  }
+
+  private isDisabledTarget(target: Element | null): boolean {
+    return !!target?.closest?.('.tp-ui-tips-disabled');
   }
 
   private getPointerPosition(event: MouseEvent | TouchEvent): Point {
@@ -173,6 +201,12 @@ export class DragHandlers {
 
   private getClockRadius(): number {
     return this.clockFace.offsetWidth / 2;
+  }
+
+  private cancelPendingFrame(): void {
+    if (this.rafId === null) return;
+    cancelAnimationFrame(this.rafId);
+    this.rafId = null;
   }
 
   private removeGlobalListeners(): void {

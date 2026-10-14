@@ -38,6 +38,10 @@ export default class EventManager {
     this.modalHandlers.handleBackdropClick();
   }
 
+  handlePointerModality(): void {
+    this.modalHandlers.handlePointerModality();
+  }
+
   handleEscClick(): void {
     this.keyboardHandlers.handleEscClick();
   }
@@ -58,6 +62,10 @@ export default class EventManager {
     this.inputHandlers.handleMinutesEvents();
   }
 
+  handleSecondsEvents(): void {
+    this.inputHandlers.handleSecondsEvents();
+  }
+
   handleKeyboardInput(): void {
     this.keyboardHandlers.handleKeyboardInput();
   }
@@ -66,12 +74,15 @@ export default class EventManager {
     this.keyboardHandlers.focusTrapHandler();
   }
 
-  handleMoveHand(): void {
-    this.modalHandlers.handleMoveHand();
-  }
-
   handleSwitchViewButton(): void {
     this.buttonHandlers.handleSwitchViewButton();
+  }
+
+  detach(): void {
+    this.buttonHandlers.detach();
+    this.inputHandlers.detach();
+    this.keyboardHandlers.detach();
+    this.modalHandlers.detach();
   }
 
   destroy(): void {

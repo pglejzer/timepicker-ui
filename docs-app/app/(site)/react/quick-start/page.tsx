@@ -7,7 +7,7 @@ import { CodeBlock } from "@/components/code-block";
 export const metadata = buildMetadata({
   title: "React Quick Start",
   description:
-    "React time picker quick start - render your first timepicker-ui-react component in minutes. Zero-dependency, SSR-safe and fully typed, with copy-paste JSX.",
+    "React time picker quick start - render your first timepicker-ui-react component in minutes. SSR-safe and fully typed, with copy-paste JSX.",
   path: "/react/quick-start",
 });
 

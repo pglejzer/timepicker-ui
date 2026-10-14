@@ -138,7 +138,7 @@ describe('HourEngine', () => {
 
   describe('isDisabled', () => {
     it('should return false when no disabled config', () => {
-      const result = HourEngine.isDisabled('03', 'AM', null);
+      const result = HourEngine.isDisabled('03', 'AM', null, '12h');
       expect(result).toBe(false);
     });
 
@@ -147,7 +147,7 @@ describe('HourEngine', () => {
         hours: ['03', '04', '05'],
       };
 
-      const result = HourEngine.isDisabled('03', 'AM', disabledTime);
+      const result = HourEngine.isDisabled('03', 'AM', disabledTime, '12h');
       expect(result).toBe(true);
     });
 
@@ -156,7 +156,7 @@ describe('HourEngine', () => {
         hours: ['03', '04', '05'],
       };
 
-      const result = HourEngine.isDisabled('10', 'AM', disabledTime);
+      const result = HourEngine.isDisabled('10', 'AM', disabledTime, '12h');
       expect(result).toBe(false);
     });
 
@@ -165,7 +165,7 @@ describe('HourEngine', () => {
         hours: ['3'],
       };
 
-      const result = HourEngine.isDisabled('03', 'AM', disabledTime);
+      const result = HourEngine.isDisabled('03', 'AM', disabledTime, '12h');
       expect(result).toBe(true);
     });
 
@@ -177,7 +177,7 @@ describe('HourEngine', () => {
           clockType: '12h' as const,
         };
 
-        const result = HourEngine.isDisabled('10', 'AM', disabledTime);
+        const result = HourEngine.isDisabled('10', 'AM', disabledTime, '12h');
         expect(result).toBe(true);
       });
 
@@ -188,7 +188,7 @@ describe('HourEngine', () => {
           clockType: '12h' as const,
         };
 
-        const result = HourEngine.isDisabled('10', 'AM', disabledTime);
+        const result = HourEngine.isDisabled('10', 'AM', disabledTime, '12h');
         expect(result).toBe(false);
       });
 
@@ -199,7 +199,7 @@ describe('HourEngine', () => {
           clockType: '24h' as const,
         };
 
-        const result = HourEngine.isDisabled('14', '', disabledTime);
+        const result = HourEngine.isDisabled('14', '', disabledTime, '24h');
         expect(result).toBe(true);
       });
 
@@ -210,8 +210,28 @@ describe('HourEngine', () => {
           clockType: '12h' as const,
         };
 
-        const result = HourEngine.isDisabled('10', 'AM', disabledTime);
+        const result = HourEngine.isDisabled('10', 'AM', disabledTime, '12h');
         expect(result).toBe(false);
+      });
+
+      it('should read intervals with the given clock type when the config has none', () => {
+        const disabledTime = {
+          isInterval: true,
+          intervals: ['02:00 PM - 02:59 PM'],
+        };
+
+        expect(HourEngine.isDisabled('02', 'PM', disabledTime, '12h')).toBe(true);
+        expect(HourEngine.isDisabled('02', 'AM', disabledTime, '12h')).toBe(false);
+      });
+
+      it('should read 24h intervals with the given clock type when the config has none', () => {
+        const disabledTime = {
+          isInterval: true,
+          intervals: ['14:00 - 14:59'],
+        };
+
+        expect(HourEngine.isDisabled('14', '', disabledTime, '24h')).toBe(true);
+        expect(HourEngine.isDisabled('15', '', disabledTime, '24h')).toBe(false);
       });
     });
 
@@ -222,7 +242,7 @@ describe('HourEngine', () => {
           rangeFromHour: 3,
         };
 
-        const result = HourEngine.isDisabled('10', 'AM', disabledTime);
+        const result = HourEngine.isDisabled('10', 'AM', disabledTime, '12h');
         expect(result).toBe(true);
       });
 
@@ -232,7 +252,7 @@ describe('HourEngine', () => {
           rangeFromHour: 10,
         };
 
-        const result = HourEngine.isDisabled('03', 'PM', disabledTime);
+        const result = HourEngine.isDisabled('03', 'PM', disabledTime, '12h');
         expect(result).toBe(false);
       });
 
@@ -242,7 +262,7 @@ describe('HourEngine', () => {
           rangeFromHour: 12,
         };
 
-        const result = HourEngine.isDisabled('10', 'AM', disabledTime);
+        const result = HourEngine.isDisabled('10', 'AM', disabledTime, '12h');
         expect(result).toBe(false);
       });
 
@@ -252,7 +272,7 @@ describe('HourEngine', () => {
           rangeFromHour: 10,
         };
 
-        const result = HourEngine.isDisabled('12', 'AM', disabledTime);
+        const result = HourEngine.isDisabled('12', 'AM', disabledTime, '12h');
         expect(result).toBe(true);
       });
 
@@ -262,7 +282,7 @@ describe('HourEngine', () => {
           rangeFromHour: 10,
         };
 
-        const result = HourEngine.isDisabled('08', 'AM', disabledTime);
+        const result = HourEngine.isDisabled('08', 'AM', disabledTime, '12h');
         expect(result).toBe(true);
       });
 
@@ -272,7 +292,7 @@ describe('HourEngine', () => {
           rangeFromHour: 8,
         };
 
-        const result = HourEngine.isDisabled('10', 'AM', disabledTime);
+        const result = HourEngine.isDisabled('10', 'AM', disabledTime, '12h');
         expect(result).toBe(false);
       });
 
@@ -282,7 +302,7 @@ describe('HourEngine', () => {
           rangeFromHour: 12,
         };
 
-        const result = HourEngine.isDisabled('03', 'PM', disabledTime);
+        const result = HourEngine.isDisabled('03', 'PM', disabledTime, '12h');
         expect(result).toBe(false);
       });
 
@@ -292,7 +312,7 @@ describe('HourEngine', () => {
           rangeFromHour: 3,
         };
 
-        const result = HourEngine.isDisabled('12', 'PM', disabledTime);
+        const result = HourEngine.isDisabled('12', 'PM', disabledTime, '12h');
         expect(result).toBe(true);
       });
 
@@ -302,7 +322,7 @@ describe('HourEngine', () => {
           rangeFromHour: 5,
         };
 
-        const result = HourEngine.isDisabled('03', 'PM', disabledTime);
+        const result = HourEngine.isDisabled('03', 'PM', disabledTime, '12h');
         expect(result).toBe(true);
       });
 
@@ -312,7 +332,7 @@ describe('HourEngine', () => {
           rangeFromHour: 10,
         };
 
-        const result = HourEngine.isDisabled('03', 'AM', disabledTime);
+        const result = HourEngine.isDisabled('03', 'AM', disabledTime, '12h');
         expect(result).toBe(false);
       });
     });

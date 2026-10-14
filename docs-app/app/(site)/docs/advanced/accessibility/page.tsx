@@ -9,7 +9,6 @@ import {
   ArrowRight,
   ArrowLeft,
   Check,
-  ArrowLeftRight,
 } from "lucide-react";
 
 export const metadata = buildMetadata({
@@ -76,7 +75,57 @@ export default function AccessibilityPage() {
                 <code className="text-primary bg-primary/10 px-1 rounded text-sm">
                   aria-valuenow
                 </code>{" "}
-                for hour/minute inputs (dynamically updated)
+                for the hour and minute inputs, and the seconds input when{" "}
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  clock.showSeconds
+                </code>{" "}
+                is on (dynamically updated)
+              </span>
+            </li>
+            <li className="flex items-start gap-2">
+              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+              <span>
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  role=&quot;group&quot;
+                </code>{" "}
+                around the analog clock, named by{" "}
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  labels.clock
+                </code>{" "}
+                (default &quot;Clock&quot;)
+              </span>
+            </li>
+            <li className="flex items-start gap-2">
+              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+              <span>
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  role=&quot;slider&quot;
+                </code>{" "}
+                with{" "}
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  tabindex=&quot;0&quot;
+                </code>{" "}
+                on the clock face. Its{" "}
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  aria-label
+                </code>
+                ,{" "}
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  aria-valuemin
+                </code>
+                ,{" "}
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  aria-valuemax
+                </code>
+                ,{" "}
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  aria-valuenow
+                </code>{" "}
+                and{" "}
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  aria-valuetext
+                </code>{" "}
+                follow the active hour, minute or second field
               </span>
             </li>
             <li className="flex items-start gap-2">
@@ -85,7 +134,8 @@ export default function AccessibilityPage() {
                 <code className="text-primary bg-primary/10 px-1 rounded text-sm">
                   role=&quot;listbox&quot;
                 </code>{" "}
-                for clock face wrappers
+                for the wheel columns (wheel and compact-wheel modes) and the
+                timezone dropdown
               </span>
             </li>
             <li className="flex items-start gap-2">
@@ -98,7 +148,11 @@ export default function AccessibilityPage() {
                 <code className="text-primary bg-primary/10 px-1 rounded text-sm">
                   aria-selected
                 </code>{" "}
-                for active time values on clock
+                for the values in those lists, with{" "}
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  aria-activedescendant
+                </code>{" "}
+                pointing to the current one
               </span>
             </li>
             <li className="flex items-start gap-2">
@@ -107,7 +161,20 @@ export default function AccessibilityPage() {
                 <code className="text-primary bg-primary/10 px-1 rounded text-sm">
                   aria-disabled
                 </code>{" "}
-                for disabled times (respects disabledTime configuration)
+                on disabled wheel items, on the OK button while the time
+                can&apos;t be confirmed (a disabled time, a time that was just
+                cleared, or a range that isn&apos;t valid yet), on the Clear
+                button when there is nothing to clear, and on the range To tab
+                until a From time is set. Disabled numbers on the clock face
+                are dimmed, can&apos;t be clicked and are skipped by the
+                keyboard. They have no{" "}
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  aria-disabled
+                </code>{" "}
+                because the numbers are{" "}
+                <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                  aria-hidden
+                </code>
               </span>
             </li>
             <li className="flex items-start gap-2">
@@ -142,7 +209,8 @@ export default function AccessibilityPage() {
                 <code className="text-primary bg-primary/10 px-1 rounded text-sm">
                   aria-hidden=&quot;true&quot;
                 </code>{" "}
-                for decorative elements (dots, clock hand)
+                for decorative elements (clock numbers, dots, clock hand). The
+                clock numbers are not focusable
               </span>
             </li>
           </ul>
@@ -164,74 +232,66 @@ export default function AccessibilityPage() {
                 <span className="text-sm text-muted-foreground">
                   Open timepicker
                 </span>
-                <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
-                  Enter
-                </kbd>
+                <div className="flex gap-1">
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    Enter
+                  </kbd>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    Space
+                  </kbd>
+                </div>
               </div>
               <div className="flex items-center justify-between border-b border-border pb-2">
                 <span className="text-sm text-muted-foreground">
-                  Close / Cancel
+                  Close / Cancel (not in inline mode)
                 </span>
                 <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
                   Esc
                 </kbd>
               </div>
-              <div className="flex items-center justify-between border-b border-border pb-2">
+              <div className="flex items-center justify-between gap-4 border-b border-border pb-2">
                 <span className="text-sm text-muted-foreground">
-                  Navigate between elements
+                  Move between controls: hour, minute, second (when shown), AM,
+                  PM, clock face, then the footer buttons
                 </span>
                 <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
                   Tab
                 </kbd>
               </div>
-              <div className="flex items-center justify-between border-b border-border pb-2">
+              <div className="flex items-center justify-between gap-4 border-b border-border pb-2">
                 <span className="text-sm text-muted-foreground">
-                  Adjust time on clock face (±1 min/hour)
+                  Clock face: one step up (1 hour, or the minute / second
+                  increment)
                 </span>
                 <div className="flex gap-1">
                   <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    <span className="sr-only">Up arrow</span>
                     <ArrowLeft className="rotate-90 inline w-4 h-4 align-middle text-gray-500" />{" "}
                   </kbd>
                   <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
-                    <ArrowLeft className="-rotate-90 inline w-4 h-4 align-middle text-gray-500" />{" "}
-                  </kbd>
-                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
-                    <ArrowLeft className="inline w-4 h-4 align-middle text-gray-500" />{" "}
-                  </kbd>
-                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    <span className="sr-only">Right arrow</span>
                     <ArrowRight className="inline w-4 h-4 align-middle text-gray-500" />{" "}
                   </kbd>
                 </div>
               </div>
-              <div className="flex items-center justify-between border-b border-border pb-2">
+              <div className="flex items-center justify-between gap-4 border-b border-border pb-2">
                 <span className="text-sm text-muted-foreground">
-                  Adjust time on hour/minute inputs (±1)
+                  Clock face: one step down
                 </span>
                 <div className="flex gap-1">
                   <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
-                    <ArrowLeft className="rotate-90 inline w-4 h-4 align-middle text-gray-500" />{" "}
-                  </kbd>
-                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    <span className="sr-only">Down arrow</span>
                     <ArrowLeft className="-rotate-90 inline w-4 h-4 align-middle text-gray-500" />{" "}
                   </kbd>
-                </div>
-              </div>
-              <div className="flex items-center justify-between border-b border-border pb-2">
-                <span className="text-sm text-muted-foreground">
-                  Jump to min / max value (hour/minute inputs)
-                </span>
-                <div className="flex gap-1">
                   <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
-                    Home
-                  </kbd>
-                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
-                    End
+                    <span className="sr-only">Left arrow</span>
+                    <ArrowLeft className="inline w-4 h-4 align-middle text-gray-500" />{" "}
                   </kbd>
                 </div>
               </div>
-              <div className="flex items-center justify-between border-b border-border pb-2">
+              <div className="flex items-center justify-between gap-4 border-b border-border pb-2">
                 <span className="text-sm text-muted-foreground">
-                  Step in larger increments (hour ±3, minute ±5)
+                  Clock face: ±3 hours, or ±5 steps on minutes and seconds
                 </span>
                 <div className="flex gap-1">
                   <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
@@ -242,40 +302,108 @@ export default function AccessibilityPage() {
                   </kbd>
                 </div>
               </div>
-              <div className="flex items-center justify-between border-b border-border pb-2">
-                <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                  Switch view (hour
-                  <ArrowLeftRight className="inline h-3 w-3" />
-                  minute) from input
-                </span>
-                <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
-                  Enter
-                </kbd>
-              </div>
-              <div className="flex items-center justify-between border-b border-border pb-2">
+              <div className="flex items-center justify-between gap-4 border-b border-border pb-2">
                 <span className="text-sm text-muted-foreground">
-                  Quick toggle to AM
+                  Clock face: first / last value
                 </span>
-                <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
-                  A
-                </kbd>
+                <div className="flex gap-1">
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    Home
+                  </kbd>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    End
+                  </kbd>
+                </div>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-4 border-b border-border pb-2">
                 <span className="text-sm text-muted-foreground">
-                  Quick toggle to PM
+                  Clock face: go to the next face (hour, then minute, then
+                  second). Off when{" "}
+                  <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                    clock.autoSwitchToMinutes
+                  </code>{" "}
+                  /{" "}
+                  <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                    autoSwitchToSeconds
+                  </code>{" "}
+                  is{" "}
+                  <code className="text-primary bg-primary/10 px-1 rounded text-sm">
+                    false
+                  </code>
                 </span>
-                <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
-                  P
-                </kbd>
+                <div className="flex gap-1">
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    Enter
+                  </kbd>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    Space
+                  </kbd>
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-4 border-b border-border pb-2">
+                <span className="text-sm text-muted-foreground">
+                  Hour, minute or second field: one step up / down
+                </span>
+                <div className="flex gap-1">
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    <span className="sr-only">Up arrow</span>
+                    <ArrowLeft className="rotate-90 inline w-4 h-4 align-middle text-gray-500" />{" "}
+                  </kbd>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    <span className="sr-only">Down arrow</span>
+                    <ArrowLeft className="-rotate-90 inline w-4 h-4 align-middle text-gray-500" />{" "}
+                  </kbd>
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-4 border-b border-border pb-2">
+                <span className="text-sm text-muted-foreground">
+                  Hour, minute or second field: first / last value
+                </span>
+                <div className="flex gap-1">
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    Home
+                  </kbd>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    End
+                  </kbd>
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-4 border-b border-border pb-2">
+                <span className="text-sm text-muted-foreground">
+                  Hour, minute or second field: ±3 hours, or ±5 steps on
+                  minutes and seconds
+                </span>
+                <div className="flex gap-1">
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    PgUp
+                  </kbd>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    PgDn
+                  </kbd>
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-sm text-muted-foreground">
+                  Select AM or PM (Tab to the button first)
+                </span>
+                <div className="flex gap-1">
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    Enter
+                  </kbd>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">
+                    Space
+                  </kbd>
+                </div>
               </div>
             </div>
             <div className="mt-4 p-3 bg-muted/50 rounded-lg">
               <p className="text-xs text-muted-foreground">
-                <strong className="text-foreground">Note:</strong> Clock face
-                numbers are Tab-focusable. Use arrow keys while focused to
-                adjust time by 1 minute/hour. The clock hand and input values
-                update in real-time, but focus stays on the current element for
-                easier fine-tuning.
+                <strong className="text-foreground">Note:</strong> The clock
+                face is a single Tab stop and works like a slider. The arrow
+                keys change the value of the active face (hour, minute or
+                second). The clock hand and the matching field update as you
+                press, and focus stays on the face. Disabled values are skipped
+                on the clock face and in the time fields.
               </p>
             </div>
           </div>
@@ -290,15 +418,26 @@ export default function AccessibilityPage() {
                   1.
                 </span>
                 <span className="text-sm text-muted-foreground">
-                  Tab through: Hour input{" "}
+                  Tab through: Hour input
+                  <span className="sr-only">, then</span>{" "}
                   <ArrowRight className="inline w-4 h-4 align-middle text-gray-500" />{" "}
-                  Minute input{" "}
+                  Minute input
+                  <span className="sr-only">, then</span>{" "}
                   <ArrowRight className="inline w-4 h-4 align-middle text-gray-500" />{" "}
-                  Clock face numbers{" "}
+                  Second input (when shown)
+                  <span className="sr-only">, then</span>{" "}
                   <ArrowRight className="inline w-4 h-4 align-middle text-gray-500" />{" "}
-                  AM/PM{" "}
+                  AM
+                  <span className="sr-only">, then</span>{" "}
                   <ArrowRight className="inline w-4 h-4 align-middle text-gray-500" />{" "}
-                  Cancel{" "}
+                  PM
+                  <span className="sr-only">, then</span>{" "}
+                  <ArrowRight className="inline w-4 h-4 align-middle text-gray-500" />{" "}
+                  Clock face
+                  <span className="sr-only">, then</span>{" "}
+                  <ArrowRight className="inline w-4 h-4 align-middle text-gray-500" />{" "}
+                  Cancel
+                  <span className="sr-only">, then</span>{" "}
                   <ArrowRight className="inline w-4 h-4 align-middle text-gray-500" />{" "}
                   OK
                 </span>
@@ -308,8 +447,9 @@ export default function AccessibilityPage() {
                   2.
                 </span>
                 <span className="text-sm text-muted-foreground">
-                  When focused on hour/minute input, press Enter to switch clock
-                  face view
+                  On the clock face, press Enter or Space to go to the next face
+                  (hour, then minute, then second). Clicking a time field also
+                  switches the face
                 </span>
               </div>
               <div className="flex items-start gap-3">
@@ -317,8 +457,8 @@ export default function AccessibilityPage() {
                   3.
                 </span>
                 <span className="text-sm text-muted-foreground">
-                  When focused on clock face numbers, use arrow keys to adjust
-                  time without moving focus
+                  When the clock face has focus, the arrow keys change the
+                  active value and focus stays on the face
                 </span>
               </div>
               <div className="flex items-start gap-3">
@@ -353,20 +493,13 @@ export default function AccessibilityPage() {
 
 picker.create();
 
-// Arrow keys work on both inputs and clock face
-// - On hour/minute inputs: Up/Down adjusts by ±1
-// - On clock face numbers: Up/Down/Left/Right adjusts by ±1
+// Arrow keys work on the time fields and on the clock face
+// - Hour/minute/second fields: Up/Down step by 1 hour, or by
+//   clock.incrementMinutes / clock.incrementSeconds
+// - Clock face: Up/Right and Down/Left step the active face the same way
 // - Disabled times are automatically skipped
 
-// A/P shortcuts work from anywhere except inputs
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'a' || e.key === 'A') {
-    // Switches to AM (when not typing in input)
-  }
-  if (e.key === 'p' || e.key === 'P') {
-    // Switches to PM (when not typing in input)
-  }
-});`}
+// AM and PM are buttons: Tab to one and press Enter or Space`}
               language="typescript"
             />
           </div>
@@ -388,23 +521,25 @@ document.addEventListener('keydown', (e) => {
     cancel: 'Cancel',
 
     // Accessible names for the picker controls
-    clockLabel: 'Clock',
-    hourLabel: 'Hour',
-    minuteLabel: 'Minute',
-    periodLabel: 'Period',
-    timeLabel: 'Select appointment time'
+    clock: 'Clock',
+    period: 'Period',
+    timeFields: 'Select appointment time',
+
+    // Field caption, accessible name and announcement prefix in one key
+    hour: 'Hour',
+    minute: 'Minute'
   }
 });
 
 // Add a custom aria-label / hint directly on the input element
 <input
-  type="time"
+  type="text"
   id="timepicker"
   aria-label="Select appointment time"
   aria-describedby="time-help"
 />
 <span id="time-help" class="sr-only">
-  Use arrow keys to select time. Press Enter to confirm.
+  Press Enter or Space to open the time picker.
 </span>`}
               language="typescript"
             />
@@ -414,33 +549,40 @@ document.addEventListener('keydown', (e) => {
             <h3 className="font-semibold mb-3 text-foreground">Live Regions</h3>
             <CodeBlock
               code={`<!-- Live region for screen reader announcements -->
-<div 
-  class="timepicker-announcer" 
-  role="status" 
-  aria-live="polite" 
+<!-- Rendered as the last child of .tp-ui-modal; sr-only hides it visually -->
+<div
+  class="timepicker-announcer sr-only"
+  role="status"
+  aria-live="polite"
   aria-atomic="true"
-  style="position: absolute; width: 1px; height: 1px; 
-         overflow: hidden; clip: rect(0,0,0,0);"
 >
   <!-- Dynamically updated by the timepicker -->
-  <!-- Announces: "Hour changed to 14", "Minute changed to 30", etc. -->
+  <!-- Announces: "Hour: 14", "Minutes: 30", etc. -->
 </div>
 
 <script>
 // Timepicker automatically announces changes via live region
 // No manual setup required - works out of the box
 
-// Example announcements:
-// - "Hour changed to 14"
-// - "Minute changed to 30" 
+// Example announcements with the default labels:
+// - "Hour: 14"
+// - "Minutes: 30"
+// - "Second: 15"
 // - "AM selected"
 // - "PM selected"
+// - "Time cleared"
 
 // Live region updates happen on:
 // - Clock hand drag
 // - Clock number click
-// - Arrow key navigation
+// - Arrow keys, Home/End and PageUp/PageDown on the time fields
+// - Enter/Space on the clock face (announces the new face and its value)
+// - Wheel column scroll (wheel and compact-wheel modes)
 // - AM/PM toggle
+// - Clear
+
+// Arrow steps on the focused clock face are not announced here: the
+// clock face is a slider, so the screen reader reads its new value itself
 </script>`}
               language="html"
             />
@@ -455,8 +597,8 @@ document.addEventListener('keydown', (e) => {
   Meeting Time
   <span class="text-muted">(Required)</span>
 </label>
-<input 
-  type="time" 
+<input
+  type="text"
   id="meeting-time"
   required
   aria-required="true"
@@ -490,7 +632,8 @@ document.addEventListener('keydown', (e) => {
 const picker = new TimepickerUI(input, {
   behavior: {
     // Modal automatically manages focus
-    focusTrap: true // Default behavior
+    focusTrap: true, // Default behavior
+    returnFocus: true // Recommended, default: false (true in 5.0)
   }
 });
 
@@ -500,9 +643,10 @@ picker.create();
 // 1. Focus moves to the wrapper element
 // 2. Tab cycles through all focusable elements in order:
 //    - Hour input
-//    - Minute input  
-//    - Clock face numbers (all visible hour/minute values)
+//    - Minute input
+//    - Second input (when clock.showSeconds is true)
 //    - AM/PM buttons (in 12h mode)
+//    - Clock face (one Tab stop for the whole dial)
 //    - Cancel button
 //    - OK button
 // 3. Shift+Tab cycles backwards
@@ -511,9 +655,10 @@ picker.create();
 
 // When modal closes:
 // - Focus returns to the input field that triggered the modal
+//   when behavior.returnFocus is true (default: false)
 
-// Note: Clock face numbers are included in Tab order, allowing keyboard-only
-// users to reach them. Once focused, arrow keys can adjust time precisely.`}
+// Note: The numbers on the clock face are not in the Tab order. The clock
+// face itself works like a slider: the arrow keys change the active value.`}
               language="typescript"
             />
           </div>
@@ -523,33 +668,36 @@ picker.create();
               Visible Focus Indicators
             </h3>
             <CodeBlock
-              code={`/* Default focus styles for all interactive elements */
-.tp-ui-hour:focus-visible,
-.tp-ui-minutes:focus-visible,
-.tp-ui-am:focus-visible,
-.tp-ui-pm:focus-visible,
-.tp-ui-cancel-btn:focus-visible,
+              code={`/* Built-in focus ring (simplified) */
 .tp-ui-ok-btn:focus-visible,
-.tp-ui-keyboard-icon-wrapper:focus-visible {
-  outline: 3px solid var(--tp-primary);
+.tp-ui-cancel-btn:focus-visible,
+.tp-ui-clear-btn:focus-visible,
+.tp-ui-keyboard-icon:focus-visible {
+  outline: 3px solid var(--tp-focus-ring, var(--tp-primary));
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(98, 0, 238, 0.2);
+  box-shadow: var(--tp-shadow-focus-ring, none);
 }
 
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .tp-ui-hour:focus-visible,
-  .tp-ui-minutes:focus-visible,
-  .tp-ui-am:focus-visible,
-  .tp-ui-pm:focus-visible,
-  .tp-ui-cancel-btn:focus-visible,
-  .tp-ui-ok-btn:focus-visible {
+/* AM/PM, the time fields and the clock face draw the ring inside their edge */
+.tp-ui-hour:focus-visible,
+.tp-ui-minutes:focus-visible,
+.tp-ui-seconds:focus-visible,
+.tp-ui-am:focus-visible,
+.tp-ui-pm:focus-visible,
+.tp-ui-clock-face:focus-visible {
+  outline-offset: -3px;
+}
+
+/* Thicker ring when the user asks for more contrast */
+@media (prefers-contrast: more) {
+  .tp-ui-ok-btn:focus-visible,
+  .tp-ui-cancel-btn:focus-visible {
     outline-width: 4px;
   }
 }
 
-/* Focus styles use :focus-visible to only show for keyboard navigation */
-/* Mouse clicks won't show focus ring, but Tab navigation will */`}
+/* The ring shows only for keyboard focus, not after a mouse click or tap */
+/* Set --tp-focus-ring to change its color */`}
               language="css"
             />
           </div>
@@ -561,27 +709,40 @@ picker.create();
             <CodeBlock
               code={`// Disabled times are properly marked and skipped
 
+// Lists: disable specific hours / minutes
 const picker = new TimepickerUI(input, {
   clock: {
+    type: '24h',
     disabledTime: {
-      // Disable one or more time ranges (string or array of strings)
-      interval: ['9:00 AM - 12:00 PM', '6:00 PM - 11:59 PM'],
-
-      // Optionally disable specific hours / minutes outright
       hours: [0, 1, 2],
       minutes: [15, 45]
     }
   }
 });
 
-// Disabled times have:
-// - tabIndex = -1 (not focusable via Tab)
-// - aria-disabled="true" (announced by screen readers)
-// - Visual styling (grayed out)
-// - Skipped during arrow key navigation
+// Ranges: disable one or more time ranges (string or array of strings).
+// When ranges is set, the hours, minutes and seconds lists are ignored
+const rangesPicker = new TimepickerUI(input, {
+  clock: {
+    disabledTime: {
+      ranges: ['9:00 AM - 12:00 PM', '6:00 PM - 11:59 PM']
+    }
+  }
+});
 
-// Arrow key navigation automatically skips disabled values
-// If all minutes in an hour are disabled, that hour is also skipped`}
+// On the clock face, disabled numbers:
+// - are dimmed and can't be picked by click or drag
+// - are skipped by the arrow keys, Home/End and PageUp/PageDown
+// - have no aria-disabled, because the numbers are aria-hidden and not
+//   focusable (the clock face itself is the focusable slider)
+
+// In wheel and compact-wheel modes, disabled items get aria-disabled="true",
+// or are left out with wheel.hideDisabled: true
+
+// OK gets aria-disabled="true" while the shown time is disabled
+
+// The keyboard skips disabled values in the time fields too
+// If the ranges cover every minute of an hour, that hour is also skipped`}
               language="typescript"
             />
           </div>
@@ -644,7 +805,7 @@ const picker = new TimepickerUI(input, {
 }
 
 /* Respect user's contrast preference */
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
   .tp-ui-wrapper {
     border: 2px solid currentColor;
   }

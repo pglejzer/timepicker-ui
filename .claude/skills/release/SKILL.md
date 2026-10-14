@@ -1,6 +1,7 @@
 ---
 name: release
 description: Cut a new timepicker-ui release. Use when the user wants to bump the version, prepare a release, write/update the changelog, or sync version + changelog across README, CHANGELOG.md and the docs-app (changelog/what's-new/version strings). Drives the build-release subagent in an audit → approve → apply flow, then runs a sanity build. Does NOT git-commit/tag or npm-publish — proposes those for the user to run.
+disable-model-invocation: true
 ---
 
 # Release
@@ -52,28 +53,28 @@ with the confirmed new version. Ask it to return a file-level plan, making NO ed
 2. The **historical** version references it will deliberately leave untouched (prior CHANGELOG
    entries, docs-app `<Section>` blocks, "Removed in v4.0.0", migration guides) — listed so you
    can see nothing historical gets rewritten.
-3. A drafted **CHANGELOG.md** entry (`## [x.y.z] - YYYY-MM-DD`, grouped Added/Changed/Fixed/…,
-   user-facing copy) derived from the actual diff/commits — not invented.
+3. A drafted **CHANGELOG.md** entry (`## [x.y.z] - YYYY-MM-DD` with the date the user gave, else
+   `Unreleased`; grouped Added/Changed/Fixed/…; entries per `.claude/rules/writing.md`, about 25
+   words each) derived from the actual diff/commits — not invented.
 4. The matching docs-app updates: a new `<Section>` for `app/(site)/docs/changelog/page.tsx`, the
    what's-new highlights, and any install/banner version strings.
 
 ### Phase 3 — Present & approve (gate)
 Relay the plan concisely: proposed version, the drafted changelog, the bump list, and the
-"leave historical" list. **Use AskUserQuestion** to approve as-is, edit the changelog copy, or
-narrow scope (e.g. skip docs-app this round). Capture the approved version + final changelog
+"leave historical" list. **Use AskUserQuestion** to approve as-is, edit the changelog copy, set the
+release date (or keep `Unreleased`), or narrow scope (e.g. skip docs-app this round). Capture the approved version + final changelog
 text. Do not skip this gate unless `--apply-all` was passed.
 
 ### Phase 4 — Apply
 Dispatch `build-release` again in **apply mode** with the approved version and final changelog.
 It edits root `package.json`, README (badge + affected sections), `CHANGELOG.md`, and the
 docs-app changelog/what's-new/version strings — bumping only current-version references and
-leaving historical ones intact. It matches docs-app's own conventions (not the library's CRLF
-rules) for docs-app files.
+leaving historical ones intact. docs-app files follow docs-app's own conventions and stay CRLF.
 
 ### Phase 5 — Sanity build & report
-- Run a build to confirm nothing broke: `cd app && npm run build:prod` (or `build:tsup` +
-  `build:rollup`). Report pass/fail with the real output — never claim green without running it.
-  If the user prefers to run it themselves, offer rather than assume.
+- Run the full suite and a build to confirm nothing broke: `cd app && npm test && npm run build:prod`,
+  then `/verify --full`. Report pass/fail with the real output — never claim green without running
+  it. Skip a step only when the user says so.
 - Summarize: new version, every file changed (grouped: package.json / README / CHANGELOG /
   docs-app), and confirmation that `exports` / `sideEffects` / entry points / zero-dependency /
   tree-shaking are intact.
@@ -87,5 +88,5 @@ rules) for docs-app files.
   `docs-app/` a release only edits content that *references* the library version (changelog /
   what's-new / install snippets), never the docs site's own `version`.
 - Never rewrite historical version references or past changelog entries.
-- Keep `.claude/` and library files CRLF; docs-app files keep docs-app's own style.
+- Keep `.claude/`, library and docs-app files CRLF.
 - This skill prepares a release; it does not execute git or npm publish.

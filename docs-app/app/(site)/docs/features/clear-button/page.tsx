@@ -26,27 +26,30 @@ export default function ClearButtonPage() {
         variant="emerald"
         className="mb-8"
       >
-        The clear button is <strong>enabled by default</strong> via{" "}
+        The clear button is <strong>off by default</strong>. Turn it on with{" "}
         <code>ui.clearButton: true</code>. It resets the clock hands to 12:00,
         disables the confirm button, and optionally empties the input value.
       </InfoBox>
 
       <Section icon={Trash2} title="Basic Usage">
         <p className="text-muted-foreground mb-4">
-          The clear button appears automatically. No extra configuration needed:
+          Set <code className="text-primary">ui.clearButton: true</code> to
+          show the button:
         </p>
         <CodeBlock
-          code={`const picker = new TimepickerUI(input);
-picker.create();
-// Clear button is visible by default`}
+          code={`const picker = new TimepickerUI(input, {
+  ui: { clearButton: true }
+});
+picker.create();`}
           language="typescript"
         />
       </Section>
 
       <Section icon={Settings} title="Disable Clear Button">
         <p className="text-muted-foreground mb-4">
-          Set <code className="text-primary">ui.clearButton: false</code> to
-          hide it:
+          <code className="text-primary">ui.clearButton</code> is{" "}
+          <code>false</code> by default. Leave it out, or set it to{" "}
+          <code>false</code>, to hide the button:
         </p>
         <CodeBlock
           code={`new TimepickerUI(input, {
@@ -58,13 +61,16 @@ picker.create();
 
       <Section icon={Settings} title="Clear Behavior Options">
         <p className="text-muted-foreground mb-4">
-          Use <code className="text-primary">clearBehavior</code> to control
-          what happens when the user clicks Clear:
+          Pass an object to{" "}
+          <code className="text-primary">ui.clearButton</code> to control what
+          happens when the user clicks Clear. The object form also shows the
+          button. It is new in 4.5.0 and replaces{" "}
+          <code>clearBehavior.clearInput</code>, which still works until 5.0:
         </p>
         <CodeBlock
           code={`new TimepickerUI(input, {
-  clearBehavior: {
-    clearInput: false  // Keep the input value after clearing
+  ui: {
+    clearButton: { clearInput: false }  // Keep the input value after clearing
   }
 }).create();`}
           language="typescript"
@@ -116,6 +122,7 @@ picker.create();
         </p>
         <CodeBlock
           code={`new TimepickerUI(input, {
+  ui: { clearButton: true },
   labels: { clear: 'Reset' }
 }).create();`}
           language="typescript"
@@ -142,6 +149,7 @@ picker.create();
             </h3>
             <CodeBlock
               code={`new TimepickerUI(input, {
+  ui: { clearButton: true },
   callbacks: {
     onClear: (data) => {
       console.log('Cleared! Previous value:', data.previousValue);
@@ -162,21 +170,18 @@ picker.create();
           </li>
           <li>Clear button auto-disables when no time is selected</li>
           <li>
-            Screen reader announces &quot;Time selection cleared&quot; for
-            accessibility
+            Screen reader announces &quot;Time cleared&quot; (
+            <code>labels.announceCleared</code>) for accessibility
           </li>
         </ul>
       </Section>
 
       <Section icon={Code2} title="TypeScript Types">
         <CodeBlock
-          code={`import type {
-  ClearEventData,
-  ClearBehaviorOptions
-} from 'timepicker-ui';
+          code={`import type { ClearEventData, UIOptions } from 'timepicker-ui';
 
-// ClearEventData: { previousValue: string }
-// ClearBehaviorOptions: { clearInput: boolean }`}
+// ClearEventData: { previousValue: string | null }
+// UIOptions['clearButton']: boolean | { clearInput?: boolean }`}
           language="typescript"
         />
       </Section>

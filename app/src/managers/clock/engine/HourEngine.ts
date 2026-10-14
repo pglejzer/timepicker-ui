@@ -1,5 +1,7 @@
 import type { ClockType, AmPmType, DisabledTimeConfig } from '../types';
-import { parseIntervalEdge } from '../../../utils/time/parse';
+import { isHourDisabled, isHourOnIncrement } from '../../../utils/time/rules';
+import { toDisabledRules } from './disabledRules';
+import { isHourBeforeRangeFrom } from './rangeLimit';
 
 export class HourEngine {
   static angleToIndex(angle: number, clockType: ClockType, isInnerCircle: boolean): number {
@@ -42,103 +44,23 @@ export class HourEngine {
     return (hour % 12) * 30;
   }
 
-  static isDisabled(value: string, amPm: AmPmType, disabledTime: DisabledTimeConfig | null): boolean {
+  static isDisabled(
+    value: string,
+    amPm: AmPmType,
+    disabledTime: DisabledTimeConfig | null,
+    clockType: ClockType,
+    showSeconds: boolean = false,
+  ): boolean {
     if (!disabledTime) return false;
 
-    if (disabledTime.isInterval && disabledTime.intervals && disabledTime.clockType) {
-      return this.isDisabledByInterval(value, amPm, disabledTime);
-    }
-
-    if (disabledTime.rangeFromType !== undefined && disabledTime.rangeFromHour !== undefined) {
-      return this.isDisabledForRange12h(value, amPm, disabledTime);
-    }
-
-    if (disabledTime.hours) {
-      return disabledTime.hours.some(
-        (h) => String(h) === value || Number(h) === Number(value) || h === value,
-      );
-    }
-
-    return false;
-  }
-
-  private static isDisabledForRange12h(
-    value: string,
-    currentAmPm: AmPmType,
-    disabledTime: DisabledTimeConfig,
-  ): boolean {
-    const fromType = disabledTime.rangeFromType;
-    const fromHour = disabledTime.rangeFromHour;
-    const toHour = parseInt(value, 10);
-
-    if (fromType === null || fromHour === undefined) return false;
-
-    if (currentAmPm === 'AM' && fromType === 'PM') {
-      return true;
-    }
-
-    if (currentAmPm === 'AM' && fromType === 'AM') {
-      if (fromHour === 12) {
-        return false;
-      }
-      if (toHour === 12) {
-        return true;
-      }
-      return toHour < fromHour;
-    }
-
-    if (currentAmPm === 'PM' && fromType === 'AM') {
-      return false;
-    }
-
-    if (currentAmPm === 'PM' && fromType === 'PM') {
-      if (fromHour === 12) {
-        return false;
-      }
-      if (toHour === 12) {
-        return true;
-      }
-      return toHour < fromHour;
-    }
-
-    return false;
-  }
-
-  private static isDisabledByInterval(
-    hour: string,
-    amPm: AmPmType,
-    disabledTime: DisabledTimeConfig,
-  ): boolean {
-    if (!disabledTime.intervals) return false;
-
-    for (let minute = 0; minute < 60; minute++) {
-      const minuteStr = minute.toString().padStart(2, '0');
-      if (!this.isTimeInIntervals(hour, minuteStr, amPm, disabledTime.intervals, disabledTime.clockType!)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  private static isTimeInIntervals(
-    hour: string,
-    minute: string,
-    amPm: AmPmType,
-    intervals: string[],
-    clockType: ClockType,
-  ): boolean {
-    const timeStr = clockType === '12h' ? `${hour}:${minute} ${amPm}` : `${hour}:${minute}`;
-    const target = parseIntervalEdge(timeStr, clockType);
-
-    for (const interval of intervals) {
-      const [start, end] = interval.split('-').map((s) => s.trim());
-      const startValue = parseIntervalEdge(start, clockType);
-      const endValue = parseIntervalEdge(end, clockType);
-      if (target >= startValue && target <= endValue) return true;
-    }
-
-    return false;
+    return (
+      isHourBeforeRangeFrom(value, amPm, disabledTime, clockType) ||
+      isHourDisabled(
+        toDisabledRules(disabledTime, clockType),
+        { hour: value, type: amPm || undefined },
+        showSeconds,
+      )
+    );
   }
 
   static findNearestValid(
@@ -146,6 +68,8 @@ export class HourEngine {
     clockType: ClockType,
     amPm: AmPmType,
     disabledTime: DisabledTimeConfig | null,
+    showSeconds: boolean = false,
+    incrementHours: number = 1,
   ): number {
     const maxHour = clockType === '24h' ? 23 : 12;
 
@@ -158,7 +82,10 @@ export class HourEngine {
         if (testIndex > maxHour) testIndex = testIndex % (maxHour + 1);
 
         const value = this.indexToValue(testIndex, clockType);
-        if (!this.isDisabled(value, amPm, disabledTime)) {
+        if (
+          isHourOnIncrement(testIndex, incrementHours) &&
+          !this.isDisabled(value, amPm, disabledTime, clockType, showSeconds)
+        ) {
           return testIndex;
         }
       }

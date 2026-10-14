@@ -57,9 +57,8 @@ describe('Range minutes disabling on clock tips', () => {
       const renderer = new ClockRenderer(config);
 
       const disabled: DisabledTimeConfig = {
-        hours: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13'],
-        minutes: ['00', '05', '10'],
         rangeFromHour: 14,
+        rangeFromMinute: 11,
       };
 
       renderer.renderTips(MINUTES, TIP_CLASS, 'minutes', disabled, '24h', true, undefined, '', '14');
@@ -77,9 +76,8 @@ describe('Range minutes disabling on clock tips', () => {
       const renderer = new ClockRenderer(config);
 
       const disabled: DisabledTimeConfig = {
-        hours: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13'],
-        minutes: ['00', '05', '10'],
         rangeFromHour: 14,
+        rangeFromMinute: 11,
       };
 
       renderer.renderTips(MINUTES, TIP_CLASS, 'minutes', disabled, '24h', true, undefined, '', '20');
@@ -96,9 +94,8 @@ describe('Range minutes disabling on clock tips', () => {
       const renderer = new ClockRenderer(config);
 
       const disabled: DisabledTimeConfig = {
-        hours: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13'],
-        minutes: ['00', '05', '10'],
         rangeFromHour: 14,
+        rangeFromMinute: 15,
       };
 
       renderer.renderTips(MINUTES, TIP_CLASS, 'minutes', disabled, '24h', true, undefined, '', '15');
@@ -112,9 +109,8 @@ describe('Range minutes disabling on clock tips', () => {
       const renderer = new ClockRenderer(config);
 
       const disabled: DisabledTimeConfig = {
-        hours: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13'],
-        minutes: ['00', '05', '10', '15', '20', '25', '30'],
         rangeFromHour: 14,
+        rangeFromMinute: 35,
       };
 
       renderer.renderTips(MINUTES, TIP_CLASS, 'minutes', disabled, '24h', true, undefined, '', '23');
@@ -128,8 +124,8 @@ describe('Range minutes disabling on clock tips', () => {
       const renderer = new ClockRenderer(config);
 
       const disabled: DisabledTimeConfig = {
-        minutes: ['00', '05', '10', '15', '20', '25', '30'],
         rangeFromHour: 14,
+        rangeFromMinute: 31,
       };
 
       renderer.renderTips(MINUTES, TIP_CLASS, 'minutes', disabled, '24h', true, undefined, '', '14');
@@ -148,9 +144,9 @@ describe('Range minutes disabling on clock tips', () => {
       const renderer = new ClockRenderer(config);
 
       const disabled: DisabledTimeConfig = {
-        minutes: ['00', '05', '10', '15', '20', '25'],
         rangeFromType: 'AM',
         rangeFromHour: 10,
+        rangeFromMinute: 26,
       };
 
       renderer.renderTips(MINUTES, TIP_CLASS, 'minutes', disabled, '12h', true, undefined, 'AM', '10');
@@ -166,9 +162,9 @@ describe('Range minutes disabling on clock tips', () => {
       const renderer = new ClockRenderer(config);
 
       const disabled: DisabledTimeConfig = {
-        minutes: ['00', '05', '10', '15', '20', '25'],
         rangeFromType: 'AM',
         rangeFromHour: 10,
+        rangeFromMinute: 26,
       };
 
       renderer.renderTips(MINUTES, TIP_CLASS, 'minutes', disabled, '12h', true, undefined, 'AM', '11');
@@ -182,9 +178,9 @@ describe('Range minutes disabling on clock tips', () => {
       const renderer = new ClockRenderer(config);
 
       const disabled: DisabledTimeConfig = {
-        minutes: ['00', '05', '10', '15', '20', '25'],
         rangeFromType: 'AM',
         rangeFromHour: 10,
+        rangeFromMinute: 26,
       };
 
       renderer.renderTips(MINUTES, TIP_CLASS, 'minutes', disabled, '12h', true, undefined, 'PM', '10');
@@ -214,9 +210,9 @@ describe('Range minutes disabling on clock tips', () => {
       const renderer = new ClockRenderer(config);
 
       const disabled: DisabledTimeConfig = {
-        minutes: ['00', '05', '10', '15', '20'],
         rangeFromType: 'AM',
         rangeFromHour: 9,
+        rangeFromMinute: 21,
       };
 
       renderer.renderTips(MINUTES, TIP_CLASS, 'minutes', disabled, '12h', true, undefined, 'PM', '09');
@@ -232,8 +228,8 @@ describe('Range minutes disabling on clock tips', () => {
       const renderer = new ClockRenderer(config);
 
       const disabled: DisabledTimeConfig = {
-        minutes: ['00'],
         rangeFromHour: 14,
+        rangeFromMinute: 1,
       };
 
       renderer.renderTips(MINUTES, TIP_CLASS, 'minutes', disabled, '24h', true, undefined, '', '14');
@@ -253,8 +249,8 @@ describe('Range minutes disabling on clock tips', () => {
       const renderer = new ClockRenderer(config);
 
       const disabled: DisabledTimeConfig = {
-        minutes: ['00'],
         rangeFromHour: 14,
+        rangeFromMinute: 1,
       };
 
       renderer.renderTips(MINUTES, TIP_CLASS, 'minutes', disabled, '24h', true, undefined, '', '14');

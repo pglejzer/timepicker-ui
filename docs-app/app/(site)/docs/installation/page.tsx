@@ -36,9 +36,15 @@ pnpm add timepicker-ui`}
         />
       </Section>
 
-      <Section icon={Package} title="Required Global CSS">
+      <Section icon={Package} title="Box Sizing">
         <p className="text-muted-foreground mb-4">
-          Add this to your global stylesheet to avoid layout issues:
+          You do not need a global <code>box-sizing</code> reset for the
+          picker. It sets <code>box-sizing: border-box</code> on its own modal
+          and on every element inside it.
+        </p>
+        <p className="text-muted-foreground mb-4">
+          If your own layout already uses the common reset below, keep it. It
+          does not conflict with the picker.
         </p>
         <CodeBlock
           code={`*,
@@ -65,8 +71,8 @@ pnpm add timepicker-ui`}
           For quick prototyping, use the CDN version:
         </p>
         <CodeBlock
-          code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker-ui@4.4.0/dist/css/main.css">
-<script src="https://cdn.jsdelivr.net/npm/timepicker-ui@4.4.0/dist/index.umd.js"></script>
+          code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker-ui@4.5.0/dist/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/timepicker-ui@4.5.0/dist/index.umd.js"></script>
 <script>
   // The UMD build exposes the class as the global TimepickerUI
   const picker = new TimepickerUI('#timepicker');

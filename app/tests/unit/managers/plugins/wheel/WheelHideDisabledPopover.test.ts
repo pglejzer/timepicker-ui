@@ -100,6 +100,7 @@ describe('Wheel hideDisabled - compact-wheel popover 24h + 5min step', () => {
     });
 
     core = new CoreState(element, options, INSTANCE_ID);
+    core.setIsOpen(true);
     core.setDisabledTime({
       value: {
         hours: DISABLED_HOURS_24H.map(String),
@@ -292,6 +293,7 @@ describe('WheelManager integration - popover 24h hideDisabled + 5min step', () =
     });
 
     core = new CoreState(element, options, INSTANCE_ID);
+    core.setIsOpen(true);
     core.setDisabledTime({
       value: {
         hours: DISABLED_HOURS_24H.map(String),

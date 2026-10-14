@@ -1,13 +1,53 @@
 import ModalManager from '../../../src/managers/ModalManager';
 import { CoreState } from '../../../src/timepicker/CoreState';
 import { EventEmitter, type TimepickerEventMap } from '../../../src/utils/EventEmitter';
-import { DEFAULT_OPTIONS } from '../../../src/utils/options/defaults';
+import { DEFAULT_OPTIONS, mergeOptionGroups } from '../../../src/utils/options/defaults';
+import type { TimepickerOptions } from '../../../src/types/options';
+
+const SCROLLBAR_GAP_PROPERTY = '--tp-scrollbar-gap';
+const CLIENT_WIDTH_WITH_SCROLLBAR = 1000;
+const LOCKING_OPTIONS: TimepickerOptions = { ui: { enableScrollbar: false } };
+
+const scrollbarGap = (): string => document.documentElement.style.getPropertyValue(SCROLLBAR_GAP_PROPERTY);
+
+const stubScrollbarGap = (element: HTMLElement, gap: number) =>
+  jest.spyOn(element, 'clientWidth', 'get').mockImplementation(() => {
+    const scrollbarHidden = element.style.overflowY === 'hidden';
+    return scrollbarHidden ? CLIENT_WIDTH_WITH_SCROLLBAR + gap : CLIENT_WIDTH_WITH_SCROLLBAR;
+  });
+
+const expectPageUntouched = (): void => {
+  expect(document.documentElement.getAttribute('style')).toBeNull();
+  expect(document.body.getAttribute('style')).toBeNull();
+};
 
 describe('ModalManager', () => {
   let coreState: CoreState;
   let emitter: EventEmitter<TimepickerEventMap>;
   let modalManager: ModalManager;
   let mockElement: HTMLElement;
+  let trackedManagers: ModalManager[];
+  let injectedStyles: HTMLStyleElement[];
+
+  const createManagerWithCore = (
+    updates: TimepickerOptions,
+    id: string,
+  ): { core: CoreState; manager: ModalManager } => {
+    const core = new CoreState(mockElement, mergeOptionGroups(DEFAULT_OPTIONS, updates), id);
+    const manager = new ModalManager(core, emitter);
+    trackedManagers.push(manager);
+    return { core, manager };
+  };
+
+  const createManager = (updates: TimepickerOptions, id: string): ModalManager =>
+    createManagerWithCore(updates, id).manager;
+
+  const addStylesheet = (css: string): void => {
+    const style = document.createElement('style');
+    style.textContent = css;
+    document.head.appendChild(style);
+    injectedStyles.push(style);
+  };
 
   beforeEach(() => {
     mockElement = document.createElement('div');
@@ -17,11 +57,18 @@ describe('ModalManager', () => {
     coreState = new CoreState(mockElement, DEFAULT_OPTIONS, 'test-instance-id');
     emitter = new EventEmitter();
     modalManager = new ModalManager(coreState, emitter);
+    trackedManagers = [];
+    injectedStyles = [];
   });
 
   afterEach(() => {
+    trackedManagers.forEach((manager) => manager.destroy());
     modalManager.destroy();
+    document.documentElement.removeAttribute('style');
+    document.body.removeAttribute('style');
+    injectedStyles.forEach((style) => style.remove());
     document.body.innerHTML = '';
+    jest.restoreAllMocks();
     jest.useRealTimers();
     jest.clearAllMocks();
   });
@@ -48,7 +95,7 @@ describe('ModalManager', () => {
       expect(modals.length).toBe(1);
     });
 
-    it('should create modal in custom container when appendModalSelector is set', () => {
+    it('should create modal in custom container when appendTo is set', () => {
       const container = document.createElement('div');
       container.id = 'custom-container';
       document.body.appendChild(container);
@@ -57,7 +104,7 @@ describe('ModalManager', () => {
         ...DEFAULT_OPTIONS,
         ui: {
           ...DEFAULT_OPTIONS.ui,
-          appendModalSelector: '#custom-container',
+          appendTo: '#custom-container',
         },
       };
 
@@ -70,6 +117,23 @@ describe('ModalManager', () => {
       expect(modalInContainer).not.toBeNull();
 
       customModalManager.destroy();
+    });
+
+    it.each<{ name: string; ui: (container: HTMLElement) => TimepickerOptions['ui'] }>([
+      { name: 'an element in ui.appendTo', ui: (container) => ({ appendTo: container }) },
+      {
+        name: 'a selector in ui.appendModalSelector',
+        ui: () => ({ appendModalSelector: '#custom-container' }),
+      },
+    ])('should create modal in the custom container given as $name', ({ ui }) => {
+      const container = document.createElement('div');
+      container.id = 'custom-container';
+      document.body.appendChild(container);
+
+      createManager({ ui: ui(container) }, 'test-custom-target').setModalTemplate();
+
+      expect(document.querySelectorAll('.tp-ui-modal')).toHaveLength(1);
+      expect(container.querySelector('.tp-ui-modal')).not.toBeNull();
     });
 
     it('should create inline modal in specified container', () => {
@@ -103,47 +167,26 @@ describe('ModalManager', () => {
 
   describe('setScrollbarOrNot', () => {
     it('should hide scrollbar when enableScrollbar is false', () => {
-      const customOptions = {
-        ...DEFAULT_OPTIONS,
-        ui: {
-          ...DEFAULT_OPTIONS.ui,
-          enableScrollbar: false,
-        },
-      };
+      const manager = createManager(LOCKING_OPTIONS, 'test-scrollbar-id');
 
-      const customCore = new CoreState(mockElement, customOptions, 'test-scrollbar-id');
-      const customModalManager = new ModalManager(customCore, emitter);
+      manager.setScrollbarOrNot();
 
-      customModalManager.setScrollbarOrNot();
-
-      expect(document.body.style.overflowY).toBe('hidden');
-
-      customModalManager.destroy();
+      expect(document.documentElement.style.overflowY).toBe('hidden');
+      expect(document.body.style.overflowY).toBe('');
     });
 
     it('should not modify scrollbar for inline mode', () => {
-      const inlineOptions = {
-        ...DEFAULT_OPTIONS,
-        ui: {
-          ...DEFAULT_OPTIONS.ui,
-          enableScrollbar: false,
-          inline: {
-            enabled: true,
-            containerId: 'test',
-          },
-        },
-      };
+      document.documentElement.style.overflowY = 'scroll';
 
-      document.body.style.overflowY = 'scroll';
+      const manager = createManager(
+        { ui: { enableScrollbar: false, inline: { enabled: true, containerId: 'test' } } },
+        'test-inline-scroll-id',
+      );
 
-      const inlineCore = new CoreState(mockElement, inlineOptions, 'test-inline-scroll-id');
-      const inlineModalManager = new ModalManager(inlineCore, emitter);
+      manager.setScrollbarOrNot();
 
-      inlineModalManager.setScrollbarOrNot();
-
-      expect(document.body.style.overflowY).toBe('scroll');
-
-      inlineModalManager.destroy();
+      expect(document.documentElement.style.overflowY).toBe('scroll');
+      expect(scrollbarGap()).toBe('');
     });
   });
 
@@ -225,55 +268,19 @@ describe('ModalManager', () => {
     });
   });
 
-  describe('setShowClassToBackdrop', () => {
-    beforeEach(() => {
+  describe('show class ownership', () => {
+    it('should render the modal and set up the page without adding show', () => {
       jest.useFakeTimers();
-    });
+      const manager = createManager(LOCKING_OPTIONS, 'test-no-show');
 
-    it('should add show class immediately for inline mode', () => {
-      const inlineContainer = document.createElement('div');
-      inlineContainer.id = 'inline-timepicker';
-      document.body.appendChild(inlineContainer);
+      manager.setScrollbarOrNot();
+      manager.setModalTemplate();
+      manager.setNormalizeClass();
+      manager.removeBackdrop();
+      manager.setInitialFocus();
+      jest.runOnlyPendingTimers();
 
-      const inlineOptions = {
-        ...DEFAULT_OPTIONS,
-        ui: {
-          ...DEFAULT_OPTIONS.ui,
-          inline: {
-            enabled: true,
-            containerId: 'inline-timepicker',
-          },
-        },
-      };
-
-      const inlineCore = new CoreState(mockElement, inlineOptions, 'test-show-inline-id');
-      const inlineModalManager = new ModalManager(inlineCore, emitter);
-
-      inlineModalManager.setModalTemplate();
-
-      const modal = inlineContainer.querySelector('.tp-ui-modal');
-      jest.spyOn(inlineCore, 'getModalElement').mockReturnValue(modal as HTMLDivElement);
-
-      inlineModalManager.setShowClassToBackdrop();
-
-      expect(modal?.classList.contains('show')).toBe(true);
-
-      inlineModalManager.destroy();
-    });
-
-    it('should add show class after delay for backdrop mode', () => {
-      modalManager.setModalTemplate();
-
-      const modal = document.querySelector('.tp-ui-modal') as HTMLDivElement;
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
-
-      modalManager.setShowClassToBackdrop();
-
-      expect(modal.classList.contains('show')).toBe(false);
-
-      jest.advanceTimersByTime(400);
-
-      expect(modal.classList.contains('show')).toBe(true);
+      expect(document.querySelector('.tp-ui-modal')).not.toHaveClass('show');
     });
   });
 
@@ -320,128 +327,395 @@ describe('ModalManager', () => {
       expect(document.querySelector('.tp-ui-modal')).toBeNull();
     });
 
-    it('should restore body scroll styles', () => {
-      document.body.style.overflowY = 'scroll';
-      document.body.style.paddingRight = '0px';
+    it('should restore the page scroll styles', () => {
+      const html = document.documentElement;
+      html.style.overflowY = 'scroll';
+      html.style.paddingRight = '0px';
+      stubScrollbarGap(html, 15);
 
-      const customOptions = {
-        ...DEFAULT_OPTIONS,
-        ui: {
-          ...DEFAULT_OPTIONS.ui,
-          enableScrollbar: false,
-        },
-      };
+      const manager = createManager(LOCKING_OPTIONS, 'test-destroy-id');
 
-      const customCore = new CoreState(mockElement, customOptions, 'test-destroy-id');
-      const customModalManager = new ModalManager(customCore, emitter);
+      manager.setScrollbarOrNot();
 
-      customModalManager.setScrollbarOrNot();
+      expect(html.style.overflowY).toBe('hidden');
+      expect(html.style.paddingRight).toBe('15px');
 
-      expect(document.body.style.overflowY).toBe('hidden');
+      manager.destroy();
 
-      customModalManager.destroy();
-
-      expect(document.body.style.overflowY).toBe('scroll');
+      expect(html.style.overflowY).toBe('scroll');
+      expect(html.style.paddingRight).toBe('0px');
+      expect(scrollbarGap()).toBe('');
     });
   });
 
   describe('scroll-lock reference counting', () => {
-    const lockOptions = {
-      ...DEFAULT_OPTIONS,
-      ui: {
-        ...DEFAULT_OPTIONS.ui,
-        enableScrollbar: false,
-      },
-    };
+    it('leaves the page scrollable after rapid open/close cycles on one instance', () => {
+      const html = document.documentElement;
+      html.style.overflowY = 'scroll';
 
-    it('leaves body scrollable after rapid open/close cycles on one instance', () => {
-      document.body.style.overflowY = 'scroll';
-
-      const core = new CoreState(mockElement, lockOptions, 'test-refcount-single');
-      const manager = new ModalManager(core, emitter);
+      const manager = createManager(LOCKING_OPTIONS, 'test-refcount-single');
 
       for (let i = 0; i < 5; i += 1) {
         manager.lockScroll();
-        expect(document.body.style.overflowY).toBe('hidden');
+        expect(html.style.overflowY).toBe('hidden');
         manager.unlockScroll();
-        expect(document.body.style.overflowY).toBe('scroll');
+        expect(html.style.overflowY).toBe('scroll');
       }
 
-      expect(document.body.style.overflowY).not.toBe('hidden');
-
-      manager.destroy();
+      expect(html.style.overflowY).not.toBe('hidden');
     });
 
     it('keeps the lock while a second picker is still open and only releases on the last close', () => {
-      document.body.style.overflowY = 'scroll';
+      const html = document.documentElement;
+      html.style.overflowY = 'scroll';
 
-      const coreA = new CoreState(mockElement, lockOptions, 'test-refcount-a');
-      const coreB = new CoreState(mockElement, lockOptions, 'test-refcount-b');
-      const managerA = new ModalManager(coreA, emitter);
-      const managerB = new ModalManager(coreB, emitter);
+      const managerA = createManager(LOCKING_OPTIONS, 'test-refcount-a');
+      const managerB = createManager(LOCKING_OPTIONS, 'test-refcount-b');
 
       managerA.lockScroll();
       managerB.lockScroll();
-      expect(document.body.style.overflowY).toBe('hidden');
+      expect(html.style.overflowY).toBe('hidden');
 
       managerA.unlockScroll();
-      expect(document.body.style.overflowY).toBe('hidden');
+      expect(html.style.overflowY).toBe('hidden');
 
       managerB.unlockScroll();
-      expect(document.body.style.overflowY).toBe('scroll');
+      expect(html.style.overflowY).toBe('scroll');
 
-      expect(document.body.style.overflowY).not.toBe('hidden');
-
-      managerA.destroy();
-      managerB.destroy();
+      expect(html.style.overflowY).not.toBe('hidden');
     });
 
     it('does not double-release when unlockScroll is called more than the matching lock', () => {
-      document.body.style.overflowY = 'scroll';
+      const html = document.documentElement;
+      html.style.overflowY = 'scroll';
 
-      const coreA = new CoreState(mockElement, lockOptions, 'test-refcount-extra-a');
-      const coreB = new CoreState(mockElement, lockOptions, 'test-refcount-extra-b');
-      const managerA = new ModalManager(coreA, emitter);
-      const managerB = new ModalManager(coreB, emitter);
+      const managerA = createManager(LOCKING_OPTIONS, 'test-refcount-extra-a');
+      const managerB = createManager(LOCKING_OPTIONS, 'test-refcount-extra-b');
 
       managerA.lockScroll();
       managerB.lockScroll();
 
       managerA.unlockScroll();
       managerA.unlockScroll();
-      expect(document.body.style.overflowY).toBe('hidden');
+      expect(html.style.overflowY).toBe('hidden');
 
       managerB.unlockScroll();
-      expect(document.body.style.overflowY).toBe('scroll');
-
-      managerA.destroy();
-      managerB.destroy();
+      expect(html.style.overflowY).toBe('scroll');
     });
   });
 
   describe('setScrollbarOrNot with enableScrollbar true', () => {
-    it('should restore scrollbar after timeout when enableScrollbar is true', () => {
+    it('does not touch the page and schedules no timer', () => {
       jest.useFakeTimers();
 
-      const scrollbarOptions = {
-        ...DEFAULT_OPTIONS,
-        ui: {
-          ...DEFAULT_OPTIONS.ui,
-          enableScrollbar: true,
+      const manager = createManager({ ui: { enableScrollbar: true } }, 'test-scrollbar-enable');
+
+      manager.setScrollbarOrNot();
+
+      expectPageUntouched();
+      expect(jest.getTimerCount()).toBe(0);
+    });
+
+    it('does not release the lock another open picker holds', () => {
+      const locking = createManager(LOCKING_OPTIONS, 'test-scrollbar-locking');
+      const scrolling = createManager({ ui: { enableScrollbar: true } }, 'test-scrollbar-scrolling');
+
+      locking.lockScroll();
+      scrolling.setScrollbarOrNot();
+
+      expect(document.documentElement.style.overflowY).toBe('hidden');
+      expect(scrollbarGap()).toBe('0px');
+    });
+
+    it('releases its own lock at once when enableScrollbar is turned on while locked', () => {
+      jest.useFakeTimers();
+      const html = document.documentElement;
+      html.style.overflowY = 'scroll';
+      const { core, manager } = createManagerWithCore(LOCKING_OPTIONS, 'test-toggle');
+
+      manager.setScrollbarOrNot();
+      expect(html.style.overflowY).toBe('hidden');
+
+      core.updateOptions({ ui: { enableScrollbar: true } });
+      manager.setScrollbarOrNot();
+
+      expect(html.style.overflowY).toBe('scroll');
+      expect(scrollbarGap()).toBe('');
+      expect(jest.getTimerCount()).toBe(0);
+    });
+
+    it('locks again when enableScrollbar is turned back off', () => {
+      const { core, manager } = createManagerWithCore({ ui: { enableScrollbar: true } }, 'test-toggle-back');
+
+      manager.setScrollbarOrNot();
+      expectPageUntouched();
+
+      core.updateOptions(LOCKING_OPTIONS);
+      manager.setScrollbarOrNot();
+
+      expect(document.documentElement.style.overflowY).toBe('hidden');
+    });
+  });
+
+  describe('page scroll lock', () => {
+    let html: HTMLElement;
+    let body: HTMLElement;
+
+    beforeEach(() => {
+      html = document.documentElement;
+      body = document.body;
+    });
+
+    it('locks only <html> when <body> is not a scroll container', () => {
+      stubScrollbarGap(html, 15);
+      const bodyWidth = stubScrollbarGap(body, 12);
+      const manager = createManager(LOCKING_OPTIONS, 'scroll-lock-html-only');
+
+      manager.lockScroll();
+
+      expect(html.style.overflowY).toBe('hidden');
+      expect(html.style.paddingRight).toBe('15px');
+      expect(scrollbarGap()).toBe('15px');
+      expect(body.style.overflowY).toBe('');
+      expect(body.style.paddingRight).toBe('');
+      expect(bodyWidth).not.toHaveBeenCalled();
+
+      manager.unlockScroll();
+
+      expect(html.style.overflowY).toBe('');
+      expect(html.style.paddingRight).toBe('');
+      expect(scrollbarGap()).toBe('');
+    });
+
+    it.each<{ source: string; makeBodyScroll: () => void; restoredOverflow: string }>([
+      {
+        source: 'a stylesheet rule',
+        makeBodyScroll: () => addStylesheet('body { overflow-y: auto; }'),
+        restoredOverflow: '',
+      },
+      {
+        source: 'an inline style',
+        makeBodyScroll: () => {
+          document.body.style.overflowY = 'auto';
         },
-      };
+        restoredOverflow: 'auto',
+      },
+    ])(
+      'locks <body> too when $source makes it the scroll container',
+      ({ makeBodyScroll, restoredOverflow }) => {
+        makeBodyScroll();
+        stubScrollbarGap(body, 12);
+        const manager = createManager(LOCKING_OPTIONS, 'scroll-lock-body-scroller');
 
-      document.body.style.overflowY = 'hidden';
-      document.body.style.paddingRight = '15px';
+        manager.lockScroll();
 
-      const scrollbarCore = new CoreState(mockElement, scrollbarOptions, 'test-scrollbar-enable');
-      const scrollbarModalManager = new ModalManager(scrollbarCore, emitter);
+        expect(body.style.overflowY).toBe('hidden');
+        expect(body.style.paddingRight).toBe('12px');
+        expect(html.style.overflowY).toBe('hidden');
+        expect(scrollbarGap()).toBe('12px');
 
-      scrollbarModalManager.setScrollbarOrNot();
+        manager.unlockScroll();
 
-      jest.advanceTimersByTime(800);
+        expect(body.style.overflowY).toBe(restoredOverflow);
+        expect(body.style.paddingRight).toBe('');
+        expect(html.style.overflowY).toBe('');
+        expect(scrollbarGap()).toBe('');
+      },
+    );
 
-      scrollbarModalManager.destroy();
+    it('measures the <body> gap before <html> is hidden', () => {
+      body.style.overflowY = 'auto';
+      const htmlOverflowAtBodyReads: string[] = [];
+      jest.spyOn(body, 'clientWidth', 'get').mockImplementation(() => {
+        htmlOverflowAtBodyReads.push(html.style.overflowY);
+        const scrollbarHidden = body.style.overflowY === 'hidden';
+        return scrollbarHidden ? CLIENT_WIDTH_WITH_SCROLLBAR + 12 : CLIENT_WIDTH_WITH_SCROLLBAR;
+      });
+
+      createManager(LOCKING_OPTIONS, 'scroll-lock-body-first').lockScroll();
+
+      expect(htmlOverflowAtBodyReads).toEqual(['', '']);
+      expect(body.style.paddingRight).toBe('12px');
+    });
+
+    it('restores the exact previous inline overflow and padding of both elements', () => {
+      html.style.overflowY = 'auto';
+      html.style.paddingRight = '3px';
+      body.style.overflowY = 'scroll';
+      body.style.paddingRight = '5px';
+      stubScrollbarGap(html, 15);
+      stubScrollbarGap(body, 12);
+      const manager = createManager(LOCKING_OPTIONS, 'scroll-lock-restore-both');
+
+      manager.lockScroll();
+
+      expect(html.style.overflowY).toBe('hidden');
+      expect(html.style.paddingRight).toBe('18px');
+      expect(body.style.overflowY).toBe('hidden');
+      expect(body.style.paddingRight).toBe('17px');
+
+      manager.unlockScroll();
+
+      expect(html.style.overflowY).toBe('auto');
+      expect(html.style.paddingRight).toBe('3px');
+      expect(body.style.overflowY).toBe('scroll');
+      expect(body.style.paddingRight).toBe('5px');
+    });
+
+    it.each([
+      { htmlGap: 15, bodyGap: 12, gap: '15px', htmlPadding: '15px', bodyPadding: '12px' },
+      { htmlGap: 0, bodyGap: 17, gap: '17px', htmlPadding: '', bodyPadding: '17px' },
+    ])(
+      'exposes the larger gap ($gap) and pads each element by its own gap (html $htmlGap, body $bodyGap)',
+      ({ htmlGap, bodyGap, gap, htmlPadding, bodyPadding }) => {
+        body.style.overflowY = 'auto';
+        stubScrollbarGap(html, htmlGap);
+        stubScrollbarGap(body, bodyGap);
+
+        createManager(LOCKING_OPTIONS, 'scroll-lock-larger-gap').lockScroll();
+
+        expect(scrollbarGap()).toBe(gap);
+        expect(html.style.paddingRight).toBe(htmlPadding);
+        expect(body.style.paddingRight).toBe(bodyPadding);
+      },
+    );
+
+    it('exposes a 0px gap and writes no padding when nothing shows a scrollbar', () => {
+      body.style.overflowY = 'auto';
+
+      createManager(LOCKING_OPTIONS, 'scroll-lock-no-gap').lockScroll();
+
+      expect(html.style.overflowY).toBe('hidden');
+      expect(body.style.overflowY).toBe('hidden');
+      expect(scrollbarGap()).toBe('0px');
+      expect(html.style.paddingRight).toBe('');
+      expect(body.style.paddingRight).toBe('');
+    });
+
+    it('puts back a previous inline gap property on release', () => {
+      html.style.setProperty(SCROLLBAR_GAP_PROPERTY, '4px');
+      stubScrollbarGap(html, 15);
+      const manager = createManager(LOCKING_OPTIONS, 'scroll-lock-previous-gap');
+
+      manager.lockScroll();
+
+      expect(scrollbarGap()).toBe('15px');
+
+      manager.unlockScroll();
+
+      expect(scrollbarGap()).toBe('4px');
+    });
+
+    it('overrides a stylesheet overflow-y: scroll on <html> while locked', () => {
+      addStylesheet('html { overflow-y: scroll; }');
+      const manager = createManager(LOCKING_OPTIONS, 'scroll-lock-html-stylesheet');
+
+      manager.lockScroll();
+
+      expect(window.getComputedStyle(html).overflowY).toBe('hidden');
+
+      manager.unlockScroll();
+
+      expect(window.getComputedStyle(html).overflowY).toBe('scroll');
+      expect(html.style.overflowY).toBe('');
+    });
+
+    it.each<{ name: string; css: string; target: () => HTMLElement; gap: number; locked: string }>([
+      {
+        name: '<html>',
+        css: 'html { padding-right: 8px; }',
+        target: () => document.documentElement,
+        gap: 15,
+        locked: '23px',
+      },
+      {
+        name: 'a scrolling <body>',
+        css: 'body { overflow-y: auto; padding-right: 6px; }',
+        target: () => document.body,
+        gap: 12,
+        locked: '18px',
+      },
+    ])('adds the gap to the existing computed padding of $name', ({ css, target, gap, locked }) => {
+      addStylesheet(css);
+      const element = target();
+      stubScrollbarGap(element, gap);
+      const manager = createManager(LOCKING_OPTIONS, 'scroll-lock-existing-padding');
+
+      manager.lockScroll();
+
+      expect(element.style.paddingRight).toBe(locked);
+
+      manager.unlockScroll();
+
+      expect(element.style.paddingRight).toBe('');
+    });
+
+    it('measures once on the first lock and restores only on the last release', () => {
+      body.style.overflowY = 'auto';
+      const htmlWidth = stubScrollbarGap(html, 15);
+      const bodyWidth = stubScrollbarGap(body, 12);
+      const first = createManager(LOCKING_OPTIONS, 'scroll-lock-measure-first');
+      const second = createManager(LOCKING_OPTIONS, 'scroll-lock-measure-second');
+
+      first.lockScroll();
+      second.lockScroll();
+
+      expect(htmlWidth).toHaveBeenCalledTimes(2);
+      expect(bodyWidth).toHaveBeenCalledTimes(2);
+      expect(html.style.paddingRight).toBe('15px');
+      expect(body.style.paddingRight).toBe('12px');
+      expect(scrollbarGap()).toBe('15px');
+
+      first.unlockScroll();
+
+      expect(html.style.overflowY).toBe('hidden');
+      expect(body.style.overflowY).toBe('hidden');
+      expect(html.style.paddingRight).toBe('15px');
+      expect(body.style.paddingRight).toBe('12px');
+      expect(scrollbarGap()).toBe('15px');
+
+      second.unlockScroll();
+
+      expect(html.style.overflowY).toBe('');
+      expect(html.style.paddingRight).toBe('');
+      expect(body.style.overflowY).toBe('auto');
+      expect(body.style.paddingRight).toBe('');
+      expect(scrollbarGap()).toBe('');
+
+      second.unlockScroll();
+      first.unlockScroll();
+
+      expect(html.style.overflowY).toBe('');
+      expect(body.style.overflowY).toBe('auto');
+      expect(scrollbarGap()).toBe('');
+
+      first.lockScroll();
+
+      expect(html.style.overflowY).toBe('hidden');
+      expect(htmlWidth).toHaveBeenCalledTimes(4);
+    });
+
+    it.each<{ name: string; updates: TimepickerOptions }>([
+      {
+        name: 'in inline mode',
+        updates: { ui: { enableScrollbar: false, inline: { enabled: true, containerId: 'inline-host' } } },
+      },
+      {
+        name: 'in the compact-wheel popover',
+        updates: { ui: { enableScrollbar: false, mode: 'compact-wheel' }, wheel: { placement: 'auto' } },
+      },
+      {
+        name: 'with ui.enableScrollbar: true',
+        updates: { ui: { enableScrollbar: true } },
+      },
+    ])('writes nothing to <html> or <body> $name', ({ updates }) => {
+      const manager = createManager(updates, 'scroll-lock-skipped');
+
+      manager.setScrollbarOrNot();
+      manager.lockScroll();
+      manager.unlockScroll();
+
+      expectPageUntouched();
     });
   });
 
@@ -508,34 +782,184 @@ describe('ModalManager', () => {
   });
 
   describe('setInitialFocus', () => {
-    it('should focus wrapper when focusTrap is enabled', () => {
+    const renderWith = (updates: TimepickerOptions, id: string): ModalManager => {
+      const manager = createManager(updates, id);
+      manager.setModalTemplate();
+      return manager;
+    };
+
+    const wrapperOf = (): HTMLElement | null =>
+      document.querySelector<HTMLElement>('.tp-ui-modal .tp-ui-wrapper');
+
+    beforeEach(() => {
       jest.useFakeTimers();
+      const host = document.createElement('div');
+      host.id = 'focus-inline-host';
+      document.body.appendChild(host);
+    });
 
-      const focusTrapOptions = {
-        ...DEFAULT_OPTIONS,
-        behavior: {
-          ...DEFAULT_OPTIONS.behavior,
-          focusTrap: true,
-        },
-      };
+    it.each<{ name: string; updates: TimepickerOptions }>([
+      { name: 'with a backdrop', updates: { ui: { backdrop: true } } },
+      {
+        name: 'inline without a backdrop',
+        updates: { ui: { backdrop: false, inline: { enabled: true, containerId: 'focus-inline-host' } } },
+      },
+      {
+        name: 'in the compact-wheel popover without a backdrop',
+        updates: { ui: { backdrop: false, mode: 'compact-wheel' }, wheel: { placement: 'auto' } },
+      },
+    ])('should focus the wrapper on the next animation frame $name', ({ updates }) => {
+      const manager = renderWith({ ...updates, behavior: { focusTrap: true } }, 'focus-gated-on');
 
-      const focusTrapCore = new CoreState(mockElement, focusTrapOptions, 'test-focus-trap');
-      const focusTrapModalManager = new ModalManager(focusTrapCore, emitter);
+      manager.setInitialFocus();
 
-      focusTrapModalManager.setModalTemplate();
+      expect(document.activeElement).not.toBe(wrapperOf());
 
-      const modal = document.querySelector('.tp-ui-modal') as HTMLDivElement;
-      const wrapper = modal?.querySelector('.tp-ui-wrapper') as HTMLDivElement;
-      wrapper?.setAttribute('tabindex', '-1');
+      jest.runOnlyPendingTimers();
 
-      jest.spyOn(focusTrapCore, 'getModalElement').mockReturnValue(modal);
-      jest.spyOn(focusTrapCore, 'getWrapper').mockReturnValue(wrapper);
+      expect(document.activeElement).toBe(wrapperOf());
+    });
 
-      focusTrapModalManager.setShowClassToBackdrop();
+    it.each<{ name: string; updates: TimepickerOptions }>([
+      { name: 'focusTrap is off', updates: { ui: { backdrop: true }, behavior: { focusTrap: false } } },
+      {
+        name: 'there is no backdrop, inline or popover',
+        updates: { ui: { backdrop: false }, behavior: { focusTrap: true } },
+      },
+    ])('should leave focus alone when $name', ({ updates }) => {
+      const manager = renderWith(updates, 'focus-gated-off');
+      const outside = document.createElement('button');
+      document.body.appendChild(outside);
+      outside.focus();
 
-      jest.advanceTimersByTime(200);
+      manager.setInitialFocus();
 
-      focusTrapModalManager.destroy();
+      expect(jest.getTimerCount()).toBe(0);
+
+      jest.runOnlyPendingTimers();
+
+      expect(document.activeElement).toBe(outside);
+    });
+
+    it('should keep focus that is already inside the wrapper', () => {
+      const manager = renderWith({ behavior: { focusTrap: true } }, 'focus-inside');
+      const hour = document.querySelector<HTMLElement>('.tp-ui-modal .tp-ui-hour');
+      hour?.focus();
+
+      manager.setInitialFocus();
+      jest.runOnlyPendingTimers();
+
+      expect(document.activeElement).toBe(hour);
+    });
+
+    it('should focus the wrapper of the modal rendered when the animation frame runs', () => {
+      const manager = renderWith({ behavior: { focusTrap: true } }, 'focus-rerendered');
+
+      manager.setInitialFocus();
+      manager.setModalTemplate();
+      const wrapper = wrapperOf();
+      jest.runOnlyPendingTimers();
+
+      expect(document.querySelectorAll('.tp-ui-modal')).toHaveLength(1);
+      expect(document.activeElement).toBe(wrapper);
+    });
+  });
+
+  describe('focus across a re-render', () => {
+    const renderModal = (): HTMLElement => {
+      modalManager.setModalTemplate();
+      const modal = document.querySelector<HTMLElement>('.tp-ui-modal');
+      if (!modal) throw new Error('modal is not rendered');
+      return modal;
+    };
+
+    const control = (modal: HTMLElement, selector: string): HTMLElement => {
+      const element = modal.querySelector<HTMLElement>(selector);
+      if (!element) throw new Error(`${selector} is not rendered`);
+      return element;
+    };
+
+    const focusOutside = (): HTMLButtonElement => {
+      const outside = document.createElement('button');
+      document.body.appendChild(outside);
+      outside.focus();
+      return outside;
+    };
+
+    describe('getFocusedControlSelector', () => {
+      it('should return null when focus is outside the modal', () => {
+        renderModal();
+        focusOutside();
+
+        expect(modalManager.getFocusedControlSelector()).toBeNull();
+      });
+
+      it('should return null when no modal is rendered', () => {
+        focusOutside();
+
+        expect(modalManager.getFocusedControlSelector()).toBeNull();
+      });
+
+      it.each([
+        ['the minutes input', '.tp-ui-minutes', '.tp-ui-minutes'],
+        ['the AM button', '.tp-ui-am', '.tp-ui-type-mode.tp-ui-am'],
+        ['the OK button', '.tp-ui-ok-btn', '.tp-ui-ok-btn'],
+      ])('should describe %s by its tp-ui- classes only', (_label, selector, expected) => {
+        const target = control(renderModal(), selector);
+        target.classList.add('active', 'expanded');
+        target.focus();
+
+        expect(modalManager.getFocusedControlSelector()).toBe(expected);
+      });
+
+      it('should return an empty selector for a focused element without a tp-ui- class', () => {
+        const wrapper = control(renderModal(), '.tp-ui-wrapper');
+        const custom = document.createElement('button');
+        custom.className = 'custom-control expanded';
+        wrapper.appendChild(custom);
+        custom.focus();
+
+        expect(modalManager.getFocusedControlSelector()).toBe('');
+      });
+    });
+
+    describe('restoreFocus', () => {
+      it('should focus the matching control inside the wrapper', () => {
+        const modal = renderModal();
+        focusOutside();
+
+        modalManager.restoreFocus('.tp-ui-ok-btn');
+
+        expect(document.activeElement).toBe(control(modal, '.tp-ui-ok-btn'));
+      });
+
+      it.each([
+        ['an empty selector', '', ''],
+        ['a selector that matches nothing', '.tp-ui-missing', ''],
+        [
+          'a disabled control',
+          '.tp-ui-extra-control',
+          '<button type="button" class="tp-ui-extra-control" disabled></button>',
+        ],
+        ['a hidden control', '.tp-ui-extra-control', '<input type="hidden" class="tp-ui-extra-control">'],
+      ])('should fall back to the wrapper for %s', (_label, selector, markup) => {
+        const wrapper = control(renderModal(), '.tp-ui-wrapper');
+        wrapper.insertAdjacentHTML('beforeend', markup);
+        focusOutside();
+
+        modalManager.restoreFocus(selector);
+
+        expect(document.activeElement).toBe(wrapper);
+      });
+
+      it('should keep focus that is already inside the wrapper when nothing matches', () => {
+        const hour = control(renderModal(), '.tp-ui-hour');
+        hour.focus();
+
+        modalManager.restoreFocus('.tp-ui-missing');
+
+        expect(document.activeElement).toBe(hour);
+      });
     });
   });
 

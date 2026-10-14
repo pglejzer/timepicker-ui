@@ -13,3 +13,6 @@ readme/*.md
 docs/superpowers/*
 
 .superpowers/
+.verify/
+.playwright-mcp/
+docs/do_not_commit_this/*

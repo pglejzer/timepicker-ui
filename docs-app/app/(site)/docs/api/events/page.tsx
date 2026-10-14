@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+import Link from "next/link";
 import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
@@ -11,7 +13,13 @@ export const metadata = buildMetadata({
   path: "/docs/api/events",
 });
 
-const eventEmitterMethods = [
+type DocEntry = {
+  name: string;
+  description: ReactNode;
+  code: string;
+};
+
+const eventEmitterMethods: DocEntry[] = [
   {
     name: "on(event, handler)",
     description:
@@ -31,21 +39,23 @@ picker.on('confirm', (data) => {
 });`,
   },
   {
-    name: "off(event, handler)",
-    description: "Unsubscribe from an event.",
+    name: "off(event, handler?)",
+    description:
+      "Unsubscribe from an event. Without a handler, every handler for that event is removed.",
     code: `const handler = (data) => console.log(data);
 picker.on('confirm', handler);
 picker.off('confirm', handler);`,
   },
 ];
 
-const availableEvents = [
+const availableEvents: DocEntry[] = [
   {
     name: "confirm",
     description: "Triggered when user confirms time selection.",
     code: `picker.on('confirm', (data) => {
   console.log('Hour:', data.hour);
   console.log('Minutes:', data.minutes);
+  console.log('Seconds:', data.seconds); // only with clock.showSeconds
   console.log('Type:', data.type); // 'AM' or 'PM' (12h mode)
   console.log('Auto commit:', data.autoCommit);
   // autoCommit is true when the confirm was triggered
@@ -62,32 +72,63 @@ const availableEvents = [
   },
   {
     name: "open",
-    description: "Triggered when picker opens.",
+    description: (
+      <>
+        Triggered when the picker opens: its markup has been added to the page
+        and filled with the input&apos;s value. Fires for user activation and
+        for <code>open()</code>.
+      </>
+    ),
     code: `picker.on('open', (data) => {
   console.log('Picker opened');
   console.log(data.hour, data.minutes, data.type);
-  console.log(data.degreesHours, data.degreesMinutes);
+  console.log(data.seconds); // only with clock.showSeconds
+  // data.degreesHours and data.degreesMinutes are deprecated
 });`,
   },
   {
     name: "show",
-    description: "Triggered when the modal becomes visible. Empty payload.",
+    description: (
+      <>
+        Triggered when the user asks to open the picker: a click on the input
+        or a{" "}
+        <Link
+          href="/examples/features/open-from-button"
+          className="text-primary underline"
+        >
+          <code>data-open</code> element
+        </Link>
+        , or Enter or Space on it. Empty
+        payload. Your handler (<code>on(&apos;show&apos;)</code> or{" "}
+        <code>callbacks.onShow</code>) runs before the picker renders, so{" "}
+        <code>.tp-ui-modal</code> does not exist yet inside it.{" "}
+        <code>open</code> fires after the picker is rendered.{" "}
+        <code>picker.open()</code> does not emit <code>show</code>. It renders
+        the picker and emits <code>open</code>.
+      </>
+    ),
     code: `picker.on('show', () => {
-  console.log('Modal shown');
+  console.log('User asked to open the picker');
+  // The picker is not rendered yet; use 'open' to reach its markup
 });`,
   },
   {
     name: "hide",
-    description: "Triggered when the modal is hidden. Empty payload.",
-    code: `picker.on('hide', () => {
-  console.log('Modal hidden');
-});`,
+    description: (
+      <>
+        <span className="font-medium text-foreground">Deprecated.</span> Never
+        emitted. The event and <code>HideEventData</code> will be removed in
+        5.0.
+      </>
+    ),
+    code: `// Do not use: 'hide' is never emitted.`,
   },
   {
     name: "update",
     description: "Triggered when time value changes during interaction.",
     code: `picker.on('update', (data) => {
   console.log('Time updated:', data.hour, data.minutes);
+  console.log('Seconds:', data.seconds); // only with clock.showSeconds
   console.log('Type:', data.type); // 'AM' or 'PM' (12h mode)
 });`,
   },
@@ -106,34 +147,91 @@ const availableEvents = [
 });`,
   },
   {
-    name: "select:am",
-    description: "Triggered when AM is selected (12h mode only).",
-    code: `picker.on('select:am', (data) => {
-  console.log('AM selected');
+    name: "select:second",
+    description: (
+      <>
+        Triggered when the seconds field or face is selected, and when the
+        seconds wheel column stops on a value. Needs{" "}
+        <code>clock.showSeconds</code>. New in 4.5.0.
+      </>
+    ),
+    code: `picker.on('select:second', (data) => {
+  console.log('Seconds selected:', data.seconds);
 });`,
   },
   {
-    name: "select:pm",
-    description: "Triggered when PM is selected (12h mode only).",
-    code: `picker.on('select:pm', (data) => {
-  console.log('PM selected');
+    name: "select:period",
+    description: (
+      <>
+        Triggered when AM or PM is selected (12h mode only). The payload is{" "}
+        <code>{"{ type: 'AM' | 'PM' }"}</code>. New in 4.5.0.
+      </>
+    ),
+    code: `picker.on('select:period', (data) => {
+  console.log('Period selected:', data.type); // 'AM' or 'PM'
+});`,
+  },
+  {
+    name: "select:am / select:pm",
+    description: (
+      <>
+        <span className="font-medium text-foreground">Deprecated.</span> Use{" "}
+        <code>select:period</code>. Both still fire next to{" "}
+        <code>select:period</code> and will be removed in 5.0.
+      </>
+    ),
+    code: `// Deprecated: listen to 'select:period' instead
+picker.on('select:period', (data) => {
+  if (data.type === 'AM') console.log('AM selected');
+});`,
+  },
+  {
+    name: "switch:face",
+    description: (
+      <>
+        Triggered when the clock face switches between hours, minutes and
+        seconds: a click on a field, Enter or Space on it, or the automatic
+        switch after a pick. Clicking the field that is already active does
+        not trigger it.
+        The payload is{" "}
+        <code>{"{ face: 'hours' | 'minutes' | 'seconds' }"}</code>. Use it to
+        follow face changes: in 5.0, <code>select:hour</code>,{" "}
+        <code>select:minute</code> and <code>select:second</code> fire only
+        when a value is picked. New in 4.5.0.
+      </>
+    ),
+    code: `picker.on('switch:face', (data) => {
+  console.log('Face shown:', data.face); // 'hours' | 'minutes' | 'seconds'
 });`,
   },
   {
     name: "switch:view",
-    description:
-      "Triggered when switching between clock and keyboard view. Empty payload.",
+    description: (
+      <>
+        Triggered when the switch icon toggles between the clock and keyboard
+        view. Needs <code>ui.viewSwitch</code>. Empty payload.
+      </>
+    ),
     code: `picker.on('switch:view', () => {
   console.log('View switched');
 });`,
   },
   {
     name: "error",
-    description: "Triggered when validation error occurs.",
+    description: (
+      <>
+        Triggered on an invalid input value, on a <code>setValue()</code>{" "}
+        string that is not a time, on invalid options (for example a
+        malformed <code>clock.disabledTime.ranges</code>) and when a needed
+        plugin is not registered. <code>rejectedHour</code> and{" "}
+        <code>rejectedMinute</code> are deprecated and always{" "}
+        <code>undefined</code>.
+      </>
+    ),
     code: `picker.on('error', (data) => {
   console.error('Error:', data.error);
-  console.log('Rejected:', data.rejectedHour, data.rejectedMinute);
   console.log('Input values:', data.inputHour, data.inputMinute);
+  console.log('Input seconds:', data.inputSecond); // only with clock.showSeconds
   console.log('Input type/length:', data.inputType, data.inputLength);
 });`,
   },
@@ -157,7 +255,8 @@ const availableEvents = [
     description: "Triggered when a time range is confirmed (range mode only).",
     code: `picker.on('range:confirm', (data) => {
   console.log('From:', data.from, 'To:', data.to);
-  console.log('Duration (minutes):', data.duration);
+  console.log('Duration (whole minutes):', data.duration);
+  console.log('Duration (seconds):', data.durationSeconds); // only with clock.showSeconds
 });`,
   },
   {
@@ -175,6 +274,7 @@ const availableEvents = [
       "Triggered when the range duration is validated (range mode only).",
     code: `picker.on('range:validation', (data) => {
   console.log('Valid:', data.valid, 'Duration:', data.duration);
+  console.log('Duration (seconds):', data.durationSeconds); // only with clock.showSeconds
   console.log('Limits:', data.minDuration, data.maxDuration);
 });`,
   },
@@ -189,25 +289,25 @@ picker.on('animation:clock', () => console.log('Clock animation'));`,
   {
     name: "wheel:scroll:start",
     description:
-      "Triggered when a wheel column starts scrolling (wheel mode only).",
+      "Triggered when a wheel column starts scrolling (wheel and compact-wheel modes).",
     code: `picker.on('wheel:scroll:start', (data) => {
   console.log('Scroll started on column:', data.column);
-  // data.column: 'hours' | 'minutes' | 'ampm'
+  // data.column: 'hours' | 'minutes' | 'seconds' | 'ampm'
 });`,
   },
   {
     name: "wheel:scroll:end",
     description:
-      "Triggered when a wheel column finishes scrolling and snaps to a value (wheel mode only).",
+      "Triggered when a wheel column finishes scrolling and snaps to a value (wheel and compact-wheel modes).",
     code: `picker.on('wheel:scroll:end', (data) => {
   console.log('Column:', data.column, 'snapped to:', data.value);
   console.log('Previous value:', data.previousValue);
-  // data.column: 'hours' | 'minutes' | 'ampm'
+  // data.column: 'hours' | 'minutes' | 'seconds' | 'ampm'
 });`,
   },
 ];
 
-const callbacks = [
+const callbacks: DocEntry[] = [
   {
     name: "onConfirm",
     description: "Alternative: pass callback in options.",
@@ -237,6 +337,22 @@ const callbacks = [
   callbacks: {
     onOpen: () => {
       console.log('Opened');
+    }
+  }
+});`,
+  },
+  {
+    name: "onShow",
+    description: (
+      <>
+        Triggered when the user asks to open the picker. See the{" "}
+        <code>show</code> event above. New in 4.5.0.
+      </>
+    ),
+    code: `new TimepickerUI(input, {
+  callbacks: {
+    onShow: () => {
+      console.log('User asked to open the picker');
     }
   }
 });`,
@@ -275,30 +391,93 @@ const callbacks = [
 });`,
   },
   {
-    name: "onSelectAM",
-    description: "Triggered when AM is selected.",
+    name: "onSelectSecond",
+    description: (
+      <>
+        Triggered when the seconds field or face is selected. Needs{" "}
+        <code>clock.showSeconds</code>. New in 4.5.0.
+      </>
+    ),
     code: `new TimepickerUI(input, {
+  clock: { showSeconds: true },
   callbacks: {
-    onSelectAM: () => {
-      console.log('AM selected');
+    onSelectSecond: (data) => {
+      console.log('Seconds:', data.seconds);
     }
   }
 });`,
   },
   {
-    name: "onSelectPM",
-    description: "Triggered when PM is selected.",
+    name: "onSelectPeriod",
+    description: (
+      <>
+        Triggered when AM or PM is selected. See the{" "}
+        <code>select:period</code> event above. New in 4.5.0.
+      </>
+    ),
     code: `new TimepickerUI(input, {
   callbacks: {
-    onSelectPM: () => {
-      console.log('PM selected');
+    onSelectPeriod: (data) => {
+      console.log('Period:', data.type); // 'AM' or 'PM'
+    }
+  }
+});`,
+  },
+  {
+    name: "onSelectAM / onSelectPM",
+    description: (
+      <>
+        <span className="font-medium text-foreground">Deprecated.</span> Use{" "}
+        <code>onSelectPeriod</code>. Both still work and will be removed in
+        5.0.
+      </>
+    ),
+    code: `// Deprecated: use onSelectPeriod instead
+new TimepickerUI(input, {
+  callbacks: {
+    onSelectPeriod: (data) => {
+      if (data.type === 'PM') console.log('PM selected');
+    }
+  }
+});`,
+  },
+  {
+    name: "onSwitchFace",
+    description: (
+      <>
+        Triggered when the clock face switches between hours, minutes and
+        seconds. See the <code>switch:face</code> event above. New in 4.5.0.
+      </>
+    ),
+    code: `new TimepickerUI(input, {
+  callbacks: {
+    onSwitchFace: (data) => {
+      console.log('Face:', data.face);
+    }
+  }
+});`,
+  },
+  {
+    name: "onSwitchView",
+    description: (
+      <>
+        Triggered when the switch icon toggles the view. Needs{" "}
+        <code>ui.viewSwitch</code>. New in 4.5.0.
+      </>
+    ),
+    code: `new TimepickerUI(input, {
+  ui: { viewSwitch: true },
+  callbacks: {
+    onSwitchView: () => {
+      console.log('View switched');
     }
   }
 });`,
   },
   {
     name: "onError",
-    description: "Triggered on validation error.",
+    description:
+      "Triggered on an invalid input value, a setValue() string that is not a time, invalid options or a missing plugin.",
     code: `new TimepickerUI(input, {
   callbacks: {
     onError: (data) => {
@@ -353,6 +532,22 @@ const callbacks = [
 });`,
   },
   {
+    name: "onWheelScrollStart / onWheelScrollEnd",
+    description:
+      "Triggered when a wheel column starts scrolling and when it snaps to a value (wheel and compact-wheel modes). New in 4.5.0.",
+    code: `new TimepickerUI(input, {
+  ui: { mode: 'wheel' },  // needs the wheel plugin
+  callbacks: {
+    onWheelScrollStart: (data) => {
+      console.log('Scrolling:', data.column);
+    },
+    onWheelScrollEnd: (data) => {
+      console.log(data.column, 'snapped to', data.value);
+    }
+  }
+});`,
+  },
+  {
     name: "onClear",
     description: "Triggered when user clicks the clear button.",
     code: `new TimepickerUI(input, {
@@ -395,11 +590,14 @@ export default function EventsPage() {
       <Section icon={Bell} title="Available Events">
         <p className="text-muted-foreground mb-6">
           All events you can subscribe to. These events work in both{" "}
-          <strong>clock</strong> (default) and <strong>wheel</strong> mode. A
-          few additional events (<code className="text-sm">range:get-disabled-time</code>,{" "}
-          <code className="text-sm">range:update-disabled</code>,{" "}
-          <code className="text-sm">range:minute:commit</code>) are internal
-          coordination events and not part of the public contract.
+          <strong>clock</strong> (default) and <strong>wheel</strong> mode.{" "}
+          <code className="text-sm">range:minute:commit</code> is an internal
+          event between the clock and the range plugin and is not part of the
+          public contract. With <code className="text-sm">showSeconds</code> its
+          payload also has <code className="text-sm">seconds</code>.{" "}
+          <code className="text-sm">range:get-disabled-time</code> and{" "}
+          <code className="text-sm">range:update-disabled</code> are deprecated,
+          never emitted, and will be removed in 5.0.
         </p>
         <div className="space-y-8">
           {availableEvents.map((event) => (
@@ -467,21 +665,25 @@ picker.on('confirm', (data) => {
       <Section icon={Database} title="Event Data">
         <p className="text-muted-foreground mb-4">
           Every event has its own payload type, exported from{" "}
-          <code className="text-sm">timepicker-ui</code>. The most important
-          ones:
+          <code className="text-sm">timepicker-ui</code>. Fields marked{" "}
+          <code className="text-sm">showSeconds</code> appear only when{" "}
+          <code className="text-sm">clock.showSeconds</code> is on. The most
+          important ones:
         </p>
         <CodeBlock
           code={`type OpenEventData = {
   hour: string;
   minutes: string;
+  seconds?: string;              // showSeconds
   type?: string;                 // 'AM' or 'PM' (12h mode)
-  degreesHours: number | null;
-  degreesMinutes: number | null;
+  degreesHours: number | null;   // deprecated, removed in 5.0
+  degreesMinutes: number | null; // deprecated, removed in 5.0
 };
 
 type ConfirmEventData = {
   hour?: string;
   minutes?: string;
+  seconds?: string;              // showSeconds
   type?: string;
   autoCommit?: boolean;          // true when triggered by wheel.commitOnScroll
 };
@@ -489,7 +691,20 @@ type ConfirmEventData = {
 type UpdateEventData = {
   hour?: string;
   minutes?: string;
+  seconds?: string;              // showSeconds
   type?: string;
+};
+
+type SelectSecondEventData = {
+  seconds: string;
+};
+
+type SelectPeriodEventData = {
+  type: 'AM' | 'PM';
+};
+
+type SwitchFaceEventData = {
+  face: 'hours' | 'minutes' | 'seconds';
 };
 
 type CancelEventData = Record<string, never>;  // empty payload
@@ -500,19 +715,28 @@ type ClearEventData = {
 
 type ErrorEventData = {
   error: string;
-  rejectedHour?: string;
-  rejectedMinute?: string;
+  rejectedHour?: string;         // deprecated, always undefined
+  rejectedMinute?: string;       // deprecated, always undefined
   inputHour?: string | number;
   inputMinute?: string | number;
+  inputSecond?: string | number; // showSeconds
   inputType?: string;
   inputLength?: string | number;
 };
 
+type RangeConfirmEventData = {
+  from: string;
+  to: string;
+  duration: number;              // whole minutes
+  durationSeconds?: number;      // showSeconds, exact
+};
+
 // Also exported: SelectHourEventData, SelectMinuteEventData,
-// SelectAMEventData, SelectPMEventData, ShowEventData, HideEventData,
-// SwitchViewEventData, TimezoneChangeEventData, RangeConfirmEventData,
-// RangeSwitchEventData, RangeValidationEventData,
-// WheelScrollStartEventData, WheelScrollEndEventData`}
+// SelectAMEventData and SelectPMEventData (deprecated), ShowEventData,
+// HideEventData (deprecated), SwitchViewEventData,
+// TimezoneChangeEventData, RangeSwitchEventData,
+// RangeValidationEventData, WheelScrollStartEventData,
+// WheelScrollEndEventData`}
           language="typescript"
         />
       </Section>
@@ -542,7 +766,7 @@ picker.on('cancel', () => {
 });
 
 picker.on('update', (data) => {
-  document.getElementById('display').textContent = 
+  document.getElementById('display').textContent =
     \`\${data.hour}:\${data.minutes} \${data.type || ''}\`;
 });
 

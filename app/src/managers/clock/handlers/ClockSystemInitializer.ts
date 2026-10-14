@@ -2,7 +2,8 @@ import type { CoreState } from '../../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitter';
 import { ClockSystem, type ClockSystemConfig } from '../ClockSystem';
 import type { DisabledTimeConfig } from '../types';
-import { announceToScreenReader } from '../../../utils/accessibility';
+import { setSpinbuttonValue } from '../../../utils/accessibility';
+import { announceField, buildUpdatePayload, getTimeInput, type TimeField } from '../../events/timeFields';
 
 export class ClockSystemInitializer {
   private core: CoreState;
@@ -19,6 +20,8 @@ export class ClockSystemInitializer {
   }
 
   initialize(): void {
+    this.destroy();
+
     const clockFace = this.core.getClockFace();
     const clockHand = this.core.getClockHand();
     const circle = this.core.getCircle();
@@ -27,15 +30,18 @@ export class ClockSystemInitializer {
       return;
     }
 
-    const is24h = this.core.options.clock.type === '24h';
+    const { clock } = this.core.options;
+    const is24h = clock.type === '24h';
     const tipsWrapper = this.core.getTipsWrapper();
 
     if (!tipsWrapper) {
       return;
     }
 
+    const showSeconds = clock.showSeconds === true;
     const hour = this.core.getHour();
     const minutes = this.core.getMinutes();
+    const seconds = showSeconds ? this.core.getSeconds() : null;
 
     const config: ClockSystemConfig = {
       clockFace,
@@ -43,69 +49,39 @@ export class ClockSystemInitializer {
       tipsWrapperFor24h: is24h ? this.core.getTipsWrapperFor24h() || undefined : undefined,
       clockHand,
       circle,
-      clockType: (this.core.options.clock.type || '12h') as '12h' | '24h',
+      clockType: (clock.type || '12h') as '12h' | '24h',
       disabledTime: this.convertDisabledTime(),
       initialHour: hour?.value || '12',
       initialMinute: minutes?.value || '00',
+      initialSecond: seconds?.value || '00',
       initialAmPm: this.getAmPmValue(),
       theme: this.core.options.ui.theme,
-      incrementHours: this.core.options.clock.incrementHours || 1,
-      incrementMinutes: this.core.options.clock.incrementMinutes || 1,
-      smoothHourSnap: this.core.options.clock.smoothHourSnap ?? true,
+      incrementHours: clock.incrementHours || 1,
+      incrementMinutes: clock.incrementMinutes || 1,
+      incrementSeconds: clock.incrementSeconds || 1,
+      smoothHourSnap: clock.smoothHourSnap ?? true,
+      showSeconds,
       timepicker: null,
       dragConfig: {
-        autoSwitchToMinutes: this.core.options.clock.autoSwitchToMinutes,
+        autoSwitchToMinutes: clock.autoSwitchToMinutes,
+        autoSwitchToSeconds: clock.autoSwitchToSeconds,
         isMobileView: this.core.isMobileView,
-        smoothHourSnap: this.core.options.clock.smoothHourSnap ?? true,
+        smoothHourSnap: clock.smoothHourSnap ?? true,
         hourElement: hour,
         minutesElement: minutes,
+        secondsElement: seconds,
         onMinuteCommit: () => {
-          const m = this.core.getMinutes();
-          const h = this.core.getHour();
-          const activeTypeMode = this.core.getActiveTypeMode();
+          const time = buildUpdatePayload(this.core);
           this.emitter.emit('range:minute:commit', {
-            hour: h?.value ?? '12',
-            minutes: m?.value ?? '00',
-            type: activeTypeMode?.textContent ?? undefined,
+            ...time,
+            hour: time.hour ?? '12',
+            minutes: time.minutes ?? '00',
           });
         },
       },
-      onHourChange: (hourValue: string) => {
-        const h = this.core.getHour();
-        if (h) {
-          h.value = hourValue;
-          h.setAttribute('aria-valuenow', hourValue);
-        }
-
-        const modal = this.core.getModalElement();
-        announceToScreenReader(modal, `Hour: ${hourValue}`);
-
-        const minutesEl = this.core.getMinutes();
-        const activeTypeMode = this.core.getActiveTypeMode();
-        this.emitter.emit('update', {
-          hour: hourValue,
-          minutes: minutesEl?.value,
-          type: activeTypeMode?.textContent || undefined,
-        });
-      },
-      onMinuteChange: (minuteValue: string) => {
-        const m = this.core.getMinutes();
-        if (m) {
-          m.value = minuteValue;
-          m.setAttribute('aria-valuenow', minuteValue);
-        }
-
-        const modal = this.core.getModalElement();
-        announceToScreenReader(modal, `Minutes: ${minuteValue}`);
-
-        const hourEl = this.core.getHour();
-        const activeTypeMode = this.core.getActiveTypeMode();
-        this.emitter.emit('update', {
-          hour: hourEl?.value,
-          minutes: minuteValue,
-          type: activeTypeMode?.textContent || undefined,
-        });
-      },
+      onHourChange: (value: string) => this.reflectClockValue('hour', value),
+      onMinuteChange: (value: string) => this.reflectClockValue('minutes', value),
+      onSecondChange: (value: string) => this.reflectClockValue('seconds', value),
     };
 
     this.clockSystem = new ClockSystem(config);
@@ -126,6 +102,7 @@ export class ClockSystemInitializer {
     return {
       hours: disabledTimeData.hours,
       minutes: disabledTimeData.minutes,
+      seconds: disabledTimeData.seconds,
       isInterval: disabledTimeData.isInterval,
       intervals,
       clockType: disabledTimeData.clockType as '12h' | '24h' | undefined,
@@ -134,17 +111,20 @@ export class ClockSystemInitializer {
 
   getAmPmValue(): '' | 'AM' | 'PM' {
     if (this.core.options.clock.type === '24h') return '';
-    const activeMode = this.core.getActiveTypeMode();
-    if (activeMode) {
-      const text = activeMode.textContent?.trim();
-      if (text === 'AM' || text === 'PM') return text;
-    }
+    const activeType = this.core.getActiveType();
+    if (activeType) return activeType;
     const AM = this.core.getAM();
     const isRangeMode = this.core.options.range?.enabled === true;
     if (isRangeMode) {
       return AM?.classList.contains('active') ? 'AM' : '';
     }
     return AM?.classList.contains('active') ? 'AM' : 'PM';
+  }
+
+  private reflectClockValue(field: TimeField, value: string): void {
+    setSpinbuttonValue(getTimeInput(this.core, field), value);
+    announceField(this.core, field);
+    this.emitter.emit('update', buildUpdatePayload(this.core));
   }
 
   destroy(): void {

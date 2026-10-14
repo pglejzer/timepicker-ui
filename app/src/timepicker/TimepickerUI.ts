@@ -5,15 +5,20 @@ import { EventEmitter, type TimepickerEventMap } from '../utils/EventEmitter';
 import { generateUUID } from '../utils/config';
 import { getInputValue } from '../utils/input';
 import { mergeOptions } from '../utils/options';
+import { getTimeFormat, isCompactWheelMode } from '../utils/options/predicates';
+import { clockDegrees, formatTime, type ClockType, type TimeValue } from '../utils/time/parse';
 import { sanitizeTimeInput } from '../utils/validation';
 import type { TimepickerOptions } from '../types/options';
+import type { UpdateEventData } from '../types/types';
 import { isDocument, isNode } from '../utils/node';
+import { getInlineContainer } from '../utils/dom';
 import {
-  parseTimeStringFor,
+  resolveTimeFor,
+  invalidTimeError,
   applyParsedTime,
+  seedDegrees,
   syncPeriodIndicator,
   syncClockVisual,
-  type ParsedTime,
 } from './SetValue';
 
 type Callback = () => void;
@@ -31,14 +36,13 @@ export default class TimepickerUI {
       throw new Error('TimepickerUI requires browser environment');
     }
 
-    const targetInput = this.resolveInputElement(selectorOrElement);
-    if (!targetInput) {
+    const element = this.resolveRootElement(selectorOrElement);
+    if (!element) {
       throw new Error('Input element not found');
     }
 
     const customId = options?.behavior?.id;
     const instanceId = customId || `tp-ui-${generateUUID()}`;
-    const element = this.createWrapperElement(targetInput);
 
     const mergedOptions = mergeOptions(options || {});
 
@@ -47,15 +51,12 @@ export default class TimepickerUI {
     }
 
     if (mergedOptions.ui.inline?.enabled) {
-      if (!mergedOptions.ui.inline.containerId) {
-        throw new Error('inline.containerId is required when inline mode is enabled');
+      const { container, containerId } = mergedOptions.ui.inline;
+      if (!container && !containerId) {
+        throw new Error('inline.container is required when inline mode is enabled');
       }
-
-      if (!isNode()) {
-        const containerElement = document.getElementById(mergedOptions.ui.inline.containerId);
-        if (!containerElement) {
-          throw new Error(`Container element with id "${mergedOptions.ui.inline.containerId}" not found`);
-        }
+      if (!getInlineContainer(mergedOptions.ui.inline)) {
+        throw new Error('Inline container not found');
       }
     }
 
@@ -64,11 +65,8 @@ export default class TimepickerUI {
 
     const input = this.core.getInput();
     if (input) {
-      const inputValue = getInputValue(input, mergedOptions.clock.type);
-      const degreesHours = Number(inputValue.hour) * 30;
-      const degreesMinutes = Number(inputValue.minutes) * 6;
-      this.core.setDegreesHours(degreesHours);
-      this.core.setDegreesMinutes(degreesMinutes);
+      const { type, showSeconds } = mergedOptions.clock;
+      seedDegrees(this.core, getInputValue(input, type, undefined, undefined, !!showSeconds));
     }
 
     this.managers = new Managers(this.core, this.emitter);
@@ -83,7 +81,7 @@ export default class TimepickerUI {
   }
 
   private setupInternalEventListeners(): void {
-    this.emitter.on('show', () => {
+    this.emitter.on('open:request', () => {
       if (!this.core.isDestroyed) {
         this.lifecycle.mount();
       }
@@ -91,7 +89,7 @@ export default class TimepickerUI {
 
     this.emitter.on('cancel', () => {
       if (!this.core.isDestroyed) {
-        this.lifecycle.unmount();
+        this.lifecycle.discardSelection();
       }
     });
 
@@ -100,15 +98,18 @@ export default class TimepickerUI {
         if (this.core.options.range?.enabled) {
           return;
         }
-        const input = this.core.getInput();
-        if (input && data.hour && data.minutes) {
-          const type = data.type ? ` ${data.type}` : '';
-          input.value = `${data.hour}:${data.minutes}${type}`;
-        }
+        this.writeInputValue(data);
         if (!data.autoCommit) {
-          this.lifecycle.unmount();
+          this.lifecycle.closeUnlessInline();
         }
       }
+    });
+
+    this.emitter.on('update', (data) => {
+      if (this.core.isDestroyed || this.core.options.range?.enabled) return;
+      const { inline } = this.core.options.ui;
+      if (!inline?.enabled || !inline.autoUpdate) return;
+      this.writeInputValue(data);
     });
 
     this.emitter.on('range:confirm', (data) => {
@@ -118,8 +119,23 @@ export default class TimepickerUI {
       if (input) {
         input.value = `${data.from} - ${data.to}`;
       }
-      this.lifecycle.unmount();
+      this.lifecycle.closeUnlessInline();
     });
+
+    this.emitter.on('select:am', () => this.emitter.emit('select:period', { type: 'AM' }));
+    this.emitter.on('select:pm', () => this.emitter.emit('select:period', { type: 'PM' }));
+  }
+
+  private writeInputValue(data: UpdateEventData): void {
+    if (!data.hour || !data.minutes) return;
+    this.setInputText(formatTime(data as TimeValue, getTimeFormat(this.core.options)));
+  }
+
+  private setInputText(text: string): void {
+    const input = this.core.getInput();
+    if (!input) return;
+    input.value = text;
+    this.managers.validation.removeErrorHandler();
   }
 
   /**
@@ -143,13 +159,18 @@ export default class TimepickerUI {
   }
 
   /**
-   * Close the timepicker, optionally updating the input value before closing.
-   * @param update - If true, the input value will be updated with the current selection before closing.
-   * @param callback - Optional callback to be executed after closing.
+   * Close the timepicker. An inline picker is removed from its container until `open()` is called.
+   * @param update - If true, the current selection is committed first, exactly like clicking OK: the input is updated and `confirm` is emitted (nothing is committed while OK is disabled). Otherwise the selection is discarded.
+   * @param callback - Optional callback. With `update: true` it runs once the picker has closed; otherwise it runs immediately.
    */
   public close(update?: boolean, callback?: Callback): void {
-    this.lifecycle.unmount(update ? callback : undefined);
-    if (!update && callback) callback();
+    if (update) {
+      this.lifecycle.unmount(callback, true);
+      return;
+    }
+
+    this.lifecycle.unmount();
+    if (callback) callback();
   }
 
   /**
@@ -166,16 +187,18 @@ export default class TimepickerUI {
   }
 
   /**
-   * Update the timepicker instance with new options.
+   * Update the timepicker instance with new options. Options that fail validation (for example an invalid `clock.disabledTime`) are reported through the `error` event / `callbacks.onError`; the previous options stay in place and the callback is not run. When `clock.type` or `clock.showSeconds` changes, a valid time in the input, or both times of a range value (`from - to`), is rewritten in the new format (no `update` or `confirm` event); an empty or invalid input is left as it is. An open picker is re-rendered with the new options, and a selection that was not confirmed is reset to the input value.
    * @param value - The new options and optional create flag.
    * @param callback - Optional callback to be executed after update.
+   * @deprecated Use `setOptions(options)`. Removed in 5.0.
    */
   public update(value: { options: TimepickerOptions; create?: boolean }, callback?: Callback): void {
     if (this.core.isDestroyed) return;
+    if (!this.lifecycle.applyOptions(value.options)) return;
 
-    this.core.updateOptions(value.options);
-    this.managers.config.checkMobileOption();
-    this.managers.config.getDisableTime();
+    if (this.core.isOpen) {
+      this.lifecycle.rerender();
+    }
 
     if (value.create) {
       this.create();
@@ -185,15 +208,33 @@ export default class TimepickerUI {
   }
 
   /**
-   * Get the current selected time value from the timepicker.
-   * @returns An object containing the current hour, minutes, type (if applicable), formatted time string, and degrees for hours and minutes.
+   * Set options at runtime. Options that fail validation (for example an invalid `clock.disabledTime`) are reported through the `error` event / `callbacks.onError` and the previous options stay in place. When `clock.type` or `clock.showSeconds` changes, a valid time in the input is rewritten in the new format. An open picker is re-rendered with the new options.
+   * @param options - The options to change. Groups you leave out keep their values.
+   */
+  public setOptions(options: TimepickerOptions): void {
+    this.update({ options });
+  }
+
+  /**
+   * Get the current selected time value from the timepicker. While the picker is open this is the selection shown in it; otherwise, including while it is closing, it is the value in the input.
+   * @returns An object containing the current hour, minutes, seconds (only with `clock.showSeconds`), type (if applicable), formatted time string, and degrees for hours and minutes.
    */
   public getValue(): {
     hour: string;
     minutes: string;
+    /**
+     * Present only with `clock.showSeconds`.
+     */
+    seconds?: string;
     type?: string;
     time: string;
+    /**
+     * @deprecated Internal clock-hand angle; use `hour` instead. Removed in 5.0.
+     */
     degreesHours: number | null;
+    /**
+     * @deprecated Internal clock-hand angle; use `minutes` instead. Removed in 5.0.
+     */
     degreesMinutes: number | null;
   } {
     if (this.core.isDestroyed) {
@@ -207,84 +248,97 @@ export default class TimepickerUI {
       };
     }
 
+    const format = getTimeFormat(this.core.options);
+    const fallback: TimeValue = {
+      hour: '12',
+      minutes: '00',
+      seconds: format.showSeconds ? '00' : undefined,
+      type: format.clockType === '24h' ? undefined : 'AM',
+    };
     const modal = this.core.getModalElement();
     const input = this.core.getInput();
 
-    let currentHour = '12';
-    let currentMinutes = '00';
-    let currentType: string | undefined = this.core.options.clock.type === '24h' ? undefined : 'AM';
-    let degreesHours: number | null = null;
-    let degreesMinutes: number | null = null;
+    let value = fallback;
 
-    if (modal) {
-      const hour = this.core.getHour();
-      const minutes = this.core.getMinutes();
-      const activeTypeMode = this.core.getActiveTypeMode();
-
-      currentHour = hour?.value || '12';
-      currentMinutes = minutes?.value || '00';
-      currentType = this.core.options.clock.type === '24h' ? undefined : activeTypeMode?.textContent || 'AM';
-
-      degreesHours = this.core.degreesHours;
-      degreesMinutes = this.core.degreesMinutes;
+    if (modal && this.core.isOpen) {
+      value = this.readOpenValue(format.clockType, fallback);
     } else if (input) {
-      const inputValue = getInputValue(input, this.core.options.clock.type);
-      currentHour = inputValue.hour;
-      currentMinutes = inputValue.minutes;
-      currentType = inputValue.type;
-
-      degreesHours = Number(currentHour) * 30;
-      degreesMinutes = Number(currentMinutes) * 6;
+      value = getInputValue(input, this.core.options.clock.type, undefined, undefined, format.showSeconds);
     }
 
-    let timeString = '';
-    if (this.core.options.clock.type === '24h') {
-      timeString = `${currentHour.padStart(2, '0')}:${currentMinutes.padStart(2, '0')}`;
-    } else {
-      timeString = `${currentHour}:${currentMinutes.padStart(2, '0')} ${currentType}`;
+    const { degreesHours, degreesMinutes } =
+      modal || input ? clockDegrees(value) : { degreesHours: null, degreesMinutes: null };
+
+    const result: ReturnType<TimepickerUI['getValue']> = {
+      hour: value.hour,
+      minutes: value.minutes,
+      type: value.type,
+      time: formatTime(value, format),
+      degreesHours,
+      degreesMinutes,
+    };
+
+    if (format.showSeconds) {
+      result.seconds = value.seconds ?? fallback.seconds;
+    }
+
+    return result;
+  }
+
+  private readOpenValue(clockType: ClockType, fallback: TimeValue): TimeValue {
+    const periodOf = (type: string | undefined): string | undefined => {
+      if (clockType === '24h') return undefined;
+      return type ?? 'AM';
+    };
+
+    if (isCompactWheelMode(this.core.options)) {
+      const selection = this.managers.getPlugin('wheel')?.getSelection?.();
+      if (!selection) return fallback;
+      return {
+        hour: selection.hour,
+        minutes: selection.minutes,
+        seconds: selection.seconds ?? fallback.seconds,
+        type: periodOf(selection.type),
+      };
     }
 
     return {
-      hour: currentHour,
-      minutes: currentMinutes,
-      type: currentType,
-      time: timeString,
-      degreesHours,
-      degreesMinutes,
+      hour: this.core.getHour()?.value || fallback.hour,
+      minutes: this.core.getMinutes()?.value || fallback.minutes,
+      seconds: this.core.getSeconds()?.value || fallback.seconds,
+      type: periodOf(this.core.getActiveType()),
     };
   }
 
   /**
    * Set the timepicker value programmatically.
-   * @param time - The time string to set, in the format "HH:MM" for 24h or "HH:MM AM/PM" for 12h.
+   * @param time - The time string to set: "HH:MM" for 24h or "HH:MM AM/PM" for 12h. With `clock.showSeconds` also "HH:MM:SS" / "HH:MM:SS AM/PM"; a value without seconds means ":00". Without `clock.showSeconds` seconds in the string are accepted and dropped. A valid time in the other clock format is converted: "2:30 PM" sets 14:30 in a 24h picker, "00:15" sets 12:15 AM in a 12h picker. A string that is not a valid time in either format changes nothing and emits `error` (`callbacks.onError`); an empty string is ignored.
    * @param updateInput - If true, the input field will be updated with the new time value. Default is true.
    */
   public setValue(time: string, updateInput: boolean = true): void {
     if (this.core.isDestroyed) return;
-    if (!time || typeof time !== 'string') return;
+    if (typeof time !== 'string' || !time.trim()) return;
 
     if (!this.core.isInitialized) {
       this.create();
+      if (this.core.isDestroyed) return;
     }
 
-    const trimmedTime = sanitizeTimeInput(time.trim());
-
-    try {
-      const parsed: ParsedTime = parseTimeStringFor(this.core, trimmedTime);
-      applyParsedTime(this.core, parsed);
-      syncPeriodIndicator(this.core, parsed.typeValue);
-
-      if (updateInput) {
-        const input = this.core.getInput();
-        if (input) {
-          input.value = trimmedTime;
-        }
-      }
-
-      syncClockVisual(this.core, this.managers, parsed);
-    } catch {
+    const resolved = resolveTimeFor(this.core, sanitizeTimeInput(time.trim()));
+    if (!resolved) {
+      this.emitter.emit('error', invalidTimeError(this.core));
       return;
     }
+
+    const { parsed, inputText } = resolved;
+    applyParsedTime(this.core, parsed);
+    syncPeriodIndicator(this.core, parsed.type);
+
+    if (updateInput) {
+      this.setInputText(inputText);
+    }
+
+    syncClockVisual(this.core, this.managers, parsed);
   }
 
   /**
@@ -409,50 +463,29 @@ export default class TimepickerUI {
     this.emitter.off(event, handler);
   }
 
-  private resolveInputElement(selectorOrElement: string | HTMLElement): HTMLInputElement | null {
+  private resolveRootElement(selectorOrElement: string | HTMLElement): HTMLElement | null {
     if (isDocument() === false) {
       return null;
     }
 
-    let element: HTMLElement | null = null;
+    const target =
+      typeof selectorOrElement === 'string' ? document.querySelector(selectorOrElement) : selectorOrElement;
+    if (!(target instanceof HTMLElement)) return null;
 
-    if (typeof selectorOrElement === 'string') {
-      element = document.querySelector(selectorOrElement);
-      if (!element) return null;
-    } else if (selectorOrElement instanceof HTMLElement) {
-      element = selectorOrElement;
-    } else {
-      return null;
+    if (target.tagName !== 'INPUT') {
+      if (!target.querySelector('input')) return null;
+      target.classList.add('tp-ui');
+      return target;
     }
 
-    if (element.tagName === 'INPUT') {
-      return element as HTMLInputElement;
-    }
+    const parent = target.parentElement;
+    if (parent?.classList.contains('tp-ui')) return parent;
 
-    const inputElement = element.querySelector('input');
-    return inputElement;
-  }
-
-  private createWrapperElement(inputElement: HTMLInputElement): HTMLElement {
-    if (isDocument() === false) {
-      return inputElement;
-    }
-
-    const parentElement = inputElement.parentElement;
-
-    if (inputElement.tagName === 'INPUT' && !parentElement?.classList.contains('tp-ui')) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'tp-ui';
-      inputElement.parentNode?.insertBefore(wrapper, inputElement);
-      wrapper.appendChild(inputElement);
-      return wrapper;
-    }
-
-    if (parentElement && !parentElement.classList.contains('tp-ui')) {
-      parentElement.classList.add('tp-ui');
-    }
-
-    return parentElement || inputElement;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'tp-ui';
+    target.before(wrapper);
+    wrapper.appendChild(target);
+    return wrapper;
   }
 
   /**
@@ -473,9 +506,9 @@ export default class TimepickerUI {
   }
 
   /**
-   *  Check if a timepicker instance can be created for the given selector or element. This method verifies that the environment is a browser, the element exists in the DOM, and is either an input or contains an input.
-   * @param selectorOrElement - A CSS selector string or an HTMLElement to check for timepicker availability.
-   * @returns - True if a timepicker instance can be created for the given selector or element, false otherwise.
+   * Check whether the given selector or element exists in the document. Always false outside a browser. It does not check that the element is, or contains, an input.
+   * @param selectorOrElement - A CSS selector string or an HTMLElement to look up.
+   * @returns - True if the selector matches an element in the document, or the element is attached to the document; false otherwise.
    */
   static isAvailable(selectorOrElement: string | HTMLElement): boolean {
     if (isNode()) {

@@ -22,21 +22,27 @@ function createDOM(): { container: HTMLDivElement; input: HTMLInputElement; moda
   return { container, input, modal };
 }
 
+function pointerDownOn(target: EventTarget): void {
+  target.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true, composed: true }));
+}
+
+function appendOutsideElement(tagName = 'div'): HTMLElement {
+  const element = document.createElement(tagName);
+  document.body.appendChild(element);
+  return element;
+}
+
 describe('PopoverManager', () => {
   let core: CoreState;
   let emitter: EventEmitter;
   let manager: PopoverManager;
   let container: HTMLDivElement;
-
-  beforeEach(() => {
-    jest.useFakeTimers();
-  });
+  let modal: HTMLDivElement;
 
   afterEach(() => {
     manager.destroy();
     document.body.innerHTML = '';
     jest.clearAllMocks();
-    jest.useRealTimers();
   });
 
   describe('ignoreOutsideClick option', () => {
@@ -44,6 +50,7 @@ describe('PopoverManager', () => {
       beforeEach(() => {
         const dom = createDOM();
         container = dom.container;
+        modal = dom.modal;
 
         const options = mergeOptions({
           ui: { mode: 'compact-wheel' },
@@ -59,15 +66,18 @@ describe('PopoverManager', () => {
         const emitSpy = jest.spyOn(emitter, 'emit');
         manager.attach();
 
-        jest.runAllTimers();
+        pointerDownOn(appendOutsideElement());
 
-        const outsideElement = document.createElement('div');
-        document.body.appendChild(outsideElement);
+        expect(emitSpy).toHaveBeenCalledWith('cancel', {});
+      });
 
-        const event = new MouseEvent('pointerdown', { bubbles: true });
-        Object.defineProperty(event, 'target', { value: outsideElement });
+      it('should emit cancel even when the outside target stops propagation', () => {
+        const emitSpy = jest.spyOn(emitter, 'emit');
+        manager.attach();
+        const outsideElement = appendOutsideElement();
+        outsideElement.addEventListener('pointerdown', (event) => event.stopPropagation());
 
-        document.dispatchEvent(event);
+        pointerDownOn(outsideElement);
 
         expect(emitSpy).toHaveBeenCalledWith('cancel', {});
       });
@@ -75,17 +85,10 @@ describe('PopoverManager', () => {
       it('should not emit cancel when clicking inside the modal', () => {
         const emitSpy = jest.spyOn(emitter, 'emit');
         manager.attach();
-
-        jest.runAllTimers();
-
-        const modal = document.querySelector(`[data-owner-id="${INSTANCE_ID}"]`);
         const innerElement = document.createElement('span');
-        modal?.appendChild(innerElement);
+        modal.appendChild(innerElement);
 
-        const event = new MouseEvent('pointerdown', { bubbles: true });
-        Object.defineProperty(event, 'target', { value: innerElement });
-
-        document.dispatchEvent(event);
+        pointerDownOn(innerElement);
 
         expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
       });
@@ -94,14 +97,7 @@ describe('PopoverManager', () => {
         const emitSpy = jest.spyOn(emitter, 'emit');
         manager.attach();
 
-        jest.runAllTimers();
-
-        const input = container.querySelector('input');
-
-        const event = new MouseEvent('pointerdown', { bubbles: true });
-        Object.defineProperty(event, 'target', { value: input });
-
-        document.dispatchEvent(event);
+        pointerDownOn(container.querySelector('input') as HTMLInputElement);
 
         expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
       });
@@ -111,6 +107,7 @@ describe('PopoverManager', () => {
       beforeEach(() => {
         const dom = createDOM();
         container = dom.container;
+        modal = dom.modal;
 
         const options = mergeOptions({
           ui: { mode: 'compact-wheel' },
@@ -126,15 +123,7 @@ describe('PopoverManager', () => {
         const emitSpy = jest.spyOn(emitter, 'emit');
         manager.attach();
 
-        jest.runAllTimers();
-
-        const outsideElement = document.createElement('div');
-        document.body.appendChild(outsideElement);
-
-        const event = new MouseEvent('pointerdown', { bubbles: true });
-        Object.defineProperty(event, 'target', { value: outsideElement });
-
-        document.dispatchEvent(event);
+        pointerDownOn(appendOutsideElement());
 
         expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
       });
@@ -142,17 +131,10 @@ describe('PopoverManager', () => {
       it('should not emit cancel when clicking inside the modal', () => {
         const emitSpy = jest.spyOn(emitter, 'emit');
         manager.attach();
-
-        jest.runAllTimers();
-
-        const modal = document.querySelector(`[data-owner-id="${INSTANCE_ID}"]`);
         const innerElement = document.createElement('span');
-        modal?.appendChild(innerElement);
+        modal.appendChild(innerElement);
 
-        const event = new MouseEvent('pointerdown', { bubbles: true });
-        Object.defineProperty(event, 'target', { value: innerElement });
-
-        document.dispatchEvent(event);
+        pointerDownOn(innerElement);
 
         expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
       });
@@ -161,20 +143,8 @@ describe('PopoverManager', () => {
         const emitSpy = jest.spyOn(emitter, 'emit');
         manager.attach();
 
-        jest.runAllTimers();
-
-        const targets = [
-          document.createElement('div'),
-          document.createElement('p'),
-          document.createElement('button'),
-        ];
-
-        targets.forEach((target) => {
-          document.body.appendChild(target);
-          const event = new MouseEvent('pointerdown', { bubbles: true });
-          Object.defineProperty(event, 'target', { value: target });
-          document.dispatchEvent(event);
-        });
+        ['div', 'p', 'button'].forEach((tagName) => pointerDownOn(appendOutsideElement(tagName)));
+        pointerDownOn(document.body);
 
         expect(emitSpy).not.toHaveBeenCalled();
       });
@@ -184,6 +154,7 @@ describe('PopoverManager', () => {
       beforeEach(() => {
         const dom = createDOM();
         container = dom.container;
+        modal = dom.modal;
 
         const options = mergeOptions({
           ui: { mode: 'compact-wheel' },
@@ -199,24 +170,17 @@ describe('PopoverManager', () => {
         const emitSpy = jest.spyOn(emitter, 'emit');
         manager.attach();
 
-        jest.runAllTimers();
-
-        const outsideElement = document.createElement('div');
-        document.body.appendChild(outsideElement);
-
-        const event = new MouseEvent('pointerdown', { bubbles: true });
-        Object.defineProperty(event, 'target', { value: outsideElement });
-
-        document.dispatchEvent(event);
+        pointerDownOn(appendOutsideElement());
 
         expect(emitSpy).toHaveBeenCalledWith('cancel', {});
       });
     });
 
-    describe('when modal or target is missing', () => {
+    describe('after detach and across shadow roots', () => {
       beforeEach(() => {
         const dom = createDOM();
         container = dom.container;
+        modal = dom.modal;
 
         const options = mergeOptions({
           ui: { mode: 'compact-wheel' },
@@ -228,38 +192,42 @@ describe('PopoverManager', () => {
         manager = new PopoverManager(core, emitter);
       });
 
-      it('should not emit cancel when modal element is missing', () => {
+      it('should not emit cancel after detach()', () => {
+        const emitSpy = jest.spyOn(emitter, 'emit');
+        const outsideElement = appendOutsideElement();
+        manager.attach();
+        pointerDownOn(outsideElement);
+
+        manager.detach();
+        pointerDownOn(outsideElement);
+
+        expect(emitSpy).toHaveBeenCalledTimes(1);
+        expect(emitSpy).toHaveBeenCalledWith('cancel', {});
+      });
+
+      it('should not emit cancel for a pointerdown inside an open shadow root within the modal', () => {
         const emitSpy = jest.spyOn(emitter, 'emit');
         manager.attach();
+        const host = document.createElement('div');
+        modal.appendChild(host);
+        const shadowButton = document.createElement('button');
+        host.attachShadow({ mode: 'open' }).appendChild(shadowButton);
 
-        jest.runAllTimers();
-
-        const modal = document.querySelector(`[data-owner-id="${INSTANCE_ID}"]`);
-        modal?.remove();
-
-        const outsideElement = document.createElement('div');
-        document.body.appendChild(outsideElement);
-
-        const event = new MouseEvent('pointerdown', { bubbles: true });
-        Object.defineProperty(event, 'target', { value: outsideElement });
-
-        document.dispatchEvent(event);
+        pointerDownOn(shadowButton);
 
         expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
       });
 
-      it('should not emit cancel when event target is null', () => {
+      it('should emit cancel for a pointerdown inside a shadow root outside the picker', () => {
         const emitSpy = jest.spyOn(emitter, 'emit');
         manager.attach();
+        const host = appendOutsideElement();
+        const shadowButton = document.createElement('button');
+        host.attachShadow({ mode: 'open' }).appendChild(shadowButton);
 
-        jest.runAllTimers();
+        pointerDownOn(shadowButton);
 
-        const event = new MouseEvent('pointerdown', { bubbles: true });
-        Object.defineProperty(event, 'target', { value: null });
-
-        document.dispatchEvent(event);
-
-        expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
+        expect(emitSpy).toHaveBeenCalledWith('cancel', {});
       });
     });
   });
@@ -268,6 +236,7 @@ describe('PopoverManager', () => {
     beforeEach(() => {
       const dom = createDOM();
       container = dom.container;
+      modal = dom.modal;
 
       const options = mergeOptions({
         ui: { mode: 'compact-wheel' },
@@ -283,20 +252,10 @@ describe('PopoverManager', () => {
       const emitSpy = jest.spyOn(emitter, 'emit');
       manager.attach();
 
-      jest.runAllTimers();
-
       manager.destroy();
-
-      const outsideElement = document.createElement('div');
-      document.body.appendChild(outsideElement);
-
-      const event = new MouseEvent('pointerdown', { bubbles: true });
-      Object.defineProperty(event, 'target', { value: outsideElement });
-
-      document.dispatchEvent(event);
+      pointerDownOn(appendOutsideElement());
 
       expect(emitSpy).not.toHaveBeenCalledWith('cancel', {});
     });
   });
 });
-

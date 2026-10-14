@@ -1,15 +1,18 @@
-import type { RenderConfig, ClockMode, DisabledTimeConfig, ClockType, AmPmType } from '../types';
+import type { RenderConfig, ClockMode, DisabledTimeConfig, ClockType, AmPmType, FaceContext } from '../types';
 import { HourEngine } from '../engine/HourEngine';
 import { MinuteEngine } from '../engine/MinuteEngine';
 import { AngleEngine } from '../engine/AngleEngine';
 import { isDocument } from '../../../utils/node';
-import { prefersReducedMotion } from '../../../utils/accessibility';
+import { prefersReducedMotion, setClass } from '../../../utils/accessibility';
+import { TIMINGS } from '../../../constants/timings';
 
 export class ClockRenderer {
   private config: RenderConfig;
   private currentAngle: number = 0;
   private tipsCache = new Map<string, { wrapper: HTMLElement; tip: HTMLElement }>();
   private cachedDimensions: Map<HTMLElement, { width: number; height: number; radius: number }> = new Map();
+  private snapTimeout: ReturnType<typeof setTimeout> | null = null;
+  private sweep: (() => void) | null = null;
 
   constructor(config: RenderConfig) {
     this.config = config;
@@ -28,6 +31,7 @@ export class ClockRenderer {
   }
 
   setHandAngle(angle: number): void {
+    this.cancelSweep();
     const targetAngle = AngleEngine.calculateShortestPath(this.currentAngle, angle);
 
     if (Math.abs(this.currentAngle - targetAngle) < 0.01) return;
@@ -45,34 +49,62 @@ export class ClockRenderer {
       return;
     }
 
-    this.config.tipsWrapper.classList.add('tp-ui-tips-animation');
+    this.clearSnapTimeout();
+    this.config.clockHand.classList.add('tp-ui-tips-animation');
     this.config.clockHand.style.transform = `rotateZ(${targetAngle}deg)`;
 
-    setTimeout(() => {
-      this.config.tipsWrapper.classList.remove('tp-ui-tips-animation');
-    }, 401);
+    this.snapTimeout = setTimeout(() => {
+      this.snapTimeout = null;
+      this.config.clockHand.classList.remove('tp-ui-tips-animation');
+    }, TIMINGS.TIPS_ANIMATION);
+  }
+
+  private clearSnapTimeout(): void {
+    if (this.snapTimeout === null) return;
+    clearTimeout(this.snapTimeout);
+    this.snapTimeout = null;
   }
 
   setActiveValue(value: string): void {
-    const wrappers = [this.config.tipsWrapper];
-    if (this.config.tipsWrapperFor24h) {
-      wrappers.push(this.config.tipsWrapperFor24h);
-    }
+    const target = Number(value);
 
-    wrappers.forEach((wrapper) => {
-      const tips = wrapper.querySelectorAll('.tp-ui-value-tips, .tp-ui-value-tips-24h');
-
-      tips.forEach((tip) => {
-        const htmlTip = tip as HTMLElement;
-        const isActive = htmlTip.textContent === value || Number(htmlTip.textContent) === Number(value);
-
-        if (isActive) {
-          htmlTip.classList.add('active');
-        } else {
-          htmlTip.classList.remove('active');
-        }
+    [this.config.tipsWrapper, this.config.tipsWrapperFor24h].forEach((wrapper) => {
+      wrapper?.querySelectorAll('.tp-ui-value-tips, .tp-ui-value-tips-24h').forEach((tip) => {
+        setClass(tip, 'active', tip.textContent === value || Number(tip.textContent) === target);
       });
     });
+  }
+
+  followHand(valueAt: (angle: number) => string, finalValue: string): void {
+    this.cancelSweep();
+    const hand = this.config.clockHand;
+
+    if (prefersReducedMotion() || !hand.classList.contains('tp-ui-tips-animation')) {
+      this.setActiveValue(finalValue);
+      return;
+    }
+
+    let frame = 0;
+    const step = (): void => {
+      const { a, b } = new DOMMatrix(getComputedStyle(hand).transform);
+      this.setActiveValue(valueAt((Math.atan2(b, a) * 180) / Math.PI));
+      frame = requestAnimationFrame(step);
+    };
+    const timeout = setTimeout(() => {
+      this.cancelSweep();
+      this.setActiveValue(finalValue);
+    }, TIMINGS.TIPS_ANIMATION);
+
+    this.sweep = () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(timeout);
+    };
+    frame = requestAnimationFrame(step);
+  }
+
+  cancelSweep(): void {
+    this.sweep?.();
+    this.sweep = null;
   }
 
   renderTips(
@@ -85,12 +117,21 @@ export class ClockRenderer {
     targetWrapper?: HTMLElement,
     amPm: AmPmType = '',
     currentHour: string = '12',
+    currentMinute: string = '00',
   ): void {
     if (isDocument() === false) {
       return;
     }
 
     const wrapper = targetWrapper || this.config.tipsWrapper;
+    const context: FaceContext = {
+      hour: currentHour,
+      minute: currentMinute,
+      amPm,
+      disabledTime,
+      clockType,
+      showSeconds: this.config.showSeconds,
+    };
 
     if (clearBefore) {
       wrapper.innerHTML = '';
@@ -112,7 +153,7 @@ export class ClockRenderer {
       }
 
       const { wrapper: span, tip: spanTip } = cached;
-      this.updateTipState(span, spanTip, value, mode, disabledTime, clockType, amPm, currentHour);
+      this.updateTipState(span, spanTip, value, mode, context);
 
       const angle = index * (360 / values.length) * (Math.PI / 180);
       span.style.left = `${wrapperWidth + Math.sin(angle) * radius}px`;
@@ -155,65 +196,34 @@ export class ClockRenderer {
     spanTip: HTMLElement,
     value: string,
     mode: ClockMode,
-    disabledTime: DisabledTimeConfig | null,
-    clockType: ClockType,
-    amPm: AmPmType,
-    currentHour: string,
+    context: FaceContext,
   ): void {
-    span.classList.remove('tp-ui-tips-disabled');
-    spanTip.classList.remove('tp-ui-tips-disabled');
-    spanTip.tabIndex = -1;
+    const isDisabled = this.checkIfDisabled(value, mode, context);
 
-    const isDisabled = this.checkIfDisabled(value, mode, disabledTime, clockType, amPm, currentHour);
-
-    if (isDisabled) {
-      span.classList.add('tp-ui-tips-disabled');
-      spanTip.classList.add('tp-ui-tips-disabled');
-    }
+    setClass(span, 'tp-ui-tips-disabled', isDisabled);
+    setClass(spanTip, 'tp-ui-tips-disabled', isDisabled);
   }
 
-  private checkIfDisabled(
-    value: string,
-    mode: ClockMode,
-    disabledTime: DisabledTimeConfig | null,
-    clockType: ClockType,
-    amPm: AmPmType,
-    currentHour: string,
-  ): boolean {
+  private checkIfDisabled(value: string, mode: ClockMode, context: FaceContext): boolean {
+    const { amPm, disabledTime, clockType, showSeconds } = context;
     if (!disabledTime) return false;
 
     if (mode === 'hours') {
-      return HourEngine.isDisabled(value, amPm, disabledTime);
+      return HourEngine.isDisabled(value, amPm, disabledTime, clockType, showSeconds);
     }
 
-    if (mode === 'minutes') {
-      return MinuteEngine.isDisabled(value, currentHour, amPm, disabledTime, clockType);
-    }
-
-    return false;
-  }
-
-  setCircleSize(isLarge: boolean): void {
-    if (isLarge) {
-      this.config.circle.classList.remove('small-circle');
-    } else {
-      this.config.circle.classList.add('small-circle');
-    }
+    return MinuteEngine.isUnitDisabled(mode, value, context);
   }
 
   setCircle24hMode(is24h: boolean): void {
-    if (is24h) {
-      this.config.circle.classList.add('tp-ui-circle-hand-24h');
-      this.config.clockHand.classList.add('tp-ui-clock-hand-24h');
-    } else {
-      this.config.circle.classList.remove('tp-ui-circle-hand-24h');
-      this.config.clockHand.classList.remove('tp-ui-clock-hand-24h');
-    }
+    setClass(this.config.circle, 'tp-ui-circle-hand-24h', is24h);
+    setClass(this.config.clockHand, 'tp-ui-clock-hand-24h', is24h);
   }
 
   destroy(): void {
+    this.cancelSweep();
+    this.clearSnapTimeout();
     this.tipsCache.clear();
     this.cachedDimensions.clear();
-    this.config.tipsWrapper.innerHTML = '';
   }
 }

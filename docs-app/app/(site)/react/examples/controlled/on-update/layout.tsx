@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "React onUpdate Example",
   description:
-    "React time picker onUpdate - react to live time changes via the onUpdate callback in timepicker-ui-react. Zero-dependency, SSR-safe and fully typed, with JSX.",
+    "React time picker onUpdate - react to live time changes via the onUpdate callback in timepicker-ui-react. SSR-safe and fully typed, with JSX.",
   path: "/react/examples/controlled/on-update",
 });
 

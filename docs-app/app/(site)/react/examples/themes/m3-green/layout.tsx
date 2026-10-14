@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "React Material 3 Green Example",
   description:
-    "React Material 3 green time picker - use the M3 green theme with timepicker-ui-react. Zero-dependency, SSR-safe and fully typed for React, with copy-paste JSX.",
+    "React Material 3 green time picker - use the M3 green theme with timepicker-ui-react. SSR-safe and fully typed for React, with copy-paste JSX.",
   path: "/react/examples/themes/m3-green",
 });
 

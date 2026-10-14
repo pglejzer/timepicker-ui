@@ -47,7 +47,7 @@ function BasicExample() {
       ref={inputRef}
       type="text"
       placeholder="Select time"
-      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
     />
   );
 }
@@ -69,7 +69,7 @@ function ClockTypeExample() {
       ref={inputRef}
       type="text"
       placeholder="24-hour format"
-      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
     />
   );
 }
@@ -91,7 +91,7 @@ function ThemeExample() {
       ref={inputRef}
       type="text"
       placeholder="Dark theme"
-      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
     />
   );
 }
@@ -122,7 +122,7 @@ function CallbackExample() {
         ref={inputRef}
         type="text"
         placeholder="Select time"
-        className="w-full rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+        className="w-full rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
       />
       {selectedTime && (
         <p className="text-sm text-muted-foreground text-center">
@@ -151,7 +151,7 @@ function IncrementExample() {
       ref={inputRef}
       type="text"
       placeholder="15-minute intervals"
-      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
     />
   );
 }
@@ -164,7 +164,7 @@ function DisabledTimeExample() {
     const picker = new TimepickerUI(inputRef.current, {
       clock: {
         disabledTime: {
-          interval: "12:00 PM - 1:00 PM",
+          ranges: "12:00 PM - 1:00 PM",
         },
       },
     });
@@ -177,7 +177,7 @@ function DisabledTimeExample() {
       ref={inputRef}
       type="text"
       placeholder="Restricted hours"
-      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
     />
   );
 }
@@ -264,6 +264,7 @@ export default function Clock24Example() {
           description="Apply dark theme for better visual hierarchy"
           code={`import { useEffect, useRef } from "react";
 import { TimepickerUI } from "timepicker-ui";
+import "timepicker-ui/main.css";
 import "timepicker-ui/theme-dark.css";
 
 export default function DarkThemeExample() {
@@ -351,7 +352,7 @@ export default function IncrementExample() {
       <Section icon={Lock} title="Restrictions">
         <ExampleCard
           title="Disabled Time Ranges"
-          description="Prevent selection of specific hours or time intervals"
+          description="Prevent selection of specific hours or time ranges"
           code={`import { useEffect, useRef } from "react";
 import { TimepickerUI } from "timepicker-ui";
 
@@ -363,7 +364,7 @@ export default function DisabledTimeExample() {
     const picker = new TimepickerUI(inputRef.current, {
       clock: {
         disabledTime: {
-          interval: "12:00 PM - 1:00 PM",
+          ranges: "12:00 PM - 1:00 PM",
         },
       },
     });

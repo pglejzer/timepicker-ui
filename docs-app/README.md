@@ -1,120 +1,66 @@
-# timepicker-ui — Documentation Site
+# timepicker-ui docs site
 
-The official documentation and live-demo website for [`timepicker-ui`](https://www.npmjs.com/package/timepicker-ui) — a zero-dependency, framework-agnostic, SSR-safe time picker for the web. It is built with **Next.js 16 (App Router)** and **React 19**, and deployed on **Vercel** at **https://timepicker-ui.vercel.app**.
+Source of [timepicker-ui.vercel.app](https://timepicker-ui.vercel.app): guides, API reference and live demos. Built with Next.js 16 (App Router) and React 19, deployed on Vercel.
 
-> This is a **separate project** from the library itself. The library source lives in [`../app`](../app) (see the [library README](../README.md)); this folder (`docs-app/`) only consumes `timepicker-ui` as a published dependency to render docs, API references, and interactive examples.
+This is a separate project from the library, which lives in [`../app`](../app). The site installs `timepicker-ui` and `timepicker-ui-react` from npm like any other app would, so the demos show the published version, not your local changes.
 
-## Table of Contents
+## Running it
 
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-- [Scripts](#scripts)
-- [Project Structure](#project-structure)
-- [Tech Stack](#tech-stack)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Prerequisites
-
-- **Node.js** — no `engines` field is declared in `package.json`, so the version is inferred. Next.js 16 requires **Node.js 20.9+**; use an active LTS release (Node 20 or 22).
-- **npm** — the repository ships a `package-lock.json`, so npm is the supported package manager for this site.
-
-## Getting Started
-
-From the `docs-app/` directory:
+You need Node 20.9 or newer (the minimum for Next.js 16) and npm.
 
 ```bash
-# install dependencies
+cd docs-app
 npm install
-
-# start the dev server
-npm run dev
+npm run dev     # http://localhost:3000
 ```
 
-Then open **http://localhost:3000** in your browser. The dev server uses the standard Next.js port (it is not overridden in `package.json`).
+Other scripts: `npm run build` for a production build, `npm run start` to serve it, `npm run lint` for ESLint.
 
-> Run all commands from `docs-app/`. This site has its own toolchain and dependencies, independent of the library build in `../app`.
-
-## Scripts
-
-All scripts are defined in [`package.json`](./package.json):
-
-| Script          | Command      | Description                                          |
-| --------------- | ------------ | ---------------------------------------------------- |
-| `npm run dev`   | `next dev`   | Start the local development server on port 3000.     |
-| `npm run build` | `next build` | Create an optimized production build.                |
-| `npm run start` | `next start` | Serve the production build locally (run after build).|
-| `npm run lint`  | `eslint`     | Lint the project with ESLint (flat config).          |
-
-## Project Structure
+## Where things are
 
 ```
 docs-app/
-├── app/                          # Next.js App Router
-│   ├── (site)/                   # Route group for the documentation site
-│   │   ├── docs/                 # Guides: installation, quick-start, configuration,
-│   │   │                         #   api/, features/, advanced/, changelog, roadmap, …
-│   │   ├── examples/             # Live demos: basic/, themes/, features/,
-│   │   │                         #   advanced/, plugins/
-│   │   ├── react/                # React wrapper docs + examples (timepicker-ui-react)
-│   │   ├── bundle-stats/         # Bundle-size analysis page
+├── app/
+│   ├── (site)/
+│   │   ├── docs/             # guides: installation, quick-start, configuration, api/, features/, advanced/, changelog, ...
+│   │   ├── examples/         # live demos: basic/, themes/, features/, advanced/, plugins/
+│   │   ├── react/            # docs and examples for timepicker-ui-react
+│   │   ├── bundle-stats/     # bundle size page
 │   │   ├── layout.tsx
-│   │   └── page.tsx              # Landing page
-│   ├── layout.tsx                # Root layout, metadata, fonts, analytics
-│   ├── globals.css               # Global styles (Tailwind entry)
-│   ├── manifest.ts               # Web app manifest
-│   ├── robots.ts                 # robots.txt
-│   ├── sitemap.ts                # Sitemap (driven by lib/seo-routes.ts)
-│   ├── opengraph-image.tsx       # Dynamic OG image
-│   ├── icon.svg / favicon.ico / apple-icon.png
-│   └── not-found.tsx             # 404 page
-├── components/                   # UI: header, footer, sidebars, code-block,
-│   │                             #   command-menu, examples/, bundleStats/, …
-├── lib/                          # docs-nav.ts, seo-routes.ts, use-dark-mode.ts
-├── public/                       # Static assets (svgs, bundle-data.json)
-├── next.config.ts                # Next config (React Compiler enabled)
-├── postcss.config.mjs            # PostCSS (Tailwind CSS v4)
-├── eslint.config.mjs             # ESLint flat config (eslint-config-next)
-├── tsconfig.json                 # TypeScript config (@/* path alias → ./)
-└── vercel.json                   # Vercel build configuration
+│   │   └── page.tsx          # landing page
+│   ├── layout.tsx            # root layout, metadata, fonts, analytics
+│   ├── globals.css           # Tailwind entry
+│   ├── manifest.ts
+│   ├── robots.ts
+│   ├── sitemap.ts            # built from lib/seo-routes.ts
+│   ├── opengraph-image.tsx
+│   ├── icon.svg, favicon.ico, apple-icon.png
+│   └── not-found.tsx
+├── components/               # header, footer, sidebars, code blocks, command menu, examples/, bundleStats/, ...
+├── lib/                      # docs-nav.ts, metadata.ts, seo-routes.ts, use-dark-mode.ts
+├── public/                   # static files, bundle-data.json
+├── next.config.ts            # React Compiler is on
+├── postcss.config.mjs        # Tailwind CSS v4
+├── eslint.config.mjs         # eslint-config-next
+├── tsconfig.json             # @/* maps to ./
+└── vercel.json
 ```
 
-## Tech Stack
+## Stack
 
-- **Framework:** [Next.js 16](https://nextjs.org) (App Router) with the [React Compiler](https://react.dev/learn/react-compiler) enabled (`reactCompiler: true`).
-- **UI library:** [React 19](https://react.dev) + React DOM 19.
-- **Language:** [TypeScript 5](https://www.typescriptlang.org) (strict mode), with the `@/*` import alias mapped to the project root.
-- **Styling:** [Tailwind CSS v4](https://tailwindcss.com) via `@tailwindcss/postcss`. Fonts: Geist Sans & Geist Mono (`next/font/google`).
-- **UI primitives:** [Radix UI](https://www.radix-ui.com) (`react-tabs`, `react-scroll-area`), [`lucide-react`](https://lucide.dev) icons, [`clsx`](https://github.com/lukeed/clsx).
-- **Code & charts:** [`prism-react-renderer`](https://github.com/FormidableLabs/prism-react-renderer) for syntax highlighting, [`recharts`](https://recharts.org) for bundle-size charts.
-- **The library on display:** [`timepicker-ui`](https://www.npmjs.com/package/timepicker-ui) and its React wrapper [`timepicker-ui-react`](https://www.npmjs.com/package/timepicker-ui-react), consumed as dependencies and rendered in live demos.
-- **Analytics:** [`@vercel/analytics`](https://vercel.com/docs/analytics) and [`@vercel/speed-insights`](https://vercel.com/docs/speed-insights).
+Next.js 16 with the React Compiler, React 19, TypeScript and Tailwind CSS v4. Radix UI for tabs and scroll areas, lucide-react for icons, prism-react-renderer for code blocks, recharts for the bundle size charts. Vercel Analytics and Speed Insights are on. Fonts are Geist Sans and Geist Mono.
 
-> Demos initialize the picker on the client (in an effect / client component), because the library guards DOM access for SSR safety.
+The picker needs the DOM, so demos create it inside an effect or a client component.
 
 ## Deployment
 
-The site is deployed on [Vercel](https://vercel.com) and serves the canonical domain **https://timepicker-ui.vercel.app** (configured via `metadataBase` and `lib/seo-routes.ts`).
-
-Vercel build settings are defined in [`vercel.json`](./vercel.json):
-
-- **Framework:** `nextjs`
-- **Install command:** `npm install`
-- **Build command:** `npm run build`
-- **Output directory:** `.next`
-
-When connected to the repository, Vercel builds and deploys automatically on push (production from the default branch, preview deployments for other branches and pull requests).
+Vercel builds the site with the settings in [`vercel.json`](./vercel.json): `npm install`, `npm run build`, output in `.next`. The canonical URL is set in `metadataBase` in `app/layout.tsx` and in `lib/seo-routes.ts`.
 
 ## Contributing
 
-Contributions to the docs site are welcome.
+Run `npm run lint` before opening a PR. Line endings are CRLF, `.gitattributes` enforces that.
 
-- Report issues or request changes at https://github.com/pglejzer/timepicker-ui/issues.
-- Open a pull request for fixes and improvements.
-- Make sure `npm run lint` passes before submitting.
-- Keep line endings **CRLF** (the repository enforces `* eol=crlf` via `.gitattributes`).
-- This site only consumes `timepicker-ui` — it does **not** change the library. If a demo surfaces a real library bug or API gap, please open an issue rather than patching `../app`.
+If a demo turns up a bug in the library itself, please [open an issue](https://github.com/pglejzer/timepicker-ui/issues) rather than working around it here.
 
 ## License
 

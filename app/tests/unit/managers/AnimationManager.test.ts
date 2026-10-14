@@ -2,12 +2,49 @@ import AnimationManager from '../../../src/managers/AnimationManager';
 import { CoreState } from '../../../src/timepicker/CoreState';
 import { EventEmitter, type TimepickerEventMap } from '../../../src/utils/EventEmitter';
 import { DEFAULT_OPTIONS } from '../../../src/utils/options/defaults';
+import { TIMINGS } from '@/constants/timings';
 
 describe('AnimationManager', () => {
   let coreState: CoreState;
   let emitter: EventEmitter<TimepickerEventMap>;
   let animationManager: AnimationManager;
   let mockElement: HTMLElement;
+  const originalMatchMedia = window.matchMedia;
+
+  const setReducedMotion = (reduce: boolean): void => {
+    window.matchMedia = jest.fn((query: string) => ({
+      matches: reduce && /prefers-reduced-motion:\s*reduce/.test(query),
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })) as unknown as typeof window.matchMedia;
+  };
+
+  const useAnimationOff = (): void => {
+    const noAnimOptions = { ...DEFAULT_OPTIONS, ui: { ...DEFAULT_OPTIONS.ui, animation: false } };
+    coreState = new CoreState(mockElement, noAnimOptions, 'test-no-anim');
+    animationManager.destroy();
+    animationManager = new AnimationManager(coreState, emitter);
+  };
+
+  const mockModal = (): HTMLDivElement => {
+    const modal = document.createElement('div');
+    jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+    return modal;
+  };
+
+  const trackStyleFlush = (modal: HTMLElement): jest.Mock<number, []> => {
+    const flush = jest.fn(() => {
+      expect(modal).not.toHaveClass('show');
+      return 0;
+    });
+    Object.defineProperty(modal, 'offsetHeight', { configurable: true, get: flush });
+    return flush;
+  };
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -23,6 +60,7 @@ describe('AnimationManager', () => {
 
   afterEach(() => {
     animationManager.destroy();
+    window.matchMedia = originalMatchMedia;
     document.body.innerHTML = '';
     jest.useRealTimers();
     jest.clearAllMocks();
@@ -46,64 +84,89 @@ describe('AnimationManager', () => {
   });
 
   describe('setAnimationToOpen', () => {
-    it('should add opacity class to modal', () => {
-      const modal = document.createElement('div') as HTMLDivElement;
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+    it('should flush styles first, then add show synchronously without scheduling a timer', () => {
+      const modal = mockModal();
+      const flush = trackStyleFlush(modal);
 
       animationManager.setAnimationToOpen();
 
-      expect(modal.classList.contains('opacity')).toBe(true);
+      expect(flush).toHaveBeenCalledTimes(1);
+      expect(modal).toHaveClass('show');
+      expect(jest.getTimerCount()).toBe(0);
     });
 
-    it('should add show class after animation delay', () => {
-      const modal = document.createElement('div') as HTMLDivElement;
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+    it('should never add the opacity helper class', () => {
+      const modal = mockModal();
+
+      animationManager.setAnimationToOpen();
+      animationManager.setAnimationToOpen(true);
+
+      expect(modal).not.toHaveClass('opacity');
+    });
+
+    it('should add show without a style flush when immediate', () => {
+      const modal = mockModal();
+      const flush = trackStyleFlush(modal);
+
+      animationManager.setAnimationToOpen(true);
+
+      expect(flush).not.toHaveBeenCalled();
+      expect(modal).toHaveClass('show');
+      expect(jest.getTimerCount()).toBe(0);
+    });
+
+    it('should add show without a style flush when animation is off', () => {
+      useAnimationOff();
+      const modal = mockModal();
+      const flush = trackStyleFlush(modal);
 
       animationManager.setAnimationToOpen();
 
-      expect(modal.classList.contains('show')).toBe(false);
-
-      jest.advanceTimersByTime(400);
-
-      expect(modal.classList.contains('show')).toBe(true);
+      expect(flush).not.toHaveBeenCalled();
+      expect(modal).toHaveClass('show');
     });
   });
 
   describe('removeAnimationToClose', () => {
-    it('should do nothing when modal is null', () => {
+    it('should not throw when modal is null', () => {
       jest.spyOn(coreState, 'getModalElement').mockReturnValue(null);
 
       expect(() => animationManager.removeAnimationToClose()).not.toThrow();
     });
 
-    it('should remove show and opacity classes', () => {
-      const modal = document.createElement('div') as HTMLDivElement;
-      modal.classList.add('show', 'opacity');
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+    it('should remove show at once and return the exit duration', () => {
+      const modal = mockModal();
+      modal.classList.add('show');
 
-      animationManager.removeAnimationToClose();
+      const wait = animationManager.removeAnimationToClose();
 
-      jest.advanceTimersByTime(400);
-
-      expect(modal.classList.contains('show')).toBe(false);
-      expect(modal.classList.contains('opacity')).toBe(false);
+      expect(modal).not.toHaveClass('show');
+      expect(wait).toBe(TIMINGS.MODAL_EXIT);
     });
-  });
 
-  describe('handleAnimationClock', () => {
-    it('should add and remove animation class', () => {
-      const clockFace = document.createElement('div');
-      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
+    it('should return no wait when animation is off', () => {
+      useAnimationOff();
+      const modal = mockModal();
+      modal.classList.add('show');
 
-      animationManager.handleAnimationClock();
+      expect(animationManager.removeAnimationToClose()).toBe(0);
+      expect(modal).not.toHaveClass('show');
+    });
 
-      jest.advanceTimersByTime(400);
+    it('should return no wait when the user prefers reduced motion', () => {
+      setReducedMotion(true);
+      const modal = mockModal();
+      modal.classList.add('show');
 
-      expect(clockFace.classList.contains('tp-ui-clock-animation')).toBe(true);
+      expect(animationManager.removeAnimationToClose()).toBe(0);
+      expect(modal).not.toHaveClass('show');
+    });
 
-      jest.advanceTimersByTime(350);
+    it('should keep the exit duration when reduced motion is not requested', () => {
+      setReducedMotion(false);
+      mockModal();
 
-      expect(clockFace.classList.contains('tp-ui-clock-animation')).toBe(false);
+      expect(animationManager.removeAnimationToClose()).toBe(TIMINGS.MODAL_EXIT);
     });
   });
 
@@ -124,10 +187,36 @@ describe('AnimationManager', () => {
       expect(clockHand.classList.contains('tp-ui-tips-animation')).toBe(true);
       expect(emitSpy).toHaveBeenCalledWith('animation:start', {});
 
-      jest.advanceTimersByTime(450);
+      jest.advanceTimersByTime(TIMINGS.TIPS_ANIMATION);
 
       expect(clockHand.classList.contains('tp-ui-tips-animation')).toBe(false);
       expect(emitSpy).toHaveBeenCalledWith('animation:end', {});
+    });
+
+    it('should leave the hand alone and emit nothing when ui.animation is off', () => {
+      useAnimationOff();
+      const clockHand = document.createElement('div');
+      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
+      const emitSpy = jest.spyOn(emitter, 'emit');
+
+      animationManager.handleAnimationSwitchTipsMode();
+
+      expect(clockHand.classList.contains('tp-ui-tips-animation')).toBe(false);
+      expect(emitSpy).not.toHaveBeenCalledWith('animation:start', {});
+      expect(jest.getTimerCount()).toBe(0);
+    });
+
+    it('should leave the hand alone and emit nothing under reduced motion', () => {
+      setReducedMotion(true);
+      const clockHand = document.createElement('div');
+      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
+      const emitSpy = jest.spyOn(emitter, 'emit');
+
+      animationManager.handleAnimationSwitchTipsMode();
+
+      expect(clockHand.classList.contains('tp-ui-tips-animation')).toBe(false);
+      expect(emitSpy).not.toHaveBeenCalledWith('animation:start', {});
+      expect(jest.getTimerCount()).toBe(0);
     });
   });
 
@@ -142,52 +231,18 @@ describe('AnimationManager', () => {
   });
 
   describe('destroy', () => {
-    it('should clear all timeouts', () => {
-      const modal = document.createElement('div') as HTMLDivElement;
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+    it('should clear a pending tips animation timer', () => {
+      const clockHand = document.createElement('div');
+      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
+      const emitSpy = jest.spyOn(emitter, 'emit');
 
-      animationManager.setAnimationToOpen();
-
+      animationManager.handleAnimationSwitchTipsMode();
       animationManager.destroy();
 
-      jest.advanceTimersByTime(500);
+      jest.advanceTimersByTime(TIMINGS.TIPS_ANIMATION);
 
-      expect(modal.classList.contains('show')).toBe(false);
-    });
-  });
-
-  describe('animations disabled', () => {
-    it('should run callback immediately when animation is disabled', () => {
-      const noAnimOptions = {
-        ...DEFAULT_OPTIONS,
-        ui: { ...DEFAULT_OPTIONS.ui, animation: false },
-      };
-      coreState = new CoreState(mockElement, noAnimOptions, 'test-no-anim');
-      animationManager = new AnimationManager(coreState, emitter);
-
-      const modal = document.createElement('div') as HTMLDivElement;
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
-
-      animationManager.setAnimationToOpen();
-
-      expect(modal.classList.contains('opacity')).toBe(true);
-      expect(modal.classList.contains('show')).toBe(true);
-    });
-
-    it('should not run handleAnimationClock when animation disabled', () => {
-      const noAnimOptions = {
-        ...DEFAULT_OPTIONS,
-        ui: { ...DEFAULT_OPTIONS.ui, animation: false },
-      };
-      coreState = new CoreState(mockElement, noAnimOptions, 'test-no-anim');
-      animationManager = new AnimationManager(coreState, emitter);
-
-      const clockFace = document.createElement('div');
-      jest.spyOn(coreState, 'getClockFace').mockReturnValue(clockFace);
-
-      animationManager.handleAnimationClock();
-
-      expect(clockFace.classList.contains('tp-ui-clock-animation')).toBe(false);
+      expect(jest.getTimerCount()).toBe(0);
+      expect(emitSpy).not.toHaveBeenCalledWith('animation:end', {});
     });
   });
 });

@@ -4,7 +4,7 @@ const clearButtonPicker = new TimepickerUI('#clear-button-picker', {
   ui: {
     clearButton: true,
     theme: 'basic',
-    enableSwitchIcon: true,
+    viewSwitch: true,
   },
   labels: {
     clear: 'Clear',
@@ -22,12 +22,9 @@ clearButtonPicker.create();
 
 const clearNoClearInputPicker = new TimepickerUI('#clear-no-input-picker', {
   ui: {
-    clearButton: true,
+    clearButton: { clearInput: false },
     theme: 'basic',
-    enableSwitchIcon: true,
-  },
-  clearBehavior: {
-    clearInput: false,
+    viewSwitch: true,
   },
   callbacks: {
     onClear: (data) => {
@@ -53,7 +50,7 @@ const clearThemeList = [
 
 clearThemeList.forEach((theme) => {
   new TimepickerUI(`#clear-theme-${theme}`, {
-    ui: { clearButton: true, theme, enableSwitchIcon: true },
+    ui: { clearButton: true, theme, viewSwitch: true },
     labels: { clear: 'Clear' },
     callbacks: {
       onClear: (data) => {
@@ -66,9 +63,9 @@ clearThemeList.forEach((theme) => {
 // Range + Clear Button
 const rangeClearPicker = new TimepickerUI('#range-clear-picker', {
   clock: { type: '12h' },
-  ui: { clearButton: true, theme: 'm3-green', enableSwitchIcon: true },
-  range: { enabled: true, fromLabel: 'From', toLabel: 'To' },
-  labels: { clear: 'Clear' },
+  ui: { clearButton: true, theme: 'm3-green', viewSwitch: true },
+  range: { enabled: true },
+  labels: { rangeFrom: 'From', rangeTo: 'To', clear: 'Clear' },
   callbacks: {
     onRangeConfirm: (data) => {
       console.log('Range + Clear confirmed:', data.from, '–', data.to);

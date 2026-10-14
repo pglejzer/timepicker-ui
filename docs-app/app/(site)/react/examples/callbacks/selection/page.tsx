@@ -88,13 +88,11 @@ function App() {
           code={`// onSelectHour
 interface HourSelectData {
   hour: string;
-  degreesHours: number;
 }
 
 // onSelectMinute
 interface MinuteSelectData {
   minutes: string;
-  degreesMinutes: number;
 }
 
 // onSelectAM, onSelectPM

@@ -30,7 +30,7 @@ export function TabButton({
       ref={buttonRef}
       onClick={onClick}
       onKeyDown={onKeyDown}
-      className={`relative flex h-10 shrink-0 items-center whitespace-nowrap px-1 font-mono text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+      className={`relative flex h-10 shrink-0 items-center whitespace-nowrap px-1 font-mono text-sm transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring ${
         active
           ? "text-foreground"
           : "text-muted-foreground hover:text-foreground"

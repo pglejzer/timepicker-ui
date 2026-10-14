@@ -13,23 +13,22 @@
   --tp-on-surface: #e5e5e5;
   --tp-on-surface-rgb: 229, 229, 229;
 
-  --tp-am-pm-active: #bb86fc;
+  --tp-am-pm-active: var(--tp-primary);
   --tp-am-pm-text-selected: #000000;
   --tp-am-pm-text-unselected: #a1a1a1;
 
   --tp-primary: #bb86fc;
   --tp-on-primary: #000000;
-  --tp-primary-container: #bb86fc;
+  --tp-primary-container: var(--tp-primary);
   --tp-on-primary-container: #000000;
 
-  --tp-tertiary-container: #bb86fc;
+  --tp-tertiary-container: var(--tp-primary);
   --tp-on-tertiary-container: #000000;
 
   --tp-border: rgba(255, 255, 255, 0.12);
   --tp-outline: #d8b4fe;
   --tp-hover-bg: #3b3940;
   --tp-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6);
-  --tp-focus-ring-halo: rgba(255, 255, 255, 0.7);
 
   --tp-dropdown-option-bg: #2c2b30;
   --tp-dropdown-option-text: #e5e5e5;

@@ -138,31 +138,6 @@ describe('ColumnDragState', () => {
     });
   });
 
-  describe('scheduleSnapAfterWheel()', () => {
-    it('should call callback after debounce timeout', () => {
-      jest.useFakeTimers();
-      const callback = jest.fn();
-
-      state.scheduleSnapAfterWheel(callback);
-      expect(callback).not.toHaveBeenCalled();
-
-      jest.advanceTimersByTime(200);
-      expect(callback).toHaveBeenCalledTimes(1);
-    });
-
-    it('should debounce multiple calls', () => {
-      jest.useFakeTimers();
-      const callback = jest.fn();
-
-      state.scheduleSnapAfterWheel(callback);
-      state.scheduleSnapAfterWheel(callback);
-      state.scheduleSnapAfterWheel(callback);
-
-      jest.advanceTimersByTime(200);
-      expect(callback).toHaveBeenCalledTimes(1);
-    });
-  });
-
   describe('destroy()', () => {
     it('should abort the signal', () => {
       const signal = state.signal;
@@ -173,17 +148,6 @@ describe('ColumnDragState', () => {
     it('should not throw when called multiple times', () => {
       state.destroy();
       expect(() => state.destroy()).not.toThrow();
-    });
-
-    it('should clear pending snap timeout', () => {
-      jest.useFakeTimers();
-      const callback = jest.fn();
-
-      state.scheduleSnapAfterWheel(callback);
-      state.destroy();
-
-      jest.advanceTimersByTime(200);
-      expect(callback).not.toHaveBeenCalled();
     });
   });
 });

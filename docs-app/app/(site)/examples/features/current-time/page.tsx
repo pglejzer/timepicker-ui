@@ -10,99 +10,75 @@ export default function CurrentTimePage() {
     <div>
       <PageHeader
         title="Current Time"
-        description="Initialize with current time"
+        description={
+          <>
+            Start the picker on the current time, or on a time you choose, with{" "}
+            <code>clock.defaultTime</code>.
+          </>
+        }
         eyebrow="Example · Features"
       />
 
       <Section icon={Clock} title="Simple Current Time">
         <p className="text-muted-foreground mb-4">
-          Set to true to use current time:
+          Set <code>defaultTime</code> to <code>&apos;now&apos;</code> to show
+          the current time and write it to the input:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  clock: { currentTime: true }
+  clock: { defaultTime: 'now' }
 });
 picker.create();`}
           options={{
-            clock: { currentTime: true },
+            clock: { defaultTime: "now" },
           }}
         />
       </Section>
 
-      <Section icon={Clock} title="Update Input with Current Time">
+      <Section icon={Clock} title="Current Time Without Updating the Input">
         <p className="text-muted-foreground mb-4">
-          Automatically set input value to current time:
+          With the object form and <code>updateInput: false</code>, the picker
+          opens on the current time and the input stays empty until the user
+          confirms:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   clock: {
-    currentTime: {
-      updateInput: true,
-      time: new Date()
+    defaultTime: {
+      time: 'now',
+      updateInput: false
     }
   }
 });
 picker.create();`}
           options={{
             clock: {
-              currentTime: {
-                updateInput: true,
-                time: new Date(),
+              defaultTime: {
+                time: "now",
+                updateInput: false,
               },
             },
           }}
         />
       </Section>
 
-      <Section icon={Clock} title="With Locale">
+      <Section icon={Clock} title="Clock Type from the Locale">
         <p className="text-muted-foreground mb-4">
-          Use specific locale for time formatting:
+          Use <code>clock.type: &apos;auto&apos;</code> to pick 12h or 24h from
+          the browser locale:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   clock: {
-    currentTime: {
-      updateInput: true,
-      time: new Date(),
-      locales: 'en-US'
-    }
+    type: 'auto',
+    defaultTime: 'now'
   }
 });
 picker.create();`}
           options={{
             clock: {
-              currentTime: {
-                updateInput: true,
-                time: new Date(),
-                locales: "en-US",
-              },
-            },
-          }}
-        />
-      </Section>
-
-      <Section icon={Clock} title="Prevent Clock Type">
-        <p className="text-muted-foreground mb-4">
-          Force clock type based on locale:
-        </p>
-        <TimepickerExample
-          code={`const picker = new TimepickerUI(input, {
-  clock: {
-    currentTime: {
-      updateInput: true,
-      time: new Date(),
-      preventClockType: true
-    }
-  }
-});
-picker.create();`}
-          options={{
-            clock: {
-              currentTime: {
-                updateInput: true,
-                time: new Date(),
-                preventClockType: true,
-              },
+              type: "auto",
+              defaultTime: "now",
             },
           }}
         />
@@ -118,16 +94,16 @@ customTime.setHours(14, 30, 0);
 
 const picker = new TimepickerUI(input, {
   clock: {
-    currentTime: {
-      updateInput: true,
-      time: customTime
+    defaultTime: {
+      time: customTime,
+      updateInput: true
     }
   }
 });
 picker.create();`}
           options={{
             clock: {
-              currentTime: {
+              defaultTime: {
                 updateInput: true,
                 time: (() => {
                   const customTime = new Date();

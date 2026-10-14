@@ -1,6 +1,9 @@
 import type { RangePart, RangeValue, RangeValidationResult, DisabledTimeConfig } from './types';
 import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitter';
-import { isValueComplete, calculateDuration } from './utils';
+import { isValueComplete, isPlaceholder, calculateDuration, calculateDurationSeconds } from './utils';
+import { pad, SECONDS_PER_MINUTE } from '../../../utils/time/parse';
+
+const valuesBelow = (limit: number): string[] => Array.from({ length: limit }, (_, index) => pad(index));
 
 export class RangeState {
   private activePart: RangePart = 'from';
@@ -11,17 +14,21 @@ export class RangeState {
   private readonly minDuration: number | undefined;
   private readonly maxDuration: number | undefined;
   private readonly emitter: EventEmitter<TimepickerEventMap>;
+  readonly showSeconds: boolean;
+  readonly chosenFields = new Set<keyof RangeValue>();
 
   constructor(
     clockType: '12h' | '24h',
     minDuration: number | undefined,
     maxDuration: number | undefined,
     emitter: EventEmitter<TimepickerEventMap>,
+    showSeconds = false,
   ) {
     this.clockType = clockType;
     this.minDuration = minDuration;
     this.maxDuration = maxDuration;
     this.emitter = emitter;
+    this.showSeconds = showSeconds;
   }
 
   getActivePart(): RangePart {
@@ -64,15 +71,33 @@ export class RangeState {
     return this.isFromComplete();
   }
 
+  getCompletePreview(part: RangePart): RangeValue | null {
+    const preview = this.previewValue;
+    if (!preview || this.activePart !== part) return null;
+
+    const hasPlaceholder = [preview.minutes, preview.seconds ?? ''].some(isPlaceholder);
+    return isValueComplete(preview, this.clockType) && !hasPlaceholder ? preview : null;
+  }
+
+  getPendingFrom(): RangeValue | null {
+    return this.isFromComplete() ? null : this.getCompletePreview('from');
+  }
+
   canConfirm(): boolean {
-    if (!this.isFromComplete() || !this.isToComplete()) return false;
+    const preview = this.chosenFields.size > 0 ? this.getCompletePreview('to') : null;
+    const committed = this.isFromComplete() && this.isToComplete() ? this.toValue : null;
+    const durationSeconds = calculateDurationSeconds(this.fromValue, preview ?? committed, this.clockType);
+    return durationSeconds > 0 && this.isWithinLimits(durationSeconds);
+  }
 
-    const duration = this.getDuration();
-
-    return duration > 0;
+  private isWithinLimits(seconds: number): boolean {
+    const belowMin = this.minDuration !== undefined && seconds < this.minDuration * SECONDS_PER_MINUTE;
+    const aboveMax = this.maxDuration !== undefined && seconds > this.maxDuration * SECONDS_PER_MINUTE;
+    return !belowMin && !aboveMax;
   }
 
   setActivePart(part: RangePart): boolean {
+    this.chosenFields.clear();
     if (part === 'to' && !this.canSwitchToEnd()) {
       return false;
     }
@@ -85,18 +110,6 @@ export class RangeState {
     }
 
     return changed;
-  }
-
-  resetActivePart(): void {
-    this.activePart = 'from';
-    this.previewValue = null;
-  }
-
-  getCurrentValue(): RangeValue | null {
-    if (this.previewValue) {
-      return this.previewValue;
-    }
-    return this.activePart === 'from' ? this.fromValue : this.toValue;
   }
 
   getSavedValue(): RangeValue | null {
@@ -114,6 +127,10 @@ export class RangeState {
     this.previewValue = null;
   }
 
+  getDurationSeconds(): number {
+    return calculateDurationSeconds(this.fromValue, this.toValue, this.clockType);
+  }
+
   getDuration(): number {
     return calculateDuration(this.fromValue, this.toValue, this.clockType);
   }
@@ -124,56 +141,42 @@ export class RangeState {
     }
 
     const duration = this.getDuration();
-    let valid = true;
+    const durationSeconds = this.getDurationSeconds();
+    const valid = this.isWithinLimits(durationSeconds);
 
-    if (this.minDuration !== undefined && duration < this.minDuration) {
-      valid = false;
-    }
-    if (this.maxDuration !== undefined && duration > this.maxDuration) {
-      valid = false;
-    }
+    const result: RangeValidationResult = this.showSeconds
+      ? { valid, duration, durationSeconds }
+      : { valid, duration };
 
     this.emitter.emit('range:validation', {
-      valid,
-      duration,
+      ...result,
       minDuration: this.minDuration,
       maxDuration: this.maxDuration,
     });
 
-    return { valid, duration };
+    return result;
   }
 
   getDisabledTimeForEndPart(): DisabledTimeConfig | null {
     if (this.activePart === 'from') return null;
     if (!this.fromValue || !this.isFromComplete()) return null;
 
-    const disabledHours: string[] = [];
-    const disabledMinutes: string[] = [];
-
     const fromHour = parseInt(this.fromValue.hour, 10);
-    const fromMinutes = parseInt(this.fromValue.minutes, 10);
-    const fromType = this.fromValue.type;
+    const fromMinute = parseInt(this.fromValue.minutes, 10);
+    const config: DisabledTimeConfig = { hours: [], minutes: valuesBelow(fromMinute), fromHour };
 
     if (this.clockType === '24h') {
-      for (let h = 0; h < fromHour; h++) {
-        disabledHours.push(h.toString().padStart(2, '0'));
-      }
-      for (let m = 0; m < fromMinutes; m++) {
-        disabledMinutes.push(m.toString().padStart(2, '0'));
-      }
-      return { hours: disabledHours, minutes: disabledMinutes, fromHour };
+      config.hours = valuesBelow(fromHour);
+    } else {
+      config.fromType = this.fromValue.type;
     }
 
-    for (let m = 0; m < fromMinutes; m++) {
-      disabledMinutes.push(m.toString().padStart(2, '0'));
+    if (this.showSeconds) {
+      config.seconds = valuesBelow(parseInt(this.fromValue.seconds ?? '0', 10));
+      config.fromMinute = fromMinute;
     }
 
-    return {
-      hours: disabledHours,
-      minutes: disabledMinutes,
-      fromType,
-      fromHour,
-    };
+    return config;
   }
 
   reset(): void {
@@ -181,5 +184,6 @@ export class RangeState {
     this.fromValue = null;
     this.toValue = null;
     this.previewValue = null;
+    this.chosenFields.clear();
   }
 }

@@ -2,6 +2,8 @@ import type { TimepickerOptions } from '../../types/options';
 import keyboardSvg from '../../../assets/keyboard.svg';
 import scheduleSvg from '../../../assets/schedule.svg';
 import { PluginRegistry } from '../../core/PluginRegistry';
+import { DEFAULT_OPTIONS } from '../options/defaults';
+import { escapeHtml as text } from './escape';
 
 export const HOURS_24 = ['00', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
 export const HOURS_12 = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
@@ -22,17 +24,20 @@ const buildTimezoneSelector = (
   instanceId: string,
 ): string => {
   const {
-    timezone: { enabled: tzEnabled, label: tzLabel },
+    timezone: { enabled: tzEnabled, label },
   } = options;
 
   if (!tzEnabled || !PluginRegistry.has('timezone')) return '';
 
+  const tzLabel = text(label ?? DEFAULT_OPTIONS.timezone.label);
+  const id = text(instanceId);
+
   return `<div class="tp-ui-timezone ${mobileClass}">
-        <span class="tp-ui-timezone-label" id="tp-tz-label-${instanceId}">${tzLabel}</span>
-        <div class="tp-ui-timezone-dropdown" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="tp-tz-label-${instanceId}" tabindex="0" data-tz-id="${instanceId}">
-          <div class="tp-ui-timezone-selected" data-placeholder="${tzLabel}...">${tzLabel}...</div>
+        <span class="tp-ui-timezone-label" id="tp-tz-label-${id}">${tzLabel}</span>
+        <div class="tp-ui-timezone-dropdown" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="tp-tz-label-${id}" tabindex="0" data-tz-id="${id}">
+          <div class="tp-ui-timezone-selected" data-md3-ripple data-placeholder="${tzLabel}...">${tzLabel}...</div>
           <svg class="tp-ui-timezone-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          <div class="tp-ui-timezone-menu" role="listbox" aria-labelledby="tp-tz-label-${instanceId}"></div>
+          <div class="tp-ui-timezone-menu" role="listbox" aria-labelledby="tp-tz-label-${id}"></div>
         </div>
       </div>`;
 };
@@ -45,16 +50,18 @@ const buildRangeSelector = (options: Required<TimepickerOptions>): string => {
 
   if (!rangeEnabled || !PluginRegistry.has('range')) return '';
 
-  return `<div class="tp-ui-range-header" role="tablist" aria-label="${rangeSelectionLabel}"><button type="button" class="tp-ui-range-tab tp-ui-range-from active" role="tab" tabindex="0" aria-selected="true"><span class="tp-ui-range-tab-label">${fromLabel}</span><span class="tp-ui-range-tab-value tp-ui-range-from-time">--:--</span></button><button type="button" class="tp-ui-range-tab tp-ui-range-to" role="tab" tabindex="-1" aria-selected="false"><span class="tp-ui-range-tab-label">${toLabel}</span><span class="tp-ui-range-tab-value tp-ui-range-to-time">--:--</span></button></div>`;
+  return `<div class="tp-ui-range-header" role="tablist" aria-label="${text(rangeSelectionLabel)}"><button type="button" class="tp-ui-range-tab tp-ui-range-from active" data-md3-ripple role="tab" tabindex="0" aria-selected="true"><span class="tp-ui-range-tab-label">${text(fromLabel)}</span><span class="tp-ui-range-tab-value tp-ui-range-from-time" aria-hidden="true">--:--</span></button><button type="button" class="tp-ui-range-tab tp-ui-range-to" data-md3-ripple role="tab" tabindex="-1" aria-selected="false"><span class="tp-ui-range-tab-label">${text(toLabel)}</span><span class="tp-ui-range-tab-value tp-ui-range-to-time" aria-hidden="true">--:--</span></button></div>`;
 };
 
 const buildClearButton = (options: Required<TimepickerOptions>, mobileClass: string): string => {
   const {
     ui: { clearButton: clearButtonEnabled },
-    labels: { clear: clearLabel },
+    labels: { clear },
   } = options;
 
   if (!clearButtonEnabled) return '';
+
+  const clearLabel = text(clear);
 
   return `<div class="tp-ui-clear-btn ${mobileClass} disabled" data-md3-ripple tabindex="0" role="button" aria-label="${clearLabel}" aria-disabled="true">${clearLabel}</div>`;
 };
@@ -72,64 +79,114 @@ const buildPickerBody = (
     return `<div class="tp-ui-mobile-clock-wrapper ${config.mobileClass}"></div>`;
   }
 
-  const {
-    labels: { clockLabel },
-  } = options;
+  const { clockLabel } = options.labels;
 
-  return `<div class="tp-ui-mobile-clock-wrapper ${config.mobileClass}"><div class="tp-ui-body ${config.mobileClass}"><div class="tp-ui-clock-face ${config.mobileClass}" role="group" aria-label="${clockLabel}"><div class="tp-ui-dot ${config.mobileClass}" aria-hidden="true"></div><div class="tp-ui-clock-hand ${config.mobileClass}" aria-hidden="true"><div class="tp-ui-circle-hand ${config.mobileClass}"></div></div><div class="tp-ui-tips-wrapper ${config.mobileClass}" aria-hidden="true"></div>${config.clockType === '24h' ? `<div class="tp-ui-tips-wrapper-24h ${config.mobileClass}" aria-hidden="true"></div>` : ''}</div></div></div>`;
+  return `<div class="tp-ui-mobile-clock-wrapper ${config.mobileClass}"><div class="tp-ui-body ${config.mobileClass}" role="group" aria-label="${text(clockLabel)}"><div class="tp-ui-clock-face ${config.mobileClass}" role="slider" tabindex="0"><div class="tp-ui-dot ${config.mobileClass}" aria-hidden="true"></div><div class="tp-ui-clock-hand ${config.mobileClass}" aria-hidden="true"><div class="tp-ui-circle-hand ${config.mobileClass}"></div></div><div class="tp-ui-tips-wrapper ${config.mobileClass}" aria-hidden="true"></div>${config.clockType === '24h' ? `<div class="tp-ui-tips-wrapper-24h ${config.mobileClass}" aria-hidden="true"></div>` : ''}</div></div></div>`;
+};
+
+interface TimeFieldConfig {
+  name: 'hour' | 'minutes' | 'seconds';
+  inputClass: string;
+  textClass: string;
+  min: string;
+  max: string;
+  valueNow: string;
+  valueText: string;
+  label: string | undefined;
+  mobileLabel: string | undefined;
+}
+
+const SIXTY_RANGE = { min: '0', max: '59', valueNow: '0', valueText: '00' };
+
+const buildColon = (mobileClass: string): string =>
+  `<div class="tp-ui-dots ${mobileClass}" aria-hidden="true"><span></span><span></span></div>`;
+
+const buildTimeField = (field: TimeFieldConfig, mobileClass: string, readonly: boolean): string => {
+  const caption = text(field.mobileLabel);
+  const ariaLabel = mobileClass ? caption : text(field.label);
+
+  return `<div class="tp-ui-input-wrapper ${mobileClass}"><div class="tp-ui-input-ripple-wrapper ${mobileClass}" data-md3-ripple><input name="${field.name}" ${readonly ? 'readonly' : ''} class="${field.inputClass} ${mobileClass}" tabindex="0" type="number" min="${field.min}" max="${field.max}" aria-label="${ariaLabel}" role="spinbutton" aria-valuemin="${field.min}" aria-valuemax="${field.max}" aria-valuenow="${field.valueNow}" aria-valuetext="${field.valueText}"></div><div class="${field.textClass} ${mobileClass}">${caption}</div></div>`;
 };
 
 const buildHeader = (options: Required<TimepickerOptions>, config: TemplateConfig): string => {
   const {
-    labels: {
-      time: timeText,
-      mobileTime: mobileTimeText,
-      timeLabel,
-      am: amLabel,
-      pm: pmLabel,
-      mobileMinute: minuteMobileLabel,
-      mobileHour: hourMobileLabel,
-      hourLabel,
-      minuteLabel,
-      periodLabel,
-    },
+    labels,
     ui: { editable },
+    clock: { showSeconds },
   } = options;
   const { mobileClass, clockType, instanceId } = config;
-  const headingText = mobileClass ? mobileTimeText : timeText;
+  const headingText = text(mobileClass ? labels.mobileTime : labels.time);
+  const timeLabel = text(labels.timeLabel);
+  const amLabel = text(labels.am);
+  const pmLabel = text(labels.pm);
+  const periodLabel = text(labels.periodLabel);
 
   const is12h = clockType === '12h';
-  const hourMin = is12h ? '1' : '0';
-  const hourMax = is12h ? '12' : '23';
   const hourValueNow = is12h ? '12' : '0';
+
+  const fields: TimeFieldConfig[] = [
+    {
+      name: 'hour',
+      inputClass: 'tp-ui-hour',
+      textClass: 'tp-ui-hour-text',
+      min: is12h ? '1' : '0',
+      max: is12h ? '12' : '23',
+      valueNow: hourValueNow,
+      valueText: hourValueNow,
+      label: labels.hourLabel,
+      mobileLabel: labels.mobileHour,
+    },
+    {
+      name: 'minutes',
+      inputClass: 'tp-ui-minutes',
+      textClass: 'tp-ui-minute-text',
+      ...SIXTY_RANGE,
+      label: labels.minuteLabel,
+      mobileLabel: labels.mobileMinute,
+    },
+  ];
+
+  if (showSeconds) {
+    fields.push({
+      name: 'seconds',
+      inputClass: 'tp-ui-seconds',
+      textClass: 'tp-ui-second-text',
+      ...SIXTY_RANGE,
+      label: labels.second,
+      mobileLabel: labels.second,
+    });
+  }
+
+  const readonly = !editable && !mobileClass;
+  const timeFields = fields
+    .map((field) => buildTimeField(field, mobileClass, readonly))
+    .join(buildColon(mobileClass));
 
   const periodSelector =
     clockType !== '24h'
-      ? `<div class="tp-ui-wrapper-type-time ${mobileClass}" role="group" aria-label="${periodLabel}"><div class="tp-ui-type-mode tp-ui-am ${mobileClass ? 'mobile' : 'tp-ui-ripple'}" data-md3-ripple tabindex="0" role="button" aria-label="${amLabel}" aria-pressed="false" data-type="AM">${amLabel}</div><div class="tp-ui-type-mode tp-ui-pm ${mobileClass ? 'mobile' : 'tp-ui-ripple'}" data-md3-ripple tabindex="0" role="button" aria-label="${pmLabel}" aria-pressed="false" data-type="PM">${pmLabel}</div></div>`
+      ? `<div class="tp-ui-wrapper-type-time ${mobileClass}" role="group" aria-label="${periodLabel}"><div class="tp-ui-type-mode tp-ui-am ${mobileClass}" data-md3-ripple tabindex="0" role="button" aria-label="${amLabel}" aria-pressed="false" data-type="AM">${amLabel}</div><div class="tp-ui-type-mode tp-ui-pm ${mobileClass}" data-md3-ripple tabindex="0" role="button" aria-label="${pmLabel}" aria-pressed="false" data-type="PM">${pmLabel}</div></div>`
       : '';
 
-  return `<div class="tp-ui-select-time ${mobileClass}" id="tp-ui-label-${instanceId}">${headingText}</div><div class="tp-ui-header ${mobileClass}"><div class="tp-ui-wrapper-time ${mobileClass} ${clockType === '24h' ? 'tp-ui-wrapper-time-24h' : ''}" role="group" aria-label="${timeLabel}"><div class="tp-ui-input-wrapper ${mobileClass}"><div class="tp-ui-input-ripple-wrapper ${mobileClass}" data-md3-ripple><input name="hour" ${!editable && !mobileClass ? 'readonly' : ''} class="tp-ui-hour ${mobileClass}" tabindex="0" type="number" min="${hourMin}" max="${hourMax}" aria-label="${mobileClass ? hourMobileLabel : hourLabel}" role="spinbutton" aria-valuemin="${hourMin}" aria-valuemax="${hourMax}" aria-valuenow="${hourValueNow}" aria-valuetext="${hourValueNow}"></div><div class="tp-ui-hour-text ${mobileClass}">${hourMobileLabel}</div></div><div class="tp-ui-dots ${mobileClass}" aria-hidden="true"><span></span><span></span></div><div class="tp-ui-input-wrapper ${mobileClass}"><div class="tp-ui-input-ripple-wrapper ${mobileClass}" data-md3-ripple><input name="minutes" ${!editable && !mobileClass ? 'readonly' : ''} class="tp-ui-minutes ${mobileClass}" tabindex="0" type="number" min="0" max="59" aria-label="${mobileClass ? minuteMobileLabel : minuteLabel}" role="spinbutton" aria-valuemin="0" aria-valuemax="59" aria-valuenow="0" aria-valuetext="00"></div><div class="tp-ui-minute-text ${mobileClass}">${minuteMobileLabel}</div></div></div>${periodSelector}</div>`;
+  return `<div class="tp-ui-select-time ${mobileClass}" id="tp-ui-label-${text(instanceId)}">${headingText}</div><div class="tp-ui-header ${mobileClass}"><div class="tp-ui-wrapper-time ${mobileClass} ${clockType === '24h' ? 'tp-ui-wrapper-time-24h' : ''}" role="group" aria-label="${timeLabel}">${timeFields}</div>${periodSelector}</div>`;
 };
+
+const buildSwitchButton = (label: string | undefined, icon: string): string =>
+  `<button aria-label="${text(label)}" type="button" class="tp-ui-keyboard-icon">${icon}</button>`;
 
 const buildFooter = (options: Required<TimepickerOptions>, mobileClass: string): string => {
   const {
     ui: { enableSwitchIcon, iconTemplate, iconTemplateMobile },
-    labels: {
-      cancel: cancelLabel,
-      ok: okLabel,
-      switchToKeyboardLabel,
-      switchToClockLabel,
-      toggleLabel,
-    },
+    labels,
   } = options;
+  const cancelLabel = text(labels.cancel);
+  const okLabel = text(labels.ok);
 
-  const keyboardIcon = `<button aria-label="${switchToKeyboardLabel}" type="button" class="tp-ui-keyboard-icon">${iconTemplate || keyboardSvg}</button>`;
-  const clockIcon =
-    iconTemplateMobile ||
-    `<button aria-label="${switchToClockLabel}" type="button" class="tp-ui-keyboard-icon">${iconTemplateMobile || scheduleSvg}</button>`;
+  const switchButton = mobileClass
+    ? buildSwitchButton(labels.switchToClockLabel, iconTemplateMobile || scheduleSvg)
+    : buildSwitchButton(labels.switchToKeyboardLabel, iconTemplate || keyboardSvg);
 
   const switchIcon = enableSwitchIcon
-    ? `<div class="tp-ui-keyboard-icon-wrapper ${mobileClass}" tabindex="0" role="button" aria-pressed="false" aria-label="${toggleLabel}" data-view="desktop">${mobileClass ? clockIcon : keyboardIcon}</div>`
+    ? `<div class="tp-ui-keyboard-icon-wrapper ${mobileClass}" data-md3-ripple data-view="desktop">${switchButton}</div>`
     : '';
 
   const clearButton = buildClearButton(options, mobileClass);
@@ -140,7 +197,7 @@ const buildFooter = (options: Required<TimepickerOptions>, mobileClass: string):
 export const getModalTemplate = (options: Required<TimepickerOptions>, instanceId: string): string => {
   const {
     ui: { mode: pickerMode, animation, theme, mobile },
-    clock: { incrementMinutes },
+    clock: { incrementMinutes, showSeconds },
   } = options;
 
   const mobileClass = !!mobile ? 'mobile' : '';
@@ -175,5 +232,7 @@ export const getModalTemplate = (options: Required<TimepickerOptions>, instanceI
     wheelClass = '';
   }
 
-  return `<div class="tp-ui-modal normalize ${mobileClass}${isRangeMode ? ' tp-ui-range-mode' : ''}${isTzMode ? ' tp-ui-tz-mode' : ''}${wheelClass}" data-theme="${theme}" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-${instanceId}" data-owner-id="${instanceId}" style='transition:${animation ? 'opacity 0.15s linear' : 'none'}'><div class="tp-ui-wrapper ${mobileClass}" tabindex="0">${rangeSelector}${header}${timezoneSelector}${pickerBody}${footer}</div><div class="timepicker-announcer sr-only" role="status" aria-live="polite" aria-atomic="true"></div></div>`;
+  const id = text(instanceId);
+
+  return `<div class="tp-ui-modal normalize ${mobileClass}${isRangeMode ? ' tp-ui-range-mode' : ''}${isTzMode ? ' tp-ui-tz-mode' : ''}${wheelClass}${showSeconds ? ' tp-ui-has-seconds' : ''}" data-theme="${text(theme)}" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-${id}" data-owner-id="${id}"${animation ? '' : ' style="transition:none"'}><div class="tp-ui-wrapper ${mobileClass}" tabindex="0">${rangeSelector}${header}${timezoneSelector}${pickerBody}${footer}</div><div class="timepicker-announcer sr-only" role="status" aria-live="polite" aria-atomic="true"></div></div>`;
 };

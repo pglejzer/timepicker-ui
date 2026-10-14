@@ -2,7 +2,6 @@ import type { WheelColumnType } from './WheelTypes';
 
 const SNAP_ANIMATION_DURATION_MS = 180;
 const SNAP_DISTANCE_THRESHOLD = 0.5;
-const WHEEL_SNAP_DEBOUNCE_MS = 120;
 const VELOCITY_SAMPLE_COUNT = 5;
 const VELOCITY_SAMPLE_MAX_AGE_MS = 100;
 
@@ -20,7 +19,6 @@ export class ColumnDragState {
   private _pointerId: number = -1;
   private _momentumRaf: number | null = null;
   private velocitySamples: VelocitySample[] = [];
-  private snapTimeout: ReturnType<typeof setTimeout> | null = null;
   private snapAnimationRaf: number | null = null;
   private abortController: AbortController | null = null;
 
@@ -137,22 +135,8 @@ export class ColumnDragState {
     this.snapAnimationRaf = requestAnimationFrame(step);
   }
 
-  scheduleSnapAfterWheel(callback: () => void): void {
-    if (this.snapTimeout !== null) {
-      clearTimeout(this.snapTimeout);
-    }
-    this.snapTimeout = setTimeout(() => {
-      this.snapTimeout = null;
-      callback();
-    }, WHEEL_SNAP_DEBOUNCE_MS);
-  }
-
   destroy(): void {
     this.stopMomentum();
-    if (this.snapTimeout !== null) {
-      clearTimeout(this.snapTimeout);
-      this.snapTimeout = null;
-    }
     if (this.abortController) {
       this.abortController.abort();
       this.abortController = null;

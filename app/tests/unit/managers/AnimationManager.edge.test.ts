@@ -2,6 +2,7 @@ import AnimationManager from '../../../src/managers/AnimationManager';
 import { CoreState } from '../../../src/timepicker/CoreState';
 import { EventEmitter, type TimepickerEventMap } from '../../../src/utils/EventEmitter';
 import { DEFAULT_OPTIONS } from '../../../src/utils/options/defaults';
+import { TIMINGS } from '@/constants/timings';
 
 describe('AnimationManager edge cases', () => {
   let coreState: CoreState;
@@ -38,10 +39,23 @@ describe('AnimationManager edge cases', () => {
       manager.setAnimationToOpen();
       manager.removeAnimationToClose();
 
-      jest.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(TIMINGS.MODAL_EXIT);
 
       expect(modal.classList.contains('show')).toBe(false);
       expect(modal.classList.contains('opacity')).toBe(false);
+    });
+
+    it('should end shown when the last call is an open', () => {
+      const modal = document.createElement('div') as HTMLDivElement;
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+
+      manager.setAnimationToOpen();
+      manager.removeAnimationToClose();
+      manager.setAnimationToOpen();
+
+      jest.advanceTimersByTime(TIMINGS.MODAL_EXIT);
+
+      expect(modal.classList.contains('show')).toBe(true);
     });
   });
 
@@ -50,22 +64,24 @@ describe('AnimationManager edge cases', () => {
       jest.spyOn(coreState, 'getModalElement').mockReturnValue(null);
 
       expect(() => manager.setAnimationToOpen()).not.toThrow();
+      expect(() => manager.setAnimationToOpen(true)).not.toThrow();
     });
   });
 
-  describe('destroy cancels pending animation timers', () => {
-    it('should not apply show class after destroy', () => {
-      const modal = document.createElement('div') as HTMLDivElement;
-      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+  describe('closing during a tips animation', () => {
+    it('should cancel the pending tips timer so nothing fires after close', () => {
+      const clockHand = document.createElement('div');
+      jest.spyOn(coreState, 'getClockHand').mockReturnValue(clockHand);
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(document.createElement('div'));
+      const emitSpy = jest.spyOn(emitter, 'emit');
 
-      manager.setAnimationToOpen();
-      expect(modal.classList.contains('opacity')).toBe(true);
+      manager.handleAnimationSwitchTipsMode();
+      manager.removeAnimationToClose();
 
-      manager.destroy();
+      jest.advanceTimersByTime(TIMINGS.TIPS_ANIMATION);
 
-      jest.advanceTimersByTime(1000);
-
-      expect(modal.classList.contains('show')).toBe(false);
+      expect(emitSpy).not.toHaveBeenCalledWith('animation:end', {});
+      expect(jest.getTimerCount()).toBe(0);
     });
   });
 
@@ -78,7 +94,7 @@ describe('AnimationManager edge cases', () => {
       manager.handleAnimationSwitchTipsMode();
       manager.handleAnimationSwitchTipsMode();
 
-      jest.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(TIMINGS.TIPS_ANIMATION);
 
       expect(clockHand.classList.contains('tp-ui-tips-animation')).toBe(false);
     });
@@ -92,4 +108,3 @@ describe('AnimationManager edge cases', () => {
     });
   });
 });
-

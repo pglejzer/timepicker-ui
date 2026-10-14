@@ -1,4 +1,4 @@
-export type DocLink = { title: string; href: string };
+export type DocLink = { title: string; href: string; badge?: string };
 export type DocSection = { title: string; links: DocLink[] };
 
 export const docsNavigation: DocSection[] = [
@@ -8,7 +8,9 @@ export const docsNavigation: DocSection[] = [
       { title: "Installation", href: "/docs/installation" },
       { title: "Quick Start", href: "/docs/quick-start" },
       { title: "Configuration", href: "/docs/configuration" },
-      { title: "Migration Guide v3 to v4", href: "/docs/migration-guide" },
+      { title: "Migrate to v5", href: "/docs/migration-guide-v5", badge: "Beta" },
+      { title: "Migrate to v4", href: "/docs/migration-guide" },
+      { title: "What's New", href: "/docs/whats-new" },
     ],
   },
   {
@@ -24,6 +26,7 @@ export const docsNavigation: DocSection[] = [
     title: "Features",
     links: [
       { title: "12h/24h Format", href: "/docs/features/clock-format" },
+      { title: "Seconds", href: "/docs/features/seconds" },
       { title: "Themes", href: "/docs/features/themes" },
       { title: "Inline Mode", href: "/docs/features/inline-mode" },
       { title: "Mobile Support", href: "/docs/features/mobile" },
@@ -52,7 +55,7 @@ export const docsNavigation: DocSection[] = [
   {
     title: "Legacy",
     links: [
-      { title: "Migration Guide v2 to v3", href: "/docs/legacy-migration" },
+      { title: "Migrate to v3", href: "/docs/legacy-migration" },
     ],
   },
 ];

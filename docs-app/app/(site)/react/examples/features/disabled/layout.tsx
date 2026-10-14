@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "React Disabled State Example",
   description:
-    "React disabled time picker - disable the input or block specific times in timepicker-ui-react. Zero-dependency, SSR-safe and fully typed, with copy-paste JSX.",
+    "React disabled time picker - disable the input or block specific times in timepicker-ui-react. SSR-safe and fully typed, with copy-paste JSX.",
   path: "/react/examples/features/disabled",
 });
 

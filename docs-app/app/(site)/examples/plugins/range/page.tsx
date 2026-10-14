@@ -54,17 +54,21 @@ PluginRegistry.register(RangePlugin);
 
 const picker = new TimepickerUI(input, {
   range: {
-    enabled: true,
-    fromLabel: 'Start',
-    toLabel: 'End'
+    enabled: true
+  },
+  labels: {
+    rangeFrom: 'Start',
+    rangeTo: 'End'
   }
 });
 picker.create();`}
             options={{
               range: {
                 enabled: true,
-                fromLabel: "Start",
-                toLabel: "End",
+              },
+              labels: {
+                rangeFrom: "Start",
+                rangeTo: "End",
               },
             }}
             plugins={["range"]}

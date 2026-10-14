@@ -6,18 +6,17 @@ export const WheelPlugin: Plugin = {
   name: 'wheel',
   factory: (core, emitter) => new WheelManager(core, emitter),
   templateProvider: (options, instanceId) => {
+    const { clock, labels } = options;
     const isCompactWheel = options.ui.mode === 'compact-wheel';
-    const includeAmPmColumn = isCompactWheel && options.clock.type === '12h';
+    const includeAmPmColumn = isCompactWheel && clock.type === '12h';
     return getWheelTemplate(
-      options.clock.type as '12h' | '24h',
-      options.clock.incrementMinutes ?? 1,
+      clock.type as '12h' | '24h',
+      clock.incrementMinutes ?? 1,
       includeAmPmColumn,
       instanceId,
-      {
-        hourLabel: options.labels?.hourLabel,
-        minuteLabel: options.labels?.minuteLabel,
-        periodLabel: options.labels?.periodLabel,
-      },
+      labels,
+      { show: !!clock.showSeconds, increment: clock.incrementSeconds ?? 1 },
+      clock.incrementHours ?? 1,
     );
   },
 };

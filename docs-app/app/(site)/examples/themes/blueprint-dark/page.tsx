@@ -10,13 +10,13 @@ export default function BlueprintDarkThemePage() {
     <div>
       <PageHeader
         title="Blueprint Dark"
-        description="Dark sibling of Blueprint, brighter cobalt on near-black surfaces with hairline borders"
+        description="Dark sibling of Blueprint, brighter cobalt on navy surfaces with hairline borders"
         eyebrow="Example · Themes"
       />
 
       <Section icon={Ruler} title="Blueprint Dark Theme">
         <p className="text-muted-foreground mb-4">
-          The same technical, hairline-bordered aesthetic on near-black
+          The same technical, hairline-bordered aesthetic on navy
           surfaces with a brighter cobalt accent, distinct from the purple{" "}
           <code>dark</code> theme:
         </p>

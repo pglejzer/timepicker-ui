@@ -367,8 +367,8 @@ TimepickerUI.destroyAll();`}
           code={`const picker = new TimepickerUI('#input');
 
 // Get current value
-const currentTime = picker.getValue();
-console.log(currentTime); // "14:30"
+const value = picker.getValue();
+console.log(value); // "14:30"
 
 // Set new value
 picker.setValue('09:15');
@@ -398,6 +398,15 @@ picker.setValue('3:45 PM');`}
           code={`<input type="text" id="input" />
 <div id="timepicker-container"></div>`}
         />
+        <p className="mt-4 text-sm text-muted-foreground">
+          In 4.5 this option is{" "}
+          <code>{"ui.inline.container: '#timepicker-container'"}</code>, which
+          takes a selector or an element. See the{" "}
+          <a href="/docs/migration-guide" className="text-primary underline">
+            Migration Guide v3 to v4
+          </a>{" "}
+          for the other option names.
+        </p>
       </Section>
 
       <Section icon={Code2} title="Complete Migration Example">

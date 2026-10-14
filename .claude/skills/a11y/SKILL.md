@@ -1,6 +1,7 @@
 ---
 name: a11y
 description: Audit and improve the accessibility of the timepicker-ui LIBRARY (app/src) - ARIA, keyboard operability, focus trap/management, screen-reader announcements, labels - against WCAG 2.2 AA and the WAI-ARIA Authoring Practices. Use when the user wants an a11y audit/fix of the picker itself (clock, wheel, plugins, modal, inputs). Drives the accessibility subagent in an audit → approve → apply flow. Does NOT cover docs-app (use /docs-a11y for that).
+disable-model-invocation: true
 ---
 
 # Library Accessibility (a11y)
@@ -42,8 +43,8 @@ strings to the `labels` group, and stays within the architecture (engine = no DO
 public API unchanged; SSR-safe; CRLF; zero new deps).
 
 ### Phase 4 — Verify & report
-- Offer to run focused checks: relevant Jest specs (`npx jest --testPathPattern=...`) and/or
-  `npm run eslint` in `app/`. Report real output; defer the full suite to the user's batched run.
+- Run the relevant Jest specs (`npx jest --testPathPatterns=...`), `npm run eslint` and, once at
+  the end, the full `npm test` in `app/`, then `/verify` per HARD RULES §5. Report real output.
 - Summarize what changed, grouped by the five areas, with the file list.
 - Give the manual checklist: keyboard-only walkthrough (Tab/Shift+Tab/Arrows/Esc/Enter/Space), an
   NVDA/VoiceOver pass on open→select→confirm, and focus returning to the input on close.

@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "Dynamic Updates Example",
   description:
-    "Dynamic updates example - change time picker options at runtime with update() in timepicker-ui. Zero-dependency, framework-agnostic and SSR-safe, with code.",
+    "Dynamic updates example - change time picker options at runtime with setOptions() in timepicker-ui. Zero-dependency, framework-agnostic and SSR-safe, with code.",
   path: "/examples/advanced/dynamic-updates",
 });
 

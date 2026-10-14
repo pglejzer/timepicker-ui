@@ -3,7 +3,7 @@ import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
-import { Clock, Sun, Moon } from "lucide-react";
+import { Clock, Sun, Moon, Globe } from "lucide-react";
 
 export const metadata = buildMetadata({
   title: "12h / 24h Format",
@@ -40,19 +40,10 @@ picker.create();`}
         />
         <div className="mt-6 rounded-lg border border-border bg-card p-6">
           <h3 className="font-semibold mb-3 text-foreground">Features:</h3>
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <span className="text-primary">•</span>
-              <span>Hours range from 1 to 12</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary">•</span>
-              <span>AM/PM toggle buttons</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary">•</span>
-              <span>Returns time in format: &quot;10:30 AM&quot;</span>
-            </li>
+          <ul className="list-disc pl-5 marker:text-primary space-y-2 text-sm text-muted-foreground">
+            <li>Hours range from 1 to 12</li>
+            <li>AM/PM toggle buttons</li>
+            <li>Returns time in format: &quot;10:30 AM&quot;</li>
           </ul>
         </div>
       </Section>
@@ -76,30 +67,37 @@ picker.create();`}
         />
         <div className="mt-6 rounded-lg border border-border bg-card p-6">
           <h3 className="font-semibold mb-3 text-foreground">Features:</h3>
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <span className="text-primary">•</span>
-              <span>Hours range from 0 to 23</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary">•</span>
-              <span>No AM/PM indicators</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary">•</span>
-              <span>Returns time in format: &quot;14:30&quot;</span>
-            </li>
+          <ul className="list-disc pl-5 marker:text-primary space-y-2 text-sm text-muted-foreground">
+            <li>Hours range from 0 to 23</li>
+            <li>No AM/PM indicators</li>
+            <li>Returns time in format: &quot;14:30&quot;</li>
           </ul>
         </div>
       </Section>
 
       <Section
+        icon={Globe}
+        title="How do I follow the browser's 12h or 24h setting?"
+        description="Set clock.type to 'auto'. The picker picks 12h or 24h from the browser locale when it is created and each time its options are set. New in 4.5.0."
+      >
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
+  clock: {
+    type: 'auto'
+  }
+});
+picker.create();`}
+          language="typescript"
+        />
+      </Section>
+
+      <Section
         icon={Clock}
         title="Can I change the clock format at runtime?"
-        description="Yes. Call picker.update({ options: { clock: { type: '24h' } }, create: true }) to switch format after the picker is created."
+        description="Yes. Call picker.setOptions({ clock: { type: '24h' } }) to switch format after the picker is created. A valid time in the input is rewritten in the new format."
       >
         <p className="text-muted-foreground mb-4">
-          Change clock format dynamically using the update method:
+          Change clock format dynamically with <code>setOptions()</code>:
         </p>
         <CodeBlock
           code={`// Start with 12h format
@@ -111,10 +109,7 @@ const picker = new TimepickerUI(input, {
 picker.create();
 
 // Switch to 24h format
-picker.update({
-  options: { clock: { type: '24h' } },
-  create: true
-});`}
+picker.setOptions({ clock: { type: '24h' } });`}
           language="typescript"
         />
       </Section>
@@ -138,8 +133,8 @@ console.log(value);
   minutes: '30',
   type: 'AM',
   time: '10:30 AM',
-  degreesHours: 30,
-  degreesMinutes: 180
+  degreesHours: 300,   // deprecated
+  degreesMinutes: 180  // deprecated
 }`}
               language="typescript"
             />
@@ -157,10 +152,10 @@ console.log(value);
 {
   hour: '14',
   minutes: '30',
-  type: '',
+  type: undefined,
   time: '14:30',
-  degreesHours: 30,
-  degreesMinutes: 180
+  degreesHours: 420,   // deprecated
+  degreesMinutes: 180  // deprecated
 }`}
               language="typescript"
             />
@@ -170,7 +165,9 @@ console.log(value);
 
       <InfoBox title="Tip" variant="blue">
         The clock format affects both the visual display and the returned time
-        format. Choose based on your application&apos;s locale and user expectations.
+        format. Choose based on your application&apos;s locale and user
+        expectations, or use <code>&apos;auto&apos;</code> to follow the
+        browser.
       </InfoBox>
     </div>
   );

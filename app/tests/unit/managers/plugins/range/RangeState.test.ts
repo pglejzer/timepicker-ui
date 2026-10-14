@@ -154,6 +154,37 @@ describe('RangeState', () => {
     });
   });
 
+  describe('canConfirm for a saved range with duration limits', () => {
+    const savedRange = (
+      minDuration: number | undefined,
+      maxDuration: number | undefined,
+      to: string,
+    ): RangeState => {
+      const [hour, minutes] = to.split(':');
+      const state = new RangeState('24h', minDuration, maxDuration, emitter);
+      state.setFromValue({ hour: '09', minutes: '00' });
+      state.setToValue({ hour, minutes });
+      return state;
+    };
+
+    it.each<[number, string, boolean]>([
+      [20, '09:20', false],
+      [30, '09:30', true],
+      [45, '09:45', true],
+      [60, '10:00', true],
+      [90, '10:30', false],
+    ])(
+      'should allow a %i min range (09:00-%s) with min 30 / max 60 only inside the limits',
+      (_, to, expected) => {
+        expect(savedRange(30, 60, to).canConfirm()).toBe(expected);
+      },
+    );
+
+    it('should allow a 90 min range when no limits are set', () => {
+      expect(savedRange(undefined, undefined, '10:30').canConfirm()).toBe(true);
+    });
+  });
+
   describe('setActivePart', () => {
     it('should switch to from part', () => {
       const state = new RangeState('12h', undefined, undefined, emitter);
@@ -191,35 +222,6 @@ describe('RangeState', () => {
       state.setActivePart('to');
 
       expect(state.getPreviewValue()).toBeNull();
-    });
-  });
-
-  describe('getCurrentValue', () => {
-    it('should return preview value if set', () => {
-      const state = new RangeState('12h', undefined, undefined, emitter);
-      const preview = { hour: '11', minutes: '15', type: 'AM' as const };
-      state.setPreviewValue(preview);
-
-      expect(state.getCurrentValue()).toEqual(preview);
-    });
-
-    it('should return from value when active part is from', () => {
-      const state = new RangeState('12h', undefined, undefined, emitter);
-      const fromValue = { hour: '10', minutes: '30', type: 'AM' as const };
-      state.setFromValue(fromValue);
-
-      expect(state.getCurrentValue()).toEqual(fromValue);
-    });
-
-    it('should return to value when active part is to', () => {
-      const state = new RangeState('12h', undefined, undefined, emitter);
-      const fromValue = { hour: '10', minutes: '30', type: 'AM' as const };
-      const toValue = { hour: '02', minutes: '45', type: 'PM' as const };
-      state.setFromValue(fromValue);
-      state.setToValue(toValue);
-      state.setActivePart('to');
-
-      expect(state.getCurrentValue()).toEqual(toValue);
     });
   });
 

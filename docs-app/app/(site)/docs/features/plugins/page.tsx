@@ -65,10 +65,12 @@ PluginRegistry.register(RangePlugin);
 const picker = new TimepickerUI(input, {
   range: {
     enabled: true,
-    fromLabel: 'Start',
-    toLabel: 'End',
     minDuration: 30,  // minimum 30 minutes
     maxDuration: 480  // maximum 8 hours
+  },
+  labels: {
+    rangeFrom: 'Start',
+    rangeTo: 'End'
   },
   callbacks: {
     onRangeConfirm: (data) => {
@@ -99,14 +101,16 @@ const picker = new TimepickerUI(input, {
   timezone: {
     enabled: true,
     default: 'America/New_York',
-    whitelist: [
+    list: [
       'America/New_York',
       'America/Los_Angeles',
       'Europe/London',
       'Europe/Paris',
       'Asia/Tokyo'
-    ],
-    label: 'Timezone'
+    ]
+  },
+  labels: {
+    timezone: 'Timezone'
   },
   callbacks: {
     onTimezoneChange: (data) => {
@@ -123,7 +127,8 @@ picker.create();`}
           Replaces the analog clock face with a touch-friendly scroll-spinner.
           Two modes available: <code className="text-primary">wheel</code> (with
           header) and <code className="text-primary">compact-wheel</code>{" "}
-          (headerless popover). Supports all themes, 12h/24h, disabled time, and
+          (headerless: a popover when <code>wheel.placement</code> is set,
+          otherwise a modal). Supports all themes, 12h/24h, disabled time, and
           keyboard navigation.
         </p>
         <CodeBlock

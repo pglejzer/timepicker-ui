@@ -1,7 +1,7 @@
 "use client";
 
 import { Highlight, themes } from "prism-react-renderer";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Copy, ChevronDown, ChevronUp } from "lucide-react";
 import { useDarkMode } from "@/lib/use-dark-mode";
 
@@ -24,6 +24,8 @@ export function CodeBlock({
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [scrollable, setScrollable] = useState(false);
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const isDark = useDarkMode();
 
   const trimmed = code.trim();
@@ -37,6 +39,19 @@ export function CodeBlock({
   // Theme-aware prism palette. Backgrounds are driven by the --code-bg token,
   // so we only consume token colors from the prism theme, never its surface.
   const prismTheme = isDark ? themes.nightOwl : themes.oneLight;
+
+  // Only a block whose long lines overflow becomes a focusable, named region,
+  // so keyboard users can scroll it without adding a tab stop to every snippet.
+  // The observer's initial callback does the first measurement.
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    const observer = new ResizeObserver(() => {
+      setScrollable(scroller.scrollWidth > scroller.clientWidth);
+    });
+    observer.observe(scroller);
+    return () => observer.disconnect();
+  }, [trimmed, withLineNumbers]);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(trimmed);
@@ -68,7 +83,7 @@ export function CodeBlock({
         <button
           type="button"
           onClick={handleCopy}
-          className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           aria-label={copied ? "Copied" : "Copy code"}
         >
           {copied ? (
@@ -91,7 +106,11 @@ export function CodeBlock({
       {/* Code surface */}
       <div className="relative">
         <div
-          className={`bench-scroll overflow-x-auto ${
+          ref={scrollerRef}
+          tabIndex={scrollable ? 0 : undefined}
+          role={scrollable ? "region" : undefined}
+          aria-label={scrollable ? `${filename ?? language} code` : undefined}
+          className={`bench-scroll overflow-x-auto focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring ${
             isCollapsed ? "bench-code-fade max-h-96 overflow-y-hidden" : ""
           }`}
         >
@@ -104,7 +123,10 @@ export function CodeBlock({
                 {tokens.map((line, i) => (
                   <div key={i} {...getLineProps({ line })}>
                     {withLineNumbers && (
-                      <span className="mr-4 inline-block w-6 select-none text-right text-muted-foreground/40">
+                      <span
+                        aria-hidden="true"
+                        className="mr-4 inline-block w-6 select-none text-right text-muted-foreground/75"
+                      >
                         {i + 1}
                       </span>
                     )}
@@ -129,7 +151,7 @@ export function CodeBlock({
             <button
               type="button"
               onClick={() => setExpanded((v) => !v)}
-              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1 font-mono text-xs text-muted-foreground shadow-sm transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1 font-mono text-xs text-muted-foreground shadow-sm transition-colors hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               aria-expanded={expanded}
             >
               {expanded ? (

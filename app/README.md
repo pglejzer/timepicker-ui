@@ -1,175 +1,95 @@
-# timepicker-ui — Build & Development
+# timepicker-ui: development
 
-> Source, build, and test workspace for the `timepicker-ui` library.
+This folder has the library source, the build and the tests. If you just want to use the package, read the [main README](../README.md) instead.
 
-This directory (`app/`) holds all source, build, and test work for `timepicker-ui` — a zero-dependency, framework-agnostic, SSR-safe time picker. This README is for **contributors working on the library itself**. If you just want to install and use the package, read the [published package README](../README.md) and the [`timepicker-ui` npm page](https://www.npmjs.com/package/timepicker-ui).
+## Setup
 
-The build pipeline uses three tools, each with a distinct job: **Tsup** compiles the JavaScript bundles, **Rollup** compiles the CSS themes, the UMD bundles, and the TypeScript declarations, and **Webpack** runs the local development/demo server only. Compiled artifacts are written to `../dist/`, which is generated output and must never be hand-edited.
-
-## 📑 Table of Contents
-
-- [Prerequisites](#-prerequisites)
-- [Install](#-install)
-- [Scripts](#-scripts)
-- [Build Pipeline & Output](#-build-pipeline--output)
-- [Output Themes](#-output-themes)
-- [Project Structure](#-project-structure)
-- [Tools](#-tools)
-- [Contributing](#-contributing)
-- [Maintainer](#-maintainer)
-- [License](#-license)
-
-## 🧰 Prerequisites
-
-- **Node.js** — `app/package.json` does not declare an `engines` field, so no version is enforced. A minimum of **Node 18+** is recommended (inferred from the toolchain: `@types/node` 24, ESLint 9, Jest 30, and ESM-only configs). Node 20+ or 22 LTS is the safest choice.
-- **npm** — used for dependency management and all scripts (a `package-lock.json` is committed).
-
-> All commands below are run from the `app/` directory.
-
-## 📦 Install
+You need Node 20 (that's what CI runs) and npm.
 
 ```bash
 cd app
 npm install
+npm run start     # demo on http://localhost:8010
 ```
 
-## 🧪 Scripts
+All commands below run from `app/`.
 
-All scripts are defined in `app/package.json` and run from `app/`.
+## Scripts
 
-### Development
+| Script | What it does |
+| --- | --- |
+| `npm run start` | Webpack dev server with the demo, port 8010 |
+| `npm run build:prod` | `eslint`, then `build:tsup`, then `build:rollup` |
+| `npm run build:tsup` | ESM and CJS bundles |
+| `npm run build:rollup` | CSS, UMD bundles and `.d.ts` files |
+| `npm run build:webpack`, `npm run build:vercel` | Build the demo. Both run the same webpack config. |
+| `npm test` | All Jest tests |
+| `npm run test:unit` | Only `tests/unit` |
+| `npm run test:watch` | Watch mode |
+| `npm run test:coverage` | With coverage |
+| `npm run test:verbose` | Verbose output |
+| `npm run test:ci` | `--ci --coverage --maxWorkers=2` |
+| `npm run eslint` | Lint `src/**/*.ts` |
+| `npm run lint` | lint-staged and pretty-quick on staged files |
 
-| Script              | Description                                              |
-| ------------------- | -------------------------------------------------------- |
-| `npm run start`     | Start the Webpack dev server for the demo (port `8005`)  |
+`test:integration` and `test:e2e` are in `package.json` too, but `tests/integration` and `tests/e2e` don't exist yet, so they find nothing.
 
-### Build
+## How the build works
 
-| Script                  | Description                                                      |
-| ----------------------- | --------------------------------------------------------------- |
-| `npm run build:prod`    | Full production build: `eslint` → `build:tsup` → `build:rollup` |
-| `npm run build:tsup`    | Compile JS bundles (ESM + CJS) for the 4 entry points via Tsup  |
-| `npm run build:rollup`  | Compile SCSS → CSS, the UMD bundles, and `.d.ts` declarations   |
-| `npm run build:webpack` | Run a one-off Webpack build of the demo                         |
-| `npm run build:vercel`  | Build the demo for Vercel deployment (Webpack)                  |
+tsup (`tsup.config.ts`) builds the ESM (`.js`) and CJS (`.cjs`) bundles for four entry points: `index`, `plugins/range`, `plugins/timezone` and `plugins/wheel`. Output is minified, targets ES2022, and SVGs are inlined as strings.
 
-### Test
+Rollup (`rollup.config.js`) does the rest. It compiles the SCSS, builds the UMD bundles (`index.umd.js` and one per plugin, through Babel and Terser) and bundles the `.d.ts` files.
 
-| Script                     | Description                                            |
-| -------------------------- | ----------------------------------------------------- |
-| `npm test`                 | Run the full Jest test suite                          |
-| `npm run test:unit`        | Run unit tests (`tests/unit`)                         |
-| `npm run test:integration` | Run integration tests (`tests/integration`)           |
-| `npm run test:e2e`         | Run end-to-end tests (`tests/e2e`)                    |
-| `npm run test:watch`       | Run Jest in watch mode                                |
-| `npm run test:coverage`    | Run tests with coverage reporting                     |
-| `npm run test:verbose`     | Run tests with verbose output                         |
-| `npm run test:ci`          | Run tests in CI mode (`--ci --coverage --maxWorkers=2`) |
+Webpack only runs the demo. It's not part of the production build.
 
-> The active test suite lives in `tests/unit`. The `test:integration` and `test:e2e` scripts are wired in `package.json` but their `tests/integration` / `tests/e2e` directories are not present yet, so they currently match no specs.
+Everything lands in `../dist/`. Don't edit files there, the next build overwrites them. The four entry points match the `exports` field in `package.json`, so if you add one, update both.
 
-### Lint
+CSS output: `dist/css/main.css` has the core styles and the `basic` theme and is always required. Each other theme gets its own `dist/css/themes/theme-<name>.css` (11 of them). `dist/css/index.css` is `main.css` plus every theme in one file.
 
-| Script           | Description                                              |
-| ---------------- | ------------------------------------------------------- |
-| `npm run eslint` | Lint all TypeScript source files (`./src/**/*.ts`)      |
-| `npm run lint`   | Lint and format staged files (`lint-staged` + `pretty-quick`) |
-
-## 🏗 Build Pipeline & Output
-
-Three tools, three jobs — Webpack is **never** part of the production build:
-
-- **Tsup** (`tsup.config.ts`) — compiles TypeScript to **ESM** (`*.js`) and **CJS** (`*.cjs`) bundles, minified, target **ES2022**, for four tree-shakeable entry points: `index`, `plugins/range`, `plugins/timezone`, and `plugins/wheel`. SVG assets are inlined as text strings.
-- **Rollup** (`rollup.config.js`) — three outputs:
-  - **CSS** — compiles SCSS in `src/styles/` to `dist/css/` (`index.css`, `main.css`, and the per-theme files in `dist/css/themes/`), minified.
-  - **UMD bundles** (`*.umd.js`) — `index.umd.js` plus one per plugin (`plugins/range.umd.js`, `plugins/timezone.umd.js`, `plugins/wheel.umd.js`), transpiled with Babel and minified with Terser, for direct `<script>` / CommonJS consumption.
-  - **TypeScript declarations** (`*.d.ts`) — bundled per entry point via `rollup-plugin-dts`.
-- **Webpack** (`webpack.config.js`) — local dev/demo server only (`npm run start`).
-
-`build:prod` runs `eslint` → `build:tsup` → `build:rollup`. All artifacts land in `../dist/`, which is generated output and must never be hand-edited.
-
-The four entry points map directly to the `exports` field in `app/package.json`, keeping the tree-shakeable surface in sync with what consumers import.
-
-## 🎨 Output Themes
-
-SCSS themes are compiled to CSS in `../dist/css/themes/` (authoritative list from the Rollup CSS job — **11 themes**):
-
-- `theme-crane.css`
-- `theme-crane-straight.css`
-- `theme-dark.css`
-- `theme-glassmorphic.css`
-- `theme-m2.css`
-- `theme-m3-green.css`
-- `theme-pastel.css`
-- `theme-ai.css`
-- `theme-cyberpunk.css`
-- `theme-blueprint.css`
-- `theme-blueprint-dark.css`
-
-Alongside the themes, Rollup also emits the base stylesheets `dist/css/index.css` (core + default theme) and `dist/css/main.css` (core styles only).
-
-## 📁 Project Structure
+## Layout
 
 ```
 app/
-├── src/                  # Library source (TS + SCSS)
-│   ├── constants/        # Timing/delay constants
-│   ├── core/             # PluginRegistry (plugin system)
-│   ├── managers/         # Built-in managers + clock/ + plugins/
-│   ├── plugins/          # Plugin definitions (range, timezone, wheel)
-│   ├── styles/           # SCSS: variables, mixins, themes/
+├── src/
+│   ├── constants/        # timing and delay constants
+│   ├── core/             # PluginRegistry
+│   ├── managers/         # built-in managers, clock/, plugins/
+│   ├── plugins/          # plugin definitions (range, timezone, wheel)
+│   ├── styles/           # SCSS, themes/
 │   ├── timepicker/       # TimepickerUI, CoreState, Managers, Lifecycle
 │   ├── types/            # TypeScript interfaces (.d.ts)
 │   └── utils/            # EventEmitter, options, template, time, validation
-├── tests/                # Jest tests
-│   ├── unit/             # Unit specs (mirror src/)
-│   └── __mocks__/        # CSS/SVG mock stubs
-├── docs/                 # Local demo served by the Webpack dev server
-├── assets/               # Static assets
-├── tsup.config.ts        # JS bundles → ESM + CJS (4 entry points)
-├── rollup.config.js      # SCSS → CSS, UMD bundles, .d.ts declarations
-├── webpack.config.js     # Dev/demo server only
-├── jest.config.ts        # Test config
-├── eslint.config.js      # ESLint flat config
-├── tailwind.config.js    # Tailwind config (demo)
-├── tsconfig.json         # Dev tsconfig
-├── tsconfig.prod.json    # Production tsconfig (used by Tsup/Rollup)
-├── tsconfig.test.json    # Test tsconfig
-└── package.json          # Build workspace scripts and dependencies
+├── tests/
+│   ├── unit/             # Jest specs, same structure as src/
+│   └── __mocks__/        # CSS and SVG stubs
+├── docs/                 # demo page for the dev server
+├── assets/               # SVG icons
+├── tsup.config.ts
+├── rollup.config.js
+├── webpack.config.js     # demo only
+├── jest.config.ts
+├── eslint.config.js
+├── tailwind.config.js    # demo only
+├── tsconfig.json         # dev
+├── tsconfig.prod.json    # production build
+└── tsconfig.test.json    # tests
 ```
 
-> `dist/`, `coverage/`, and `node_modules/` are generated and not tracked as source.
+`coverage/`, `node_modules/` and `../dist/` are generated.
 
-## 🔧 Tools
+Tests run on Jest with ts-jest and jsdom. Formatting is Prettier, linting is ESLint with typescript-eslint.
 
-- [**Tsup**](https://tsup.egoist.dev/) — bundles JS (ESM + CJS) for the four entry points
-- [**Rollup**](https://rollupjs.org/) — compiles SCSS → CSS, the UMD bundles, and `.d.ts` declarations
-- [**Webpack**](https://webpack.js.org/) — local dev/demo server only (`npm run start`)
-- [**TypeScript**](https://www.typescriptlang.org/) — typed library source
-- [**Sass**](https://sass-lang.com/) — modular styling and themes
-- [**PostCSS**](https://postcss.org/) + [**Autoprefixer**](https://github.com/postcss/autoprefixer) — vendor prefixing and CSS minification (via `rollup-plugin-postcss`)
-- [**Babel**](https://babeljs.io/) + [**Terser**](https://terser.org/) — transpilation and minification of the UMD bundles
-- [**Jest**](https://jestjs.io/) (with `ts-jest`, jsdom) — unit testing
-- [**ESLint**](https://eslint.org/) + [**Prettier**](https://prettier.io/) — linting and formatting
-- [**Husky**](https://typicode.github.io/husky/) + **lint-staged** — git pre-commit hooks
+## Before you open a PR
 
-## 🤝 Contributing
+```bash
+npm run eslint
+npm test
+```
 
-Contributions are welcome. There is no separate `CONTRIBUTING.md`; the essentials are:
+Source files use CRLF line endings. ESLint fails on LF in `src/`, and `.gitattributes` converts files on checkout.
 
-- **Questions, bugs, and feature requests** — open an issue at [github.com/pglejzer/timepicker-ui/issues](https://github.com/pglejzer/timepicker-ui/issues).
-- **Pull requests** are welcome. Before opening one, please make sure your changes pass linting and tests:
-  ```bash
-  cd app
-  npm run eslint
-  npm test
-  ```
-- **Line endings** — all source files use **CRLF** (`linebreak-style: windows` is enforced by ESLint on `src/**/*.ts`).
+Bugs and questions go to [GitHub issues](https://github.com/pglejzer/timepicker-ui/issues).
 
-## 👤 Maintainer
+## License
 
-[@pglejzer](https://github.com/pglejzer)
-
-## 📄 License
-
-[MIT](../LICENSE)
+[MIT](../LICENSE). Maintained by [@pglejzer](https://github.com/pglejzer).

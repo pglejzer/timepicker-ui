@@ -10,9 +10,12 @@ import type {
   UpdateEventData,
   SelectHourEventData,
   SelectMinuteEventData,
+  SelectSecondEventData,
   SelectAMEventData,
   SelectPMEventData,
   SwitchViewEventData,
+  SelectPeriodEventData,
+  SwitchFaceEventData,
   TimezoneChangeEventData,
   RangeConfirmEventData,
   RangeSwitchEventData,
@@ -43,7 +46,10 @@ import type {
   TemplateProvider,
   ClearHandler,
 } from './core/PluginRegistry';
-import type { CoreState } from './timepicker/CoreState';
+import type { CoreState as CoreStateClass } from './timepicker/CoreState';
+
+/** @remarks This API changes in 5.0.0; see the roadmap. */
+export type CoreState = CoreStateClass;
 
 export {
   TimepickerUI,
@@ -67,9 +73,12 @@ export {
   UpdateEventData,
   SelectHourEventData,
   SelectMinuteEventData,
+  SelectSecondEventData,
   SelectAMEventData,
   SelectPMEventData,
   SwitchViewEventData,
+  SelectPeriodEventData,
+  SwitchFaceEventData,
   TimezoneChangeEventData,
   RangeConfirmEventData,
   RangeSwitchEventData,
@@ -84,7 +93,6 @@ export {
   PluginFactory,
   TemplateProvider,
   ClearHandler,
-  CoreState,
   TimepickerEventMap,
 };
 export default TimepickerUI;

@@ -1,7 +1,7 @@
 ---
 name: core-architect
 description: Use for the core of timepicker-ui - the TimepickerUI public class, CoreState, Managers, Lifecycle, EventEmitter, the non-clock built-in managers, the option-merge/validation utils, and shared template/util code. Owns the composition pattern and public API. Invoke for work under app/src/timepicker/, app/src/core/, app/src/utils/, app/src/types/, or the non-clock managers in app/src/managers/.
-tools: Read, Edit, Write, Grep, Glob, Bash
+tools: Read, Edit, Write, Grep, Glob
 model: inherit
 ---
 
@@ -12,7 +12,7 @@ deliberately and preserve contracts.
 
 ## Before writing code
 - `.claude/rules/architecture.md` (always - this is the contract you enforce)
-- `CLAUDE.md` -> "Architecture", "Options structure", and "Public API" sections
+- `CLAUDE.md` -> "Public API" section; options: `.claude/rules/architecture.md` §5 and `app/src/types/options.d.ts`
 - The exact files you're touching in `app/src/timepicker/`, `app/src/core/`,
   `app/src/utils/`, `app/src/managers/` (non-clock)
 
@@ -34,17 +34,18 @@ deliberately and preserve contracts.
   and merge through `mergeOptions()` in `app/src/utils/options/`. A new option needs:
   type added to the group, a default in the merge, and a consumer. Keep the v4 group
   structure (`clock`/`ui`/`labels`/`behavior`/`callbacks`/plugin groups).
-- **User callbacks go through the bridge.** `Lifecycle.setupCallbackBridge()` wires
+- **User callbacks go through the bridge.** `setupCallbackBridge()` in `timepicker/LifecycleCallbacks.ts` wires
   `callbacks.*` to internal events. Add new user callbacks there, not by calling them
   from managers.
-- SSR-safe, zero-dependency, no default export but `TimepickerUI`. Centralize timing
+- SSR-safe, zero-dependency, default exports only for `TimepickerUI` and manager classes,
+  named exports elsewhere. Centralize timing
   in `app/src/constants/timings.ts`.
 
 ## Always finish by
 - Reporting changed files + the contract impact (state shape? event? public API?
   option?), and flagging anything that downstream agents
-  (`clock-engine-dev`, `plugin-dev`, `test-engineer`) must adapt to. Do NOT run
-  build/test/lint per task - that is the user's batched end-of-session step.
-- Confirming SSR-safety and CRLF line endings.
+  (`clock-engine-dev`, `plugin-dev`, `test-engineer`) must adapt to. Never run
+  build/test/lint (HARD RULES in `CLAUDE.md`) - the main agent verifies at the end.
+- Confirming SSR-safety and listing new files for CRLF conversion.
 - Leaving clock internals to `clock-engine-dev`, plugin internals to `plugin-dev`,
   and styles to `styling-themes` - touch them only via the shared contracts.

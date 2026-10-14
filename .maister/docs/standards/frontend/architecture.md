@@ -12,7 +12,7 @@ Every manager and plugin manager: constructor `(core: CoreState, emitter: EventE
 Managers never reference each other directly. Cross-cutting behavior goes through shared `CoreState` or a new namespaced event on the `EventEmitter` bus — never a direct manager→manager call. Subscriptions register cleanup (often via the `bindEmitter` helper pushing into a `cleanupHandlers` array) and are torn down in `destroy()`. Event namespaces: lifecycle, clock selection (`select:*`), `range:*`, `timezone:*`, `wheel:*`, `animation:*`, `error`. Sources: code, docs.
 
 ### User Callbacks Go Through the Callback Bridge
-User-facing `callbacks.*` options are wired to internal events via `Lifecycle.setupCallbackBridge()`. Do not call user callbacks directly from managers; add new ones at the bridge. Source: docs.
+User-facing `callbacks.*` options are wired to internal events via `setupCallbackBridge()` (`timepicker/LifecycleCallbacks.ts`). Do not call user callbacks directly from managers; add new ones at the bridge. Source: docs.
 
 ### Public API Stability
 The public API (`create/open/close/destroy/getValue/setValue/update/on/once/off`) and statics (`getById/getAllInstances/isAvailable/destroyAll`) are a promise — don't change signatures or the `getValue()` shape without flagging a breaking change. Keep `instanceRegistry` consistent (register on create, remove on destroy). Source: docs.
@@ -24,4 +24,4 @@ Options are grouped (`clock, ui, labels, behavior, callbacks, timezone, range, c
 Core code must NEVER statically import a plugin, and cross-plugin imports are forbidden — plugins communicate via CoreState + namespaced events. A user who doesn't import a plugin must not pay for its code. Emit `error` when a required plugin is missing. Sources: docs (config-corroborated by the multi-entry build).
 
 ### Default Export per Manager; Named Exports Elsewhere
-NOTE — this documents actual code, which diverges from older docs that said "no default exports except TimepickerUI". In practice: class-based managers (the 8 built-ins + 3 plugin managers) use `export default` and are re-aggregated through barrels with `export { default as X }`. `TimepickerUI` is also a default export (the package's public default). Everything else — utils, engines, CoreState, Lifecycle, controllers, types, plugin definitions — uses NAMED exports. Sources: code (17 `export default`: 11 managers + TimepickerUI re-exports + entry barrels), docs (drift noted).
+Class-based managers (the 8 built-ins and the plugin managers) use `export default` and are re-aggregated through barrels with `export { default as X }`. `TimepickerUI` is also a default export (the package's public default). Everything else - utils, engines, CoreState, Lifecycle, controllers, types, plugin definitions - uses named exports.

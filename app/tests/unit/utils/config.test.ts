@@ -1,14 +1,4 @@
-import {
-  hasClass,
-  range,
-  reverseRange,
-  initCallback,
-  timeConversion,
-  normalize24h,
-  isOverlappingRangeArray,
-  generateUUID,
-  getScrollbarWidth,
-} from '../../../src/utils/config';
+import { hasClass, isOverlappingRangeArray, generateUUID } from '../../../src/utils/config';
 
 describe('config utils', () => {
   describe('hasClass', () => {
@@ -25,81 +15,6 @@ describe('config utils', () => {
 
     it('should return false for null element', () => {
       expect(hasClass(null, 'test-class')).toBe(false);
-    });
-  });
-
-  describe('range', () => {
-    it('should generate range from start to stop inclusive', () => {
-      expect(range(1, 5)).toEqual([1, 2, 3, 4, 5]);
-    });
-
-    it('should handle string inputs', () => {
-      expect(range('0', '3')).toEqual([0, 1, 2, 3]);
-    });
-
-    it('should handle single element range', () => {
-      expect(range(5, 5)).toEqual([5]);
-    });
-
-    it('should handle zero start', () => {
-      expect(range(0, 2)).toEqual([0, 1, 2]);
-    });
-  });
-
-  describe('reverseRange', () => {
-    it('should generate reversed range from start to stop', () => {
-      expect(reverseRange(1, 5)).toEqual([1, 2, 3, 4, 5]);
-    });
-
-    it('should handle string inputs', () => {
-      expect(reverseRange('0', '3')).toEqual([0, 1, 2, 3]);
-    });
-  });
-
-  describe('initCallback', () => {
-    it('should call callback if provided', () => {
-      const callback = jest.fn();
-      initCallback(callback);
-      expect(callback).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not throw if callback is undefined', () => {
-      expect(() => initCallback(undefined)).not.toThrow();
-    });
-
-    it('should not throw if callback is not a function', () => {
-      expect(() => initCallback('not a function' as unknown as () => void)).not.toThrow();
-    });
-  });
-
-  describe('timeConversion', () => {
-    it('should convert 12h time to 24h format', () => {
-      expect(timeConversion('9:30AM')).toBe('09:30');
-      expect(timeConversion('12:00PM')).toBe('12:00');
-      expect(timeConversion('1:15PM')).toBe('13:15');
-      expect(timeConversion('12:00AM')).toBe('00:00');
-    });
-
-    it('should handle times with space before AM/PM', () => {
-      expect(timeConversion('9:30 AM')).toBe('09:30');
-      expect(timeConversion('1:15 PM')).toBe('13:15');
-    });
-
-    it('should handle lowercase am/pm', () => {
-      expect(timeConversion('9:30am')).toBe('09:30');
-      expect(timeConversion('1:15pm')).toBe('13:15');
-    });
-  });
-
-  describe('normalize24h', () => {
-    it('should pad hour and minute with zeros', () => {
-      expect(normalize24h('9:5')).toBe('09:05');
-      expect(normalize24h('1:0')).toBe('01:00');
-    });
-
-    it('should not change already padded times', () => {
-      expect(normalize24h('09:30')).toBe('09:30');
-      expect(normalize24h('23:59')).toBe('23:59');
     });
   });
 
@@ -164,51 +79,6 @@ describe('config utils', () => {
       const uuid1 = generateUUID();
       const uuid2 = generateUUID();
       expect(uuid1).not.toBe(uuid2);
-    });
-  });
-
-  describe('getScrollbarWidth', () => {
-    it('should return a number', () => {
-      const width = getScrollbarWidth();
-      expect(typeof width).toBe('number');
-      expect(width).toBeGreaterThanOrEqual(0);
-    });
-  });
-
-  describe('getClickTouchPosition', () => {
-    it('should return undefined when object is null', () => {
-      const { getClickTouchPosition } = require('../../../src/utils/config');
-      const event = new TouchEvent('touchstart');
-      const result = getClickTouchPosition(event, null as never);
-      expect(result).toBeUndefined();
-    });
-
-    it('should handle mouse event without touches', () => {
-      const { getClickTouchPosition } = require('../../../src/utils/config');
-      const element = document.createElement('div');
-      element.getBoundingClientRect = jest.fn().mockReturnValue({ left: 10, top: 20 });
-
-      const event = {
-        touches: undefined,
-        clientX: 50,
-        clientY: 60,
-      } as unknown as TouchEvent;
-
-      const result = getClickTouchPosition(event, element);
-      expect(result).toEqual({ x: 40, y: 40 });
-    });
-
-    it('should handle touch event with touches array', () => {
-      const { getClickTouchPosition } = require('../../../src/utils/config');
-      const element = document.createElement('div');
-      element.getBoundingClientRect = jest.fn().mockReturnValue({ left: 10, top: 20 });
-
-      const event = {
-        touches: [{ clientX: 100, clientY: 120 }],
-      } as unknown as TouchEvent;
-
-      const result = getClickTouchPosition(event, element);
-      expect(result).toEqual({ x: 90, y: 100 });
     });
   });
 
