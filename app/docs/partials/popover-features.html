@@ -365,13 +365,15 @@ popoverThemeList.forEach((theme) => {
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">const inlinePicker = new TimepickerUI('#inline-picker', {
-  inline: {
-    enabled: true,
-    containerId: 'inline-container',
-    showButtons: false,
-    autoUpdate: true
-  },
-  clockType: '24h'
+  clock: { type: '24h' },
+  ui: {
+    inline: {
+      enabled: true,
+      container: '#inline-container',
+      showButtons: false,
+      autoUpdate: true
+    }
+  }
 });
 inlinePicker.create();</code></pre>
       </div>
@@ -462,14 +464,16 @@ picker.addEventListener('cancel', (e) => {
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">const customLabelsPicker = new TimepickerUI('#custom-labels-picker', {
-timeLabel: 'Select time',
-okLabel: 'It is ok',
-cancelLabel: 'Nope',
-amLabel: 'AM',
-pmLabel: 'PM',
-mobileTimeLabel: 'Enter Time',
-hourMobileLabel: 'Hour',
-minuteMobileLabel: 'Minute',
+  labels: {
+    clockTitle: 'Select time',
+    ok: 'It is ok',
+    cancel: 'Nope',
+    am: 'AM',
+    pm: 'PM',
+    keyboardTitle: 'Enter Time',
+    hour: 'Hour',
+    minute: 'Minute'
+  }
 });
 customLabelsPicker.create();</code></pre>
       </div>
@@ -526,18 +530,18 @@ customLabelsPicker.create();</code></pre>
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">new TimepickerUI('#multi-picker-1', {
-  clockType: '24h',
-  theme: 'basic'
+  clock: { type: '24h' },
+  ui: { theme: 'basic' }
 }).create();
 
 new TimepickerUI('#multi-picker-2', {
-  clockType: '12h',
-  theme: 'm3'
+  clock: { type: '12h' },
+  ui: { theme: 'm3-green' }
 }).create();
 
 new TimepickerUI('#multi-picker-3', {
-  clockType: '24h',
-  theme: 'crane-radius'
+  clock: { type: '24h' },
+  ui: { theme: 'crane' }
 }).create();</code></pre>
       </div>
     </div>

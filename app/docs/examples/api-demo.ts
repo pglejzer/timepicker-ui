@@ -66,14 +66,13 @@ if (openCheckButton && getValueOutput) {
 // Range Pickers
 const rangePicker = new TimepickerUI('#range-picker', {
   clock: { type: '12h' },
-  ui: { enableSwitchIcon: true },
+  ui: { viewSwitch: true },
   range: {
     enabled: true,
     minDuration: 30,
     maxDuration: 480,
-    fromLabel: 'Start',
-    toLabel: 'End',
   },
+  labels: { rangeFrom: 'Start', rangeTo: 'End' },
   callbacks: {
     onRangeConfirm: (data) => {
       console.log('Range confirmed:', data.from, '–', data.to, 'Duration:', data.duration);
@@ -100,14 +99,13 @@ rangePicker.create();
 
 const range24hPicker = new TimepickerUI('#range-picker-24h', {
   clock: { type: '24h' },
-  ui: { enableSwitchIcon: true },
+  ui: { viewSwitch: true },
   range: {
     enabled: true,
     minDuration: 60,
     maxDuration: 720,
-    fromLabel: 'Start',
-    toLabel: 'End',
   },
+  labels: { rangeFrom: 'Start', rangeTo: 'End' },
   callbacks: {
     onRangeConfirm: (data) => {
       console.log('Range 24h confirmed:', data.from, '–', data.to, 'Duration:', data.duration);
@@ -134,12 +132,11 @@ range24hPicker.create();
 
 const range12hAmPmPicker = new TimepickerUI('#range-picker-12h-ampm', {
   clock: { type: '12h' },
-  ui: { enableSwitchIcon: true },
+  ui: { viewSwitch: true },
   range: {
     enabled: true,
-    fromLabel: 'From',
-    toLabel: 'To',
   },
+  labels: { rangeFrom: 'From', rangeTo: 'To' },
   callbacks: {
     onRangeConfirm: (data) => {
       console.log('Range 12h AM/PM confirmed:', data.from, '–', data.to, 'Duration:', data.duration);

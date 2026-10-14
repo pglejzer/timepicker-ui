@@ -10,41 +10,47 @@ export default function SwitchIconPage() {
     <div>
       <PageHeader
         title="Switch Icon"
-        description="Enable icon to toggle between mobile and desktop views"
+        description={
+          <>
+            Show a button that switches between the clock face and the
+            keyboard view, with <code>ui.viewSwitch</code>.
+          </>
+        }
         eyebrow="Example · Features"
       />
 
-      <Section icon={ArrowLeftRight} title="Enable Switch Icon">
+      <Section icon={ArrowLeftRight} title="Enable the View Switch">
         <p className="text-muted-foreground mb-4">
-          Show icon to switch between mobile and desktop versions:
+          Show the icon that switches between the clock face and the keyboard
+          view:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  ui: { enableSwitchIcon: true }
+  ui: { viewSwitch: true }
 });
 picker.create();`}
           options={{
-            ui: { enableSwitchIcon: true },
+            ui: { viewSwitch: true },
           }}
         />
       </Section>
 
-      <Section icon={ArrowLeftRight} title="With Mobile Default">
+      <Section icon={ArrowLeftRight} title="Start in the Keyboard View">
         <p className="text-muted-foreground mb-4">
-          Start in mobile mode with switch icon:
+          Open in the keyboard view, with the icon to switch to the clock face:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   ui: {
-    mobile: true,
-    enableSwitchIcon: true
+    initialView: 'keyboard',
+    viewSwitch: true
   }
 });
 picker.create();`}
           options={{
             ui: {
-              mobile: true,
-              enableSwitchIcon: true,
+              initialView: "keyboard",
+              viewSwitch: true,
             },
           }}
         />
@@ -54,14 +60,14 @@ picker.create();`}
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   ui: {
-    enableSwitchIcon: true,
+    viewSwitch: true,
     theme: 'dark'
   }
 });
 picker.create();`}
           options={{
             ui: {
-              enableSwitchIcon: true,
+              viewSwitch: true,
               theme: "dark",
             },
           }}

@@ -92,11 +92,11 @@ export function Header() {
         page below it. Only the inner bar condenses (h-16 -> h-14) and the
         backdrop / border / shadow sharpen on scroll - all GPU/compositor work.
       */}
-      <div className="site-header-bar container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-        <div className="flex items-center gap-7">
+      <div className="site-header-bar container mx-auto flex h-16 items-center justify-between px-4 max-[360px]:px-3 md:px-6">
+        <div className="flex items-center gap-2 max-[360px]:gap-1 sm:gap-7">
           <button
             onClick={handleMobileSidebarOpen}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:hidden"
             aria-label="Open navigation"
           >
             <Menu className="h-5 w-5" />
@@ -104,13 +104,15 @@ export function Header() {
 
           <Link
             href="/"
-            className="site-wordmark group flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="site-wordmark group flex items-center gap-2 max-[360px]:gap-1.5 rounded-md focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="timepicker-ui home"
           >
             <span className="site-logo">
-              <Logo />
+              <Logo
+                className="h-[22px] w-[22px] max-[360px]:h-5 max-[360px]:w-5"
+              />
             </span>
-            <span className="font-mono text-[15px] font-semibold tracking-tight">
+            <span className="font-mono text-[15px] max-[360px]:text-[13px] font-semibold tracking-tight">
               timepicker
               <span className="text-muted-foreground">-ui</span>
             </span>
@@ -128,7 +130,7 @@ export function Header() {
                   href={item.href}
                   aria-current={active ? "page" : undefined}
                   data-active={active ? "" : undefined}
-                  className="site-nav-link rounded-md px-2 py-1.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[active]:text-foreground"
+                  className="site-nav-link rounded-md px-2 py-1.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[active]:text-foreground"
                 >
                   {item.label}
                   <span className="site-nav-tick" aria-hidden="true" />
@@ -138,10 +140,10 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 max-[360px]:gap-0.5 sm:gap-1.5">
           <button
             onClick={openSearch}
-            className="hidden h-10 items-center gap-2 rounded-md border border-border bg-muted/40 px-3 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:inline-flex"
+            className="hidden h-10 items-center gap-2 rounded-md border border-border bg-muted/40 px-3 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:inline-flex"
             aria-label="Search documentation"
           >
             <Search className="h-3.5 w-3.5" />
@@ -152,7 +154,7 @@ export function Header() {
           </button>
           <button
             onClick={openSearch}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:hidden"
             aria-label="Search documentation"
           >
             <Search className="h-5 w-5" />
@@ -162,15 +164,15 @@ export function Header() {
             href="https://www.npmjs.com/package/timepicker-ui"
             target="_blank"
             rel="noreferrer"
-            className="hidden items-center rounded-md border border-border px-2.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:inline-flex sm:h-10"
+            className="hidden items-center rounded-md border border-border px-2.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:inline-flex sm:h-10"
             aria-label="npm version"
           >
-            v4.4.0
+            v4.5.0
           </a>
 
           <button
             onClick={toggleDark}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="Toggle theme"
           >
             {isDark ? (
@@ -183,7 +185,7 @@ export function Header() {
             href="https://github.com/pglejzer/timepicker-ui"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="GitHub"
           >
             <Github className="h-5 w-5" />

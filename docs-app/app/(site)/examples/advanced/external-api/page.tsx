@@ -13,6 +13,7 @@ export default function ExternalAPIExample() {
   const input1Ref = useRef<HTMLInputElement>(null);
   const input2Ref = useRef<HTMLInputElement>(null);
   const input3Ref = useRef<HTMLInputElement>(null);
+  const picker2Ref = useRef<TimepickerUI | null>(null);
   const [currentTime, setCurrentTime] = useState<string>("");
   const [timezone, setTimezone] = useState<string>("Europe/Warsaw");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -72,6 +73,7 @@ export default function ExternalAPIExample() {
       },
     });
     picker.create();
+    picker2Ref.current = picker;
 
     // EventEmitter API
     picker.on("confirm", (data) => {
@@ -111,6 +113,7 @@ export default function ExternalAPIExample() {
     return () => {
       clearInterval(interval);
       picker.destroy();
+      picker2Ref.current = null;
     };
   }, [timezone]);
 
@@ -122,7 +125,7 @@ export default function ExternalAPIExample() {
       clock: {
         type: "12h",
         disabledTime: {
-          hours: [1, 2, 3, 4, 5], // Disable 1 AM - 5 AM
+          ranges: "1:00 AM - 5:59 AM", // Disable 1 AM - 5 AM
         },
       },
       ui: {
@@ -133,11 +136,11 @@ export default function ExternalAPIExample() {
       labels: {
         am: "AM",
         pm: "PM",
-        time: "Select Time",
+        clockTitle: "Select Time",
       },
       behavior: {
         focusTrap: true,
-        focusInputAfterClose: true,
+        returnFocus: true,
       },
       callbacks: {
         onConfirm: (data) => {
@@ -199,9 +202,7 @@ export default function ExternalAPIExample() {
       const hour = String(data.hour).padStart(2, "0");
       const minutes = String(data.minute).padStart(2, "0");
 
-      const picker = TimepickerUI.getById(
-        input2Ref.current.getAttribute("data-timepicker-id") || ""
-      );
+      const picker = picker2Ref.current;
       if (picker) {
         picker.setValue(`${hour}:${minutes}`);
         setCurrentTime(`${hour}:${minutes} (${timezone})`);
@@ -425,7 +426,7 @@ return () => {
   clock: {
     type: '12h',
     disabledTime: {
-      hours: [1, 2, 3, 4, 5], // Disable 1 AM - 5 AM
+      ranges: '1:00 AM - 5:59 AM', // Disable 1 AM - 5 AM
     },
   },
   ui: {
@@ -436,11 +437,11 @@ return () => {
   labels: {
     am: 'AM',
     pm: 'PM',
-    time: 'Select Time',
+    clockTitle: 'Select Time',
   },
   behavior: {
     focusTrap: true,
-    focusInputAfterClose: true,
+    returnFocus: true,
   },
   callbacks: {
     onConfirm: (data) => console.log('Time confirmed:', data),
@@ -523,14 +524,14 @@ fetchWorldTime();`}
       </Section>
 
       <InfoBox title="Production Tips" variant="purple">
-        <ul className="space-y-2 text-sm">
-          <li>• Always handle API errors gracefully with try/catch</li>
+        <ul className="list-disc list-inside space-y-2 text-sm">
+          <li>Always handle API errors gracefully with try/catch</li>
           <li>
-            • Clean up intervals and destroy pickers in React useEffect cleanup
+            Clean up intervals and destroy pickers in React useEffect cleanup
           </li>
-          <li>• Use EventEmitter API for better TypeScript support</li>
-          <li>• Consider rate limiting and caching for frequent API calls</li>
-          <li>• Validate time data from external APIs before setting</li>
+          <li>Use EventEmitter API for better TypeScript support</li>
+          <li>Consider rate limiting and caching for frequent API calls</li>
+          <li>Validate time data from external APIs before setting</li>
         </ul>
       </InfoBox>
     </div>

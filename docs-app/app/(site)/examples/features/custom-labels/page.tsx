@@ -58,41 +58,43 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Type} title="Time Label">
+      <Section icon={Type} title="Clock View Title">
         <p className="text-muted-foreground mb-4">
-          Customize time selection label:
+          Change the heading of the clock face view with{" "}
+          <code>labels.clockTitle</code>:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  labels: { time: 'Choose Your Time' }
+  labels: { clockTitle: 'Choose Your Time' }
 });
 picker.create();`}
           options={{
-            labels: { time: "Choose Your Time" },
+            labels: { clockTitle: "Choose Your Time" },
           }}
         />
       </Section>
 
-      <Section icon={Type} title="Mobile Labels">
+      <Section icon={Type} title="Keyboard View Labels">
         <p className="text-muted-foreground mb-4">
-          Customize labels for mobile version:
+          Change the labels of the keyboard view. <code>labels.hour</code> and{" "}
+          <code>labels.minute</code> also name the fields for screen readers:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  ui: { mobile: true },
+  ui: { initialView: 'keyboard' },
   labels: {
-    mobileHour: 'H',
-    mobileMinute: 'M',
-    mobileTime: 'Set Time'
+    hour: 'Hours',
+    minute: 'Minutes',
+    keyboardTitle: 'Set Time'
   }
 });
 picker.create();`}
           options={{
-            ui: { mobile: true },
+            ui: { initialView: "keyboard" },
             labels: {
-              mobileHour: "H",
-              mobileMinute: "M",
-              mobileTime: "Set Time",
+              hour: "Hours",
+              minute: "Minutes",
+              keyboardTitle: "Set Time",
             },
           }}
         />
@@ -107,7 +109,7 @@ picker.create();`}
   labels: {
     ok: 'Zatwierdź',
     cancel: 'Anuluj',
-    time: 'Wybierz godzinę'
+    clockTitle: 'Wybierz godzinę'
   }
 });
 picker.create();`}
@@ -115,7 +117,7 @@ picker.create();`}
             labels: {
               ok: "Zatwierdź",
               cancel: "Anuluj",
-              time: "Wybierz godzinę",
+              clockTitle: "Wybierz godzinę",
             },
           }}
         />

@@ -56,6 +56,7 @@ picker.create();
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
+  clock: { type: '24h' },
   callbacks: {
     onConfirm: (data) => {
       const hour = parseInt(data.hour);
@@ -75,6 +76,7 @@ const picker = new TimepickerUI(input, {
 
 picker.create();`}
           options={{
+            clock: { type: "24h" },
             callbacks: {
               onConfirm: (data: TimepickerEventData) => {
                 if (!data.hour) return;
@@ -145,6 +147,7 @@ function validateTimeRange(time: string, min: string, max: string): boolean {
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
+  clock: { type: '24h' },
   callbacks: {
     onConfirm: (data) => {
       const time = \`\${data.hour}:\${data.minutes}\`;
@@ -175,9 +178,9 @@ import { TimepickerUI } from 'timepicker-ui';
 import { useForm } from 'react-hook-form';
 
 function TimePickerForm() {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const pickerRef = useRef<TimepickerUI | null>(null);
-  
+
   const {
     register,
     handleSubmit,
@@ -185,10 +188,19 @@ function TimePickerForm() {
     formState: { errors }
   } = useForm();
 
+  const { ref: registerRef, ...timeField } = register('time', {
+    required: 'Time is required',
+    pattern: {
+      value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+      message: 'Invalid time format'
+    }
+  });
+
   const options = useMemo(() => ({
+    clock: { type: '24h' as const },
     callbacks: {
       onConfirm: (data) => {
-        const time = \`\${data.hour}:\${data.minutes}\${data.type ? ' ' + data.type : ''}\`;
+        const time = \`\${data.hour}:\${data.minutes}\`;
         setValue('time', time, { shouldValidate: true });
       }
     }
@@ -212,15 +224,12 @@ function TimePickerForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input
-        ref={inputRef}
+        {...timeField}
+        ref={(el) => {
+          registerRef(el);
+          inputRef.current = el;
+        }}
         type="text"
-        {...register('time', {
-          required: 'Time is required',
-          pattern: {
-            value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-            message: 'Invalid time format'
-          }
-        })}
       />
       {errors.time && (
         <span className="error">{errors.time.message}</span>

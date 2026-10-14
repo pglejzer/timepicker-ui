@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "timepicker-ui/index.css";
 import { CommandMenu } from "@/components/command-menu";
+import { ConsoleBanner } from "@/components/console-banner";
 import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
@@ -96,15 +97,17 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
         >
           Skip to content
         </a>
         {children}
         {/* Global, route-independent: CommandMenu listens for ⌘K and the
             `open-command-menu` window event, so it works on real pages and on
-            the chrome-less 404. Analytics tracks every route, 404 included. */}
+            the chrome-less 404. ConsoleBanner prints the console logo once per
+            page load. Analytics tracks every route, 404 included. */}
         <CommandMenu />
+        <ConsoleBanner />
         <Analytics />
       </body>
     </html>

@@ -1,8 +1,11 @@
+import type { ReactNode } from "react";
 import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { InfoBox } from "@/components/info-box";
+import { RenamedOptionsTable } from "@/components/renamed-options-table";
+import { renamedOptions } from "@/lib/renamed-options";
 import {
   Layout,
   Lock,
@@ -11,9 +14,9 @@ import {
   Palette,
   Sliders,
   Bell,
-  Trash2,
   Globe,
   ArrowLeftRight,
+  ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -24,18 +27,38 @@ export const metadata = buildMetadata({
   path: "/docs/api/options",
 });
 
-const clockOptions = [
+type OptionRow = {
+  name: string;
+  type: string;
+  default: string;
+  description: ReactNode;
+};
+
+const Deprecated = ({ children }: { children: ReactNode }) => (
+  <>
+    <span className="font-medium text-foreground">Deprecated.</span>{" "}
+    {children}
+  </>
+);
+
+const clockOptions: OptionRow[] = [
   {
     name: "type",
-    type: '"12h" | "24h"',
+    type: '"12h" | "24h" | "auto"',
     default: '"12h"',
-    description: "Clock format type",
+    description: (
+      <>
+        Clock format. <code>auto</code> picks 12h or 24h from the browser
+        locale when the picker is created or its options are set.{" "}
+        <code>auto</code> is new in 4.5.0.
+      </>
+    ),
   },
   {
     name: "incrementHours",
     type: "number",
     default: "1",
-    description: "Hour increment step (1, 2, 3, etc.)",
+    description: "Hour step on the clock, the wheel and the arrow keys. Use a divisor of 12: 1, 2, 3, 4 or 6",
   },
   {
     name: "incrementMinutes",
@@ -50,26 +73,76 @@ const clockOptions = [
     description: "Auto-switch to minutes after hour selection",
   },
   {
+    name: "showSeconds",
+    type: "boolean",
+    default: "false",
+    description: (
+      <>
+        Show a seconds field, clock face and wheel column. Values become{" "}
+        <code>HH:MM:SS</code>. New in 4.5.0. See{" "}
+        <Link href="/docs/features/seconds" className="text-primary underline">
+          Seconds
+        </Link>
+        .
+      </>
+    ),
+  },
+  {
+    name: "incrementSeconds",
+    type: "1 | 5 | 10 | 15 | 20 | 30",
+    default: "1",
+    description:
+      "Seconds step on the seconds face, the wheel column and the keyboard. New in 4.5.0.",
+  },
+  {
+    name: "autoSwitchToSeconds",
+    type: "boolean",
+    default: "true",
+    description: (
+      <>
+        Switch the clock face to seconds after a minute is picked. Only used
+        with <code>showSeconds</code>. New in 4.5.0.
+      </>
+    ),
+  },
+  {
     name: "disabledTime",
     type: "DisabledTime",
     default: "undefined",
-    description: "Disable specific hours, minutes, or intervals",
+    description: (
+      <>
+        Disable specific hours, minutes, seconds or time ranges. When{" "}
+        <code>ranges</code> is set, the <code>hours</code>,{" "}
+        <code>minutes</code> and <code>seconds</code> lists are ignored.
+      </>
+    ),
   },
   {
-    name: "smoothHourSnap",
+    name: "discreteHourJump",
     type: "boolean",
-    default: "true",
-    description: "Enable smooth hour dragging with snap animation",
+    default: "false",
+    description:
+      "Move the hour hand from hour to hour while dragging instead of following the pointer",
   },
   {
-    name: "currentTime",
-    type: "CurrentTime",
+    name: "defaultTime",
+    type: '"now" | { time?: Date | "now"; updateInput?: boolean }',
     default: "undefined",
-    description: "Set current time configuration",
+    description: (
+      <>
+        Time the picker shows while the input is empty.{" "}
+        <code>&apos;now&apos;</code> shows the current time and also writes it
+        to the input when the picker is created, replacing a value that is
+        already there. In the object form,{" "}
+        <code>time</code> is a <code>Date</code> or{" "}
+        <code>&apos;now&apos;</code>. <code>updateInput: true</code> writes it
+        to the input and <code>updateInput: false</code> only shows it.
+      </>
+    ),
   },
 ];
 
-const uiOptions = [
+const uiOptions: OptionRow[] = [
   {
     name: "theme",
     type: "Theme",
@@ -89,16 +162,18 @@ const uiOptions = [
     description: "Show/hide backdrop overlay",
   },
   {
-    name: "mobile",
-    type: "boolean",
-    default: "false",
-    description: "Force mobile version",
+    name: "initialView",
+    type: '"clock" | "keyboard"',
+    default: '"clock"',
+    description:
+      "View shown when the picker opens: the clock face or the keyboard fields",
   },
   {
-    name: "enableSwitchIcon",
+    name: "viewSwitch",
     type: "boolean",
     default: "false",
-    description: "Show desktop/mobile switch icon",
+    description:
+      "Show the button that switches between the clock face and the keyboard fields",
   },
   {
     name: "editable",
@@ -107,10 +182,25 @@ const uiOptions = [
     description: "Allow manual input editing",
   },
   {
-    name: "enableScrollbar",
+    name: "allowPageScroll",
     type: "boolean",
     default: "false",
-    description: "Keep page scroll when picker is open",
+    description: (
+      <>
+        Let the page scroll while the picker is open. When{" "}
+        <code>false</code>, the page is locked while the modal is open (inline
+        pickers and the compact-wheel popover never lock it), and{" "}
+        <code>&lt;html&gt;</code> gets <code>--tp-scrollbar-gap</code> with the
+        width of the removed scrollbar, for fixed headers. See{" "}
+        <Link
+          href="/docs/configuration#scroll-lock"
+          className="text-primary underline"
+        >
+          Scroll lock and fixed headers
+        </Link>
+        .
+      </>
+    ),
   },
   {
     name: "cssClass",
@@ -119,70 +209,106 @@ const uiOptions = [
     description: "Additional CSS class for timepicker wrapper",
   },
   {
-    name: "appendModalSelector",
+    name: "appendTo",
+    type: "string | HTMLElement",
+    default: '""',
+    description: (
+      <>
+        Element, or selector of the element, the modal is appended to. Empty
+        means <code>document.body</code>. Passing an element is new in 4.5.0.
+      </>
+    ),
+  },
+  {
+    name: "keyboardIcon",
     type: "string",
     default: '""',
-    description: "DOM selector to append timepicker (defaults to body)",
+    description:
+      "Custom HTML for the switch icon that opens the keyboard fields, shown on the clock face view. The built-in icon is used when empty",
   },
   {
-    name: "iconTemplate",
+    name: "clockIcon",
     type: "string",
-    default: "undefined",
-    description: "Custom HTML template for desktop icon",
-  },
-  {
-    name: "iconTemplateMobile",
-    type: "string",
-    default: "undefined",
-    description: "Custom HTML template for mobile icon",
+    default: '""',
+    description:
+      "Custom HTML for the switch icon that goes back to the clock, shown on the keyboard view. The built-in icon is used when empty",
   },
   {
     name: "inline",
     type: "InlineOptions",
     default: "undefined",
-    description: "Inline mode configuration",
+    description: (
+      <>
+        Inline mode configuration. <code>container</code> takes an element or
+        a selector and is required when <code>enabled</code> is{" "}
+        <code>true</code>.
+      </>
+    ),
   },
   {
     name: "clearButton",
-    type: "boolean",
+    type: "boolean | { clearInput?: boolean }",
     default: "false",
-    description: "Show clear button to reset time selection",
+    description: (
+      <>
+        Show the Clear button. The object form also sets what Clear does:{" "}
+        <code>{"{ clearInput: false }"}</code> keeps the input value. The
+        object form is new in 4.5.0.
+      </>
+    ),
   },
   {
     name: "mode",
     type: '"clock" | "wheel" | "compact-wheel"',
     default: '"clock"',
     description:
-      "Picker mode \u2014 analog clock face, scroll-spinner wheels, or headerless wheel",
+      "Picker mode: analog clock face, scroll wheel, or compact wheel without a header. The wheel modes need the wheel plugin",
   },
 ];
 
-const wheelOptions = [
+const wheelOptions: OptionRow[] = [
   {
     name: "placement",
     type: '"auto" | "top" | "bottom"',
     default: "undefined",
-    description: "Popover placement relative to input in compact-wheel mode",
+    description: (
+      <>
+        <code>compact-wheel</code> only. When unset, compact-wheel opens as a
+        modal. Set it to open compact-wheel as a popover next to the input:{" "}
+        <code>auto</code> opens below when there is room, otherwise above;{" "}
+        <code>top</code> and <code>bottom</code> open on that side while it
+        has room for at least three wheel rows, otherwise on the other side.
+      </>
+    ),
   },
   {
     name: "hideFooter",
     type: "boolean",
     default: "false",
-    description: "Hide footer (OK/Cancel/Clear buttons) in compact-wheel mode",
+    description: (
+      <>
+        Do not render the footer (OK, Cancel, Clear and the switch icon).{" "}
+        <code>compact-wheel</code> only.
+      </>
+    ),
   },
   {
     name: "commitOnScroll",
     type: "boolean",
     default: "false",
-    description:
-      "Auto-commit time at end of wheel scrolling without pressing OK",
+    description: (
+      <>
+        Commit the time when wheel scrolling ends, without pressing OK. The{" "}
+        <code>confirm</code> payload then has <code>autoCommit: true</code>.
+      </>
+    ),
   },
   {
     name: "hideDisabled",
     type: "boolean",
     default: "false",
     description:
-      "Completely remove disabled hours/minutes from the wheel list instead of dimming them",
+      "Remove disabled hours, minutes and seconds from the wheel list instead of dimming them",
   },
   {
     name: "ignoreOutsideClick",
@@ -193,7 +319,7 @@ const wheelOptions = [
   },
 ];
 
-const labelsOptions = [
+const labelsOptions: OptionRow[] = [
   {
     name: "am",
     type: "string",
@@ -219,112 +345,137 @@ const labelsOptions = [
     description: "Text for cancel button",
   },
   {
-    name: "time",
-    type: "string",
-    default: '"Select time"',
-    description: "Time label for desktop version",
-  },
-  {
-    name: "mobileTime",
-    type: "string",
-    default: '"Enter Time"',
-    description: "Time label for mobile version",
-  },
-  {
-    name: "mobileHour",
-    type: "string",
-    default: '"Hour"',
-    description: "Hour label for mobile version",
-  },
-  {
-    name: "mobileMinute",
-    type: "string",
-    default: '"Minute"',
-    description: "Minute label for mobile version",
-  },
-  {
     name: "clear",
     type: "string",
     default: '"Clear"',
     description: "Text for clear button",
   },
   {
-    name: "hourLabel",
+    name: "clockTitle",
+    type: "string",
+    default: '"Select time"',
+    description: "Heading of the clock face view",
+  },
+  {
+    name: "keyboardTitle",
+    type: "string",
+    default: '"Enter Time"',
+    description: "Heading of the keyboard view",
+  },
+  {
+    name: "hour",
     type: "string",
     default: '"Hour"',
-    description: "Accessible label for the hour spinbutton",
+    description:
+      "Hour field caption, its accessible name, the dial name on the hours face, and the prefix of the hour announcement",
   },
   {
-    name: "minuteLabel",
+    name: "minute",
     type: "string",
     default: '"Minute"',
-    description: "Accessible label for the minute spinbutton",
+    description: (
+      <>
+        Same as <code>hour</code>, for minutes. Until 5.0, the minute
+        announcement says <code>Minutes</code> when <code>minute</code> is not
+        set.
+      </>
+    ),
   },
   {
-    name: "clockLabel",
+    name: "second",
+    type: "string",
+    default: '"Second"',
+    description: (
+      <>
+        Same as <code>hour</code>, for seconds. Used with{" "}
+        <code>clock.showSeconds</code>. New in 4.5.0.
+      </>
+    ),
+  },
+  {
+    name: "clock",
     type: "string",
     default: '"Clock"',
-    description: "Accessible label for the analog clock face group",
+    description: "Accessible name of the group around the clock dial",
   },
   {
-    name: "periodLabel",
+    name: "period",
     type: "string",
     default: '"Period"',
-    description: "Accessible label for the AM/PM period group",
+    description: "Accessible name of the AM/PM group",
   },
   {
-    name: "timeLabel",
+    name: "timeFields",
     type: "string",
     default: '"Time"',
-    description: "Accessible label for the time wrapper group / tips",
+    description: "Accessible name of the group around the time fields",
+  },
+  {
+    name: "range",
+    type: "string",
+    default: '"Range selection"',
+    description: "Accessible name of the range From/To tabs",
+  },
+  {
+    name: "rangeFrom",
+    type: "string",
+    default: '"From"',
+    description: "Text of the range From tab",
+  },
+  {
+    name: "rangeTo",
+    type: "string",
+    default: '"To"',
+    description: "Text of the range To tab",
+  },
+  {
+    name: "timezone",
+    type: "string",
+    default: '"Timezone"',
+    description: "Label of the timezone selector",
+  },
+  {
+    name: "switchToKeyboard",
+    type: "string",
+    default: '"Switch to keyboard input"',
+    description: "Accessible name of the view switch on the clock face view",
+  },
+  {
+    name: "switchToClock",
+    type: "string",
+    default: '"Switch to clock"',
+    description: "Accessible name of the view switch on the keyboard view",
   },
   {
     name: "format24Label",
     type: "string",
     default: '"24-hour"',
-    description: "Accessible label for the 24-hour tips group",
-  },
-  {
-    name: "rangeSelectionLabel",
-    type: "string",
-    default: '"Range selection"',
-    description: "Accessible label for the range selection tablist",
-  },
-  {
-    name: "switchToKeyboardLabel",
-    type: "string",
-    default: '"Switch to keyboard input"',
-    description: "Accessible label for the keyboard-input switch icon",
-  },
-  {
-    name: "switchToClockLabel",
-    type: "string",
-    default: '"Switch to clock"',
-    description: "Accessible label for the clock-view switch icon",
+    description: (
+      <Deprecated>Has no effect. Will be removed in 5.0.</Deprecated>
+    ),
   },
   {
     name: "toggleLabel",
     type: "string",
     default: '"Toggle"',
-    description: "Accessible label for the generic view toggle button",
+    description: (
+      <Deprecated>
+        Has no effect. The view switch is one button labelled by{" "}
+        <code>switchToKeyboard</code> and <code>switchToClock</code>. Will be
+        removed in 5.0.
+      </Deprecated>
+    ),
   },
   {
     name: "timezoneSelectorLabel",
     type: "string",
     default: '"Timezone"',
-    description: "Accessible label for the timezone selector",
-  },
-  {
-    name: "announceHour",
-    type: "string",
-    default: '"Hour"',
-    description: "Screen-reader announcement prefix for the selected hour",
-  },
-  {
-    name: "announceMinute",
-    type: "string",
-    default: '"Minutes"',
-    description: "Screen-reader announcement prefix for the selected minutes",
+    description: (
+      <Deprecated>
+        Has no effect. Use <code>labels.timezone</code>. Will be removed in
+        5.0.
+      </Deprecated>
+    ),
   },
   {
     name: "announceAmSelected",
@@ -344,9 +495,16 @@ const labelsOptions = [
     default: '"Invalid time format"',
     description: "Error/announcement text for an invalid time format",
   },
+  {
+    name: "announceCleared",
+    type: "string",
+    default: '"Time cleared"',
+    description:
+      "Screen-reader announcement after the Clear button is used. New in 4.5.0.",
+  },
 ];
 
-const timezoneOptions = [
+const timezoneOptions: OptionRow[] = [
   {
     name: "enabled",
     type: "boolean",
@@ -358,24 +516,18 @@ const timezoneOptions = [
     type: "string",
     default: "undefined",
     description:
-      'Default timezone ID (e.g. "America/New_York"); browser timezone if not set',
+      'Default timezone ID (e.g. "America/New_York"). Uses the browser timezone if not set',
   },
   {
-    name: "whitelist",
+    name: "list",
     type: "readonly string[]",
     default: "undefined",
     description:
-      "Whitelist of allowed timezone IDs; curated list of common timezones if not set",
-  },
-  {
-    name: "label",
-    type: "string",
-    default: '"Timezone"',
-    description: "Label for the timezone selector",
+      "Timezone IDs shown in the selector, instead of the built-in list of common timezones",
   },
 ];
 
-const rangeOptions = [
+const rangeOptions: OptionRow[] = [
   {
     name: "enabled",
     type: "boolean",
@@ -386,34 +538,38 @@ const rangeOptions = [
     name: "minDuration",
     type: "number",
     default: "undefined",
-    description: "Minimum duration in minutes",
+    description: (
+      <>
+        Minimum duration in minutes. With <code>clock.showSeconds</code>, it is
+        compared to the exact length in seconds.
+      </>
+    ),
   },
   {
     name: "maxDuration",
     type: "number",
     default: "undefined",
-    description: "Maximum duration in minutes",
-  },
-  {
-    name: "fromLabel",
-    type: "string",
-    default: '"From"',
-    description: 'Label for the "from" segment',
-  },
-  {
-    name: "toLabel",
-    type: "string",
-    default: '"To"',
-    description: 'Label for the "to" segment',
+    description: (
+      <>
+        Maximum duration in minutes. With <code>clock.showSeconds</code>, it is
+        compared to the exact length in seconds.
+      </>
+    ),
   },
 ];
 
-const behaviorOptions = [
+const behaviorOptions: OptionRow[] = [
   {
-    name: "focusInputAfterClose",
+    name: "returnFocus",
     type: "boolean",
     default: "false",
-    description: "Focus input after closing modal",
+    description: (
+      <>
+        Return focus to the input when the picker closes (WAI-ARIA dialog
+        pattern). <code>true</code> is recommended, and 5.0 makes{" "}
+        <code>true</code> the default.
+      </>
+    ),
   },
   {
     name: "focusTrap",
@@ -424,18 +580,29 @@ const behaviorOptions = [
   {
     name: "delayHandler",
     type: "number",
-    default: "300",
-    description: "Debounce delay for buttons (ms)",
+    default: "0",
+    description: (
+      <>
+        Extra delay (ms) before the picker starts to close after OK, Cancel,
+        Escape, a backdrop click or <code>close()</code>. The default was{" "}
+        <code>300</code> before 4.5.0.
+      </>
+    ),
   },
   {
     name: "id",
     type: "string",
     default: "undefined",
-    description: "Custom ID for timepicker instance",
+    description: (
+      <>
+        Custom ID for the instance. Pass it to{" "}
+        <code>TimepickerUI.getById()</code>.
+      </>
+    ),
   },
 ];
 
-const callbacksOptions = [
+const callbacksOptions: OptionRow[] = [
   {
     name: "onConfirm",
     type: "(data: ConfirmEventData) => void",
@@ -452,7 +619,30 @@ const callbacksOptions = [
     name: "onOpen",
     type: "(data: OpenEventData) => void",
     default: "undefined",
-    description: "Triggered when picker opens",
+    description: (
+      <>
+        Triggered when the picker opens, including through{" "}
+        <code>open()</code>.
+      </>
+    ),
+  },
+  {
+    name: "onShow",
+    type: "(data: ShowEventData) => void",
+    default: "undefined",
+    description: (
+      <>
+        Triggered when the user clicks the input or a{" "}
+        <Link
+          href="/examples/features/open-from-button"
+          className="text-primary underline"
+        >
+          <code>data-open</code> element
+        </Link>
+        , or presses Enter or Space on it, to open the picker.{" "}
+        <code>open()</code> does not trigger it. New in 4.5.0.
+      </>
+    ),
   },
   {
     name: "onUpdate",
@@ -473,22 +663,56 @@ const callbacksOptions = [
     description: "Triggered when minute is selected",
   },
   {
-    name: "onSelectAM",
-    type: "(data: SelectAMEventData) => void",
+    name: "onSelectSecond",
+    type: "(data: SelectSecondEventData) => void",
     default: "undefined",
-    description: "Triggered when AM is selected",
+    description: (
+      <>
+        Triggered when the seconds field or face is selected. Needs{" "}
+        <code>clock.showSeconds</code>. New in 4.5.0.
+      </>
+    ),
   },
   {
-    name: "onSelectPM",
-    type: "(data: SelectPMEventData) => void",
+    name: "onSelectPeriod",
+    type: "(data: SelectPeriodEventData) => void",
     default: "undefined",
-    description: "Triggered when PM is selected",
+    description: (
+      <>
+        Triggered when AM or PM is selected, with{" "}
+        <code>{"{ type: 'AM' | 'PM' }"}</code>. New in 4.5.0.
+      </>
+    ),
+  },
+  {
+    name: "onSwitchFace",
+    type: "(data: SwitchFaceEventData) => void",
+    default: "undefined",
+    description: (
+      <>
+        Triggered when the clock face switches between hours, minutes and
+        seconds, with <code>{"{ face }"}</code>. Clicking the field that is
+        already active does not trigger it. New in 4.5.0.
+      </>
+    ),
+  },
+  {
+    name: "onSwitchView",
+    type: "(data: SwitchViewEventData) => void",
+    default: "undefined",
+    description: (
+      <>
+        Triggered when the switch icon toggles between the clock face and
+        keyboard input. Needs <code>ui.viewSwitch</code>. New in 4.5.0.
+      </>
+    ),
   },
   {
     name: "onError",
     type: "(data: ErrorEventData) => void",
     default: "undefined",
-    description: "Triggered when validation error occurs",
+    description:
+      "Triggered on an invalid input value, a setValue() string that is not a time, invalid options or a missing plugin",
   },
   {
     name: "onTimezoneChange",
@@ -516,6 +740,20 @@ const callbacksOptions = [
     description: "Triggered on range validation (range mode only)",
   },
   {
+    name: "onWheelScrollStart",
+    type: "(data: WheelScrollStartEventData) => void",
+    default: "undefined",
+    description:
+      "Triggered when a wheel column starts scrolling (wheel and compact-wheel modes). New in 4.5.0.",
+  },
+  {
+    name: "onWheelScrollEnd",
+    type: "(data: WheelScrollEndEventData) => void",
+    default: "undefined",
+    description:
+      "Triggered when a wheel column stops and snaps to a value (wheel and compact-wheel modes). New in 4.5.0.",
+  },
+  {
     name: "onClear",
     type: "(data: ClearEventData) => void",
     default: "undefined",
@@ -523,16 +761,7 @@ const callbacksOptions = [
   },
 ];
 
-const clearBehaviorOptions = [
-  {
-    name: "clearInput",
-    type: "boolean",
-    default: "true",
-    description: "Whether clearing also empties the input field value",
-  },
-];
-
-const OptionsTable = ({ options }: { options: typeof clockOptions }) => (
+const OptionsTable = ({ options }: { options: OptionRow[] }) => (
   <div className="overflow-x-auto rounded-lg border border-border">
     <table className="w-full text-sm">
       <thead className="bg-muted/50">
@@ -597,7 +826,7 @@ const themes = [
   },
   {
     name: "blueprint-dark",
-    description: "Dark sibling of Blueprint on near-black surfaces (new in v4.4.0)",
+    description: "Dark sibling of Blueprint on navy surfaces (new in v4.4.0)",
   },
 ];
 
@@ -612,18 +841,23 @@ export default function OptionsPage() {
 
       <InfoBox title="Important notice" variant="emerald" className="mb-8">
         <strong>v4.0.0 Breaking Change:</strong> Options are now organized into
-        9 logical groups:
+        groups:
         <code className="mx-1">clock</code>, <code className="mx-1">ui</code>,{" "}
         <code className="mx-1">labels</code>,
         <code className="mx-1">behavior</code>,{" "}
         <code className="mx-1">callbacks</code>,{" "}
         <code className="mx-1">timezone</code>,{" "}
-        <code className="mx-1">range</code>, <code className="mx-1">wheel</code>
-        , and <code className="mx-1">clearBehavior</code>. See the{" "}
-        <Link href="/docs/changelog" className="text-primary underline">
-          changelog
-        </Link>{" "}
-        for migration guide.
+        <code className="mx-1">range</code> and{" "}
+        <code className="mx-1">wheel</code>. See the{" "}
+        <Link href="/docs/migration-guide" className="text-primary underline">
+          migration guide
+        </Link>
+        . 4.5.0 renames some options. The old names still work until 5.0 and
+        are listed in{" "}
+        <a href="#renamed" className="text-primary underline">
+          Renamed in 4.5.0
+        </a>
+        .
       </InfoBox>
 
       <Section icon={Clock} title="Clock Options">
@@ -650,10 +884,14 @@ export default function OptionsPage() {
 
       <Section icon={Type} title="Labels Options">
         <p className="text-muted-foreground mb-4">
-          Customize all text labels for localization. The accessibility labels
-          (from <code className="text-primary">hourLabel</code> to{" "}
-          <code className="text-primary">invalidTimeFormat</code>) are new in
-          v4.4.0:
+          Every text the picker shows or gives to screen readers, for
+          localization. <code className="text-primary">second</code> and{" "}
+          <code className="text-primary">announceCleared</code> are new in
+          4.5.0. Keys that got a new name in 4.5.0 are listed in{" "}
+          <a href="#renamed" className="text-primary underline">
+            Renamed in 4.5.0
+          </a>
+          .
         </p>
         <OptionsTable options={labelsOptions} />
       </Section>
@@ -675,7 +913,8 @@ export default function OptionsPage() {
       <Section icon={Globe} title="Timezone Options">
         <p className="text-muted-foreground mb-4">
           Optional timezone selector (requires the timezone plugin) via{" "}
-          <code className="text-primary">timezone</code>:
+          <code className="text-primary">timezone</code>. Its label is{" "}
+          <code className="text-primary">labels.timezone</code>:
         </p>
         <OptionsTable options={timezoneOptions} />
       </Section>
@@ -683,17 +922,28 @@ export default function OptionsPage() {
       <Section icon={ArrowLeftRight} title="Range Options">
         <p className="text-muted-foreground mb-4">
           Optional from-to range selection (requires the range plugin) via{" "}
-          <code className="text-primary">range</code>:
+          <code className="text-primary">range</code>. The tab texts are{" "}
+          <code className="text-primary">labels.rangeFrom</code> and{" "}
+          <code className="text-primary">labels.rangeTo</code>:
         </p>
         <OptionsTable options={rangeOptions} />
       </Section>
 
-      <Section icon={Trash2} title="Clear Behavior Options">
+      <Section id="renamed" icon={ArrowRight} title="Renamed in 4.5.0">
         <p className="text-muted-foreground mb-4">
-          Control clear button behavior via{" "}
-          <code className="text-primary">clearBehavior</code>:
+          These options got clearer names in 4.5.0. The old names still work
+          and are removed in 5.0. When both names are set, the new one wins.{" "}
+          <code className="text-primary">picker.options</code> keeps returning
+          the old names until 5.0. To prepare for 5.0, see the{" "}
+          <Link
+            href="/docs/migration-guide-v5"
+            className="text-primary underline"
+          >
+            Migration Guide v4 to v5
+          </Link>
+          .
         </p>
-        <OptionsTable options={clearBehaviorOptions} />
+        <RenamedOptionsTable rows={renamedOptions} />
       </Section>
 
       <Section icon={Palette} title="Available Themes">
@@ -739,7 +989,7 @@ export default function OptionsPage() {
   ui: {
     inline: {
       enabled: true,
-      containerId: 'timepicker-container',
+      container: '#timepicker-container', // selector or element
       showButtons: false,  // Hide OK/Cancel buttons
       autoUpdate: true     // Auto-update input on change
     }
@@ -752,56 +1002,88 @@ export default function OptionsPage() {
       <Section icon={Layout} title="Wheel Mode Configuration">
         <p className="text-muted-foreground mb-4">
           Configure wheel/compact-wheel mode via{" "}
-          <code className="text-primary">wheel</code>:
+          <code className="text-primary">wheel</code>. Both modes need the
+          wheel plugin. <code className="text-primary">placement</code> and{" "}
+          <code className="text-primary">hideFooter</code> apply to{" "}
+          <code className="text-primary">compact-wheel</code> only:
         </p>
         <CodeBlock
-          code={`const picker = new TimepickerUI(input, {
-  ui: { mode: 'wheel' },
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
+
+PluginRegistry.register(WheelPlugin);
+
+const picker = new TimepickerUI(input, {
+  ui: { mode: 'compact-wheel' },
   wheel: {
-    placement: 'bottom',     // Popover placement (compact-wheel only)
-    hideFooter: true,        // Hide OK/Cancel footer
+    placement: 'bottom',     // Popover below the input; unset = modal
+    hideFooter: true,        // No OK/Cancel/Clear footer
     commitOnScroll: true     // Commit value on scroll end
   }
-});`}
+});
+picker.create();`}
           language="typescript"
         />
       </Section>
 
       <Section icon={Lock} title="Disabled Time Configuration">
         <p className="text-muted-foreground mb-4">
-          Disable specific hours, minutes, or intervals via{" "}
-          <code className="text-primary">clock.disabledTime</code>:
+          Disable specific hours, minutes, seconds or time ranges via{" "}
+          <code className="text-primary">clock.disabledTime</code>. Use either
+          the lists or <code className="text-primary">ranges</code>: when{" "}
+          <code className="text-primary">ranges</code> is set, the lists are
+          ignored. See{" "}
+          <Link href="/docs/features/seconds" className="text-primary underline">
+            Seconds
+          </Link>{" "}
+          for ranges with seconds.
         </p>
         <CodeBlock
-          code={`const picker = new TimepickerUI(input, {
+          code={`// Lists
+const picker = new TimepickerUI(input, {
   clock: {
     disabledTime: {
-      hours: [1, 3, 5, 8],                    // Disable specific hours
-      minutes: [15, 30, 45],                  // Disable specific minutes
-      interval: '10:00 AM - 12:00 PM',        // Or disable a whole time interval (string or string[])
+      hours: [1, 3, 5, 8],      // Disable specific hours
+      minutes: [15, 30, 45]     // Disable specific minutes
     }
   },
   wheel: {
-    hideDisabled: true                   // Hide disabled items instead of greying out (wheel modes only)
+    hideDisabled: true          // Hide disabled items instead of greying out (wheel modes only)
+  }
+});
+
+// Ranges (string or string[])
+const rangesPicker = new TimepickerUI(input, {
+  clock: {
+    disabledTime: {
+      ranges: ['10:00 AM - 12:00 PM', '5:00 PM - 8:00 PM']
+    }
   }
 });`}
           language="typescript"
         />
       </Section>
 
-      <Section icon={Clock} title="Current Time Configuration">
+      <Section icon={Clock} title="Default Time Configuration">
         <p className="text-muted-foreground mb-4">
-          Set current time via{" "}
-          <code className="text-primary">clock.currentTime</code>:
+          Set the time the picker shows while the input is empty via{" "}
+          <code className="text-primary">clock.defaultTime</code>.{" "}
+          <code className="text-primary">&apos;now&apos;</code> also writes the
+          current time to the input when the picker is created, replacing its
+          value. The object form with{" "}
+          <code className="text-primary">updateInput: false</code> only shows
+          it:
         </p>
         <CodeBlock
-          code={`const picker = new TimepickerUI(input, {
+          code={`// Current time, written to the input
+const picker = new TimepickerUI(input, {
+  clock: { defaultTime: 'now' }
+});
+
+// A fixed time, shown in the picker only
+const morningPicker = new TimepickerUI(input, {
   clock: {
-    currentTime: {
-      updateInput: true,
-      locales: 'en-US',
-      time: new Date()
-    }
+    defaultTime: { time: new Date(2026, 0, 1, 9, 30), updateInput: false }
   }
 });`}
           language="typescript"
@@ -820,30 +1102,28 @@ export default function OptionsPage() {
     incrementHours: 1,
     incrementMinutes: 5,
     autoSwitchToMinutes: true,
+    showSeconds: false,
     disabledTime: {
-      hours: [0, 1, 2, 3],
-      interval: '10:00 - 12:00'
+      ranges: ['00:00 - 03:59', '10:00 - 12:00']
     },
-    currentTime: {
-      updateInput: true,
-      time: new Date()
-    }
+    defaultTime: 'now'
   },
-  
+
   // UI options
   ui: {
     theme: 'dark',
     animation: true,
     backdrop: true,
-    mobile: false,
-    enableScrollbar: false,
-    enableSwitchIcon: false,
+    initialView: 'clock',
+    allowPageScroll: false,
+    viewSwitch: false,
     editable: false,
     cssClass: 'custom-picker',
-    appendModalSelector: '#timepicker-container'
+    appendTo: '#timepicker-container',
+    clearButton: { clearInput: true }
   },
 
-  // Wheel options
+  // Wheel options (wheel / compact-wheel modes)
   wheel: {
     placement: 'bottom',
     hideFooter: true,
@@ -851,27 +1131,28 @@ export default function OptionsPage() {
     hideDisabled: true,
     ignoreOutsideClick: false
   },
-  
+
   // Labels options
   labels: {
     ok: 'Confirm',
     cancel: 'Close',
-    time: 'Choose Time',
+    clockTitle: 'Choose Time',
     am: 'AM',
     pm: 'PM',
-    mobileTime: 'Enter Time',
-    mobileHour: 'Hour',
-    mobileMinute: 'Minute'
+    keyboardTitle: 'Enter Time',
+    hour: 'Hour',
+    minute: 'Minute',
+    second: 'Second'
   },
-  
+
   // Behavior options
   behavior: {
     focusTrap: true,
-    focusInputAfterClose: false,
-    delayHandler: 300,
+    returnFocus: true,
+    delayHandler: 0,
     id: 'my-timepicker'
   },
-  
+
   // Callbacks options
   callbacks: {
     onConfirm: (data) => console.log('Confirmed:', data),
@@ -880,6 +1161,8 @@ export default function OptionsPage() {
     onUpdate: (data) => console.log('Updated:', data),
     onSelectHour: (data) => console.log('Hour selected:', data.hour),
     onSelectMinute: (data) => console.log('Minute selected:', data.minutes),
+    onSelectPeriod: (data) => console.log('Period selected:', data.type),
+    onSwitchFace: (data) => console.log('Face shown:', data.face),
     onError: (data) => console.error('Error:', data.error)
   }
 });`}

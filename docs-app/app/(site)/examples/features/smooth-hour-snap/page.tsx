@@ -10,7 +10,13 @@ export default function SmoothHourSnapPage() {
     <div>
       <PageHeader
         title="Smooth Hour Snap"
-        description="Enable fluid hour dragging with smooth snapping animation"
+        description={
+          <>
+            Fluid hour dragging with a snap animation on release. Set{" "}
+            <code>clock.discreteHourJump</code> to make the hand jump from hour
+            to hour instead.
+          </>
+        }
         eyebrow="Example · Features"
       />
 
@@ -21,11 +27,11 @@ export default function SmoothHourSnapPage() {
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  clock: { smoothHourSnap: true }
+  clock: { discreteHourJump: false } // This is the default
 });
 picker.create();`}
           options={{
-            clock: { smoothHourSnap: true },
+            clock: { discreteHourJump: false },
           }}
         />
       </Section>
@@ -38,14 +44,14 @@ picker.create();`}
           code={`const picker = new TimepickerUI(input, {
   clock: {
     type: '24h',
-    smoothHourSnap: true
+    discreteHourJump: false
   }
 });
 picker.create();`}
           options={{
             clock: {
               type: "24h",
-              smoothHourSnap: true,
+              discreteHourJump: false,
             },
           }}
         />
@@ -59,52 +65,52 @@ picker.create();`}
           code={`const picker = new TimepickerUI(input, {
   clock: {
     incrementHours: 2,
-    smoothHourSnap: true
+    discreteHourJump: false
   }
 });
 picker.create();`}
           options={{
             clock: {
               incrementHours: 2,
-              smoothHourSnap: true,
+              discreteHourJump: false,
             },
           }}
         />
       </Section>
 
-      <Section icon={RotateCw} title="Comparison: Default vs Smooth">
+      <Section icon={RotateCw} title="Comparison: Discrete vs Smooth">
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="text-lg font-semibold mb-3 text-foreground">
-              Default (Discrete)
+              Discrete
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
               Clock hand jumps directly to each hour
             </p>
             <TimepickerExample
               code={`const picker = new TimepickerUI(input, {
-  clock: { smoothHourSnap: false }
+  clock: { discreteHourJump: true }
 });
 picker.create();`}
               options={{
-                clock: { smoothHourSnap: false },
+                clock: { discreteHourJump: true },
               }}
             />
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-3 text-foreground">
-              Smooth Hour Snap
+              Smooth Hour Snap (Default)
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
               Clock hand drags fluidly, snaps on release
             </p>
             <TimepickerExample
               code={`const picker = new TimepickerUI(input, {
-  clock: { smoothHourSnap: true }
+  clock: { discreteHourJump: false }
 });
 picker.create();`}
               options={{
-                clock: { smoothHourSnap: true },
+                clock: { discreteHourJump: false },
               }}
             />
           </div>

@@ -53,15 +53,15 @@
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">new TimepickerUI('#disabled-hours', {
-  disabledTime: { hours: [1, 2, 3, 22, 23] }
+  clock: { type: '24h', disabledTime: { hours: [1, 2, 3, 22, 23] } }
 }).create();
 
 new TimepickerUI('#disabled-minutes', {
-  disabledTime: { minutes: [15, 30, 45] }
+  clock: { type: '12h', disabledTime: { minutes: [15, 30, 45] } }
 }).create();
 
 new TimepickerUI('#disabled-interval', {
-  disabledTime: { interval: '12:00 - 18:00' }
+  clock: { type: '24h', disabledTime: { ranges: '12:00 - 18:00' } }
 }).create();</code></pre>
       </div>
     </div>
@@ -112,13 +112,17 @@ new TimepickerUI('#disabled-interval', {
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">new TimepickerUI('#disabled-intervals-12h', {
-disabledTime: { interval: ['12:00 AM - 4:00 AM', '5:30 PM - 8:00 PM'] }
+  clock: {
+    type: '12h',
+    disabledTime: { ranges: ['12:00 AM - 4:00 AM', '5:30 PM - 8:00 PM'] }
+  }
 }).create();
 
-
 new TimepickerUI('#disabled-intervals-24h', {
-clockType: '24h',
-disabledTime: { interval: ['04:33 - 12:12', '16:34 - 20:22'] }
+  clock: {
+    type: '24h',
+    disabledTime: { ranges: ['04:33 - 12:12', '16:34 - 20:22', '21:37 - 23:23'] }
+  }
 }).create();</code></pre>
       </div>
     </div>
@@ -183,23 +187,23 @@ picker.create();
 // Update to morning shift (disable 0-8)
 document.getElementById('update-morning-shift')
   .addEventListener('click', () => {
-    picker.update({ 
+    picker.setOptions({
       clock: { disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] } }
-    }, true);
+    });
   });
 
 // Update to evening shift (disable 18-23)
 document.getElementById('update-evening-shift')
   .addEventListener('click', () => {
-    picker.update({ 
+    picker.setOptions({
       clock: { disabledTime: { hours: [18, 19, 20, 21, 22, 23] } }
-    }, true);
+    });
   });
 
 // Clear all restrictions
 document.getElementById('clear-restrictions')
   .addEventListener('click', () => {
-    picker.update({ clock: { disabledTime: { hours: [] } } }, true);
+    picker.setOptions({ clock: { disabledTime: { hours: [] } } });
   });</code></pre>
       </div>
     </div>
@@ -259,34 +263,34 @@ document.getElementById('clear-restrictions')
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">const intervalPicker = new TimepickerUI('#dynamic-interval-picker', {
-  clock: { type: '24h', disabledTime: { interval: '09:00 - 12:00' } }
+  clock: { type: '24h', disabledTime: { ranges: '09:00 - 12:00' } }
 });
 intervalPicker.create();
 
 // Update to single interval (lunch break)
 document.getElementById('update-single-interval')
   .addEventListener('click', () => {
-    intervalPicker.update({ 
-      clock: { disabledTime: { interval: '12:00 - 13:00' } }
-    }, true);
+    intervalPicker.setOptions({
+      clock: { disabledTime: { ranges: '12:00 - 13:00' } }
+    });
   });
 
 // Update to multiple intervals (shift schedule)
 document.getElementById('update-multiple-intervals')
   .addEventListener('click', () => {
-    intervalPicker.update({ 
+    intervalPicker.setOptions({
       clock: { 
         disabledTime: { 
-          interval: ['00:00 - 08:00', '12:00 - 13:00', '18:00 - 23:59']
+          ranges: ['00:00 - 08:00', '12:00 - 13:00', '18:00 - 23:59']
         } 
       }
-    }, true);
+    });
   });
 
 // Clear all intervals
 document.getElementById('clear-intervals')
   .addEventListener('click', () => {
-    intervalPicker.update({ clock: { disabledTime: {} } }, true);
+    intervalPicker.setOptions({ clock: { disabledTime: {} } });
   });</code></pre>
       </div>
     </div>
@@ -321,9 +325,8 @@ document.getElementById('clear-intervals')
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">const editablePicker = new TimepickerUI('#editable-picker', {
-  editable: true,
-  focusInputAfterCloseModal: true,
-  enableSwitchIcon: true
+  ui: { editable: true, viewSwitch: true },
+  behavior: { returnFocus: true }
 });
 editablePicker.create();</code></pre>
       </div>
@@ -449,7 +452,7 @@ new TimepickerUI('#hide-disabled-popover', {
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">const smoothHourPicker = new TimepickerUI('#smooth-hour-snap-picker', {
   clock: {
-    smoothHourSnap: true
+    discreteHourJump: false
   }
 });
 smoothHourPicker.create();</code></pre>

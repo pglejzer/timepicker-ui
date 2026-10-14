@@ -3,12 +3,13 @@ import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { LinkCard } from "@/components/link-card";
+import { InfoBox } from "@/components/info-box";
 import { Palette, Sparkles, Moon, Zap } from "lucide-react";
 
 export const metadata = buildMetadata({
   title: "Themes",
   description:
-    "12 built-in themes for timepicker-ui - Basic, Crane, Material 2/3, Dark, Glassmorphic, Pastel, AI, Cyberpunk and the new Blueprint pair. Zero-dependency and SSR-safe.",
+    "12 built-in themes for timepicker-ui - Basic, Crane, Crane Straight, Material 2/3, Dark, Glassmorphic, Pastel, AI, Cyberpunk, Blueprint and Blueprint Dark.",
   path: "/docs/features/themes",
 });
 
@@ -62,7 +63,7 @@ const themes: Theme[] = [
   },
   {
     name: "ai",
-    description: "Futuristic AI-inspired theme with gradients",
+    description: "AI-inspired theme with light gray surfaces and a solid blue accent",
     color: "from-cyan-400 to-blue-600",
   },
   {
@@ -73,14 +74,14 @@ const themes: Theme[] = [
   {
     name: "blueprint",
     description:
-      "Light precision-instrument look - vivid cobalt accent, white surfaces and hairline borders",
+      "Light precision-instrument look - vivid cobalt accent, pale blue surfaces and hairline borders",
     color: "from-blue-500 to-indigo-600",
     isNew: true,
   },
   {
     name: "blueprint-dark",
     description:
-      "Dark sibling of Blueprint - brighter cobalt on near-black surfaces with hairline borders",
+      "Dark sibling of Blueprint - brighter cobalt on navy surfaces with hairline borders",
     color: "from-blue-600 to-slate-900",
     isNew: true,
   },
@@ -119,6 +120,21 @@ export default function ThemesPage() {
             </div>
           ))}
         </div>
+        <InfoBox
+          title="Crane and contrast"
+          variant="orange"
+          className="mt-6"
+        >
+          <p>
+            In <code>crane</code> and <code>crane-straight</code> the keyboard
+            focus ring uses the theme&apos;s coral <code>--tp-outline</code>.
+          </p>
+          <p className="mt-2">
+            Known exception: the Crane red on plum is below the 3:1 non-text
+            contrast of WCAG 1.4.11 for the selected clock tip circle and the
+            selected AM/PM fill. The white text on them meets AA.
+          </p>
+        </InfoBox>
       </Section>
 
       <Section icon={Sparkles} title="Using Themes">
@@ -180,7 +196,7 @@ import 'timepicker-ui/theme-cyberpunk.css';`}
 
       <Section icon={Zap} title="Dynamic Theme Switching">
         <p className="text-muted-foreground mb-4">
-          Change themes at runtime using the update method:
+          Change themes at runtime with <code>setOptions()</code>:
         </p>
         <CodeBlock
           code={`// Initialize with basic theme
@@ -192,16 +208,10 @@ const picker = new TimepickerUI(input, {
 picker.create();
 
 // Switch to dark theme
-picker.update({
-  options: { ui: { theme: 'dark' } },
-  create: true
-});
+picker.setOptions({ ui: { theme: 'dark' } });
 
 // Switch to cyberpunk theme
-picker.update({
-  options: { ui: { theme: 'cyberpunk' } },
-  create: true
-});`}
+picker.setOptions({ ui: { theme: 'cyberpunk' } });`}
           language="typescript"
         />
       </Section>
@@ -279,7 +289,7 @@ const picker = new TimepickerUI(input, {
             <p className="text-sm text-muted-foreground mb-3">
               A precision-instrument look with a vivid cobalt accent and
               hairline borders. Use <code>blueprint</code> for light surfaces or{" "}
-              <code>blueprint-dark</code> for the near-black dark sibling.
+              <code>blueprint-dark</code> for the navy dark sibling.
             </p>
             <CodeBlock
               code={`import 'timepicker-ui/main.css';

@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/page-header";
 import { LinkCard } from "@/components/link-card";
 import { Globe, Languages, Type, MapPin } from "lucide-react";
 import { Section } from "@/components/section";
+import Link from "next/link";
 
 export const metadata = buildMetadata({
   title: "Localization",
@@ -31,18 +32,69 @@ export default function LocalizationPage() {
             <h3 className="font-semibold mb-3 text-foreground">
               Default Labels
             </h3>
+            <p className="text-muted-foreground mb-4">
+              The <code>labels</code> group with its English defaults, without
+              the deprecated keys. Keys you leave out keep these values.{" "}
+              <code>clock</code>, <code>period</code>, <code>timeFields</code>,{" "}
+              <code>range</code>, <code>switchToKeyboard</code>,{" "}
+              <code>switchToClock</code> and the keys that start with{" "}
+              <code>announce</code> are read by screen readers only.
+            </p>
             <CodeBlock
               code={`// Default English labels
 {
   labels: {
-    ok: 'Ok',
-    cancel: 'Cancel',
     am: 'AM',
-    pm: 'PM'
+    pm: 'PM',
+    ok: 'OK',
+    cancel: 'Cancel',
+    clear: 'Clear',
+    clockTitle: 'Select time',
+    keyboardTitle: 'Enter Time',
+    hour: 'Hour',
+    minute: 'Minute',
+    second: 'Second',
+    clock: 'Clock',
+    period: 'Period',
+    timeFields: 'Time',
+    range: 'Range selection',
+    rangeFrom: 'From',
+    rangeTo: 'To',
+    timezone: 'Timezone',
+    switchToKeyboard: 'Switch to keyboard input',
+    switchToClock: 'Switch to clock',
+    announceAmSelected: 'AM selected',
+    announcePmSelected: 'PM selected',
+    announceCleared: 'Time cleared',
+    invalidTimeFormat: 'Invalid time format'
   }
 }`}
               language="typescript"
             />
+            <p className="text-muted-foreground mt-4 text-sm">
+              <code>hour</code>, <code>minute</code> and <code>second</code>{" "}
+              each set the field caption, the field&apos;s accessible name, the
+              dial name and the prefix of the screen-reader announcement. Until
+              5.0, the minute announcement says <code>Minutes</code> when{" "}
+              <code>minute</code> is not set. <code>second</code> is used only
+              with <code>clock.showSeconds: true</code>. <code>range</code>,{" "}
+              <code>rangeFrom</code> and <code>rangeTo</code> are used by the
+              range plugin, and <code>timezone</code> by the timezone plugin.
+              Keys renamed in 4.5.0 are listed on the{" "}
+              <Link
+                href="/docs/api/options#renamed"
+                className="text-primary underline"
+              >
+                Options
+              </Link>{" "}
+              page.
+            </p>
+            <p className="text-muted-foreground mt-2 text-sm">
+              <code>labels.am</code> and <code>labels.pm</code> change only the
+              text on screen and what screen readers announce. The input value
+              and <code>getValue().type</code> always use <code>AM</code> /{" "}
+              <code>PM</code>.
+            </p>
           </div>
 
           <div className="rounded-lg border border-border bg-card p-6">
@@ -146,18 +198,22 @@ export const deLocale = {
 
 // locales/ja.ts
 export const jaLocale = {
-  okLabel: '確認',
-  cancelLabel: 'キャンセル',
-  amLabel: '午前',
-  pmLabel: '午後'
+  labels: {
+    ok: '確認',
+    cancel: 'キャンセル',
+    am: '午前',
+    pm: '午後'
+  }
 };
 
 // locales/zh.ts
 export const zhLocale = {
-  okLabel: '确定',
-  cancelLabel: '取消',
-  amLabel: '上午',
-  pmLabel: '下午'
+  labels: {
+    ok: '确定',
+    cancel: '取消',
+    am: '上午',
+    pm: '下午'
+  }
 };`}
               language="typescript"
             />
@@ -264,22 +320,14 @@ picker.create();`}
             <h3 className="font-semibold mb-3 text-foreground">
               Auto-detect User Locale
             </h3>
+            <p className="text-muted-foreground mb-4">
+              <code>clock.type: &apos;auto&apos;</code> picks 12h or 24h from
+              the browser locale when the picker is created and each time its
+              options are set. New in 4.5.0.
+            </p>
             <CodeBlock
-              code={`function getLocaleTimeFormat() {
-  // Get user's locale
-  const locale = navigator.language || 'en-US';
-  
-  // Test if locale uses 12-hour format
-  const testDate = new Date(2000, 0, 1, 13, 0);
-  const formatted = testDate.toLocaleTimeString(locale);
-  
-  return formatted.includes('PM') || formatted.includes('AM') ? '12h' : '24h';
-}
-
-// Usage
-const clockType = getLocaleTimeFormat();
-const picker = new TimepickerUI(input, {
-  clock: { type: clockType }
+              code={`const picker = new TimepickerUI(input, {
+  clock: { type: 'auto' }
 });
 
 picker.create();`}
@@ -438,7 +486,7 @@ function LocalizedTimePicker() {
     };
   }, [t, i18n.language]);
 
-  return <input ref={inputRef} type="time" />;
+  return <input ref={inputRef} type="text" />;
 }`}
               language="typescript"
             />
@@ -489,22 +537,23 @@ function LocalizedTimePicker() {
           Right-to-Left (RTL) Support
         </h2>
         <p className="text-muted-foreground mb-4">
-          Support for RTL languages like Arabic and Hebrew:
+          The picker has no built-in RTL layout. The modal is appended to{" "}
+          <code>body</code> unless <code>ui.appendTo</code> is set,
+          so a <code>dir</code> attribute on a wrapper around the input does not
+          reach it. Put <code>dir=&quot;rtl&quot;</code> on{" "}
+          <code>&lt;html&gt;</code>, or append the modal to your RTL container:
         </p>
         <CodeBlock
-          code={`/* Add to your CSS */
-[dir="rtl"] .timepicker-ui-wrapper {
-  direction: rtl;
-}
-
-[dir="rtl"] .timepicker-ui-hour,
-[dir="rtl"] .timepicker-ui-minutes {
-  text-align: right;
-}
-
-// JavaScript
-const picker = new TimepickerUI(input, {
+          code={`<div id="rtl-root" dir="rtl">
+  <input id="timepicker" type="text" />
+</div>`}
+          language="html"
+        />
+        <div className="mt-4">
+          <CodeBlock
+            code={`const picker = new TimepickerUI('#timepicker', {
   clock: { type: '12h' },
+  ui: { appendTo: '#rtl-root' },
   labels: {
     ok: 'موافق',
     cancel: 'إلغاء',
@@ -513,10 +562,19 @@ const picker = new TimepickerUI(input, {
   }
 });
 
-picker.create();
-
-// Set RTL on container
-document.querySelector('.timepicker-container').dir = 'rtl';`}
+picker.create();`}
+            language="typescript"
+          />
+        </div>
+        <p className="text-muted-foreground mt-4 mb-4">
+          <code>direction: rtl</code> also reverses flex rows, including the
+          hour and minute fields. To keep them in HH:MM order, reset the
+          direction on the field group:
+        </p>
+        <CodeBlock
+          code={`[dir="rtl"] .tp-ui-wrapper-time {
+  direction: ltr;
+}`}
           language="css"
         />
       </section>

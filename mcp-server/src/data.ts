@@ -1,4 +1,4 @@
-export const PACKAGE_VERSION = '4.4';
+export const PACKAGE_VERSION = '4.5';
 
 export interface ThemeInfo {
   name: string;
@@ -99,7 +99,11 @@ export const API_METHODS: ApiMethod[] = [
     description: 'Returns { hour, minutes, type?, time, degreesHours, degreesMinutes }.',
   },
   { signature: 'setValue(time, updateInput?)', description: 'Set time, e.g. "14:30" or "2:30 PM".' },
-  { signature: 'update({ options, create? }, callback?)', description: 'Update options at runtime.' },
+  { signature: 'setOptions(options)', description: 'Change options at runtime; groups you leave out keep their values.' },
+  {
+    signature: 'update({ options, create? }, callback?)',
+    description: 'Deprecated, use setOptions(). Removed in 5.0.',
+  },
   { signature: 'on(event, handler)', description: 'Subscribe to an event.' },
   { signature: 'once(event, handler)', description: 'Subscribe once.' },
   { signature: 'off(event, handler?)', description: 'Unsubscribe.' },

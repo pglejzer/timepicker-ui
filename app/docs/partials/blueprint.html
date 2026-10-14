@@ -34,7 +34,7 @@
         />
         <pre><code class="language-javascript">new TimepickerUI('#blueprint-light', {
   clock: { type: '12h', autoSwitchToMinutes: true },
-  ui: { theme: 'blueprint', enableSwitchIcon: true },
+  ui: { theme: 'blueprint', viewSwitch: true },
 }).create();</code></pre>
       </div>
 
@@ -51,7 +51,7 @@
         />
         <pre><code class="language-javascript">new TimepickerUI('#blueprint-dark-24h', {
   clock: { type: '24h' },
-  ui: { theme: 'blueprint-dark', enableSwitchIcon: true },
+  ui: { theme: 'blueprint-dark', viewSwitch: true },
 }).create();</code></pre>
       </div>
     </div>
@@ -74,10 +74,10 @@
     type: '24h',
     disabledTime: {
       hours: [0, 1, 2, 3, 4, 5, 6],
-      interval: '12:00 - 13:00',
+      ranges: '12:00 - 13:00',
     },
   },
-  ui: { theme: 'blueprint', enableSwitchIcon: true },
+  ui: { theme: 'blueprint', viewSwitch: true },
 }).create();</code></pre>
       </div>
 
@@ -101,7 +101,7 @@
         </div>
         <pre><code class="language-javascript">new TimepickerUI('#blueprint-range', {
   clock: { type: '24h' },
-  ui: { theme: 'blueprint-dark', enableSwitchIcon: true },
+  ui: { theme: 'blueprint-dark', viewSwitch: true },
   range: { enabled: true, minDuration: 60, maxDuration: 720 },
 }).create();</code></pre>
       </div>
@@ -122,7 +122,7 @@
         />
         <pre><code class="language-javascript">new TimepickerUI('#blueprint-timezone', {
   clock: { type: '12h' },
-  ui: { theme: 'blueprint', enableSwitchIcon: true },
+  ui: { theme: 'blueprint', viewSwitch: true },
   timezone: { enabled: true, default: 'Europe/Warsaw' },
 }).create();</code></pre>
       </div>
@@ -175,15 +175,15 @@
   clock: {
     type: '24h',
     incrementMinutes: 5,
-    disabledTime: { interval: '22:00 - 06:00' },
+    disabledTime: { ranges: '22:00 - 06:00' },
   },
   ui: {
     theme: 'blueprint',
-    enableSwitchIcon: true,
+    viewSwitch: true,
     editable: true,
     clearButton: true,
   },
-  behavior: { focusTrap: true, focusInputAfterClose: true },
+  behavior: { focusTrap: true, returnFocus: true },
   labels: { clear: 'Clear' },
 }).create();</code></pre>
       </div>

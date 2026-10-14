@@ -37,22 +37,14 @@ picker.create();`}
           code={`const picker = new TimepickerUI(input, {
   clock: {
     type: '24h',
-    currentTime: {
-      updateInput: true,
-      time: new Date(),
-      locales: 'en-GB'
-    }
+    defaultTime: 'now'
   }
 });
 picker.create();`}
           options={{
             clock: {
               type: "24h",
-              currentTime: {
-                updateInput: true,
-                time: new Date(),
-                locales: "en-GB",
-              },
+              defaultTime: "now",
             },
           }}
         />
@@ -92,7 +84,7 @@ picker.create();`}
   clock: {
     type: '24h',
     disabledTime: {
-      interval: '00:00 - 08:00'
+      ranges: '00:00 - 08:00'
     }
   }
 });
@@ -101,7 +93,7 @@ picker.create();`}
             clock: {
               type: "24h",
               disabledTime: {
-                interval: "00:00 - 08:00",
+                ranges: "00:00 - 08:00",
               },
             },
           }}

@@ -22,7 +22,7 @@
     },
     {
       "name": "--tp-text-secondary",
-      "value": "#6b7280"
+      "value": "#686e7c"
     },
     {
       "name": "--tp-text-disabled",
@@ -38,7 +38,7 @@
     },
     {
       "name": "--tp-am-pm-active",
-      "value": "#3b82f6"
+      "value": "#2563eb"
     },
     {
       "name": "--tp-am-pm-text-selected",
@@ -46,11 +46,11 @@
     },
     {
       "name": "--tp-am-pm-text-unselected",
-      "value": "#6b7280"
+      "value": "#686e7c"
     },
     {
       "name": "--tp-primary",
-      "value": "#3b82f6"
+      "value": "#2563eb"
     },
     {
       "name": "--tp-on-primary",
@@ -58,7 +58,7 @@
     },
     {
       "name": "--tp-primary-container",
-      "value": "#3b82f6"
+      "value": "#2563eb"
     },
     {
       "name": "--tp-on-primary-container",
@@ -66,7 +66,7 @@
     },
     {
       "name": "--tp-tertiary-container",
-      "value": "#3b82f6"
+      "value": "#2563eb"
     },
     {
       "name": "--tp-on-tertiary-container",
@@ -110,7 +110,7 @@
     },
     {
       "name": "--tp-wheel-selected-color",
-      "value": "#3b82f6"
+      "value": "#1d4ed8"
     }
   ],
   "blueprint-dark": [
@@ -209,10 +209,6 @@
     {
       "name": "--tp-shadow",
       "value": "0 8px 24px rgba(0, 0, 0, 0.55)"
-    },
-    {
-      "name": "--tp-focus-ring-halo",
-      "value": "rgba(160, 210, 255, 0.7)"
     },
     {
       "name": "--tp-dropdown-option-bg",
@@ -341,10 +337,6 @@
       "value": "0 8px 24px rgba(11, 46, 110, 0.12)"
     },
     {
-      "name": "--tp-focus-ring-halo",
-      "value": "rgba(11, 78, 162, 0.4)"
-    },
-    {
       "name": "--tp-dropdown-option-bg",
       "value": "#f3f8fe"
     },
@@ -420,7 +412,7 @@
     },
     {
       "name": "--tp-am-pm-active",
-      "value": "#f7363e"
+      "value": "#e30425"
     },
     {
       "name": "--tp-am-pm-text-selected",
@@ -432,7 +424,7 @@
     },
     {
       "name": "--tp-primary",
-      "value": "#f7363e"
+      "value": "#e30425"
     },
     {
       "name": "--tp-on-primary",
@@ -440,15 +432,19 @@
     },
     {
       "name": "--tp-primary-container",
-      "value": "#f7363e"
+      "value": "#e30425"
     },
     {
       "name": "--tp-on-primary-container",
       "value": "#ffffff"
     },
     {
+      "name": "--tp-btn-text",
+      "value": "#ffffff"
+    },
+    {
       "name": "--tp-tertiary-container",
-      "value": "#f7363e"
+      "value": "#e30425"
     },
     {
       "name": "--tp-on-tertiary-container",
@@ -463,8 +459,8 @@
       "value": "#ff4c52"
     },
     {
-      "name": "--tp-focus-ring-halo",
-      "value": "rgba(255, 255, 255, 0.75)"
+      "name": "--tp-focus-ring",
+      "value": "var(--tp-outline)"
     },
     {
       "name": "--tp-radius",
@@ -499,6 +495,10 @@
       "value": "#000000"
     },
     {
+      "name": "--tp-dropdown-option-hover-text",
+      "value": "#ffffff"
+    },
+    {
       "name": "--tp-error",
       "value": "#ffb4ab"
     },
@@ -516,7 +516,7 @@
     },
     {
       "name": "--tp-wheel-selected-color",
-      "value": "#f7363e"
+      "value": "#fa8489"
     }
   ],
   "crane": [
@@ -566,7 +566,7 @@
     },
     {
       "name": "--tp-am-pm-active",
-      "value": "#f7363e"
+      "value": "#e30425"
     },
     {
       "name": "--tp-am-pm-text-selected",
@@ -578,7 +578,7 @@
     },
     {
       "name": "--tp-primary",
-      "value": "#f7363e"
+      "value": "#e30425"
     },
     {
       "name": "--tp-on-primary",
@@ -586,15 +586,19 @@
     },
     {
       "name": "--tp-primary-container",
-      "value": "#f7363e"
+      "value": "#e30425"
     },
     {
       "name": "--tp-on-primary-container",
       "value": "#ffffff"
     },
     {
+      "name": "--tp-btn-text",
+      "value": "#ffffff"
+    },
+    {
       "name": "--tp-tertiary-container",
-      "value": "#f7363e"
+      "value": "#e30425"
     },
     {
       "name": "--tp-on-tertiary-container",
@@ -613,8 +617,8 @@
       "value": "1.25rem"
     },
     {
-      "name": "--tp-focus-ring-halo",
-      "value": "rgba(255, 255, 255, 0.75)"
+      "name": "--tp-focus-ring",
+      "value": "var(--tp-outline)"
     },
     {
       "name": "--tp-dropdown-option-bg",
@@ -623,6 +627,10 @@
     {
       "name": "--tp-dropdown-option-text",
       "value": "#000000"
+    },
+    {
+      "name": "--tp-dropdown-option-hover-text",
+      "value": "#ffffff"
     },
     {
       "name": "--tp-error",
@@ -642,7 +650,7 @@
     },
     {
       "name": "--tp-wheel-selected-color",
-      "value": "#f7363e"
+      "value": "#fa8489"
     }
   ],
   "cyberpunk": [
@@ -739,10 +747,6 @@
       "value": "0 0 12px #00f0ff"
     },
     {
-      "name": "--tp-focus-ring-halo",
-      "value": "rgba(255, 255, 255, 0.85)"
-    },
-    {
       "name": "--tp-radius",
       "value": "1rem"
     },
@@ -822,7 +826,7 @@
     },
     {
       "name": "--tp-am-pm-active",
-      "value": "#bb86fc"
+      "value": "var(--tp-primary)"
     },
     {
       "name": "--tp-am-pm-text-selected",
@@ -842,7 +846,7 @@
     },
     {
       "name": "--tp-primary-container",
-      "value": "#bb86fc"
+      "value": "var(--tp-primary)"
     },
     {
       "name": "--tp-on-primary-container",
@@ -850,7 +854,7 @@
     },
     {
       "name": "--tp-tertiary-container",
-      "value": "#bb86fc"
+      "value": "var(--tp-primary)"
     },
     {
       "name": "--tp-on-tertiary-container",
@@ -871,10 +875,6 @@
     {
       "name": "--tp-shadow",
       "value": "0px 8px 16px rgba(0, 0, 0, 0.6)"
-    },
-    {
-      "name": "--tp-focus-ring-halo",
-      "value": "rgba(255, 255, 255, 0.7)"
     },
     {
       "name": "--tp-dropdown-option-bg",
@@ -987,8 +987,8 @@
       "value": "rgba(255, 255, 255, 0.9)"
     },
     {
-      "name": "--tp-focus-ring-halo",
-      "value": "rgba(255, 255, 255, 0.85)"
+      "name": "--tp-focus-ring",
+      "value": "#ffffff"
     },
     {
       "name": "--tp-shadow",
@@ -1058,7 +1058,7 @@
     },
     {
       "name": "--tp-text-secondary",
-      "value": "#a9a9a9"
+      "value": "rgba(0, 0, 0, 0.6)"
     },
     {
       "name": "--tp-text-disabled",
@@ -1082,7 +1082,7 @@
     },
     {
       "name": "--tp-am-pm-text-unselected",
-      "value": "#787878"
+      "value": "rgba(0, 0, 0, 0.6)"
     },
     {
       "name": "--tp-primary",
@@ -1196,7 +1196,7 @@
     },
     {
       "name": "--tp-text-secondary",
-      "value": "#6b7165"
+      "value": "#43483f"
     },
     {
       "name": "--tp-text-disabled",
@@ -1204,11 +1204,11 @@
     },
     {
       "name": "--tp-text-type-time",
-      "value": "#6b7165"
+      "value": "#43483f"
     },
     {
       "name": "--tp-text-icon",
-      "value": "#6b7165"
+      "value": "#43483f"
     },
     {
       "name": "--tp-am-pm-active",
@@ -1220,7 +1220,7 @@
     },
     {
       "name": "--tp-am-pm-text-unselected",
-      "value": "#6b7165"
+      "value": "#43483f"
     },
     {
       "name": "--tp-primary",
@@ -1228,7 +1228,7 @@
     },
     {
       "name": "--tp-on-primary",
-      "value": "#042100"
+      "value": "#ffffff"
     },
     {
       "name": "--tp-primary-container",
@@ -1252,7 +1252,7 @@
     },
     {
       "name": "--tp-outline",
-      "value": "#4ade80"
+      "value": "#386a20"
     },
     {
       "name": "--tp-shadow",
@@ -1310,7 +1310,7 @@
     },
     {
       "name": "--tp-text-secondary",
-      "value": "#a58f86"
+      "value": "#836b61"
     },
     {
       "name": "--tp-text-disabled",
@@ -1318,11 +1318,11 @@
     },
     {
       "name": "--tp-text-type-time",
-      "value": "#a58f86"
+      "value": "#836b61"
     },
     {
       "name": "--tp-text-icon",
-      "value": "#a58f86"
+      "value": "#836b61"
     },
     {
       "name": "--tp-am-pm-active",
@@ -1330,11 +1330,11 @@
     },
     {
       "name": "--tp-am-pm-text-selected",
-      "value": "white"
+      "value": "#3b3b3b"
     },
     {
       "name": "--tp-am-pm-text-unselected",
-      "value": "#a58f86"
+      "value": "#836b61"
     },
     {
       "name": "--tp-primary",
@@ -1342,7 +1342,7 @@
     },
     {
       "name": "--tp-on-primary",
-      "value": "white"
+      "value": "#3b3b3b"
     },
     {
       "name": "--tp-primary-container",
@@ -1350,7 +1350,11 @@
     },
     {
       "name": "--tp-on-primary-container",
-      "value": "white"
+      "value": "#3b3b3b"
+    },
+    {
+      "name": "--tp-btn-text",
+      "value": "#a8474e"
     },
     {
       "name": "--tp-tertiary-container",
@@ -1358,7 +1362,7 @@
     },
     {
       "name": "--tp-on-tertiary-container",
-      "value": "white"
+      "value": "#3b3b3b"
     },
     {
       "name": "--tp-border",
@@ -1366,7 +1370,11 @@
     },
     {
       "name": "--tp-outline",
-      "value": "#ff8a8f"
+      "value": "#c9646a"
+    },
+    {
+      "name": "--tp-focus-ring",
+      "value": "#a8474e"
     },
     {
       "name": "--tp-shadow",
@@ -1398,7 +1406,7 @@
     },
     {
       "name": "--tp-wheel-selected-color",
-      "value": "#ff8a8f"
+      "value": "#a8474e"
     }
   ]
 }

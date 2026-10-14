@@ -10,80 +10,86 @@ export default function MobilePage() {
     <div>
       <PageHeader
         title="Mobile Version"
-        description="Force mobile-optimized interface"
+        description={
+          <>
+            Open the picker in the keyboard view, where users type the time,
+            with <code>ui.initialView: &apos;keyboard&apos;</code>.
+          </>
+        }
         eyebrow="Example · Features"
       />
 
-      <Section icon={Smartphone} title="Force Mobile Version">
+      <Section icon={Smartphone} title="Start in the Keyboard View">
         <p className="text-muted-foreground mb-4">
-          Enable mobile-optimized version:
+          Open with the hour and minute fields instead of the clock face:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  ui: { mobile: true }
+  ui: { initialView: 'keyboard' }
 });
 picker.create();`}
           options={{
-            ui: { mobile: true },
+            ui: { initialView: "keyboard" },
           }}
         />
       </Section>
 
-      <Section icon={Smartphone} title="Mobile with Custom Labels">
+      <Section icon={Smartphone} title="Keyboard View with Custom Labels">
         <p className="text-muted-foreground mb-4">
-          Customize labels for mobile version:
+          Change the title and the field captions of the keyboard view:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  ui: { mobile: true },
+  ui: { initialView: 'keyboard' },
   labels: {
-    mobileHour: 'Hour',
-    mobileMinute: 'Minute',
-    mobileTime: 'Enter Time'
+    hour: 'Hour',
+    minute: 'Minute',
+    keyboardTitle: 'Enter Time'
   }
 });
 picker.create();`}
           options={{
-            ui: { mobile: true },
+            ui: { initialView: "keyboard" },
             labels: {
-              mobileHour: "Hour",
-              mobileMinute: "Minute",
-              mobileTime: "Enter Time",
+              hour: "Hour",
+              minute: "Minute",
+              keyboardTitle: "Enter Time",
             },
           }}
         />
       </Section>
 
-      <Section icon={Smartphone} title="Mobile with Switch Icon">
+      <Section icon={Smartphone} title="Keyboard View with View Switch">
         <p className="text-muted-foreground mb-4">
-          Enable icon to switch between mobile and desktop:
+          Show the icon that switches between the keyboard view and the clock
+          face:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   ui: {
-    mobile: true,
-    enableSwitchIcon: true
+    initialView: 'keyboard',
+    viewSwitch: true
   }
 });
 picker.create();`}
           options={{
             ui: {
-              mobile: true,
-              enableSwitchIcon: true,
+              initialView: "keyboard",
+              viewSwitch: true,
             },
           }}
         />
       </Section>
 
-      <Section icon={Smartphone} title="Mobile with 24h">
+      <Section icon={Smartphone} title="Keyboard View with 24h">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
-  ui: { mobile: true },
+  ui: { initialView: 'keyboard' },
   clock: { type: '24h' }
 });
 picker.create();`}
           options={{
-            ui: { mobile: true },
+            ui: { initialView: "keyboard" },
             clock: { type: "24h" },
           }}
         />

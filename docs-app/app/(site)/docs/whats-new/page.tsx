@@ -36,10 +36,110 @@ export default function WhatsNewPage() {
       />
 
       <InfoBox
-        title="Version 4.4.0 Released!"
+        title="Version 4.5.0 - October 14, 2026"
         variant="emerald"
         className="mb-8"
       >
+        <p className="mb-3">
+          Optional seconds, clearer option names, keyboard control of the clock
+          face, a callback for every event, Material Design 3 press feedback,
+          and keyboard, screen-reader and theme fixes
+        </p>
+        <p className="text-sm">What&apos;s new:</p>
+        <ul className="mt-2 space-y-1 text-sm ml-4">
+          <li>
+            <strong>Optional seconds</strong> - Set{" "}
+            <code>clock.showSeconds: true</code> for <code>HH:MM:SS</code> in
+            every mode, with its own step, disabled seconds and{" "}
+            <code>select:second</code> event
+          </li>
+          <li>
+            <strong>Renamed options</strong> - Clearer names such as{" "}
+            <code>ui.initialView</code> for <code>ui.mobile</code> and{" "}
+            <code>labels.hour</code> for <code>hourLabel</code>,{" "}
+            <code>mobileHour</code> and <code>announceHour</code>, plus{" "}
+            <code>setOptions()</code> in place of <code>update()</code>. The
+            old names keep working until 5.0, and the{" "}
+            <Link
+              href="/docs/api/options"
+              className="text-primary hover:underline font-medium"
+            >
+              options page
+            </Link>{" "}
+            lists every pair
+          </li>
+          <li>
+            <strong>Keyboard control of the clock face</strong> - Arrow keys,
+            PageUp / PageDown and Home / End change the value, and Enter or
+            Space moves to the next face
+          </li>
+          <li>
+            <strong>A callback for every event</strong> -{" "}
+            <code>callbacks.onShow</code>, <code>onSwitchView</code>,{" "}
+            <code>onWheelScrollStart</code> and <code>onWheelScrollEnd</code>.
+            Callbacks passed later through <code>update()</code> now take effect
+          </li>
+          <li>
+            <strong>Material Design 3 press feedback</strong> - A ripple plus
+            hover, focus and pressed state layers, and one 3px focus ring on
+            every control
+          </li>
+          <li>
+            <strong>Keyboard and screen readers</strong> - Arrow keys skip
+            disabled times, a range can be completed with the keyboard alone,
+            and errors are announced inside the dialog
+          </li>
+          <li>
+            <strong>Compact-wheel popover</strong> - A parent&apos;s{" "}
+            <code>overflow: hidden</code> or <code>z-index</code> no longer
+            clips the popover, and it fits its columns and the viewport
+          </li>
+          <li>
+            <strong>setValue() converts formats</strong> -{" "}
+            <code>&apos;14:30&apos;</code> in a 12h picker sets{" "}
+            <code>02:30 PM</code>. A string that is not a time now emits{" "}
+            <code>error</code>
+          </li>
+          <li>
+            <strong>Faster open and close</strong> - The fade starts on the
+            click, with no wait before it. <code>behavior.delayHandler</code>{" "}
+            now defaults to <code>0</code>
+          </li>
+          <li>
+            <strong>No page shift on open</strong> - Opening a modal picker no
+            longer moves the page sideways, and <code>--tp-scrollbar-gap</code>{" "}
+            helps keep fixed headers in place
+          </li>
+          <li>
+            <strong>Safer labels</strong> - Label text is HTML-escaped, so it
+            cannot inject markup
+          </li>
+          <li>
+            <strong>Check before upgrading</strong> - Some defaults, classes and
+            tokens changed: for example, the old <code>.tp-ui-ripple</code>{" "}
+            classes are removed. The changelog lists them all, and the items
+            deprecated for removal in 5.0. Set{" "}
+            <code>behavior.returnFocus: true</code> to return focus to the
+            input on close. 5.0 does this by default
+          </li>
+        </ul>
+        <div className="mt-3 flex flex-wrap gap-4">
+          <Link
+            href="/docs/features/seconds"
+            className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+          >
+            Seconds guide
+          </Link>
+          <Link
+            href="/docs/changelog"
+            className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+          >
+            Full 4.5.0 changelog
+          </Link>
+        </div>
+      </InfoBox>
+
+      <InfoBox title="Version 4.4.0" variant="blue" className="mb-8">
         <p className="mb-3">
           <strong>June 10, 2026</strong> - Two new Blueprint themes, localizable
           accessibility labels, and extended keyboard navigation
@@ -358,10 +458,10 @@ export default function WhatsNewPage() {
               Use Arrow Up/Down keys to increment/decrement hour and minute
               values with live clockface updates.
             </p>
-            <ul className="space-y-1 text-sm text-muted-foreground">
-              <li>• Works in both 12h and 24h modes</li>
-              <li>• Proper wrap-around (59 to 00, 12 to 01)</li>
-              <li>• Smooth clock hand animations</li>
+            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+              <li>Works in both 12h and 24h modes</li>
+              <li>Proper wrap-around (59 to 00, 12 to 01)</li>
+              <li>Smooth clock hand animations</li>
             </ul>
           </div>
 

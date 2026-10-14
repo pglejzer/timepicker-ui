@@ -38,7 +38,7 @@
   timezone: {
     enabled: true,
     label: 'Timezone',
-    whitelist: ['UTC', 'America/New_York', 'Europe/London', 'Europe/Warsaw', 'Asia/Tokyo']
+    list: ['UTC', 'America/New_York', 'Europe/London', 'Europe/Warsaw', 'Asia/Tokyo']
   },
   callbacks: {
     onTimezoneChange: (data) => {
@@ -90,7 +90,7 @@ timezonePicker.create();</code></pre>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        📍 Selected Timezone:
+                        Selected timezone:
                       </p>
                       <p id="tz-world-display" class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
                         -
@@ -98,7 +98,7 @@ timezonePicker.create();</code></pre>
                     </div>
                     <div>
                       <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        🕐 Selected Time:
+                        Selected time:
                       </p>
                       <p id="tz-world-time" class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
                         -
@@ -106,7 +106,7 @@ timezonePicker.create();</code></pre>
                     </div>
                   </div>
                   <div class="mt-4">
-                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">🌍 UTC Offset:</p>
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">UTC offset:</p>
                     <p id="tz-world-offset" class="text-base font-semibold text-gray-900 dark:text-gray-100">
                       -
                     </p>
@@ -116,18 +116,18 @@ timezonePicker.create();</code></pre>
                   class="mt-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800"
                 >
                   <p class="text-sm text-blue-900 dark:text-blue-200 font-medium mb-2">
-                    🌏 Try switching between these cities:
+                    Try switching between these cities:
                   </p>
                   <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs text-blue-800 dark:text-blue-300">
-                    <div>🗽 New York (EST/EDT)</div>
-                    <div>🌉 San Francisco</div>
-                    <div>🗼 Tokyo</div>
-                    <div>🏛️ London</div>
-                    <div>🥐 Paris</div>
-                    <div>🕌 Dubai</div>
-                    <div>🏖️ Sydney</div>
-                    <div>🇧🇷 São Paulo</div>
-                    <div>🌐 UTC</div>
+                    <div>New York (EST/EDT)</div>
+                    <div>San Francisco</div>
+                    <div>Tokyo</div>
+                    <div>London</div>
+                    <div>Paris</div>
+                    <div>Dubai</div>
+                    <div>Sydney</div>
+                    <div>São Paulo</div>
+                    <div>UTC</div>
                   </div>
                 </div>
               </div>
@@ -144,12 +144,12 @@ timezonePicker.create();</code></pre>
                 <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
                 <pre><code class="language-javascript">const worldTimezonePicker = new TimepickerUI('#timezone-world-picker', {
   clock: { type: '24h' },
-  ui: { theme: 'm3-green', enableSwitchIcon: true },
+  ui: { theme: 'm3-green', viewSwitch: true },
   timezone: {
     enabled: true,
     label: 'Select City',
     // No default - user must select a timezone
-    whitelist: [
+    list: [
       'UTC',
       'America/New_York',
       'America/Los_Angeles',
@@ -193,7 +193,7 @@ worldTimezonePicker.create();</code></pre>
               class="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg"
             >
               <p class="text-sm text-amber-800 dark:text-amber-300">
-                <strong>💡 Tip:</strong> The timezone selector automatically displays UTC offsets for each
+                <strong>Tip:</strong> The timezone selector automatically displays UTC offsets for each
                 city. This is a UI-only feature - no automatic time conversions happen. Perfect for scheduling
                 apps, booking systems, or any global application where users need to specify their timezone.
               </p>
@@ -204,7 +204,7 @@ worldTimezonePicker.create();</code></pre>
         <!-- Timezone All Themes Section -->
         <section class="mb-12">
           <div
-            id="timezone-themes"
+            id="timezone-themes-api"
             class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700"
           >
             <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Timezone - All Themes</h3>

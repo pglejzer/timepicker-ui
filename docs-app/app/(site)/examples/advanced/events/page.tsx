@@ -49,12 +49,8 @@ picker.on('select:minute', (data) => {
   console.log('Minute selected:', data.minutes);
 });
 
-picker.on('select:am', (data) => {
-  console.log('AM selected');
-});
-
-picker.on('select:pm', (data) => {
-  console.log('PM selected');
+picker.on('select:period', (data) => {
+  console.log('Period selected:', data.type);
 });
 
 picker.once('confirm', (data) => {
@@ -93,11 +89,8 @@ picker.off('confirm', handler);`}
     onSelectMinute: (data) => {
       console.log('Minute selected:', data.minutes);
     },
-    onSelectAM: (data) => {
-      console.log('AM selected:', data);
-    },
-    onSelectPM: (data) => {
-      console.log('PM selected:', data);
+    onSelectPeriod: (data) => {
+      console.log('Period selected:', data.type);
     },
     onError: (data) => {
       console.error('Error:', data.error);
@@ -109,6 +102,8 @@ picker.create();`}
             callbacks: {
               onOpen: (data: TimepickerEventData) =>
                 console.log("Opened:", data),
+              onConfirm: (data: TimepickerEventData) =>
+                console.log("Confirmed:", data.hour, data.minutes, data.type),
               onCancel: (data: TimepickerEventData) =>
                 console.log("Cancelled:", data),
               onUpdate: (data: TimepickerEventData) =>
@@ -117,10 +112,8 @@ picker.create();`}
                 console.log("Hour selected:", data.hour),
               onSelectMinute: (data: TimepickerEventData) =>
                 console.log("Minute selected:", data.minutes),
-              onSelectAM: (data: TimepickerEventData) =>
-                console.log("AM selected:", data),
-              onSelectPM: (data: TimepickerEventData) =>
-                console.log("PM selected:", data),
+              onSelectPeriod: (data: TimepickerEventData) =>
+                console.log("Period selected:", data.type),
               onError: (data: TimepickerEventData) =>
                 console.error("Error:", data.error),
             },
@@ -157,31 +150,40 @@ const picker = new TimepickerUI(input, {
 
       <Section icon={Zap} title="TypeScript Event Types">
         <p className="text-muted-foreground mb-4">
-          Event data interface for TypeScript:
+          Payload types are exported from timepicker-ui, and{" "}
+          <code>on()</code> infers them from the event name:
         </p>
         <CodeBlock
-          code={`interface CallbackData {
-  hour?: string | null;
-  minutes?: string | null;
-  type?: string | null;
-  degreesHours?: number | null;
-  degreesMinutes?: number | null;
-  hourNotAccepted?: string | null;
-  minutesNotAccepted?: string | null;
-  eventType?: any;
-  error?: string;
-  currentHour?: string | number;
-  currentMin?: string | number;
-  currentType?: string;
-  currentLength?: string | number;
-}
+          code={`import { TimepickerUI } from 'timepicker-ui';
+import type { ConfirmEventData, ErrorEventData } from 'timepicker-ui';
 
-type EventHandler<T> = (data: T) => void;
+// ConfirmEventData:
+// {
+//   hour?: string;
+//   minutes?: string;
+//   seconds?: string;      // only with clock.showSeconds
+//   type?: string;         // 'AM' or 'PM' in 12h mode
+//   autoCommit?: boolean;  // true when wheel.commitOnScroll confirmed it
+// }
 
 const picker = new TimepickerUI(input);
-picker.on('confirm', (data: CallbackData) => {
+picker.create();
+
+// data is typed from the event name
+picker.on('confirm', (data) => {
+  console.log(data.hour, data.minutes, data.type);
+});
+
+// or name the payload type yourself
+const handleError = (data: ErrorEventData) => {
+  console.error(data.error);
+};
+picker.on('error', handleError);
+
+const handleConfirm = (data: ConfirmEventData) => {
   console.log(data.hour, data.minutes);
-});`}
+};
+picker.on('confirm', handleConfirm);`}
           language="typescript"
         />
       </Section>

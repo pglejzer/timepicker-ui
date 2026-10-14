@@ -14,20 +14,26 @@ export default function ClearButtonPage() {
         eyebrow="Example · Features"
       />
 
-      <Section icon={Trash2} title="Default (Enabled)">
+      <Section icon={Trash2} title="Enable Clear Button">
         <p className="text-muted-foreground mb-4">
-          The clear button is enabled by default in all pickers:
+          The clear button is off by default. Turn it on with{" "}
+          <code>ui.clearButton: true</code>:
         </p>
         <TimepickerExample
-          code={`const picker = new TimepickerUI(input);
-picker.create();
-// Clear button is visible by default`}
-          options={{}}
+          code={`const picker = new TimepickerUI(input, {
+  ui: { clearButton: true }
+});
+picker.create();`}
+          options={{
+            ui: { clearButton: true },
+          }}
         />
       </Section>
 
       <Section icon={Settings} title="Disabled Clear Button">
-        <p className="text-muted-foreground mb-4">Hide the clear button:</p>
+        <p className="text-muted-foreground mb-4">
+          Hide the clear button (this is the default):
+        </p>
         <TimepickerExample
           code={`new TimepickerUI(input, {
   ui: { clearButton: false }
@@ -40,14 +46,15 @@ picker.create();
 
       <Section icon={Settings} title="Keep Input Value on Clear">
         <p className="text-muted-foreground mb-4">
-          Clear the clock state but keep the input value:
+          Clear the clock state but keep the input value, with the object form
+          of <code>ui.clearButton</code>:
         </p>
         <TimepickerExample
           code={`new TimepickerUI(input, {
-  clearBehavior: { clearInput: false }
+  ui: { clearButton: { clearInput: false } }
 }).create();`}
           options={{
-            clearBehavior: { clearInput: false },
+            ui: { clearButton: { clearInput: false } },
           }}
         />
       </Section>
@@ -58,9 +65,11 @@ picker.create();
         </p>
         <TimepickerExample
           code={`new TimepickerUI(input, {
+  ui: { clearButton: true },
   labels: { clear: 'Reset' }
 }).create();`}
           options={{
+            ui: { clearButton: true },
             labels: { clear: "Reset" },
           }}
         />
@@ -72,6 +81,7 @@ picker.create();
         </p>
         <TimepickerExample
           code={`new TimepickerUI(input, {
+  ui: { clearButton: true },
   callbacks: {
     onClear: (data) => {
       console.log('Cleared! Previous:', data.previousValue);
@@ -79,6 +89,7 @@ picker.create();
   }
 }).create();`}
           options={{
+            ui: { clearButton: true },
             callbacks: {
               onClear: (data: { previousValue: string }) => {
                 console.log("Cleared! Previous:", data.previousValue);

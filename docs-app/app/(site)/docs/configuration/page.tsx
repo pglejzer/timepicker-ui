@@ -9,29 +9,29 @@ import {
   Clock,
   Zap,
   Bell,
-  Trash2,
 } from "lucide-react";
 import { InfoBox } from "@/components/info-box";
+import Link from "next/link";
 
 export const metadata = buildMetadata({
   title: "Configuration",
   description:
-    "Configure timepicker-ui - clock, ui, labels, behavior, callbacks, timezone, range, wheel and clearBehavior option groups for the zero-dependency, SSR-safe time picker.",
+    "Configure timepicker-ui - clock, ui, labels, behavior, callbacks, timezone, range and wheel option groups for the zero-dependency, SSR-safe time picker.",
   path: "/docs/configuration",
 });
 
 const clockOptions = [
   {
     name: "type",
-    type: "12h | 24h",
+    type: "12h | 24h | auto",
     default: "12h",
-    description: "Clock format",
+    description: "Clock format. auto picks 12h or 24h from the browser locale",
   },
   {
     name: "incrementHours",
     type: "number",
     default: "1",
-    description: "Hour increment step",
+    description: "Hour step on the clock, the wheel and the arrow keys (1, 2, 3, 4 or 6)",
   },
   {
     name: "incrementMinutes",
@@ -46,22 +46,42 @@ const clockOptions = [
     description: "Auto-switch after hour",
   },
   {
+    name: "showSeconds",
+    type: "boolean",
+    default: "false",
+    description: "Show seconds (values become HH:MM:SS)",
+  },
+  {
+    name: "incrementSeconds",
+    type: "1 | 5 | 10 | 15 | 20 | 30",
+    default: "1",
+    description: "Seconds increment step",
+  },
+  {
+    name: "autoSwitchToSeconds",
+    type: "boolean",
+    default: "true",
+    description: "Auto-switch after minute (with showSeconds)",
+  },
+  {
     name: "disabledTime",
     type: "object",
     default: "undefined",
-    description: "Disable specific times",
+    description: "Disable hours, minutes, seconds or time ranges",
   },
   {
-    name: "smoothHourSnap",
+    name: "discreteHourJump",
     type: "boolean",
-    default: "true",
-    description: "Smooth hour dragging with snap",
+    default: "false",
+    description:
+      "Move the hour hand from hour to hour while dragging instead of following the pointer",
   },
   {
-    name: "currentTime",
-    type: "boolean | object",
+    name: "defaultTime",
+    type: "'now' | object",
     default: "undefined",
-    description: "Set current time",
+    description:
+      "Time shown while the input is empty. 'now' also writes the current time to the input",
   },
 ];
 
@@ -85,16 +105,16 @@ const uiOptions = [
     description: "Show backdrop",
   },
   {
-    name: "mobile",
-    type: "boolean",
-    default: "false",
-    description: "Force mobile mode",
+    name: "initialView",
+    type: "clock | keyboard",
+    default: "clock",
+    description: "View shown when the picker opens",
   },
   {
-    name: "ui.enableSwitchIcon",
+    name: "viewSwitch",
     type: "boolean",
     default: "false",
-    description: "Show mode switch icon",
+    description: "Show the clock / keyboard view switch",
   },
   {
     name: "editable",
@@ -103,10 +123,11 @@ const uiOptions = [
     description: "Allow manual input",
   },
   {
-    name: "enableScrollbar",
+    name: "allowPageScroll",
     type: "boolean",
     default: "false",
-    description: "Keep scrollable",
+    description:
+      "Let the page scroll while open. When false, the page is locked and --tp-scrollbar-gap on <html> holds the removed scrollbar width",
   },
   {
     name: "cssClass",
@@ -115,22 +136,24 @@ const uiOptions = [
     description: "Custom CSS class",
   },
   {
-    name: "appendModalSelector",
+    name: "appendTo",
+    type: "string | HTMLElement",
+    default: '""',
+    description: "Element or selector the modal is appended to (body when empty)",
+  },
+  {
+    name: "keyboardIcon",
     type: "string",
     default: '""',
-    description: "Custom container",
+    description:
+      "Keyboard switch icon as raw HTML (built-in icon when empty). Trusted markup only",
   },
   {
-    name: "iconTemplate",
+    name: "clockIcon",
     type: "string",
-    default: "SVG",
-    description: "Desktop icon",
-  },
-  {
-    name: "iconTemplateMobile",
-    type: "string",
-    default: "SVG",
-    description: "Mobile icon",
+    default: '""',
+    description:
+      "Clock switch icon as raw HTML (built-in icon when empty). Trusted markup only",
   },
   {
     name: "inline",
@@ -140,9 +163,10 @@ const uiOptions = [
   },
   {
     name: "clearButton",
-    type: "boolean",
+    type: "boolean | { clearInput }",
     default: "false",
-    description: "Show clear button",
+    description:
+      "Show clear button. { clearInput: false } keeps the input value on Clear",
   },
   {
     name: "mode",
@@ -157,7 +181,8 @@ const wheelOptions = [
     name: "placement",
     type: "auto | top | bottom",
     default: "undefined",
-    description: "Popover placement (compact-wheel only)",
+    description:
+      "Compact-wheel popover placement. When unset, compact-wheel opens as a modal. auto: below if there is room, otherwise above. top / bottom: that side while it has room for at least three wheel rows, otherwise the other side",
   },
   {
     name: "hideFooter",
@@ -196,28 +221,35 @@ const labelsOptions = [
     description: "Cancel button",
   },
   {
-    name: "time",
+    name: "clockTitle",
     type: "string",
     default: "Select time",
-    description: "Desktop label",
+    description: "Heading of the clock face view",
   },
   {
-    name: "mobileTime",
+    name: "keyboardTitle",
     type: "string",
     default: "Enter Time",
-    description: "Mobile label",
+    description: "Heading of the keyboard view",
   },
   {
-    name: "mobileHour",
+    name: "hour",
     type: "string",
     default: "Hour",
-    description: "Mobile hour",
+    description: "Hour field caption, accessible name and announcement",
   },
   {
-    name: "mobileMinute",
+    name: "minute",
     type: "string",
     default: "Minute",
-    description: "Mobile minute",
+    description: "Minute field caption, accessible name and announcement",
+  },
+  {
+    name: "second",
+    type: "string",
+    default: "Second",
+    description:
+      "Second field caption, accessible name and announcement (with showSeconds)",
   },
   {
     name: "clear",
@@ -229,10 +261,11 @@ const labelsOptions = [
 
 const behaviorOptions = [
   {
-    name: "focusInputAfterClose",
+    name: "returnFocus",
     type: "boolean",
     default: "false",
-    description: "Focus input on close",
+    description:
+      "Return focus to the input when the picker closes. true is recommended, and 5.0 makes it the default",
   },
   {
     name: "focusTrap",
@@ -243,14 +276,14 @@ const behaviorOptions = [
   {
     name: "delayHandler",
     type: "number",
-    default: "300",
-    description: "Click delay (ms)",
+    default: "0",
+    description: "Extra delay (ms) before the picker starts to close",
   },
   {
     name: "id",
     type: "string",
-    default: "auto",
-    description: "Custom instance ID",
+    default: "undefined",
+    description: "Custom instance ID for TimepickerUI.getById()",
   },
 ];
 
@@ -274,6 +307,12 @@ const callbacksOptions = [
     description: "Picker opened",
   },
   {
+    name: "onShow",
+    type: "function",
+    default: "undefined",
+    description: "User asked to open the picker",
+  },
+  {
     name: "onUpdate",
     type: "function",
     default: "undefined",
@@ -292,16 +331,28 @@ const callbacksOptions = [
     description: "Minute selected",
   },
   {
-    name: "onSelectAM",
+    name: "onSelectSecond",
     type: "function",
     default: "undefined",
-    description: "AM selected",
+    description: "Second selected (with showSeconds)",
   },
   {
-    name: "onSelectPM",
+    name: "onSelectPeriod",
     type: "function",
     default: "undefined",
-    description: "PM selected",
+    description: "AM or PM selected, with { type }",
+  },
+  {
+    name: "onSwitchFace",
+    type: "function",
+    default: "undefined",
+    description: "Clock face switched between hours, minutes and seconds",
+  },
+  {
+    name: "onSwitchView",
+    type: "function",
+    default: "undefined",
+    description: "View switched (with viewSwitch)",
   },
   {
     name: "onError",
@@ -314,15 +365,6 @@ const callbacksOptions = [
     type: "function",
     default: "undefined",
     description: "Time cleared",
-  },
-];
-
-const clearBehaviorOptions = [
-  {
-    name: "clearInput",
-    type: "boolean",
-    default: "true",
-    description: "Whether clearing also empties the input",
   },
 ];
 
@@ -391,11 +433,22 @@ export default function ConfigurationPage() {
       />
 
       <InfoBox title="v4.0.0 Breaking Change" variant="orange" className="mb-8">
-        Options are now organized into 9 logical groups: <code>clock</code>,{" "}
+        Options are now organized into groups: <code>clock</code>,{" "}
         <code>ui</code>, <code>labels</code>, <code>behavior</code>,{" "}
-        <code>callbacks</code>, <code>timezone</code>, <code>range</code>,{" "}
-        <code>wheel</code>, and <code>clearBehavior</code>. See migration guide
-        in the changelog.
+        <code>callbacks</code>, <code>timezone</code>, <code>range</code> and{" "}
+        <code>wheel</code>. See the{" "}
+        <Link href="/docs/migration-guide" className="text-primary underline">
+          migration guide
+        </Link>
+        . This page uses the option names from 4.5.0. The older names still
+        work until 5.0 and are listed in{" "}
+        <Link
+          href="/docs/api/options#renamed"
+          className="text-primary underline"
+        >
+          Renamed in 4.5.0
+        </Link>
+        .
       </InfoBox>
 
       <Section icon={Clock} title="Clock Options">
@@ -410,6 +463,41 @@ export default function ConfigurationPage() {
           Customize appearance, theme, and display modes:
         </p>
         <OptionsTable options={uiOptions} />
+        <p className="text-sm text-muted-foreground mt-4">
+          <code>keyboardIcon</code> and <code>clockIcon</code> are inserted as
+          raw HTML, so pass only trusted markup. Every other label and text
+          option is escaped.
+        </p>
+        <div className="mt-6 rounded-lg border border-border bg-card p-6">
+          <h3 id="scroll-lock" className="font-semibold mb-3 text-foreground">
+            Scroll lock and fixed headers
+          </h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            With <code>allowPageScroll: false</code> (the default), the page
+            cannot scroll while the picker is open as a modal. Inline pickers
+            and the compact-wheel popover do not lock it. The lock is set on{" "}
+            <code>&lt;html&gt;</code>, and also on <code>&lt;body&gt;</code>{" "}
+            when the body is the element that scrolls. If a scrollbar
+            disappears, the picker adds its width as right padding, so the
+            page content does not move.
+          </p>
+          <p className="text-sm text-muted-foreground mb-4">
+            That padding does not reach <code>position: fixed</code> elements.
+            While the page is locked, <code>&lt;html&gt;</code> has{" "}
+            <code>--tp-scrollbar-gap</code> set to the width of the removed
+            scrollbar (<code>0px</code> when there was none). Use it to keep a
+            fixed header from jumping:
+          </p>
+          <CodeBlock
+            code={`.site-header {
+  padding-right: var(--tp-scrollbar-gap, 0px);
+}`}
+            language="css"
+          />
+          <p className="text-sm text-muted-foreground mt-4">
+            The variable is removed when the last open picker closes.
+          </p>
+        </div>
       </Section>
 
       <Section icon={Layout} title="Wheel Options">
@@ -421,7 +509,12 @@ export default function ConfigurationPage() {
 
       <Section icon={Tag} title="Labels Options">
         <p className="text-muted-foreground mb-4">
-          Customize all text labels and button texts:
+          Customize the main text labels and button texts. The full list,
+          including the accessibility labels, is on the{" "}
+          <Link href="/docs/api/options" className="text-primary underline">
+            Options
+          </Link>{" "}
+          page:
         </p>
         <OptionsTable options={labelsOptions} />
       </Section>
@@ -433,16 +526,14 @@ export default function ConfigurationPage() {
         <OptionsTable options={behaviorOptions} />
       </Section>
 
-      <Section icon={Trash2} title="Clear Behavior Options">
-        <p className="text-muted-foreground mb-4">
-          Control clear button behavior:
-        </p>
-        <OptionsTable options={clearBehaviorOptions} />
-      </Section>
-
       <Section icon={Bell} title="Callbacks Options">
         <p className="text-muted-foreground mb-4">
-          Event handlers for user interactions:
+          Event handlers for user interactions. Plugin and wheel callbacks are
+          listed on the{" "}
+          <Link href="/docs/api/events" className="text-primary underline">
+            Events
+          </Link>{" "}
+          page:
         </p>
         <OptionsTable options={callbacksOptions} />
       </Section>
@@ -459,34 +550,35 @@ export default function ConfigurationPage() {
     incrementHours: 1,
     incrementMinutes: 5,
     autoSwitchToMinutes: false,
+    showSeconds: true,
+    incrementSeconds: 5,
     disabledTime: {
-      hours: [0, 1, 2, 3],
-      interval: ['12:00 PM - 1:00 PM']
+      ranges: ['00:00 - 03:59', '12:00 - 13:00']
     }
   },
   ui: {
     theme: 'dark',
     animation: true,
     backdrop: true,
-    mobile: false,
+    initialView: 'clock',
     editable: false,
-    enableScrollbar: false,
-    enableSwitchIcon: true,
+    allowPageScroll: false,
+    viewSwitch: true,
+    clearButton: { clearInput: false }
   },
-  wheel: {
-    placement: 'bottom',
+  wheel: {                   // used by the wheel modes only
     hideFooter: true,
     commitOnScroll: true
   },
   labels: {
     ok: 'Confirm',
     cancel: 'Close',
-    time: 'Choose Time'
+    clockTitle: 'Choose Time'
   },
   behavior: {
     focusTrap: true,
-    focusInputAfterClose: false,
-    delayHandler: 300
+    returnFocus: true,
+    delayHandler: 0
   },
   callbacks: {
     onConfirm: (data) => console.log('Confirmed:', data),
@@ -525,13 +617,42 @@ export default function ConfigurationPage() {
 
           <div className="rounded-lg border border-border bg-card p-6">
             <h3 className="font-semibold mb-3 text-foreground">
-              Disable Time Intervals
+              Disable Seconds
             </h3>
             <CodeBlock
               code={`{
   clock: {
+    showSeconds: true,
     disabledTime: {
-      interval: ['10:00 AM - 2:00 PM', '5:00 PM - 8:00 PM']
+      seconds: [55, 56, 57, 58, 59]
+    }
+  }
+}`}
+              language="typescript"
+            />
+          </div>
+
+          <div className="rounded-lg border border-border bg-card p-6">
+            <h3 className="font-semibold mb-3 text-foreground">
+              Disable Time Ranges
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              When <code>ranges</code> is set, the <code>hours</code>,{" "}
+              <code>minutes</code> and <code>seconds</code> lists are ignored.
+              Edges can carry seconds. See{" "}
+              <Link
+                href="/docs/features/seconds"
+                className="text-primary underline"
+              >
+                Seconds
+              </Link>
+              .
+            </p>
+            <CodeBlock
+              code={`{
+  clock: {
+    disabledTime: {
+      ranges: ['10:00 AM - 2:00 PM', '5:00 PM - 8:00 PM']
     }
   }
 }`}
@@ -550,7 +671,7 @@ export default function ConfigurationPage() {
   ui: {
     inline: {
       enabled: true,
-      containerId: 'timepicker-container',
+      container: '#timepicker-container',
       autoUpdate: true,
       showButtons: false
     }
@@ -565,31 +686,44 @@ export default function ConfigurationPage() {
           Wheel Mode
         </h2>
         <CodeBlock
-          code={`{
-  ui: { mode: 'wheel' },
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
+
+PluginRegistry.register(WheelPlugin);
+
+const picker = new TimepickerUI(input, {
+  ui: { mode: 'compact-wheel' },
   wheel: {
-    placement: 'bottom',     // Popover placement (compact-wheel only)
-    hideFooter: true,        // Hide OK/Cancel footer
-    commitOnScroll: true,    // Commit value on scroll end
+    placement: 'bottom',      // Popover below the input; unset = modal
+    hideFooter: true,         // No OK/Cancel/Clear footer (compact-wheel only)
+    commitOnScroll: true,     // Commit value on scroll end
     ignoreOutsideClick: true  // Keep open on outside click
   }
-}`}
+});
+picker.create();`}
           language="typescript"
         />
       </section>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Current Time
+          Default Time
         </h2>
+        <p className="text-muted-foreground mb-4">
+          <code>&apos;now&apos;</code> shows the current time and writes it to
+          the input. The object form with <code>updateInput: false</code> only
+          shows the time in the picker.
+        </p>
         <CodeBlock
           code={`{
   clock: {
-    currentTime: {
-      updateInput: true,
-      locales: 'en-US',
-      time: new Date()
-    }
+    defaultTime: 'now'
+  }
+}
+
+{
+  clock: {
+    defaultTime: { time: new Date(2026, 0, 1, 9, 30), updateInput: false }
   }
 }`}
           language="typescript"

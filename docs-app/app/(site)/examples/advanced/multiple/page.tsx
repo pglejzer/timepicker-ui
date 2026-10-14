@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useId, useRef, useMemo } from "react";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerUI } from "timepicker-ui";
 import { Section } from "@/components/section";
@@ -10,6 +10,7 @@ import { InfoBox } from "@/components/info-box";
 import "timepicker-ui/index.css";
 
 export default function MultiplePickers() {
+  const fieldId = useId();
   const startTimeRef = useRef<HTMLInputElement>(null);
   const endTimeRef = useRef<HTMLInputElement>(null);
   const picker1Ref = useRef<TimepickerUI | null>(null);
@@ -63,25 +64,33 @@ export default function MultiplePickers() {
 
         <div className="mb-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2 text-foreground">
+            <label
+              htmlFor={`${fieldId}-start`}
+              className="block text-sm font-medium mb-2 text-foreground"
+            >
               Start Time (Basic Theme)
             </label>
             <input
+              id={`${fieldId}-start`}
               ref={startTimeRef}
               type="text"
               placeholder="Select start time"
-              className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2 text-foreground">
-              End Time (Crane Theme)
+            <label
+              htmlFor={`${fieldId}-end`}
+              className="block text-sm font-medium mb-2 text-foreground"
+            >
+              End Time (Crane Straight Theme)
             </label>
             <input
+              id={`${fieldId}-end`}
               ref={endTimeRef}
               type="text"
               placeholder="Select end time"
-              className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>

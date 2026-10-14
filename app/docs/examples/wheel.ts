@@ -49,7 +49,7 @@ const wheelThemeList = [
 
 wheelThemeList.forEach((theme) => {
   new TimepickerUI(`#wheel-theme-${theme}`, {
-    ui: { mode: 'wheel', theme, enableSwitchIcon: true },
+    ui: { mode: 'wheel', theme, viewSwitch: true },
   }).create();
 });
 
@@ -85,7 +85,7 @@ const compactThemeList = [
 
 compactThemeList.forEach((theme) => {
   new TimepickerUI(`#compact-theme-${theme}`, {
-    ui: { mode: 'compact-wheel', theme, enableSwitchIcon: true },
+    ui: { mode: 'compact-wheel', theme, viewSwitch: true },
   }).create();
 });
 
@@ -226,7 +226,7 @@ new TimepickerUI('#wheel-disabled-minutes', {
 new TimepickerUI('#wheel-disabled-interval-12h', {
   clock: {
     type: '12h',
-    disabledTime: { interval: '10:00 AM - 2:00 PM' },
+    disabledTime: { ranges: '10:00 AM - 2:00 PM' },
   },
   ui: { mode: 'wheel' },
 }).create();
@@ -234,7 +234,7 @@ new TimepickerUI('#wheel-disabled-interval-12h', {
 new TimepickerUI('#wheel-disabled-interval-24h', {
   clock: {
     type: '24h',
-    disabledTime: { interval: '12:00 - 18:00' },
+    disabledTime: { ranges: '12:00 - 18:00' },
   },
   ui: { mode: 'wheel' },
 }).create();
@@ -242,7 +242,7 @@ new TimepickerUI('#wheel-disabled-interval-24h', {
 new TimepickerUI('#wheel-disabled-intervals-12h', {
   clock: {
     type: '12h',
-    disabledTime: { interval: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM'] },
+    disabledTime: { ranges: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM'] },
   },
   ui: { mode: 'wheel' },
 }).create();
@@ -250,7 +250,7 @@ new TimepickerUI('#wheel-disabled-intervals-12h', {
 new TimepickerUI('#wheel-disabled-intervals-24h', {
   clock: {
     type: '24h',
-    disabledTime: { interval: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59'] },
+    disabledTime: { ranges: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59'] },
   },
   ui: { mode: 'wheel' },
 }).create();
@@ -267,7 +267,7 @@ new TimepickerUI('#wheel-hide-disabled-hours', {
 new TimepickerUI('#wheel-hide-disabled-interval', {
   clock: {
     type: '24h',
-    disabledTime: { interval: ['01:11 - 08:33', '18:00 - 23:59'] },
+    disabledTime: { ranges: ['01:11 - 08:33', '18:00 - 23:59'] },
   },
   ui: { mode: 'wheel' },
   wheel: { hideDisabled: true },
@@ -300,7 +300,7 @@ new TimepickerUI('#compact-disabled-minutes', {
 new TimepickerUI('#compact-disabled-interval-12h', {
   clock: {
     type: '12h',
-    disabledTime: { interval: '10:00 AM - 2:00 PM' },
+    disabledTime: { ranges: '10:00 AM - 2:00 PM' },
   },
   ui: { mode: 'compact-wheel' },
 }).create();
@@ -308,7 +308,7 @@ new TimepickerUI('#compact-disabled-interval-12h', {
 new TimepickerUI('#compact-disabled-interval-24h', {
   clock: {
     type: '24h',
-    disabledTime: { interval: '12:00 - 18:00' },
+    disabledTime: { ranges: '12:00 - 18:00' },
   },
   ui: { mode: 'compact-wheel' },
 }).create();
@@ -316,7 +316,7 @@ new TimepickerUI('#compact-disabled-interval-24h', {
 new TimepickerUI('#compact-disabled-intervals-12h', {
   clock: {
     type: '12h',
-    disabledTime: { interval: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM'] },
+    disabledTime: { ranges: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM'] },
   },
   ui: { mode: 'compact-wheel' },
 }).create();
@@ -324,7 +324,7 @@ new TimepickerUI('#compact-disabled-intervals-12h', {
 new TimepickerUI('#compact-disabled-intervals-24h', {
   clock: {
     type: '24h',
-    disabledTime: { interval: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59'] },
+    disabledTime: { ranges: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59'] },
   },
   ui: { mode: 'compact-wheel' },
 }).create();
@@ -341,7 +341,7 @@ new TimepickerUI('#compact-hide-disabled-hours', {
 new TimepickerUI('#compact-hide-disabled-interval', {
   clock: {
     type: '24h',
-    disabledTime: { interval: ['00:00 - 08:33', '18:00 - 23:59'] },
+    disabledTime: { ranges: ['00:00 - 08:33', '18:00 - 23:59'] },
   },
   ui: { mode: 'compact-wheel' },
   wheel: { hideDisabled: true },

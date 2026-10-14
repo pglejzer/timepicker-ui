@@ -29,6 +29,12 @@ const COMMANDS: CommandItem[] = [
   },
   {
     group: "Getting Started",
+    label: "Migration Guide v4 to v5",
+    href: "/docs/migration-guide-v5",
+    keywords: "upgrade 5.0 renamed deprecated removed beta",
+  },
+  {
+    group: "Getting Started",
     label: "Migration Guide v3 to v4",
     href: "/docs/migration-guide",
   },
@@ -39,7 +45,12 @@ const COMMANDS: CommandItem[] = [
     keywords: "changelog release",
   },
   // API
-  { group: "API Reference", label: "Options", href: "/docs/api/options" },
+  {
+    group: "API Reference",
+    label: "Options",
+    href: "/docs/api/options",
+    keywords: "renamed deprecated",
+  },
   { group: "API Reference", label: "Methods", href: "/docs/api/methods" },
   { group: "API Reference", label: "Events", href: "/docs/api/events" },
   {
@@ -53,6 +64,12 @@ const COMMANDS: CommandItem[] = [
     group: "Features",
     label: "12h / 24h Format",
     href: "/docs/features/clock-format",
+  },
+  {
+    group: "Features",
+    label: "Seconds",
+    href: "/docs/features/seconds",
+    keywords: "showSeconds hh:mm:ss incrementSeconds",
   },
   {
     group: "Features",
@@ -148,8 +165,20 @@ const COMMANDS: CommandItem[] = [
   { group: "Examples", label: "Mobile", href: "/examples/features/mobile" },
   {
     group: "Examples",
+    label: "Open From a Button",
+    href: "/examples/features/open-from-button",
+    keywords: "data-open icon trigger returnFocus",
+  },
+  {
+    group: "Examples",
     label: "Disabled Time",
     href: "/examples/features/disabled-time",
+  },
+  {
+    group: "Examples",
+    label: "Seconds",
+    href: "/examples/features/seconds",
+    keywords: "showSeconds hh:mm:ss",
   },
   {
     group: "Examples",
@@ -357,7 +386,7 @@ export function CommandMenu() {
               setActive(0);
             }}
             placeholder="Search documentation…"
-            className="h-12 w-full bg-transparent font-mono text-sm text-foreground outline-none placeholder:text-muted-foreground"
+            className="h-12 w-full bg-transparent font-mono text-sm text-foreground outline-none placeholder:text-muted-foreground forced-colors:focus-visible:outline-solid forced-colors:focus-visible:outline-2 forced-colors:focus-visible:-outline-offset-2"
             aria-label="Search"
             role="combobox"
             aria-expanded="true"
@@ -419,11 +448,14 @@ export function CommandMenu() {
 
         <div className="flex items-center gap-4 border-t border-border px-4 py-2 font-mono text-[10px] text-muted-foreground">
           <span className="flex items-center gap-1">
+            <span className="sr-only">Up arrow</span>
             <ArrowUp className="h-3 w-3" />
+            <span className="sr-only">Down arrow</span>
             <ArrowDown className="h-3 w-3" />
             navigate
           </span>
           <span className="flex items-center gap-1">
+            <span className="sr-only">Enter</span>
             <CornerDownLeft className="h-3 w-3" />
             open
           </span>

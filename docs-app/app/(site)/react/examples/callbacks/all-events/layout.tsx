@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "React All Events Example",
   description:
-    "React time picker all events - wire up every lifecycle and selection callback in timepicker-ui-react. Zero-dependency, SSR-safe and fully typed, with JSX.",
+    "React time picker all events - wire up every lifecycle and selection callback in timepicker-ui-react. SSR-safe and fully typed, with JSX.",
   path: "/react/examples/callbacks/all-events",
 });
 

@@ -5,15 +5,15 @@
       {
         "name": "type",
         "optional": true,
-        "type": "'12h' | '24h'",
-        "description": "Set type of clock: `12h` or `24h`",
+        "type": "'12h' | '24h' | 'auto'",
+        "description": "Clock format. `auto` picks 12h or 24h from the browser locale when the picker is created or its options are set.",
         "default": "\"12h\""
       },
       {
         "name": "incrementHours",
         "optional": true,
         "type": "number",
-        "description": "Set increment for hours (1, 2, 3, etc.)",
+        "description": "Step between selectable hours on the clock, the wheel and the hour field's arrow keys. Use a divisor of 12: 1, 2, 3, 4 or 6.",
         "default": "1"
       },
       {
@@ -31,25 +31,60 @@
         "default": "true"
       },
       {
+        "name": "showSeconds",
+        "optional": true,
+        "type": "boolean",
+        "description": "Show a seconds field, wheel column and clock face (HH:MM:SS)",
+        "default": "false"
+      },
+      {
+        "name": "incrementSeconds",
+        "optional": true,
+        "type": "1 | 5 | 10 | 15 | 20 | 30",
+        "description": "Set increment for seconds: 1, 5, 10, 15, 20 or 30",
+        "default": "1"
+      },
+      {
+        "name": "autoSwitchToSeconds",
+        "optional": true,
+        "type": "boolean",
+        "description": "Automatically switch from minutes to seconds after a minute is picked on the clock.\r\nOnly used with `showSeconds`.",
+        "default": "true"
+      },
+      {
         "name": "smoothHourSnap",
         "optional": true,
         "type": "boolean",
-        "description": "Enable smooth hour snapping with animation\r\nIn v5.0.0, this will become default and option will be renamed to discreteHourJump (inverted)",
+        "description": "Enable smooth hour snapping with animation",
         "default": "true"
+      },
+      {
+        "name": "discreteHourJump",
+        "optional": true,
+        "type": "boolean",
+        "description": "Move the hour hand from hour to hour while dragging instead of following the pointer.",
+        "default": "false"
       },
       {
         "name": "disabledTime",
         "optional": true,
-        "type": "{ minutes?: Array<string | number>; hours?: Array<string | number>; interval?: string | string[]; }",
-        "description": "Disable specific hours/minutes or time intervals",
-        "example": "disabledTime: {\r\n  minutes: [1, 2, 4, 5, 55, 23, \"22\", \"38\"],\r\n  hours: [1, \"3\", \"5\", 8],\r\n  interval: \"10:00 AM - 12:00 PM\" | [\"10:00 AM - 12:00 PM\", \"5:00 PM - 8:00 PM\"]\r\n}"
+        "type": "{ minutes?: Array<string | number>; hours?: Array<string | number>; /** * @description Seconds (0-59) disabled in every minute. Used with `showSeconds`. */ seconds?: Array<string | number>; /** * @description Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h). * An edge without seconds covers its whole minute. * When set, the `hours`, `minutes` and `seconds` lists are ignored. */ ranges?: string | string[]; /** * @description Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h). * An edge without seconds covers its whole minute. * When set, the `hours`, `minutes` and `seconds` lists are ignored. * @deprecated Use `ranges`. Removed in 5.0. */ interval?: string | string[]; }",
+        "description": "Disable specific hours/minutes/seconds or time ranges",
+        "example": "disabledTime: {\r\n  minutes: [1, 2, 4, 5, 55, 23, \"22\", \"38\"],\r\n  hours: [1, \"3\", \"5\", 8],\r\n  seconds: [0, 30]\r\n}\r\n// or time ranges instead: the hours, minutes and seconds lists are ignored when ranges is set\r\ndisabledTime: {\r\n  ranges: [\"10:00 AM - 12:00 PM\", \"5:00:30 PM - 8:00 PM\"]\r\n}"
+      },
+      {
+        "name": "defaultTime",
+        "optional": true,
+        "type": "'now' | { time?: Date | 'now'; updateInput?: boolean }",
+        "description": "Time the picker shows while the input is empty. `'now'` shows the current time and also writes it to the input when the picker is created, replacing a value that is already there.\r\nUse the object form to choose: `time` is a `Date` or `'now'`, and `updateInput: true` writes it to the input the same way.",
+        "example": "defaultTime: 'now'"
       },
       {
         "name": "currentTime",
         "optional": true,
-        "type": "| { time?: Date; updateInput?: boolean; locales?: string | string[]; preventClockType?: boolean; } | boolean",
+        "type": "| { time?: Date; updateInput?: boolean; /** * @deprecated Has no effect since 4.5.0; the value is formatted by the library. Removed in 5.0. */ locales?: string | string[]; /** * @deprecated Use `clock.type: 'auto'`. Removed in 5.0. */ preventClockType?: boolean; } | boolean",
         "description": "Set current time to the input and timepicker",
-        "example": "currentTime: {\r\n  time: new Date(),\r\n  updateInput: true,\r\n  locales: \"en-US\",\r\n  preventClockType: false\r\n}"
+        "example": "currentTime: {\r\n  time: new Date(),\r\n  updateInput: true,\r\n  preventClockType: false\r\n}"
       }
     ]
   },
@@ -85,10 +120,24 @@
         "default": "true"
       },
       {
+        "name": "initialView",
+        "optional": true,
+        "type": "'clock' | 'keyboard'",
+        "description": "View shown when the picker opens: the clock face or the keyboard fields.",
+        "default": "\"clock\""
+      },
+      {
         "name": "mobile",
         "optional": true,
         "type": "boolean",
         "description": "Force mobile mode",
+        "default": "false"
+      },
+      {
+        "name": "viewSwitch",
+        "optional": true,
+        "type": "boolean",
+        "description": "Show the button that switches between the clock face and the keyboard fields.",
         "default": "false"
       },
       {
@@ -106,10 +155,17 @@
         "default": "false"
       },
       {
+        "name": "allowPageScroll",
+        "optional": true,
+        "type": "boolean",
+        "description": "Let the page scroll while the picker is open. When false, page scroll is locked on `<html>`\r\n(and on `<body>` when it is the scroll container), and `<html>` gets `--tp-scrollbar-gap` set to the removed\r\nscrollbar width for your own fixed or sticky elements, e.g. `header { padding-right: var(--tp-scrollbar-gap, 0px) }`.",
+        "default": "false"
+      },
+      {
         "name": "enableScrollbar",
         "optional": true,
         "type": "boolean",
-        "description": "Enable scrollbar when timepicker is open",
+        "description": "Enable scrollbar when timepicker is open.\r\nWhen false, page scroll is locked on `<html>` (and on `<body>` when it is the scroll container),\r\nand `<html>` gets `--tp-scrollbar-gap` set to the removed scrollbar width for your own fixed or\r\nsticky elements, e.g. `header { padding-right: var(--tp-scrollbar-gap, 0px) }`.",
         "default": "false"
       },
       {
@@ -122,9 +178,17 @@
       {
         "name": "clearButton",
         "optional": true,
-        "type": "boolean",
-        "description": "Show clear button to reset time selection",
-        "default": "false"
+        "type": "boolean | { clearInput?: boolean }",
+        "description": "Show the Clear button. The object form also sets what Clear does: `clearInput: false` keeps the input value.",
+        "default": "false",
+        "example": "clearButton: { clearInput: false }"
+      },
+      {
+        "name": "appendTo",
+        "optional": true,
+        "type": "string | HTMLElement",
+        "description": "Element, or selector of the element, the modal is appended to.",
+        "default": "document.body"
       },
       {
         "name": "appendModalSelector",
@@ -134,10 +198,24 @@
         "default": "\"\""
       },
       {
+        "name": "keyboardIcon",
+        "optional": true,
+        "type": "string",
+        "description": "HTML of the keyboard icon, shown on the clock face view.",
+        "default": "Material Icons template"
+      },
+      {
         "name": "iconTemplate",
         "optional": true,
         "type": "string",
         "description": "Custom keyboard icon template (desktop → mobile)",
+        "default": "Material Icons template"
+      },
+      {
+        "name": "clockIcon",
+        "optional": true,
+        "type": "string",
+        "description": "HTML of the clock icon, shown on the keyboard view.",
         "default": "Material Icons template"
       },
       {
@@ -150,9 +228,9 @@
       {
         "name": "inline",
         "optional": true,
-        "type": "{ enabled: boolean; containerId: string; showButtons?: boolean; autoUpdate?: boolean; }",
+        "type": "{ enabled: boolean; /** * @description Element, or selector of the element, the inline picker renders into. Required when `enabled` is true. * @example container: '#timepicker-container' */ container?: string | HTMLElement; /** * @deprecated Use `container`. Removed in 5.0. */ containerId?: string; /** * @description Show the OK and Cancel buttons. OK writes the time to the input and Cancel brings back the time from the input; the picker stays visible either way. * @default false */ showButtons?: boolean; autoUpdate?: boolean; }",
         "description": "Inline mode configuration",
-        "example": "inline: {\r\n  enabled: true,\r\n  containerId: \"timepicker-container\",\r\n  showButtons: false,\r\n  autoUpdate: true\r\n}"
+        "example": "inline: {\r\n  enabled: true,\r\n  container: '#timepicker-container',\r\n  showButtons: false,\r\n  autoUpdate: true\r\n}"
       }
     ]
   },
@@ -188,6 +266,13 @@
         "default": "\"Cancel\""
       },
       {
+        "name": "clockTitle",
+        "optional": true,
+        "type": "string",
+        "description": "Heading of the clock face view",
+        "default": "\"Select time\""
+      },
+      {
         "name": "time",
         "optional": true,
         "type": "string",
@@ -195,11 +280,39 @@
         "default": "\"Select time\""
       },
       {
+        "name": "keyboardTitle",
+        "optional": true,
+        "type": "string",
+        "description": "Heading of the keyboard view",
+        "default": "\"Enter Time\""
+      },
+      {
         "name": "mobileTime",
         "optional": true,
         "type": "string",
         "description": "Time label on mobile",
         "default": "\"Enter Time\""
+      },
+      {
+        "name": "hour",
+        "optional": true,
+        "type": "string",
+        "description": "Hour field caption, its accessible name, the dial name on the hours face, and the prefix of the hour announcement",
+        "default": "\"Hour\""
+      },
+      {
+        "name": "minute",
+        "optional": true,
+        "type": "string",
+        "description": "Minute field caption, its accessible name, the dial name on the minutes face, and the prefix of the minute announcement.\r\nUntil 5.0 the minute announcement keeps its own default, `Minutes`, when neither `minute` nor `announceMinute` is set.",
+        "default": "\"Minute\""
+      },
+      {
+        "name": "second",
+        "optional": true,
+        "type": "string",
+        "description": "Second field caption, its accessible name, the dial name on the seconds face, and the prefix of the second announcement (requires `clock.showSeconds`)",
+        "default": "\"Second\""
       },
       {
         "name": "mobileHour",
@@ -226,22 +339,36 @@
         "name": "hourLabel",
         "optional": true,
         "type": "string",
-        "description": "Accessible label for the hour spinbutton",
+        "description": "Accessible label for the hour spinbutton and the clock dial while it shows hours",
         "default": "\"Hour\""
       },
       {
         "name": "minuteLabel",
         "optional": true,
         "type": "string",
-        "description": "Accessible label for the minute spinbutton",
+        "description": "Accessible label for the minute spinbutton and the clock dial while it shows minutes",
         "default": "\"Minute\""
+      },
+      {
+        "name": "clock",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible name of the group around the clock dial",
+        "default": "\"Clock\""
       },
       {
         "name": "clockLabel",
         "optional": true,
         "type": "string",
-        "description": "Accessible label for the analog clock face group",
+        "description": "Accessible label for the group that wraps the analog clock dial",
         "default": "\"Clock\""
+      },
+      {
+        "name": "period",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible name of the AM/PM group",
+        "default": "\"Period\""
       },
       {
         "name": "periodLabel",
@@ -249,6 +376,13 @@
         "type": "string",
         "description": "Accessible label for the AM/PM period group",
         "default": "\"Period\""
+      },
+      {
+        "name": "timeFields",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible name of the group around the time fields",
+        "default": "\"Time\""
       },
       {
         "name": "timeLabel",
@@ -265,6 +399,13 @@
         "default": "\"24-hour\""
       },
       {
+        "name": "range",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible name of the range From/To tabs",
+        "default": "\"Range selection\""
+      },
+      {
         "name": "rangeSelectionLabel",
         "optional": true,
         "type": "string",
@@ -272,11 +413,46 @@
         "default": "\"Range selection\""
       },
       {
+        "name": "rangeFrom",
+        "optional": true,
+        "type": "string",
+        "description": "Text of the range From tab",
+        "default": "\"From\""
+      },
+      {
+        "name": "rangeTo",
+        "optional": true,
+        "type": "string",
+        "description": "Text of the range To tab",
+        "default": "\"To\""
+      },
+      {
+        "name": "timezone",
+        "optional": true,
+        "type": "string",
+        "description": "Label of the timezone selector",
+        "default": "\"Timezone\""
+      },
+      {
+        "name": "switchToKeyboard",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible name of the view switch on the clock face view",
+        "default": "\"Switch to keyboard input\""
+      },
+      {
         "name": "switchToKeyboardLabel",
         "optional": true,
         "type": "string",
         "description": "Accessible label for the keyboard-input switch icon",
         "default": "\"Switch to keyboard input\""
+      },
+      {
+        "name": "switchToClock",
+        "optional": true,
+        "type": "string",
+        "description": "Accessible name of the view switch on the keyboard view",
+        "default": "\"Switch to clock\""
       },
       {
         "name": "switchToClockLabel",
@@ -333,6 +509,13 @@
         "type": "string",
         "description": "Error/announcement text for an invalid time format",
         "default": "\"Invalid time format\""
+      },
+      {
+        "name": "announceCleared",
+        "optional": true,
+        "type": "string",
+        "description": "Screen-reader announcement after Clear",
+        "default": "\"Time cleared\""
       }
     ]
   },
@@ -340,10 +523,17 @@
     "interface": "BehaviorOptions",
     "options": [
       {
+        "name": "returnFocus",
+        "optional": true,
+        "type": "boolean",
+        "description": "Return focus to the input when the picker closes (WAI-ARIA dialog pattern). Setting it to `true` is recommended; 5.0 makes `true` the default.",
+        "default": "false"
+      },
+      {
         "name": "focusInputAfterClose",
         "optional": true,
         "type": "boolean",
-        "description": "Focus input after closing modal",
+        "description": "Focus input after closing modal. Old name of `returnFocus`.",
         "default": "false"
       },
       {
@@ -357,8 +547,8 @@
         "name": "delayHandler",
         "optional": true,
         "type": "number",
-        "description": "Delay for clickable elements (ms)",
-        "default": "300"
+        "description": "Extra delay (ms) before the picker starts to close after OK, Cancel, Escape, a backdrop click or `close()`",
+        "default": "0"
       },
       {
         "name": "id",
@@ -387,6 +577,13 @@
         "description": "Default timezone ID (e.g., 'America/New_York')\r\nUses browser's local timezone if not specified."
       },
       {
+        "name": "list",
+        "optional": true,
+        "type": "readonly string[]",
+        "description": "Timezone IDs shown in the selector, instead of the built-in list.\r\nIf not provided, uses a curated list of common timezones.",
+        "example": "list: ['UTC', 'America/New_York', 'Europe/London']"
+      },
+      {
         "name": "whitelist",
         "optional": true,
         "type": "readonly string[]",
@@ -409,8 +606,8 @@
         "name": "placement",
         "optional": true,
         "type": "'auto' | 'top' | 'bottom'",
-        "description": "Popover placement relative to input in compact-wheel mode.\r\n'auto' opens below if space allows, otherwise above.\r\nDefaults to 'auto' in compact-wheel mode.\r\nCan be overridden to 'top' or 'bottom' for fixed positioning.",
-        "default": "'auto' (compact-wheel) | undefined (wheel)"
+        "description": "Popover placement relative to input in compact-wheel mode.\r\nWhen unset, compact-wheel opens as a modal.\r\nSet 'auto' | 'top' | 'bottom' to show compact-wheel as a popover:\r\n'auto' opens below if space allows, otherwise above. 'top' / 'bottom' open on that side\r\nwhile it has room for at least three wheel rows, otherwise on the other side.\r\nIn every placement the popover stays inside the viewport and scrolls when it is too tall.",
+        "default": "undefined (modal)"
       },
       {
         "name": "hideFooter",
@@ -430,7 +627,7 @@
         "name": "hideDisabled",
         "optional": true,
         "type": "boolean",
-        "description": "When true, disabled hours/minutes are completely removed from the wheel list\r\ninstead of being dimmed. Only applies to wheel and compact-wheel modes.\r\nUseful when many values are disabled (e.g., business hours only).",
+        "description": "When true, disabled hours/minutes/seconds are completely removed from the wheel list\r\ninstead of being dimmed. Only applies to wheel and compact-wheel modes.\r\nUseful when many values are disabled (e.g., business hours only).",
         "default": "false"
       },
       {
@@ -490,6 +687,12 @@
         "description": "Triggered when timepicker opens"
       },
       {
+        "name": "onShow",
+        "optional": true,
+        "type": "TimepickerEventCallback<ShowEventData>",
+        "description": "Triggered when the user activates the input or a `data-open` element (click, Enter or Space) to open the picker, before it renders. `open()` does not trigger it."
+      },
+      {
         "name": "onCancel",
         "optional": true,
         "type": "TimepickerEventCallback<CancelEventData>",
@@ -520,6 +723,18 @@
         "description": "Triggered when minute mode is selected"
       },
       {
+        "name": "onSelectSecond",
+        "optional": true,
+        "type": "TimepickerEventCallback<SelectSecondEventData>",
+        "description": "Triggered when second mode is selected (requires `clock.showSeconds`)"
+      },
+      {
+        "name": "onSelectPeriod",
+        "optional": true,
+        "type": "TimepickerEventCallback<SelectPeriodEventData>",
+        "description": "Triggered when AM or PM is selected, with `{ type }`"
+      },
+      {
         "name": "onSelectAM",
         "optional": true,
         "type": "TimepickerEventCallback<SelectAMEventData>",
@@ -530,6 +745,18 @@
         "optional": true,
         "type": "TimepickerEventCallback<SelectPMEventData>",
         "description": "Triggered when PM is selected"
+      },
+      {
+        "name": "onSwitchView",
+        "optional": true,
+        "type": "TimepickerEventCallback<SwitchViewEventData>",
+        "description": "Triggered when the switch icon toggles between the clock face and keyboard input (requires `ui.viewSwitch`)"
+      },
+      {
+        "name": "onSwitchFace",
+        "optional": true,
+        "type": "TimepickerEventCallback<SwitchFaceEventData>",
+        "description": "Triggered when the clock face switches between hours, minutes and seconds, with `{ face }`"
       },
       {
         "name": "onError",
@@ -560,6 +787,18 @@
         "optional": true,
         "type": "TimepickerEventCallback<RangeValidationEventData>",
         "description": "Triggered on range validation (range mode only)"
+      },
+      {
+        "name": "onWheelScrollStart",
+        "optional": true,
+        "type": "TimepickerEventCallback<WheelScrollStartEventData>",
+        "description": "Triggered when a wheel column starts scrolling (wheel and compact-wheel modes)"
+      },
+      {
+        "name": "onWheelScrollEnd",
+        "optional": true,
+        "type": "TimepickerEventCallback<WheelScrollEndEventData>",
+        "description": "Triggered when a wheel column stops scrolling and snaps to a value (wheel and compact-wheel modes)"
       },
       {
         "name": "onClear",

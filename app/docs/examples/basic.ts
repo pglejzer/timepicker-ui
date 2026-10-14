@@ -9,13 +9,13 @@ basicTimePicker.create();
 
 const format24hPicker = new TimepickerUI('#format-24h-picker', {
   clock: { type: '24h' },
-  ui: { enableSwitchIcon: true },
+  ui: { viewSwitch: true },
 });
 format24hPicker.create();
 
 const mobilePicker = new TimepickerUI('#mobile-picker', {
   clock: { type: '24h' },
-  ui: { mobile: true, enableSwitchIcon: true },
+  ui: { initialView: 'keyboard', viewSwitch: true },
 });
 mobilePicker.create();
 

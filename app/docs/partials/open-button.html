@@ -1,0 +1,101 @@
+<section
+  id="open-button"
+  class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+>
+  <div
+    class="bg-gradient-to-r from-sky-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
+  >
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Open from a button</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Wrap the input and a button in one element, put
+      <code class="bg-sky-100 dark:bg-sky-800 px-1 rounded">data-open</code> on the button and pass the
+      wrapper to <code class="bg-sky-100 dark:bg-sky-800 px-1 rounded">TimepickerUI</code>. Only the button
+      opens the picker. A click in the field places the cursor, so the time can be typed, and the picker reads
+      the typed value when it opens.
+    </p>
+  </div>
+  <div class="p-4 sm:p-8">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label
+            for="open-button-end-input"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Icon on the right (12h)</label
+          >
+          <div id="open-button-end" class="relative">
+            <input
+              id="open-button-end-input"
+              class="w-full pl-4 pr-14 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors"
+              value="10:30 AM"
+            />
+            <button
+              type="button"
+              data-open="open-button-end"
+              aria-label="Choose time"
+              class="absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 inline-flex items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 transition-colors"
+            >
+              <span class="material-icons" aria-hidden="true">schedule</span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label
+            for="open-button-start-input"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Icon on the left (24h)</label
+          >
+          <div id="open-button-start" class="relative">
+            <button
+              type="button"
+              data-open="open-button-start"
+              aria-label="Choose time"
+              class="absolute left-1 top-1/2 -translate-y-1/2 w-10 h-10 inline-flex items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 transition-colors"
+            >
+              <span class="material-icons" aria-hidden="true">schedule</span>
+            </button>
+            <input
+              id="open-button-start-input"
+              class="w-full pl-14 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors"
+              value="18:45"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mb-8 p-4 bg-sky-50 dark:bg-sky-900/20 rounded-lg border border-sky-200 dark:border-sky-800 text-sm text-sky-800 dark:text-sky-300"
+    >
+      <ul class="space-y-1 list-disc list-inside">
+        <li>
+          When the wrapper has a <code>data-open</code> element, the input no longer opens the picker.
+          Elements that share the first <code>data-open</code> value all open it.
+        </li>
+        <li>Use a real <code>&lt;button type="button"&gt;</code>: Enter and Space open the picker too.</li>
+        <li>An icon-only button needs an <code>aria-label</code>.</li>
+        <li>
+          <code>behavior.returnFocus: true</code> moves focus back to the field after OK, Cancel or
+          Escape.
+        </li>
+      </ul>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
+        <pre><code class="language-html">&lt;div id="open-button-end"&gt;
+  &lt;input id="open-button-end-input" value="10:30 AM" /&gt;
+  &lt;button type="button" data-open="open-button-end" aria-label="Choose time"&gt;
+    &lt;span class="material-icons" aria-hidden="true"&gt;schedule&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
+        <pre><code class="language-javascript">const picker = new TimepickerUI('#open-button-end', {
+  behavior: { returnFocus: true },
+});
+picker.create();</code></pre>
+      </div>
+    </div>
+  </div>
+</section>

@@ -12,7 +12,7 @@ export function SoftwareApplicationJsonLd() {
     name: "timepicker-ui",
     applicationCategory: "DeveloperApplication",
     operatingSystem: "Any",
-    softwareVersion: "4.4.0",
+    softwareVersion: "4.5.0",
     description:
       "Zero-dependency, framework-agnostic, SSR-safe time picker with analog clock, scroll wheel and compact-wheel modes, 12 themes, full TypeScript types and tree-shakeable plugins.",
     url: SITE_URL,

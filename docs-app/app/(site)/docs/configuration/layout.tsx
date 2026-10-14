@@ -11,7 +11,7 @@ export default function Layout({
       <JsonLdTechArticle
         pathname="/docs/configuration"
         headline="Configuration"
-        description="Configure timepicker-ui - clock, ui, labels, behavior, callbacks, timezone, range, wheel and clearBehavior option groups for the zero-dependency, SSR-safe time picker."
+        description="Configure timepicker-ui - clock, ui, labels, behavior, callbacks, timezone, range and wheel option groups for the zero-dependency, SSR-safe time picker."
       />
       {children}
     </>

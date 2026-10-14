@@ -97,10 +97,12 @@ picker.create();
 
 // CSS:
 .tp-ui-wrapper.custom-rounded-picker {
-  --tp-font-family: 'Inter', -apple-system, sans-serif;
   --tp-border-radius: 24px;
   --tp-primary: #10b981;
   --tp-surface-hover: #d1fae5;
+
+  /* The time fields and buttons inherit this font */
+  font-family: 'Inter', -apple-system, sans-serif;
 }`}
           options={{
             ui: { cssClass: "custom-rounded-picker" },
@@ -108,17 +110,20 @@ picker.create();
         />
       </Section>
 
-      <Section icon={Palette} title="Material Design 3 Features (v3.2.0+)">
+      <Section icon={Palette} title="Material Design 3 Features">
         <p className="text-muted-foreground mb-4">
-          Version 3.2.0 introduced full Material Design 3 support with ripple
-          effects and container colors:
+          Version 3.2.0 added container colors. Version 4.5.0 reworked the
+          ripple and added hover, focus and pressed state layers:
         </p>
         <TimepickerExample
           code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  ui: { theme: 'm3-green' } // or 'm2' for Material Design 2
+  ui: {
+    theme: 'm3-green', // or 'm2' for Material Design 2
+    cssClass: 'custom'
+  }
 });
 picker.create();
 
@@ -127,27 +132,28 @@ picker.create();
   /* Material Design 3 container colors */
   --tp-primary-container: #eaddff;
   --tp-on-primary-container: #21005d;
-  --tp-tertiary-container: #ffd8e4;
-  --tp-on-tertiary-container: #633b48;
-  
+
   /* AM/PM specific colors */
   --tp-am-pm-text-selected: #633b48;
   --tp-am-pm-text-unselected: #49454f;
   --tp-am-pm-active: #ece0fd;
 }
 
-// Ripple effect is automatically applied to:
+// The ripple is applied automatically to:
+// - OK, Cancel and Clear buttons
 // - AM/PM buttons
-// - Hour and minute inputs`}
+// - Hour, minute and second fields
+// - The view-switch icon, range tabs and timezone trigger`}
           options={{
             ui: { theme: "m3-green" },
           }}
         />
         <InfoBox title="Ripple Effect" variant="green" className="mt-4">
-          Material Design 3 ripple effects are automatically applied to AM/PM
-          buttons and time input fields. Customize the ripple color using{" "}
-          <code>--timepicker-on-primary-container</code> variable or override
-          the <code>[data-md3-ripple]::before</code> pseudo-element styles.
+          The ripple uses the text color of the control it is on. On the
+          selected time field that is <code>--tp-on-primary-container</code>.
+          Set its strength with <code>--tp-state-pressed-opacity</code> and{" "}
+          <code>--tp-ripple-opacity</code>, or turn it off with{" "}
+          <code>--tp-ripple-opacity: 0</code>.
         </InfoBox>
       </Section>
 
@@ -171,18 +177,21 @@ picker.create();
           --tp-primary: #a855f7;
           --tp-on-primary: #ffffff;
           --tp-border: rgba(168, 85, 247, 0.3);
-          --tp-hover-bg: rgba(168, 85, 247, 0.1);
           --tp-shadow: 0 20px 25px -5px rgba(168, 85, 247, 0.2);
           --tp-border-radius: 16px;
         }
 
         .tp-ui-wrapper.custom-rounded-picker {
-          --tp-font-family: "Inter", -apple-system, sans-serif;
           --tp-border-radius: 24px;
           --tp-primary: #10b981;
           --tp-surface-hover: #d1fae5;
           --tp-bg: #ecfdf5;
           --tp-surface: #d1fae5;
+        }
+
+        .tp-ui-wrapper.custom-rounded-picker,
+        .tp-ui-wrapper.custom-rounded-picker input {
+          font-family: "Inter", -apple-system, sans-serif;
         }
       `}</style>
     </div>

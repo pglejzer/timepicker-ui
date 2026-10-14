@@ -14,12 +14,12 @@ const faqQuestions = [
   {
     question: "How do I add a timezone selector?",
     answer:
-      "Import TimezonePlugin from timepicker-ui/plugins/timezone, register it, then set timezone: { enabled: true } with a default and whitelist. The selector is display-only and does not convert times.",
+      "Import TimezonePlugin from timepicker-ui/plugins/timezone, register it, then set timezone: { enabled: true } with an optional default and list. The selector is display-only and does not convert times.",
   },
   {
     question: "How do I use the scroll wheel picker?",
     answer:
-      "Import WheelPlugin from timepicker-ui/plugins/wheel, register it, then set ui.mode to 'wheel' for the full spinner or 'compact-wheel' for a headerless popover.",
+      "Import WheelPlugin from timepicker-ui/plugins/wheel, register it, then set ui.mode to 'wheel' for the full spinner or 'compact-wheel' for a headerless picker. Compact-wheel opens as a popover when wheel.placement is set, otherwise as a modal.",
   },
 ];
 

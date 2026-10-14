@@ -16,16 +16,19 @@ export default function CustomContainerPage() {
         eyebrow="Example · Advanced"
       />
 
-      <InfoBox title="appendModalSelector" variant="blue" className="mb-8">
+      <InfoBox title="ui.appendTo" variant="blue" className="mb-8">
         By default, the timepicker modal is appended to{" "}
         <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
           document.body
         </code>
-        . Use{" "}
+        . Set{" "}
         <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
-          appendModalSelector
+          ui.appendTo
         </code>{" "}
-        to render it inside a specific container element.
+        to a CSS selector or an element to render it inside another element. The
+        picker looks a selector up with <code>document.querySelector</code> each
+        time it opens, so the element must exist by then. A selector cannot point
+        into a shadow root or another frame&apos;s document.
       </InfoBox>
 
       <Section icon={Box} title="Custom Container">
@@ -37,7 +40,7 @@ export default function CustomContainerPage() {
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  appendModalSelector: '#modal-container'
+  ui: { appendTo: '#modal-container' }
 });
 
 picker.create();
@@ -45,7 +48,7 @@ picker.create();
 // HTML:
 // <div id="modal-container"></div>`}
           options={{
-            appendModalSelector: "body",
+            ui: { appendTo: "body" },
           }}
         />
       </Section>
@@ -68,7 +71,7 @@ picker.create();
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
   // Append to modal content instead of body
-  appendModalSelector: '#modal-content'
+  ui: { appendTo: '#modal-content' }
 });
 
 picker.create();`}
@@ -76,83 +79,35 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Box} title="Shadow DOM">
+      <Section icon={Layout} title="React">
         <p className="text-muted-foreground mb-4">
-          Use with Web Components and Shadow DOM:
+          Render the container in your component and pass its selector. Create
+          the picker in an effect, so it only runs in the browser:
         </p>
         <CodeBlock
-          code={`class TimePickerComponent extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-  }
-
-  connectedCallback() {
-    // Create container inside shadow DOM
-    this.shadowRoot.innerHTML = \`
-      <style>
-        @import url('timepicker-ui/index.css');
-      </style>
-      <div id="picker-container">
-        <input id="timepicker" type="text" />
-      </div>
-    \`;
-
-    const input = this.shadowRoot.querySelector('#timepicker');
-    const container = this.shadowRoot.querySelector('#picker-container');
-    
-    const picker = new TimepickerUI(input, {
-      appendModalSelector: container
-    });
-    
-    picker.create();
-  }
-}
-
-customElements.define('time-picker', TimePickerComponent);`}
-          language="typescript"
-        />
-      </Section>
-
-      <Section icon={Layout} title="React Portal Pattern">
-        <p className="text-muted-foreground mb-4">
-          Integrate with React Portals for complex layouts:
-        </p>
-        <CodeBlock
-          code={`import { useEffect, useRef, useMemo } from 'react';
-import { createPortal } from 'react-dom';
+          code={`import { useEffect, useRef } from 'react';
 import { TimepickerUI } from 'timepicker-ui';
 
-function TimepickerWithPortal() {
+function TimepickerWithContainer() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const pickerRef = useRef<TimepickerUI | null>(null);
-
-  const options = useMemo(() => ({
-    appendModalSelector: containerRef.current
-  }), []);
 
   useEffect(() => {
-    if (!inputRef.current || !containerRef.current) return;
+    if (!inputRef.current) return;
 
-    pickerRef.current = new TimepickerUI(
-      inputRef.current, 
-      options
-    );
-    pickerRef.current.create();
+    const picker = new TimepickerUI(inputRef.current, {
+      ui: { appendTo: '#timepicker-root' }
+    });
+    picker.create();
 
     return () => {
-      pickerRef.current?.destroy();
+      picker.destroy();
     };
   }, []);
 
   return (
     <>
       <input ref={inputRef} type="text" />
-      {createPortal(
-        <div ref={containerRef} />,
-        document.body
-      )}
+      <div id="timepicker-root" />
     </>
   );
 }`}
@@ -162,27 +117,18 @@ function TimepickerWithPortal() {
 
       <Section icon={Box} title="Iframe Integration">
         <p className="text-muted-foreground mb-4">
-          Use timepicker inside an iframe:
+          Load timepicker-ui in the iframe&apos;s own page. The modal is
+          appended to that document&apos;s <code>body</code>, so it stays inside
+          the frame:
         </p>
         <CodeBlock
-          code={`// Inside iframe document
+          code={`// Script running inside the iframe page
 import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
-const iframeBody = document.body;
+const picker = new TimepickerUI(input);
 
-const picker = new TimepickerUI(input, {
-  // Keep modal inside iframe
-  appendModalSelector: iframeBody
-});
-
-picker.create();
-
-// Or append to parent document (if same origin)
-const parentContainer = window.parent.document.querySelector('#container');
-const pickerToParent = new TimepickerUI(input, {
-  appendModalSelector: parentContainer
-});`}
+picker.create();`}
           language="typescript"
         />
       </Section>
@@ -201,22 +147,18 @@ const pickerToParent = new TimepickerUI(input, {
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
-  appendModalSelector: '#scoped-container',
-  cssClass: 'scoped-picker'
+  ui: {
+    appendTo: '#scoped-container',
+    cssClass: 'scoped-picker'
+  }
 });
 
 picker.create();
 
-// CSS:
-// .custom-scope {
-//   /* Container styles */
-//   position: relative;
-//   z-index: 100;
-// }
-//
-// .custom-scope .timepicker-ui-modal {
-//   /* Scoped modal styles */
-//   position: absolute;
+// CSS: the modal now sits inside .custom-scope,
+// so rules scoped to it reach the picker
+// .custom-scope .tp-ui-wrapper.scoped-picker {
+//   --tp-primary: #0b57d0;
 // }`}
           language="typescript"
         />
@@ -232,21 +174,21 @@ picker.create();
 // Picker 1 in sidebar
 const input1 = document.querySelector('#timepicker-1');
 const picker1 = new TimepickerUI(input1, {
-  appendModalSelector: '#sidebar-container'
+  ui: { appendTo: '#sidebar-container' }
 });
 picker1.create();
 
 // Picker 2 in main content
 const input2 = document.querySelector('#timepicker-2');
 const picker2 = new TimepickerUI(input2, {
-  appendModalSelector: '#main-content'
+  ui: { appendTo: '#main-content' }
 });
 picker2.create();
 
 // Picker 3 in modal
 const input3 = document.querySelector('#timepicker-3');
 const picker3 = new TimepickerUI(input3, {
-  appendModalSelector: '#modal-dialog'
+  ui: { appendTo: '#modal-dialog' }
 });
 picker3.create();`}
           language="typescript"

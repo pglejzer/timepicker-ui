@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "React Custom Labels Example",
   description:
-    "React custom labels time picker - localize OK, Cancel and AM/PM text in timepicker-ui-react. Zero-dependency, SSR-safe and fully typed, with copy-paste JSX.",
+    "React custom labels time picker - localize OK, Cancel and AM/PM text in timepicker-ui-react. SSR-safe and fully typed, with copy-paste JSX.",
   path: "/react/examples/features/custom-labels",
 });
 

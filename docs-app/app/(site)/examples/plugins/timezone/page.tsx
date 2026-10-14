@@ -72,7 +72,7 @@ picker.create();`}
 
         <section>
           <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Whitelisted Timezones
+            Custom Timezone List
           </h2>
           <TimepickerExample
             code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
@@ -84,7 +84,7 @@ const picker = new TimepickerUI(input, {
   timezone: {
     enabled: true,
     default: 'America/New_York',
-    whitelist: [
+    list: [
       'America/New_York',
       'America/Los_Angeles',
       'Europe/London',
@@ -98,7 +98,7 @@ picker.create();`}
               timezone: {
                 enabled: true,
                 default: "America/New_York",
-                whitelist: [
+                list: [
                   "America/New_York",
                   "America/Los_Angeles",
                   "Europe/London",
@@ -124,15 +124,19 @@ PluginRegistry.register(TimezonePlugin);
 
 const picker = new TimepickerUI(input, {
   timezone: {
-    enabled: true,
-    label: 'Time Zone'
+    enabled: true
+  },
+  labels: {
+    timezone: 'Time Zone'
   }
 });
 picker.create();`}
             options={{
               timezone: {
                 enabled: true,
-                label: "Time Zone",
+              },
+              labels: {
+                timezone: "Time Zone",
               },
             }}
             plugins={["timezone"]}

@@ -171,7 +171,7 @@ export const MIGRATION_V3_TO_V4: { summary: string[]; mappings: MigrationMapping
         { from: 'incrementMinutes', to: 'clock.incrementMinutes' },
         { from: 'autoSwitchToMinutes', to: 'clock.autoSwitchToMinutes' },
         { from: 'disabledTime', to: 'clock.disabledTime' },
-        { from: 'currentTime', to: 'clock.currentTime' },
+        { from: 'currentTime', to: 'clock.defaultTime' },
       ],
     },
     {
@@ -180,14 +180,14 @@ export const MIGRATION_V3_TO_V4: { summary: string[]; mappings: MigrationMapping
         { from: 'theme', to: 'ui.theme' },
         { from: 'animation', to: 'ui.animation' },
         { from: 'backdrop', to: 'ui.backdrop' },
-        { from: 'mobile', to: 'ui.mobile' },
-        { from: 'enableSwitchIcon', to: 'ui.enableSwitchIcon' },
+        { from: 'mobile', to: 'ui.initialView' },
+        { from: 'enableSwitchIcon', to: 'ui.viewSwitch' },
         { from: 'editable', to: 'ui.editable' },
-        { from: 'enableScrollbar', to: 'ui.enableScrollbar' },
+        { from: 'enableScrollbar', to: 'ui.allowPageScroll' },
         { from: 'cssClass', to: 'ui.cssClass' },
-        { from: 'appendModalSelector', to: 'ui.appendModalSelector' },
-        { from: 'iconTemplate', to: 'ui.iconTemplate' },
-        { from: 'iconTemplateMobile', to: 'ui.iconTemplateMobile' },
+        { from: 'appendModalSelector', to: 'ui.appendTo' },
+        { from: 'iconTemplate', to: 'ui.keyboardIcon' },
+        { from: 'iconTemplateMobile', to: 'ui.clockIcon' },
         { from: 'inline', to: 'ui.inline' },
       ],
     },
@@ -198,16 +198,16 @@ export const MIGRATION_V3_TO_V4: { summary: string[]; mappings: MigrationMapping
         { from: 'pmLabel', to: 'labels.pm' },
         { from: 'okLabel', to: 'labels.ok' },
         { from: 'cancelLabel', to: 'labels.cancel' },
-        { from: 'timeLabel', to: 'labels.time' },
-        { from: 'mobileTimeLabel', to: 'labels.mobileTime' },
-        { from: 'hourMobileLabel', to: 'labels.mobileHour' },
-        { from: 'minuteMobileLabel', to: 'labels.mobileMinute' },
+        { from: 'timeLabel', to: 'labels.clockTitle' },
+        { from: 'mobileTimeLabel', to: 'labels.keyboardTitle' },
+        { from: 'hourMobileLabel', to: 'labels.hour' },
+        { from: 'minuteMobileLabel', to: 'labels.minute' },
       ],
     },
     {
       group: 'behavior',
       rows: [
-        { from: 'focusInputAfterCloseModal', to: 'behavior.focusInputAfterClose' },
+        { from: 'focusInputAfterCloseModal', to: 'behavior.returnFocus' },
         { from: 'focusTrap', to: 'behavior.focusTrap' },
         { from: 'delayHandler', to: 'behavior.delayHandler' },
         { from: 'id', to: 'behavior.id' },
@@ -230,7 +230,8 @@ export const MIGRATION_V3_TO_V4: { summary: string[]; mappings: MigrationMapping
   ],
   notes: [
     'Reading options also changed: options.clockType -> options.clock.type, options.amLabel -> options.labels.am.',
-    'update() takes grouped options too: update({ options: { clock: { type: "24h" } } }).',
+    'setOptions() takes grouped options too: setOptions({ clock: { type: "24h" } }).',
+    'Some values changed shape: mobile: true becomes ui.initialView: "keyboard", currentTime: true becomes clock.defaultTime: "now".',
     'CSS class names were renamed in v4 (tp-ui- prefix). Re-check any custom CSS selectors.',
   ],
 };
@@ -239,6 +240,19 @@ export const MIGRATION_V43_TO_V44: string[] = [
   'Non-breaking. Adds the blueprint and blueprint-dark themes.',
   'Adds 16 localizable accessibility labels under labels.* (e.g. hourLabel, minuteLabel, announceHour).',
   'Adds Home/End/PageUp/PageDown keyboard navigation. No migration needed.',
+];
+
+export const MIGRATION_V44_TO_V45: string[] = [
+  'Non-breaking. With clock.showSeconds off (the default) values, getValue() and event payloads are the same as in 4.4.',
+  'Optional seconds: clock.showSeconds, clock.incrementSeconds (1, 5, 10, 15, 20 or 30), clock.autoSwitchToSeconds and clock.disabledTime.seconds. Values become HH:MM:SS or HH:MM:SS AM/PM.',
+  'New label labels.second; new event select:second and callbacks.onSelectSecond; seconds on open, confirm and update; durationSeconds on range:confirm and range:validation.',
+  'Range edges in clock.disabledTime.ranges may carry seconds. An edge without seconds covers its whole minute, so 4.4 ranges disable the same minutes.',
+  'setOptions() (and update()) with an invalid disabledTime reports it through the error event and keeps the previous options instead of throwing.',
+  'behavior.returnFocus (formerly focusInputAfterClose) still defaults to false; 5.0 makes true the default, so set it to true now.',
+  'Renamed options; the old names still work and are removed in 5.0: ui.mobile -> ui.initialView, ui.enableSwitchIcon -> ui.viewSwitch, ui.enableScrollbar -> ui.allowPageScroll, ui.appendModalSelector -> ui.appendTo, ui.iconTemplate / iconTemplateMobile -> ui.keyboardIcon / clockIcon, ui.inline.containerId -> ui.inline.container, clock.currentTime -> clock.defaultTime, clock.smoothHourSnap -> clock.discreteHourJump (inverted), clock.disabledTime.interval -> ranges, behavior.focusInputAfterClose -> returnFocus, timezone.whitelist -> list, clearBehavior.clearInput -> ui.clearButton: { clearInput }. Labels: one key per unit (labels.hour, labels.minute, labels.second), labels.clockTitle / keyboardTitle, labels.clock / period / timeFields / range / switchToKeyboard / switchToClock, and range.fromLabel / toLabel / timezone.label move to labels.rangeFrom / rangeTo / timezone.',
+  'New: setOptions(), select:period with onSelectPeriod, switch:face with onSwitchFace, clock.type: "auto" (12h or 24h from the browser locale); ui.appendTo and ui.inline.container also accept an element.',
+  'The focus ring is a single 3px ring in --tp-focus-ring; --tp-focus-ring-halo was removed.',
+  'Deprecated (removed in 5.0): OptionTypes (use TimepickerOptions), labels.timezoneSelectorLabel, labels.format24Label, labels.toggleLabel, clock.currentTime.locales, getValue().degreesHours / degreesMinutes, the hide event, update() (use setOptions()), select:am / select:pm with onSelectAM / onSelectPM (use select:period / onSelectPeriod) and the renamed option names.',
 ];
 
 export interface Troubleshoot {
@@ -266,7 +280,7 @@ export const TROUBLESHOOTING: Troubleshoot[] = [
   {
     symptom: 'Modal appears in the wrong place or behind other UI.',
     cause: 'It is appended to <body> by default.',
-    fix: "Set ui.appendModalSelector to a container selector, or check stacking context / z-index of ancestors.",
+    fix: "Set ui.appendTo to a container selector or element, or check stacking context / z-index of ancestors.",
   },
   {
     symptom: 'Setting ui.theme to a custom name does nothing.',

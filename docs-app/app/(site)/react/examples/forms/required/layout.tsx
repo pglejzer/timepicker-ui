@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "React Required Field Example",
   description:
-    "React required time field - make the time picker a required form input in timepicker-ui-react. Zero-dependency, SSR-safe and fully typed, with copy-paste JSX.",
+    "React required time field - make the time picker a required form input in timepicker-ui-react. SSR-safe and fully typed, with copy-paste JSX.",
   path: "/react/examples/forms/required",
 });
 

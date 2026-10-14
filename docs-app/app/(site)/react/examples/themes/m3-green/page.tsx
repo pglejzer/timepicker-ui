@@ -42,6 +42,8 @@ export default function M3GreenPage() {
             </div>
             <CodeBlock
               code={`import { Timepicker } from "timepicker-ui-react";
+import "timepicker-ui/main.css";
+import "timepicker-ui/theme-m3-green.css";
 
 function App() {
   return (
@@ -60,44 +62,39 @@ function App() {
 
       <Section icon={Palette} title="Available Themes">
         <div className="rounded-lg border border-border bg-card p-6">
-          <ul className="space-y-2 text-sm text-muted-foreground">
+          <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
             <li>
-              •{" "}
               <code className="text-xs bg-muted px-1 py-0.5 rounded">
                 basic
               </code>{" "}
               - Default light theme
             </li>
             <li>
-              •{" "}
               <code className="text-xs bg-muted px-1 py-0.5 rounded">dark</code>{" "}
               - Dark mode
             </li>
             <li>
-              •{" "}
               <code className="text-xs bg-muted px-1 py-0.5 rounded">
                 m3-green
               </code>{" "}
               - Material Design 3 green
             </li>
             <li>
-              •{" "}
               <code className="text-xs bg-muted px-1 py-0.5 rounded">
                 crane
               </code>{" "}
               - Crane theme
             </li>
             <li>
-              •{" "}
               <code className="text-xs bg-muted px-1 py-0.5 rounded">
                 crane-straight
               </code>{" "}
               - Crane straight variant
             </li>
             <li>
-              • Check{" "}
+              Check{" "}
               <Link
-                href="/examples/themes"
+                href="/examples/themes/basic"
                 className="text-primary hover:underline"
               >
                 vanilla examples

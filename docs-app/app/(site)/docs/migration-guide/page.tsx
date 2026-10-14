@@ -62,6 +62,21 @@ export default function MigrationGuidePage() {
         </p>
       </InfoBox>
 
+      <InfoBox title="Option names from 4.5.0" variant="blue" className="mb-8">
+        <p className="text-sm">
+          The v4 side of this guide uses the option names from 4.5.0. Some
+          options had other names in 4.0 to 4.4. Those names still work until
+          5.0 and are listed in{" "}
+          <Link
+            href="/docs/api/options#renamed"
+            className="text-primary underline font-medium"
+          >
+            Renamed in 4.5.0
+          </Link>
+          .
+        </p>
+      </InfoBox>
+
       <Section icon={Layers} title="What Changed?">
         <p className="mb-6">
           The previous <strong>flat structure</strong> with 40+ fields has been
@@ -138,7 +153,7 @@ export default function MigrationGuidePage() {
 
           <div>
             <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-              New API (v4.0.0) - Grouped Structure
+              New API (v4) - Grouped Structure
             </h3>
             <CodeBlock
               language="typescript"
@@ -152,7 +167,7 @@ export default function MigrationGuidePage() {
     animation: true,
     backdrop: true,
     theme: 'basic',
-    mobile: false,
+    initialView: 'clock',
     editable: false,
   },
   labels: {
@@ -160,7 +175,7 @@ export default function MigrationGuidePage() {
     pm: 'PM',
     ok: 'OK',
     cancel: 'Cancel',
-    time: 'Select time',
+    clockTitle: 'Select time',
   },
   behavior: {
     focusTrap: true,
@@ -190,7 +205,7 @@ export default function MigrationGuidePage() {
                       v3.x (Flat)
                     </th>
                     <th className="text-left py-2 px-4 font-semibold">
-                      v4.0.0 (Grouped)
+                      v4.5 (Grouped)
                     </th>
                   </tr>
                 </thead>
@@ -224,9 +239,17 @@ export default function MigrationGuidePage() {
                     </td>
                   </tr>
                   <tr className="border-b border-border/50">
-                    <td className="py-2 pr-4">currentTime</td>
+                    <td className="py-2 pr-4">currentTime: true</td>
                     <td className="py-2 px-4 text-primary">
-                      clock.currentTime
+                      clock.defaultTime: &apos;now&apos;
+                    </td>
+                  </tr>
+                  <tr className="border-b border-border/50">
+                    <td className="py-2 pr-4">
+                      {"currentTime: { time, updateInput }"}
+                    </td>
+                    <td className="py-2 px-4 text-primary">
+                      {"clock.defaultTime: { time, updateInput }"}
                     </td>
                   </tr>
                 </tbody>
@@ -246,7 +269,7 @@ export default function MigrationGuidePage() {
                       v3.x (Flat)
                     </th>
                     <th className="text-left py-2 px-4 font-semibold">
-                      v4.0.0 (Grouped)
+                      v4.5 (Grouped)
                     </th>
                   </tr>
                 </thead>
@@ -264,14 +287,14 @@ export default function MigrationGuidePage() {
                     <td className="py-2 px-4 text-primary">ui.backdrop</td>
                   </tr>
                   <tr className="border-b border-border/50">
-                    <td className="py-2 pr-4">mobile</td>
-                    <td className="py-2 px-4 text-primary">ui.mobile</td>
+                    <td className="py-2 pr-4">mobile: true</td>
+                    <td className="py-2 px-4 text-primary">
+                      ui.initialView: &apos;keyboard&apos;
+                    </td>
                   </tr>
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">enableSwitchIcon</td>
-                    <td className="py-2 px-4 text-primary">
-                      ui.enableSwitchIcon
-                    </td>
+                    <td className="py-2 px-4 text-primary">ui.viewSwitch</td>
                   </tr>
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">editable</td>
@@ -280,7 +303,7 @@ export default function MigrationGuidePage() {
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">enableScrollbar</td>
                     <td className="py-2 px-4 text-primary">
-                      ui.enableScrollbar
+                      ui.allowPageScroll
                     </td>
                   </tr>
                   <tr className="border-b border-border/50">
@@ -289,23 +312,27 @@ export default function MigrationGuidePage() {
                   </tr>
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">appendModalSelector</td>
-                    <td className="py-2 px-4 text-primary">
-                      ui.appendModalSelector
-                    </td>
+                    <td className="py-2 px-4 text-primary">ui.appendTo</td>
                   </tr>
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">iconTemplate</td>
-                    <td className="py-2 px-4 text-primary">ui.iconTemplate</td>
+                    <td className="py-2 px-4 text-primary">ui.keyboardIcon</td>
                   </tr>
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">iconTemplateMobile</td>
-                    <td className="py-2 px-4 text-primary">
-                      ui.iconTemplateMobile
-                    </td>
+                    <td className="py-2 px-4 text-primary">ui.clockIcon</td>
                   </tr>
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">inline</td>
                     <td className="py-2 px-4 text-primary">ui.inline</td>
+                  </tr>
+                  <tr className="border-b border-border/50">
+                    <td className="py-2 pr-4">
+                      {"inline: { containerId: 'x' }"}
+                    </td>
+                    <td className="py-2 px-4 text-primary">
+                      {"ui.inline: { container: '#x' }"}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -324,7 +351,7 @@ export default function MigrationGuidePage() {
                       v3.x (Flat)
                     </th>
                     <th className="text-left py-2 px-4 font-semibold">
-                      v4.0.0 (Grouped)
+                      v4.5 (Grouped)
                     </th>
                   </tr>
                 </thead>
@@ -347,25 +374,23 @@ export default function MigrationGuidePage() {
                   </tr>
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">timeLabel</td>
-                    <td className="py-2 px-4 text-primary">labels.time</td>
+                    <td className="py-2 px-4 text-primary">
+                      labels.clockTitle
+                    </td>
                   </tr>
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">mobileTimeLabel</td>
                     <td className="py-2 px-4 text-primary">
-                      labels.mobileTime
+                      labels.keyboardTitle
                     </td>
                   </tr>
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">hourMobileLabel</td>
-                    <td className="py-2 px-4 text-primary">
-                      labels.mobileHour
-                    </td>
+                    <td className="py-2 px-4 text-primary">labels.hour</td>
                   </tr>
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">minuteMobileLabel</td>
-                    <td className="py-2 px-4 text-primary">
-                      labels.mobileMinute
-                    </td>
+                    <td className="py-2 px-4 text-primary">labels.minute</td>
                   </tr>
                 </tbody>
               </table>
@@ -384,7 +409,7 @@ export default function MigrationGuidePage() {
                       v3.x (Flat)
                     </th>
                     <th className="text-left py-2 px-4 font-semibold">
-                      v4.0.0 (Grouped)
+                      v4.5 (Grouped)
                     </th>
                   </tr>
                 </thead>
@@ -392,7 +417,7 @@ export default function MigrationGuidePage() {
                   <tr className="border-b border-border/50">
                     <td className="py-2 pr-4">focusInputAfterCloseModal</td>
                     <td className="py-2 px-4 text-primary">
-                      behavior.focusInputAfterClose
+                      behavior.returnFocus
                     </td>
                   </tr>
                   <tr className="border-b border-border/50">
@@ -428,7 +453,7 @@ export default function MigrationGuidePage() {
                       v3.x (Flat)
                     </th>
                     <th className="text-left py-2 px-4 font-semibold">
-                      v4.0.0 (Grouped)
+                      v4.5 (Grouped)
                     </th>
                   </tr>
                 </thead>
@@ -468,15 +493,10 @@ export default function MigrationGuidePage() {
                     </td>
                   </tr>
                   <tr className="border-b border-border/50">
-                    <td className="py-2 pr-4">onSelectAM</td>
+                    <td className="py-2 pr-4">onSelectAM, onSelectPM</td>
                     <td className="py-2 px-4 text-primary">
-                      callbacks.onSelectAM
-                    </td>
-                  </tr>
-                  <tr className="border-b border-border/50">
-                    <td className="py-2 pr-4">onSelectPM</td>
-                    <td className="py-2 px-4 text-primary">
-                      callbacks.onSelectPM
+                      callbacks.onSelectPeriod (data.type is &apos;AM&apos; or
+                      &apos;PM&apos;)
                     </td>
                   </tr>
                   <tr className="border-b border-border/50">
@@ -541,19 +561,22 @@ console.log(options.labels.am); // 'AM'`}
               <div>
                 <p className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400 mb-2">
                   <Check className="h-4 w-4" />
-                  v4.0.0 - REQUIRED
+                  v4.5 - REQUIRED
                 </p>
                 <CodeBlock
                   language="typescript"
-                  code={`timepicker.update({
-  options: {
-    clock: { type: '24h' },
-    ui: { animation: false },
-  },
+                  code={`timepicker.setOptions({
+  clock: { type: '24h' },
+  ui: { animation: false },
 });`}
                 />
               </div>
             </div>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Before 4.5.0, pass the same groups to{" "}
+              <code>{"timepicker.update({ options })"}</code>. It still works
+              until 5.0.
+            </p>
           </div>
         </div>
       </Section>
@@ -592,13 +615,14 @@ const options: TimepickerOptions = {
 const timepicker = new TimepickerUI('#input', options);`}
         />
         <InfoBox
-          title="Note: OptionTypes Removed"
+          title="Note: OptionTypes Is Deprecated"
           variant="blue"
           className="mt-4"
         >
           <p>
-            <code>OptionTypes</code> has been removed. Use{" "}
-            <code>TimepickerOptions</code> instead.
+            <code>OptionTypes</code> is still exported, but it describes the
+            old flat v3 options and is deprecated in favour of{" "}
+            <code>TimepickerOptions</code>. It is removed in 5.0.
           </p>
         </InfoBox>
       </Section>
@@ -661,32 +685,31 @@ const timepicker = new TimepickerUI('#input', {
             <h3 className="text-lg font-semibold mb-3">Advanced Setup</h3>
             <CodeBlock
               language="typescript"
-              code={`// v4.0.0
+              code={`// v4.5
 const timepicker = new TimepickerUI('#input', {
   clock: {
     type: '24h',
     incrementMinutes: 15,
     disabledTime: {
-      hours: [0, 1, 2, 23],
-      interval: ['00:00 - 06:00', '22:00 - 23:59'],
+      ranges: ['00:00 - 06:00', '22:00 - 23:59'],
     },
   },
   ui: {
     theme: 'm3-green',
     animation: true,
     backdrop: true,
-    mobile: false,
+    initialView: 'clock',
     editable: true,
   },
   labels: {
-    time: 'Pick a time',
+    clockTitle: 'Pick a time',
     ok: 'Confirm',
     cancel: 'Dismiss',
   },
   behavior: {
     focusTrap: true,
     delayHandler: 300,
-    focusInputAfterClose: true,
+    returnFocus: true,
   },
   callbacks: {
     onOpen: () => console.log('Opened'),
@@ -701,12 +724,12 @@ const timepicker = new TimepickerUI('#input', {
             <h3 className="text-lg font-semibold mb-3">Inline Mode</h3>
             <CodeBlock
               language="typescript"
-              code={`// v4.0.0
+              code={`// v4.5
 const timepicker = new TimepickerUI('#input', {
   ui: {
     inline: {
       enabled: true,
-      containerId: 'timepicker-container',
+      container: '#timepicker-container',
       showButtons: false,
       autoUpdate: true,
     },
@@ -782,7 +805,7 @@ const timepicker = new TimepickerUI('#input', {
           </li>
           <li>
             <a
-              href="https://github.com/openapi-ts/timepicker-ui/issues"
+              href="https://github.com/pglejzer/timepicker-ui/issues"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"

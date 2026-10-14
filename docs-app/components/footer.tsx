@@ -3,7 +3,7 @@ import { Github, Package, ArrowUpRight } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { FooterClock } from "@/components/footer-clock";
 
-const VERSION = "v4.4.0";
+const VERSION = "v4.5.0";
 
 const columns = [
   {
@@ -88,7 +88,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${s.label} (opens in new tab)`}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
                   <s.icon className="h-[18px] w-[18px]" aria-hidden="true" />
                 </a>
@@ -141,14 +141,14 @@ export function Footer() {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`${link.label} (opens in new tab)`}
-                          className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                          className="rounded-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                         >
                           {content}
                         </a>
                       ) : (
                         <Link
                           href={link.href}
-                          className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                          className="rounded-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                         >
                           {content}
                         </Link>
@@ -181,16 +181,6 @@ export function Footer() {
             >
               Piotr Glejzer
             </a>{" "}
-            ·{" "}
-            <a
-              href="https://typujmecz.pl"
-              target="_blank"
-              rel="noopener"
-              aria-label="typujmecz.pl, another project by the author (opens in new tab)"
-              className="rounded-sm transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              typujmecz.pl
-            </a>
           </span>
           <div className="flex items-center gap-5">
             <a

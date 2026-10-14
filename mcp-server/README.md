@@ -1,9 +1,8 @@
 # timepicker-ui MCP server
 
-A Model Context Protocol server (stdio, TypeScript) for `timepicker-ui`. It exposes tools,
-resources and prompts so an MCP client (Claude Code, Claude Desktop, etc.) can answer questions
-about options, events and themes, generate snippets, author custom themes, and migrate v3 code.
-All data is extracted from the library source.
+An MCP server for `timepicker-ui`. Connect it to Claude Code, Claude Desktop or another MCP client and the model can look up options, events and themes, generate setup snippets and custom themes, and migrate v3 code. Everything it returns comes from the library source, not from the model's memory.
+
+It runs over stdio and needs Node 18 or newer.
 
 ## Tools
 
@@ -19,11 +18,11 @@ All data is extracted from the library source.
 | `explain_option` | Full detail for one option (`group` + `name`). |
 | `get_theme` | The `--tp-` variables a built-in theme overrides. |
 | `framework_recipe` | Integration recipe and SSR notes for vanilla, react, next, vue, angular, svelte. |
-| `migration_guide` | `v3->v4` field mapping, or `v4.3->v4.4` additions. |
+| `migration_guide` | `v3->v4` field mapping, or the `v4.3->v4.4` / `v4.4->v4.5` changes. |
 | `generate_snippet` | Vanilla JS or React setup (CSS imports and plugin registration). |
 | `generate_custom_theme` | A `[data-theme]` CSS block from `overrides`, or a full scaffold. |
-| `validate_time` | Checks `HH:MM` or `h:MM AM/PM` against a 12h or 24h clock. |
-| `validate_disabled_time` | Checks a `clock.disabledTime` config (hours, minutes, interval strings). |
+| `validate_time` | Checks `HH:MM`, `HH:MM:SS`, `h:MM AM/PM` or `h:MM:SS AM/PM` against a 12h or 24h clock. |
+| `validate_disabled_time` | Checks a `clock.disabledTime` config (hours, minutes, seconds, range strings). |
 
 ## Resources
 
@@ -38,7 +37,7 @@ All data is extracted from the library source.
 
 | Prompt | Argument | Purpose |
 |--------|----------|---------|
-| `integrate` | `framework` | Drive a framework integration. |
+| `integrate` | `framework` | Walk through a framework integration. |
 | `build-custom-theme` | `description` | Turn a palette into a theme. |
 | `migrate-v3-to-v4` | `code` | Convert v3 code to v4 grouped options. |
 
@@ -48,46 +47,40 @@ All data is extracted from the library source.
 cd mcp-server
 npm install
 npm run build      # generate data, compile, copy generated JSON into build/
-npm test           # spawn the server and assert tools/resources/prompts respond
+npm test           # start the server and check that tools, resources and prompts respond
 npm run inspect    # open the MCP Inspector against the built server
 ```
 
-## How the data stays accurate
+## Where the data comes from
 
-`npm run build` runs `scripts/generate.mjs`, which reads the library source in the sibling
-`app/` directory and writes `src/generated/*.json`: grouped options and event payload shapes
-from `options.d.ts` and `types.d.ts`, the EventEmitter map, the theme stylesheets and
-`variables.scss`, and the `tp-ui-` template classes. The generated JSON is committed, so the
-published server runs without the app source. Re-run `npm run build` after changing the library
-to refresh it.
+`npm run build` first runs `scripts/generate.mjs`. It reads the library source in `../app` and writes `src/generated/*.json`: options and event payloads from `options.d.ts` and `types.d.ts`, the EventEmitter map, the theme stylesheets and `variables.scss`, and the `tp-ui-` classes from the templates.
 
-## Installing in Claude Code
+The generated JSON is committed, so the server works without the `app/` source next to it. After changing the library, run `npm run build` again to refresh it.
 
-The server runs from anywhere once built. `--scope user` registers it for every project; without
-it the registration is project-local. No API keys or env vars are needed. Verify with
-`claude mcp list` (expect `timepicker-ui  ✓ Connected`).
+## Adding it to Claude Code
 
-**Absolute path**, no install:
+Build it first. No API keys or env vars are needed. `--scope user` makes it available in every project; leave it out to register it for the current project only. Check it with `claude mcp list`, which should show `timepicker-ui  ✓ Connected`.
+
+Point at the built file directly:
 
 ```bash
 claude mcp add --scope user timepicker-ui -- node /absolute/path/to/timepicker-ui/mcp-server/build/index.js
 ```
 
-**Global bin** via `npm link` (or `npm install -g .`), no path:
+Or link the bin once with `npm link` (or `npm install -g .`) and skip the path:
 
 ```bash
 npm link
 claude mcp add --scope user timepicker-ui -- timepicker-ui-mcp
 ```
 
-**From npm** once published, no clone and no path:
+The package isn't on npm yet. Once it is, this will work without cloning anything:
 
 ```bash
 claude mcp add --scope user timepicker-ui -- npx -y timepicker-ui-mcp
 ```
 
-**Project `.mcp.json`** for contributors who clone this repo (they run `npm install && npm run build`
-in `mcp-server/` once):
+If you work in this repo, you can also add a project `.mcp.json` (after `npm install && npm run build` in `mcp-server/`):
 
 ```json
 {
@@ -100,9 +93,9 @@ in `mcp-server/` once):
 }
 ```
 
-## Installing in Claude Desktop
+## Adding it to Claude Desktop
 
-Edit `claude_desktop_config.json` (on Windows it lives at `%APPDATA%\Claude\`):
+Edit `claude_desktop_config.json`. It's in `%APPDATA%\Claude\` on Windows and `~/Library/Application Support/Claude/` on macOS.
 
 ```json
 {
@@ -115,4 +108,4 @@ Edit `claude_desktop_config.json` (on Windows it lives at `%APPDATA%\Claude\`):
 }
 ```
 
-Restart Claude Desktop after editing.
+Restart Claude Desktop after saving.

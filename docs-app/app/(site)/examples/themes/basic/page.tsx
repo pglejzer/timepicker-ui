@@ -70,7 +70,7 @@ picker.create();`}
   labels: {
     ok: 'Confirm',
     cancel: 'Close',
-    time: 'Choose Your Time'
+    clockTitle: 'Choose Your Time'
   }
 });
 picker.create();`}
@@ -79,7 +79,7 @@ picker.create();`}
             labels: {
               ok: "Confirm",
               cancel: "Close",
-              time: "Choose Your Time",
+              clockTitle: "Choose Your Time",
             },
           }}
         />

@@ -47,11 +47,8 @@
     onSelectMinute: (data) => {
       console.log('Minute mode selected', data);
     },
-    onSelectAM: (data) => {
-      console.log('AM selected', data);
-    },
-    onSelectPM: (data) => {
-      console.log('PM selected', data);
+    onSelectPeriod: (data) => {
+      console.log(`${data.type} selected`);
     },
     onError: (data) => {
       console.log('Error occurred', data.error);
@@ -103,24 +100,29 @@ if (pickerElement) {
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">const advancedPicker = new TimepickerUI('#advanced-picker', {
-  clockType: '12h',
-  theme: 'm3',
-  enableSwitchIcon: true,
-  focusTrap: true,
-  editable: true,
-  focusInputAfterCloseModal: true,
-  delayHandler: 500,
-  incrementHours: 1,
-  incrementMinutes: 15,
-  currentTime: {
-    time: new Date(),
-    updateInput: false,
-    preventClockType: true
+  clock: {
+    type: 'auto',
+    incrementHours: 1,
+    incrementMinutes: 15,
+    defaultTime: {
+      time: new Date(),
+      updateInput: false
+    },
+    disabledTime: {
+      ranges: '22:00 - 06:00'
+    }
   },
-  disabledTime: {
-    interval: '22:00 - 06:00'
+  ui: {
+    theme: 'm3-green',
+    viewSwitch: true,
+    editable: true,
+    cssClass: 'my-custom-picker'
   },
-  cssClass: 'my-custom-picker'
+  behavior: {
+    focusTrap: true,
+    returnFocus: true,
+    delayHandler: 500
+  }
 });
 advancedPicker.create();</code></pre>
       </div>
@@ -135,8 +137,8 @@ advancedPicker.create();</code></pre>
   <div
     class="bg-gradient-to-r from-slate-50 to-gray-50 dark:from-gray-700 dark:to-gray-600 px-4 py-4 sm:px-8 sm:py-6"
   >
-    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Version 3 events</h3>
-    <p class="text-gray-600 dark:text-gray-300 mt-2">Examples of the new version 3.0 events</p>
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Callbacks and events</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">Listen through <code>callbacks.*</code> options or <code>picker.on()</code></p>
   </div>
   <div class="p-4 sm:p-8">
     <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
@@ -155,23 +157,20 @@ advancedPicker.create();</code></pre>
         <div>
           <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
           <pre><code class="language-javascript">const version3Example = new TimepickerUI('#version3-example', {
-  theme: 'm3',
-  clockType: '24h',
-  focusTrap: false,
-  delayHandler: 200,
-  onOpen: (data) => {
-    console.log('Version 3.0 picker opened!', data);
-  },
+  clock: { type: '24h' },
+  ui: { theme: 'm3-green' },
+  behavior: { focusTrap: false, delayHandler: 200 },
+  callbacks: {
+    onOpen: (data) => {
+      console.log('Picker opened!', data);
+    }
+  }
 });
 version3Example.create();
 
-const pickerElement = version3Example.getElement();
-if (pickerElement) {
-  pickerElement.addEventListener('timepicker:open', (data) => {
-    console.log('Picker opened!', data);
-  });
-}
-</code></pre>
+version3Example.on('open', (data) => {
+  console.log('Picker opened (on API)!', data);
+});</code></pre>
         </div>
       </div>
     </div>
@@ -192,7 +191,7 @@ if (pickerElement) {
     <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-8 mb-8">
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
         <input
-          id="destroy-example"
+          id="destroy-example-input"
           class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
           value="14:30"
         />
@@ -207,24 +206,20 @@ if (pickerElement) {
     <div class="grid md:grid-cols-2 gap-6">
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="destroy-example"  value="14:30" /&gt;</code></pre>
+        <pre><code class="language-html">&lt;input id="destroy-example-input" value="14:30" /&gt;</code></pre>
       </div>
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const destroyExample = new TimepickerUI('#destroy-example', {
-mobile: true,
-clockType: '24h',
-enableSwitchIcon: true
+        <pre><code class="language-javascript">const destroyExample = new TimepickerUI('#destroy-example-input', {
+  clock: { type: '24h' },
+  ui: { theme: 'm3-green' },
+  behavior: { focusTrap: false, delayHandler: 200 }
 });
 destroyExample.create();
 
-const pickerElement = destroyExample.getElement();
-if (pickerElement) {
-  pickerElement.addEventListener('timepicker:open', (data) => {
-    console.log('Picker opened!', data);
-  });
-}
-</code></pre>
+document.querySelector('#destroy-button').addEventListener('click', () => {
+  destroyExample.destroy();
+});</code></pre>
       </div>
     </div>
   </div>
@@ -296,7 +291,7 @@ clearButtonPicker.create();</code></pre>
         <li>The button is disabled when no time is selected</li>
         <li>
           Use
-          <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">clearBehavior: { clearInput: false }</code>
+          <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">clearButton: { clearInput: false }</code>
           to keep the input value when clearing
         </li>
       </ul>
@@ -320,10 +315,7 @@ clearButtonPicker.create();</code></pre>
       <div>
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
         <pre><code class="language-javascript">const picker = new TimepickerUI('#clear-no-input-picker', {
-  ui: { clearButton: true },
-  clearBehavior: {
-    clearInput: false
-  },
+  ui: { clearButton: { clearInput: false } },
   callbacks: {
     onClear: (data) => {
       console.log('Clear clicked (input kept)!', data.previousValue);
@@ -457,7 +449,7 @@ picker.create();</code></pre>
 
 clearThemeList.forEach((theme) => {
   new TimepickerUI(`#clear-theme-${theme}`, {
-    ui: { clearButton: true, theme, enableSwitchIcon: true },
+    ui: { clearButton: true, theme, viewSwitch: true },
     labels: { clear: 'Clear' },
     callbacks: {
       onClear: (data) => {

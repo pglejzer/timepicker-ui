@@ -71,7 +71,7 @@ export async function StarCallout() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Star timepicker-ui on GitHub"
-                className="star-cta group inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="star-cta group inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 Star on GitHub
                 <span className="star-cta-icon-wrap relative ml-2 inline-flex h-4 w-4 items-center justify-center">

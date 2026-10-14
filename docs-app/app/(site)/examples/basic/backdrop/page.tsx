@@ -46,20 +46,20 @@ picker.create();`}
 
       <Section icon={Sparkles} title="Backdrop with Scroll">
         <p className="text-muted-foreground mb-4">
-          Enable scrollbar while backdrop is visible:
+          Let the page scroll while the backdrop is visible:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   ui: {
     backdrop: true,
-    enableScrollbar: true
+    allowPageScroll: true
   }
 });
 picker.create();`}
           options={{
             ui: {
               backdrop: true,
-              enableScrollbar: true,
+              allowPageScroll: true,
             },
           }}
         />
@@ -76,7 +76,7 @@ picker.create();`}
   },
   behavior: {
     focusTrap: true,
-    focusInputAfterClose: true
+    returnFocus: true
   }
 });
 picker.create();`}
@@ -84,7 +84,7 @@ picker.create();`}
             ui: { backdrop: true },
             behavior: {
               focusTrap: true,
-              focusInputAfterClose: true,
+              returnFocus: true,
             },
           }}
         />

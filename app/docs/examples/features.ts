@@ -5,7 +5,7 @@ const inlinePicker = new TimepickerUI('#inline-picker', {
   ui: {
     inline: {
       enabled: true,
-      containerId: 'inline-container',
+      container: '#inline-container',
       showButtons: false,
       autoUpdate: true,
     },
@@ -44,14 +44,14 @@ if (eventPickerElement && eventLog) {
 
 const customLabelsPicker = new TimepickerUI('#custom-labels-picker', {
   labels: {
-    time: 'Select time',
+    clockTitle: 'Select time',
     ok: 'It is ok',
     cancel: 'Nope',
     am: 'AM',
     pm: 'PM',
-    mobileTime: 'Enter Time',
-    mobileHour: 'Hour',
-    mobileMinute: 'Minute',
+    keyboardTitle: 'Enter Time',
+    hour: 'Hour',
+    minute: 'Minute',
   },
 });
 customLabelsPicker.create();
@@ -113,12 +113,8 @@ if (emitterEventLog) {
     logEvent('select:minute', { minutes: data.minutes });
   });
 
-  eventEmitterPicker.on('select:am', () => {
-    logEvent('select:am');
-  });
-
-  eventEmitterPicker.on('select:pm', () => {
-    logEvent('select:pm');
+  eventEmitterPicker.on('select:period', (data) => {
+    logEvent('select:period', { type: data.type });
   });
 
   eventEmitterPicker.once('open', () => {
@@ -133,27 +129,26 @@ customThemePicker.create();
 
 const advancedPicker = new TimepickerUI('#advanced-picker', {
   clock: {
-    type: '12h',
+    type: 'auto',
     incrementHours: 1,
     incrementMinutes: 15,
-    currentTime: {
+    defaultTime: {
       time: new Date(),
       updateInput: false,
-      preventClockType: true,
     },
     disabledTime: {
-      interval: '22:00 - 06:00',
+      ranges: '22:00 - 06:00',
     },
   },
   ui: {
     theme: 'm3-green',
-    enableSwitchIcon: true,
+    viewSwitch: true,
     editable: true,
     cssClass: 'my-custom-picker',
   },
   behavior: {
     focusTrap: true,
-    focusInputAfterClose: true,
+    returnFocus: true,
     delayHandler: 500,
   },
 });
@@ -179,11 +174,8 @@ const newEventsAndCallbacksPicker = new TimepickerUI('#new-events-and-callbacks-
     onSelectMinute: (data) => {
       console.log('Minute mode selected v4!', data);
     },
-    onSelectAM: () => {
-      console.log('AM selected v4!');
-    },
-    onSelectPM: () => {
-      console.log('PM selected v4!');
+    onSelectPeriod: (data) => {
+      console.log(`${data.type} selected v4!`);
     },
     onError: (data) => {
       console.log('Error occurred v4!', data.error);
@@ -232,7 +224,7 @@ if (elementExists) {
   version3Example.create();
 }
 
-const destroyExample = new TimepickerUI('#destroy-example', {
+const destroyExample = new TimepickerUI('#destroy-example-input', {
   clock: { type: '24h' },
   ui: { theme: 'm3-green' },
   behavior: { focusTrap: false, delayHandler: 200 },

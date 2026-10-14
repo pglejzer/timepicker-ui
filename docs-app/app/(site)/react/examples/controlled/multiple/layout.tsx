@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "React Multiple Pickers Example",
   description:
-    "React multiple time pickers - manage several controlled timepicker-ui-react instances in one component. Zero-dependency, SSR-safe and fully typed, with JSX.",
+    "React multiple time pickers - manage several controlled timepicker-ui-react instances in one component. SSR-safe and fully typed, with JSX.",
   path: "/react/examples/controlled/multiple",
 });
 

@@ -44,22 +44,23 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Focus} title="Focus Input After Close">
+      <Section icon={Focus} title="Return Focus After Close">
         <p className="text-muted-foreground mb-4">
-          Return focus to input after closing modal:
+          Return focus to the input after closing the modal with{" "}
+          <code>behavior.returnFocus</code>:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   behavior: {
     focusTrap: true,
-    focusInputAfterClose: true
+    returnFocus: true
   }
 });
 picker.create();`}
           options={{
             behavior: {
               focusTrap: true,
-              focusInputAfterClose: true,
+              returnFocus: true,
             },
           }}
         />
@@ -73,7 +74,7 @@ picker.create();`}
           code={`const picker = new TimepickerUI(input, {
   behavior: {
     focusTrap: true,
-    focusInputAfterClose: true
+    returnFocus: true
   },
   ui: {
     backdrop: true,
@@ -84,7 +85,7 @@ picker.create();`}
           options={{
             behavior: {
               focusTrap: true,
-              focusInputAfterClose: true,
+              returnFocus: true,
             },
             ui: {
               backdrop: true,

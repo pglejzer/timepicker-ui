@@ -7,6 +7,8 @@ interface SectionProps {
   description?: ReactNode;
   /** Optional mono eyebrow above the title. */
   eyebrow?: string;
+  /** Optional anchor id for links into the section. */
+  id?: string;
   children: React.ReactNode;
 }
 
@@ -15,10 +17,11 @@ export function Section({
   title,
   description,
   eyebrow,
+  id,
   children,
 }: SectionProps) {
   return (
-    <section className="mb-12 scroll-mt-24">
+    <section id={id} className="mb-12 scroll-mt-24">
       <div className="mb-5">
         <div className="flex items-center gap-3">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/60 text-primary">

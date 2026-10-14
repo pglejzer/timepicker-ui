@@ -14,7 +14,7 @@ import {
 export const metadata = buildMetadata({
   title: "React Time Picker",
   description:
-    "React time picker - the official timepicker-ui-react wrapper. Zero-dependency, SSR-safe and fully typed for React, with analog clock, wheel modes and 12 themes.",
+    "React time picker - the official timepicker-ui-react wrapper. SSR-safe and fully typed for React, with analog clock, wheel modes and 12 themes.",
   path: "/react",
 });
 

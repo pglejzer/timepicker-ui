@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "React onConfirm Example",
   description:
-    "React time picker onConfirm - capture the confirmed time when the user clicks OK in timepicker-ui-react. Zero-dependency, SSR-safe and fully typed, with JSX.",
+    "React time picker onConfirm - capture the confirmed time when the user clicks OK in timepicker-ui-react. SSR-safe and fully typed, with JSX.",
   path: "/react/examples/callbacks/on-confirm",
 });
 

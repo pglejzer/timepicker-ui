@@ -9,7 +9,7 @@ const faqQuestions = [
   {
     question: "How do I configure the picker?",
     answer:
-      "Pass a grouped options object, for example { ui: { theme: 'dark' }, clock: { type: '24h' } }. Options are grouped under ui, clock, labels, behavior and callbacks.",
+      "Pass a grouped options object, for example { ui: { theme: 'dark' }, clock: { type: '24h' } }. Options are grouped under ui, clock, labels, behavior, callbacks, range, timezone and wheel.",
   },
   {
     question: "How do I use timepicker-ui in React, Vue or Angular?",

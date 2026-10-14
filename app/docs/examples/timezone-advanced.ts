@@ -6,7 +6,7 @@ const timezonePicker = new TimepickerUI('#timezone-picker', {
     enabled: true,
     label: 'Timezone',
   },
-  ui: { theme: 'dark', enableSwitchIcon: true },
+  ui: { theme: 'dark', viewSwitch: true },
   callbacks: {
     onTimezoneChange: (data) => {
       console.log('Timezone changed:', data.timezone);
@@ -21,11 +21,11 @@ timezonePicker.create();
 
 const worldTimezonePicker = new TimepickerUI('#timezone-world-picker', {
   clock: { type: '24h' },
-  ui: { theme: 'm3-green', enableSwitchIcon: true },
+  ui: { theme: 'm3-green', viewSwitch: true },
   timezone: {
     enabled: true,
     label: 'Select City',
-    whitelist: [
+    list: [
       'UTC',
       'America/New_York',
       'America/Los_Angeles',
@@ -108,11 +108,11 @@ const themes = [
 themes.forEach((theme) => {
   const picker = new TimepickerUI(`#tz-theme-${theme}`, {
     clock: { type: '24h' },
-    ui: { theme, enableSwitchIcon: true },
+    ui: { theme, viewSwitch: true },
     timezone: {
       enabled: true,
       label: 'Timezone',
-      whitelist: ['UTC', 'America/New_York', 'Europe/London', 'Europe/Warsaw', 'Asia/Tokyo'],
+      list: ['UTC', 'America/New_York', 'Europe/London', 'Europe/Warsaw', 'Asia/Tokyo'],
     },
   });
   picker.create();

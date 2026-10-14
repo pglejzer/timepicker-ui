@@ -4,17 +4,17 @@ const faqQuestions = [
   {
     question: "Is timepicker-ui accessible?",
     answer:
-      "Yes. The modal uses a dialog role with aria-modal, controls expose ARIA roles and labels, disabled times get aria-disabled, and time changes are announced through an aria-live region.",
+      "Yes. The modal uses a dialog role with aria-modal and controls expose ARIA roles and labels. Disabled wheel items get aria-disabled, and so do the OK and Clear buttons when they can't be used. On the clock face, disabled numbers are dimmed and skipped by the keyboard. Time changes are announced through an aria-live region.",
   },
   {
     question: "How do I operate the time picker with a keyboard?",
     answer:
-      "Open with Enter, move with Tab, and use the arrow keys to adjust the focused hour, minute or clock value. Home and End jump to the min or max, A or P toggles AM/PM, and Esc closes the picker.",
+      "Open with Enter and move with Tab. The arrow keys change the focused hour, minute or second field, or the clock face, one step at a time. Home and End jump to the first or last value, and PageUp and PageDown take bigger steps. AM and PM are buttons you press with Enter or Space. Esc closes the picker unless it is inline.",
   },
   {
     question: "Does timepicker-ui work with screen readers?",
     answer:
-      "Yes. It is tested with NVDA, JAWS and VoiceOver, announces hour, minute and AM/PM changes through a polite live region, and lets you rename every control with the labels option.",
+      "Yes. It is built for screen readers such as NVDA, JAWS and VoiceOver, announces hour, minute and AM/PM changes through a polite live region, and lets you rename every control with the labels option.",
   },
 ];
 

@@ -80,15 +80,14 @@ function App() {
         </p>
         <CodeBlock
           code={`interface ConfirmEventData {
-  hour: string;        // e.g., "3", "15"
-  minutes: string;     // e.g., "30", "00"
-  type?: "AM" | "PM";  // Only in 12h mode
-  degreesHours: number;
-  degreesMinutes: number;
+  hour?: string;         // e.g., "03", "15"
+  minutes?: string;      // e.g., "30", "00"
+  type?: string;         // "AM" or "PM", only in 12h mode
+  autoCommit?: boolean;  // true when wheel.commitOnScroll confirmed it
 }
 
 onConfirm={(data) => {
-  console.log(data.hour);     // "3"
+  console.log(data.hour);     // "03"
   console.log(data.minutes);  // "30"
   console.log(data.type);     // "PM"
 }}`}

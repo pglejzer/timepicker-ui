@@ -101,9 +101,18 @@ function App() {
       <Section icon={Type} title="Available Labels">
         <div className="rounded-lg border border-border bg-card p-6">
           <CodeBlock
-            code={`interface LabelsOptions {
-  ok?: string;        // Default: "OK"
-  cancel?: string;    // Default: "Cancel"
+            code={`// Visible text labels (options.labels)
+interface LabelsOptions {
+  am?: string;            // Default: "AM"
+  pm?: string;            // Default: "PM"
+  ok?: string;            // Default: "OK"
+  cancel?: string;        // Default: "Cancel"
+  clear?: string;         // Default: "Clear"
+  clockTitle?: string;    // Default: "Select time"
+  keyboardTitle?: string; // Default: "Enter Time"
+  hour?: string;          // Default: "Hour"
+  minute?: string;        // Default: "Minute"
+  second?: string;        // Default: "Second"
 }`}
             language="typescript"
           />

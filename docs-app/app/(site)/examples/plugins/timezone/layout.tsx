@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "Timezone Plugin Example",
   description:
-    "Timezone picker example - a searchable timezone selector via the tree-shakeable timezone plugin in timepicker-ui. Zero-dependency and SSR-safe.",
+    "Timezone picker example - a timezone selector dropdown via the tree-shakeable timezone plugin in timepicker-ui. Zero-dependency and SSR-safe.",
   path: "/examples/plugins/timezone",
 });
 

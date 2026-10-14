@@ -41,9 +41,9 @@ function MobileExample() {
   return (
     <TimepickerExample
       code={`const picker = new TimepickerUI(input, {
-  ui: { mobile: true },
+  ui: { initialView: 'keyboard', viewSwitch: true },
 });`}
-      options={{ ui: { mobile: true, enableSwitchIcon: true } }}
+      options={{ ui: { initialView: "keyboard", viewSwitch: true } }}
       inputPlaceholder="Select time"
       showCode={false}
     />
@@ -89,7 +89,7 @@ const features = [
     icon: Clock,
     title: "12h / 24h formats",
     description:
-      "Switch clock format at runtime, with AM/PM or 24-hour output.",
+      "AM/PM or 24-hour output, with optional seconds. Switch at runtime.",
   },
   {
     icon: Disc3,
@@ -121,7 +121,8 @@ const features = [
   {
     icon: Accessibility,
     title: "Keyboard & ARIA",
-    description: "Focus trap, arrow-key selection, screen-reader labels.",
+    description:
+      "Arrow keys on the fields and the clock face, focus trap, screen-reader labels.",
   },
   {
     icon: Globe,
@@ -139,7 +140,7 @@ const advanced = [
   {
     icon: Lock,
     title: "Disabled time",
-    description: "Block specific hours, minutes, or intervals.",
+    description: "Block specific hours, minutes, or time ranges.",
     href: "/docs/features/disabled-time",
   },
   {
@@ -215,6 +216,16 @@ export default function Home() {
         <div className="container mx-auto px-4 py-20 sm:py-28 md:px-6">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
+              <Link
+                href="/docs/whats-new"
+                className="reveal mb-6 inline-flex max-w-full items-center gap-2 rounded-md border border-border px-3 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <span className="text-primary">4.5.0</span>
+                <span>
+                  Optional seconds. The clock face now works with the keyboard.
+                </span>
+                <ArrowRight className="h-3 w-3 shrink-0" />
+              </Link>
               <p className="eyebrow reveal">
                 Zero-dependency · Framework-agnostic · SSR-safe
               </p>
@@ -285,7 +296,7 @@ export default function Home() {
                     href="/docs/whats-new"
                     className="font-mono text-xs text-primary"
                   >
-                    v4.4.0
+                    v4.5.0
                   </Link>
                 </div>
               </div>
@@ -502,4 +513,3 @@ picker.create();`}
     </main>
   );
 }
-

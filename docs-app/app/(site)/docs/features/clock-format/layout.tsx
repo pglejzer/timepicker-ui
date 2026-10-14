@@ -14,7 +14,7 @@ const faqQuestions = [
   {
     question: "Can I change the clock format at runtime?",
     answer:
-      "Yes. Call picker.update({ options: { clock: { type: '24h' } }, create: true }) to switch format after the picker is created.",
+      "Yes. Call picker.setOptions({ clock: { type: '24h' } }) to switch format after the picker is created. A valid time in the input is rewritten in the new format.",
   },
 ];
 

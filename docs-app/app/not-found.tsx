@@ -88,7 +88,7 @@ export default function NotFound() {
           className="reveal mx-auto mt-3 max-w-sm text-sm text-muted-foreground sm:text-base"
           style={{ animationDelay: "280ms" }}
         >
-          The page you&apos;re after is out of time. The clock kept ticking; the
+          The page you&apos;re after is out of time. The clock kept ticking, but the
           URL did not.
         </p>
 
@@ -105,7 +105,7 @@ export default function NotFound() {
         >
           <Link
             href="/"
-            className="inline-flex h-11 w-full items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto"
+            className="inline-flex h-11 w-full items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto"
           >
             Back to home
             <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
@@ -123,7 +123,7 @@ export default function NotFound() {
             <Link
               key={l.href}
               href={l.href}
-              className="group flex items-center gap-3 bg-card p-4 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring sm:flex-col sm:items-start"
+              className="group flex items-center gap-3 bg-card p-4 text-left transition-colors hover:bg-muted/40 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring sm:flex-col sm:items-start"
             >
               <l.icon
                 className="h-5 w-5 shrink-0 text-foreground transition-colors group-hover:text-primary"

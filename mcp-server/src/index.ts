@@ -26,6 +26,7 @@ import {
   IO_CONTRACT,
   MIGRATION_V3_TO_V4,
   MIGRATION_V43_TO_V44,
+  MIGRATION_V44_TO_V45,
   TROUBLESHOOTING,
 } from './content.js';
 import { buildSnippet, modeRequiresWheel } from './snippet.js';
@@ -132,7 +133,7 @@ server.registerTool(
     description: 'Returns the full detail (type, default, description, example) for one option in a group.',
     inputSchema: {
       group: z.enum(OPTION_GROUP_NAMES as [string, ...string[]]).describe('Option group.'),
-      name: z.string().describe('Option name within the group, e.g. "smoothHourSnap".'),
+      name: z.string().describe('Option name within the group, e.g. "showSeconds".'),
     },
   },
   async (args) => {
@@ -180,13 +181,14 @@ server.registerTool(
   {
     title: 'Migration guide',
     description:
-      'Returns migration guidance between major versions. "v3->v4" gives the full flat->grouped field mapping; "v4.3->v4.4" lists the non-breaking additions.',
+      'Returns migration guidance between versions. "v3->v4" gives the full flat->grouped field mapping; "v4.3->v4.4" and "v4.4->v4.5" list the non-breaking changes.',
     inputSchema: {
-      path: z.enum(['v3->v4', 'v4.3->v4.4']).default('v3->v4').describe('Which migration to return.'),
+      path: z.enum(['v3->v4', 'v4.3->v4.4', 'v4.4->v4.5']).default('v3->v4').describe('Which migration to return.'),
     },
   },
   async (args) => {
     if (args.path === 'v4.3->v4.4') return text({ path: 'v4.3->v4.4', changes: MIGRATION_V43_TO_V44 });
+    if (args.path === 'v4.4->v4.5') return text({ path: 'v4.4->v4.5', changes: MIGRATION_V44_TO_V45 });
     return text({ path: 'v3->v4', ...MIGRATION_V3_TO_V4 });
   },
 );
@@ -259,9 +261,9 @@ server.registerTool(
   {
     title: 'Validate a time string',
     description:
-      'Validates a time string against a 12h or 24h clock and returns the parsed parts. Accepts "HH:MM" and "h:MM AM/PM".',
+      'Validates a time string against a 12h or 24h clock and returns the parsed parts. Accepts "HH:MM", "HH:MM:SS", "h:MM AM/PM" and "h:MM:SS AM/PM".',
     inputSchema: {
-      time: z.string().describe('The time string, e.g. "14:30" or "2:30 PM".'),
+      time: z.string().describe('The time string, e.g. "14:30", "14:30:15" or "2:30:15 PM".'),
       clockType: z.enum(['12h', '24h']).default('24h'),
     },
   },
@@ -273,14 +275,19 @@ server.registerTool(
   {
     title: 'Validate a disabledTime config',
     description:
-      'Validates a clock.disabledTime config: hours/minutes lists and interval strings ("10:00 AM - 12:00 PM"). Returns per-issue feedback.',
+      'Validates a clock.disabledTime config: hours/minutes/seconds lists and range strings in ranges (formerly interval) ("10:00 AM - 12:00 PM", "10:00:30 - 10:05"). Returns per-issue feedback.',
     inputSchema: {
       hours: z.array(z.union([z.string(), z.number()])).optional().describe('Disabled hours.'),
       minutes: z.array(z.union([z.string(), z.number()])).optional().describe('Disabled minutes.'),
+      seconds: z.array(z.union([z.string(), z.number()])).optional().describe('Disabled seconds (used with clock.showSeconds).'),
+      ranges: z
+        .union([z.string(), z.array(z.string())])
+        .optional()
+        .describe('Range string or array, e.g. "10:00 AM - 12:00 PM".'),
       interval: z
         .union([z.string(), z.array(z.string())])
         .optional()
-        .describe('Interval string or array, e.g. "10:00 AM - 12:00 PM".'),
+        .describe('Old name of ranges; ranges wins when both are set.'),
       clockType: z.enum(['12h', '24h']).default('24h'),
     },
   },
@@ -290,6 +297,8 @@ server.registerTool(
         {
           hours: args.hours as (string | number)[] | undefined,
           minutes: args.minutes as (string | number)[] | undefined,
+          seconds: args.seconds as (string | number)[] | undefined,
+          ranges: args.ranges as string | string[] | undefined,
           interval: args.interval as string | string[] | undefined,
         },
         args.clockType as '12h' | '24h',

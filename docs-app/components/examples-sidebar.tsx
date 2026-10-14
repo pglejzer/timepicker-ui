@@ -59,10 +59,20 @@ const navigation: NavigationSection[] = [
       { title: "Inline Mode", href: "/examples/features/inline-mode" },
       { title: "Mobile Version", href: "/examples/features/mobile" },
       { title: "Editable Input", href: "/examples/features/editable" },
+      {
+        title: "Open From a Button",
+        href: "/examples/features/open-from-button",
+        badge: "new",
+      },
       { title: "Disabled Time", href: "/examples/features/disabled-time" },
       { title: "Custom Labels", href: "/examples/features/custom-labels" },
       { title: "Current Time", href: "/examples/features/current-time" },
       { title: "Increment Steps", href: "/examples/features/increment" },
+      {
+        title: "Seconds",
+        href: "/examples/features/seconds",
+        badge: "new",
+      },
       { title: "Focus Trap", href: "/examples/features/focus-trap" },
       { title: "Switch Icon", href: "/examples/features/switch-icon" },
       {

@@ -11,7 +11,9 @@ export default function WheelPluginPage() {
         </h1>
         <p className="text-muted-foreground">
           Scroll-spinner interface replacing the analog clock face. Supports
-          wheel (with header) and compact-wheel (headerless popover) modes.
+          wheel (with header) and compact-wheel (headerless) modes.
+          Compact-wheel opens as a popover when <code>wheel.placement</code>{" "}
+          is set, otherwise as a modal.
         </p>
       </div>
 
@@ -108,7 +110,7 @@ picker.create();`}
               wheel: { placement: "bottom" },
             }}
             plugins={["wheel"]}
-            inputPlaceholder="Always opens below"
+            inputPlaceholder="Opens below"
           />
         </section>
 
@@ -132,7 +134,7 @@ picker.create();`}
               wheel: { placement: "top" },
             }}
             plugins={["wheel"]}
-            inputPlaceholder="Always opens above"
+            inputPlaceholder="Opens above"
           />
         </section>
 
@@ -185,8 +187,8 @@ picker.create();`}
             Auto-Commit on Scroll
           </h2>
           <p className="text-muted-foreground mb-4">
-            Automatically confirms and closes when scrolling stops - no OK
-            button needed.
+            Writes the time to the input and emits confirm when scrolling
+            stops - no OK button needed. The popover stays open.
           </p>
           <TimepickerExample
             code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';

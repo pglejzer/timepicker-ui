@@ -6,7 +6,7 @@ import { Download, ArrowRight, Code2, AlertCircle } from "lucide-react";
 export const metadata = buildMetadata({
   title: "React Installation",
   description:
-    "Install timepicker-ui-react - the official React time picker wrapper. Zero-dependency, SSR-safe and fully typed, works with Next.js, Remix and Vite.",
+    "Install timepicker-ui-react - the official React time picker wrapper. SSR-safe and fully typed, works with Next.js, Remix and Vite.",
   path: "/react/installation",
 });
 
@@ -70,24 +70,16 @@ export default function InstallationPage() {
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Requirements</h2>
         <div className="rounded-lg border border-border bg-card p-6">
-          <ul className="space-y-2 text-sm">
-            <li className="flex items-start gap-2">
-              <span className="text-primary">•</span>
-              <span>
-                <strong>React:</strong> 17.0.0 or higher
-              </span>
+          <ul className="list-disc pl-5 marker:text-primary space-y-2 text-sm">
+            <li>
+              <strong>React:</strong> 17.0.0 or higher
             </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary">•</span>
-              <span>
-                <strong>React DOM:</strong> 17.0.0 or higher
-              </span>
+            <li>
+              <strong>React DOM:</strong> 17.0.0 or higher
             </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary">•</span>
-              <span>
-                <strong>timepicker-ui:</strong> Automatically installed (^4.0.3)
-              </span>
+            <li>
+              <strong>timepicker-ui:</strong> installed with{" "}
+              <code>timepicker-ui-react</code> as a dependency
             </li>
           </ul>
         </div>

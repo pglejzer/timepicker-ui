@@ -275,6 +275,21 @@
     "commonlyThemed": false
   },
   {
+    "name": "--tp-font-size-seconds-12h",
+    "value": "36px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-font-size-seconds-24h",
+    "value": "44px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-range-tab-value-font-size-seconds",
+    "value": "14px",
+    "commonlyThemed": false
+  },
+  {
     "name": "--tp-radius-sm",
     "value": "7px",
     "commonlyThemed": true
@@ -298,11 +313,6 @@
     "name": "--tp-radius-full",
     "value": "100%",
     "commonlyThemed": false
-  },
-  {
-    "name": "--tp-btn-radius",
-    "value": "var(--tp-radius-lg)",
-    "commonlyThemed": true
   },
   {
     "name": "--tp-size-clock",
@@ -332,6 +342,26 @@
   {
     "name": "--tp-size-wrapper-mobile-height",
     "value": "258px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-mobile-landscape-width",
+    "value": "328px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-mobile-landscape-height",
+    "value": "258px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-mobile-landscape-height-range",
+    "value": "287px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-mobile-landscape-height-timezone",
+    "value": "326px",
     "commonlyThemed": false
   },
   {
@@ -396,7 +426,7 @@
   },
   {
     "name": "--tp-size-am-pm-width",
-    "value": "54px",
+    "value": "52px",
     "commonlyThemed": false
   },
   {
@@ -422,6 +452,36 @@
   {
     "name": "--tp-size-colon-height",
     "value": "48px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-input-seconds-12h",
+    "value": "64px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-input-seconds-12h-narrow",
+    "value": "58px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-colon-seconds-12h",
+    "value": "12px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-input-seconds-24h",
+    "value": "80px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-input-seconds-24h-narrow",
+    "value": "74px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-size-colon-seconds-24h",
+    "value": "20px",
     "commonlyThemed": false
   },
   {
@@ -495,6 +555,16 @@
     "commonlyThemed": false
   },
   {
+    "name": "--tp-easing-decelerate",
+    "value": "cubic-bezier(0, 0, 0.2, 1)",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-easing-accelerate",
+    "value": "cubic-bezier(0.4, 0, 1, 1)",
+    "commonlyThemed": false
+  },
+  {
     "name": "--tp-easing-ease",
     "value": "ease",
     "commonlyThemed": false
@@ -550,6 +620,26 @@
     "commonlyThemed": false
   },
   {
+    "name": "--tp-state-hover-opacity",
+    "value": "0.08",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-state-focus-opacity",
+    "value": "0.1",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-state-pressed-opacity",
+    "value": "0.1",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-ripple-opacity",
+    "value": "1",
+    "commonlyThemed": false
+  },
+  {
     "name": "--tp-shadow-inline",
     "value": "0 2px 8px rgba(0, 0, 0, 0.15)",
     "commonlyThemed": false
@@ -557,16 +647,6 @@
   {
     "name": "--tp-shadow-focus",
     "value": "0 0 0 4px rgba(98, 0, 238, 0.2)",
-    "commonlyThemed": false
-  },
-  {
-    "name": "--tp-focus-ring-halo",
-    "value": "rgba(0, 0, 0, 0.55)",
-    "commonlyThemed": true
-  },
-  {
-    "name": "--tp-shadow-focus-ring",
-    "value": "0 0 0 var(--tp-outline-offset) var(--tp-bg),\r\n    0 0 0 calc(var(--tp-outline-offset) + var(--tp-outline-width-thick) + 1px) var(--tp-focus-ring-halo)",
     "commonlyThemed": false
   },
   {
@@ -605,6 +685,16 @@
     "commonlyThemed": false
   },
   {
+    "name": "--tp-wheel-column-width-seconds",
+    "value": "64px",
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-wheel-separator-width-seconds",
+    "value": "16px",
+    "commonlyThemed": false
+  },
+  {
     "name": "--tp-wheel-landscape-footer-offset",
     "value": "72px",
     "commonlyThemed": false
@@ -627,11 +717,6 @@
   {
     "name": "--tp-wheel-highlight-border",
     "value": "var(--tp-outline-variant, rgba(0, 0, 0, 0.12))",
-    "commonlyThemed": true
-  },
-  {
-    "name": "--tp-wheel-highlight-radius",
-    "value": "var(--tp-radius-md)",
     "commonlyThemed": true
   },
   {
@@ -665,6 +750,11 @@
     "commonlyThemed": false
   },
   {
+    "name": "--tp-popover-edge-margin",
+    "value": "4px",
+    "commonlyThemed": false
+  },
+  {
     "name": "--tp-popover-min-width",
     "value": "260px",
     "commonlyThemed": false
@@ -677,11 +767,6 @@
   {
     "name": "--tp-popover-shadow",
     "value": "0 4px 24px rgba(0, 0, 0, 0.15)",
-    "commonlyThemed": false
-  },
-  {
-    "name": "--tp-popover-radius",
-    "value": "var(--tp-border-radius)",
     "commonlyThemed": false
   }
 ]

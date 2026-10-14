@@ -10,7 +10,7 @@ export const metadata: Metadata = buildMetadata({
   title: "React Time Picker Examples",
   section: true,
   description:
-    "React time picker examples for timepicker-ui-react - controlled value, callbacks, themes, forms and features. Zero-dependency, SSR-safe and fully typed.",
+    "React time picker examples for timepicker-ui-react - controlled value, callbacks, themes, forms and features. SSR-safe and fully typed.",
   path: "/react/examples",
 });
 

@@ -5,7 +5,7 @@ import { JsonLdBreadcrumb } from "@/components/json-ld";
 export const metadata: Metadata = buildMetadata({
   title: "React 24-Hour Format Example",
   description:
-    "React time picker in 24-hour format - configure timepicker-ui-react for 24h clock. Zero-dependency, SSR-safe and fully typed for React, with copy-paste JSX.",
+    "React time picker in 24-hour format - configure timepicker-ui-react for 24h clock. SSR-safe and fully typed for React, with copy-paste JSX.",
   path: "/react/examples/basic/24h-format",
 });
 

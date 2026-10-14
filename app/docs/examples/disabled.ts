@@ -11,18 +11,18 @@ const disabledMinutesPicker = new TimepickerUI('#disabled-minutes', {
 disabledMinutesPicker.create();
 
 const disabledIntervalPicker = new TimepickerUI('#disabled-interval', {
-  clock: { type: '24h', disabledTime: { interval: '12:00 - 18:00' } },
+  clock: { type: '24h', disabledTime: { ranges: '12:00 - 18:00' } },
 });
 disabledIntervalPicker.create();
 
 const editablePicker = new TimepickerUI('#editable-picker', {
-  ui: { editable: true, enableSwitchIcon: true },
-  behavior: { focusInputAfterClose: true },
+  ui: { editable: true, viewSwitch: true },
+  behavior: { returnFocus: true },
 });
 editablePicker.create();
 
 const smoothHourPicker = new TimepickerUI('#smooth-hour-snap-picker', {
-  clock: { smoothHourSnap: true },
+  clock: { discreteHourJump: false },
 });
 smoothHourPicker.create();
 
@@ -30,7 +30,7 @@ const multipleIntervalsPicker = new TimepickerUI('#disabled-intervals-12h', {
   clock: {
     type: '12h',
     disabledTime: {
-      interval: ['12:00 AM - 4:00 AM', '5:30 PM - 8:00 PM'],
+      ranges: ['12:00 AM - 4:00 AM', '5:30 PM - 8:00 PM'],
     },
   },
 });
@@ -40,7 +40,7 @@ const multipleIntervalsPicker24h = new TimepickerUI('#disabled-intervals-24h', {
   clock: {
     type: '24h',
     disabledTime: {
-      interval: ['04:33 - 12:12', '16:34 - 20:22', '21:37 - 23:23'],
+      ranges: ['04:33 - 12:12', '16:34 - 20:22', '21:37 - 23:23'],
     },
   },
 });
@@ -55,81 +55,63 @@ const dynamicUpdatePicker = new TimepickerUI('#dynamic-update-picker', {
 dynamicUpdatePicker.create();
 
 document.getElementById('update-morning-shift')?.addEventListener('click', () => {
-  dynamicUpdatePicker.update({
-    options: {
-      clock: {
-        type: '12h',
-        disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
-      },
+  dynamicUpdatePicker.setOptions({
+    clock: {
+      type: '12h',
+      disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
     },
-    create: true,
   });
 });
 
 document.getElementById('update-evening-shift')?.addEventListener('click', () => {
-  dynamicUpdatePicker.update({
-    options: {
-      ui: { theme: 'm3-green' },
-      clock: {
-        type: '24h',
-        disabledTime: { hours: [18, 19, 20, 21, 22, 23] },
-      },
+  dynamicUpdatePicker.setOptions({
+    ui: { theme: 'm3-green' },
+    clock: {
+      type: '24h',
+      disabledTime: { hours: [18, 19, 20, 21, 22, 23] },
     },
-    create: true,
   });
 });
 
 document.getElementById('clear-restrictions')?.addEventListener('click', () => {
-  dynamicUpdatePicker.update({
-    options: {
-      clock: {
-        disabledTime: { hours: [] },
-      },
+  dynamicUpdatePicker.setOptions({
+    clock: {
+      disabledTime: { hours: [] },
     },
-    create: true,
   });
 });
 
 const dynamicIntervalPicker = new TimepickerUI('#dynamic-interval-picker', {
   clock: {
     type: '24h',
-    disabledTime: { interval: '09:00 - 12:00' },
+    disabledTime: { ranges: '09:00 - 12:00' },
   },
 });
 dynamicIntervalPicker.create();
 
 document.getElementById('update-single-interval')?.addEventListener('click', () => {
-  dynamicIntervalPicker.update({
-    options: {
-      clock: {
-        disabledTime: { interval: '12:00 - 13:00' },
-      },
+  dynamicIntervalPicker.setOptions({
+    clock: {
+      disabledTime: { ranges: '12:00 - 13:00' },
     },
-    create: true,
   });
 });
 
 document.getElementById('update-multiple-intervals')?.addEventListener('click', () => {
-  dynamicIntervalPicker.update({
-    options: {
-      clock: {
-        disabledTime: {
-          interval: ['00:00 - 08:00', '12:00 - 13:00', '18:00 - 23:59'],
-        },
+  dynamicIntervalPicker.setOptions({
+    clock: {
+      disabledTime: {
+        ranges: ['00:00 - 08:00', '12:00 - 13:00', '18:00 - 23:59'],
       },
     },
-    create: true,
   });
 });
 
 document.getElementById('clear-intervals')?.addEventListener('click', () => {
-  dynamicIntervalPicker.update({
-    options: {
-      clock: {
-        disabledTime: {},
-      },
+  dynamicIntervalPicker.setOptions({
+    clock: {
+      disabledTime: {},
     },
-    create: true,
   });
 });
 
