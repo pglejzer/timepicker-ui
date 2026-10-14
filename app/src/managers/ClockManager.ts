@@ -17,13 +17,10 @@ export default class ClockManager {
     this.systemInitializer = new ClockSystemInitializer(core, emitter);
     this.styleHandler = new ClockStyleHandler(core);
 
-    const clockType = (core.options.clock.type || '12h') as '12h' | '24h';
-
     this.timeHandler = new ClockTimeHandler(
       () => this.systemInitializer.getClockSystem(),
-      this.styleHandler,
       () => this.systemInitializer.getAmPmValue(),
-      clockType,
+      () => (core.options.clock.type || '12h') as '12h' | '24h',
     );
 
     this.eventHandler = new ClockEventHandler(
@@ -33,6 +30,7 @@ export default class ClockManager {
       (value) => this.timeHandler.setMinutesToClock(value),
       () => this.timeHandler.updateAmPm(),
       () => this.systemInitializer.convertDisabledTime(),
+      (value) => this.timeHandler.setSecondsToClock(value),
     );
 
     this.eventHandler.setup();
@@ -46,54 +44,22 @@ export default class ClockManager {
     this.systemInitializer.destroy();
   }
 
-  removeCircleClockClasses24h(): void {
-    this.styleHandler.removeCircleClockClasses24h();
-  }
-
-  setCircleClockClasses24h(): void {
-    this.styleHandler.setCircleClockClasses24h();
-  }
-
   setOnStartCSSClassesIfClockType24h(): void {
     this.styleHandler.setOnStartCSSClassesIfClockType24h();
   }
-
-  setBgColorToCircleWithMinutesTips = (): void => {
-    this.styleHandler.setBgColorToCircleWithMinutesTips();
-  };
-
-  removeBgColorToCirleWithMinutesTips = (): void => {
-    this.styleHandler.removeBgColorToCirleWithMinutesTips();
-  };
 
   setClassActiveToHourOnOpen = (): void => {
     this.styleHandler.setClassActiveToHourOnOpen();
   };
 
-  setMinutesToClock = (value: string | null): void => {
-    this.timeHandler.setMinutesToClock(value);
-  };
+  syncClockValue(hour: string, minutes: string, type?: string, seconds?: string): boolean {
+    const clockSystem = this.systemInitializer.getClockSystem();
+    if (!clockSystem) return false;
 
-  setHoursToClock = (value: string | null): void => {
-    this.timeHandler.setHoursToClock(value);
-  };
-
-  setTransformToCircleWithSwitchesHour = (val: string | null): void => {
-    this.timeHandler.setTransformToCircleWithSwitchesHour(val);
-  };
-
-  setTransformToCircleWithSwitchesMinutes = (val: string | null): void => {
-    this.timeHandler.setTransformToCircleWithSwitchesMinutes(val);
-  };
-
-  updateAmPm = (): void => {
-    this.timeHandler.updateAmPm();
-  };
-
-  toggleClassActiveToValueTips = (value: string | number | null): void => {
-    const hasClockSystem = this.systemInitializer.getClockSystem() !== null;
-    this.styleHandler.toggleClassActiveToValueTips(hasClockSystem, value);
-  };
+    const amPm = type === 'AM' || type === 'PM' ? type : '';
+    clockSystem.syncValue({ hour, minute: minutes, second: seconds, amPm });
+    return true;
+  }
 
   destroy(): void {
     this.destroyClockSystem();
