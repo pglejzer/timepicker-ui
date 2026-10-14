@@ -1,17 +1,24 @@
-const TP_PADDING_COUNT = 2;
+import { pad } from '../time/parse';
+import { isHourOnIncrement } from '../time/rules';
+import { escapeHtml } from './escape';
 
-const pad = (value: number): string => String(value).padStart(2, '0');
+const TP_PADDING_COUNT = 2;
 
 const buildPadding = (): string =>
   Array.from({ length: TP_PADDING_COUNT })
     .map(() => '<div class="tp-ui-wheel-padding"></div>')
     .join('');
 
-const buildItems = (values: ReadonlyArray<string>, labelPrefix: string, columnId: string): string =>
+const buildItems = (
+  values: ReadonlyArray<string>,
+  texts: ReadonlyArray<string>,
+  labelPrefix: string,
+  columnId: string,
+): string =>
   values
     .map(
-      (v) =>
-        `<div class="tp-ui-wheel-item" role="option" id="${columnId}-${v}" data-value="${v}" aria-label="${labelPrefix} ${v}" aria-selected="false">${v}</div>`,
+      (v, index) =>
+        `<div class="tp-ui-wheel-item" role="option" id="${columnId}-${v}" data-value="${v}" aria-label="${labelPrefix} ${texts[index]}" aria-selected="false">${texts[index]}</div>`,
     )
     .join('');
 
@@ -21,8 +28,9 @@ const buildColumn = (
   values: ReadonlyArray<string>,
   labelPrefix: string,
   columnId: string,
+  texts: ReadonlyArray<string> = values,
 ): string =>
-  `<div class="tp-ui-wheel-column-wrapper at-start"><div class="tp-ui-wheel-column ${className}" role="listbox" aria-label="${ariaLabel}" aria-activedescendant="" tabindex="0">${buildPadding()}${buildItems(values, labelPrefix, columnId)}${buildPadding()}</div></div>`;
+  `<div class="tp-ui-wheel-column-wrapper at-start"><div class="tp-ui-wheel-column ${className}" role="listbox" aria-label="${ariaLabel}" aria-activedescendant="" tabindex="0">${buildPadding()}${buildItems(values, texts, labelPrefix, columnId)}${buildPadding()}</div></div>`;
 
 const generateHours12 = (): ReadonlyArray<string> => Array.from({ length: 12 }, (_, i) => pad(i + 1));
 
@@ -36,7 +44,10 @@ const AMPM_VALUES: ReadonlyArray<string> = ['AM', 'PM'];
 export interface WheelTemplateLabels {
   hourLabel?: string;
   minuteLabel?: string;
+  second?: string;
   periodLabel?: string;
+  am?: string;
+  pm?: string;
 }
 
 export const getWheelTemplate = (
@@ -45,33 +56,53 @@ export const getWheelTemplate = (
   includeAmPmColumn: boolean = false,
   instanceId: string = 'tp',
   labels: WheelTemplateLabels = {},
+  seconds: { show: boolean; increment: number } = { show: false, increment: 1 },
+  incrementHours: number = 1,
 ): string => {
-  const hourLabel = labels.hourLabel ?? 'Hour';
-  const minuteLabel = labels.minuteLabel ?? 'Minute';
-  const periodLabel = labels.periodLabel ?? 'Period';
+  const hourLabel = escapeHtml(labels.hourLabel);
+  const minuteLabel = escapeHtml(labels.minuteLabel);
+  const secondLabel = escapeHtml(labels.second);
+  const periodLabel = escapeHtml(labels.periodLabel);
+  const id = escapeHtml(instanceId);
 
-  const hours = clockType === '12h' ? generateHours12() : generateHours24();
+  const hours = (clockType === '12h' ? generateHours12() : generateHours24()).filter((hour) =>
+    isHourOnIncrement(Number(hour), incrementHours || 1),
+  );
 
   const minutes = generateMinutes(incrementMinutes);
 
-  const hoursColumn = buildColumn('tp-ui-wheel-hours', hourLabel, hours, hourLabel, `${instanceId}-wh`);
+  const hoursColumn = buildColumn('tp-ui-wheel-hours', hourLabel, hours, hourLabel, `${id}-wh`);
 
   const separator = '<div class="tp-ui-wheel-separator" aria-hidden="true">:</div>';
 
-  const minutesColumn = buildColumn(
-    'tp-ui-wheel-minutes',
-    minuteLabel,
-    minutes,
-    minuteLabel,
-    `${instanceId}-wm`,
-  );
+  const minutesColumn = buildColumn('tp-ui-wheel-minutes', minuteLabel, minutes, minuteLabel, `${id}-wm`);
+
+  const secondsColumn = seconds.show
+    ? separator +
+      buildColumn(
+        'tp-ui-wheel-seconds',
+        secondLabel,
+        generateMinutes(seconds.increment),
+        secondLabel,
+        `${id}-ws`,
+      )
+    : '';
+
+  const periodTexts = [escapeHtml(labels.am), escapeHtml(labels.pm)];
 
   const ampmColumn =
     includeAmPmColumn && clockType === '12h'
-      ? buildColumn('tp-ui-wheel-ampm', periodLabel, AMPM_VALUES, periodLabel, `${instanceId}-wp`)
+      ? buildColumn(
+          'tp-ui-wheel-ampm',
+          periodLabel,
+          AMPM_VALUES,
+          periodLabel,
+          `${id}-wp`,
+          periodTexts,
+        )
       : '';
 
   const highlight = '<div class="tp-ui-wheel-highlight" aria-hidden="true"></div>';
 
-  return `<div class="tp-ui-wheel-container">${hoursColumn}${separator}${minutesColumn}${ampmColumn}${highlight}</div>`;
+  return `<div class="tp-ui-wheel-container">${hoursColumn}${separator}${minutesColumn}${secondsColumn}${ampmColumn}${highlight}</div>`;
 };

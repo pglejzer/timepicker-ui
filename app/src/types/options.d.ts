@@ -13,6 +13,7 @@ import type {
   UpdateEventData,
   SelectHourEventData,
   SelectMinuteEventData,
+  SelectSecondEventData,
   SelectAMEventData,
   SelectPMEventData,
   ErrorEventData,
@@ -21,6 +22,12 @@ import type {
   RangeSwitchEventData,
   RangeValidationEventData,
   ClearEventData,
+  ShowEventData,
+  SwitchViewEventData,
+  SelectPeriodEventData,
+  SwitchFaceEventData,
+  WheelScrollStartEventData,
+  WheelScrollEndEventData,
 } from './types';
 
 /**
@@ -28,13 +35,13 @@ import type {
  */
 export interface ClockOptions {
   /**
-   * @description Set type of clock: `12h` or `24h`
+   * @description Clock format. `auto` picks 12h or 24h from the browser locale when the picker is created or its options are set.
    * @default "12h"
    */
-  type?: '12h' | '24h';
+  type?: '12h' | '24h' | 'auto';
 
   /**
-   * @description Set increment for hours (1, 2, 3, etc.)
+   * @description Step between selectable hours on the clock, the wheel and the hour field's arrow keys. Use a divisor of 12: 1, 2, 3, 4 or 6.
    * @default 1
    */
   incrementHours?: number;
@@ -52,26 +59,82 @@ export interface ClockOptions {
   autoSwitchToMinutes?: boolean;
 
   /**
-   * @description Enable smooth hour snapping with animation
-   * In v5.0.0, this will become default and option will be renamed to discreteHourJump (inverted)
+   * @description Show a seconds field, wheel column and clock face (HH:MM:SS)
+   * @default false
+   */
+  showSeconds?: boolean;
+
+  /**
+   * @description Set increment for seconds: 1, 5, 10, 15, 20 or 30
+   * @default 1
+   */
+  incrementSeconds?: 1 | 5 | 10 | 15 | 20 | 30;
+
+  /**
+   * @description Automatically switch from minutes to seconds after a minute is picked on the clock.
+   * Only used with `showSeconds`.
    * @default true
+   */
+  autoSwitchToSeconds?: boolean;
+
+  /**
+   * @description Enable smooth hour snapping with animation
+   * @default true
+   * @deprecated Use `discreteHourJump`. Removed in 5.0.
    */
   smoothHourSnap?: boolean;
 
   /**
-   * @description Disable specific hours/minutes or time intervals
+   * @description Move the hour hand from hour to hour while dragging instead of following the pointer.
+   * @default false
+   */
+  discreteHourJump?: boolean;
+
+  /**
+   * @description Disable specific hours/minutes/seconds or time ranges
+   * @remarks Arrow, Page Up/Down, Home and End keys skip disabled values, and a typed value moves to
+   * the nearest enabled one when the field loses focus. Outside range mode, OK stays disabled while
+   * the selected time is disabled.
    * @example
    * disabledTime: {
    *   minutes: [1, 2, 4, 5, 55, 23, "22", "38"],
    *   hours: [1, "3", "5", 8],
-   *   interval: "10:00 AM - 12:00 PM" | ["10:00 AM - 12:00 PM", "5:00 PM - 8:00 PM"]
+   *   seconds: [0, 30]
+   * }
+   * // or time ranges instead: the hours, minutes and seconds lists are ignored when ranges is set
+   * disabledTime: {
+   *   ranges: ["10:00 AM - 12:00 PM", "5:00:30 PM - 8:00 PM"]
    * }
    */
   disabledTime?: {
     minutes?: Array<string | number>;
     hours?: Array<string | number>;
+    /**
+     * @description Seconds (0-59) disabled in every minute. Used with `showSeconds`.
+     */
+    seconds?: Array<string | number>;
+    /**
+     * @description Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h).
+     * An edge without seconds covers its whole minute.
+     * When set, the `hours`, `minutes` and `seconds` lists are ignored.
+     */
+    ranges?: string | string[];
+    /**
+     * @description Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h).
+     * An edge without seconds covers its whole minute.
+     * When set, the `hours`, `minutes` and `seconds` lists are ignored.
+     * @deprecated Use `ranges`. Removed in 5.0.
+     */
     interval?: string | string[];
   };
+
+  /**
+   * @description Time the picker shows while the input is empty. `'now'` shows the current time and also writes it to the input when the picker is created, replacing a value that is already there.
+   * Use the object form to choose: `time` is a `Date` or `'now'`, and `updateInput: true` writes it to the input the same way.
+   * @example defaultTime: 'now'
+   * @example defaultTime: { time: new Date(2026, 0, 1, 9, 30), updateInput: false }
+   */
+  defaultTime?: 'now' | { time?: Date | 'now'; updateInput?: boolean };
 
   /**
    * @description Set current time to the input and timepicker
@@ -79,16 +142,22 @@ export interface ClockOptions {
    * currentTime: {
    *   time: new Date(),
    *   updateInput: true,
-   *   locales: "en-US",
    *   preventClockType: false
    * }
    * @example currentTime: true
+   * @deprecated Use `defaultTime`. Removed in 5.0.
    */
   currentTime?:
     | {
         time?: Date;
         updateInput?: boolean;
+        /**
+         * @deprecated Has no effect since 4.5.0; the value is formatted by the library. Removed in 5.0.
+         */
         locales?: string | string[];
+        /**
+         * @deprecated Use `clock.type: 'auto'`. Removed in 5.0.
+         */
         preventClockType?: boolean;
       }
     | boolean;
@@ -135,14 +204,28 @@ export interface UIOptions {
   backdrop?: boolean;
 
   /**
+   * @description View shown when the picker opens: the clock face or the keyboard fields.
+   * @default "clock"
+   */
+  initialView?: 'clock' | 'keyboard';
+
+  /**
    * @description Force mobile mode
    * @default false
+   * @deprecated Use `initialView: 'keyboard'`. Removed in 5.0.
    */
   mobile?: boolean;
 
   /**
+   * @description Show the button that switches between the clock face and the keyboard fields.
+   * @default false
+   */
+  viewSwitch?: boolean;
+
+  /**
    * @description Enable switch icon (mobile ↔ desktop)
    * @default false
+   * @deprecated Use `viewSwitch`. Removed in 5.0.
    */
   enableSwitchIcon?: boolean;
 
@@ -153,8 +236,20 @@ export interface UIOptions {
   editable?: boolean;
 
   /**
-   * @description Enable scrollbar when timepicker is open
+   * @description Let the page scroll while the picker is open. When false, page scroll is locked on `<html>`
+   * (and on `<body>` when it is the scroll container), and `<html>` gets `--tp-scrollbar-gap` set to the removed
+   * scrollbar width for your own fixed or sticky elements, e.g. `header { padding-right: var(--tp-scrollbar-gap, 0px) }`.
    * @default false
+   */
+  allowPageScroll?: boolean;
+
+  /**
+   * @description Enable scrollbar when timepicker is open.
+   * When false, page scroll is locked on `<html>` (and on `<body>` when it is the scroll container),
+   * and `<html>` gets `--tp-scrollbar-gap` set to the removed scrollbar width for your own fixed or
+   * sticky elements, e.g. `header { padding-right: var(--tp-scrollbar-gap, 0px) }`.
+   * @default false
+   * @deprecated Use `allowPageScroll`. Removed in 5.0.
    */
   enableScrollbar?: boolean;
 
@@ -165,26 +260,48 @@ export interface UIOptions {
   cssClass?: string;
 
   /**
-   * @description Show clear button to reset time selection
+   * @description Show the Clear button. The object form also sets what Clear does: `clearInput: false` keeps the input value.
    * @default false
+   * @example clearButton: { clearInput: false }
    */
-  clearButton?: boolean;
+  clearButton?: boolean | { clearInput?: boolean };
+
+  /**
+   * @description Element, or selector of the element, the modal is appended to.
+   * @default document.body
+   */
+  appendTo?: string | HTMLElement;
 
   /**
    * @description Selector where to append modal (default: body)
    * @default ""
+   * @deprecated Use `appendTo`. Removed in 5.0.
    */
   appendModalSelector?: string;
 
   /**
+   * @description HTML of the keyboard icon, shown on the clock face view.
+   * @default Material Icons template
+   */
+  keyboardIcon?: string;
+
+  /**
    * @description Custom keyboard icon template (desktop → mobile)
    * @default Material Icons template
+   * @deprecated Use `keyboardIcon`. Removed in 5.0.
    */
   iconTemplate?: string;
 
   /**
+   * @description HTML of the clock icon, shown on the keyboard view.
+   * @default Material Icons template
+   */
+  clockIcon?: string;
+
+  /**
    * @description Custom schedule icon template (mobile → desktop)
    * @default Material Icons template
+   * @deprecated Use `clockIcon`. Removed in 5.0.
    */
   iconTemplateMobile?: string;
 
@@ -193,14 +310,26 @@ export interface UIOptions {
    * @example
    * inline: {
    *   enabled: true,
-   *   containerId: "timepicker-container",
+   *   container: '#timepicker-container',
    *   showButtons: false,
    *   autoUpdate: true
    * }
    */
   inline?: {
     enabled: boolean;
-    containerId: string;
+    /**
+     * @description Element, or selector of the element, the inline picker renders into. Required when `enabled` is true.
+     * @example container: '#timepicker-container'
+     */
+    container?: string | HTMLElement;
+    /**
+     * @deprecated Use `container`. Removed in 5.0.
+     */
+    containerId?: string;
+    /**
+     * @description Show the OK and Cancel buttons. OK writes the time to the input and Cancel brings back the time from the input; the picker stays visible either way.
+     * @default false
+     */
     showButtons?: boolean;
     autoUpdate?: boolean;
   };
@@ -235,26 +364,61 @@ export interface LabelsOptions {
   cancel?: string;
 
   /**
+   * @description Heading of the clock face view
+   * @default "Select time"
+   */
+  clockTitle?: string;
+
+  /**
    * @description Time label on desktop
    * @default "Select time"
+   * @deprecated Use `clockTitle`. Removed in 5.0.
    */
   time?: string;
 
   /**
+   * @description Heading of the keyboard view
+   * @default "Enter Time"
+   */
+  keyboardTitle?: string;
+
+  /**
    * @description Time label on mobile
    * @default "Enter Time"
+   * @deprecated Use `keyboardTitle`. Removed in 5.0.
    */
   mobileTime?: string;
 
   /**
+   * @description Hour field caption, its accessible name, the dial name on the hours face, and the prefix of the hour announcement
+   * @default "Hour"
+   */
+  hour?: string;
+
+  /**
+   * @description Minute field caption, its accessible name, the dial name on the minutes face, and the prefix of the minute announcement.
+   * Until 5.0 the minute announcement keeps its own default, `Minutes`, when neither `minute` nor `announceMinute` is set.
+   * @default "Minute"
+   */
+  minute?: string;
+
+  /**
+   * @description Second field caption, its accessible name, the dial name on the seconds face, and the prefix of the second announcement (requires `clock.showSeconds`)
+   * @default "Second"
+   */
+  second?: string;
+
+  /**
    * @description Hour label on mobile
    * @default "Hour"
+   * @deprecated Use `hour`. Removed in 5.0.
    */
   mobileHour?: string;
 
   /**
    * @description Minute label on mobile
    * @default "Minute"
+   * @deprecated Use `minute`. Removed in 5.0.
    */
   mobileMinute?: string;
 
@@ -265,80 +429,147 @@ export interface LabelsOptions {
   clear?: string;
 
   /**
-   * @description Accessible label for the hour spinbutton
+   * @description Accessible label for the hour spinbutton and the clock dial while it shows hours
    * @default "Hour"
+   * @deprecated Use `hour`. Removed in 5.0.
    */
   hourLabel?: string;
 
   /**
-   * @description Accessible label for the minute spinbutton
+   * @description Accessible label for the minute spinbutton and the clock dial while it shows minutes
    * @default "Minute"
+   * @deprecated Use `minute`. Removed in 5.0.
    */
   minuteLabel?: string;
 
   /**
-   * @description Accessible label for the analog clock face group
+   * @description Accessible name of the group around the clock dial
    * @default "Clock"
+   */
+  clock?: string;
+
+  /**
+   * @description Accessible label for the group that wraps the analog clock dial
+   * @default "Clock"
+   * @deprecated Use `clock`. Removed in 5.0.
    */
   clockLabel?: string;
 
   /**
+   * @description Accessible name of the AM/PM group
+   * @default "Period"
+   */
+  period?: string;
+
+  /**
    * @description Accessible label for the AM/PM period group
    * @default "Period"
+   * @deprecated Use `period`. Removed in 5.0.
    */
   periodLabel?: string;
 
   /**
+   * @description Accessible name of the group around the time fields
+   * @default "Time"
+   */
+  timeFields?: string;
+
+  /**
    * @description Accessible label for the time wrapper group / tips
    * @default "Time"
+   * @deprecated Use `timeFields`. Removed in 5.0.
    */
   timeLabel?: string;
 
   /**
    * @description Accessible label for the 24-hour tips group
    * @default "24-hour"
+   * @deprecated Has no effect. Removed in 5.0.
    */
   format24Label?: string;
 
   /**
+   * @description Accessible name of the range From/To tabs
+   * @default "Range selection"
+   */
+  range?: string;
+
+  /**
    * @description Accessible label for the range selection tablist
    * @default "Range selection"
+   * @deprecated Use `range`. Removed in 5.0.
    */
   rangeSelectionLabel?: string;
 
   /**
+   * @description Text of the range From tab
+   * @default "From"
+   */
+  rangeFrom?: string;
+
+  /**
+   * @description Text of the range To tab
+   * @default "To"
+   */
+  rangeTo?: string;
+
+  /**
+   * @description Label of the timezone selector
+   * @default "Timezone"
+   */
+  timezone?: string;
+
+  /**
+   * @description Accessible name of the view switch on the clock face view
+   * @default "Switch to keyboard input"
+   */
+  switchToKeyboard?: string;
+
+  /**
    * @description Accessible label for the keyboard-input switch icon
    * @default "Switch to keyboard input"
+   * @deprecated Use `switchToKeyboard`. Removed in 5.0.
    */
   switchToKeyboardLabel?: string;
 
   /**
+   * @description Accessible name of the view switch on the keyboard view
+   * @default "Switch to clock"
+   */
+  switchToClock?: string;
+
+  /**
    * @description Accessible label for the clock-view switch icon
    * @default "Switch to clock"
+   * @deprecated Use `switchToClock`. Removed in 5.0.
    */
   switchToClockLabel?: string;
 
   /**
    * @description Accessible label for the generic view toggle button
    * @default "Toggle"
+   * @deprecated Has no effect; the view switch button is labelled by `switchToKeyboard` / `switchToClock`. Removed in 5.0.
    */
   toggleLabel?: string;
 
   /**
    * @description Accessible label for the timezone selector
    * @default "Timezone"
+   * @deprecated Has no effect; use `labels.timezone`. Removed in 5.0.
    */
   timezoneSelectorLabel?: string;
 
   /**
    * @description Screen-reader announcement prefix for the selected hour
    * @default "Hour"
+   * @deprecated Use `hour`. Removed in 5.0.
    */
   announceHour?: string;
 
   /**
    * @description Screen-reader announcement prefix for the selected minutes
    * @default "Minutes"
+   * @deprecated Use `minute`. Removed in 5.0.
    */
   announceMinute?: string;
 
@@ -359,6 +590,12 @@ export interface LabelsOptions {
    * @default "Invalid time format"
    */
   invalidTimeFormat?: string;
+
+  /**
+   * @description Screen-reader announcement after Clear
+   * @default "Time cleared"
+   */
+  announceCleared?: string;
 }
 
 /**
@@ -366,8 +603,15 @@ export interface LabelsOptions {
  */
 export interface BehaviorOptions {
   /**
-   * @description Focus input after closing modal
+   * @description Return focus to the input when the picker closes (WAI-ARIA dialog pattern). Setting it to `true` is recommended; 5.0 makes `true` the default.
    * @default false
+   */
+  returnFocus?: boolean;
+
+  /**
+   * @description Focus input after closing modal. Old name of `returnFocus`.
+   * @default false
+   * @deprecated Use `returnFocus`. Removed in 5.0.
    */
   focusInputAfterClose?: boolean;
 
@@ -378,8 +622,8 @@ export interface BehaviorOptions {
   focusTrap?: boolean;
 
   /**
-   * @description Delay for clickable elements (ms)
-   * @default 300
+   * @description Extra delay (ms) before the picker starts to close after OK, Cancel, Escape, a backdrop click or `close()`
+   * @default 0
    */
   delayHandler?: number;
 
@@ -409,15 +653,24 @@ export interface TimezoneOptions {
   default?: string;
 
   /**
+   * @description Timezone IDs shown in the selector, instead of the built-in list.
+   * If not provided, uses a curated list of common timezones.
+   * @example list: ['UTC', 'America/New_York', 'Europe/London']
+   */
+  list?: readonly string[];
+
+  /**
    * @description Whitelist of allowed timezone IDs.
    * If not provided, uses a curated list of common timezones.
    * @example whitelist: ['UTC', 'America/New_York', 'Europe/London']
+   * @deprecated Use `list`. Removed in 5.0.
    */
   whitelist?: readonly string[];
 
   /**
    * @description Label for timezone selector
    * @default "Timezone"
+   * @deprecated Use `labels.timezone`. Removed in 5.0.
    */
   label?: string;
 }
@@ -434,10 +687,12 @@ export interface TimezoneOptions {
 export interface WheelOptions {
   /**
    * @description Popover placement relative to input in compact-wheel mode.
-   * 'auto' opens below if space allows, otherwise above.
-   * Defaults to 'auto' in compact-wheel mode.
-   * Can be overridden to 'top' or 'bottom' for fixed positioning.
-   * @default 'auto' (compact-wheel) | undefined (wheel)
+   * When unset, compact-wheel opens as a modal.
+   * Set 'auto' | 'top' | 'bottom' to show compact-wheel as a popover:
+   * 'auto' opens below if space allows, otherwise above. 'top' / 'bottom' open on that side
+   * while it has room for at least three wheel rows, otherwise on the other side.
+   * In every placement the popover stays inside the viewport and scrolls when it is too tall.
+   * @default undefined (modal)
    */
   placement?: 'auto' | 'top' | 'bottom';
 
@@ -458,7 +713,7 @@ export interface WheelOptions {
   commitOnScroll?: boolean;
 
   /**
-   * @description When true, disabled hours/minutes are completely removed from the wheel list
+   * @description When true, disabled hours/minutes/seconds are completely removed from the wheel list
    * instead of being dimmed. Only applies to wheel and compact-wheel modes.
    * Useful when many values are disabled (e.g., business hours only).
    * @default false
@@ -497,12 +752,14 @@ export interface RangeOptions {
   /**
    * @description Label for "from" segment
    * @default "From"
+   * @deprecated Use `labels.rangeFrom`. Removed in 5.0.
    */
   fromLabel?: string;
 
   /**
    * @description Label for "to" segment
    * @default "To"
+   * @deprecated Use `labels.rangeTo`. Removed in 5.0.
    */
   toLabel?: string;
 }
@@ -515,6 +772,11 @@ export interface CallbacksOptions {
    * @description Triggered when timepicker opens
    */
   onOpen?: TimepickerEventCallback<OpenEventData>;
+
+  /**
+   * @description Triggered when the user activates the input or a `data-open` element (click, Enter or Space) to open the picker, before it renders. `open()` does not trigger it.
+   */
+  onShow?: TimepickerEventCallback<ShowEventData>;
 
   /**
    * @description Triggered when user cancels
@@ -542,14 +804,36 @@ export interface CallbacksOptions {
   onSelectMinute?: TimepickerEventCallback<SelectMinuteEventData>;
 
   /**
+   * @description Triggered when second mode is selected (requires `clock.showSeconds`)
+   */
+  onSelectSecond?: TimepickerEventCallback<SelectSecondEventData>;
+
+  /**
+   * @description Triggered when AM or PM is selected, with `{ type }`
+   */
+  onSelectPeriod?: TimepickerEventCallback<SelectPeriodEventData>;
+
+  /**
    * @description Triggered when AM is selected
+   * @deprecated Use `onSelectPeriod`. Removed in 5.0.
    */
   onSelectAM?: TimepickerEventCallback<SelectAMEventData>;
 
   /**
    * @description Triggered when PM is selected
+   * @deprecated Use `onSelectPeriod`. Removed in 5.0.
    */
   onSelectPM?: TimepickerEventCallback<SelectPMEventData>;
+
+  /**
+   * @description Triggered when the switch icon toggles between the clock face and keyboard input (requires `ui.viewSwitch`)
+   */
+  onSwitchView?: TimepickerEventCallback<SwitchViewEventData>;
+
+  /**
+   * @description Triggered when the clock face switches between hours, minutes and seconds, with `{ face }`
+   */
+  onSwitchFace?: TimepickerEventCallback<SwitchFaceEventData>;
 
   /**
    * @description Triggered on invalid time format
@@ -577,6 +861,16 @@ export interface CallbacksOptions {
   onRangeValidation?: TimepickerEventCallback<RangeValidationEventData>;
 
   /**
+   * @description Triggered when a wheel column starts scrolling (wheel and compact-wheel modes)
+   */
+  onWheelScrollStart?: TimepickerEventCallback<WheelScrollStartEventData>;
+
+  /**
+   * @description Triggered when a wheel column stops scrolling and snaps to a value (wheel and compact-wheel modes)
+   */
+  onWheelScrollEnd?: TimepickerEventCallback<WheelScrollEndEventData>;
+
+  /**
    * @description Triggered when clear button is clicked
    */
   onClear?: TimepickerEventCallback<ClearEventData>;
@@ -589,6 +883,7 @@ export interface ClearBehaviorOptions {
   /**
    * @description Whether clicking clear also empties the input field value
    * @default true
+   * @deprecated Use `ui.clearButton: { clearInput }`. Removed in 5.0.
    */
   clearInput?: boolean;
 }

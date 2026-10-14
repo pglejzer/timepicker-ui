@@ -7,9 +7,12 @@ import type {
   UpdateEventData,
   SelectHourEventData,
   SelectMinuteEventData,
+  SelectSecondEventData,
   SelectAMEventData,
   SelectPMEventData,
   SwitchViewEventData,
+  SelectPeriodEventData,
+  SwitchFaceEventData,
   TimezoneChangeEventData,
   RangeConfirmEventData,
   RangeSwitchEventData,
@@ -31,19 +34,35 @@ export interface TimepickerEventMap {
   confirm: ConfirmEventData;
   clear: ClearEventData;
   show: ShowEventData;
+  /**
+   * @internal Emitted right after `show` when the user activates an open element or presses Enter in the input; the picker mounts on it, so every `show` listener runs before render. Not bridged to a callback.
+   */
+  'open:request': Record<string, never>;
+  /**
+   * @deprecated Never emitted. Removed in 5.0.
+   */
   hide: HideEventData;
   update: UpdateEventData;
   'select:hour': SelectHourEventData;
   'select:minute': SelectMinuteEventData;
+  'select:second': SelectSecondEventData;
   'select:am': SelectAMEventData;
   'select:pm': SelectPMEventData;
+  'select:period': SelectPeriodEventData;
   'switch:view': SwitchViewEventData;
+  'switch:face': SwitchFaceEventData;
   'timezone:change': TimezoneChangeEventData;
   'range:confirm': RangeConfirmEventData;
   'range:switch': RangeSwitchEventData;
   'range:validation': RangeValidationEventData;
   'range:minute:commit': RangeMinuteCommitEventData;
+  /**
+   * @deprecated Never emitted or read. Removed in 5.0.
+   */
   'range:get-disabled-time': RangeGetDisabledTimeEventData;
+  /**
+   * @deprecated Never emitted or read. Removed in 5.0.
+   */
   'range:update-disabled': RangeUpdateDisabledEventData;
   'wheel:scroll:start': WheelScrollStartEventData;
   'wheel:scroll:end': WheelScrollEndEventData;
@@ -56,6 +75,7 @@ export interface TimepickerEventMap {
 
 type TaggedHandler = EventHandler<unknown> & { __originalHandler?: EventHandler<unknown> };
 
+/** @remarks This API changes in 5.0.0; see the roadmap. */
 export class EventEmitter<EventMap extends Record<string, unknown> = TimepickerEventMap> {
   private events = new Map<keyof EventMap, Set<EventHandler<unknown>>>();
 

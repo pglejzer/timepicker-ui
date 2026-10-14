@@ -1,4 +1,5 @@
-import { isDocument } from '../../utils/node';
+import { trackPointerModality } from '../../utils/accessibility';
+import { runCleanups } from '../../utils/managerHelpers';
 import type { CoreState } from '../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../utils/EventEmitter';
 
@@ -16,39 +17,42 @@ export class ModalHandlers {
     const modal = this.core.getModalElement();
     if (!modal) return;
 
-    const handler = (e: MouseEvent): void => {
-      if (this.core.isDestroyed) return;
-      if (e.target === modal) {
+    let pressedInDialog = false;
+    const onPointerDown = (e: Event): void => {
+      pressedInDialog = e.target !== modal;
+    };
+    const onPointerUp = (e: Event): void => {
+      pressedInDialog ||= e.target !== modal;
+    };
+    const handler = (e: Event): void => {
+      if (!this.core.isDestroyed && e.target === modal && !pressedInDialog) {
         this.emitter.emit('cancel', {});
       }
     };
 
+    modal.addEventListener('pointerdown', onPointerDown);
+    modal.addEventListener('pointerup', onPointerUp);
     modal.addEventListener('click', handler);
-    this.cleanupHandlers.push(() => modal.removeEventListener('click', handler));
-  }
-
-  handleMoveHand(): void {
-    if (isDocument() === false) {
-      return;
-    }
-
-    const onDragStart = (e: MouseEvent | TouchEvent): void => {
-      if (this.core.isDestroyed) return;
-      e.preventDefault();
-    };
-
-    document.addEventListener('mousedown', onDragStart, false);
-    document.addEventListener('touchstart', onDragStart, { passive: false });
-
     this.cleanupHandlers.push(() => {
-      document.removeEventListener('mousedown', onDragStart);
-      document.removeEventListener('touchstart', onDragStart);
+      modal.removeEventListener('pointerdown', onPointerDown);
+      modal.removeEventListener('pointerup', onPointerUp);
+      modal.removeEventListener('click', handler);
     });
   }
 
+  handlePointerModality(): void {
+    const modal = this.core.getModalElement();
+    if (!modal) return;
+
+    this.cleanupHandlers.push(trackPointerModality(modal));
+  }
+
+  detach(): void {
+    runCleanups(this.cleanupHandlers);
+  }
+
   destroy(): void {
-    this.cleanupHandlers.forEach((cleanup) => cleanup());
-    this.cleanupHandlers = [];
+    this.detach();
   }
 }
 

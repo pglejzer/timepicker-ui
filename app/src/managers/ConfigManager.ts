@@ -1,6 +1,6 @@
-import { getInputValue } from '../utils/input';
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
+import type { TimepickerOptions } from '../types/options';
 import { InputValueHandler } from './config/InputValueHandler';
 import { MobileViewHandler } from './config/MobileViewHandler';
 import { DisabledTimeHandler } from './config/DisabledTimeHandler';
@@ -9,10 +9,8 @@ export default class ConfigManager {
   private readonly inputValueHandler: InputValueHandler;
   private readonly mobileViewHandler: MobileViewHandler;
   private readonly disabledTimeHandler: DisabledTimeHandler;
-  private readonly core: CoreState;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
-    this.core = core;
     this.inputValueHandler = new InputValueHandler(core, emitter);
     this.mobileViewHandler = new MobileViewHandler(core, emitter);
     this.disabledTimeHandler = new DisabledTimeHandler(core);
@@ -26,24 +24,16 @@ export default class ConfigManager {
     this.inputValueHandler.updateInputValueWithCurrentTimeOnStart();
   }
 
-  getInputValueOnOpenAndSet(): void {
-    this.inputValueHandler.getInputValueOnOpenAndSet();
+  getInputValueOnOpenAndSet(emitOpen = true): void {
+    this.inputValueHandler.getInputValueOnOpenAndSet(emitOpen);
   }
 
-  getInputValue(
-    el: HTMLInputElement,
-    clockType: string,
-    currentTime: typeof this.core.options.clock.currentTime,
-  ): ReturnType<typeof getInputValue> {
-    return this.inputValueHandler.getInputValue(el, clockType, currentTime);
+  syncInputFormat(previousOptions: Required<TimepickerOptions>): void {
+    this.inputValueHandler.syncInputFormat(previousOptions);
   }
 
   checkMobileOption(): void {
     this.mobileViewHandler.checkMobileOption();
-  }
-
-  toggleMobileClockFace(): void {
-    this.mobileViewHandler.toggleMobileClockFace();
   }
 
   updateClockFaceAccessibility(isHidden: boolean): void {

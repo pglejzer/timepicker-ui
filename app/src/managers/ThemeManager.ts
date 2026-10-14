@@ -5,21 +5,10 @@ import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 
 export default class ThemeManager {
   private core: CoreState;
-  private emitter: EventEmitter<TimepickerEventMap>;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
-    this.emitter = emitter;
-  }
-
-  setTheme(): void {
-    const modal = this.core.getModalElement();
-    if (!modal) return;
-
-    const { theme } = this.core.options.ui;
-    if (!theme) return;
-
-    modal.setAttribute('data-theme', theme);
+    void emitter;
   }
 
   setInputClassToInputElement(): void {

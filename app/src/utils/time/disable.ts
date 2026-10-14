@@ -1,151 +1,39 @@
-import { range, reverseRange, timeConversion, normalize24h, isOverlappingRangeArray } from '../config';
-import { getInputValue, handleValueAndCheck } from '../input';
+import { isOverlappingRangeArray } from '../config';
+import { handleValueAndCheck } from '../input';
+import { pad } from './parse';
+import { getClockType } from '../options/predicates';
 import type { TimepickerOptions } from '../../types/options';
 
- 
+const toSixtyList = (
+  values: ReadonlyArray<string | number> | undefined,
+  unit: 'minutes' | 'seconds',
+): string[] | undefined => {
+  values?.forEach((value) => {
+    if (Number(value) > 59) {
+      throw new Error(`The disabled ${unit} value has to be less than 60`);
+    }
+  });
+  return values?.map((value) => pad(Number(value)));
+};
+
 export const createDisabledTime = (options: Required<TimepickerOptions>) => {
   if (!options) return;
   const { disabledTime, type: clockType } = options.clock;
 
   if (!disabledTime || !Object.keys(disabledTime).length) return;
 
-  const { hours, minutes, interval } = disabledTime;
+  const { hours, minutes, seconds, interval } = disabledTime;
 
   if (interval) {
-    delete disabledTime.hours;
-    delete disabledTime.minutes;
-
     const intervals = Array.isArray(interval) ? interval : [interval];
 
     if (!clockType) {
       throw new Error('clockType required for interval');
     }
 
-    isOverlappingRangeArray(intervals, clockType);
+    isOverlappingRangeArray(intervals, getClockType(options));
 
-    const results = intervals.map((rangeStr) => {
-      const [first, second] = rangeStr.trim().split('-');
-
-      const {
-        hour: startHour,
-        minutes: startMinutes,
-        type: startType,
-      } = getInputValue({ value: first.trim() } as HTMLInputElement, clockType);
-
-      const {
-        hour: endHour,
-        minutes: endMinutes,
-        type: endType,
-      } = getInputValue({ value: second.trim() } as HTMLInputElement, clockType);
-
-      let rangeArrHour = range(startHour, endHour).map((e: number | string) =>
-        Number(e) === 0 ? '00' : String(Number(e)),
-      );
-
-      const removedHours: (string | undefined)[] = [];
-      const numberStartMinutes = Number(startMinutes);
-      const numberEndMinutes = Number(endMinutes);
-
-      if (endType === startType) {
-        if (numberStartMinutes > 0 && numberEndMinutes <= 0) {
-          removedHours.push(rangeArrHour[0], rangeArrHour[rangeArrHour.length - 1]);
-          rangeArrHour = rangeArrHour.slice(1, -1);
-        } else if (numberEndMinutes < 59 && numberEndMinutes > 0 && numberStartMinutes <= 0) {
-          removedHours.push(undefined, rangeArrHour[rangeArrHour.length - 1]);
-          rangeArrHour = rangeArrHour.slice(0, -1);
-        } else if (numberEndMinutes > 0 && numberStartMinutes > 0) {
-          removedHours.push(rangeArrHour[0], rangeArrHour[rangeArrHour.length - 1]);
-          rangeArrHour = rangeArrHour.slice(1, -1);
-        } else if (numberEndMinutes === 0 && numberStartMinutes === 0) {
-          removedHours.push(undefined, rangeArrHour[rangeArrHour.length - 1]);
-          rangeArrHour.pop();
-        }
-
-        return {
-          removedStartedHour:
-            removedHours[0] !== undefined && Number(removedHours[0]) <= 9
-              ? `0${removedHours[0]}`
-              : removedHours[0],
-          removedEndHour:
-            removedHours[1] !== undefined && Number(removedHours[1]) <= 9
-              ? `0${removedHours[1]}`
-              : removedHours[1],
-          rangeArrHour,
-          startMinutes: range(startMinutes, 59).map((e: number | string) =>
-            Number(e) <= 9 ? `0${e}` : `${e}`,
-          ),
-          endMinutes: reverseRange(0, endMinutes).map((e: number | string) =>
-            Number(e) <= 9 ? `0${e}` : `${e}`,
-          ),
-          startType,
-          endType,
-        };
-      } else {
-        const amHours = range(startHour, 12).map(String);
-        const pmHours = reverseRange(1, endHour).map(String);
-
-        const removedAmHours: string[] = [];
-        const removedPmHours: string[] = [];
-
-        if (numberStartMinutes > 0 && numberEndMinutes <= 0) {
-          removedPmHours.push(pmHours[pmHours.length - 1]);
-          removedAmHours.push(amHours[0]);
-          pmHours.pop();
-          amHours.shift();
-        } else if (numberEndMinutes < 59 && numberEndMinutes > 0 && numberStartMinutes <= 0) {
-          removedAmHours.push(amHours[0]);
-          removedPmHours.push(pmHours[pmHours.length - 1]);
-          pmHours.pop();
-        } else if (numberEndMinutes > 0 && numberStartMinutes > 0) {
-          removedPmHours.push(pmHours[pmHours.length - 1]);
-          removedAmHours.push(amHours[0]);
-          pmHours.pop();
-          amHours.shift();
-        } else if (numberEndMinutes === 0 && numberStartMinutes === 0) {
-          removedPmHours.push(pmHours[pmHours.length - 1]);
-          removedAmHours.push(amHours[0]);
-          pmHours.pop();
-        }
-
-        return {
-          startType,
-          endType,
-          amHours,
-          pmHours,
-          removedAmHour:
-            removedAmHours[0] && Number(removedAmHours[0]) <= 9 ? `0${removedAmHours[0]}` : removedAmHours[0],
-          removedPmHour:
-            removedPmHours[0] && Number(removedPmHours[0]) <= 9 ? `0${removedPmHours[0]}` : removedPmHours[0],
-          startMinutes:
-            Number(startMinutes) === 0
-              ? []
-              : range(startMinutes, 59).map((e: number | string) => (Number(e) <= 9 ? `0${e}` : `${e}`)),
-          endMinutes: reverseRange(0, endMinutes).map((e: number | string) =>
-            Number(e) <= 9 ? `0${e}` : `${e}`,
-          ),
-        };
-      }
-    });
-
-    const merged = results.reduce(
-      (acc, curr) => {
-        Object.entries(curr).forEach(([key, val]) => {
-          if (Array.isArray(val)) {
-            acc[key] = Array.isArray(acc[key]) ? [...acc[key], ...val] : [...val];
-          } else {
-            acc[key] = val;
-          }
-        });
-        return acc;
-      },
-      {
-        isInterval: true,
-        clockType,
-        intervals: intervals,
-      } as Record<string, unknown>,
-    );
-
-    return { value: merged };
+    return { value: { isInterval: true, clockType, intervals } };
   }
 
   hours?.forEach((e: number | string) => {
@@ -157,18 +45,16 @@ export const createDisabledTime = (options: Required<TimepickerOptions>) => {
     }
   });
 
-  minutes?.forEach((e: number | string) => {
-    if (Number(e) > 59) {
-      throw new Error('The disabled minutes value has to be less than 60');
-    }
-  });
+  const disabledMinutes = toSixtyList(minutes, 'minutes');
+  const disabledSeconds = toSixtyList(seconds, 'seconds');
 
   return {
     value: {
       hours: hours?.map((e: number | string) =>
         e === '00' || Number(e) === 0 ? `0${Number(e)}` : `${Number(e)}`,
       ),
-      minutes: minutes?.map((e: number | string) => (Number(e) <= 9 ? `0${e}` : `${e}`)),
+      minutes: disabledMinutes,
+      seconds: disabledSeconds,
     },
   };
 };
@@ -181,7 +67,7 @@ export const checkDisabledHoursAndMinutes = (
 ) => {
   if (!value) return;
 
-  if (Array.isArray(value) && value.length > 0) {
+  if (Array.isArray(value)) {
     const checkArr = value.map((e) => handleValueAndCheck(e, type, clockType));
 
     if (checkArr.some((e) => e === false)) {
@@ -200,56 +86,4 @@ export const checkDisabledHoursAndMinutes = (
 
     return false;
   }
-};
-
-export const checkedDisabledValuesInterval = (
-  hour?: string,
-  minutes?: string,
-  type?: string,
-  interval?: string | string[],
-  clockType?: '12h' | '24h',
-): boolean => {
-  if (!hour || !minutes || !interval || !clockType) return false;
-
-  const actualTime =
-    clockType === '12h'
-      ? timeConversion(`${hour}:${minutes} ${type || ''}`.trim())
-      : normalize24h(`${hour}:${minutes}`);
-
-  const intervals = Array.isArray(interval) ? interval : [interval];
-
-  for (const rangeStr of intervals) {
-    const [first, second] = rangeStr.trim().split('-');
-
-    let getFirstTime: string;
-    let getSecondTime: string;
-
-    if (clockType === '12h') {
-      const firstTrimmed = first.trim();
-      const secondTrimmed = second.trim();
-
-      if (!/\s?(AM|PM|am|pm)\s?$/.test(firstTrimmed) || !/\s?(AM|PM|am|pm)\s?$/.test(secondTrimmed)) {
-        continue;
-      }
-
-      getFirstTime = timeConversion(firstTrimmed);
-      getSecondTime = timeConversion(secondTrimmed);
-    } else {
-      const firstTrimmed = first.trim();
-      const secondTrimmed = second.trim();
-
-      if (/\s?(AM|PM|am|pm)\s?/.test(firstTrimmed) || /\s?(AM|PM|am|pm)\s?/.test(secondTrimmed)) {
-        continue;
-      }
-
-      getFirstTime = normalize24h(firstTrimmed);
-      getSecondTime = normalize24h(secondTrimmed);
-    }
-
-    if (actualTime >= getFirstTime && actualTime <= getSecondTime) {
-      return false;
-    }
-  }
-
-  return true;
 };

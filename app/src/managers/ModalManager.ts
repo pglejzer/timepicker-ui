@@ -1,20 +1,46 @@
-import { getScrollbarWidth } from '../utils/config';
 import { getModalTemplate } from '../utils/template';
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
-import { isDocument, isNode } from '../utils/node';
-import { TIMINGS } from '../constants/timings';
+import { isDocument } from '../utils/node';
+import { isPopoverMode } from '../utils/options/predicates';
+import { getInlineContainer, resolveElement } from '../utils/dom';
+
+const SCROLLBAR_GAP_PROPERTY = '--tp-scrollbar-gap';
+const SCROLLING_OVERFLOW = ['auto', 'scroll'];
+const CONTROL_CLASS = /^tp-ui-[\w-]+$/;
+
+interface SavedScrollStyles {
+  element: HTMLElement;
+  overflowY: string;
+  paddingRight: string;
+}
 
 let scrollLockCount = 0;
-let savedOverflowY = '';
-let savedPaddingRight = '';
+let savedScrollStyles: SavedScrollStyles[] = [];
+let savedScrollbarGap = '';
+
+function isScrollContainer(element: HTMLElement): boolean {
+  return SCROLLING_OVERFLOW.includes(window.getComputedStyle(element).overflowY);
+}
+
+function lockElementScroll(element: HTMLElement): number {
+  const { style } = element;
+  const widthBefore = element.clientWidth;
+  const paddingBefore = parseFloat(window.getComputedStyle(element).paddingRight) || 0;
+  savedScrollStyles.push({ element, overflowY: style.overflowY, paddingRight: style.paddingRight });
+  style.overflowY = 'hidden';
+  const gap = Math.max(0, element.clientWidth - widthBefore);
+  if (gap > 0) style.paddingRight = `${paddingBefore + gap}px`;
+  return gap;
+}
 
 function acquireScrollLock(): void {
   if (scrollLockCount === 0) {
-    savedOverflowY = document.body.style.overflowY;
-    savedPaddingRight = document.body.style.paddingRight;
-    document.body.style.paddingRight = `${getScrollbarWidth()}px`;
-    document.body.style.overflowY = 'hidden';
+    const { body, documentElement: root } = document;
+    const bodyGap = isScrollContainer(body) ? lockElementScroll(body) : 0;
+    const rootGap = lockElementScroll(root);
+    savedScrollbarGap = root.style.getPropertyValue(SCROLLBAR_GAP_PROPERTY);
+    root.style.setProperty(SCROLLBAR_GAP_PROPERTY, `${Math.max(bodyGap, rootGap)}px`);
   }
   scrollLockCount += 1;
 }
@@ -23,36 +49,28 @@ function releaseScrollLock(): void {
   if (scrollLockCount === 0) return;
   scrollLockCount -= 1;
   if (scrollLockCount === 0) {
-    document.body.style.overflowY = savedOverflowY;
-    document.body.style.paddingRight = savedPaddingRight;
-    savedOverflowY = '';
-    savedPaddingRight = '';
+    savedScrollStyles.forEach(({ element, overflowY, paddingRight }) => {
+      element.style.overflowY = overflowY;
+      element.style.paddingRight = paddingRight;
+    });
+    const root = document.documentElement;
+    if (savedScrollbarGap) {
+      root.style.setProperty(SCROLLBAR_GAP_PROPERTY, savedScrollbarGap);
+    } else {
+      root.style.removeProperty(SCROLLBAR_GAP_PROPERTY);
+    }
+    savedScrollStyles = [];
+    savedScrollbarGap = '';
   }
 }
 
 export default class ModalManager {
   private core: CoreState;
-  private emitter: EventEmitter<TimepickerEventMap>;
-  private timeouts: NodeJS.Timeout[] = [];
   private scrollLocked = false;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
-    this.emitter = emitter;
-  }
-
-  private runWithTimeout(cb: () => void, delay: number = TIMINGS.DEFAULT_DELAY): void {
-    const t = setTimeout(cb, delay);
-    this.timeouts.push(t);
-  }
-
-  private clearAllTimeouts(): void {
-    this.timeouts.forEach(clearTimeout);
-    this.timeouts = [];
-  }
-
-  private isPopoverMode(): boolean {
-    return this.core.options.ui.mode === 'compact-wheel' && !!this.core.options.wheel?.placement;
+    void emitter;
   }
 
   private clearExistingModal(): void {
@@ -74,7 +92,7 @@ export default class ModalManager {
     const modalTemplate = getModalTemplate(this.core.options, this.core.instanceId);
 
     if (this.core.options.ui.inline?.enabled) {
-      const containerElement = document.getElementById(this.core.options.ui.inline.containerId);
+      const containerElement = getInlineContainer(this.core.options.ui.inline);
       if (!containerElement) return;
 
       containerElement.innerHTML = '';
@@ -89,23 +107,22 @@ export default class ModalManager {
           modalElement
             .querySelectorAll('.tp-ui-wrapper-btn, .tp-ui-wrapper-btn.mobile')
             .forEach((btn) => ((btn as HTMLElement).style.display = 'none'));
+          modalElement.querySelectorAll<HTMLElement>('.tp-ui-footer').forEach((footer) => {
+            if (!footer.querySelector('.tp-ui-keyboard-icon-wrapper')) footer.style.display = 'none';
+          });
         }
       }
       return;
     }
 
-    const { appendModalSelector } = this.core.options.ui;
-    if (!appendModalSelector) {
-      document.body.insertAdjacentHTML('beforeend', modalTemplate);
-    } else {
-      const element = document.querySelector(appendModalSelector);
-      element?.insertAdjacentHTML('beforeend', modalTemplate);
-    }
+    const { appendTo } = this.core.options.ui;
+    const target = appendTo ? resolveElement(appendTo) : document.body;
+    target?.insertAdjacentHTML('beforeend', modalTemplate);
   }
 
   lockScroll(): void {
     if (isDocument() === false) return;
-    if (this.core.options.ui.inline?.enabled || this.isPopoverMode()) return;
+    if (this.core.options.ui.inline?.enabled || isPopoverMode(this.core.options)) return;
     if (this.core.options.ui.enableScrollbar) return;
     if (this.scrollLocked) return;
 
@@ -122,19 +139,10 @@ export default class ModalManager {
   }
 
   setScrollbarOrNot(): void {
-    if (isDocument() === false) return;
-    if (this.core.options.ui.inline?.enabled || this.isPopoverMode()) return;
-
-    if (!this.core.options.ui.enableScrollbar) {
-      this.lockScroll();
+    if (this.core.options.ui.enableScrollbar) {
+      this.unlockScroll();
     } else {
-      this.runWithTimeout(() => {
-        if (!isNode()) {
-          this.runWithTimeout(() => {
-            this.unlockScroll();
-          }, TIMINGS.SCROLLBAR_RESTORE);
-        }
-      }, 400);
+      this.lockScroll();
     }
   }
 
@@ -157,30 +165,36 @@ export default class ModalManager {
     divs.forEach((div: HTMLDivElement) => div.classList.add('tp-ui-normalize'));
   }
 
-  setShowClassToBackdrop(): void {
-    if (this.core.options.ui.inline?.enabled || this.isPopoverMode()) {
-      this.core.getModalElement()?.classList.add('show');
-      this.setInitialFocus();
-      return;
-    }
+  setInitialFocus(): void {
+    const { options } = this.core;
+    if (!options.behavior.focusTrap || typeof requestAnimationFrame === 'undefined') return;
+    if (!options.ui.backdrop && !options.ui.inline?.enabled && !isPopoverMode(options)) return;
 
-    if (this.core.options.ui.backdrop) {
-      this.runWithTimeout(() => {
-        this.core.getModalElement()?.classList.add('show');
-        this.setInitialFocus();
-      }, TIMINGS.MODAL_ANIMATION);
-    }
+    requestAnimationFrame(() => this.focusWrapperUnlessInside());
   }
 
-  private setInitialFocus(): void {
-    if (!this.core.options.behavior.focusTrap) return;
-
+  private focusWrapperUnlessInside(): void {
     const wrapper = this.core.getWrapper();
-    if (wrapper && typeof requestAnimationFrame !== 'undefined') {
-      requestAnimationFrame(() => {
-        wrapper.focus();
-      });
+    if (wrapper && !wrapper.contains(wrapper.ownerDocument.activeElement)) wrapper.focus();
+  }
+
+  getFocusedControlSelector(): string | null {
+    const modal = this.core.getModalElement();
+    const active = modal?.ownerDocument.activeElement;
+    if (!modal || !active || !modal.contains(active)) return null;
+
+    return Array.from(active.classList)
+      .filter((name) => CONTROL_CLASS.test(name))
+      .map((name) => `.${name}`)
+      .join('');
+  }
+
+  restoreFocus(controlSelector: string): void {
+    if (controlSelector) {
+      this.core.getWrapper()?.querySelector<HTMLElement>(controlSelector)?.focus();
     }
+
+    this.focusWrapperUnlessInside();
   }
 
   setFlexEndToFooterIfNoKeyboardIcon(): void {
@@ -191,7 +205,6 @@ export default class ModalManager {
   }
 
   destroy(): void {
-    this.clearAllTimeouts();
     this.unlockScroll();
     this.clearExistingModal();
   }

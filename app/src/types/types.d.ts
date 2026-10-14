@@ -2,8 +2,16 @@
 export type OpenEventData = {
   hour: string;
   minutes: string;
+  /** Present only with `clock.showSeconds` */
+  seconds?: string;
   type?: string;
+  /**
+   * @deprecated Internal clock-hand angle; use `hour` instead. Removed in 5.0.
+   */
   degreesHours: number | null;
+  /**
+   * @deprecated Internal clock-hand angle; use `minutes` instead. Removed in 5.0.
+   */
   degreesMinutes: number | null;
 };
 
@@ -14,6 +22,8 @@ export type CancelEventData = Record<string, never>;
 export type ConfirmEventData = {
   hour?: string;
   minutes?: string;
+  /** Present only with `clock.showSeconds` */
+  seconds?: string;
   type?: string;
   /** When true, this confirm was triggered by commitOnScroll (auto-commit) */
   autoCommit?: boolean;
@@ -27,13 +37,18 @@ export type ClearEventData = {
 /** Payload when modal shows */
 export type ShowEventData = Record<string, never>;
 
-/** Payload when modal hides */
+/**
+ * Payload of the `hide` event
+ * @deprecated The `hide` event is never emitted. Removed in 5.0.
+ */
 export type HideEventData = Record<string, never>;
 
 /** Payload for real-time updates */
 export type UpdateEventData = {
   hour?: string;
   minutes?: string;
+  /** Present only with `clock.showSeconds` */
+  seconds?: string;
   type?: string;
 };
 
@@ -47,14 +62,35 @@ export type SelectMinuteEventData = {
   minutes: string;
 };
 
-/** Payload when AM selected */
+/** Payload when second mode activated (requires `clock.showSeconds`) */
+export type SelectSecondEventData = {
+  seconds: string;
+};
+
+/**
+ * Payload when AM selected
+ * @deprecated Use `SelectPeriodEventData`. Removed in 5.0.
+ */
 export type SelectAMEventData = Record<string, never>;
 
-/** Payload when PM selected */
+/**
+ * Payload when PM selected
+ * @deprecated Use `SelectPeriodEventData`. Removed in 5.0.
+ */
 export type SelectPMEventData = Record<string, never>;
 
 /** Payload when switching view */
 export type SwitchViewEventData = Record<string, never>;
+
+/** Payload when AM or PM is selected */
+export type SelectPeriodEventData = {
+  type: 'AM' | 'PM';
+};
+
+/** Payload when the clock face switches between hours, minutes and seconds */
+export type SwitchFaceEventData = {
+  face: 'hours' | 'minutes' | 'seconds';
+};
 
 /** Payload when timezone is changed */
 export type TimezoneChangeEventData = {
@@ -65,6 +101,8 @@ export type RangeConfirmEventData = {
   from: string;
   to: string;
   duration: number;
+  /** Exact duration in seconds; present only with `clock.showSeconds` */
+  durationSeconds?: number;
 };
 
 export type RangeSwitchEventData = {
@@ -72,14 +110,18 @@ export type RangeSwitchEventData = {
   disabledTime?: {
     hours: string[];
     minutes: string[];
+    seconds?: string[];
     fromType?: string;
     fromHour?: number;
+    fromMinute?: number;
   } | null;
 };
 
 export type RangeValidationEventData = {
   valid: boolean;
   duration: number;
+  /** Exact duration in seconds; present only with `clock.showSeconds` */
+  durationSeconds?: number;
   minDuration?: number;
   maxDuration?: number;
 };
@@ -87,6 +129,7 @@ export type RangeValidationEventData = {
 export type RangeMinuteCommitEventData = {
   hour: string;
   minutes: string;
+  seconds?: string;
   type?: string;
 };
 
@@ -96,12 +139,12 @@ export type RangeUpdateDisabledEventData = Record<string, never>;
 
 /** Payload when wheel scroll starts on a column */
 export type WheelScrollStartEventData = {
-  column: 'hours' | 'minutes' | 'ampm';
+  column: 'hours' | 'minutes' | 'seconds' | 'ampm';
 };
 
 /** Payload when wheel scroll ends and snaps to a value */
 export type WheelScrollEndEventData = {
-  column: 'hours' | 'minutes' | 'ampm';
+  column: 'hours' | 'minutes' | 'seconds' | 'ampm';
   value: string;
   previousValue: string | null;
 };
@@ -109,10 +152,18 @@ export type WheelScrollEndEventData = {
 /** Payload when validation error occurs */
 export type ErrorEventData = {
   error: string;
+  /**
+   * @deprecated Always undefined. Removed in 5.0.
+   */
   rejectedHour?: string;
+  /**
+   * @deprecated Always undefined. Removed in 5.0.
+   */
   rejectedMinute?: string;
   inputHour?: string | number;
   inputMinute?: string | number;
+  /** Present only with `clock.showSeconds` */
+  inputSecond?: string | number;
   inputType?: string;
   inputLength?: string | number;
 };
@@ -120,6 +171,9 @@ export type ErrorEventData = {
 /** Callback function for timepicker events */
 export type TimepickerEventCallback<T = unknown> = (eventData: T) => void;
 
+/**
+ * @deprecated Use `TimepickerOptions` instead. Removed in 5.0.
+ */
 export type OptionTypes = {
   /** Picker mode: clock, wheel, or compact-wheel @default "clock" */
   mode?: 'clock' | 'wheel' | 'compact-wheel';
@@ -144,7 +198,9 @@ export type OptionTypes = {
   enableSwitchIcon?: boolean;
   /** Mobile time label @default "Enter Time" */
   mobileTimeLabel?: string;
-  /** Focus input after close @default false */
+  /**
+   * @deprecated Old v3 name, has no effect. Use `behavior.returnFocus` in 4.x. Removed in 5.0, where focus returns to the input by default.
+   */
   focusInputAfterCloseModal?: boolean;
   /** Mobile hour label @default "Hour" */
   hourMobileLabel?: string;
@@ -206,11 +262,13 @@ export type OptionTypes = {
     interval?: string | string[];
   };
   /** Current time config */
-  /** Current time config */
   currentTime?:
     | {
         time?: Date;
         updateInput?: boolean;
+        /**
+         * @deprecated Has no effect since 4.5.0; the value is formatted by the library. Removed in 5.0.
+         */
         locales?: string | string[];
         preventClockType?: boolean;
       }
@@ -218,7 +276,7 @@ export type OptionTypes = {
 
   /** Focus trap on modal @default true */
   focusTrap?: boolean;
-  /** Delay for clickable elements (ms) @default 300 */
+  /** Extra delay (ms) before the picker starts to close after OK, Cancel, Escape, a backdrop click or `close()` @default 0 */
   delayHandler?: number;
   /** Custom ID for instance */
   id?: string;
@@ -228,7 +286,7 @@ export type OptionTypes = {
     containerId: string;
     /** @default false */
     showButtons?: boolean;
-    /** @default true */
+    /** @default false */
     autoUpdate?: boolean;
   };
   /** Additional CSS class */

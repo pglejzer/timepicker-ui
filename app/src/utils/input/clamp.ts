@@ -25,3 +25,5 @@ export const clampMinuteValue = (value: string): string => {
   return clamped.toString().padStart(2, '0');
 };
 
+export const clampSecondValue = clampMinuteValue;
+

@@ -9,3 +9,15 @@ export function bindEmitter<K extends keyof TimepickerEventMap>(
   emitter.on(event, handler);
   cleanupHandlers.push(() => emitter.off(event, handler));
 }
+
+export function runCleanups(cleanupHandlers: Array<() => void>): void {
+  cleanupHandlers.splice(0).forEach((cleanup) => cleanup());
+}
+
+export function requestOpen(emitter: EventEmitter<TimepickerEventMap>): void {
+  try {
+    emitter.emit('show', {});
+  } finally {
+    emitter.emit('open:request', {});
+  }
+}

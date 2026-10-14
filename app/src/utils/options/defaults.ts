@@ -1,4 +1,5 @@
 import type { TimepickerOptions } from '../../types/options';
+import { resolveAliases } from './aliases';
 
 export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
   clock: {
@@ -6,6 +7,9 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     incrementHours: 1,
     incrementMinutes: 1,
     autoSwitchToMinutes: true,
+    showSeconds: false,
+    incrementSeconds: 1,
+    autoSwitchToSeconds: true,
     disabledTime: undefined,
     currentTime: undefined,
   },
@@ -20,7 +24,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     editable: false,
     enableScrollbar: false,
     cssClass: undefined,
-    appendModalSelector: '',
+    appendTo: '',
     iconTemplate: '',
     iconTemplateMobile: '',
     inline: undefined,
@@ -36,6 +40,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     mobileTime: 'Enter Time',
     mobileHour: 'Hour',
     mobileMinute: 'Minute',
+    second: 'Second',
     clear: 'Clear',
     hourLabel: 'Hour',
     minuteLabel: 'Minute',
@@ -53,29 +58,37 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     announceAmSelected: 'AM selected',
     announcePmSelected: 'PM selected',
     invalidTimeFormat: 'Invalid time format',
+    announceCleared: 'Time cleared',
   },
 
   behavior: {
     focusInputAfterClose: false,
     focusTrap: true,
-    delayHandler: 300,
+    delayHandler: 0,
     id: undefined,
   },
 
   callbacks: {
     onOpen: undefined,
+    onShow: undefined,
     onCancel: undefined,
     onConfirm: undefined,
     onUpdate: undefined,
     onSelectHour: undefined,
     onSelectMinute: undefined,
+    onSelectSecond: undefined,
     onSelectAM: undefined,
     onSelectPM: undefined,
+    onSelectPeriod: undefined,
+    onSwitchView: undefined,
+    onSwitchFace: undefined,
     onError: undefined,
     onTimezoneChange: undefined,
     onRangeConfirm: undefined,
     onRangeSwitch: undefined,
     onRangeValidation: undefined,
+    onWheelScrollStart: undefined,
+    onWheelScrollEnd: undefined,
     onClear: undefined,
   },
 
@@ -107,56 +120,25 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
   },
 };
 
-export function mergeOptions(userOptions: TimepickerOptions = {}): Required<TimepickerOptions> {
-  const merged: Required<TimepickerOptions> = {
-    clock: {
-      ...DEFAULT_OPTIONS.clock,
-      ...userOptions.clock,
-    },
-    ui: {
-      ...DEFAULT_OPTIONS.ui,
-      ...userOptions.ui,
-    },
-    labels: {
-      ...DEFAULT_OPTIONS.labels,
-      ...userOptions.labels,
-    },
-    behavior: {
-      ...DEFAULT_OPTIONS.behavior,
-      ...userOptions.behavior,
-    },
-    callbacks: {
-      ...DEFAULT_OPTIONS.callbacks,
-      ...userOptions.callbacks,
-    },
-    timezone: {
-      ...DEFAULT_OPTIONS.timezone,
-      ...userOptions.timezone,
-    },
-    range: {
-      ...DEFAULT_OPTIONS.range,
-      ...userOptions.range,
-    },
-    wheel: {
-      ...DEFAULT_OPTIONS.wheel,
-      ...userOptions.wheel,
-    },
-    clearBehavior: {
-      ...DEFAULT_OPTIONS.clearBehavior,
-      ...userOptions.clearBehavior,
-    },
+export function mergeOptionGroups(
+  base: Required<TimepickerOptions>,
+  updates: TimepickerOptions = {},
+): Required<TimepickerOptions> {
+  const next = resolveAliases(updates);
+  return {
+    ...base,
+    clock: { ...base.clock, ...next.clock },
+    ui: { ...base.ui, ...next.ui },
+    labels: { ...base.labels, ...next.labels },
+    behavior: { ...base.behavior, ...next.behavior },
+    callbacks: { ...base.callbacks, ...next.callbacks },
+    timezone: { ...base.timezone, ...next.timezone },
+    range: { ...base.range, ...next.range },
+    wheel: { ...base.wheel, ...next.wheel },
+    clearBehavior: { ...base.clearBehavior, ...next.clearBehavior },
   };
+}
 
-  const mergedMode = merged.ui.mode;
-  if (mergedMode === 'wheel' || mergedMode === 'compact-wheel') {
-    merged.wheel = {
-      placement: mergedMode === 'compact-wheel' ? 'auto' : undefined,
-      hideFooter: undefined,
-      commitOnScroll: undefined,
-      ignoreOutsideClick: undefined,
-      ...merged.wheel,
-    };
-  }
-
-  return merged;
+export function mergeOptions(userOptions: TimepickerOptions = {}): Required<TimepickerOptions> {
+  return mergeOptionGroups(DEFAULT_OPTIONS, userOptions);
 }

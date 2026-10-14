@@ -1,8 +1,17 @@
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
-import { announceToScreenReader, bindActivate } from '../utils/accessibility';
-import { PluginRegistry } from '../core/PluginRegistry';
-import { bindEmitter } from '../utils/managerHelpers';
+import {
+  announceToScreenReader,
+  bindActivate,
+  setActivePeriod,
+  setClass,
+  setElementDisabled,
+  setSpinbuttonValue,
+} from '../utils/accessibility';
+import { bindEmitter, runCleanups } from '../utils/managerHelpers';
+import { TIME_FIELDS, TIME_FIELD_NAMES, getTimeInput, type TimeField } from './events/timeFields';
+
+const NEUTRAL_VALUES: Readonly<Record<TimeField, string>> = { hour: '12', minutes: '00', seconds: '00' };
 
 export default class ClearButtonManager {
   private core: CoreState;
@@ -29,22 +38,18 @@ export default class ClearButtonManager {
     this.cleanupHandlers.push(bindActivate(clearButton, handler));
 
     this.setupInternalEventListeners();
+    this.updateClearButtonState();
   }
 
   private setupInternalEventListeners(): void {
-    bindEmitter(this.emitter, this.cleanupHandlers, 'update', () => {
-      this.updateClearButtonState();
-    });
-    bindEmitter(this.emitter, this.cleanupHandlers, 'open', () => {
-      this.updateClearButtonState();
-    });
-    bindEmitter(this.emitter, this.cleanupHandlers, 'select:hour', () => {
-      this.updateClearButtonState();
-      this.reenableConfirmIfCleared();
-    });
-    bindEmitter(this.emitter, this.cleanupHandlers, 'select:minute', () => {
-      this.updateClearButtonState();
-      this.reenableConfirmIfCleared();
+    const refresh = (): void => this.updateClearButtonState();
+    bindEmitter(this.emitter, this.cleanupHandlers, 'update', refresh);
+    bindEmitter(this.emitter, this.cleanupHandlers, 'open', refresh);
+    TIME_FIELD_NAMES.forEach((field) => {
+      bindEmitter(this.emitter, this.cleanupHandlers, TIME_FIELDS[field].event, () => {
+        refresh();
+        this.reenableConfirmIfCleared();
+      });
     });
   }
 
@@ -54,11 +59,11 @@ export default class ClearButtonManager {
 
     this.clearTimeValue();
     this.resetClockToNeutral();
-    this.disableConfirmButton();
+    setElementDisabled(this.core.getOkButton(), true);
     this.wasCleared = true;
 
     const modal = this.core.getModalElement();
-    announceToScreenReader(modal, 'Time cleared');
+    announceToScreenReader(modal, this.core.options.labels.announceCleared!);
 
     this.emitter.emit('clear', { previousValue });
     this.emitter.emit('update', {
@@ -66,11 +71,6 @@ export default class ClearButtonManager {
       minutes: undefined,
       type: undefined,
     });
-
-    const { callbacks } = this.core.options;
-    if (callbacks.onClear) {
-      callbacks.onClear({ previousValue });
-    }
   }
 
   private clearTimeValue(): void {
@@ -82,36 +82,16 @@ export default class ClearButtonManager {
 
     this.core.setDegreesHours(null);
     this.core.setDegreesMinutes(null);
-
-    const rangeClear = PluginRegistry.getClearHandler('range');
-    if (rangeClear) {
-      rangeClear(this.core, this.emitter);
-    }
-
-    const timezoneClear = PluginRegistry.getClearHandler('timezone');
-    if (timezoneClear) {
-      timezoneClear(this.core, this.emitter);
-    }
+    this.core.setDegreesSeconds(null);
   }
 
   private resetClockToNeutral(): void {
     const clockType = this.core.options.clock.type;
-    const neutralHour = '12';
-    const neutralMinutes = '00';
     const neutralType = clockType === '12h' ? 'PM' : undefined;
 
-    const hourInput = this.core.getHour();
-    const minuteInput = this.core.getMinutes();
-
-    if (hourInput) {
-      hourInput.value = neutralHour;
-      hourInput.removeAttribute('aria-valuenow');
-    }
-
-    if (minuteInput) {
-      minuteInput.value = neutralMinutes;
-      minuteInput.removeAttribute('aria-valuenow');
-    }
+    TIME_FIELD_NAMES.forEach((field) => {
+      setSpinbuttonValue(getTimeInput(this.core, field), NEUTRAL_VALUES[field]);
+    });
 
     const clockHand = this.core.getClockHand();
     if (clockHand) {
@@ -127,48 +107,17 @@ export default class ClearButtonManager {
     }
 
     this.removeActiveStates();
+    this.core.getHour()?.click();
 
-    if (hourInput) {
-      hourInput.click();
-    }
-
-    if (clockType === '12h' && neutralType) {
-      const amButton = this.core.getAM();
-      const pmButton = this.core.getPM();
-
-      amButton?.classList.remove('active');
-      pmButton?.classList.remove('active');
-
-      amButton?.setAttribute('aria-pressed', 'false');
-      pmButton?.setAttribute('aria-pressed', 'false');
-
-      pmButton?.classList.add('active');
-      pmButton?.setAttribute('aria-pressed', 'true');
+    if (neutralType) {
+      setActivePeriod(this.core.getAM(), this.core.getPM(), neutralType);
     }
 
     this.emitter.emit('animation:clock', {});
   }
 
   private removeActiveStates(): void {
-    const allValueTips = this.core.getAllValueTips();
-    allValueTips.forEach((tip) => {
-      tip.classList.remove('active');
-      tip.removeAttribute('aria-selected');
-    });
-
-    const hourInput = this.core.getHour();
-    const minuteInput = this.core.getMinutes();
-
-    hourInput?.removeAttribute('aria-valuenow');
-    minuteInput?.removeAttribute('aria-valuenow');
-  }
-
-  private disableConfirmButton(): void {
-    const okButton = this.core.getOkButton();
-    if (!okButton) return;
-
-    okButton.classList.add('disabled');
-    okButton.setAttribute('aria-disabled', 'true');
+    this.core.getAllValueTips().forEach((tip) => setClass(tip, 'active', false));
   }
 
   private updateClearButtonState(): void {
@@ -176,28 +125,26 @@ export default class ClearButtonManager {
     if (!clearButton) return;
 
     const input = this.core.getInput();
-    const hasInputValue = input?.value && input.value.trim() !== '';
-
-    const hourInput = this.core.getHour();
-    const minuteInput = this.core.getMinutes();
-    const activeTypeMode = this.core.getActiveTypeMode();
+    const hasInputValue = !!input?.value.trim();
 
     const clockType = this.core.options.clock.type;
-    const currentHour = hourInput?.value || '';
-    const currentMinutes = minuteInput?.value || '';
-    const currentType = activeTypeMode?.textContent || '';
+    const currentHour = this.core.getHour()?.value || '';
+    const currentMinutes = this.core.getMinutes()?.value || '';
+    const currentSeconds = this.core.getSeconds()?.value || '';
+    const currentType = this.core.getActiveType() ?? '';
 
+    const hasSelection = currentHour !== '' || currentMinutes !== '' || currentSeconds !== '';
     const isDefaultValue =
-      clockType === '12h'
-        ? currentHour === '12' && currentMinutes === '00' && currentType === 'PM'
-        : currentHour === '12' && currentMinutes === '00';
+      currentHour === NEUTRAL_VALUES.hour &&
+      currentMinutes === NEUTRAL_VALUES.minutes &&
+      (currentSeconds === '' || currentSeconds === NEUTRAL_VALUES.seconds) &&
+      (clockType !== '12h' || currentType === 'PM');
 
-    const hasChangedValue = !isDefaultValue;
+    const hasChangedValue = hasSelection && !isDefaultValue;
 
     const shouldEnable = hasInputValue || hasChangedValue;
 
-    clearButton.classList.toggle('disabled', !shouldEnable);
-    clearButton.setAttribute('aria-disabled', String(!shouldEnable));
+    setElementDisabled(clearButton, !shouldEnable);
   }
 
   private reenableConfirmIfCleared(): void {
@@ -206,8 +153,7 @@ export default class ClearButtonManager {
     const okButton = this.core.getOkButton();
     if (!okButton) return;
 
-    okButton.classList.remove('disabled');
-    okButton.setAttribute('aria-disabled', 'false');
+    setElementDisabled(okButton, false);
     this.wasCleared = false;
   }
 
@@ -216,8 +162,11 @@ export default class ClearButtonManager {
     return modal?.querySelector('.tp-ui-clear-btn') || null;
   }
 
+  detach(): void {
+    runCleanups(this.cleanupHandlers);
+  }
+
   destroy(): void {
-    this.cleanupHandlers.forEach((cleanup) => cleanup());
-    this.cleanupHandlers = [];
+    this.detach();
   }
 }
