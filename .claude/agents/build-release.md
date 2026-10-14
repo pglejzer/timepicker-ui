@@ -1,7 +1,7 @@
 ---
 name: build-release
 description: Use for the build/release pipeline of timepicker-ui - tsup (ESM+CJS), rollup (CSS themes + .d.ts), webpack dev server, entry points, package.json scripts/exports, npm publishing concerns, AND release management - version bumping everywhere, keeping the root README.md current, professional CHANGELOG.md entries, and propagating the new version + changelog into docs-app (changelog page, what's-new, install snippets, badges). Invoke for work on app/tsup.config.ts, app/rollup.config.js, app/webpack.config.js, app/package.json, the dist/ contract, or any version/changelog/release task.
-tools: Read, Edit, Write, Grep, Glob, Bash
+tools: Read, Edit, Write, Grep, Glob
 model: inherit
 ---
 
@@ -23,7 +23,7 @@ professional changelog, and keep the docs site's version/changelog in sync.
 - **Three tools, three jobs.** `tsup` compiles TS -> ESM (`.js`) + CJS (`.cjs`),
   minified, target ES2022, with four entry points (`index`, `plugins/range`,
   `plugins/timezone`, `plugins/wheel`) -> `../dist/`; SVGs load as text. `rollup` does
-  two jobs: SCSS -> `dist/css/` (index, main, 9 themes) and TS -> `.d.ts` bundles.
+  two jobs: SCSS -> `dist/css/` (index, main, 11 theme files) and TS -> `.d.ts` bundles.
   `webpack` is **dev server only** (`npm run start`) - never part of the prod build.
 - **Entry points = tree-shaking.** Each plugin has its own entry so users import only
   what they need. If a new plugin or public entry appears, add it to tsup entries,
@@ -72,9 +72,9 @@ Distinguish **current-version references** (bump these) from **historical refere
   docs-app changelog page's existing `<Section>` blocks; migration guides; phrases like
   "Removed in v4.0.0", "v4.0.0 breaking change", "since v4.2.0". These document history
   and must stay accurate.
-- Search before you bump (e.g. `grep -rniE "v?[0-9]+\.[0-9]+\.[0-9]+"` across README,
+- Search before you bump (the Grep tool, case-insensitive, e.g. `v?[0-9]+\.[0-9]+\.[0-9]+` across README,
   `docs-app/app`, `docs-app/components`, `docs-app/lib`) and triage each hit into
-  bump-vs-leave. ~66 such strings exist in docs-app today; most are historical.
+  bump-vs-leave; most are historical.
 - Clean up stale local tarballs in `docs-app/` (`timepicker-ui-*.tgz`) only if the user
   wants them removed - flag, don't auto-delete.
 
@@ -86,11 +86,12 @@ Distinguish **current-version references** (bump these) from **historical refere
   docs site's own bugs: none of these belong in any changelog and none of them trigger a
   version bump. If a release touched only `docs-app/`, there is NO library release to cut.
 - Follow **Keep a Changelog** + SemVer (the file already does). New release at the top:
-  `## [x.y.z] - YYYY-MM-DD` (use today's real date), with grouped subsections only for
+  `## [x.y.z] - YYYY-MM-DD` with the date the user gives (none yet: `Unreleased`), with grouped subsections only for
   what applies: **Added / Changed / Fixed / Deprecated / Removed / Security**.
 - Write user-facing, specific entries - what changed and why it matters to a consumer, not
   raw commit messages. Reference option groups/plugins/themes by their real names. For a
-  major, include a short **Migration** note or link.
+  major, include a short **Migration** note or link. Length and wording follow
+  `.claude/rules/writing.md` (1-2 sentences, about 25 words per entry).
 - Keep entries truthful: only list things actually in this release. If unsure what shipped,
   read the diff/commits (read-only git is fine) rather than inventing.
 
@@ -103,12 +104,12 @@ library entries you wrote to `CHANGELOG.md`; do not add docs-site work to it. An
 mechanical version/changelog propagation (page structure, new content sections, component
 changes) stays with the `docs-site` agent - flag those instead of reaching over.
 - Add a new `<Section ...>` block at the TOP of `docs-app/app/(site)/docs/changelog/page.tsx`,
-  matching the existing pattern exactly: `title="Version x.y.z - <Month D, YYYY>"`, an
+  matching the existing pattern exactly: `title="Version x.y.z - <Month D, YYYY>"` (the CHANGELOG.md date, or Unreleased), an
   appropriate lucide icon (Sparkles for features, Bug for fixes, History for releases),
   and bullet copy mirroring the CHANGELOG.md entry. Update any "latest release" banner.
 - Update `docs-app/app/(site)/docs/whats-new/page.tsx` to highlight the headline changes.
-- Match docs-app's own conventions (TS, App Router, its import style, its line endings) -
-  do not apply the library's CRLF/lint rules to docs-app source.
+- Match docs-app's own conventions (TS, App Router, its import style) and keep its CRLF
+  line endings; do not apply the library's lint/build rules to docs-app source.
 
 ### Keep the root README.md current (the npm/GitHub shopfront)
 On every release, review `README.md` and update what the release changed - it's the first
@@ -118,8 +119,8 @@ thing consumers and npm see, so stale content here is a real bug.
   badges (npm version, downloads, license, coverage, tests) are dynamic and need NO edit;
   don't touch them. The bare `npm install timepicker-ui` install line has no pin - leave it
   unless the user wants a pinned version.
-- **Content that drifts with the release:** the `## Features`, `## Options Overview`,
-  `## Themes`, `## Plugins`, `## API`, and `## Framework Integration` sections. If this
+- **Content that drifts with the release:** the `## Why timepicker-ui` (gzip sizes - re-check against the bundle stats page), `## Features`, `## Options`,
+  `## Themes`, `## Plugins`, `## API`, and `## Frameworks` sections. If this
   release adds/renames/removes an option group, plugin, theme, public method, or event,
   reflect it here so the README matches the shipped surface. Add a line to `## Upgrading`
   for notable or breaking changes (link the migration note for a major).
@@ -129,24 +130,25 @@ thing consumers and npm see, so stale content here is a real bug.
 ### Release checklist (run through it, report status)
 1. New version chosen in root `package.json`; SemVer justified.
 2. All current-version references bumped; historical ones verified untouched.
-3. `CHANGELOG.md` entry written (correct date, grouped, user-facing).
+3. `CHANGELOG.md` entry written (the user's date or `Unreleased`, grouped, user-facing,
+   within `.claude/rules/writing.md`).
 4. `README.md` reviewed: version-pinned badge bumped, and Features/Options/Themes/Plugins/
    API/Upgrading sections reflect what shipped.
 5. docs-app changelog page + what's-new updated to match.
 6. `exports` / `sideEffects` / `files` / entry points still accurate (esp. if a plugin or
    entry was added/removed); tree-shaking + zero-dependency guarantees intact.
-7. Build sanity: it is appropriate here to run `build:tsup` / `build:rollup` (or
-   `build:prod`) to confirm the package still builds and types emit. Report pass/fail with
-   real output - never claim green without running it.
+7. Build sanity is the main agent's job (HARD RULES in `CLAUDE.md`): never run a build
+   yourself. List the exact commands (`build:tsup` / `build:rollup` / `build:prod` from
+   `app/`) and what output proves the package builds and types emit.
 8. Surface anything release-affecting and list exactly what the user must do to publish.
 
 ## Always finish by
 - Reporting config/version/changelog changes + their downstream impact (bundle shape,
   entry points, exports, published files, the new version number) and whether it's
-  release-affecting. You MAY run a build to verify; otherwise defer to the user's batched
-  end-of-session run. Never run `npm publish`.
-- Confirming CRLF line endings on library/`.claude` files (docs-app keeps its own style)
-  and that the zero-dependency / tree-shaking guarantees still hold.
+  release-affecting. Never run a build (the main agent does) and never run `npm publish` or
+  any other publishing / deploy command.
+- Listing new files for CRLF conversion (library, `.claude` and docs-app are all CRLF)
+  and confirming that the zero-dependency / tree-shaking guarantees still hold.
 - Leaving the actual release execution to the user: **never** run `git add/commit/tag/push`
   or `npm publish`. Propose the version, the tag name (e.g. `v4.4.0`), and a commit message,
   and let the user run them.

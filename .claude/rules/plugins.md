@@ -23,5 +23,5 @@ Applies to the range / timezone / wheel plugins + the registry. Pairs with
   `wheel:*`) and shared `CoreState` - never direct manager-to-manager calls or cross-plugin refs.
   Emit `error` when a required plugin is missing or validation fails.
 - SSR-safe, zero new runtime deps, CRLF. Visible/AT text goes through the `labels` group, not
-  hardcoded. Keyboard + ARIA (tablist for range, listbox/combobox for timezone, spinbutton/list
-  for wheel) follow the WAI-ARIA APG.
+  hardcoded. Keyboard + ARIA (tablist for range, listbox/combobox for timezone, listbox for the
+  wheel columns) follow the WAI-ARIA APG.

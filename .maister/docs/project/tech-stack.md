@@ -12,9 +12,9 @@ This document describes the technology choices and rationale for `timepicker-ui`
 - **Key Features Used**: strict mode, `EventEmitter<TimepickerEventMap>` typed bus, grouped option interfaces, `@/` path alias to `app/src/`. `@typescript-eslint/no-explicit-any` is intentionally off — `any` is permitted but typed code is preferred.
 
 ### SCSS
-- **Usage**: 11 stylesheets in `app/src/styles/` (core + 10 themes)
+- **Usage**: core stylesheets plus 11 theme files in `app/src/styles/` (12 themes; basic lives in the core tokens)
 - **Rationale**: Variables, mixins, and effects shared across themes; compiled to standalone CSS so consumers load only what they need.
-- **Key Features Used**: `variables.scss`, `_mixins.scss`, `_effects.scss`; `tp-ui-` class prefix; standalone per-theme output.
+- **Key Features Used**: `variables.scss` tokens, `partials/`; `tp-ui-` class prefix; standalone per-theme output.
 
 ### JavaScript
 - **Usage**: Build configuration (`rollup.config.js`, `webpack.config.js`) and emitted ESM/CJS bundles.
@@ -78,7 +78,7 @@ None detected.
 
 - Semantic Versioning; changes tracked in `CHANGELOG.md` (Keep a Changelog format).
 - Animation/delay values centralized in `app/src/constants/timings.ts` (`TIMINGS`) rather than hardcoded.
-- Current published version 4.3.0; active development on `feature/4.4.0`.
+- Current published version 4.4.0; 4.5.0 prepared, not released yet.
 
 ## Migration Path
 

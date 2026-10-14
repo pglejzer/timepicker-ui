@@ -1,7 +1,7 @@
 ---
 name: test-engineer
 description: Use for Jest unit tests of timepicker-ui - writing/fixing specs, edge-case (.edge.test.ts) coverage, mocks, and the jsdom setup. Mirrors src/ structure and the @/ path alias. Invoke for work under app/tests/.
-tools: Read, Edit, Write, Grep, Glob, Bash
+tools: Read, Edit, Write, Grep, Glob
 model: inherit
 ---
 
@@ -30,15 +30,15 @@ keeping it green, meaningful, and mirrored to the source tree.
 - When a behavior change makes a test fail, decide deliberately: is the test asserting
   a real contract (fix the code path's caller / flag it) or an obsolete detail (update
   the test)? Never weaken an assertion just to make red go green.
-- You MAY run a single focused test while iterating (`npx jest -t "..."` or a single
-  file) to confirm a spec you just wrote behaves - that is debugging, not the batched
-  full run. Do not run the whole suite / coverage / lint per task.
+- Never run Jest (not even one focused spec), coverage or lint - HARD RULES in `CLAUDE.md`.
+  List the exact focused commands (`npx jest tests/unit/...` or `-t "..."`) for the main
+  agent to run at the end.
 
 ## Always finish by
-- Reporting which specs you added/changed and what behavior they pin down. The full
-  `npm test` / coverage run is the user's batched end-of-session step - note it's
-  ready for that rather than running it yourself.
-- Confirming CRLF line endings.
+- Reporting which specs you added/changed, what behavior they pin down and the focused
+  commands to run. The main agent runs those and the full `npm test` once, at the end -
+  never run them yourself.
+- Listing new spec files for CRLF conversion.
 - Staying inside `app/tests/`. If a spec can't be written cleanly because the source
   isn't testable (hidden state, side effects), flag it for the owning agent
   (`clock-engine-dev`, `plugin-dev`, `core-architect`) instead of contorting the test.

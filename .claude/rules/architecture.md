@@ -5,7 +5,7 @@ the root `CLAUDE.md` (full repo map + commands). When this file and `CLAUDE.md`
 disagree, `CLAUDE.md` wins - flag the drift instead of silently following one.
 
 `timepicker-ui` is a **zero-dependency, framework-agnostic, SSR-safe** time picker
-(v4.4.0, published to npm). Analog clock, scroll wheel, and compact-wheel UI modes.
+(v4.5.0, published to npm). Analog clock, scroll wheel, and compact-wheel UI modes.
 Three optional plugins (range, timezone, wheel) tree-shaken out unless imported.
 12 built-in CSS themes. **All source/build/test work happens in `app/`.**
 
@@ -78,14 +78,14 @@ of a plugin from core code.
 goes through it. Key events:
 
 - Lifecycle: `show`, `open`, `cancel`, `confirm`, `clear`
-- Clock selection: `select:hour`, `select:minute`, `select:am`, `select:pm`
+- Clock selection: `select:hour`, `select:minute`, `select:second`, `select:am`, `select:pm`
 - Range: `range:confirm`, `range:switch`, `range:validation`
 - Timezone: `timezone:change`
 - Wheel: `wheel:scroll:start`, `wheel:scroll:end`
 - Animation: `animation:clock`, `animation:start`, `animation:end`
 - `error` - missing plugin or validation errors
 
-`Lifecycle.setupCallbackBridge()` wires user `callbacks.*` options to internal events
+`setupCallbackBridge()` (`timepicker/LifecycleCallbacks.ts`) wires user `callbacks.*` options to internal events
 (e.g. `callbacks.onConfirm` -> `emitter.on('confirm', ...)`). User-facing callbacks go
 through this bridge - do not call user callbacks directly from managers.
 
@@ -94,7 +94,7 @@ through this bridge - do not call user callbacks directly from managers.
 Grouped, defined in `app/src/types/options.d.ts`, merged via `mergeOptions()` in
 `app/src/utils/options/`:
 
-- `clock` - type (12h/24h), increments, disabledTime, currentTime, smoothHourSnap
+- `clock` - type (12h/24h), incrementHours / incrementMinutes / incrementSeconds, showSeconds, autoSwitchToSeconds, disabledTime, currentTime, smoothHourSnap
 - `ui` - theme, mode, animation, backdrop, mobile, editable, inline, clearButton, cssClass
 - `labels` - all UI text
 - `behavior` - focusTrap, focusInputAfterClose, delayHandler, id
@@ -106,16 +106,26 @@ animation behavior there, never hardcode timeouts.
 
 ## 6. Working agreement (applies to every agent)
 
-- **CRLF line endings** on all new/edited files. ESLint enforces
-  `linebreak-style: windows` on `src/**/*.ts`; keep `.claude/` files CRLF too.
-- **Git is the user's job.** Never `git add` / `commit` / `push` / `branch` / `merge`.
-  Read-only git (`status`, `log`, `diff`) is fine.
-- **Batch execution.** Do NOT run `build` / `test` / `lint` after each task. Verify
-  changes by reading code and reasoning about them, report what you changed and why,
-  and let the user run the full suite (and decide on commits) at the very end.
+- **CRLF line endings** on all new/edited files (library, `.claude/`, docs-app). ESLint enforces
+  `linebreak-style: windows` on `src/**/*.ts`. Edit keeps CRLF; Write creates LF, so list every
+  file you created in your report - the main agent converts them.
+- **Git is the user's job** (HARD RULES in `CLAUDE.md`). Subagents run no git at all; the
+  main agent only reads (`status`, `diff`, `log`, `show`, ...) and never adds, commits,
+  pushes, branches, merges, resets, stashes or checks out without the user's explicit
+  approval for that one operation. End state: nothing staged, nothing committed.
+- **Packages are the user's job.** Never `npm install` / `ci` / `uninstall` / `update`;
+  propose the command and wait for the user to run it.
+- **Subagents never run anything** (HARD RULES in `CLAUDE.md`): no build / test / lint /
+  typecheck / dev server / browser / `/verify` / review, no git. Verify changes by reading
+  code and reasoning about them; report what you changed and which commands, specs and
+  routes the main agent should run. The main agent runs all verification once, at the very
+  end (including `/verify`, quick profile by default, when HARD RULES §5 calls for it - not for
+  demo examples or micro changes); the user decides on commits.
+- **Local only.** Never publish, deploy or push (`npm publish`, `vercel`, `git push`, ...).
 - **Zero-dependency & SSR-safe.** No new runtime dependencies. No bare `window` /
   `document` access at module top level - guard for SSR.
-- **No default exports** except `TimepickerUI` itself.
+- **Default exports** only for `TimepickerUI` and the manager classes (built-in and plugin
+  managers); named exports everywhere else.
 - **No nested ternaries** (`no-nested-ternary`). `any` is permitted but prefer types.
 - **No code comments.** Don't add inline/explanatory comments in `app/src` - they clutter
   the source and the user doesn't want them. Let the code self-document (clear names,

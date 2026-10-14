@@ -21,5 +21,5 @@ Applies when working in `app/tests/`. Pairs with `.claude/rules/architecture.md`
 - **Never weaken an assertion just to make a failing test pass.** If behavior legitimately
   changed, assert the new correct attribute/class/event that proves the same behavior.
 - Coverage is collected from `src/**/*.{ts,tsx}` excluding `.d.ts`, `src/types/`, `src/styles/`.
-- Don't run the full suite per task while iterating - run focused specs; the user runs the full
-  `npm test` at the end. No git.
+- Subagents never run Jest, not even a focused spec (HARD RULES in `CLAUDE.md`). List the focused
+  commands; the main agent runs them and the full `npm test` once, at the end. No git.

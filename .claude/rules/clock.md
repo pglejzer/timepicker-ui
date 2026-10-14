@@ -14,12 +14,19 @@ Applies in `app/src/managers/clock/`. Pairs with `.claude/rules/architecture.md`
   - `renderer/` - `ClockRenderer` is the **only** place that touches clock-face DOM.
   - `handlers/` - events (click/drag), CSS, time selection, startup.
 - Cross-layer changes route **through the controller**, not sideways.
-- **Degrees in `CoreState` are the source of truth** for hand rotation - don't recompute angles
-  in the renderer.
+- **`ClockController` owns the hand angle** (engine math -> controller state -> renderer); don't
+  recompute angles in the renderer. `CoreState.degreesHours` / `degreesMinutes` / `degreesSeconds`
+  are legacy values for the deprecated `getValue()` degree fields and the `open` payload; the clock
+  never reads them.
 - All timing/animation comes from `TIMINGS` (`app/src/constants/timings.ts`) - never hardcode a
   timeout or transition duration. Gate JS-driven motion on `prefersReducedMotion()`.
-- Clock tips are decorative (`aria-hidden`, `tabindex="-1"`, no `role="option"`); the keyboard
-  path is the hour/minute spinbutton inputs. Don't re-add list/option ARIA to tips.
+- Clock tips are decorative (`aria-hidden`, `tabindex="-1"`, no `role="option"`). Keyboard users
+  set the time through the hour/minute/second spinbutton inputs or the dial itself:
+  `.tp-ui-clock-face` is an APG slider (`tabindex="0"`) whose name and value mirror the active
+  field through `syncClockSlider` (`utils/accessibility`). Move the `active` class between time
+  fields only through `activateField` (`managers/events/timeFields.ts`), which syncs the dial; a
+  same-face value change goes through `ClockSystem.setValueIfShown` (no tip rebuild, no
+  `animation:clock`), only a real face switch animates. Don't re-add list/option ARIA to tips.
 - SSR-safe: guard DOM access (`isNode`/`isDocument`); nothing at module top level.
 - Structural/logic changes here are `clock-engine-dev`'s scope; a11y semantics flow through the
   `accessibility` concern; CSS through `styling-themes`.

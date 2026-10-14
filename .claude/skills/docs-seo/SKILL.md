@@ -1,6 +1,7 @@
 ---
 name: docs-seo
 description: Audit and improve the discoverability of the timepicker-ui documentation site (docs-app/) across the full modern discoverability stack — SEO (ranking), AEO (answer engines / featured snippets), GEO (citations inside ChatGPT/Gemini/Perplexity/Claude), and AIO (Google AI Overviews). Use when the user wants to optimize docs SEO, improve Google ranking/positioning, win featured snippets or AI-answer boxes, get the docs cited by AI engines, add or fix sitemap/robots/manifest, fill in page metadata, add Open Graph/Twitter cards, answer-first copy, or JSON-LD (FAQPage/SoftwareApplication/TechArticle/BreadcrumbList). Drives the seo-optimizer subagent with an audit → approve → apply flow.
+disable-model-invocation: true
 ---
 
 # Docs Discoverability (SEO + AEO + GEO + AIO)
@@ -41,14 +42,15 @@ may already be fixed. Ask it to return a prioritized, file-level change plan gro
 6. **AIO / AI-crawler / Core Web Vitals** flags (llms.txt + robots AI user-agents are the
    owner's call; default is to welcome AI crawlers on a public OSS site)
 
-The subagent's own definition already mandates the two checks below — this is the reminder to
+The subagent's own definition already sets the checks below — this is the reminder to
 put in its brief, not a second source of truth (if the agent's rules change, its file wins).
-The subagent MUST, **every run, in both audit and apply mode**:
-- **Check the web first.** Derive today's real date (`date +%Y-%m-%d`) and web-search the
+- **Today's date** from your context: the agent has no Bash to look it up.
+- **Check the web first** in audit mode (in apply mode only when an approved item rests on a
+  fact it doubts). Use today's date from the brief and web-search the
   current best practice across **all four layers** — Next.js APIs, Google ranking + AI-slop +
   AI-features guidance, AEO/GEO/AIO tactics, the AI-crawler / `llms.txt` state — rather than
   optimizing from memory. Live sources win over anything hardcoded; it cites sources + dates.
-- **Run the AI-slop check on text AND icons.** Scan existing and proposed titles/descriptions/
+- **Run the AI-slop check on text AND icons** in both modes. Scan existing and proposed titles/descriptions/
   FAQ copy for slop and long dashes (`—`/`–`), and the SEO/OG surface for stray Unicode emojis
   or native/system icons (the site uses `lucide-react` — emoji/native icons are a defect to
   flag, not ship).
@@ -72,8 +74,8 @@ AI slop, no long dashes, and no emojis/native icons (lucide or none). It keeps t
 footprint consistent across hero copy, metadata, OG, and JSON-LD.
 
 ### Phase 4 — Verify & report
-- Offer to run `cd docs-app && npm run build` to confirm the site still builds (don't assume —
-  the user may prefer to run it). If you run it, report pass/fail honestly with output.
+- Run `cd docs-app && npm run build` to confirm the site still builds, then `/verify` per HARD
+  RULES §5. Report pass/fail honestly with output.
 - Summarize what changed, grouped by the six areas, with the file list.
 - Give the manual verification checklist: open `/sitemap.xml`, `/robots.txt`,
   `/manifest.webmanifest`; view-source a couple of routes for `<title>`, OG/Twitter tags, and
@@ -88,13 +90,13 @@ footprint consistent across hero copy, metadata, OG, and JSON-LD.
   library — a fabricated fact is what gets the entity distrusted by AI engines and demoted by
   Google. When unsure a feature exists, verify against `app/src/types/options.d.ts` or the docs.
 - Don't regress existing good metadata/JSON-LD — extend it (FAQ/TechArticle JSON-LD already ships).
-- Best practices are re-derived live every run from today's real date, never from memory or a
-  hardcoded year — for all four layers. A run today and a run months from now both research the
+- Best practices are re-derived live in every audit from today's real date, never from memory or a
+  hardcoded year — for all four layers. An audit today and one months from now both research the
   *current* guidance.
 - The generated copy is human, short, slop-free: no filler openers or empty intensifiers, no
   keyword stuffing, no long dashes (`—`/`–`, use short hyphens), and no Unicode emojis or
   native icons (use `lucide-react`).
-- Keep this skill and the agent file in CRLF; for `docs-app/` source files, match docs-app's
+- Keep this skill, the agent file and `docs-app/` files in CRLF; otherwise follow docs-app's
   own conventions.
 - One run optimizes discoverability; it does not redesign the site. Visual/content rewrites
   beyond SEO/answer-first copy belong to the `docs-site` agent.

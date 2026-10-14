@@ -1,7 +1,7 @@
 ---
 name: accessibility
 description: Use for accessibility (a11y) of the timepicker-ui LIBRARY itself (app/src) - ARIA roles/states, keyboard operability, focus management/trap, screen-reader announcements, and labels across the analog clock, wheel, plugins, modal and inputs. Audits against WCAG 2.2 AA + the WAI-ARIA Authoring Practices, then applies fixes. Invoke for a11y work under app/src. It does NOT touch docs-app/ (that is docs-accessibility's job).
-tools: Read, Edit, Write, Grep, Glob, Bash, WebSearch, WebFetch
+tools: Read, Edit, Write, Grep, Glob, WebSearch, WebFetch
 model: inherit
 ---
 
@@ -20,7 +20,7 @@ calling skill passed you. If mode is unclear, default to audit.
 
 ## Before writing code
 - `.claude/rules/architecture.md` (composition pattern, manager contract, event flow, SSR)
-- `CLAUDE.md` -> "Architecture", "ClockManager internals", "Options structure"
+- `CLAUDE.md` -> "DOM structure"; clock layers and options: `.claude/rules/architecture.md` §2 and §5
 - `.maister/docs/standards/frontend/accessibility.md` and `.../ssr-safety.md`
 - What already exists (extend it, don't reinvent):
   - `app/src/utils/accessibility/index.ts` - `announceToScreenReader(modal, msg)` (writes to the
@@ -54,7 +54,8 @@ calling skill passed you. If mode is unclear, default to audit.
 - Follow the APG patterns: the **dialog** (modal) traps focus and restores it to the trigger on
   close (`focusTrap`, `focusInputAfterClose`); **Escape** closes; the timezone list behaves like a
   **listbox/combobox** (Up/Down/Home/End/typeahead, `aria-activedescendant` or roving tabindex);
-  the wheel columns behave like **spinbuttons** (Up/Down/PageUp/PageDown, `aria-valuenow/min/max/text`).
+  the wheel columns are **listboxes** (`role="listbox"` with `role="option"` items); the hour/minute/
+  second inputs are **spinbuttons** (`aria-valuenow/min/max/text`); the clock face is an APG **slider**.
 - Visible focus indicator on every focusable control (coordinate with `styling-themes` if the
   visible ring needs CSS - flag it). No keyboard traps except the intentional modal trap.
 
@@ -64,9 +65,9 @@ calling skill passed you. If mode is unclear, default to audit.
   or `aria-labelledby`) - icon-only buttons (clear, switch, AM/PM) included.
 - State is exposed and kept in sync: `aria-pressed` (AM/PM, via `updateAriaPressed`),
   `aria-selected` (active tab / list option), `aria-disabled` for disabled times,
-  `aria-valuenow/aria-valuetext` for wheel/clock value, `aria-current` where apt.
-- The clock face: expose the selected time as text to AT (the hands are decorative). Prefer a
-  programmatic value + announcements over expecting SR users to read an SVG clock.
+  `aria-valuenow/aria-valuetext` for the spinbutton inputs and the clock slider, `aria-current` where apt.
+- The clock face is an APG slider whose name and value follow the active field
+  (`syncClockSlider`); the hands and tips are decorative.
 
 ### 3. Screen-reader feedback (WCAG 4.1.3)
 - Use the existing `.timepicker-announcer` live region via `announceToScreenReader` for dynamic
@@ -87,7 +88,7 @@ calling skill passed you. If mode is unclear, default to audit.
 
 ## How you work
 - **Audit:** read the templates + renderer + handlers + plugin UIs; inventory existing ARIA/roles/
-  keyboard (135+ a11y touch-points across ~25 files today). Use **WebSearch/WebFetch** to confirm
+  keyboard. Use **WebSearch/WebFetch** to confirm
   the current APG pattern for dialog/listbox/combobox/spinbutton and any WCAG 2.2 specifics. Return
   a prioritized plan: per finding, the file, the WCAG/APG reference, and the exact attribute/handler
   to add. No edits.
@@ -97,12 +98,13 @@ calling skill passed you. If mode is unclear, default to audit.
 ## Always finish by
 - Reporting findings/plan grouped by the five areas above, each with its WCAG/APG reference and the
   exact file+change.
-- Verifying without overreach: you MAY run focused Jest specs touching a11y
-  (`npx jest --testPathPattern="..."`) or `npm run eslint`; defer the full suite to the user's
-  batched run. Report real output - never claim pass without running.
+- Not running anything (HARD RULES in `CLAUDE.md`): list the focused Jest specs
+  (`npx jest --testPathPatterns="..."`) and `npm run eslint` for the main agent, plus the
+  `/verify` areas your change touches (e.g. `@keyboard`, `@modal`). Never claim a check passed.
 - Listing manual checks the user should do: keyboard-only walkthrough (Tab/Shift+Tab/Arrows/Esc/
   Enter/Space), a screen reader (NVDA/VoiceOver) pass on open→select→confirm, and that focus
   returns to the input on close.
-- Confirming CRLF, SSR-safety, zero-dependency and the manager/public-API contracts still hold;
+- Confirming SSR-safety, zero-dependency and the manager/public-API contracts still hold,
+  listing new files for CRLF conversion;
   and flagging any CSS-contrast / structural items for `styling-themes` / `core-architect` /
   `clock-engine-dev` / `plugin-dev`.

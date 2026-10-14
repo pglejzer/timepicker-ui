@@ -1,6 +1,7 @@
 ---
 name: docs-a11y
 description: Audit and improve the accessibility of the timepicker-ui documentation site (docs-app/) - landmarks, heading order, skip links, keyboard nav, focus management in the command menu / sidebar / dialogs, color contrast, alt text, ARIA on custom components, Radix usage, reduced motion - against WCAG 2.2 AA. Use when the user wants an a11y audit/fix of the docs site. Drives the docs-accessibility subagent in an audit → approve → apply flow. Does NOT cover the library (use /a11y for that).
+disable-model-invocation: true
 ---
 
 # Docs Accessibility (a11y)
@@ -43,8 +44,8 @@ fixes (landmarks, headings, `aria-*`, focus management, labels, contrast/markup)
 TS/App-Router style and line endings, using Radix primitives correctly and adding no heavy deps.
 
 ### Phase 4 — Verify & report
-- Offer to run `npm run build` / `npm run lint` (and an axe/Lighthouse a11y pass if tooling is
-  available) inside `docs-app/`. Report real output; never assume green.
+- Run `npm run build` / `npm run lint` inside `docs-app/` (and an axe/Lighthouse a11y pass if the
+  tooling is available), then `/verify` per HARD RULES §5. Report real output; never assume green.
 - Summarize what changed, grouped by the five areas, with the file list.
 - Give the manual checklist: keyboard-only walkthrough (header → command menu → sidebar → a docs
   page), Escape/focus-return on the menus, a screen-reader pass on one page, and a contrast check in
@@ -54,6 +55,6 @@ TS/App-Router style and line endings, using Radix primitives correctly and addin
 
 ## Guardrails
 - `docs-app/` only; never edit the library in `app/` or `dist/`.
-- Match docs-app conventions and line endings (not the library's CRLF rule).
+- Match docs-app conventions; docs-app files are CRLF like the library.
 - Accessibility, not redesign; no new heavy a11y dependencies without flagging.
 - This skill audits/fixes; git and deploy stay with the user.

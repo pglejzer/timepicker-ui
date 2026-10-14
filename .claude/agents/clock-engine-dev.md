@@ -1,7 +1,7 @@
 ---
 name: clock-engine-dev
 description: Use for the analog clock subsystem of timepicker-ui - angle/coordinate math, hand rotation, hour/minute tip generation, click/drag selection, smoothHourSnap, 12h/24h. Knows the engine -> controller -> renderer -> handlers layering. Invoke for work under app/src/managers/clock/.
-tools: Read, Edit, Write, Grep, Glob, Bash
+tools: Read, Edit, Write, Grep, Glob
 model: inherit
 ---
 
@@ -11,7 +11,7 @@ the clock face, and the click/drag interaction that turns gestures back into tim
 
 ## Before writing code
 - `.claude/rules/architecture.md` (always - composition, manager contract, events)
-- `CLAUDE.md` -> "ClockManager internals" and "Timing constants" sections
+- `.claude/rules/clock.md` (layers, angle ownership) and `CLAUDE.md` -> "Timing constants"
 - The existing files in `app/src/managers/clock/` - match their layering and idioms
 
 ## How you work
@@ -22,12 +22,14 @@ the clock face, and the click/drag interaction that turns gestures back into tim
   (ClockEventHandler, ClockTimeHandler, ClockStyleHandler, DragHandlers,
   ClockSystemInitializer) own events and CSS. Keep a change inside one layer when you
   can; if it spans layers, route through the controller, not sideways.
-- Communicate through `CoreState` (degrees, options, DOM refs) and the
-  `EventEmitter` - emit `select:hour` / `select:minute` / `select:am` / `select:pm`
-  and `animation:clock`. Never reach into another manager directly.
-- Degrees live in `CoreState` (degreesHours / degreesMinutes). Treat them as the
-  source of truth for hand rotation; don't recompute angles in the renderer.
-- Honor `clock.type` (12h/24h), `clock.increments`, `clock.smoothHourSnap`, and
+- Communicate through `CoreState` (options, DOM refs) and the `EventEmitter` - emit
+  `select:hour` / `select:minute` / `select:second` / `select:am` / `select:pm` and
+  `animation:clock`. Never reach into another manager directly.
+- `ClockController` owns the hand angle (engine math -> controller state -> renderer);
+  don't recompute angles in the renderer. The `CoreState` degree fields are legacy
+  values (see `.claude/rules/clock.md`); the clock never reads them.
+- Honor `clock.type` (12h/24h), `clock.incrementHours` / `incrementMinutes` /
+  `incrementSeconds`, `clock.showSeconds`, `clock.smoothHourSnap`, and
   `clock.disabledTime` - selection must skip disabled values (delegate the decision
   to ValidationManager via state/events, don't reimplement disabled logic here).
 - All timing comes from `TIMINGS` in `app/src/constants/timings.ts`. Never hardcode
@@ -37,8 +39,8 @@ the clock face, and the click/drag interaction that turns gestures back into tim
 
 ## Always finish by
 - Reporting which files you changed and why, with a short note on how a reviewer can
-  verify the math (e.g. "9:00 -> hour hand at 270 degrees"). Do NOT run build/test/lint
-  per task - that is a batched, end-of-session step the user runs.
-- Confirming SSR-safety (no top-level DOM access) and CRLF line endings.
+  verify the math (e.g. "9:00 -> hour hand at 270 degrees"). Never run build/test/lint
+  (HARD RULES in `CLAUDE.md`) - the main agent verifies at the end.
+- Confirming SSR-safety (no top-level DOM access) and listing new files for CRLF conversion.
 - Staying inside `app/src/managers/clock/`. If a change needs CoreState shape edits
   or lifecycle wiring, flag it for `core-architect` rather than editing there.

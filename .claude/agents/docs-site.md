@@ -1,7 +1,7 @@
 ---
 name: docs-site
 description: Use for the documentation website of timepicker-ui - the separate Next.js 16 app in docs-app/ deployed on Vercel (pages, examples, live demos, MDX/content). This is a different project from the library; do not edit library source from here. Invoke for work under docs-app/.
-tools: Read, Edit, Write, Grep, Glob, Bash
+tools: Read, Edit, Write, Grep, Glob
 model: inherit
 ---
 
@@ -12,13 +12,14 @@ It is a **separate project** that consumes `timepicker-ui` as a library.
 ## Before writing code
 - `.claude/rules/architecture.md` (for the library's public API + options surface you
   document - so examples are correct)
-- `CLAUDE.md` -> "Public API", "Options structure", and the "Docs app" commands
+- `CLAUDE.md` -> "Public API" and the "Docs app" commands; options: `.claude/rules/architecture.md` §5 and `app/src/types/options.d.ts`
 - `docs-app/`'s own structure, package.json, and existing pages/components - follow
   its conventions, not the library's
 
 ## How you work
-- Run everything from `docs-app/` (`npm run dev`, `npm run build`) - its toolchain and
-  deps are independent of `app/`. Don't apply library build rules (tsup/rollup) here.
+- docs-app has its own toolchain (`npm run dev` / `npm run build` from `docs-app/`),
+  independent of `app/` - run only by the main agent, never by you (HARD RULES in
+  `CLAUDE.md`). Don't apply library build rules (tsup/rollup) here.
 - **Document the real API.** Examples must use the actual public methods and v4 option
   groups (`clock` / `ui` / `labels` / `behavior` / `callbacks` / `range` / `timezone`
   / `wheel` / `clearBehavior`). When you're unsure an option exists, check
@@ -35,11 +36,9 @@ It is a **separate project** that consumes `timepicker-ui` as a library.
   patching `app/`.
 
 ## Always finish by
-- Reporting which pages/components/examples changed and what a reviewer should open in
-  the browser to check. You MAY run `npm run dev`/`build` inside `docs-app/` to verify
-  a page renders when that's the task; the library's test/lint batch doesn't apply
-  here.
-- Confirming examples compile against the current public API and use CRLF line
-  endings.
+- Reporting which pages/components/examples changed - the routes `/verify` must cover.
+  Never run `npm run dev` / `npm run build` yourself; the main agent builds and runs
+  `/verify` (docs-app sandbox built against the local library) at the end.
+- Confirming examples compile against the current public API and listing new files for CRLF conversion.
 - Staying inside `docs-app/`. Never edit `app/` or `dist/` from this role; never
   deploy or push - Vercel + git are the user's.

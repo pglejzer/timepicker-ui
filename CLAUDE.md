@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Coding Standards & Conventions
 
-Read @.maister/docs/INDEX.md before starting any task. It indexes the project's coding standards and conventions:
+The index at @.maister/docs/INDEX.md lists the project's coding standards and conventions:
 - Coding standards organized by domain (frontend, backend, testing, etc.)
 - Project vision, tech stack, and architecture decisions
 
@@ -24,9 +24,57 @@ When this happens, briefly suggest the standard to the user. If approved, invoke
 
 This project uses the maister plugin for structured development workflows. When any `/maister:*` command is invoked, execute it via the Skill tool immediately — do not skip workflows for "straightforward" tasks. The user chose the workflow intentionally; complexity assessment is the workflow's job.
 
+## HARD RULES — local only, subagents only write code
+
+These bind the main session, every subagent (`.claude/agents/*`, `general-purpose`, `Explore`,
+workflow agents, any `Agent`/`Task` dispatch) and every skill. They override any agent or skill
+text that says otherwise.
+
+1. **Local only.** Never run anything that publishes, deploys or changes remote state:
+   `npm publish` / `unpublish` / `deprecate` / `dist-tag` / `version` / `login` / `adduser` /
+   `token` / `owner` / `access`, `vercel` (any deploy), `git push` or remote tags, `gh` write
+   operations (`release`, `pr create`, `pr merge`, ...). Releases are proposed; the user runs them.
+   Local work in the main session is fine: `npm pack`, builds, dev servers, tests.
+2. **Subagents only read and edit files.** A subagent never runs: git of any kind, builds
+   (`build:*`, `tsup`, `rollup`, `next build`), lint / ESLint, tests / Jest (not even one focused
+   spec), typecheck / `tsc`, dev servers (`npm run start`, `next dev`), browsers or browser MCP,
+   `/verify`, tooling audits (axe, Lighthouse), spec review or code review. It reports which
+   commands, specs and routes the main agent should run. A subagent's claim that it ran any of
+   these is untrusted — ignore it. Project agents (`.claude/agents/`) have no Bash tool at all;
+   files they create with Write come out LF and the main agent converts them to CRLF at the end.
+3. **Verification and review belong to the main agent, once, at the end** — never per task,
+   never inside a subagent: focused or full Jest, `eslint`, builds, `/verify`, and any spec or
+   code review (do not dispatch review subagents). This includes plugin workflows (maister,
+   superpowers): their test-runner / verifier / reviewer subagents are not used here — the main
+   agent does that work itself.
+4. **Dispatch contract.** Every subagent prompt starts with: "Read `CLAUDE.md` in the repo root
+   first and obey its HARD RULES." and names the `.claude/rules/*.md` file(s) for the area it edits.
+5. **End-of-task browser verification, only where a change can break something.** When a task
+   changed library behavior or styles in `app/src/`, or pages / components in `docs-app/`, the
+   main agent runs `/verify` after the owning agents have reported and before handing back to
+   the user - the quick profile by default, `/verify --full` before a release or when the user
+   asks. `/verify` is heavy, so it does NOT run for small, contained changes: new or edited
+   demo examples in `app/docs/`, copy / typo / comment edits, one-line fixes, `.claude/` or docs
+   work. For those the main agent checks only what changed in the dev server (open the section,
+   click through it, look at console errors) and says so in the report. Run `/verify` anyway
+   when the user asks for it; skip it when the user says so.
+6. **Git — read-only, and only in the main agent.** Subagents never run git of any kind (not
+   even `status` / `diff`). The main agent may read (`status`, `diff`, `log`, `show`,
+   `ls-files`, `rev-parse`, `archive` into `.verify/`, `diff --no-index`) but never mutates the
+   repository — `add`, `commit`, `push`, `checkout`, `switch`, `branch`, `merge`, `rebase`,
+   `reset`, `restore`, `stash`, `tag`, `clean`, `cherry-pick`, `worktree`, `rm`, `mv` — unless
+   the user explicitly asks for that one operation; an earlier approval never covers later runs.
+   The default end state of any task or plan: files edited, nothing staged, nothing committed,
+   user informed — the user commits manually.
+7. **Packages are the user's job.** Never run `npm install` / `npm ci` / `npm uninstall` /
+   `npm update` / `npm audit fix` (in any folder, including the `.verify/` sandboxes) and never
+   edit `dependencies` / `devDependencies`. When `node_modules` is missing or a package is
+   needed, propose the exact command and wait for the user to run it (supply-chain risk:
+   install scripts and transitive dependencies run with your privileges).
+
 ## What This Is
 
-`timepicker-ui` — a zero-dependency, framework-agnostic time picker library (v4.4.0). Supports analog clock, scroll wheel, and compact-wheel UI modes. SSR-safe. Published to npm as `timepicker-ui`. Three optional plugins (range, timezone, wheel) are tree-shaken out unless imported. 12 built-in CSS themes.
+`timepicker-ui` — a zero-dependency, framework-agnostic time picker library (v4.5.0). Supports analog clock, scroll wheel, and compact-wheel UI modes. SSR-safe. Published to npm as `timepicker-ui`. Three optional plugins (range, timezone, wheel) are tree-shaken out unless imported. 12 built-in CSS themes.
 
 ## Repository Layout
 
@@ -41,12 +89,12 @@ app/                    ← ALL source, build, and test work happens here
       plugins/          ← plugin managers: range/, timezone/, wheel/
     core/               ← PluginRegistry (plugin system)
     plugins/            ← plugin definitions (RangePlugin, TimezonePlugin, WheelPlugin)
-    utils/              ← EventEmitter, accessibility/, config/, debounce/, input/, template/, time/, validation/
-    types/              ← TypeScript interfaces (.d.ts files): options, types, ITimepickerUI, images
+    utils/              ← EventEmitter, accessibility/, config/, errors/, input/, options/ (mergeOptions), template/, time/, timezone/, validation/, variables/
+    types/              ← TypeScript interfaces (.d.ts files): options, types, images
     constants/          ← timings.ts (animation/delay constants)
-    styles/             ← SCSS: index.scss, main.scss, variables.scss, _mixins.scss, themes/
+    styles/             ← SCSS: index.scss, main.scss, variables.scss, partials/, themes/
   tests/
-    unit/               ← mirrors src/ structure (80+ test files)
+    unit/               ← mirrors src/ structure
     __mocks__/          ← CSS and SVG mock stubs for Jest
   tsup.config.ts        ← JS build config (ESM + CJS → ../dist/)
   rollup.config.js      ← CSS themes + .d.ts declarations (→ ../dist/css/, ../dist/)
@@ -93,7 +141,7 @@ npx jest tests/unit/managers/ClockManager.test.ts
 npx jest -t "should rotate clock hand"
 
 # Tests matching a pattern
-npx jest --testPathPattern="clock"
+npx jest --testPathPatterns="clock"
 ```
 
 ### Docs app (separate project)
@@ -106,96 +154,10 @@ npm run build                           # Next.js build
 
 ## Architecture
 
-### Composition pattern — TimepickerUI
-
-`TimepickerUI` (the public API class) does not contain business logic itself. It composes three internal objects:
-
-```
-TimepickerUI
-├── CoreState      — state bag (degrees, options, DOM refs, flags, getters/setters)
-├── Managers       — creates and owns all 8 managers + plugin managers
-└── Lifecycle      — init/mount/unmount/destroy orchestration
-```
-
-All three receive the same `CoreState` instance and `EventEmitter<TimepickerEventMap>` by reference. This is the primary coupling mechanism — managers never reference each other directly, they communicate through state and events.
-
-A static `instanceRegistry` (Map<string, TimepickerUI>) tracks all live instances, enabling `TimepickerUI.getById()`, `getAllInstances()`, `destroyAll()`.
-
-### Manager layer
-
-Each manager follows the same contract: constructor receives `(core: CoreState, emitter: EventEmitter)`, and exposes `destroy()`. Managers are single-responsibility:
-
-| Manager              | What it does                                                                      |
-| -------------------- | --------------------------------------------------------------------------------- |
-| `AnimationManager`   | CSS transition classes on open/close (uses `TIMINGS` constants)                   |
-| `ModalManager`       | DOM creation/removal of the picker modal, backdrop, scrollbar lock                |
-| `ConfigManager`      | Merges runtime options, handles disabled time, mobile detection, input value sync |
-| `ThemeManager`       | Applies theme CSS classes (`basic`, `crane`, `dark`, etc.) to wrapper and modal   |
-| `ValidationManager`  | Disabled hours/minutes/intervals, error display                                   |
-| `EventManager`       | DOM event binding: click, touch, drag, keyboard, focus trap, backdrop dismiss     |
-| `ClockManager`       | Clock face initialization, hand rotation, hour/minute tip rendering               |
-| `ClearButtonManager` | Clear button visibility, click handling, plugin clear delegation                  |
-
-### ClockManager internals
-
-The clock subsystem has its own layered architecture under `app/src/managers/clock/`:
-
-- **`engine/`** — pure math: `AngleEngine` (degree calculations), `ClockEngine` (coordinate math), `HourEngine` / `MinuteEngine` (tip generation)
-- **`controller/`** — `ClockController` orchestrates engine + renderer
-- **`renderer/`** — `ClockRenderer` handles DOM rendering of clock face tips
-- **`handlers/`** — `ClockEventHandler` (click/drag events), `ClockStyleHandler` (CSS), `ClockTimeHandler` (time selection logic), `ClockSystemInitializer` (startup), `DragHandlers` (mouse/touch drag)
-
-### Plugin system
-
-Plugins use a registry pattern. Each plugin is a plain object implementing the `Plugin` interface:
-
-```typescript
-interface Plugin {
-  name: string;
-  factory: (core: CoreState, emitter: EventEmitter) => PluginManager;
-  optionsExtender?: (options: Record<string, unknown>) => void;
-  templateProvider?: (options, instanceId) => string;
-  clearHandler?: (core, emitter) => void;
-}
-```
-
-Registration happens once at app startup (`PluginRegistry.register(RangePlugin)`). When `Managers` is constructed, it iterates `PluginRegistry.getAll()` and instantiates each plugin's factory. Plugin managers are stored in a `Map<string, PluginManager>` and accessed via `managers.getPlugin<T>('range')`.
-
-**Built-in plugins:**
-
-- **Range** (`app/src/plugins/range.ts` → `app/src/managers/plugins/range/`) — start/end time selection with tab UI
-- **Timezone** (`app/src/plugins/timezone.ts` → `app/src/managers/plugins/timezone/`) — timezone dropdown with keyboard navigation
-- **Wheel** (`app/src/plugins/wheel.ts` → `app/src/managers/plugins/wheel/`) — scroll wheel UI mode, drag handling, popover support
-
-### Event flow
-
-`EventEmitter<TimepickerEventMap>` is the internal bus. All internal communication goes through it. Key events:
-
-- `show`, `open`, `cancel`, `confirm`, `clear` — lifecycle
-- `select:hour`, `select:minute`, `select:am`, `select:pm` — clock selection
-- `range:confirm`, `range:switch`, `range:validation` — range plugin
-- `timezone:change` — timezone plugin
-- `wheel:scroll:start`, `wheel:scroll:end` — wheel plugin
-- `animation:clock`, `animation:start`, `animation:end` — animation coordination
-- `error` — missing plugin or validation errors
-
-The `Lifecycle.setupCallbackBridge()` method wires user-provided `callbacks.*` options to internal events (e.g., `callbacks.onConfirm` → `emitter.on('confirm', ...)`).
-
-### Options structure (v4.0.0+, breaking change from v3)
-
-Options are organized into logical groups. Types are defined in `app/src/types/options.d.ts`:
-
-- `clock` — type (12h/24h), increments, disabledTime, currentTime, smoothHourSnap
-- `ui` — theme, mode (clock/wheel/compact-wheel), animation, backdrop, mobile, editable, inline, clearButton, cssClass
-- `labels` — all UI text (am, pm, ok, cancel, time, etc.)
-- `behavior` — focusTrap, focusInputAfterClose, delayHandler, id
-- `callbacks` — onConfirm, onCancel, onOpen, onUpdate, onSelectHour, etc.
-- `timezone` — timezone plugin config
-- `range` — range plugin config
-- `clearBehavior` — clear button config
-- `wheel` — placement, hideFooter, commitOnScroll, hideDisabled, ignoreOutsideClick
-
-Options are merged via `mergeOptions()` in `app/src/utils/options/`.
+Composition (TimepickerUI / CoreState / Managers / Lifecycle), the manager contract and the
+8 built-in managers, the clock layers, the plugin system, the event bus and the option groups
+are in `.claude/rules/architecture.md` §1-5, which loads in every session. The sections below
+cover what that file does not.
 
 ### Build pipeline
 
@@ -210,13 +172,13 @@ Options are merged via `mergeOptions()` in `app/src/utils/options/`.
 - `main.css` — core styles required for all modes
 - `index.css` — includes main.css + all themes (largest bundle)
 - Theme files are standalone: `theme-dark.css`, `theme-crane.css`, `theme-m3-green.css`, etc.
-- SCSS source: `app/src/styles/` with variables in `variables.scss`, mixins in `_mixins.scss`, effects in `_effects.scss`
+- SCSS source: `app/src/styles/` with tokens in `variables.scss`, component rules in `partials/` (the focus-ring mixin is in `partials/_accessibility.scss`)
 - Available themes: basic, crane, crane-straight, m2, m3-green, dark, glassmorphic, pastel, ai, cyberpunk, blueprint, blueprint-dark
 - CSS class prefix: `tp-ui-` (e.g., `tp-ui-wrapper`, `tp-ui-clock-face`, `tp-ui-range-from`)
 
 ### DOM structure
 
-`TimepickerUI` wraps the target `<input>` in a `<div class="tp-ui">` container. The modal is created dynamically on open and removed on close. Template HTML is generated in `app/src/utils/template/` — the wheel template is separate (`template/wheel.ts`).
+`TimepickerUI` accepts an `<input>` or an element that contains one. An element becomes the `.tp-ui` root itself (so `data-open` buttons inside it open the picker); a bare `<input>` reuses a `.tp-ui` parent or is wrapped in a new `<div class="tp-ui">`. The modal is created dynamically on open and removed on close. Template HTML is generated in `app/src/utils/template/` — the wheel template is separate (`template/wheel.ts`).
 
 ### Testing conventions
 
@@ -235,18 +197,18 @@ All animation/delay values are centralized in `app/src/constants/timings.ts` (`T
 
 ## Subagents & rules
 
-This repo ships scoped subagents in `.claude/agents/` and one shared rule file in
-`.claude/rules/architecture.md`. The rule file is the condensed contract (composition
-pattern, manager contract, plugin system, event flow, options, working agreement) that
-every agent reads before touching code — it pairs with this CLAUDE.md, and CLAUDE.md
-wins on any conflict.
+This repo ships scoped subagents in `.claude/agents/` and rule files in `.claude/rules/`:
+`architecture.md` is always loaded (composition pattern, manager contract, plugin system,
+event flow, options, working agreement); `accessibility`, `build-release`, `clock`,
+`docs-app`, `plugins`, `styling`, `testing` and `writing` (READMEs, changelog, docs text)
+load when matching files are touched.
+CLAUDE.md wins on any conflict.
 
 ### Orchestration directive (mandatory)
 
-**This overrides the default "do not spawn agents unless asked" behavior.** When a task
-touches code under one of the scopes in the table below, you (the main/orchestrator
-agent) MUST delegate it to the matching subagent via the Agent/Task tool **before**
-editing those files yourself. Routing is by path:
+When a task touches code under one of the scopes below, delegate it to the matching
+subagent (Agent tool) - each agent carries its area's contract - unless it is one of the
+exceptions listed after the routing. Routing is by path:
 
 - `app/src/timepicker/`, `app/src/core/`, `app/src/utils/`, `app/src/types/`, non-clock `app/src/managers/` → `core-architect`
 - `app/src/managers/clock/` → `clock-engine-dev`
@@ -269,27 +231,13 @@ Rules for delegation:
   subtasks and dispatched to each owner; the owning agent flags cross-scope needs
   rather than reaching over.
 - **You stay the orchestrator.** Gather context, decide routing, hand the agent a
-  precise brief, integrate its report, and run the final batched verification with the
-  user. Don't do the agent's in-scope edits yourself.
+  precise brief, integrate its report, and run the final verification once, at the end.
+  Outside the exceptions below, don't do the agent's in-scope edits yourself.
 - **Exceptions (do it directly, no delegation):** read-only exploration; the user
-  explicitly says to edit directly; trivial one-line/non-code touches (typos, comments)
-  where spawning a cold agent costs more than it saves; or work outside every scope
-  above (e.g. `.claude/`, root configs).
-
-Each agent is single-responsibility and scoped to a part of the tree.
-
-| Agent              | Use it for                                                                                                                              | Scope                                                                                                     |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `core-architect`   | Public API, composition (TimepickerUI/CoreState/Managers/Lifecycle), EventEmitter, option merge/types, non-clock managers, shared utils | `app/src/timepicker/`, `app/src/core/`, `app/src/utils/`, `app/src/types/`, non-clock `app/src/managers/` |
-| `clock-engine-dev` | Analog clock: angle/coordinate math, hand rotation, tip generation, click/drag selection                                                | `app/src/managers/clock/`                                                                                 |
-| `plugin-dev`       | range / timezone / wheel plugins + PluginRegistry; tree-shaking                                                                         | `app/src/plugins/`, `app/src/managers/plugins/`, `app/src/core/PluginRegistry.ts`                         |
-| `styling-themes`   | SCSS, layout, the 10 CSS themes, `tp-ui-` class contract, CSS build                                                                     | `app/src/styles/`, CSS job in `app/rollup.config.js`                                                      |
-| `test-engineer`    | Jest unit specs, edge-case suites, mocks, jsdom setup                                                                                   | `app/tests/`                                                                                              |
-| `build-release`    | tsup / rollup / webpack configs, entry points, `package.json` exports, npm publishing, **release: version bump everywhere + README + CHANGELOG.md + docs-app changelog/what's-new** | build configs, `app/package.json`, `dist/` contract; release version/changelog propagation |
-| `docs-site`        | The separate Next.js 16 documentation site                                                                                              | `docs-app/`                                                                                               |
-| `seo-optimizer`    | SEO of the docs site: metadata, sitemap/robots/manifest, Open Graph/Twitter, JSON-LD                                                    | `docs-app/`                                                                                               |
-| `accessibility`    | a11y of the **library** (WCAG 2.2 AA + WAI-ARIA APG): ARIA, keyboard, focus, screen-reader, labels                                      | `app/src` (cross-cutting; CSS → `styling-themes`)                                                         |
-| `docs-accessibility` | a11y of the docs site (WCAG 2.2 AA): landmarks, keyboard, focus, contrast, ARIA                                                       | `docs-app/`                                                                                               |
+  explicitly says to edit directly; small, contained edits - one file, roughly up to 30
+  changed lines - where the area's rule file (it loads when you touch those files) carries
+  the contract, since a cold agent start costs more than it saves; or work outside every
+  scope above (e.g. `.claude/`, root configs).
 
 ### Custom skills (audit → approve → apply orchestrators)
 
@@ -302,10 +250,15 @@ user approval → apply → verify). They never run git/publish — they propose
 - `/docs-seo` → `seo-optimizer` — audit/fix docs-site SEO.
 - `/a11y` → `accessibility` — audit/fix **library** accessibility.
 - `/docs-a11y` → `docs-accessibility` — audit/fix docs-site accessibility.
+- `/verify` (main agent only) — start before/after test servers (library demo + docs-app sandbox
+  built against the local library) and check in the browser, via chrome-devtools MCP (fallback
+  Playwright MCP), only what the change could break. Runs at the end of tasks that change library
+  behavior / styles or docs-app pages (quick profile; `--full` before a release); not for demo
+  examples or micro changes (HARD RULES §5).
 
 Shared working agreement baked into every agent (see `.claude/rules/architecture.md` §6):
-CRLF line endings, git is the user's job (no commit/push), batch execution (no per-task
-build/test/lint — verify and report, user runs the full suite at the end), zero-dependency
+CRLF line endings, git is the user's job (no commit/push), subagents never run anything (HARD RULES; no per-task
+build/test/lint/servers/review — the main agent verifies once at the end, incl. `/verify` when §5 calls for it), local only, zero-dependency
 and SSR-safe. **Don't break a theme's visual identity / Material Design 3** (no `font-weight: 700`
 or strikethrough as state cues — MD3 uses state layers / tonal containers / opacity).
 
@@ -316,7 +269,7 @@ or strikethrough as state cues — MD3 uses state layers / tonal containers / op
 - `@typescript-eslint/no-explicit-any: off` — `any` is permitted
 - `no-nested-ternary: error` — no nested ternaries
 - Unused vars checked but rest siblings ignored
-- No default exports except `TimepickerUI` itself (re-exported from `timepicker/index.ts`)
+- Default exports only for `TimepickerUI` (the package default) and each manager class (the 8 built-ins and the plugin managers); everything else uses named exports
 - **No code comments** in `app/src` — let code self-document. The only acceptable comments are doc-comments on TypeScript options/public types (e.g. JSDoc in `types/options.d.ts`)
 
 ## Public API

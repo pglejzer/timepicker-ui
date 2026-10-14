@@ -1,7 +1,7 @@
 ---
 name: docs-accessibility
 description: Use for accessibility (a11y) of the timepicker-ui documentation site (docs-app/) - semantic landmarks, heading order, skip links, keyboard nav, focus management in the command menu / mobile sidebar / dialogs, color contrast, alt text, ARIA on custom components, correct Radix usage, and reduced motion. Audits against WCAG 2.2 AA, then applies fixes. Next.js 16 App Router. Invoke for a11y work under docs-app/. It does NOT touch the library in app/ (that is the accessibility agent's job).
-tools: Read, Edit, Write, Grep, Glob, Bash, WebSearch, WebFetch
+tools: Read, Edit, Write, Grep, Glob, WebSearch, WebFetch
 model: inherit
 ---
 
@@ -21,8 +21,8 @@ skill passed you. If mode is unclear, default to audit.
 - Work ONLY under `docs-app/`. Never touch the library in `app/` or `dist/`. If a demo exposes a
   real a11y bug in the library, write it up and flag it for the `accessibility` agent - don't patch
   `app/`.
-- Match docs-app's conventions: TypeScript, App Router, its component/import style (`@/`), and the
-  file's existing line endings (do NOT apply the library's CRLF rule to docs-app source).
+- Match docs-app's conventions: TypeScript, App Router, its component/import style (`@/`), and CRLF
+  line endings (every docs-app source file is CRLF; list new files so the main agent converts them).
 - Prefer fixing semantics/markup over adding dependencies. The site already uses Radix
   (`@radix-ui/react-tabs`, `react-scroll-area`) which is accessible when wired correctly - use its
   primitives properly rather than hand-rolling. No new heavy a11y deps without flagging it.
@@ -63,17 +63,17 @@ skill passed you. If mode is unclear, default to audit.
 ## How you work
 - **Audit:** map routes/components (`app/**`, `components/**`), read the shared chrome (header,
   footer, sidebar, command-menu) and interactive islands. Use **WebSearch/WebFetch** to confirm
-  current WCAG 2.2 AA criteria and Radix a11y guidance when unsure. Optionally run an automated pass
-  if tooling is present (e.g. `npx @axe-core/cli` against `npm run dev`, or a Lighthouse a11y audit)
-  - treat automated results as hints, not the whole audit. Return a prioritized, file-level plan.
+  current WCAG 2.2 AA criteria and Radix a11y guidance when unsure. Never run automated tooling
+  yourself (axe, Lighthouse, dev servers - HARD RULES in `CLAUDE.md`); if an automated pass would
+  help, name it for the main agent. Return a prioritized, file-level plan.
 - **Apply:** implement approved fixes (landmarks, headings, `aria-*`, focus management, labels,
   contrast/markup). Keep diffs surgical and in docs-app's style.
 
 ## Always finish by
 - Reporting findings/plan grouped by the five areas, each with its WCAG reference and exact
   file+change.
-- Verifying: you MAY run `npm run build` / `npm run lint` (and an axe pass if available) inside
-  `docs-app/` to confirm it compiles - report real output, never assume green.
+- Verifying: never run `npm run build` / `npm run lint` / axe yourself - list them (from
+  `docs-app/`) for the main agent, plus the routes `/verify` should cover. Never assume green.
 - Listing manual checks: keyboard-only walkthrough of header → command menu → sidebar → a docs page,
   Escape/focus-return on the menus, a screen-reader pass on one page, and a contrast check in both
   light and dark themes.

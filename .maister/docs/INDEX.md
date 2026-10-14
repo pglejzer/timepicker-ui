@@ -1,7 +1,5 @@
 # Documentation Index
 
-**IMPORTANT**: Read this file at the beginning of any development task to understand available documentation and standards.
-
 ## Quick Reference
 
 ### Project Documentation
@@ -17,13 +15,13 @@ Coding standards, conventions, and best practices organized by domain.
 Located in `.maister/docs/project/`
 
 #### Vision (`project/vision.md`)
-Project overview as a zero-dependency, framework-agnostic, SSR-safe time picker; current state (maturity, users, distribution), purpose and the trade-off it removes, goals for the next 6-12 months (ship v4.4.0, contributor onboarding, internal consistency, tech-debt reduction), and the project's evolution toward a documented, extensible core.
+Project overview as a zero-dependency, framework-agnostic, SSR-safe time picker; current state (maturity, users, distribution), purpose and the trade-off it removes, goals for the next 6-12 months (ship v4.5.0, contributor onboarding, internal consistency, tech-debt reduction), and the project's evolution toward a documented, extensible core.
 
 #### Roadmap (`project/roadmap.md`)
-Current state and key features (three UI modes, plugins, themes, public API), planned enhancements by priority (ship v4.4.0, contributor docs, plugin authoring guide, integration examples), technical-debt items (time-math duplication, CoreState boilerplate, E2E gap, audit follow-up), and future considerations.
+Current state and key features (three UI modes, plugins, themes, public API), planned enhancements by priority (ship v4.5.0, contributor docs, plugin authoring guide, integration examples), technical-debt items (time-math duplication, CoreState boilerplate, E2E gap, audit follow-up), and future considerations.
 
 #### Tech Stack (`project/tech-stack.md`)
-Technology choices and rationale: TypeScript 5.8 (strict), SCSS (core + 10 themes), JavaScript build config; framework-agnostic frontend with no backend/database; Jest 30 + ts-jest + jsdom testing; and the tsup + rollup + webpack build tooling.
+Technology choices and rationale: TypeScript 5.8 (strict), SCSS (core + 12 themes), JavaScript build config; framework-agnostic frontend with no backend/database; Jest 30 + ts-jest + jsdom testing; and the tsup + rollup + webpack build tooling.
 
 #### Architecture (`project/architecture.md`)
 System architecture: composition pattern (TimepickerUI / CoreState / Managers / Lifecycle), event-driven manager layer with the shared-state + EventEmitter coupling mechanism, the eight built-in managers, the layered clock subsystem (engine/controller/renderer/handlers), and the registry-based plugin system.
@@ -70,7 +68,7 @@ Build what you need, clear purpose, delete exploration artifacts, no future stub
 Strict Mode, Modules & Resolution, and Compile Targets.
 
 #### Validation (`standards/global/validation.md`)
-Server-side always, client-side for feedback, validate early, specific errors, allowlists over blocklists, type and format checks, input sanitization, business rules, and consistent enforcement.
+Validation at the public API boundary, validate early, specific errors, allowlists over blocklists, type and format checks, input sanitization, business rules, and consistent enforcement.
 
 ### Frontend Standards
 
@@ -106,25 +104,3 @@ Located in `.maister/docs/standards/testing/`
 
 #### Test Writing (`standards/testing/test-writing.md`)
 Test Behavior, Clear Names, Mock External Dependencies, Fast Execution, Risk-Based Testing, Balance Coverage and Velocity, Critical Path Focus, Appropriate Depth, Jest + ts-jest on jsdom, Tests Mirror the Source Tree, Test Through the Public Surface, and Coverage Scope.
-
-### Backend Standards
-
-*Not initialized for this project. If you need backend standards, you can:*
-- *Add them manually using the docs-manager skill*
-- *Run `/maister:standards-discover --scope=backend` to auto-discover them from the codebase*
-
----
-
-## How to Use This Documentation
-
-1. **Start Here**: Always read this INDEX.md first to understand what documentation exists
-2. **Project Context**: Read relevant project documentation before starting work
-3. **Standards**: Reference appropriate standards when writing code
-4. **Keep Updated**: Update documentation when making significant changes
-5. **Customize**: Adapt all documentation to your project's specific needs
-
-## Updating Documentation
-
-- Project documentation should be updated when goals, tech stack, or architecture changes
-- Technical standards should be updated when team conventions evolve
-- Always update INDEX.md when adding, removing, or significantly changing documentation

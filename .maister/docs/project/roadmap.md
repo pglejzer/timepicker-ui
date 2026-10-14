@@ -4,21 +4,21 @@ This roadmap outlines the planned evolution of `timepicker-ui`. It is derived fr
 
 ## Current State
 
-- **Version**: 4.3.0 (active line: `feature/4.4.0`)
+- **Version**: 4.4.0 published; 4.5.0 prepared, not released yet
 - **Key Features**:
   - Three UI modes — analog clock, scroll wheel, compact-wheel
-  - 12h/24h support, increments, disabled-time, current-time, smooth hour snap
+  - 12h/24h support, optional seconds, increments, disabled-time, current-time, smooth hour snap
   - Optional tree-shakeable plugins: **range** (start/end tabs), **timezone** (dropdown + keyboard nav), **wheel**
-  - 10 standalone CSS themes (`tp-ui-` prefixed)
+  - 12 standalone CSS themes (`tp-ui-` prefixed)
   - Zero-dependency, framework-agnostic, SSR-safe
   - Public API: `create`, `open`, `close`, `destroy`, `getValue`, `setValue`, `update`, event subscriptions, static instance registry
-- **Recent Updates** (from git history): merged v4.3.0, removed SpeedInsights, documentation/README updates, in-flight v4.4.0 work touching plugins (wheel momentum, range), clock engine (Hour/Minute), and core (Lifecycle, SetValue, CoreState).
+- **Recent Updates**: v4.4.0 released 2026-06-10 (blueprint themes, localizable accessibility labels, Home/End/PageUp/PageDown). v4.5.0 adds optional seconds (`clock.showSeconds`) and the bug fixes found during browser verification.
 
 ## Planned Enhancements (Next 3-6 Months)
 
 ### High Priority
 
-- [ ] **Ship v4.4.0** — finalize and release the in-flight `feature/4.4.0` branch (wheel momentum, range, lifecycle/setValue refactors).
+- [ ] **Ship v4.5.0** — optional seconds and the bug-fix batch; the changelog is dated 2026-10-12; publishing is left.
 - [ ] **Contributor-ready documentation** — architecture guide + coding standards so the composition pattern, manager contract, and plugin system are approachable to new contributors.
 
 ### Medium Priority

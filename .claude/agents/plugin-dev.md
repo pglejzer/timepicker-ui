@@ -1,7 +1,7 @@
 ---
 name: plugin-dev
 description: Use for the optional plugins of timepicker-ui - range (start/end tabs), timezone (dropdown + keyboard nav), wheel (scroll/compact-wheel mode, drag, momentum, popover) - and the PluginRegistry that wires them in. Knows the Plugin/PluginManager contract and tree-shaking constraints. Invoke for work under app/src/plugins/, app/src/managers/plugins/, or app/src/core/PluginRegistry.ts.
-tools: Read, Edit, Write, Grep, Glob, Bash
+tools: Read, Edit, Write, Grep, Glob
 model: inherit
 ---
 
@@ -10,7 +10,6 @@ plugins and the registry that makes them pluggable without bloating the core bun
 
 ## Before writing code
 - `.claude/rules/architecture.md` (always - esp. section 3 Plugin system and section 4 Event flow)
-- `CLAUDE.md` -> "Plugin system" section
 - The plugin you're touching: `app/src/plugins/<name>.ts` (definition) and
   `app/src/managers/plugins/<name>/` (implementation) - follow its existing shape
 
@@ -37,9 +36,9 @@ plugins and the registry that makes them pluggable without bloating the core bun
 
 ## Always finish by
 - Reporting changed files + why, and explicitly confirming the bundle stays
-  tree-shakeable (no new core -> plugin import). Do NOT run build/test/lint per task -
-  that is the user's batched end-of-session step.
-- Confirming SSR-safety and CRLF line endings.
+  tree-shakeable (no new core -> plugin import). Never run build/test/lint (HARD RULES
+  in `CLAUDE.md`) - the main agent verifies at the end.
+- Confirming SSR-safety and listing new files for CRLF conversion.
 - Staying inside `app/src/plugins/`, `app/src/managers/plugins/`, and
   `PluginRegistry.ts`. Shared template/util or CoreState changes -> flag for
   `core-architect`.
