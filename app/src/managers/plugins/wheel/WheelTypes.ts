@@ -1,16 +1,14 @@
-export interface WheelColumnConfig {
-  readonly type: 'hours' | 'minutes' | 'ampm';
-  readonly values: readonly string[];
-}
-
 export interface WheelSelectionState {
   readonly hour: string;
   readonly minute: string;
+  readonly second: string | null;
   readonly ampm: string | null;
 }
 
 export interface WheelScrollEndCallback {
-  (columnType: 'hours' | 'minutes' | 'ampm', value: string): void;
+  (columnType: WheelColumnType, value: string): void;
 }
 
-export type WheelColumnType = 'hours' | 'minutes' | 'ampm';
+export type WheelColumnType = 'hours' | 'minutes' | 'seconds' | 'ampm';
+
+export type WheelTimeColumn = Exclude<WheelColumnType, 'ampm'>;

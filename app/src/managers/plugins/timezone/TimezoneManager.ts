@@ -2,6 +2,7 @@ import type { CoreState } from '../../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitter';
 import { clearTimezoneCache } from '../../../utils/timezone';
 import { isDocument } from '../../../utils/node';
+import { bindEmitter } from '../../../utils/managerHelpers';
 import { TIMINGS } from '../../../constants/timings';
 import { TimezoneDropdown } from './TimezoneDropdown';
 import { TimezoneKeyboard } from './TimezoneKeyboard';
@@ -26,6 +27,7 @@ export default class TimezoneManager {
   }
 
   init(): void {
+    this.releaseHandlers();
     if (!this.isEnabled || !isDocument()) return;
 
     const dropdownEl = this.dropdown.getDropdown();
@@ -53,11 +55,15 @@ export default class TimezoneManager {
 
     const clickOutsideHandler = (e: MouseEvent): void => {
       if (!dropdownEl.contains(e.target as Node)) {
-        this.dropdown.setOpen(false);
-        this.keyboard.reset();
-        if (isDocument()) {
-          document.removeEventListener('click', clickOutsideHandler);
-        }
+        closeMenu();
+      }
+    };
+
+    const closeMenu = (): void => {
+      this.dropdown.setOpen(false);
+      this.keyboard.reset();
+      if (isDocument()) {
+        document.removeEventListener('click', clickOutsideHandler);
       }
     };
 
@@ -74,13 +80,12 @@ export default class TimezoneManager {
           this.clickOutsideTimerId = null;
         }, TIMINGS.DROPDOWN_CLICK_DELAY);
       } else {
-        this.dropdown.setOpen(false);
-        this.keyboard.reset();
+        closeMenu();
       }
     };
 
     const keydownHandler = (e: KeyboardEvent): void => {
-      this.handleKeydown(e, clickOutsideHandler);
+      this.handleKeydown(e, closeMenu);
     };
 
     const optionClickHandler = (e: Event): void => {
@@ -92,13 +97,7 @@ export default class TimezoneManager {
       if (option instanceof HTMLElement) {
         const value = option.getAttribute('data-value');
         if (value) {
-          this.dropdown.selectTimezone(value);
-          this.dropdown.setOpen(false);
-          this.keyboard.reset();
-
-          if (isDocument()) {
-            document.removeEventListener('click', clickOutsideHandler);
-          }
+          this.selectFromMenu(value, closeMenu);
           dropdownEl.focus();
         }
       }
@@ -112,15 +111,23 @@ export default class TimezoneManager {
       () => dropdownEl.removeEventListener('click', toggleHandler),
       () => dropdownEl.removeEventListener('keydown', keydownHandler),
       () => menu.removeEventListener('click', optionClickHandler),
-      () => {
-        if (isDocument()) {
-          document.removeEventListener('click', clickOutsideHandler);
-        }
-      },
+      closeMenu,
     );
+
+    bindEmitter(this.emitter, this.cleanupHandlers, 'clear', () => {
+      this.dropdown.clearSelection();
+      closeMenu();
+    });
   }
 
-  private handleKeydown(e: KeyboardEvent, clickOutsideHandler: (e: MouseEvent) => void): void {
+  private selectFromMenu(value: string, closeMenu: () => void): void {
+    if (!this.core.isOpen) return;
+
+    this.dropdown.selectTimezone(value);
+    closeMenu();
+  }
+
+  private handleKeydown(e: KeyboardEvent, closeMenu: () => void): void {
     const dropdownEl = this.dropdown.getDropdown();
     if (!dropdownEl) return;
 
@@ -138,9 +145,7 @@ export default class TimezoneManager {
           if (focusedIndex >= 0) {
             const value = options[focusedIndex]?.getAttribute('data-value');
             if (value) {
-              this.dropdown.selectTimezone(value);
-              this.dropdown.setOpen(false);
-              this.keyboard.reset();
+              this.selectFromMenu(value, closeMenu);
             }
           }
         }
@@ -148,11 +153,7 @@ export default class TimezoneManager {
 
       case 'Escape':
         e.preventDefault();
-        this.dropdown.setOpen(false);
-        this.keyboard.reset();
-        if (isDocument()) {
-          document.removeEventListener('click', clickOutsideHandler);
-        }
+        closeMenu();
         break;
 
       case 'ArrowDown':
@@ -192,6 +193,13 @@ export default class TimezoneManager {
   }
 
   destroy(): void {
+    this.releaseHandlers();
+    this.keyboard.reset();
+    this.dropdown.reset();
+    clearTimezoneCache();
+  }
+
+  private releaseHandlers(): void {
     if (this.clickOutsideTimerId !== null) {
       window.clearTimeout(this.clickOutsideTimerId);
       this.clickOutsideTimerId = null;
@@ -199,8 +207,5 @@ export default class TimezoneManager {
 
     this.cleanupHandlers.forEach((fn) => fn());
     this.cleanupHandlers = [];
-    this.keyboard.reset();
-    this.dropdown.reset();
-    clearTimezoneCache();
   }
 }

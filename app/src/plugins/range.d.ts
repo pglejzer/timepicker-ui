@@ -13,8 +13,8 @@ export declare class RangeManager implements PluginManager {
   init(): void;
   destroy(): void;
   getActivePart(): 'from' | 'to';
-  getFromValue(): { hour: string; minutes: string; type?: string | null } | null;
-  getToValue(): { hour: string; minutes: string; type?: string | null } | null;
+  getFromValue(): { hour: string; minutes: string; seconds?: string; type?: string | null } | null;
+  getToValue(): { hour: string; minutes: string; seconds?: string; type?: string | null } | null;
   reset(): void;
 }
 

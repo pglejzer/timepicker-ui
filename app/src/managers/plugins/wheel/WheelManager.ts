@@ -1,12 +1,18 @@
 import type { CoreState } from '../../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitter';
-import { WheelRenderer } from './WheelRenderer';
-import { WheelScrollHandler } from './WheelScrollHandler';
+import type { PluginSelection } from '../../../core/PluginRegistry';
+import { parseTime, pad, type TimeValue } from '../../../utils/time/parse';
+import { NEUTRAL_HOUR, NEUTRAL_ZERO, TIME_COLUMNS, WheelRenderer } from './WheelRenderer';
+import { WheelScrollHandler, selectionToTime } from './WheelScrollHandler';
 import { WheelEventHandler } from './WheelEventHandler';
 import { WheelDragHandler } from './WheelDragHandler';
 import PopoverManager from './PopoverManager';
+import type { WheelTimeColumn } from './WheelTypes';
 import { bindEmitter } from '../../../utils/managerHelpers';
-import { isCompactWheelMode } from '../../../utils/options/predicates';
+import { setSpinbuttonValue } from '../../../utils/accessibility';
+import { getClockType, isCompactWheelMode } from '../../../utils/options/predicates';
+
+const HEADER_FIELDS = { hours: 'getHour', minutes: 'getMinutes', seconds: 'getSeconds' } as const;
 
 export default class WheelManager {
   private readonly renderer: WheelRenderer;
@@ -30,6 +36,7 @@ export default class WheelManager {
   }
 
   init(): void {
+    this.releaseHandlers();
     this.renderer.init();
     this.dragHandler.init();
     this.scrollHandler.init();
@@ -40,21 +47,36 @@ export default class WheelManager {
     });
 
     this.listenForAmPmChanges();
-    this.listenForHourChanges();
+    this.listenForTimeSelection();
     this.listenForClear();
+    this.snapHeaderToColumns();
     this.deferInitialSync();
   }
 
-  scrollToValue(hour: string, minute: string, type?: string): void {
-    this.scrollHandler.scrollToValue('hours', hour.padStart(2, '0'));
-    this.scrollHandler.scrollToValue('minutes', minute.padStart(2, '0'));
+  scrollToValue(hour: string, minute: string, type?: string, second?: string): void {
+    const time: TimeValue = {
+      hour: this.snapToColumn('hours', hour),
+      minutes: this.snapToColumn('minutes', minute),
+      type,
+    };
+    this.renderer.updateDisabledItems(time);
+    this.scrollHandler.scrollToValue('hours', time.hour);
+    this.scrollHandler.scrollToValue('minutes', time.minutes);
+    if (second) {
+      this.scrollHandler.scrollToValue('seconds', this.snapToColumn('seconds', second));
+    }
     if (type && isCompactWheelMode(this.core.options)) {
       this.scrollHandler.scrollToValue('ampm', type.toUpperCase());
     }
   }
 
+  getSelection(): PluginSelection | null {
+    if (!this.renderer.getColumnElement('hours')?.isConnected) return null;
+    return selectionToTime(this.scrollHandler.getCurrentSelection());
+  }
+
   updateDisabledItems(): void {
-    this.renderer.updateDisabledItems();
+    this.renderer.updateDisabledItems(this.getSelection());
   }
 
   attachPopover(): void {
@@ -67,8 +89,7 @@ export default class WheelManager {
 
   destroy(): void {
     this.popover.destroy();
-    this.cleanupHandlers.forEach((fn) => fn());
-    this.cleanupHandlers = [];
+    this.releaseHandlers();
     this.eventHandler.destroy();
     this.scrollHandler.destroy();
     this.dragHandler.destroy();
@@ -85,63 +106,51 @@ export default class WheelManager {
     }
   }
 
-  private syncInitialValues(): void {
-    const hourInput = this.core.getHour();
-    const minutesInput = this.core.getMinutes();
-    const isCompact = isCompactWheelMode(this.core.options);
-
-    let hourValue = hourInput?.value ?? '';
-    let minuteValue = minutesInput?.value ?? '';
-
-    if (isCompact && (!hourValue || !minuteValue)) {
-      const parsed = this.parseMainInputValue();
-      if (!hourValue) hourValue = parsed.hour;
-      if (!minuteValue) minuteValue = parsed.minutes;
-    }
-
-    if (hourValue) {
-      this.scrollHandler.scrollToValue('hours', hourValue.padStart(2, '0'));
-    }
-
-    if (minuteValue) {
-      this.scrollHandler.scrollToValue('minutes', minuteValue.padStart(2, '0'));
-    }
-
-    if (isCompact) {
-      const am = this.core.getAM();
-      const initialPeriod = am?.classList.contains('active') ? 'AM' : 'PM';
-      this.scrollHandler.scrollToValue('ampm', initialPeriod);
-    }
+  private releaseHandlers(): void {
+    this.cleanupHandlers.forEach((fn) => fn());
+    this.cleanupHandlers = [];
   }
 
-  private parseMainInputValue(): { hour: string; minutes: string; type?: string } {
-    const input = this.core.getInput();
-    if (!input?.value) return { hour: '', minutes: '' };
+  private snapHeaderToColumns(): void {
+    TIME_COLUMNS.forEach((column) => {
+      const value = this.core[HEADER_FIELDS[column]]()?.value;
+      if (value) this.snapToColumn(column, value);
+    });
+  }
 
-    const value = input.value.trim();
-    const [timePart, typePart] = value.split(' ');
-    const [hStr = '', mStr = ''] = (timePart ?? '').split(':');
+  private snapToColumn(column: WheelTimeColumn, value: string): string {
+    const padded = pad(value);
+    const snapped = this.scrollHandler.resolveValue(column, padded) ?? padded;
+    if (snapped !== padded) {
+      setSpinbuttonValue(this.core[HEADER_FIELDS[column]](), snapped);
+    }
+    return snapped;
+  }
 
-    const hour = hStr.replace(/\D/g, '').padStart(2, '0');
-    const minutes = mStr.replace(/\D/g, '').padStart(2, '0');
+  private syncInitialValues(
+    parsed = isCompactWheelMode(this.core.options) ? this.parseMainInputValue() : null,
+  ): void {
+    const emptyHour = this.core.options.clock.type === '24h' ? NEUTRAL_ZERO : NEUTRAL_HOUR;
 
-    return {
-      hour,
-      minutes,
-      type: this.core.options.clock.type === '12h' ? typePart : undefined,
-    };
+    this.scrollToValue(
+      this.core.getHour()?.value || parsed?.hour || emptyHour,
+      this.core.getMinutes()?.value || parsed?.minutes || NEUTRAL_ZERO,
+      parsed?.type ?? this.renderer.getHeaderPeriod(),
+      this.core.getSeconds()?.value || parsed?.seconds || NEUTRAL_ZERO,
+    );
+  }
+
+  private parseMainInputValue(): TimeValue | null {
+    const value = this.core.getInput()?.value;
+    if (!value) return null;
+    const { options } = this.core;
+    return parseTime(value, { clockType: getClockType(options), showSeconds: options.clock.showSeconds });
   }
 
   private listenForAmPmChanges(): void {
     if (this.core.options.clock.type === '24h') return;
 
-    const handler = (): void => {
-      const currentHour = this.scrollHandler.getSelectedValue('hours');
-      const currentMinute = this.scrollHandler.getSelectedValue('minutes');
-      this.renderer.updateDisabledItems();
-      this.scrollToFirstAvailable('hours', currentHour);
-      this.scrollToFirstAvailable('minutes', currentMinute);
-    };
+    const handler = (): void => this.refreshDisabledItems();
 
     bindEmitter(this.emitter, this.cleanupHandlers, 'select:am', handler);
     bindEmitter(this.emitter, this.cleanupHandlers, 'select:pm', handler);
@@ -149,25 +158,37 @@ export default class WheelManager {
 
   private listenForClear(): void {
     bindEmitter(this.emitter, this.cleanupHandlers, 'clear', () => {
-      this.deferInitialSync();
+      this.syncInitialValues(null);
     });
   }
 
-  private listenForHourChanges(): void {
-    const disabled = this.core.disabledTime;
-    if (!disabled?.value?.isInterval) return;
-
-    bindEmitter(this.emitter, this.cleanupHandlers, 'select:hour', () => {
-      const currentMinute = this.scrollHandler.getSelectedValue('minutes');
-      this.renderer.updateDisabledItems();
-      this.scrollToFirstAvailable('minutes', currentMinute);
+  private listenForTimeSelection(): void {
+    const { showSeconds } = this.core.options.clock;
+    bindEmitter(this.emitter, this.cleanupHandlers, 'select:hour', ({ hour }) => {
+      if (this.core.disabledTime?.value?.isInterval) this.refreshDisabledItems();
+      if (hour) this.scrollHandler.scrollToValue('hours', pad(hour));
+    });
+    bindEmitter(this.emitter, this.cleanupHandlers, 'select:minute', ({ minutes }) => {
+      if (showSeconds && this.core.disabledTime?.value?.isInterval) this.refreshDisabledItems();
+      if (minutes) this.scrollHandler.scrollToValue('minutes', pad(minutes));
+    });
+    bindEmitter(this.emitter, this.cleanupHandlers, 'select:second', ({ seconds }) => {
+      if (seconds) this.scrollHandler.scrollToValue('seconds', pad(seconds));
     });
   }
 
-  private scrollToFirstAvailable(columnType: 'hours' | 'minutes', preferredValue: string | null): void {
-    const target = this.scrollHandler.findFirstAvailable(columnType, preferredValue);
+  private refreshDisabledItems(): void {
+    const selection = this.getSelection();
+    this.renderer.updateDisabledItems(selection);
+    this.scrollToFirstAvailable('hours', selection?.hour);
+    this.scrollToFirstAvailable('minutes', selection?.minutes);
+    this.scrollToFirstAvailable('seconds', selection?.seconds);
+  }
+
+  private scrollToFirstAvailable(columnType: WheelTimeColumn, preferredValue: string | undefined): void {
+    const target = this.scrollHandler.findFirstAvailable(columnType, preferredValue ?? null);
     if (target !== null) {
-      this.scrollHandler.scrollToValue(columnType, target);
+      this.scrollHandler.scrollToValue(columnType, target, target !== preferredValue);
     }
   }
 }

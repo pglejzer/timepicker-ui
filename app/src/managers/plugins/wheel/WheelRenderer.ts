@@ -1,12 +1,37 @@
 import type { CoreState } from '../../../timepicker/CoreState';
 import { isDocument } from '../../../utils/node';
-import { checkedDisabledValuesInterval } from '../../../utils/time/disable';
-import type { WheelColumnType } from './WheelTypes';
+import { pad, type TimeValue } from '../../../utils/time/parse';
+import {
+  isHourDisabled,
+  isMinuteDisabled,
+  isSecondDisabled,
+  type DisabledRules,
+} from '../../../utils/time/rules';
+import type { WheelColumnType, WheelTimeColumn } from './WheelTypes';
 
-const COLUMN_SELECTORS: Record<WheelColumnType, string> = {
+type DisabledValue = NonNullable<NonNullable<CoreState['disabledTime']>['value']>;
+type WheelTime = Partial<TimeValue>;
+
+export const NEUTRAL_HOUR = '12';
+export const NEUTRAL_ZERO = '00';
+
+export const COLUMN_SELECTORS: Record<WheelColumnType, string> = {
   hours: '.tp-ui-wheel-hours',
   minutes: '.tp-ui-wheel-minutes',
+  seconds: '.tp-ui-wheel-seconds',
   ampm: '.tp-ui-wheel-ampm',
+};
+
+export const TIME_COLUMNS: readonly WheelTimeColumn[] = ['hours', 'minutes', 'seconds'];
+
+export const WHEEL_COLUMNS: readonly WheelColumnType[] = [...TIME_COLUMNS, 'ampm'];
+
+const isListed = (disabledSet: ReadonlySet<string>, value: string): boolean =>
+  disabledSet.has(value) || disabledSet.has(String(parseInt(value, 10)));
+
+const setItemDisabled = (item: HTMLElement, disabled: boolean): void => {
+  item.classList.toggle('is-disabled', disabled);
+  item.setAttribute('aria-disabled', String(disabled));
 };
 
 export class WheelRenderer {
@@ -30,8 +55,7 @@ export class WheelRenderer {
     const modal = this.core.getModalElement();
     if (!modal) return;
 
-    const columnTypes: readonly WheelColumnType[] = ['hours', 'minutes', 'ampm'];
-    columnTypes.forEach((type) => {
+    WHEEL_COLUMNS.forEach((type) => {
       const el = modal.querySelector<HTMLDivElement>(COLUMN_SELECTORS[type]);
       if (el) {
         this.columns.set(type, el);
@@ -41,7 +65,7 @@ export class WheelRenderer {
     this.updateDisabledItems();
   }
 
-  updateDisabledItems(): void {
+  updateDisabledItems(wheelTime: WheelTime | null = null): void {
     const disabled = this.core.disabledTime;
     if (!disabled?.value) return;
 
@@ -53,7 +77,7 @@ export class WheelRenderer {
     }
 
     if (disabled.value.isInterval && disabled.value.intervals) {
-      this.updateDisabledByInterval(disabled.value, shouldHide);
+      this.updateDisabledByInterval(disabled.value, shouldHide, wheelTime);
     } else {
       this.updateDisabledByFlatLists(disabled.value, shouldHide);
     }
@@ -63,104 +87,68 @@ export class WheelRenderer {
     }
   }
 
-  private updateDisabledByFlatLists(
-    value: NonNullable<NonNullable<typeof this.core.disabledTime>['value']>,
-    shouldHide: boolean,
-  ): void {
-    const hoursColumn = this.columns.get('hours');
-    const minutesColumn = this.columns.get('minutes');
+  private updateDisabledByFlatLists(value: DisabledValue, shouldHide: boolean): void {
+    TIME_COLUMNS.forEach((type) => {
+      const list = value[type];
+      if (!list) return;
 
-    if (hoursColumn && value.hours) {
-      const disabledSet = new Set(value.hours.map(String));
-      this.toggleDisabledOnItems(hoursColumn, disabledSet, shouldHide);
-    }
-
-    if (minutesColumn && value.minutes) {
-      const disabledSet = new Set(value.minutes.map(String));
-      this.toggleDisabledOnItems(minutesColumn, disabledSet, shouldHide);
-    }
+      const disabledSet = new Set(list.map(String));
+      this.markDisabled(type, shouldHide, (item) => isListed(disabledSet, item));
+    });
   }
 
   private updateDisabledByInterval(
-    value: NonNullable<NonNullable<typeof this.core.disabledTime>['value']>,
+    value: DisabledValue,
     shouldHide: boolean,
+    wheelTime: WheelTime | null,
   ): void {
-    const clockType = (value.clockType as '12h' | '24h') ?? '12h';
-    const intervals = value.intervals;
-    const amPm = this.getCurrentAmPm();
-    const currentHour = this.getCurrentHour();
+    const rules: DisabledRules = {
+      intervals: value.intervals,
+      clockType: value.clockType === '24h' ? '24h' : '12h',
+    };
+    const showSeconds = this.core.options.clock.showSeconds === true;
+    const type = wheelTime?.type ?? this.getHeaderPeriod();
+    const hour = this.getHeaderValue(this.core.getHour()) ?? wheelTime?.hour ?? NEUTRAL_HOUR;
+    const minutes = this.getHeaderValue(this.core.getMinutes()) ?? wheelTime?.minutes ?? NEUTRAL_ZERO;
 
-    const hoursColumn = this.columns.get('hours');
-    if (hoursColumn) {
-      const items = hoursColumn.querySelectorAll<HTMLDivElement>('.tp-ui-wheel-item');
-      items.forEach((item) => {
-        const hourVal = item.getAttribute('data-value');
-        if (hourVal === null) return;
-
-        const allMinutesDisabled = this.isHourFullyDisabled(hourVal, amPm, intervals, clockType);
-        item.classList.toggle('is-disabled', allMinutesDisabled);
-        if (shouldHide && allMinutesDisabled) {
-          this.removeItemFromDOM(item, hoursColumn);
-        }
-      });
-    }
-
-    const minutesColumn = this.columns.get('minutes');
-    if (minutesColumn) {
-      const items = minutesColumn.querySelectorAll<HTMLDivElement>('.tp-ui-wheel-item');
-      items.forEach((item) => {
-        const minuteVal = item.getAttribute('data-value');
-        if (minuteVal === null) return;
-
-        const isValid = checkedDisabledValuesInterval(currentHour, minuteVal, amPm, intervals, clockType);
-        item.classList.toggle('is-disabled', !isValid);
-        if (shouldHide && !isValid) {
-          this.removeItemFromDOM(item, minutesColumn);
-        }
-      });
-    }
+    this.markDisabled('hours', shouldHide, (item) =>
+      isHourDisabled(rules, { hour: item, type }, showSeconds),
+    );
+    this.markDisabled('minutes', shouldHide, (item) =>
+      isMinuteDisabled(rules, { hour, minutes: item, type }, showSeconds),
+    );
+    this.markDisabled('seconds', shouldHide, (item) =>
+      isSecondDisabled(rules, { hour, minutes, seconds: item, type }),
+    );
   }
 
-  private isHourFullyDisabled(
-    hour: string,
-    amPm: string,
-    intervals: string[] | undefined,
-    clockType: '12h' | '24h',
-  ): boolean {
-    if (!intervals) return false;
+  private markDisabled(
+    type: WheelColumnType,
+    shouldHide: boolean,
+    isDisabled: (value: string) => boolean,
+  ): void {
+    const column = this.columns.get(type);
+    if (!column) return;
 
-    for (let m = 0; m < 60; m++) {
-      const minuteStr = m.toString().padStart(2, '0');
-      const isValid = checkedDisabledValuesInterval(hour, minuteStr, amPm, intervals, clockType);
-      if (isValid) return false;
-    }
-    return true;
-  }
+    column.querySelectorAll<HTMLDivElement>('.tp-ui-wheel-item').forEach((item) => {
+      const value = item.getAttribute('data-value');
+      if (value === null) return;
 
-  private toggleDisabledOnItems(column: HTMLDivElement, disabledSet: Set<string>, shouldHide: boolean): void {
-    const items = column.querySelectorAll<HTMLDivElement>('.tp-ui-wheel-item');
-    items.forEach((item) => {
-      const val = item.getAttribute('data-value');
-      if (val !== null) {
-        const numVal = String(parseInt(val, 10));
-        const isDisabled = disabledSet.has(numVal) || disabledSet.has(val);
-        item.classList.toggle('is-disabled', isDisabled);
-        if (shouldHide && isDisabled) {
-          this.removeItemFromDOM(item, column);
-        }
+      const disabled = isDisabled(value);
+      setItemDisabled(item, disabled);
+      if (shouldHide && disabled) {
+        this.removeItemFromDOM(item, type);
       }
     });
   }
 
-  private getCurrentAmPm(): string {
-    const am = this.core.getAM();
-    if (am?.classList.contains('active')) return 'AM';
-    return 'PM';
+  getHeaderPeriod(): string {
+    return this.core.getAM()?.classList.contains('active') ? 'AM' : 'PM';
   }
 
-  private getCurrentHour(): string {
-    const hourInput = this.core.getHour();
-    return hourInput?.value?.padStart(2, '0') ?? '12';
+  private getHeaderValue(field: HTMLInputElement | null): string | null {
+    const value = field?.value;
+    return value ? pad(value) : null;
   }
 
   getColumnElement(type: WheelColumnType): HTMLDivElement | null {
@@ -205,10 +193,7 @@ export class WheelRenderer {
     return height;
   }
 
-  private removeItemFromDOM(item: HTMLDivElement, column: HTMLDivElement): void {
-    const type = this.getColumnTypeByElement(column);
-    if (!type) return;
-
+  private removeItemFromDOM(item: HTMLDivElement, type: WheelColumnType): void {
     const list = this.removedItems.get(type) ?? [];
     list.push(item);
     this.removedItems.set(type, list);
@@ -217,8 +202,7 @@ export class WheelRenderer {
   }
 
   private restoreRemovedItems(): void {
-    const columnTypes: readonly WheelColumnType[] = ['hours', 'minutes', 'ampm'];
-    columnTypes.forEach((type) => {
+    WHEEL_COLUMNS.forEach((type) => {
       const removed = this.removedItems.get(type);
       if (!removed || removed.length === 0) return;
 
@@ -227,7 +211,7 @@ export class WheelRenderer {
 
       const existingItems = Array.from(col.querySelectorAll<HTMLDivElement>('.tp-ui-wheel-item'));
       removed.forEach((item) => {
-        item.classList.remove('is-disabled');
+        setItemDisabled(item, false);
         const itemValue = parseInt(item.getAttribute('data-value') ?? '0', 10);
         const insertBefore = existingItems.find((existing) => {
           const existingValue = parseInt(existing.getAttribute('data-value') ?? '0', 10);
@@ -254,13 +238,6 @@ export class WheelRenderer {
       });
     });
     this.removedItems.clear();
-  }
-
-  private getColumnTypeByElement(column: HTMLDivElement): WheelColumnType | null {
-    for (const [type, el] of this.columns) {
-      if (el === column) return type;
-    }
-    return null;
   }
 
   destroy(): void {

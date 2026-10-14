@@ -12,7 +12,8 @@ interface PluginDefinition {
 export declare class WheelManager implements PluginManager {
   init(): void;
   destroy(): void;
-  scrollToValue(hour: string, minute: string, type?: string): void;
+  scrollToValue(hour: string, minute: string, type?: string, second?: string): void;
+  getSelection(): { hour: string; minutes: string; seconds?: string; type?: string } | null;
   updateDisabledItems(): void;
 }
 

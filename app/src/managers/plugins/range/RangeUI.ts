@@ -1,6 +1,8 @@
 import type { CoreState } from '../../../timepicker/CoreState';
 import type { RangeState } from './RangeState';
-import { formatDisplayTime } from './utils';
+import type { RangePart, RangeValue } from './types';
+import { formatDisplayTime, formatRangePart, getTimePlaceholder } from './utils';
+import { setActivePeriod, setSpinbuttonValue } from '../../../utils/accessibility';
 
 export class RangeUI {
   private readonly core: CoreState;
@@ -19,18 +21,18 @@ export class RangeUI {
     const toBtn = modal.querySelector('.tp-ui-range-tab.tp-ui-range-to');
 
     const isFromActive = this.state.getActivePart() === 'from';
-    const isFromComplete = this.state.isFromComplete();
+    const isToAvailable = this.state.isFromComplete() || this.state.getPendingFrom() !== null;
 
     fromBtn?.classList.toggle('active', isFromActive);
     toBtn?.classList.toggle('active', !isFromActive);
-    toBtn?.classList.toggle('disabled', !isFromComplete);
+    toBtn?.classList.toggle('disabled', !isToAvailable);
 
     fromBtn?.setAttribute('aria-selected', String(isFromActive));
     toBtn?.setAttribute('aria-selected', String(!isFromActive));
-    toBtn?.setAttribute('aria-disabled', String(!isFromComplete));
+    toBtn?.setAttribute('aria-disabled', String(!isToAvailable));
 
     fromBtn?.setAttribute('tabindex', isFromActive ? '0' : '-1');
-    toBtn?.setAttribute('tabindex', isFromActive || !isFromComplete ? '-1' : '0');
+    toBtn?.setAttribute('tabindex', isFromActive || !isToAvailable ? '-1' : '0');
   }
 
   updateTimeDisplay(): void {
@@ -42,25 +44,24 @@ export class RangeUI {
 
     const activePart = this.state.getActivePart();
     const previewValue = this.state.getPreviewValue();
-    const fromValue = this.state.getFromValue();
-    const toValue = this.state.getToValue();
+    const displayOf = (part: RangePart, saved: RangeValue | null): RangeValue | null =>
+      activePart === part && previewValue ? previewValue : saved;
 
-    let fromDisplay = '--:--';
-    if (activePart === 'from' && previewValue) {
-      fromDisplay = formatDisplayTime(previewValue);
-    } else if (fromValue) {
-      fromDisplay = formatDisplayTime(fromValue);
+    this.renderTime(fromTimeEl, displayOf('from', this.state.getFromValue()));
+    this.renderTime(toTimeEl, displayOf('to', this.state.getToValue()));
+  }
+
+  private renderTime(element: Element | null, value: RangeValue | null): void {
+    if (!element) return;
+
+    const { showSeconds } = this.state;
+    if (value) {
+      element.textContent = formatDisplayTime(value, showSeconds);
+      element.removeAttribute('aria-hidden');
+    } else {
+      element.textContent = getTimePlaceholder(showSeconds);
+      element.setAttribute('aria-hidden', 'true');
     }
-
-    let toDisplay = '--:--';
-    if (activePart === 'to' && previewValue) {
-      toDisplay = formatDisplayTime(previewValue);
-    } else if (toValue) {
-      toDisplay = formatDisplayTime(toValue);
-    }
-
-    if (fromTimeEl) fromTimeEl.textContent = fromDisplay;
-    if (toTimeEl) toTimeEl.textContent = toDisplay;
   }
 
   updateOkButton(): void {
@@ -76,11 +77,9 @@ export class RangeUI {
     const input = this.core.getInput();
     if (!input) return;
 
-    const fromValue = this.state.getFromValue();
-    const toValue = this.state.getToValue();
-
-    const from = fromValue ? formatDisplayTime(fromValue) : '--:--';
-    const to = toValue ? formatDisplayTime(toValue) : '--:--';
+    const { showSeconds } = this.state;
+    const from = formatRangePart(this.state.getFromValue(), showSeconds);
+    const to = formatRangePart(this.state.getToValue(), showSeconds);
 
     input.value = `${from} - ${to}`;
   }
@@ -89,34 +88,20 @@ export class RangeUI {
     const value = this.state.getSavedValue();
     const hourInput = this.core.getHour();
     const minutesInput = this.core.getMinutes();
+    const secondsInput = this.state.showSeconds ? this.core.getSeconds() : null;
 
-    if (hourInput) {
-      hourInput.value = value?.hour ?? '12';
-    }
-    if (minutesInput) {
-      minutesInput.value = value?.minutes ?? '00';
-    }
+    setSpinbuttonValue(hourInput, value?.hour ?? '12');
+    setSpinbuttonValue(minutesInput, value?.minutes ?? '00');
+    setSpinbuttonValue(secondsInput, value?.seconds ?? '00');
 
     if (this.core.options.clock.type === '12h') {
-      const am = this.core.getAM();
-      const pm = this.core.getPM();
-
-      if (value?.type === 'AM') {
-        am?.classList.add('active');
-        pm?.classList.remove('active');
-      } else if (value?.type === 'PM') {
-        pm?.classList.add('active');
-        am?.classList.remove('active');
-      } else {
-        am?.classList.remove('active');
-        pm?.classList.remove('active');
-      }
+      setActivePeriod(this.core.getAM(), this.core.getPM(), value?.type);
     }
 
-    if (minutesInput) {
-      minutesInput.blur();
-      minutesInput.classList.remove('active');
-    }
+    [minutesInput, secondsInput].forEach((input) => {
+      input?.blur();
+      input?.classList.remove('active');
+    });
 
     if (hourInput) {
       hourInput.click();

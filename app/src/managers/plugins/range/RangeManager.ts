@@ -1,44 +1,62 @@
 import type { CoreState } from '../../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitter';
-import type { RangeMinuteCommitEventData } from '../../../types/types';
-import type { RangePart, RangeValue, DisabledTimeConfig, FormattedRange } from './types';
+import type { RangeConfirmEventData, RangeMinuteCommitEventData } from '../../../types/types';
+import type {
+  RangePart,
+  RangeValue,
+  DisabledTimeConfig,
+  FormattedRange,
+  RangeValidationResult,
+} from './types';
 import { RangeState } from './RangeState';
 import { RangeUI } from './RangeUI';
-import { parseRangeInput, formatDisplayTime } from './utils';
+import {
+  parseRangeInput,
+  formatDisplayTime,
+  formatRangePart,
+  isPlaceholder,
+  PART_PLACEHOLDER,
+} from './utils';
 import { bindEmitter } from '../../../utils/managerHelpers';
 
 export default class RangeManager {
   private readonly core: CoreState;
   private readonly emitter: EventEmitter<TimepickerEventMap>;
-  private readonly state: RangeState;
-  private readonly ui: RangeUI;
+  private state!: RangeState;
+  private ui!: RangeUI;
   private cleanupHandlers: Array<() => void> = [];
   private isSyncingAmPm = false;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
     this.emitter = emitter;
-
-    const { range, clock } = core.options;
-    this.state = new RangeState(clock.type as '12h' | '24h', range?.minDuration, range?.maxDuration, emitter);
-    this.ui = new RangeUI(core, this.state);
+    this.createState();
   }
 
   private get isEnabled(): boolean {
     return this.core.options.range?.enabled === true;
   }
 
+  private createState(): void {
+    const { range, clock } = this.core.options;
+    this.state = new RangeState(
+      clock.type as '12h' | '24h',
+      range?.minDuration,
+      range?.maxDuration,
+      this.emitter,
+      clock.showSeconds === true,
+    );
+    this.ui = new RangeUI(this.core, this.state);
+  }
+
   init(): void {
+    this.releaseHandlers();
     if (!this.isEnabled) return;
 
-    const input = this.core.getInput();
-    const inputValue = input?.value || '';
-    const { from, to } = parseRangeInput(inputValue);
-
+    this.createState();
+    const { from, to } = parseRangeInput(this.core.getInput()?.value || '', this.state.showSeconds);
     this.state.setFromValue(from);
     this.state.setToValue(to);
-    this.state.setActivePart('from');
-    this.state.setPreviewValue(null);
 
     this.bindEvents();
     this.ui.syncClockToActivePart();
@@ -84,7 +102,7 @@ export default class RangeManager {
     return this.state.getDuration();
   }
 
-  validateRange(): { valid: boolean; duration: number } {
+  validateRange(): RangeValidationResult {
     if (!this.isEnabled) return { valid: true, duration: 0 };
     return this.state.validate();
   }
@@ -100,9 +118,10 @@ export default class RangeManager {
 
     if (!from || !to) return null;
 
+    const { showSeconds } = this.state;
     return {
-      from: formatDisplayTime(from),
-      to: formatDisplayTime(to),
+      from: formatDisplayTime(from, showSeconds),
+      to: formatDisplayTime(to, showSeconds),
     };
   }
 
@@ -113,21 +132,14 @@ export default class RangeManager {
     const fromBtn = modal.querySelector<HTMLElement>('.tp-ui-range-tab.tp-ui-range-from');
     const toBtn = modal.querySelector<HTMLElement>('.tp-ui-range-tab.tp-ui-range-to');
 
-    if (fromBtn) {
-      const handler = (): void => this.activatePart('from', fromBtn);
-      fromBtn.addEventListener('click', handler);
-      this.cleanupHandlers.push(() => fromBtn.removeEventListener('click', handler));
-    }
-
-    if (toBtn) {
-      const handler = (): void => this.activatePart('to', toBtn);
-      toBtn.addEventListener('click', handler);
-      this.cleanupHandlers.push(() => toBtn.removeEventListener('click', handler));
-    }
-
+    this.listen(fromBtn, 'click', () => this.activatePart('from', fromBtn));
+    this.listen(toBtn, 'click', () => this.activatePart('to', toBtn));
     this.bindTabKeyboard(fromBtn, toBtn);
+    this.bindFieldChoice('hour', this.core.getHour());
+    this.bindFieldChoice('minutes', this.core.getMinutes());
+    this.bindFieldChoice('seconds', this.state.showSeconds ? this.core.getSeconds() : null);
 
-    bindEmitter(this.emitter, this.cleanupHandlers, 'update', () => this.handleUpdate());
+    bindEmitter(this.emitter, this.cleanupHandlers, 'update', (data) => this.handleUpdate(data?.hour));
     bindEmitter(this.emitter, this.cleanupHandlers, 'range:minute:commit', (d) => this.handleMinuteCommit(d));
     bindEmitter(this.emitter, this.cleanupHandlers, 'confirm', () => this.handleConfirm());
     bindEmitter(this.emitter, this.cleanupHandlers, 'select:am', () => this.handleAmPm());
@@ -135,13 +147,38 @@ export default class RangeManager {
     bindEmitter(this.emitter, this.cleanupHandlers, 'clear', () => this.handleClear());
   }
 
+  private listen<K extends keyof HTMLElementEventMap>(
+    el: HTMLElement | null,
+    type: K,
+    handler: (e: HTMLElementEventMap[K]) => void,
+  ): void {
+    if (!el) return;
+    el.addEventListener(type, handler);
+    this.cleanupHandlers.push(() => el.removeEventListener(type, handler));
+  }
+
+  private bindFieldChoice(field: keyof RangeValue, input: HTMLInputElement | null): void {
+    this.listen(input, 'keydown', () => this.state.chosenFields.add(field));
+    this.listen(input, 'blur', () => {
+      if (this.state.chosenFields.has(field)) {
+        this.handleUpdate(this.state.getPreviewValue()?.hour);
+      }
+    });
+  }
+
   private isTabDisabled(btn: HTMLElement | null): boolean {
     return !btn || btn.getAttribute('aria-disabled') === 'true' || btn.classList.contains('disabled');
   }
 
   private activatePart(part: RangePart, btn: HTMLElement | null): void {
-    if (this.isTabDisabled(btn)) return;
-    this.setActivePart(part);
+    if (!this.core.isOpen || this.isTabDisabled(btn)) return;
+
+    const pendingFrom = part === 'to' ? this.state.getPendingFrom() : null;
+    if (pendingFrom) {
+      this.handleMinuteCommit(pendingFrom);
+    } else {
+      this.setActivePart(part);
+    }
   }
 
   private bindTabKeyboard(fromBtn: HTMLElement | null, toBtn: HTMLElement | null): void {
@@ -174,49 +211,59 @@ export default class RangeManager {
             break;
           case 'Enter':
           case ' ':
-          case 'Spacebar':
             e.preventDefault();
             this.activatePart(part, tab);
             break;
         }
       };
 
-      tab.addEventListener('keydown', handler);
-      this.cleanupHandlers.push(() => tab.removeEventListener('keydown', handler));
+      this.listen(tab, 'keydown', handler);
     });
   }
 
   private handleClear(): void {
     if (!this.isEnabled) return;
 
-    this.state.setFromValue(null);
-    this.state.setToValue(null);
-    this.state.setPreviewValue(null);
-    this.state.resetActivePart();
+    this.reset();
+    this.emitter.emit('range:switch', { active: 'from', disabledTime: null });
+    this.ui.updateAll();
+    this.focusHour();
   }
 
-  private handleUpdate(): void {
+  private focusHour(): void {
+    this.core.getHour()?.focus();
+  }
+
+  private handleUpdate(hour: string | undefined): void {
     if (!this.isEnabled) return;
 
-    const hourInput = this.core.getHour();
-    const minutesInput = this.core.getMinutes();
-    const activeTypeMode = this.core.getActiveTypeMode();
-
-    const hour = hourInput?.value ?? '12';
-    const currentValue = this.state.getSavedValue();
-    const hasMinutesSelected = currentValue?.minutes && currentValue.minutes !== '--';
-    const minutes = hasMinutesSelected ? (minutesInput?.value ?? '--') : '--';
-    const type =
-      this.core.options.clock.type === '12h' ? (activeTypeMode?.textContent ?? undefined) : undefined;
-
-    this.state.setPreviewValue({ hour, minutes, type });
+    this.state.setPreviewValue(hour === undefined ? null : this.buildPreview(hour));
     this.ui.updateAll();
+  }
+
+  private buildPreview(hour: string): RangeValue {
+    const minutes = this.state.getSavedValue()?.minutes;
+    const hasMinutesSelected = !!minutes && !isPlaceholder(minutes);
+    const readField = (field: keyof RangeValue, input: HTMLInputElement | null): string =>
+      ((hasMinutesSelected || this.state.chosenFields.has(field)) && input?.value) || PART_PLACEHOLDER;
+
+    return {
+      hour,
+      minutes: readField('minutes', this.core.getMinutes()),
+      seconds: this.state.showSeconds ? readField('seconds', this.core.getSeconds()) : undefined,
+      type: this.core.options.clock.type === '12h' ? this.core.getActiveType() : undefined,
+    };
   }
 
   private handleMinuteCommit(data: RangeMinuteCommitEventData): void {
     if (!this.isEnabled) return;
 
-    const value: RangeValue = { hour: data.hour, minutes: data.minutes, type: data.type ?? undefined };
+    const value: RangeValue = {
+      hour: data.hour,
+      minutes: data.minutes,
+      seconds: data.seconds,
+      type: data.type ?? undefined,
+    };
     const activePart = this.state.getActivePart();
 
     if (activePart === 'from') {
@@ -231,6 +278,7 @@ export default class RangeManager {
         });
         this.ui.syncClockToActivePart();
         this.emitAmPmSyncEvent();
+        this.focusHour();
       }
     } else {
       this.state.setToValue(value);
@@ -246,8 +294,7 @@ export default class RangeManager {
     if (this.isSyncingAmPm) return;
     if (this.core.options.clock.type !== '12h') return;
 
-    const activeTypeMode = this.core.getActiveTypeMode();
-    const type = activeTypeMode?.textContent;
+    const type = this.core.getActiveType();
     if (!type) return;
 
     const activePart = this.state.getActivePart();
@@ -306,15 +353,18 @@ export default class RangeManager {
 
     this.state.commitPreview();
 
-    const from = this.state.getFromValue();
-    const to = this.state.getToValue();
-
-    const fromStr = from ? formatDisplayTime(from) : '--:--';
-    const toStr = to ? formatDisplayTime(to) : '--:--';
-    const duration = this.state.getDuration();
+    const { showSeconds } = this.state;
+    const payload: RangeConfirmEventData = {
+      from: formatRangePart(this.state.getFromValue(), showSeconds),
+      to: formatRangePart(this.state.getToValue(), showSeconds),
+      duration: this.state.getDuration(),
+    };
+    if (showSeconds) {
+      payload.durationSeconds = this.state.getDurationSeconds();
+    }
 
     this.ui.updateInputValue();
-    this.emitter.emit('range:confirm', { from: fromStr, to: toStr, duration });
+    this.emitter.emit('range:confirm', payload);
   }
 
   reset(): void {
@@ -322,8 +372,12 @@ export default class RangeManager {
   }
 
   destroy(): void {
+    this.releaseHandlers();
+    this.reset();
+  }
+
+  private releaseHandlers(): void {
     this.cleanupHandlers.forEach((fn) => fn());
     this.cleanupHandlers = [];
-    this.reset();
   }
 }
