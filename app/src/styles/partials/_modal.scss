@@ -2,7 +2,6 @@
 
 .tp-ui {
   &-modal {
-    font-family: 'Roboto', sans-serif;
     position: fixed;
     opacity: 0;
     top: 0;
@@ -13,9 +12,12 @@
     backdrop-filter: var(--tp-backdrop-filter);
     z-index: 5000;
     pointer-events: none;
+    transition: opacity var(--tp-duration-fast) var(--tp-easing-accelerate);
 
     &.show {
+      opacity: 1;
       pointer-events: auto;
+      transition: opacity var(--tp-duration-base) var(--tp-easing-decelerate);
     }
 
     &.removed {
@@ -25,13 +27,5 @@
       right: auto;
       background-color: transparent;
     }
-  }
-
-  &-measure {
-    position: absolute;
-    top: -9999px;
-    width: $mesaruelength;
-    height: $mesaruelength;
-    overflow: scroll;
   }
 }

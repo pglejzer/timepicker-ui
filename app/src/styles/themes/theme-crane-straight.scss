@@ -13,21 +13,22 @@
   --tp-on-surface: #ffffff;
   --tp-on-surface-rgb: 255, 255, 255;
 
-  --tp-am-pm-active: #f7363e;
+  --tp-am-pm-active: #e30425;
   --tp-am-pm-text-selected: #ffffff;
   --tp-am-pm-text-unselected: #ffffff;
 
-  --tp-primary: #f7363e;
+  --tp-primary: #e30425;
   --tp-on-primary: #ffffff;
-  --tp-primary-container: #f7363e;
+  --tp-primary-container: #e30425;
   --tp-on-primary-container: #ffffff;
+  --tp-btn-text: #ffffff;
 
-  --tp-tertiary-container: #f7363e;
+  --tp-tertiary-container: #e30425;
   --tp-on-tertiary-container: #ffffff;
 
   --tp-border: transparent;
   --tp-outline: #ff4c52;
-  --tp-focus-ring-halo: rgba(255, 255, 255, 0.75);
+  --tp-focus-ring: var(--tp-outline);
   --tp-radius: 0;
   --tp-border-radius: 0;
   --tp-radius-sm: 0;
@@ -37,10 +38,11 @@
 
   --tp-dropdown-option-bg: #ffffff;
   --tp-dropdown-option-text: #000000;
+  --tp-dropdown-option-hover-text: #ffffff;
   --tp-error: #ffb4ab;
 
   --tp-wheel-highlight-bg: rgba(247, 54, 62, 0.12);
   --tp-wheel-highlight-border: rgba(255, 255, 255, 0.15);
   --tp-wheel-text-color: #ffffff;
-  --tp-wheel-selected-color: #f7363e;
+  --tp-wheel-selected-color: #fa8489;
 }

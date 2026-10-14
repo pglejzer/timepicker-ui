@@ -2,34 +2,62 @@
 
 [data-md3-ripple] {
   position: relative;
+  isolation: isolate;
 
-  &::before {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
-    top: var(--ripple-y, 50%);
-    left: var(--ripple-x, 50%);
-    width: var(--ripple-size, 0);
-    height: var(--ripple-size, 0);
-    border-radius: 50%;
-    background: var(--tp-primary);
-    transform: translate(-50%, -50%) scale(0);
-    pointer-events: none;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background-color: currentColor;
     opacity: 0;
-    z-index: 1;
+    pointer-events: none;
   }
 
-  &.is-rippling::before {
-    animation: ripple-expand 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  &::before {
+    transition: opacity var(--tp-duration-fast) var(--tp-easing-linear);
   }
 
-  &.ripple-hold::before {
-    animation: ripple-expand 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  &::after {
+    clip-path: circle(calc(var(--ripple-size, 0px) / 2) at var(--ripple-x, 50%) var(--ripple-y, 50%));
   }
 
-  &:not(.ripple-hold).is-rippling::before {
+  @media (hover: hover) {
+    &:hover::before {
+      opacity: var(--tp-state-hover-opacity);
+    }
+  }
+
+  &#{$tp-focus-visible}::before {
+    opacity: var(--tp-state-focus-opacity);
+  }
+
+  &.is-pressed::before {
+    opacity: var(--tp-state-pressed-opacity);
+  }
+
+  &.is-rippling::after {
+    opacity: calc(var(--tp-state-pressed-opacity) * var(--tp-ripple-opacity));
+    animation: tp-ripple-expand var(--tp-duration-ripple) var(--tp-easing-standard);
+  }
+
+  &.is-rippling:not(.is-pressed)::after {
     animation:
-      ripple-expand 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards,
-      ripple-fade 500ms 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      tp-ripple-expand var(--tp-duration-ripple) var(--tp-easing-standard),
+      tp-ripple-fade var(--tp-duration-ripple-fade) var(--tp-easing-standard) forwards;
+  }
+
+  &[aria-disabled='true']::before,
+  &.disabled::before {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      display: none;
+    }
   }
 }
 
@@ -39,22 +67,19 @@
   overflow: hidden;
 }
 
-@keyframes ripple-expand {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0.4;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(2.5);
-    opacity: 0.2;
+.tp-ui-input-ripple-wrapper::before,
+.tp-ui-input-ripple-wrapper::after {
+  z-index: 1;
+}
+
+@keyframes tp-ripple-expand {
+  from {
+    clip-path: circle(0 at var(--ripple-x, 50%) var(--ripple-y, 50%));
   }
 }
 
-@keyframes ripple-fade {
-  0% {
-    opacity: 0.2;
-  }
-  100% {
+@keyframes tp-ripple-fade {
+  to {
     opacity: 0;
   }
 }

@@ -1,8 +1,19 @@
 @use '../variables.scss' as *;
 
 .tp-ui {
-  * {
+  &-input {
     box-sizing: border-box !important;
+  }
+
+  &-modal,
+  &-modal *,
+  &-modal *::before,
+  &-modal *::after {
+    box-sizing: border-box;
+  }
+
+  &-modal :is(input, button) {
+    font-family: inherit;
   }
 
   &-open-element {
@@ -14,26 +25,6 @@
   }
 }
 
-.opacity {
-  transition: $tmopacity;
-
-  &.show {
-    opacity: 1;
-  }
-}
-
-.invalid-value {
-  border-color: var(--tp-error, #{$redtovalid}) !important;
-  color: var(--tp-error, #{$redtovalid}) !important;
-
-  &:hover,
-  &:focus,
-  &:active {
-    border-color: var(--tp-error, #{$redtovalid}) !important;
-    color: var(--tp-error, #{$redtovalid}) !important;
-  }
-}
-
 .tp-ui-invalid-format {
   border: var(--tp-border-width-thick) solid var(--tp-error, #{$redtovalid});
   color: var(--tp-error, #{$redtovalid});
@@ -41,11 +32,6 @@
 
 .tp-ui-invalid-text {
   color: var(--tp-error, #{$redtovalid});
-
-  &::before {
-    content: '\26A0';
-    margin-right: var(--tp-spacing-xs);
-  }
 }
 
 .sr-only,

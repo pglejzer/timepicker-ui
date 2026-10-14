@@ -20,13 +20,12 @@
     width: 100% !important;
     max-width: 328px !important;
     height: auto !important;
-    min-height: 500px !important;
     top: auto !important;
     left: auto !important;
     transform: none !important;
     margin: 0 auto !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
-    border-radius: 8px !important;
+    border-radius: var(--tp-radius-md);
   }
 
   .tp-ui-footer {
@@ -42,4 +41,8 @@
       gap: 8px !important;
     }
   }
+}
+
+.tp-ui--inline:not(.tp-ui-wheel-mode):not(.tp-ui-compact-wheel-mode) .tp-ui-wrapper.expanded {
+  min-height: var(--tp-size-inline-min-height) !important;
 }
