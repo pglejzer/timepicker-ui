@@ -5,8 +5,10 @@ import { PageHeader } from "@/components/page-header";
 import { TimepickerUI } from "timepicker-ui";
 import { Section } from "@/components/section";
 import { CodeBlock } from "@/components/code-block";
-import { RefreshCw, Settings } from "lucide-react";
-import { InfoBox } from "@/components/info-box";
+import { Callout } from "@/components/callout";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
+import styles from "./page.module.css";
 import "timepicker-ui/index.css";
 
 export default function DynamicUpdatesPage() {
@@ -52,52 +54,27 @@ export default function DynamicUpdatesPage() {
       <PageHeader
         title="Dynamic Updates"
         description="Update timepicker options dynamically without destroying the instance"
-        eyebrow="Example · Advanced"
       />
 
-      <InfoBox title="setOptions()" variant="blue" className="mb-8">
+      <Callout title="setOptions()">
         Use the{" "}
-        <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
+        <code>
           setOptions()
         </code>{" "}
         method to change options on an existing timepicker instance without
         recreating it. It replaces{" "}
-        <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
+        <code>
           update({"{ options }"})
         </code>
         , which still works until 5.0.
-      </InfoBox>
+      </Callout>
 
-      <Section icon={Settings} title="Interactive Demo">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Interactive Demo">
+        <p>
           Change options dynamically and see the timepicker update:
         </p>
 
-        <div className="mb-6 space-y-4">
-          <div className="flex gap-4 flex-wrap">
-            <button
-              onClick={() => setClockType(clockType === "12h" ? "24h" : "12h")}
-              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              Toggle Format: {clockType}
-            </button>
-            <button
-              onClick={() => setTheme(theme === "basic" ? "dark" : "basic")}
-              className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors"
-            >
-              Toggle Theme: {theme}
-            </button>
-          </div>
-
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder="Select time"
-            className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-          />
-        </div>
-
-        <CodeBlock
+        <Figure
           code={`import { useState, useEffect, useRef, useMemo } from 'react';
 import { TimepickerUI } from 'timepicker-ui';
 
@@ -147,11 +124,37 @@ function DynamicTimepicker() {
   );
 }`}
           language="tsx"
-        />
+        >
+          <div className={`${demo.form} ${styles.stage}`}>
+            <div className={demo.row}>
+              <button
+                type="button"
+                onClick={() => setClockType(clockType === "12h" ? "24h" : "12h")}
+                className={demo.button}
+              >
+                Toggle Format: {clockType}
+              </button>
+              <button
+                type="button"
+                onClick={() => setTheme(theme === "basic" ? "dark" : "basic")}
+                className={demo.buttonSecondary}
+              >
+                Toggle Theme: {theme}
+              </button>
+            </div>
+
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder="Select time"
+              className={demo.input}
+            />
+          </div>
+        </Figure>
       </Section>
 
-      <Section icon={RefreshCw} title="setOptions() Method">
-        <p className="text-muted-foreground mb-4">
+      <Section title="setOptions() Method">
+        <p>
           <code>setOptions()</code> changes options without destroying the
           picker. Groups you leave out keep their values:
         </p>
@@ -180,8 +183,8 @@ picker.setOptions({
         />
       </Section>
 
-      <Section icon={Settings} title="Update with Callbacks">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Update with Callbacks">
+        <p>
           Update options including event callbacks:
         </p>
         <CodeBlock
@@ -206,8 +209,8 @@ picker.setOptions({
         />
       </Section>
 
-      <Section icon={RefreshCw} title="Conditional Updates">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Conditional Updates">
+        <p>
           Update picker based on user preferences or app state:
         </p>
         <CodeBlock
@@ -243,8 +246,8 @@ window.matchMedia('(prefers-color-scheme: dark)')
         />
       </Section>
 
-      <Section icon={RefreshCw} title="Update DisabledTime Dynamically">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Update DisabledTime Dynamically">
+        <p>
           Change disabled times based on business rules or user context:
         </p>
         <CodeBlock
@@ -298,8 +301,8 @@ function updateForDayOfWeek() {
         />
       </Section>
 
-      <Section icon={RefreshCw} title="Update Disabled Ranges Dynamically">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Update Disabled Ranges Dynamically">
+        <p>
           Change disabled time ranges for business hours, shifts, or
           scheduling:
         </p>

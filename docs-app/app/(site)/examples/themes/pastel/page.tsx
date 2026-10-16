@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Heart } from "lucide-react";
 
 export default function PastelPage() {
   return (
@@ -11,14 +10,14 @@ export default function PastelPage() {
       <PageHeader
         title="Pastel Theme"
         description="Soft pastel colors for a gentle, calming interface"
-        eyebrow="Example · Themes"
       />
 
-      <Section icon={Heart} title="Pastel Theme">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Pastel Theme">
+        <p>
           Soft and pleasant pastel color palette:
         </p>
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'pastel' }
 });
@@ -29,8 +28,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Heart} title="Pastel with 12h">
+      <Section title="Pastel with 12h">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'pastel' },
   clock: { type: '12h' }
@@ -43,8 +43,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Heart} title="Pastel with 24h">
+      <Section title="Pastel with 24h">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'pastel' },
   clock: { type: '24h' }

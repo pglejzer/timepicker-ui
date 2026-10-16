@@ -2,11 +2,12 @@
 
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
-import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { Database } from "lucide-react";
 import { useState } from "react";
+import styles from "./page.module.css";
 
 export default function FormStatePage() {
   const [formData, setFormData] = useState({
@@ -15,11 +16,12 @@ export default function FormStatePage() {
     endTime: "5:00 PM",
     notes: "",
   });
+  const [submitted, setSubmitted] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form data:", formData);
-    alert(JSON.stringify(formData, null, 2));
+    setSubmitted(JSON.stringify(formData, null, 2));
   };
 
   return (
@@ -27,106 +29,16 @@ export default function FormStatePage() {
       <PageHeader
         title="Form State"
         description="Manage timepicker as part of form state"
-        eyebrow="React · Forms"
       />
 
-      <Section icon={Database} title="Complete Form Example">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Complete Form Example">
+        <p>
           Integrate timepicker with other form fields:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Event Form
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Multiple fields with shared state
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 rounded-lg border border-border bg-background p-6">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Event Name
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                    placeholder="Team Meeting"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Start Time
-                    </label>
-                    <Timepicker
-                      value={formData.startTime}
-                      className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                      onUpdate={(data) => {
-                        setFormData({
-                          ...formData,
-                          startTime: `${data.hour}:${data.minutes} ${data.type}`,
-                        });
-                      }}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      End Time
-                    </label>
-                    <Timepicker
-                      value={formData.endTime}
-                      className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                      onUpdate={(data) => {
-                        setFormData({
-                          ...formData,
-                          endTime: `${data.hour}:${data.minutes} ${data.type}`,
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Notes
-                  </label>
-                  <textarea
-                    value={formData.notes}
-                    onChange={(e) =>
-                      setFormData({ ...formData, notes: e.target.value })
-                    }
-                    className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                    rows={3}
-                    placeholder="Optional notes"
-                  />
-                </div>
-
-                <div className="rounded-lg bg-muted p-4 text-sm">
-                  <strong>Current state:</strong>
-                  <pre className="mt-2 text-xs overflow-x-auto">
-                    {JSON.stringify(formData, null, 2)}
-                  </pre>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-                >
-                  Submit Form
-                </button>
-              </form>
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Event Form</h3>
+        <p>Multiple fields with shared state</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 import { useState } from "react";
 
 function App() {
@@ -173,10 +85,96 @@ function App() {
     </form>
   );
 }`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <form onSubmit={handleSubmit} className={demo.form}>
+            <div className={demo.field}>
+              <label htmlFor="state-name" className={demo.label}>
+                Event Name
+              </label>
+              <input
+                id="state-name"
+                type="text"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                className={demo.input}
+                placeholder="Team Meeting"
+              />
+            </div>
+
+            <div className={styles.times}>
+              <div className={demo.field}>
+                <label htmlFor="state-start-time" className={demo.label}>
+                  Start Time
+                </label>
+                <Timepicker
+                  id="state-start-time"
+                  value={formData.startTime}
+                  className={demo.input}
+                  onUpdate={(data) => {
+                    setFormData({
+                      ...formData,
+                      startTime: `${data.hour}:${data.minutes} ${data.type}`,
+                    });
+                  }}
+                />
+              </div>
+
+              <div className={demo.field}>
+                <label htmlFor="state-end-time" className={demo.label}>
+                  End Time
+                </label>
+                <Timepicker
+                  id="state-end-time"
+                  value={formData.endTime}
+                  className={demo.input}
+                  onUpdate={(data) => {
+                    setFormData({
+                      ...formData,
+                      endTime: `${data.hour}:${data.minutes} ${data.type}`,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className={demo.field}>
+              <label htmlFor="state-notes" className={demo.label}>
+                Notes
+              </label>
+              <textarea
+                id="state-notes"
+                value={formData.notes}
+                onChange={(e) =>
+                  setFormData({ ...formData, notes: e.target.value })
+                }
+                className={styles.textarea}
+                rows={3}
+                placeholder="Optional notes"
+              />
+            </div>
+
+            <div className={demo.output}>
+              <strong>Current state:</strong>
+              <pre className={styles.json}>
+                {JSON.stringify(formData, null, 2)}
+              </pre>
+            </div>
+
+            <button type="submit" className={demo.button}>
+              Submit Form
+            </button>
+            <pre
+              role="status"
+              aria-live="polite"
+              className={`${demo.output} ${styles.json}`}
+            >
+              {submitted}
+            </pre>
+          </form>
+        </Figure>
       </Section>
     </div>
   );

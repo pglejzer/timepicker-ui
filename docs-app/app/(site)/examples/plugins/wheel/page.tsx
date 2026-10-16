@@ -1,29 +1,27 @@
 "use client";
 
+import { PageHeader } from "@/components/page-header";
+import { Section } from "@/components/section";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
 
 export default function WheelPluginPage() {
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight mb-3 text-foreground">
-          Wheel Plugin
-        </h1>
-        <p className="text-muted-foreground">
-          Scroll-spinner interface replacing the analog clock face. Supports
-          wheel (with header) and compact-wheel (headerless) modes.
-          Compact-wheel opens as a popover when <code>wheel.placement</code>{" "}
-          is set, otherwise as a modal.
-        </p>
-      </div>
+      <PageHeader
+        title="Wheel Plugin"
+        description={
+          <>
+            Scroll-spinner interface replacing the analog clock face. Supports
+            wheel (with header) and compact-wheel (headerless) modes.
+            Compact-wheel opens as a popover when <code>wheel.placement</code>{" "}
+            is set, otherwise as a modal.
+          </>
+        }
+      />
 
-      <div className="space-y-8">
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Basic Wheel (12h)
-          </h2>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="Basic Wheel (12h)">
+        <TimepickerExample
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
 
 PluginRegistry.register(WheelPlugin);
@@ -32,19 +30,16 @@ const picker = new TimepickerUI(input, {
   ui: { mode: 'wheel' }
 });
 picker.create();`}
-            options={{
-              ui: { mode: "wheel" },
-            }}
-            plugins={["wheel"]}
-          />
-        </section>
+          options={{
+            ui: { mode: "wheel" },
+          }}
+          plugins={["wheel"]}
+        />
+      </Section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            24h Wheel
-          </h2>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="24h Wheel">
+        <TimepickerExample
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
 
 PluginRegistry.register(WheelPlugin);
@@ -54,24 +49,22 @@ const picker = new TimepickerUI(input, {
   ui: { mode: 'wheel' }
 });
 picker.create();`}
-            options={{
-              clock: { type: "24h" },
-              ui: { mode: "wheel" },
-            }}
-            plugins={["wheel"]}
-          />
-        </section>
+          options={{
+            clock: { type: "24h" },
+            ui: { mode: "wheel" },
+          }}
+          plugins={["wheel"]}
+        />
+      </Section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Compact-Wheel Popover (auto)
-          </h2>
-          <p className="text-muted-foreground mb-4">
-            Headerless variant that opens as a popover anchored to the input.
-            Automatically flips between top and bottom based on viewport space.
-          </p>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="Compact-Wheel Popover (auto)">
+        <p>
+          Headerless variant that opens as a popover anchored to the input.
+          Automatically flips between top and bottom based on viewport space.
+        </p>
+        <TimepickerExample
+          display="field"
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
 
 PluginRegistry.register(WheelPlugin);
@@ -81,21 +74,19 @@ const picker = new TimepickerUI(input, {
   wheel: { placement: 'auto' }
 });
 picker.create();`}
-            options={{
-              ui: { mode: "compact-wheel" },
-              wheel: { placement: "auto" },
-            }}
-            plugins={["wheel"]}
-            inputPlaceholder="Click to open popover"
-          />
-        </section>
+          options={{
+            ui: { mode: "compact-wheel" },
+            wheel: { placement: "auto" },
+          }}
+          plugins={["wheel"]}
+          inputPlaceholder="Click to open popover"
+        />
+      </Section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Compact-Wheel Popover (bottom)
-          </h2>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="Compact-Wheel Popover (bottom)">
+        <TimepickerExample
+          display="field"
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
 
 PluginRegistry.register(WheelPlugin);
@@ -105,21 +96,19 @@ const picker = new TimepickerUI(input, {
   wheel: { placement: 'bottom' }
 });
 picker.create();`}
-            options={{
-              ui: { mode: "compact-wheel" },
-              wheel: { placement: "bottom" },
-            }}
-            plugins={["wheel"]}
-            inputPlaceholder="Opens below"
-          />
-        </section>
+          options={{
+            ui: { mode: "compact-wheel" },
+            wheel: { placement: "bottom" },
+          }}
+          plugins={["wheel"]}
+          inputPlaceholder="Opens below"
+        />
+      </Section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Compact-Wheel Popover (top)
-          </h2>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="Compact-Wheel Popover (top)">
+        <TimepickerExample
+          display="field"
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
 
 PluginRegistry.register(WheelPlugin);
@@ -129,21 +118,18 @@ const picker = new TimepickerUI(input, {
   wheel: { placement: 'top' }
 });
 picker.create();`}
-            options={{
-              ui: { mode: "compact-wheel" },
-              wheel: { placement: "top" },
-            }}
-            plugins={["wheel"]}
-            inputPlaceholder="Opens above"
-          />
-        </section>
+          options={{
+            ui: { mode: "compact-wheel" },
+            wheel: { placement: "top" },
+          }}
+          plugins={["wheel"]}
+          inputPlaceholder="Opens above"
+        />
+      </Section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Wheel + Dark Theme
-          </h2>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="Wheel + Dark Theme">
+        <TimepickerExample
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
 
 PluginRegistry.register(WheelPlugin);
@@ -152,19 +138,16 @@ const picker = new TimepickerUI(input, {
   ui: { mode: 'wheel', theme: 'dark' }
 });
 picker.create();`}
-            options={{
-              ui: { mode: "wheel", theme: "dark" },
-            }}
-            plugins={["wheel"]}
-          />
-        </section>
+          options={{
+            ui: { mode: "wheel", theme: "dark" },
+          }}
+          plugins={["wheel"]}
+        />
+      </Section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Wheel + 5 Minute Steps
-          </h2>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="Wheel + 5 Minute Steps">
+        <TimepickerExample
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
 
 PluginRegistry.register(WheelPlugin);
@@ -174,24 +157,22 @@ const picker = new TimepickerUI(input, {
   ui: { mode: 'wheel' }
 });
 picker.create();`}
-            options={{
-              clock: { incrementMinutes: 5 },
-              ui: { mode: "wheel" },
-            }}
-            plugins={["wheel"]}
-          />
-        </section>
+          options={{
+            clock: { incrementMinutes: 5 },
+            ui: { mode: "wheel" },
+          }}
+          plugins={["wheel"]}
+        />
+      </Section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Auto-Commit on Scroll
-          </h2>
-          <p className="text-muted-foreground mb-4">
-            Writes the time to the input and emits confirm when scrolling
-            stops - no OK button needed. The popover stays open.
-          </p>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="Auto-Commit on Scroll">
+        <p>
+          Writes the time to the input and emits confirm when scrolling
+          stops - no OK button needed. The popover stays open.
+        </p>
+        <TimepickerExample
+          display="field"
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
 
 PluginRegistry.register(WheelPlugin);
@@ -204,25 +185,23 @@ const picker = new TimepickerUI(input, {
   }
 });
 picker.create();`}
-            options={{
-              ui: { mode: "compact-wheel" },
-              wheel: { placement: "auto", commitOnScroll: true },
-            }}
-            plugins={["wheel"]}
-            inputPlaceholder="Scroll to auto-commit"
-          />
-        </section>
+          options={{
+            ui: { mode: "compact-wheel" },
+            wheel: { placement: "auto", commitOnScroll: true },
+          }}
+          plugins={["wheel"]}
+          inputPlaceholder="Scroll to auto-commit"
+        />
+      </Section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Ignore Outside Click
-          </h2>
-          <p className="text-muted-foreground mb-4">
-            Prevents the popover from closing on outside click - user must press
-            OK or Cancel.
-          </p>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="Ignore Outside Click">
+        <p>
+          Prevents the popover from closing on outside click - user must press
+          OK or Cancel.
+        </p>
+        <TimepickerExample
+          display="field"
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
 
 PluginRegistry.register(WheelPlugin);
@@ -235,15 +214,14 @@ const picker = new TimepickerUI(input, {
   }
 });
 picker.create();`}
-            options={{
-              ui: { mode: "compact-wheel" },
-              wheel: { placement: "bottom", ignoreOutsideClick: true },
-            }}
-            plugins={["wheel"]}
-            inputPlaceholder="Click outside won't close"
-          />
-        </section>
-      </div>
+          options={{
+            ui: { mode: "compact-wheel" },
+            wheel: { placement: "bottom", ignoreOutsideClick: true },
+          }}
+          plugins={["wheel"]}
+          inputPlaceholder="Click outside won't close"
+        />
+      </Section>
     </div>
   );
 }

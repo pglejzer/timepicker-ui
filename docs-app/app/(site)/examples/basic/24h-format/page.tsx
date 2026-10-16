@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Clock } from "lucide-react";
 
 export default function Format24hPage() {
   return (
@@ -11,11 +10,10 @@ export default function Format24hPage() {
       <PageHeader
         title="24h Format"
         description="Examples using 24-hour clock format (military time)"
-        eyebrow="Example · Basic"
       />
 
-      <Section icon={Clock} title="Basic 24h Format">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Basic 24h Format">
+        <p>
           Enable 24-hour format (no AM/PM):
         </p>
         <TimepickerExample
@@ -29,8 +27,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Clock} title="With Current Time">
-        <p className="text-muted-foreground mb-4">
+      <Section title="With Current Time">
+        <p>
           Initialize with current time in 24h format:
         </p>
         <TimepickerExample
@@ -50,8 +48,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Clock} title="Disabled Hours (24h)">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Disabled Hours (24h)">
+        <p>
           Disable specific hours in 24h format (0-23):
         </p>
         <TimepickerExample
@@ -75,8 +73,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Clock} title="Time Range Restriction">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Time Range Restriction">
+        <p>
           Disable time ranges in 24h format:
         </p>
         <TimepickerExample
@@ -100,8 +98,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Clock} title="With Hour Increments">
-        <p className="text-muted-foreground mb-4">
+      <Section title="With Hour Increments">
+        <p>
           Set hour increments in 24h format:
         </p>
         <TimepickerExample

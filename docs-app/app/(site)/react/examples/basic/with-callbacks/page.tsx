@@ -2,85 +2,70 @@
 
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
-import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { CheckCircle2 } from "lucide-react";
+import { useState } from "react";
 
 export default function WithCallbacksPage() {
+  const [message, setMessage] = useState("");
+
   return (
     <div>
       <PageHeader
         title="With Callbacks"
         description="Handle time selection with callback functions"
-        eyebrow="React · Basic"
       />
 
-      <Section icon={CheckCircle2} title="onConfirm Callback">
-        <p className="text-muted-foreground mb-4">
+      <Section title="onConfirm Callback">
+        <p>
           Execute code when user confirms time selection:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Confirm Handler
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Shows alert with selected time
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="Select time"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-                onConfirm={(data) => {
-                  alert(`Selected: ${data.hour}:${data.minutes} ${data.type}`);
-                }}
-              />
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Confirm Handler</h3>
+        <p>Shows the selected time below the field</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
+import { useState } from "react";
 
 function App() {
+  const [message, setMessage] = useState("");
+
   return (
-    <Timepicker
-      placeholder="Select time"
-      onConfirm={(data) => {
-        alert(\`Selected: \${data.hour}:\${data.minutes} \${data.type}\`);
-      }}
-    />
+    <div>
+      <Timepicker
+        placeholder="Select time"
+        onConfirm={(data) => {
+          setMessage(\`Selected: \${data.hour}:\${data.minutes} \${data.type}\`);
+        }}
+      />
+      <p role="status">{message}</p>
+    </div>
   );
 }`}
-              language="tsx"
+          language="tsx"
+        >
+          <div className={demo.form}>
+            <Timepicker
+              placeholder="Select time"
+              className={demo.input}
+              onConfirm={(data) => {
+                setMessage(`Selected: ${data.hour}:${data.minutes} ${data.type}`);
+              }}
             />
-          </div>
-        </div>
-      </Section>
-
-      <Section icon={CheckCircle2} title="Multiple Callbacks">
-        <p className="text-muted-foreground mb-4">Listen to multiple events:</p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Open, Confirm, Cancel
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Check console (F12) for event logs
+            <p role="status" aria-live="polite" className={demo.output}>
+              {message}
             </p>
           </div>
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="Open console (F12)"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-                onOpen={(data) => console.log("Opened:", data)}
-                onConfirm={(data) => console.log("Confirmed:", data)}
-                onCancel={() => console.log("Cancelled")}
-              />
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        </Figure>
+      </Section>
+
+      <Section title="Multiple Callbacks">
+        <p>Listen to multiple events:</p>
+        <h3>Open, Confirm, Cancel</h3>
+        <p>Check console (F12) for event logs</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 
 function App() {
   return (
@@ -91,10 +76,16 @@ function App() {
     />
   );
 }`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <Timepicker
+            placeholder="Open console (F12)"
+            className={demo.input}
+            onOpen={(data) => console.log("Opened:", data)}
+            onConfirm={(data) => console.log("Confirmed:", data)}
+            onCancel={() => console.log("Cancelled")}
+          />
+        </Figure>
       </Section>
     </div>
   );

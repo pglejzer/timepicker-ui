@@ -3,7 +3,7 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { RotateCw } from "lucide-react";
+import styles from "./page.module.css";
 
 export default function SmoothHourSnapPage() {
   return (
@@ -17,11 +17,10 @@ export default function SmoothHourSnapPage() {
             to hour instead.
           </>
         }
-        eyebrow="Example · Features"
       />
 
-      <Section icon={RotateCw} title="Smooth Hour Dragging">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Smooth Hour Dragging">
+        <p>
           Drag the clock hand smoothly between hours (like minutes), with
           animated snap on release:
         </p>
@@ -36,8 +35,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={RotateCw} title="With 24h Format">
-        <p className="text-muted-foreground mb-4">
+      <Section title="With 24h Format">
+        <p>
           Works perfectly with 24-hour clock format:
         </p>
         <TimepickerExample
@@ -57,8 +56,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={RotateCw} title="With Increments">
-        <p className="text-muted-foreground mb-4">
+      <Section title="With Increments">
+        <p>
           Combine with hour increments for flexible selection:
         </p>
         <TimepickerExample
@@ -78,13 +77,13 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={RotateCw} title="Comparison: Discrete vs Smooth">
-        <div className="grid md:grid-cols-2 gap-6">
+      <Section title="Comparison: Discrete vs Smooth">
+        <div className={styles.comparison}>
           <div>
-            <h3 className="text-lg font-semibold mb-3 text-foreground">
+            <h3>
               Discrete
             </h3>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p>
               Clock hand jumps directly to each hour
             </p>
             <TimepickerExample
@@ -98,10 +97,10 @@ picker.create();`}
             />
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-3 text-foreground">
+            <h3>
               Smooth Hour Snap (Default)
             </h3>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p>
               Clock hand drags fluidly, snaps on release
             </p>
             <TimepickerExample

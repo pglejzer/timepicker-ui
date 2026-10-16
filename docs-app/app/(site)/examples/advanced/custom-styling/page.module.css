@@ -1,0 +1,27 @@
+/* :has() keeps a local class in the selector and still reaches the modal variant, which mounts in <body>. */
+:root:has(.inkDemo) :global(.tp-ui-wrapper.tp-ink) {
+  --tp-font-family: var(--font-text);
+  --tp-shadow: none;
+  --tp-border-radius: var(--radius-1);
+  --tp-radius-sm: var(--radius-1);
+  --tp-radius-md: var(--radius-1);
+  --tp-radius-lg: var(--radius-1);
+
+  --tp-bg: var(--paper);
+  --tp-surface: var(--scene);
+  --tp-surface-hover: var(--hair);
+  --tp-input-bg: var(--code);
+  --tp-text: var(--ink);
+  --tp-text-secondary: var(--ink-3);
+  --tp-text-type-time: var(--ink-2);
+  --tp-primary: var(--ink);
+  --tp-on-primary: var(--paper);
+  --tp-primary-container: var(--ink);
+  --tp-on-primary-container: var(--paper);
+  --tp-am-pm-active: var(--ink);
+  --tp-am-pm-text-selected: var(--paper);
+  --tp-am-pm-text-unselected: var(--ink-2);
+  --tp-border: var(--ink-3);
+  --tp-outline: var(--ink-3);
+  --tp-focus-ring: var(--ink);
+}

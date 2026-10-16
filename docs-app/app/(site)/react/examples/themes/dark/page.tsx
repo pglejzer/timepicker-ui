@@ -2,10 +2,10 @@
 
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
-import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { Moon } from "lucide-react";
 
 export default function DarkThemePage() {
   return (
@@ -13,34 +13,16 @@ export default function DarkThemePage() {
       <PageHeader
         title="Dark Theme"
         description="Dark mode theme for reduced eye strain"
-        eyebrow="React · Themes"
       />
 
-      <Section icon={Moon} title="Dark Theme">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Dark Theme">
+        <p>
           Perfect for night-time use and dark interfaces:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Dark Theme
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Optimized for low-light environments
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="Dark theme"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-                options={{
-                  ui: { theme: "dark" },
-                }}
-              />
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Dark Theme</h3>
+        <p>Optimized for low-light environments</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
 import "timepicker-ui/theme-dark.css";
 
@@ -53,36 +35,37 @@ function App() {
     />
   );
 }`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <Timepicker
+            placeholder="Dark theme"
+            className={demo.input}
+            options={{
+              ui: { theme: "dark" },
+            }}
+          />
+        </Figure>
       </Section>
 
-      <Section icon={Moon} title="Dark with 24h Format">
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="Dark + 24h"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-                options={{
-                  ui: { theme: "dark" },
-                  clock: { type: "24h" },
-                }}
-              />
-            </div>
-            <CodeBlock
-              code={`<Timepicker
+      <Section title="Dark with 24h Format">
+        <Figure
+          code={`<Timepicker
   options={{
     ui: { theme: "dark" },
     clock: { type: "24h" }
   }}
 />`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <Timepicker
+            placeholder="Dark + 24h"
+            className={demo.input}
+            options={{
+              ui: { theme: "dark" },
+              clock: { type: "24h" },
+            }}
+          />
+        </Figure>
       </Section>
     </div>
   );

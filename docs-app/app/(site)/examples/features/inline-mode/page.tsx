@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Layout } from "lucide-react";
 
 export default function InlineModePage() {
   return (
@@ -11,12 +10,10 @@ export default function InlineModePage() {
       <PageHeader
         title="Inline Mode"
         description="Display timepicker without modal overlay"
-        eyebrow="Example · Features"
       />
-      <div id="timepicker-container-inline" />
 
-      <Section icon={Layout} title="Inline with Theme">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Inline with Theme">
+        <p>
           Apply custom theme to inline timepicker:
         </p>
         <TimepickerExample

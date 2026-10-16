@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
-import { Code2, ArrowRight, Zap, Package } from "lucide-react";
 import { CodeBlock } from "@/components/code-block";
 
 export const metadata = buildMetadata({
@@ -17,20 +16,15 @@ export default function QuickStartPage() {
       <PageHeader
         title="Quick Start"
         description="Get started with your first timepicker component in minutes"
-        eyebrow="React"
       />
 
-      <div className="rounded-lg border border-border bg-card p-6 mb-8">
-        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-          <Zap className="h-6 w-6 text-primary" />
-          Basic Usage
-        </h2>
-        <p className="text-muted-foreground mb-4">
-          Import the Timepicker component and CSS, then use it in your React
-          component:
-        </p>
-        <CodeBlock
-          code={`import { Timepicker } from "timepicker-ui-react";
+      <h2>Basic Usage</h2>
+      <p>
+        Import the Timepicker component and CSS, then use it in your React
+        component:
+      </p>
+      <CodeBlock
+        code={`import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
 
 function App() {
@@ -43,21 +37,15 @@ function App() {
     />
   );
 }`}
-          language="tsx"
-        />
-      </div>
+        language="tsx"
+      />
 
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-6">Common Patterns</h2>
+      <h2>Common Patterns</h2>
 
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="text-lg font-semibold mb-3">Controlled Component</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Manage timepicker value with React state:
-            </p>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+      <h3>Controlled Component</h3>
+      <p>Manage timepicker value with React state:</p>
+      <CodeBlock
+        code={`import { Timepicker } from "timepicker-ui-react";
 import { useState } from "react";
 
 function App() {
@@ -72,17 +60,13 @@ function App() {
     />
   );
 }`}
-              language="tsx"
-            />
-          </div>
+        language="tsx"
+      />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="text-lg font-semibold mb-3">With Options</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Customize timepicker with options:
-            </p>
-            <CodeBlock
-              code={`<Timepicker
+      <h3>With Options</h3>
+      <p>Customize timepicker with options:</p>
+      <CodeBlock
+        code={`<Timepicker
   placeholder="Select time"
   options={{
     clock: { type: "24h" },
@@ -90,17 +74,13 @@ function App() {
   }}
   onConfirm={(data) => console.log(data)}
 />`}
-              language="tsx"
-            />
-          </div>
+        language="tsx"
+      />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="text-lg font-semibold mb-3">In Forms</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Use with form validation:
-            </p>
-            <CodeBlock
-              code={`<form onSubmit={handleSubmit}>
+      <h3>In Forms</h3>
+      <p>Use with form validation:</p>
+      <CodeBlock
+        code={`<form onSubmit={handleSubmit}>
   <Timepicker
     name="appointment-time"
     required
@@ -111,103 +91,63 @@ function App() {
   />
   <button type="submit">Submit</button>
 </form>`}
-              language="tsx"
-            />
-          </div>
+        language="tsx"
+      />
+
+      <h2>Key Props</h2>
+      <dl>
+        <div>
+          <dt>value / defaultValue</dt>
+          <dd>Control or initialize the timepicker value</dd>
         </div>
-      </div>
-
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Key Props</h2>
-        <div className="rounded-lg border border-border bg-card p-6">
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-semibold mb-1 text-sm">
-                value / defaultValue
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Control or initialize the timepicker value
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-1 text-sm">onConfirm</h3>
-              <p className="text-sm text-muted-foreground">
-                Callback when user clicks OK button
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-1 text-sm">onUpdate</h3>
-              <p className="text-sm text-muted-foreground">
-                Callback on every time change (real-time sync)
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-1 text-sm">options</h3>
-              <p className="text-sm text-muted-foreground">
-                Configuration object for clock, UI, labels, etc.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-1 text-sm">
-                Standard HTML attributes
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Supports all input props: placeholder, className, disabled,
-                required, etc.
-              </p>
-            </div>
-          </div>
+        <div>
+          <dt>onConfirm</dt>
+          <dd>Callback when user clicks OK button</dd>
         </div>
-      </div>
-
-      <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-2xl font-bold mb-4">Next Steps</h2>
-        <div className="space-y-3">
-          <Link
-            href="/react/examples"
-            className="flex items-center gap-3 rounded-lg border border-border p-4 transition-colors hover:border-primary/50 hover:bg-accent"
-          >
-            <Code2 className="h-5 w-5 text-primary" />
-            <div className="flex-1">
-              <div className="font-medium">View All Examples</div>
-              <div className="text-sm text-muted-foreground">
-                Explore 19+ interactive examples
-              </div>
-            </div>
-            <ArrowRight className="h-4 w-4 text-muted-foreground" />
-          </Link>
-
-          <a
-            href="https://github.com/pglejzer/timepicker-ui-react#readme"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-3 rounded-lg border border-border p-4 transition-colors hover:border-primary/50 hover:bg-accent"
-          >
-            <Package className="h-5 w-5 text-primary" />
-            <div className="flex-1">
-              <div className="font-medium">Full API Reference</div>
-              <div className="text-sm text-muted-foreground">
-                Complete props documentation
-              </div>
-            </div>
-            <ArrowRight className="h-4 w-4 text-muted-foreground" />
-          </a>
-
-          <Link
-            href="/docs"
-            className="flex items-center gap-3 rounded-lg border border-border p-4 transition-colors hover:border-primary/50 hover:bg-accent"
-          >
-            <Package className="h-5 w-5 text-primary" />
-            <div className="flex-1">
-              <div className="font-medium">Core Library Options</div>
-              <div className="text-sm text-muted-foreground">
-                Learn about all configuration options
-              </div>
-            </div>
-            <ArrowRight className="h-4 w-4 text-muted-foreground" />
-          </Link>
+        <div>
+          <dt>onUpdate</dt>
+          <dd>Callback on every time change (real-time sync)</dd>
         </div>
-      </div>
+        <div>
+          <dt>options</dt>
+          <dd>Configuration object for clock, UI, labels, etc.</dd>
+        </div>
+        <div>
+          <dt>Standard HTML attributes</dt>
+          <dd>
+            Supports all input props: placeholder, className, disabled,
+            required, etc.
+          </dd>
+        </div>
+      </dl>
+
+      <h2>Next Steps</h2>
+      <dl>
+        <div>
+          <dt>
+            <Link href="/react/examples">View All Examples</Link>
+          </dt>
+          <dd>Explore 19+ interactive examples</dd>
+        </div>
+        <div>
+          <dt>
+            <a
+              href="https://github.com/pglejzer/timepicker-ui-react#readme"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Full API Reference
+            </a>
+          </dt>
+          <dd>Complete props documentation</dd>
+        </div>
+        <div>
+          <dt>
+            <Link href="/docs">Core Library Options</Link>
+          </dt>
+          <dd>Learn about all configuration options</dd>
+        </div>
+      </dl>
     </div>
   );
 }

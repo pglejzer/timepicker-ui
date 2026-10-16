@@ -3,8 +3,7 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Globe, Languages } from "lucide-react";
-import { InfoBox } from "@/components/info-box";
+import { Callout } from "@/components/callout";
 
 export default function LocalizationPage() {
   return (
@@ -12,17 +11,17 @@ export default function LocalizationPage() {
       <PageHeader
         title="Localization"
         description="Customize labels and text for different languages and regions"
-        eyebrow="Example · Advanced"
       />
 
-      <InfoBox title="i18n Support" variant="blue" className="mb-8">
+      <Callout title="i18n Support">
         Timepicker-UI supports full localization through label options. You can
         customize all button texts and time type labels.
-      </InfoBox>
+      </Callout>
 
-      <Section icon={Languages} title="Polish (Polski)">
-        <p className="text-muted-foreground mb-4">Polish language example:</p>
+      <Section title="Polish (Polski)">
+        <p>Polish language example:</p>
         <TimepickerExample
+          display="field"
           code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
@@ -47,9 +46,10 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Languages} title="Spanish (Español)">
-        <p className="text-muted-foreground mb-4">Spanish language example:</p>
+      <Section title="Spanish (Español)">
+        <p>Spanish language example:</p>
         <TimepickerExample
+          display="field"
           code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
@@ -74,63 +74,62 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Languages} title="German (Deutsch)">
-        <p className="text-muted-foreground mb-4">German language example:</p>
+      <Section title="German (Deutsch)">
+        <p>German language example:</p>
         <TimepickerExample
+          display="field"
           code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
+  clock: { type: '24h' },
   labels: {
     ok: 'OK',
-    cancel: 'Abbrechen',
-    am: 'Vormittag',
-    pm: 'Nachmittag'
+    cancel: 'Abbrechen'
   }
 });
 
 picker.create();`}
           options={{
+            clock: { type: "24h" },
             labels: {
               ok: "OK",
               cancel: "Abbrechen",
-              am: "Vormittag",
-              pm: "Nachmittag",
             },
           }}
         />
       </Section>
 
-      <Section icon={Languages} title="French (Français)">
-        <p className="text-muted-foreground mb-4">French language example:</p>
+      <Section title="French (Français)">
+        <p>French language example:</p>
         <TimepickerExample
+          display="field"
           code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
+  clock: { type: '24h' },
   labels: {
     ok: 'OK',
-    cancel: 'Annuler',
-    am: 'Matin',
-    pm: 'Après-midi'
+    cancel: 'Annuler'
   }
 });
 
 picker.create();`}
           options={{
+            clock: { type: "24h" },
             labels: {
               ok: "OK",
               cancel: "Annuler",
-              am: "Matin",
-              pm: "Après-midi",
             },
           }}
         />
       </Section>
 
-      <Section icon={Languages} title="Japanese (日本語)">
-        <p className="text-muted-foreground mb-4">Japanese language example:</p>
+      <Section title="Japanese (日本語)">
+        <p>Japanese language example:</p>
         <TimepickerExample
+          display="field"
           code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
@@ -155,8 +154,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Globe} title="Dynamic Language Switching">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Dynamic Language Switching">
+        <p>
           Switch languages at runtime with <code>setOptions()</code>:
         </p>
         <TimepickerExample
@@ -165,7 +164,7 @@ picker.create();`}
 const translations = {
   en: { ok: 'OK', cancel: 'Cancel', am: 'AM', pm: 'PM' },
   es: { ok: 'Aceptar', cancel: 'Cancelar', am: 'AM', pm: 'PM' },
-  pl: { ok: 'OK', cancel: 'Anuluj', am: 'Rano', pm: 'Popołudnie' },
+  pl: { ok: 'OK', cancel: 'Anuluj', am: 'AM', pm: 'PM' },
   de: { ok: 'OK', cancel: 'Abbrechen', am: 'VM', pm: 'NM' }
 };
 
@@ -190,8 +189,8 @@ function changeLanguage(lang: string) {
         />
       </Section>
 
-      <Section icon={Globe} title="React i18n Integration">
-        <p className="text-muted-foreground mb-4">
+      <Section title="React i18n Integration">
+        <p>
           Integrate with React i18n libraries like react-i18next:
         </p>
         <TimepickerExample

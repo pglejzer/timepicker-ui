@@ -5,8 +5,10 @@ import { PageHeader } from "@/components/page-header";
 import { TimepickerUI } from "timepicker-ui";
 import { Section } from "@/components/section";
 import { CodeBlock } from "@/components/code-block";
-import { Clock, Users } from "lucide-react";
-import { InfoBox } from "@/components/info-box";
+import { Callout } from "@/components/callout";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
+import styles from "./page.module.css";
 import "timepicker-ui/index.css";
 
 export default function MultiplePickers() {
@@ -49,53 +51,19 @@ export default function MultiplePickers() {
       <PageHeader
         title="Multiple Timepickers"
         description="Use multiple timepicker instances on the same page"
-        eyebrow="Example · Advanced"
       />
 
-      <InfoBox title="Multiple Instances" variant="blue" className="mb-8">
+      <Callout title="Multiple Instances">
         Each timepicker instance is independent. You can have as many pickers as
         needed with different configurations.
-      </InfoBox>
+      </Callout>
 
-      <Section icon={Clock} title="Different Themes">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Different Themes">
+        <p>
           Two pickers with different themes on the same page:
         </p>
 
-        <div className="mb-6 space-y-4">
-          <div>
-            <label
-              htmlFor={`${fieldId}-start`}
-              className="block text-sm font-medium mb-2 text-foreground"
-            >
-              Start Time (Basic Theme)
-            </label>
-            <input
-              id={`${fieldId}-start`}
-              ref={startTimeRef}
-              type="text"
-              placeholder="Select start time"
-              className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor={`${fieldId}-end`}
-              className="block text-sm font-medium mb-2 text-foreground"
-            >
-              End Time (Crane Straight Theme)
-            </label>
-            <input
-              id={`${fieldId}-end`}
-              ref={endTimeRef}
-              type="text"
-              placeholder="Select end time"
-              className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-            />
-          </div>
-        </div>
-
-        <CodeBlock
+        <Figure
           code={`import { useEffect, useRef, useMemo } from 'react';
 import { TimepickerUI } from 'timepicker-ui';
 
@@ -142,11 +110,38 @@ function MultipleTimepickers() {
   );
 }`}
           language="tsx"
-        />
+        >
+          <div className={`${demo.form} ${styles.stage}`}>
+            <div className={demo.field}>
+              <label htmlFor={`${fieldId}-start`} className={demo.label}>
+                Start Time (Basic Theme)
+              </label>
+              <input
+                id={`${fieldId}-start`}
+                ref={startTimeRef}
+                type="text"
+                placeholder="Select start time"
+                className={demo.input}
+              />
+            </div>
+            <div className={demo.field}>
+              <label htmlFor={`${fieldId}-end`} className={demo.label}>
+                End Time (Crane Straight Theme)
+              </label>
+              <input
+                id={`${fieldId}-end`}
+                ref={endTimeRef}
+                type="text"
+                placeholder="Select end time"
+                className={demo.input}
+              />
+            </div>
+          </div>
+        </Figure>
       </Section>
 
-      <Section icon={Users} title="Array of Pickers">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Array of Pickers">
+        <p>
           Managing multiple pickers using an array pattern:
         </p>
         <CodeBlock
@@ -193,8 +188,8 @@ function MultiplePickersArray() {
         />
       </Section>
 
-      <Section icon={Clock} title="Vanilla JavaScript">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Vanilla JavaScript">
+        <p>
           Multiple pickers in vanilla JavaScript:
         </p>
         <CodeBlock

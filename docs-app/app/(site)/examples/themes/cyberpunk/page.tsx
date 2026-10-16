@@ -3,22 +3,21 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Zap } from "lucide-react";
 
 export default function CyberpunkPage() {
   return (
     <div>
       <PageHeader
         title="Cyberpunk Theme"
-        description="Neon cyberpunk aesthetic with vibrant colors"
-        eyebrow="Example · Themes"
+        description="Neon cyan accents and a cyan glow on dark indigo surfaces"
       />
 
-      <Section icon={Zap} title="Cyberpunk Theme">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Cyberpunk Theme">
+        <p>
           Bold cyberpunk design with neon accents:
         </p>
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'cyberpunk' }
 });
@@ -29,8 +28,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Zap} title="Cyberpunk with 12h">
+      <Section title="Cyberpunk with 12h">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'cyberpunk' },
   clock: { type: '12h' }
@@ -43,8 +43,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Zap} title="Cyberpunk with 24h">
+      <Section title="Cyberpunk with 24h">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'cyberpunk' },
   clock: { type: '24h' }

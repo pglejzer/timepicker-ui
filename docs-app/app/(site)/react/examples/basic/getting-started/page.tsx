@@ -3,9 +3,10 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { Clock } from "lucide-react";
 
 export default function GettingStartedPage() {
   return (
@@ -13,31 +14,16 @@ export default function GettingStartedPage() {
       <PageHeader
         title="Getting Started"
         description="Simple example to start using timepicker-ui-react"
-        eyebrow="React · Basic"
       />
 
-      <Section icon={Clock} title="Basic Usage">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Basic Usage">
+        <p>
           The simplest way to create a timepicker with default settings:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Basic Timepicker
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Default 12-hour format with AM/PM
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="Select time"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-              />
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Basic Timepicker</h3>
+        <p>Default 12-hour format with AM/PM</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
 
 function App() {
@@ -48,14 +34,14 @@ function App() {
     />
   );
 }`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <Timepicker placeholder="Select time" className={demo.input} />
+        </Figure>
       </Section>
 
-      <Section icon={Clock} title="Installation">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Installation">
+        <p>
           Install the package and import required styles:
         </p>
         <CodeBlock
@@ -69,8 +55,8 @@ import "timepicker-ui/main.css";`}
         />
       </Section>
 
-      <Section icon={Clock} title="Props">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Props">
+        <p>
           The component extends standard HTML input attributes:
         </p>
         <CodeBlock

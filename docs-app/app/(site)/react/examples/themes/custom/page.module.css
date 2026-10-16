@@ -1,0 +1,6 @@
+.custom {
+  composes: input from "../../../../../../components/demo-controls.module.css";
+  padding: var(--space-3) var(--space-5);
+  border: 2px solid var(--ink);
+  font-size: var(--text-lede);
+}

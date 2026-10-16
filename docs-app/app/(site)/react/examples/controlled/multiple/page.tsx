@@ -2,10 +2,10 @@
 
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
-import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { Layers } from "lucide-react";
 import { useState } from "react";
 
 export default function MultiplePickersPage() {
@@ -17,59 +17,16 @@ export default function MultiplePickersPage() {
       <PageHeader
         title="Multiple Pickers"
         description="Use multiple timepickers with independent state"
-        eyebrow="React · Controlled"
       />
 
-      <Section icon={Layers} title="Independent Pickers">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Independent Pickers">
+        <p>
           Each timepicker manages its own state:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Time Range Selector
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Start and end time with separate state
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 rounded-lg border border-border bg-background p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Start Time
-                </label>
-                <Timepicker
-                  value={startTime}
-                  className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                  onUpdate={(data) => {
-                    setStartTime(`${data.hour}:${data.minutes} ${data.type}`);
-                  }}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  End Time
-                </label>
-                <Timepicker
-                  value={endTime}
-                  className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                  onUpdate={(data) => {
-                    setEndTime(`${data.hour}:${data.minutes} ${data.type}`);
-                  }}
-                />
-              </div>
-              <div className="rounded-lg bg-muted p-4 space-y-1">
-                <p className="text-sm">
-                  <strong>Start:</strong> {startTime}
-                </p>
-                <p className="text-sm">
-                  <strong>End:</strong> {endTime}
-                </p>
-              </div>
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Time Range Selector</h3>
+        <p>Start and end time with separate state</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 import { useState } from "react";
 
 function App() {
@@ -98,10 +55,45 @@ function App() {
     </div>
   );
 }`}
-              language="tsx"
-            />
+          language="tsx"
+        >
+          <div className={demo.form}>
+            <div className={demo.field}>
+              <label htmlFor="multiple-start-time" className={demo.label}>
+                Start Time
+              </label>
+              <Timepicker
+                id="multiple-start-time"
+                value={startTime}
+                className={demo.input}
+                onUpdate={(data) => {
+                  setStartTime(`${data.hour}:${data.minutes} ${data.type}`);
+                }}
+              />
+            </div>
+            <div className={demo.field}>
+              <label htmlFor="multiple-end-time" className={demo.label}>
+                End Time
+              </label>
+              <Timepicker
+                id="multiple-end-time"
+                value={endTime}
+                className={demo.input}
+                onUpdate={(data) => {
+                  setEndTime(`${data.hour}:${data.minutes} ${data.type}`);
+                }}
+              />
+            </div>
+            <div className={demo.output} aria-live="polite">
+              <p>
+                <strong>Start:</strong> {startTime}
+              </p>
+              <p>
+                <strong>End:</strong> {endTime}
+              </p>
+            </div>
           </div>
-        </div>
+        </Figure>
       </Section>
     </div>
   );

@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Sparkles } from "lucide-react";
 
 export default function GlassmorphicPage() {
   return (
@@ -11,14 +10,14 @@ export default function GlassmorphicPage() {
       <PageHeader
         title="Glassmorphic Theme"
         description="Modern glass effect with blur and transparency"
-        eyebrow="Example · Themes"
       />
 
-      <Section icon={Sparkles} title="Glassmorphic Theme">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Glassmorphic Theme">
+        <p>
           Trendy glassmorphism design with frosted glass effect:
         </p>
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'glassmorphic' }
 });
@@ -29,8 +28,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Sparkles} title="Glassmorphic with 12h">
+      <Section title="Glassmorphic with 12h">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'glassmorphic' },
   clock: { type: '12h' }
@@ -43,8 +43,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Sparkles} title="Glassmorphic with 24h">
+      <Section title="Glassmorphic with 24h">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'glassmorphic' },
   clock: { type: '24h' }

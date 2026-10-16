@@ -2,10 +2,10 @@
 
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
-import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { Clock } from "lucide-react";
 
 export default function Format24hPage() {
   return (
@@ -13,32 +13,16 @@ export default function Format24hPage() {
       <PageHeader
         title="24h Format"
         description="Use 24-hour clock format instead of 12-hour with AM/PM"
-        eyebrow="React · Basic"
       />
 
-      <Section icon={Clock} title="24-Hour Clock">
-        <p className="text-muted-foreground mb-4">
+      <Section title="24-Hour Clock">
+        <p>
           Configure timepicker to use 24-hour format:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              24h Format
-            </h3>
-            <p className="text-sm text-muted-foreground">Hours from 00 to 23</p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="Select time (24h)"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-                options={{
-                  clock: { type: "24h" },
-                }}
-              />
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>24h Format</h3>
+        <p>Hours from 00 to 23</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 
 function App() {
   return (
@@ -50,40 +34,26 @@ function App() {
     />
   );
 }`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <Timepicker
+            placeholder="Select time (24h)"
+            className={demo.input}
+            options={{
+              clock: { type: "24h" },
+            }}
+          />
+        </Figure>
       </Section>
 
-      <Section icon={Clock} title="With Auto-Switch">
-        <p className="text-muted-foreground mb-4">
+      <Section title="With Auto-Switch">
+        <p>
           Automatically switch to minutes after selecting hour:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Auto-Switch to Minutes
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Improves user experience
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="Select time"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-                options={{
-                  clock: {
-                    type: "24h",
-                    autoSwitchToMinutes: true,
-                  },
-                }}
-              />
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Auto-Switch to Minutes</h3>
+        <p>Improves user experience</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 
 function App() {
   return (
@@ -97,10 +67,19 @@ function App() {
     />
   );
 }`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <Timepicker
+            placeholder="Select time"
+            className={demo.input}
+            options={{
+              clock: {
+                type: "24h",
+                autoSwitchToMinutes: true,
+              },
+            }}
+          />
+        </Figure>
       </Section>
     </div>
   );

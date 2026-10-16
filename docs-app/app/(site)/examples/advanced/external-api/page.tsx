@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerUI } from "timepicker-ui";
 import "timepicker-ui/main.css";
 import { Section } from "@/components/section";
-import { CodeBlock } from "@/components/code-block";
-import { InfoBox } from "@/components/info-box";
-import { Clock, RefreshCw, Globe, Zap, Check, X } from "lucide-react";
+import { Callout } from "@/components/callout";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
+import styles from "./page.module.css";
 
 export default function ExternalAPIExample() {
+  const fieldId = useId();
   const input1Ref = useRef<HTMLInputElement>(null);
   const input2Ref = useRef<HTMLInputElement>(null);
   const input3Ref = useRef<HTMLInputElement>(null);
@@ -219,50 +221,30 @@ export default function ExternalAPIExample() {
       <PageHeader
         title="External API Integration"
         description="Integrate timepicker with external time APIs for real-world applications"
-        eyebrow="Example · Advanced"
       />
 
-      <InfoBox title="API Used" variant="blue" className="mb-8">
+      <Callout title="API Used">
         These examples use{" "}
         <a
           href="https://timeapi.io/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-primary hover:underline font-medium"
         >
           TimeAPI.io
         </a>{" "}
         to fetch current time from different timezones. You can use any API that
         returns time data.
-      </InfoBox>
+      </Callout>
 
-      <Section icon={Clock} title="Basic - Fetch and Set Time">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Basic - Fetch and Set Time">
+        <p>
           Simple example: Fetch current time from API and set it to the
           timepicker on mount.
         </p>
 
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">
-              Current Time (Europe/Warsaw)
-            </label>
-            <input
-              ref={input1Ref}
-              type="text"
-              className="w-full max-w-xs px-4 py-2 border border-border rounded-md bg-background"
-              placeholder="Click to select time"
-            />
-            {currentTime && (
-              <p className="text-sm text-muted-foreground mt-2">
-                Loaded: {currentTime}
-              </p>
-            )}
-          </div>
-
-          <CodeBlock
-            code={`const picker = new TimepickerUI(input, { 
-  clock: { type: '24h' } 
+        <Figure
+          code={`const picker = new TimepickerUI(input, {
+  clock: { type: '24h' }
 });
 picker.create();
 
@@ -282,72 +264,37 @@ async function fetchCurrentTime() {
 }
 
 fetchCurrentTime();`}
-            language="typescript"
-          />
-        </div>
+        >
+          <div className={`${demo.form} ${styles.stage}`}>
+            <div className={demo.field}>
+              <label htmlFor={`${fieldId}-warsaw`} className={demo.label}>
+                Current Time (Europe/Warsaw)
+              </label>
+              <input
+                id={`${fieldId}-warsaw`}
+                ref={input1Ref}
+                type="text"
+                className={demo.input}
+                placeholder="Click to select time"
+              />
+              {currentTime && (
+                <p className={demo.output}>
+                  Loaded: {currentTime}
+                </p>
+              )}
+            </div>
+          </div>
+        </Figure>
       </Section>
 
-      <Section icon={RefreshCw} title="Advanced - Auto-Refresh with Events">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Advanced - Auto-Refresh with Events">
+        <p>
           Advanced example: Auto-refresh time every 60 seconds with timezone
           selector, EventEmitter API, and error handling.
         </p>
 
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">
-              Select Timezone
-            </label>
-            <select
-              value={timezone}
-              onChange={(e) => setTimezone(e.target.value)}
-              className="w-full max-w-xs px-4 py-2 border border-border rounded-md bg-background mb-4"
-            >
-              <option value="Europe/Warsaw">Europe/Warsaw</option>
-              <option value="America/New_York">America/New York</option>
-              <option value="Asia/Tokyo">Asia/Tokyo</option>
-              <option value="Europe/London">Europe/London</option>
-              <option value="Australia/Sydney">Australia/Sydney</option>
-            </select>
-
-            <label className="block text-sm font-medium mb-2">
-              Current Time (Auto-refresh)
-            </label>
-            <div className="flex gap-2 items-center">
-              <input
-                ref={input2Ref}
-                type="text"
-                className="flex-1 max-w-xs px-4 py-2 border border-border rounded-md bg-background"
-                placeholder="Click to select time"
-              />
-              <button
-                onClick={handleRefresh}
-                disabled={isLoading}
-                className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-              >
-                <RefreshCw
-                  className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
-                />
-                Refresh
-              </button>
-            </div>
-
-            {currentTime && (
-              <p className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400 mt-2">
-                <Check className="h-4 w-4" />
-                {currentTime}
-              </p>
-            )}
-            {error && (
-              <p className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400 mt-2">
-                <X className="h-4 w-4" />
-                {error}
-              </p>
-            )}
-          </div>
-
-          <CodeBlock
-            code={`const picker = new TimepickerUI(input, {
+        <Figure
+          code={`const picker = new TimepickerUI(input, {
   clock: {
     type: '24h',
     autoSwitchToMinutes: true,
@@ -394,35 +341,71 @@ return () => {
   clearInterval(interval);
   picker.destroy();
 };`}
-            language="typescript"
-          />
-        </div>
+        >
+          <div className={`${demo.form} ${styles.stage}`}>
+            <div className={demo.field}>
+              <label htmlFor={`${fieldId}-timezone`} className={demo.label}>
+                Select Timezone
+              </label>
+              <select
+                id={`${fieldId}-timezone`}
+                value={timezone}
+                onChange={(e) => setTimezone(e.target.value)}
+                className={demo.input}
+              >
+                <option value="Europe/Warsaw">Europe/Warsaw</option>
+                <option value="America/New_York">America/New York</option>
+                <option value="Asia/Tokyo">Asia/Tokyo</option>
+                <option value="Europe/London">Europe/London</option>
+                <option value="Australia/Sydney">Australia/Sydney</option>
+              </select>
+            </div>
+
+            <div className={demo.field}>
+              <label htmlFor={`${fieldId}-refresh`} className={demo.label}>
+                Current Time (Auto-refresh)
+              </label>
+              <div className={styles.inputRow}>
+                <input
+                  id={`${fieldId}-refresh`}
+                  ref={input2Ref}
+                  type="text"
+                  className={demo.input}
+                  placeholder="Click to select time"
+                />
+                <button
+                  type="button"
+                  onClick={handleRefresh}
+                  disabled={isLoading}
+                  className={demo.button}
+                >
+                  Refresh
+                </button>
+              </div>
+
+              {currentTime && (
+                <p className={demo.output}>
+                  {currentTime}
+                </p>
+              )}
+              {error && (
+                <p className={demo.error}>
+                  {error}
+                </p>
+              )}
+            </div>
+          </div>
+        </Figure>
       </Section>
 
-      <Section icon={Globe} title="Multiple Timezones with Validation">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Multiple Timezones with Validation">
+        <p>
           Complex example: Random timezone selection, 12h format, disabled night
           hours, and full EventEmitter integration.
         </p>
 
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">
-              Random World Time (12h format, night hours disabled)
-            </label>
-            <input
-              ref={input3Ref}
-              type="text"
-              className="w-full max-w-xs px-4 py-2 border border-border rounded-md bg-background"
-              placeholder="Click to select time"
-            />
-            <p className="text-sm text-muted-foreground mt-2">
-              Hours 1 AM - 5 AM are disabled. Fetches random timezone on mount.
-            </p>
-          </div>
-
-          <CodeBlock
-            code={`const picker = new TimepickerUI(input, {
+        <Figure
+          code={`const picker = new TimepickerUI(input, {
   clock: {
     type: '12h',
     disabledTime: {
@@ -477,54 +460,70 @@ async function fetchWorldTime() {
 }
 
 fetchWorldTime();`}
-            language="typescript"
-          />
-        </div>
+        >
+          <div className={`${demo.form} ${styles.stage}`}>
+            <div className={demo.field}>
+              <label htmlFor={`${fieldId}-world`} className={demo.label}>
+                Random World Time (12h format, night hours disabled)
+              </label>
+              <input
+                id={`${fieldId}-world`}
+                ref={input3Ref}
+                type="text"
+                className={demo.input}
+                placeholder="Click to select time"
+              />
+              <p className={demo.hint}>
+                Hours 1 AM - 5 AM are disabled. Fetches random timezone on mount.
+              </p>
+            </div>
+          </div>
+        </Figure>
       </Section>
 
-      <Section icon={Zap} title="Key Features Demonstrated">
-        <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+      <Section title="Key Features Demonstrated">
+        <ul>
           <li>
-            <strong className="text-foreground">setValue()</strong> - Set time
+            <strong>setValue()</strong> - Set time
             programmatically from API
           </li>
           <li>
-            <strong className="text-foreground">EventEmitter API</strong> -
+            <strong>EventEmitter API</strong> -
             Listen to events with on(), once(), off()
           </li>
           <li>
-            <strong className="text-foreground">Callback options</strong> -
+            <strong>Callback options</strong> -
             onConfirm, onUpdate, onError handlers
           </li>
           <li>
-            <strong className="text-foreground">Grouped options</strong> -
+            <strong>Grouped options</strong> -
             clock, ui, labels, behavior, callbacks
           </li>
           <li>
-            <strong className="text-foreground">Auto-refresh</strong> - Update
+            <strong>Auto-refresh</strong> - Update
             time periodically with setInterval
           </li>
           <li>
-            <strong className="text-foreground">Timezone support</strong> -
+            <strong>Timezone support</strong> -
             Fetch time from different timezones
           </li>
           <li>
-            <strong className="text-foreground">Validation</strong> -
+            <strong>Validation</strong> -
             disabledTime for restricted hours
           </li>
           <li>
-            <strong className="text-foreground">Error handling</strong> - Proper
+            <strong>Error handling</strong> - Proper
             try/catch with user feedback
           </li>
           <li>
-            <strong className="text-foreground">Cleanup</strong> - Destroy
+            <strong>Cleanup</strong> - Destroy
             picker and clear intervals in useEffect
           </li>
         </ul>
       </Section>
 
-      <InfoBox title="Production Tips" variant="purple">
-        <ul className="list-disc list-inside space-y-2 text-sm">
+      <Callout title="Production Tips">
+        <ul>
           <li>Always handle API errors gracefully with try/catch</li>
           <li>
             Clean up intervals and destroy pickers in React useEffect cleanup
@@ -533,7 +532,7 @@ fetchWorldTime();`}
           <li>Consider rate limiting and caching for frequent API calls</li>
           <li>Validate time data from external APIs before setting</li>
         </ul>
-      </InfoBox>
+      </Callout>
     </div>
   );
 }

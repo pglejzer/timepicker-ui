@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Ruler } from "lucide-react";
 
 export default function BlueprintThemePage() {
   return (
@@ -11,15 +10,15 @@ export default function BlueprintThemePage() {
       <PageHeader
         title="Blueprint"
         description="Light precision-instrument look with a vivid cobalt accent and hairline borders"
-        eyebrow="Example · Themes"
       />
 
-      <Section icon={Ruler} title="Blueprint Theme">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Blueprint Theme">
+        <p>
           A clean, technical aesthetic on pale blue surfaces, vivid cobalt accent
           and crisp hairline borders that match the docs&apos; own look:
         </p>
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'blueprint' }
 });
@@ -30,8 +29,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Ruler} title="Blueprint with 12h Format">
+      <Section title="Blueprint with 12h Format">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'blueprint' },
   clock: { type: '12h' }
@@ -44,8 +44,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Ruler} title="Blueprint with 24h Format">
+      <Section title="Blueprint with 24h Format">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'blueprint' },
   clock: { type: '24h' }

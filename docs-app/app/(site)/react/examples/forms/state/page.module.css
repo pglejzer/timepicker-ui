@@ -1,0 +1,21 @@
+.times {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.textarea {
+  composes: input from "../../../../../../components/demo-controls.module.css";
+  padding-block: var(--space-2);
+  resize: vertical;
+}
+
+.json {
+  margin-top: var(--space-2);
+  overflow-x: auto;
+}
+
+@media (min-width: 40rem) {
+  .times {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

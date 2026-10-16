@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Bot } from "lucide-react";
 
 export default function AIThemePage() {
   return (
@@ -11,14 +10,14 @@ export default function AIThemePage() {
       <PageHeader
         title="AI Theme"
         description="Futuristic AI-inspired theme with modern aesthetics"
-        eyebrow="Example · Themes"
       />
 
-      <Section icon={Bot} title="AI Theme">
-        <p className="text-muted-foreground mb-4">
+      <Section title="AI Theme">
+        <p>
           Futuristic theme inspired by AI interfaces:
         </p>
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'ai' }
 });
@@ -29,8 +28,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Bot} title="AI with 12h">
+      <Section title="AI with 12h">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'ai' },
   clock: { type: '12h' }
@@ -43,8 +43,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Bot} title="AI with 24h">
+      <Section title="AI with 24h">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'ai' },
   clock: { type: '24h' }
