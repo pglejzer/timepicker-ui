@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.pglejzer/timepicker-ui-mcp",
-  "description": "MCP server for timepicker-ui: themes, UI modes, plugins, grouped options, events, public API, config-snippet and custom-theme generation, and time validation.",
+  "description": "MCP server for timepicker-ui: options, events, themes, public API, snippets and time validation.",
   "repository": {
     "url": "https://github.com/pglejzer/timepicker-ui",
     "source": "github"
   },
-  "version": "1.0.1",
+  "version": "1.0.2",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "timepicker-ui-mcp",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "transport": {
         "type": "stdio"
       }
