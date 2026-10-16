@@ -1,0 +1,21 @@
+.bundle {
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--text-h3);
+}
+
+.count {
+  flex: none;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+}

@@ -1,6 +1,6 @@
 export { BundleCard } from "./BundleCard";
 export { ComparisonSection } from "./ComparisonSection";
-export { ComparisonMetric, type BadgeVariant } from "./ComparisonMetric";
+export { ComparisonMetric } from "./ComparisonMetric";
 export { OptimizationCard } from "./OptimizationCard";
 export { SummaryStats } from "./SummaryStats";
 export { TabButton } from "./TabButton";

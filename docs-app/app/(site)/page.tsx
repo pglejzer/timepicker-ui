@@ -1,513 +1,258 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Clock,
-  Smartphone,
-  Timer,
-  Disc3,
-  Palette,
-  Code2,
-  Shield,
-  Layers,
-  Accessibility,
-  Globe,
-  Languages,
-  Lock,
-  Settings,
-  KeyRound,
-} from "lucide-react";
-import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { CodeBlock } from "@/components/code-block";
+import { Anatomy, type AnatomyNote } from "@/components/anatomy";
+import { ApiTable } from "@/components/api-table";
+import { formatBytes } from "@/components/bundleStats/types";
+import { FrameworkTabs } from "@/components/home/framework-tabs";
+import { ThemeFigure } from "@/components/home/theme-figure";
 import { InstallCommand } from "@/components/install-command";
-import { StarCallout } from "@/components/star-callout";
+import { TimepickerExample } from "@/components/timepicker-example";
+import { getStarCount } from "@/lib/github";
+import { ISSUES_URL, LIBRARY_VERSION, NPM_URL, REPO, REPO_URL } from "@/lib/site";
+import bundleData from "@/public/bundle-data.json";
+import styles from "./home.module.css";
 
-function BasicExample() {
-  return (
-    <TimepickerExample
-      code={`import { TimepickerUI } from 'timepicker-ui';
-
-const input = document.querySelector('#timepicker');
-const picker = new TimepickerUI(input);
-picker.create();`}
-      options={{}}
-      inputPlaceholder="Select time"
-      showCode={false}
-    />
-  );
-}
-
-function MobileExample() {
-  return (
-    <TimepickerExample
-      code={`const picker = new TimepickerUI(input, {
-  ui: { initialView: 'keyboard', viewSwitch: true },
-});`}
-      options={{ ui: { initialView: "keyboard", viewSwitch: true } }}
-      inputPlaceholder="Select time"
-      showCode={false}
-    />
-  );
-}
-
-function RangeExample() {
-  return (
-    <TimepickerExample
-      code={`import { RangePlugin } from 'timepicker-ui/plugins/range';
-PluginRegistry.register(RangePlugin);`}
-      options={{ range: { enabled: true, minDuration: 30 } }}
-      plugins={["range"]}
-      inputPlaceholder="Select time range"
-      showCode={false}
-    />
-  );
-}
-
-function WheelExample() {
-  return (
-    <TimepickerExample
-      code={`import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
-PluginRegistry.register(WheelPlugin);`}
-      options={{ ui: { mode: "wheel" } }}
-      plugins={["wheel"]}
-      inputPlaceholder="Select time"
-      showCode={false}
-    />
-  );
-}
-
-const stats = [
-  { value: "0", label: "Dependencies" },
-  { value: "3", label: "UI Modes" },
-  { value: "12", label: "Themes" },
-  { value: "SSR", label: "Safe" },
-  { value: "TS", label: "Typed" },
+const NOTES: AnatomyNote[] = [
+  { selector: ".tp-ui-select-time", side: "left", code: "labels.clockTitle", text: "Header text. Every label is an option." },
+  { selector: ".tp-ui-hour", side: "left", code: "clock.incrementHours", text: "Hour step: 1, 2, 3, 4 or 6." },
+  { selector: ".tp-ui-clock-face", side: "left", code: "ui.mode", text: "'clock', 'wheel' or 'compact-wheel'." },
+  { selector: ".tp-ui-cancel-btn, .tp-ui-ok-btn", side: "left", code: "labels.ok · labels.cancel", text: "Button text. Optional in inline mode." },
+  { selector: ".tp-ui-type-mode, .tp-ui-am", side: "right", code: "clock.type", text: "'12h', '24h' or 'auto' from the locale." },
+  { selector: ".tp-ui-minutes", side: "right", code: "clock.incrementMinutes", text: "Minute step, for example 5 or 15." },
+  { selector: ".tp-ui-clock-hand", side: "right", code: "clock.discreteHourJump", text: "The hour hand jumps from hour to hour while you drag." },
+  { selector: ".tp-ui-wrapper", side: "right", code: ".tp-ui-wrapper", text: "Root class. Every part has a stable tp-ui- class." },
 ];
 
-const features = [
-  {
-    icon: Clock,
-    title: "12h / 24h formats",
-    description:
-      "AM/PM or 24-hour output, with optional seconds. Switch at runtime.",
-  },
-  {
-    icon: Disc3,
-    title: "Three UI modes",
-    description:
-      "Analog clock, scroll wheel, and compact-wheel - one option to swap.",
-  },
-  {
-    icon: Palette,
-    title: "12 built-in themes",
-    description:
-      "Material 2/3, Crane, Dark, Glassmorphic, Cyberpunk, Pastel, AI, Blueprint.",
-  },
-  {
-    icon: Code2,
-    title: "Framework-agnostic",
-    description: "Vanilla JS core. Works in React, Vue, Angular, Svelte.",
-  },
-  {
-    icon: Shield,
-    title: "TypeScript types",
-    description: "Full type definitions and grouped, autocompleted options.",
-  },
-  {
-    icon: Layers,
-    title: "Inline mode",
-    description: "Render the picker in-page without a modal overlay.",
-  },
-  {
-    icon: Accessibility,
-    title: "Keyboard & ARIA",
-    description:
-      "Arrow keys on the fields and the clock face, focus trap, screen-reader labels.",
-  },
-  {
-    icon: Globe,
-    title: "SSR-safe",
-    description: "No top-level DOM access. Runs under Next.js and Nuxt.",
-  },
-  {
-    icon: KeyRound,
-    title: "Tree-shakeable plugins",
-    description: "Range, timezone, and wheel ship only when imported.",
-  },
+const HERO_OPTIONS = { ui: { inline: { enabled: true, showButtons: true } } };
+
+const HERO_CODE = `new TimepickerUI(input, {
+  ui: { inline: { enabled: true, container: '#picker', showButtons: true } },
+}).create();`;
+
+const MODES = [
+  { label: "Fig. 2a", name: "Clock", mode: "clock", wheel: false },
+  { label: "Fig. 2b", name: "Wheel", mode: "wheel", wheel: true },
+  { label: "Fig. 2c", name: "Compact wheel", mode: "compact-wheel", wheel: true },
+] as const;
+
+const PART_ROWS = [
+  { no: "01", feature: "12-hour, 24-hour, or the browser's choice", option: <code>clock.type</code>, docs: <Link href="/docs/features/clock-format">12h/24h Format</Link> },
+  { no: "02", feature: "Seconds field, wheel column and clock face", option: <code>clock.showSeconds</code>, docs: <Link href="/docs/features/seconds">Seconds</Link> },
+  { no: "03", feature: "Hours, minutes or ranges that can't be picked", option: <code>clock.disabledTime</code>, docs: <Link href="/docs/features/disabled-time">Disabled Time</Link> },
+  { no: "04", feature: "Render in the page instead of a modal", option: <code>ui.inline</code>, docs: <Link href="/docs/features/inline-mode">Inline Mode</Link> },
+  { no: "05", feature: "Layout for phones", option: <code>ui.mobile</code>, docs: <Link href="/docs/features/mobile">Mobile Support</Link> },
+  { no: "06", feature: "Button that clears the value", option: <code>ui.clearButton</code>, docs: <Link href="/docs/features/clear-button">Clear Button</Link> },
+  { no: "07", feature: "Every text, in any language", option: <code>labels.*</code>, docs: <Link href="/docs/advanced/localization">Localization</Link> },
+  { no: "08", feature: "Keyboard, focus trap and screen-reader labels", option: "built in", docs: <Link href="/docs/advanced/accessibility">Accessibility</Link> },
+  { no: "09", feature: "Events for every selection", option: <><code>callbacks.*</code>, <code>picker.on()</code></>, docs: <Link href="/docs/api/events">Events</Link> },
+  { no: "10", feature: "Types for every option and event", option: "included", docs: <Link href="/docs/api/typescript">TypeScript</Link> },
 ];
 
-const advanced = [
-  {
-    icon: Lock,
-    title: "Disabled time",
-    description: "Block specific hours, minutes, or time ranges.",
-    href: "/docs/features/disabled-time",
-  },
-  {
-    icon: Settings,
-    title: "Grouped options",
-    description:
-      "clock, ui, labels, behavior, callbacks - merged and validated.",
-    href: "/docs/api/options",
-  },
-  {
-    icon: Languages,
-    title: "Localization",
-    description: "Replace every label for any language.",
-    href: "/docs/advanced/localization",
-  },
-  {
-    icon: Palette,
-    title: "Custom styling",
-    description: "Override CSS variables or author a full theme.",
-    href: "/docs/advanced/styling",
-  },
-  {
-    icon: Code2,
-    title: "Instance registry",
-    description: "getById, getAllInstances, destroyAll.",
-    href: "/docs/api/methods",
-  },
-  {
-    icon: Timer,
-    title: "Events & callbacks",
-    description: "Subscribe to selection, confirm, cancel, and clear.",
-    href: "/docs/api/events",
-  },
+const rollup = bundleData.results.rollup;
+const coreGzip = rollup.core.files.find((file) => file.name === "core-only.min.js")?.gzip;
+const lazyGzip = (name: string) => rollup.lazy.files.find((file) => file.name === name)?.gzip;
+
+const PLUGINS = [
+  { name: "Range", text: "Start and end time in one picker, with a minimum and maximum duration.", importLine: "import { RangePlugin } from 'timepicker-ui/plugins/range';", gzip: lazyGzip("plugin-range.js") },
+  { name: "Timezone", text: "A timezone dropdown next to the time, with keyboard support.", importLine: "import { TimezonePlugin } from 'timepicker-ui/plugins/timezone';", gzip: lazyGzip("plugin-timezone.js") },
+  { name: "Wheel", text: "The scroll wheel and compact-wheel modes from Fig. 2.", importLine: "import { WheelPlugin } from 'timepicker-ui/plugins/wheel';", gzip: undefined },
 ];
 
-const liveExamples = [
-  {
-    icon: Clock,
-    title: "Analog clock",
-    note: "Default 12-hour",
-    component: <BasicExample />,
-    badge: null,
-  },
-  {
-    icon: Smartphone,
-    title: "Mobile view",
-    note: "Touch input",
-    component: <MobileExample />,
-    badge: null,
-  },
-  {
-    icon: Timer,
-    title: "Range plugin",
-    note: "Start & end",
-    component: <RangeExample />,
-    badge: "plugin",
-  },
-  {
-    icon: Disc3,
-    title: "Wheel plugin",
-    note: "Scroll spinner",
-    component: <WheelExample />,
-    badge: "plugin",
-  },
-];
+const RANGE_CODE = `import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+import { RangePlugin } from 'timepicker-ui/plugins/range';
 
-export default function Home() {
+PluginRegistry.register(RangePlugin);
+new TimepickerUI(input, { range: { enabled: true, minDuration: 30 } }).create();`;
+
+export default async function HomePage() {
+  const stars = await getStarCount();
+
   return (
-    <main id="main-content" className="flex flex-col">
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border">
-        <div className="bp-grid pointer-events-none absolute inset-0 -z-10 opacity-40" />
-        <div className="container mx-auto px-4 py-20 sm:py-28 md:px-6">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+    <main id="main-content" className={styles.main}>
+      <section className={styles.hero} aria-labelledby="home-title">
+        <div className={styles.inner}>
+          <div className={styles.head}>
+            <h1 id="home-title" className={styles.display}>
+              A time picker you can configure part by part.
+            </h1>
             <div>
-              <Link
-                href="/docs/whats-new"
-                className="reveal mb-6 inline-flex max-w-full items-center gap-2 rounded-md border border-border px-3 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <span className="text-primary">4.5.0</span>
-                <span>
-                  Optional seconds. The clock face now works with the keyboard.
-                </span>
-                <ArrowRight className="h-3 w-3 shrink-0" />
-              </Link>
-              <p className="eyebrow reveal">
-                Zero-dependency · Framework-agnostic · SSR-safe
+              <p className={styles.lede}>
+                Each part of the picker maps to one option or one <code>tp-ui-</code> class. Analog clock,
+                scroll wheel or compact wheel. No dependencies, 12 themes, TypeScript types, safe to render on
+                the server.
               </p>
-              <h1
-                className="display reveal mt-5 text-5xl font-semibold sm:text-6xl md:text-7xl"
-                style={{ animationDelay: "60ms" }}
-              >
-                Precise time
-                <br />
-                input, <span className="text-primary">for the web.</span>
-              </h1>
-              <p
-                className="reveal mt-6 max-w-md text-base text-muted-foreground sm:text-lg"
-                style={{ animationDelay: "120ms" }}
-              >
-                A time picker with an analog clock, scroll wheel, and
-                compact-wheel modes. 12 themes, full TypeScript types, and
-                plugins that tree-shake out when unused.
-              </p>
-
-              <div
-                className="reveal mt-8 flex flex-wrap items-center gap-3"
-                style={{ animationDelay: "180ms" }}
-              >
-                <Link
-                  href="/docs/installation"
-                  className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-                >
+              <div className={styles.actions}>
+                <Link href="/docs/quick-start" className={styles.primary}>
                   Get started
-                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
-                <a
-                  href="https://github.com/pglejzer/timepicker-ui"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex h-11 items-center justify-center rounded-md border border-border px-6 text-sm font-medium transition-colors hover:bg-accent"
-                >
-                  GitHub
-                  <ArrowUpRight className="ml-2 h-4 w-4" />
-                </a>
-              </div>
-
-              <div className="reveal mt-5" style={{ animationDelay: "240ms" }}>
                 <InstallCommand />
               </div>
             </div>
-
-            {/* Live picker panel */}
-            <div className="reveal" style={{ animationDelay: "200ms" }}>
-              <div className="relative rounded-xl border border-border bg-card p-6 shadow-sm">
-                <div className="mb-4 flex items-center justify-between">
-                  <span className="eyebrow">Live</span>
-                  <span className="nums text-2xl text-muted-foreground/60">
-                    12:30
-                  </span>
-                </div>
-                <div className="tick-row mb-6" />
-                <BasicExample />
-                <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
-                  <Link
-                    href="/examples"
-                    className="inline-flex items-center gap-1 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    more examples
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                  <Link
-                    href="/docs/whats-new"
-                    className="font-mono text-xs text-primary"
-                  >
-                    v4.5.0
-                  </Link>
-                </div>
-              </div>
-            </div>
           </div>
+          <Anatomy
+            notes={NOTES}
+            options={HERO_OPTIONS}
+            label="Fig. 1"
+            caption="Analog mode with the default theme. Drag the hand or type a time."
+            code={HERO_CODE}
+          />
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="border-b border-border">
-        <div className="container mx-auto grid grid-cols-2 divide-x divide-y divide-border px-4 sm:grid-cols-3 md:grid-cols-5 md:divide-y-0 md:px-6">
-          {stats.map((s) => (
-            <div key={s.label} className="px-2 py-8 text-center">
-              <div className="nums text-3xl font-semibold sm:text-4xl">
-                {s.value}
-              </div>
-              <div className="eyebrow mt-2">{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="border-b border-border">
-        <div className="container mx-auto px-4 py-16 sm:py-20 md:px-6">
-          <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="eyebrow">Capabilities</p>
-              <h2 className="display mt-3 text-3xl font-semibold sm:text-4xl">
-                What it does
-              </h2>
-            </div>
-            <Link
-              href="/docs"
-              className="inline-flex items-center gap-1 font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              read the docs
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+      <section className={styles.section} aria-labelledby="modes-title">
+        <div className={styles.inner}>
+          <div className={styles.head}>
+            <h2 id="modes-title" className={styles.h2}>Three modes, one option</h2>
+            <p className={styles.text}>
+              The analog clock is built in. The scroll wheel and the compact wheel come from the wheel plugin,
+              so they only reach your bundle when you import it.
+            </p>
           </div>
-          <div className="grid grid-cols-1 border-t border-l border-border sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f, i) => (
-              <div
-                key={f.title}
-                className="group border-b border-r border-border p-6 transition-colors hover:bg-muted/40"
-              >
-                <div className="flex items-center justify-between">
-                  <f.icon className="h-5 w-5 text-foreground transition-colors group-hover:text-primary" />
-                  <span className="nums text-xs text-muted-foreground/50">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </div>
-                <h3 className="mt-4 font-medium">{f.title}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">
-                  {f.description}
-                </p>
-              </div>
+          <div className={styles.views}>
+            {MODES.map((item) => (
+              <TimepickerExample
+                key={item.mode}
+                label={item.label}
+                caption={
+                  <>
+                    {item.name} <code>{`ui: { mode: '${item.mode}' }`}</code>
+                  </>
+                }
+                code={`new TimepickerUI(input, { ui: { mode: '${item.mode}' } }).create();`}
+                options={{ ui: { mode: item.mode } }}
+                plugins={item.wheel ? ["wheel"] : []}
+                showCode={false}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Live examples */}
-      <section className="border-b border-border bg-muted/20">
-        <div className="container mx-auto px-4 py-16 sm:py-20 md:px-6">
-          <div className="mb-10">
-            <p className="eyebrow">Interactive</p>
-            <h2 className="display mt-3 text-3xl font-semibold sm:text-4xl">
-              Try it here
-            </h2>
+      <section className={styles.section} aria-labelledby="themes-title">
+        <div className={styles.inner}>
+          <div className={styles.head}>
+            <h2 id="themes-title" className={styles.h2}>Twelve themes</h2>
+            <p className={styles.text}>
+              Each theme is a CSS file that sets the picker&apos;s custom properties. Pick one here, or write
+              your own on top of <code>main.css</code>.
+            </p>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {liveExamples.map((ex) => (
-              <div
-                key={ex.title}
-                className="rounded-xl border border-border bg-card p-5"
-              >
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <ex.icon className="h-4 w-4 text-primary" />
-                    <div>
-                      <h3 className="text-sm font-medium">{ex.title}</h3>
-                      <p className="font-mono text-xs text-muted-foreground">
-                        {ex.note}
-                      </p>
-                    </div>
-                  </div>
-                  {ex.badge && (
-                    <span className="rounded border border-primary/40 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-primary">
-                      {ex.badge}
-                    </span>
-                  )}
-                </div>
-                {ex.component}
-              </div>
-            ))}
-          </div>
+          <ThemeFigure />
         </div>
       </section>
 
-      {/* Quick integrate */}
-      <section className="border-b border-border">
-        <div className="container mx-auto px-4 py-16 sm:py-20 md:px-6">
-          <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div>
-              <p className="eyebrow">Setup</p>
-              <h2 className="display mt-3 text-3xl font-semibold sm:text-4xl">
-                Three lines to a picker
-              </h2>
-              <p className="mt-4 max-w-md text-muted-foreground">
-                Install, import, and call{" "}
-                <code className="rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-sm">
-                  create()
-                </code>
-                . No build step, no wrapper required.
-              </p>
-              <ul className="mt-7 space-y-3 text-sm">
-                {[
-                  "npm, yarn, or pnpm",
-                  "ESM and CJS builds",
-                  "Typed options with autocomplete",
-                  "Drop into any existing input",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <ArrowRight className="h-3.5 w-3.5 shrink-0 text-primary" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/docs/quick-start"
-                className="mt-8 inline-flex items-center font-mono text-sm text-primary"
-              >
-                Quick start
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </div>
-            <CodeBlock
-              filename="app.ts"
-              language="typescript"
-              code={`import { TimepickerUI } from 'timepicker-ui';
-import 'timepicker-ui/index.css';
+      <section className={styles.section} aria-labelledby="parts-title">
+        <div className={styles.inner}>
+          <div className={styles.head}>
+            <h2 id="parts-title" className={styles.h2}>What the picker does</h2>
+            <p className={styles.text}>
+              Every feature has an option and a page in the docs. Options are grouped by what they change:{" "}
+              <code>clock</code>, <code>ui</code>, <code>labels</code>, <code>behavior</code>,{" "}
+              <code>callbacks</code>.
+            </p>
+          </div>
+          <ApiTable
+            columns={[
+              { key: "no", label: "No." },
+              { key: "feature", label: "Feature" },
+              { key: "option", label: "Option" },
+              { key: "docs", label: "Docs" },
+            ]}
+            rows={PART_ROWS}
+            rowKey="no"
+            caption={
+              <>
+                <strong>Table 1</strong> Features and the options that control them.{" "}
+                <Link href="/docs/api/options">All options</Link>
+              </>
+            }
+          />
+        </div>
+      </section>
 
-const input = document.querySelector('#timepicker');
-const picker = new TimepickerUI(input, {
-  clock: { type: '24h' },
-  ui: { theme: 'dark' },
-});
-
-picker.create();`}
+      <section className={styles.section} aria-labelledby="plugins-title">
+        <div className={styles.inner}>
+          <div className={styles.head}>
+            <h2 id="plugins-title" className={styles.h2}>Plugins you import when you need them</h2>
+            <p className={styles.text}>
+              Register a plugin once and its options start working. Sizes are min + gzip from the{" "}
+              <Link href="/bundle-stats">bundle analysis</Link>
+              {coreGzip !== undefined && <>. The core is {formatBytes(coreGzip)}</>}.
+            </p>
+          </div>
+          <div className={styles.plugins}>
+            <dl className={styles.pluginList}>
+              {PLUGINS.map((plugin) => (
+                <div key={plugin.name} className={styles.pluginRow}>
+                  <dt>{plugin.name}</dt>
+                  <dd>
+                    {plugin.text}
+                    <code className={styles.importLine}>{plugin.importLine}</code>
+                  </dd>
+                  <dd className={styles.size}>
+                    {plugin.gzip !== undefined ? formatBytes(plugin.gzip) : <Link href="/bundle-stats">Bundle analysis</Link>}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <TimepickerExample
+              label="Fig. 4"
+              caption="Range plugin, at least 30 minutes."
+              code={RANGE_CODE}
+              options={{ range: { enabled: true, minDuration: 30 } }}
+              plugins={["range"]}
+              showCode={false}
             />
           </div>
         </div>
       </section>
 
-      {/* Advanced */}
-      <section className="border-b border-border">
-        <div className="container mx-auto px-4 py-16 sm:py-20 md:px-6">
-          <div className="mb-10">
-            <p className="eyebrow">Going further</p>
-            <h2 className="display mt-3 text-3xl font-semibold sm:text-4xl">
-              Built for real apps
-            </h2>
+      <section className={styles.section} aria-labelledby="frameworks-title">
+        <div className={styles.inner}>
+          <div className={styles.head}>
+            <h2 id="frameworks-title" className={styles.h2}>Works where your app runs</h2>
+            <p className={styles.text}>
+              The core is plain TypeScript with no DOM access at import time, so it runs under Next.js, Nuxt and
+              other SSR setups. React has its own wrapper.
+            </p>
           </div>
-          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
-            {advanced.map((f) => (
-              <Link
-                key={f.title}
-                href={f.href}
-                className="group bg-card p-6 transition-colors hover:bg-muted/40"
-              >
-                <div className="flex items-center justify-between">
-                  <f.icon className="h-5 w-5 transition-colors group-hover:text-primary" />
-                  <ArrowUpRight className="h-4 w-4 text-muted-foreground/40 transition-all group-hover:text-primary" />
-                </div>
-                <h3 className="mt-4 font-medium">{f.title}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">
-                  {f.description}
-                </p>
-              </Link>
-            ))}
-          </div>
+          <FrameworkTabs />
         </div>
       </section>
 
-      {/* Star call-out */}
-      <StarCallout />
-
-      {/* CTA */}
-      <section className="relative overflow-hidden">
-        <div className="bp-grid pointer-events-none absolute inset-0 -z-10 opacity-40" />
-        <div className="container mx-auto px-4 py-20 text-center sm:py-28 md:px-6">
-          <span className="nums text-4xl text-muted-foreground/40">00:00</span>
-          <h2 className="display mx-auto mt-4 max-w-2xl text-3xl font-semibold sm:text-5xl">
-            Add a time picker in minutes
-          </h2>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              href="/docs/installation"
-              className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-            >
-              Get started
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-            <Link
-              href="/examples"
-              className="inline-flex h-11 items-center justify-center rounded-md border border-border px-6 text-sm font-medium transition-colors hover:bg-accent"
-            >
-              Browse examples
-            </Link>
+      <section className={styles.section} aria-labelledby="oss-title">
+        <div className={`${styles.inner} ${styles.split}`}>
+          <div>
+            <h2 id="oss-title" className={styles.h2}>Open source, MIT</h2>
+            <p className={styles.text}>
+              Written and maintained by one developer. No runtime dependencies, no telemetry. Bugs and ideas go
+              to GitHub issues. Every release is listed in the changelog.
+            </p>
+            <a href={REPO_URL} target="_blank" rel="noreferrer" className={styles.primary}>
+              Star on GitHub
+            </a>
           </div>
+          <ul className={styles.facts}>
+            <li>
+              <a href={REPO_URL} target="_blank" rel="noreferrer">GitHub repository</a>
+              <span>{stars === null ? REPO : `${stars.toLocaleString("en-US")} stars`}</span>
+            </li>
+            <li>
+              <a href={NPM_URL} target="_blank" rel="noreferrer">npm package</a>
+              <span>timepicker-ui</span>
+            </li>
+            <li>
+              <Link href="/docs/changelog">Changelog</Link>
+              <span>{LIBRARY_VERSION}</span>
+            </li>
+            <li>
+              <Link href="/docs/roadmap">Roadmap</Link>
+              <span>5.0</span>
+            </li>
+            <li>
+              <a href={ISSUES_URL} target="_blank" rel="noreferrer">Report a bug</a>
+              <span>issues</span>
+            </li>
+          </ul>
         </div>
       </section>
     </main>

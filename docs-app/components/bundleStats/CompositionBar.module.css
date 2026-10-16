@@ -1,0 +1,135 @@
+.bar {
+  display: flex;
+  width: 100%;
+  height: var(--space-7);
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+}
+
+.seg {
+  display: flex;
+  flex: none;
+  align-items: center;
+  min-width: 2px;
+  height: 100%;
+  padding-inline: var(--space-2);
+  transform-origin: left center;
+  animation: grow var(--dur) var(--ease) both;
+}
+
+.seg + .seg {
+  border-left: 1px solid var(--paper);
+}
+
+.segLabel {
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.ink2 {
+  background: var(--ink-2);
+  color: var(--paper);
+}
+
+.ink3 {
+  background: var(--ink-3);
+  color: var(--paper);
+}
+
+.hair {
+  background: var(--hair);
+  color: var(--ink);
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.ruler {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: var(--space-2);
+}
+
+.minor,
+.major {
+  width: 1px;
+}
+
+.minor {
+  height: var(--space-1);
+  background: var(--ink-3);
+}
+
+.major {
+  height: var(--space-2);
+  background: var(--ink);
+}
+
+.legend {
+  display: grid;
+  margin-top: var(--space-4);
+}
+
+.item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.swatch {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--ink);
+}
+
+.size {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+}
+
+.share {
+  margin-left: var(--space-1);
+  color: var(--ink-3);
+}
+
+@media (min-width: 40rem) {
+  .legend {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--space-5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seg {
+    animation: none;
+  }
+}

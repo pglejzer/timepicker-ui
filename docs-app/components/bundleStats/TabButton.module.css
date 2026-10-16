@@ -1,0 +1,25 @@
+.tab {
+  flex: none;
+  min-height: 44px;
+  padding: 0 var(--space-1);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--ink-2);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.tab:hover {
+  color: var(--ink);
+}
+
+.tab[aria-selected="true"] {
+  border-bottom-color: var(--ink);
+  color: var(--ink);
+}
+
+.tab:focus-visible {
+  outline-offset: -2px;
+}

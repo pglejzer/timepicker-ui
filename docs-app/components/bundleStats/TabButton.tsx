@@ -1,4 +1,5 @@
-import type { KeyboardEvent } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
+import styles from "./TabButton.module.css";
 
 export function TabButton({
   active,
@@ -17,7 +18,7 @@ export function TabButton({
   onClick: () => void;
   onKeyDown?: (e: KeyboardEvent<HTMLButtonElement>) => void;
   buttonRef?: (node: HTMLButtonElement | null) => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <button
@@ -30,19 +31,9 @@ export function TabButton({
       ref={buttonRef}
       onClick={onClick}
       onKeyDown={onKeyDown}
-      className={`relative flex h-10 shrink-0 items-center whitespace-nowrap px-1 font-mono text-sm transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring ${
-        active
-          ? "text-foreground"
-          : "text-muted-foreground hover:text-foreground"
-      }`}
+      className={styles.tab}
     >
       {children}
-      <span
-        aria-hidden="true"
-        className={`absolute inset-x-0 -bottom-px h-0.5 transition-colors ${
-          active ? "bg-primary" : "bg-transparent"
-        }`}
-      />
     </button>
   );
 }

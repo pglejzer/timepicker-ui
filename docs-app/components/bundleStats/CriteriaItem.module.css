@@ -1,0 +1,15 @@
+.item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.status {
+  flex: none;
+  min-width: 4ch;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+}

@@ -1,0 +1,70 @@
+.inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-5) var(--gutter) var(--space-8);
+}
+
+.note {
+  margin-top: var(--space-4);
+  color: var(--ink-3);
+  font-size: var(--text-small);
+}
+
+.note code {
+  padding: 0.1em 0.35em;
+  background: var(--code);
+  color: var(--ink);
+  font-size: 0.88em;
+}
+
+.tabs {
+  border-bottom: 1px solid var(--hair);
+}
+
+.tablist {
+  display: flex;
+  gap: var(--space-5);
+  margin-bottom: -1px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.panel {
+  padding-top: var(--space-5);
+}
+
+.cards {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.comparison {
+  display: grid;
+  gap: var(--space-7);
+}
+
+.empty {
+  max-width: 40rem;
+}
+
+.emptyTitle {
+  font-size: var(--text-h3);
+}
+
+.emptyText {
+  margin: var(--space-2) 0 var(--space-4);
+  color: var(--ink-2);
+}
+
+@media (min-width: 60rem) {
+  .comparison {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-7) var(--space-6);
+  }
+}
+
+@media (min-width: 80rem) {
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
