@@ -26,12 +26,14 @@
       {
         "name": "degreesHours",
         "optional": false,
-        "type": "number | null"
+        "type": "number | null",
+        "deprecated": "Internal clock-hand angle; use `hour` instead. Removed in 5.0."
       },
       {
         "name": "degreesMinutes",
         "optional": false,
-        "type": "number | null"
+        "type": "number | null",
+        "deprecated": "Internal clock-hand angle; use `minutes` instead. Removed in 5.0."
       }
     ]
   },
@@ -90,12 +92,15 @@
   {
     "name": "open:request",
     "data": "Record<string, never>",
-    "fields": []
+    "fields": [],
+    "description": "Emitted right after `show` when the user activates an open element or presses Enter in the input; the picker mounts on it, so every `show` listener runs before render. Not bridged to a callback.",
+    "internal": true
   },
   {
     "name": "hide",
     "data": "HideEventData",
-    "fields": []
+    "fields": [],
+    "deprecated": "Never emitted. Removed in 5.0."
   },
   {
     "name": "update",
@@ -159,12 +164,14 @@
   {
     "name": "select:am",
     "data": "SelectAMEventData",
-    "fields": []
+    "fields": [],
+    "deprecated": "Use `select:period`. Removed in 5.0."
   },
   {
     "name": "select:pm",
     "data": "SelectPMEventData",
-    "fields": []
+    "fields": [],
+    "deprecated": "Use `select:period`. Removed in 5.0."
   },
   {
     "name": "select:period",
@@ -242,7 +249,39 @@
       {
         "name": "disabledTime",
         "optional": true,
-        "type": "{ hours: string[]; minutes: string[]; seconds?: string[]; fromType?: string; fromHour?: number; fromMinute?: number; } | null"
+        "type": "object | null",
+        "fields": [
+          {
+            "name": "hours",
+            "optional": false,
+            "type": "string[]"
+          },
+          {
+            "name": "minutes",
+            "optional": false,
+            "type": "string[]"
+          },
+          {
+            "name": "seconds",
+            "optional": true,
+            "type": "string[]"
+          },
+          {
+            "name": "fromType",
+            "optional": true,
+            "type": "string"
+          },
+          {
+            "name": "fromHour",
+            "optional": true,
+            "type": "number"
+          },
+          {
+            "name": "fromMinute",
+            "optional": true,
+            "type": "number"
+          }
+        ]
       }
     ]
   },
@@ -301,17 +340,20 @@
         "optional": true,
         "type": "string"
       }
-    ]
+    ],
+    "internal": true
   },
   {
     "name": "range:get-disabled-time",
     "data": "RangeGetDisabledTimeEventData",
-    "fields": []
+    "fields": [],
+    "deprecated": "Never emitted or read. Removed in 5.0."
   },
   {
     "name": "range:update-disabled",
     "data": "RangeUpdateDisabledEventData",
-    "fields": []
+    "fields": [],
+    "deprecated": "Never emitted or read. Removed in 5.0."
   },
   {
     "name": "wheel:scroll:start",
@@ -348,17 +390,20 @@
   {
     "name": "animation:clock",
     "data": "Record<string, never>",
-    "fields": []
+    "fields": [],
+    "internal": true
   },
   {
     "name": "animation:start",
     "data": "Record<string, never>",
-    "fields": []
+    "fields": [],
+    "internal": true
   },
   {
     "name": "animation:end",
     "data": "Record<string, never>",
-    "fields": []
+    "fields": [],
+    "internal": true
   },
   {
     "name": "error",
@@ -372,12 +417,14 @@
       {
         "name": "rejectedHour",
         "optional": true,
-        "type": "string"
+        "type": "string",
+        "deprecated": "Always undefined. Removed in 5.0."
       },
       {
         "name": "rejectedMinute",
         "optional": true,
-        "type": "string"
+        "type": "string",
+        "deprecated": "Always undefined. Removed in 5.0."
       },
       {
         "name": "inputHour",

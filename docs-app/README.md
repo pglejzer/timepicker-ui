@@ -29,18 +29,18 @@ docs-app/
 │   │   ├── layout.tsx
 │   │   └── page.tsx          # landing page
 │   ├── layout.tsx            # root layout, metadata, fonts, analytics
-│   ├── globals.css           # Tailwind entry
+│   ├── styles/tokens.css     # design tokens
+│   ├── styles/base.css       # reset and layers
 │   ├── manifest.ts
 │   ├── robots.ts
 │   ├── sitemap.ts            # built from lib/seo-routes.ts
 │   ├── opengraph-image.tsx
-│   ├── icon.svg, favicon.ico, apple-icon.png
+│   ├── icon.svg, favicon.ico, apple-icon.tsx
 │   └── not-found.tsx
-├── components/               # header, footer, sidebars, code blocks, command menu, examples/, bundleStats/, ...
-├── lib/                      # docs-nav.ts, metadata.ts, seo-routes.ts, use-dark-mode.ts
+├── components/               # header, footer, nav tree, code blocks, command menu, icons.tsx, examples/, bundleStats/, ...
+├── lib/                      # nav.ts, related-examples.ts, site.ts, metadata.ts, seo-routes.ts, use-dark-mode.ts
 ├── public/                   # static files, bundle-data.json
 ├── next.config.ts            # React Compiler is on
-├── postcss.config.mjs        # Tailwind CSS v4
 ├── eslint.config.mjs         # eslint-config-next
 ├── tsconfig.json             # @/* maps to ./
 └── vercel.json
@@ -48,7 +48,9 @@ docs-app/
 
 ## Stack
 
-Next.js 16 with the React Compiler, React 19, TypeScript and Tailwind CSS v4. Radix UI for tabs and scroll areas, lucide-react for icons, prism-react-renderer for code blocks, recharts for the bundle size charts. Vercel Analytics and Speed Insights are on. Fonts are Geist Sans and Geist Mono.
+Next.js 16 with the React Compiler, React 19 and TypeScript. Styles are CSS Modules on top of design tokens in `app/styles/tokens.css` and a small reset in `app/styles/base.css` (cascade layers `reset` and `prose`). prism-react-renderer renders code blocks and recharts draws the bundle size charts. Vercel Analytics is on. Fonts are Atkinson Hyperlegible Next and Atkinson Hyperlegible Mono, self-hosted from `app/fonts/` with `next/font/local` (SIL Open Font License, see the `OFL-*.txt` files there).
+
+There is no UI component library. Icons are inline SVG components in `components/icons.tsx`. The command menu and the mobile menu are native `<dialog>` elements, and the sidebar groups and the "On this page" list on narrower screens are native `<details>` elements.
 
 The picker needs the DOM, so demos create it inside an effect or a client component.
 

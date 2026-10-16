@@ -48,7 +48,7 @@
         "name": "autoSwitchToSeconds",
         "optional": true,
         "type": "boolean",
-        "description": "Automatically switch from minutes to seconds after a minute is picked on the clock.\r\nOnly used with `showSeconds`.",
+        "description": "Automatically switch from minutes to seconds after a minute is picked on the clock.\nOnly used with `showSeconds`.",
         "default": "true"
       },
       {
@@ -56,7 +56,8 @@
         "optional": true,
         "type": "boolean",
         "description": "Enable smooth hour snapping with animation",
-        "default": "true"
+        "default": "true",
+        "deprecated": "Use `discreteHourJump`. Removed in 5.0."
       },
       {
         "name": "discreteHourJump",
@@ -68,23 +69,91 @@
       {
         "name": "disabledTime",
         "optional": true,
-        "type": "{ minutes?: Array<string | number>; hours?: Array<string | number>; /** * @description Seconds (0-59) disabled in every minute. Used with `showSeconds`. */ seconds?: Array<string | number>; /** * @description Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h). * An edge without seconds covers its whole minute. * When set, the `hours`, `minutes` and `seconds` lists are ignored. */ ranges?: string | string[]; /** * @description Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h). * An edge without seconds covers its whole minute. * When set, the `hours`, `minutes` and `seconds` lists are ignored. * @deprecated Use `ranges`. Removed in 5.0. */ interval?: string | string[]; }",
+        "type": "object",
         "description": "Disable specific hours/minutes/seconds or time ranges",
-        "example": "disabledTime: {\r\n  minutes: [1, 2, 4, 5, 55, 23, \"22\", \"38\"],\r\n  hours: [1, \"3\", \"5\", 8],\r\n  seconds: [0, 30]\r\n}\r\n// or time ranges instead: the hours, minutes and seconds lists are ignored when ranges is set\r\ndisabledTime: {\r\n  ranges: [\"10:00 AM - 12:00 PM\", \"5:00:30 PM - 8:00 PM\"]\r\n}"
+        "example": "disabledTime: {\n  minutes: [1, 2, 4, 5, 55, 23, \"22\", \"38\"],\n  hours: [1, \"3\", \"5\", 8],\n  seconds: [0, 30]\n}\n// or time ranges instead: the hours, minutes and seconds lists are ignored when ranges is set\ndisabledTime: {\n  ranges: [\"10:00 AM - 12:00 PM\", \"5:00:30 PM - 8:00 PM\"]\n}",
+        "fields": [
+          {
+            "name": "minutes",
+            "optional": true,
+            "type": "Array<string | number>"
+          },
+          {
+            "name": "hours",
+            "optional": true,
+            "type": "Array<string | number>"
+          },
+          {
+            "name": "seconds",
+            "optional": true,
+            "type": "Array<string | number>",
+            "description": "Seconds (0-59) disabled in every minute. Used with `showSeconds`."
+          },
+          {
+            "name": "ranges",
+            "optional": true,
+            "type": "string | string[]",
+            "description": "Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h).\nAn edge without seconds covers its whole minute.\nWhen set, the `hours`, `minutes` and `seconds` lists are ignored."
+          },
+          {
+            "name": "interval",
+            "optional": true,
+            "type": "string | string[]",
+            "description": "Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h).\nAn edge without seconds covers its whole minute.\nWhen set, the `hours`, `minutes` and `seconds` lists are ignored.",
+            "deprecated": "Use `ranges`. Removed in 5.0."
+          }
+        ]
       },
       {
         "name": "defaultTime",
         "optional": true,
-        "type": "'now' | { time?: Date | 'now'; updateInput?: boolean }",
-        "description": "Time the picker shows while the input is empty. `'now'` shows the current time and also writes it to the input when the picker is created, replacing a value that is already there.\r\nUse the object form to choose: `time` is a `Date` or `'now'`, and `updateInput: true` writes it to the input the same way.",
-        "example": "defaultTime: 'now'"
+        "type": "'now' | object",
+        "description": "Time the picker shows while the input is empty. `'now'` shows the current time and also writes it to the input when the picker is created, replacing a value that is already there.\nUse the object form to choose: `time` is a `Date` or `'now'`, and `updateInput: true` writes it to the input the same way.",
+        "example": "defaultTime: 'now'\ndefaultTime: { time: new Date(2026, 0, 1, 9, 30), updateInput: false }",
+        "fields": [
+          {
+            "name": "time",
+            "optional": true,
+            "type": "Date | 'now'"
+          },
+          {
+            "name": "updateInput",
+            "optional": true,
+            "type": "boolean"
+          }
+        ]
       },
       {
         "name": "currentTime",
         "optional": true,
-        "type": "| { time?: Date; updateInput?: boolean; /** * @deprecated Has no effect since 4.5.0; the value is formatted by the library. Removed in 5.0. */ locales?: string | string[]; /** * @deprecated Use `clock.type: 'auto'`. Removed in 5.0. */ preventClockType?: boolean; } | boolean",
+        "type": "| object | boolean",
         "description": "Set current time to the input and timepicker",
-        "example": "currentTime: {\r\n  time: new Date(),\r\n  updateInput: true,\r\n  preventClockType: false\r\n}"
+        "example": "currentTime: {\n  time: new Date(),\n  updateInput: true,\n  preventClockType: false\n}\ncurrentTime: true",
+        "deprecated": "Use `defaultTime`. Removed in 5.0.",
+        "fields": [
+          {
+            "name": "time",
+            "optional": true,
+            "type": "Date"
+          },
+          {
+            "name": "updateInput",
+            "optional": true,
+            "type": "boolean"
+          },
+          {
+            "name": "locales",
+            "optional": true,
+            "type": "string | string[]",
+            "deprecated": "Has no effect since 4.5.0; the value is formatted by the library. Removed in 5.0."
+          },
+          {
+            "name": "preventClockType",
+            "optional": true,
+            "type": "boolean",
+            "deprecated": "Use `clock.type: 'auto'`. Removed in 5.0."
+          }
+        ]
       }
     ]
   },
@@ -131,7 +200,8 @@
         "optional": true,
         "type": "boolean",
         "description": "Force mobile mode",
-        "default": "false"
+        "default": "false",
+        "deprecated": "Use `initialView: 'keyboard'`. Removed in 5.0."
       },
       {
         "name": "viewSwitch",
@@ -145,7 +215,8 @@
         "optional": true,
         "type": "boolean",
         "description": "Enable switch icon (mobile ↔ desktop)",
-        "default": "false"
+        "default": "false",
+        "deprecated": "Use `viewSwitch`. Removed in 5.0."
       },
       {
         "name": "editable",
@@ -158,15 +229,16 @@
         "name": "allowPageScroll",
         "optional": true,
         "type": "boolean",
-        "description": "Let the page scroll while the picker is open. When false, page scroll is locked on `<html>`\r\n(and on `<body>` when it is the scroll container), and `<html>` gets `--tp-scrollbar-gap` set to the removed\r\nscrollbar width for your own fixed or sticky elements, e.g. `header { padding-right: var(--tp-scrollbar-gap, 0px) }`.",
+        "description": "Let the page scroll while the picker is open. When false, page scroll is locked on `<html>`\n(and on `<body>` when it is the scroll container), and `<html>` gets `--tp-scrollbar-gap` set to the removed\nscrollbar width for your own fixed or sticky elements, e.g. `header { padding-right: var(--tp-scrollbar-gap, 0px) }`.",
         "default": "false"
       },
       {
         "name": "enableScrollbar",
         "optional": true,
         "type": "boolean",
-        "description": "Enable scrollbar when timepicker is open.\r\nWhen false, page scroll is locked on `<html>` (and on `<body>` when it is the scroll container),\r\nand `<html>` gets `--tp-scrollbar-gap` set to the removed scrollbar width for your own fixed or\r\nsticky elements, e.g. `header { padding-right: var(--tp-scrollbar-gap, 0px) }`.",
-        "default": "false"
+        "description": "Enable scrollbar when timepicker is open.\nWhen false, page scroll is locked on `<html>` (and on `<body>` when it is the scroll container),\nand `<html>` gets `--tp-scrollbar-gap` set to the removed scrollbar width for your own fixed or\nsticky elements, e.g. `header { padding-right: var(--tp-scrollbar-gap, 0px) }`.",
+        "default": "false",
+        "deprecated": "Use `allowPageScroll`. Removed in 5.0."
       },
       {
         "name": "cssClass",
@@ -178,10 +250,17 @@
       {
         "name": "clearButton",
         "optional": true,
-        "type": "boolean | { clearInput?: boolean }",
+        "type": "boolean | object",
         "description": "Show the Clear button. The object form also sets what Clear does: `clearInput: false` keeps the input value.",
         "default": "false",
-        "example": "clearButton: { clearInput: false }"
+        "example": "clearButton: { clearInput: false }",
+        "fields": [
+          {
+            "name": "clearInput",
+            "optional": true,
+            "type": "boolean"
+          }
+        ]
       },
       {
         "name": "appendTo",
@@ -195,7 +274,8 @@
         "optional": true,
         "type": "string",
         "description": "Selector where to append modal (default: body)",
-        "default": "\"\""
+        "default": "\"\"",
+        "deprecated": "Use `appendTo`. Removed in 5.0."
       },
       {
         "name": "keyboardIcon",
@@ -209,7 +289,8 @@
         "optional": true,
         "type": "string",
         "description": "Custom keyboard icon template (desktop → mobile)",
-        "default": "Material Icons template"
+        "default": "Material Icons template",
+        "deprecated": "Use `keyboardIcon`. Removed in 5.0."
       },
       {
         "name": "clockIcon",
@@ -223,14 +304,47 @@
         "optional": true,
         "type": "string",
         "description": "Custom schedule icon template (mobile → desktop)",
-        "default": "Material Icons template"
+        "default": "Material Icons template",
+        "deprecated": "Use `clockIcon`. Removed in 5.0."
       },
       {
         "name": "inline",
         "optional": true,
-        "type": "{ enabled: boolean; /** * @description Element, or selector of the element, the inline picker renders into. Required when `enabled` is true. * @example container: '#timepicker-container' */ container?: string | HTMLElement; /** * @deprecated Use `container`. Removed in 5.0. */ containerId?: string; /** * @description Show the OK and Cancel buttons. OK writes the time to the input and Cancel brings back the time from the input; the picker stays visible either way. * @default false */ showButtons?: boolean; autoUpdate?: boolean; }",
+        "type": "object",
         "description": "Inline mode configuration",
-        "example": "inline: {\r\n  enabled: true,\r\n  container: '#timepicker-container',\r\n  showButtons: false,\r\n  autoUpdate: true\r\n}"
+        "example": "inline: {\n  enabled: true,\n  container: '#timepicker-container',\n  showButtons: false,\n  autoUpdate: true\n}",
+        "fields": [
+          {
+            "name": "enabled",
+            "optional": false,
+            "type": "boolean"
+          },
+          {
+            "name": "container",
+            "optional": true,
+            "type": "string | HTMLElement",
+            "description": "Element, or selector of the element, the inline picker renders into. Required when `enabled` is true.",
+            "example": "container: '#timepicker-container'"
+          },
+          {
+            "name": "containerId",
+            "optional": true,
+            "type": "string",
+            "deprecated": "Use `container`. Removed in 5.0."
+          },
+          {
+            "name": "showButtons",
+            "optional": true,
+            "type": "boolean",
+            "description": "Show the OK and Cancel buttons. OK writes the time to the input and Cancel brings back the time from the input; the picker stays visible either way.",
+            "default": "false"
+          },
+          {
+            "name": "autoUpdate",
+            "optional": true,
+            "type": "boolean"
+          }
+        ]
       }
     ]
   },
@@ -277,7 +391,8 @@
         "optional": true,
         "type": "string",
         "description": "Time label on desktop",
-        "default": "\"Select time\""
+        "default": "\"Select time\"",
+        "deprecated": "Use `clockTitle`. Removed in 5.0."
       },
       {
         "name": "keyboardTitle",
@@ -291,7 +406,8 @@
         "optional": true,
         "type": "string",
         "description": "Time label on mobile",
-        "default": "\"Enter Time\""
+        "default": "\"Enter Time\"",
+        "deprecated": "Use `keyboardTitle`. Removed in 5.0."
       },
       {
         "name": "hour",
@@ -304,7 +420,7 @@
         "name": "minute",
         "optional": true,
         "type": "string",
-        "description": "Minute field caption, its accessible name, the dial name on the minutes face, and the prefix of the minute announcement.\r\nUntil 5.0 the minute announcement keeps its own default, `Minutes`, when neither `minute` nor `announceMinute` is set.",
+        "description": "Minute field caption, its accessible name, the dial name on the minutes face, and the prefix of the minute announcement.\nUntil 5.0 the minute announcement keeps its own default, `Minutes`, when neither `minute` nor `announceMinute` is set.",
         "default": "\"Minute\""
       },
       {
@@ -319,14 +435,16 @@
         "optional": true,
         "type": "string",
         "description": "Hour label on mobile",
-        "default": "\"Hour\""
+        "default": "\"Hour\"",
+        "deprecated": "Use `hour`. Removed in 5.0."
       },
       {
         "name": "mobileMinute",
         "optional": true,
         "type": "string",
         "description": "Minute label on mobile",
-        "default": "\"Minute\""
+        "default": "\"Minute\"",
+        "deprecated": "Use `minute`. Removed in 5.0."
       },
       {
         "name": "clear",
@@ -340,14 +458,16 @@
         "optional": true,
         "type": "string",
         "description": "Accessible label for the hour spinbutton and the clock dial while it shows hours",
-        "default": "\"Hour\""
+        "default": "\"Hour\"",
+        "deprecated": "Use `hour`. Removed in 5.0."
       },
       {
         "name": "minuteLabel",
         "optional": true,
         "type": "string",
         "description": "Accessible label for the minute spinbutton and the clock dial while it shows minutes",
-        "default": "\"Minute\""
+        "default": "\"Minute\"",
+        "deprecated": "Use `minute`. Removed in 5.0."
       },
       {
         "name": "clock",
@@ -361,7 +481,8 @@
         "optional": true,
         "type": "string",
         "description": "Accessible label for the group that wraps the analog clock dial",
-        "default": "\"Clock\""
+        "default": "\"Clock\"",
+        "deprecated": "Use `clock`. Removed in 5.0."
       },
       {
         "name": "period",
@@ -375,7 +496,8 @@
         "optional": true,
         "type": "string",
         "description": "Accessible label for the AM/PM period group",
-        "default": "\"Period\""
+        "default": "\"Period\"",
+        "deprecated": "Use `period`. Removed in 5.0."
       },
       {
         "name": "timeFields",
@@ -389,14 +511,16 @@
         "optional": true,
         "type": "string",
         "description": "Accessible label for the time wrapper group / tips",
-        "default": "\"Time\""
+        "default": "\"Time\"",
+        "deprecated": "Use `timeFields`. Removed in 5.0."
       },
       {
         "name": "format24Label",
         "optional": true,
         "type": "string",
         "description": "Accessible label for the 24-hour tips group",
-        "default": "\"24-hour\""
+        "default": "\"24-hour\"",
+        "deprecated": "Has no effect. Removed in 5.0."
       },
       {
         "name": "range",
@@ -410,7 +534,8 @@
         "optional": true,
         "type": "string",
         "description": "Accessible label for the range selection tablist",
-        "default": "\"Range selection\""
+        "default": "\"Range selection\"",
+        "deprecated": "Use `range`. Removed in 5.0."
       },
       {
         "name": "rangeFrom",
@@ -445,7 +570,8 @@
         "optional": true,
         "type": "string",
         "description": "Accessible label for the keyboard-input switch icon",
-        "default": "\"Switch to keyboard input\""
+        "default": "\"Switch to keyboard input\"",
+        "deprecated": "Use `switchToKeyboard`. Removed in 5.0."
       },
       {
         "name": "switchToClock",
@@ -459,35 +585,40 @@
         "optional": true,
         "type": "string",
         "description": "Accessible label for the clock-view switch icon",
-        "default": "\"Switch to clock\""
+        "default": "\"Switch to clock\"",
+        "deprecated": "Use `switchToClock`. Removed in 5.0."
       },
       {
         "name": "toggleLabel",
         "optional": true,
         "type": "string",
         "description": "Accessible label for the generic view toggle button",
-        "default": "\"Toggle\""
+        "default": "\"Toggle\"",
+        "deprecated": "Has no effect; the view switch button is labelled by `switchToKeyboard` / `switchToClock`. Removed in 5.0."
       },
       {
         "name": "timezoneSelectorLabel",
         "optional": true,
         "type": "string",
         "description": "Accessible label for the timezone selector",
-        "default": "\"Timezone\""
+        "default": "\"Timezone\"",
+        "deprecated": "Has no effect; use `labels.timezone`. Removed in 5.0."
       },
       {
         "name": "announceHour",
         "optional": true,
         "type": "string",
         "description": "Screen-reader announcement prefix for the selected hour",
-        "default": "\"Hour\""
+        "default": "\"Hour\"",
+        "deprecated": "Use `hour`. Removed in 5.0."
       },
       {
         "name": "announceMinute",
         "optional": true,
         "type": "string",
         "description": "Screen-reader announcement prefix for the selected minutes",
-        "default": "\"Minutes\""
+        "default": "\"Minutes\"",
+        "deprecated": "Use `minute`. Removed in 5.0."
       },
       {
         "name": "announceAmSelected",
@@ -534,7 +665,8 @@
         "optional": true,
         "type": "boolean",
         "description": "Focus input after closing modal. Old name of `returnFocus`.",
-        "default": "false"
+        "default": "false",
+        "deprecated": "Use `returnFocus`. Removed in 5.0."
       },
       {
         "name": "focusTrap",
@@ -561,7 +693,7 @@
   },
   "timezone": {
     "interface": "TimezoneOptions",
-    "description": "Optional timezone selector for B2B/global use cases.\r\nThis is a presentation layer only - no automatic time conversions.",
+    "description": "Optional timezone selector for B2B/global use cases.\nThis is a presentation layer only - no automatic time conversions.",
     "options": [
       {
         "name": "enabled",
@@ -574,28 +706,30 @@
         "name": "default",
         "optional": true,
         "type": "string",
-        "description": "Default timezone ID (e.g., 'America/New_York')\r\nUses browser's local timezone if not specified."
+        "description": "Default timezone ID (e.g., 'America/New_York')\nUses browser's local timezone if not specified."
       },
       {
         "name": "list",
         "optional": true,
         "type": "readonly string[]",
-        "description": "Timezone IDs shown in the selector, instead of the built-in list.\r\nIf not provided, uses a curated list of common timezones.",
+        "description": "Timezone IDs shown in the selector, instead of the built-in list.\nIf not provided, uses a curated list of common timezones.",
         "example": "list: ['UTC', 'America/New_York', 'Europe/London']"
       },
       {
         "name": "whitelist",
         "optional": true,
         "type": "readonly string[]",
-        "description": "Whitelist of allowed timezone IDs.\r\nIf not provided, uses a curated list of common timezones.",
-        "example": "whitelist: ['UTC', 'America/New_York', 'Europe/London']"
+        "description": "Whitelist of allowed timezone IDs.\nIf not provided, uses a curated list of common timezones.",
+        "example": "whitelist: ['UTC', 'America/New_York', 'Europe/London']",
+        "deprecated": "Use `list`. Removed in 5.0."
       },
       {
         "name": "label",
         "optional": true,
         "type": "string",
         "description": "Label for timezone selector",
-        "default": "\"Timezone\""
+        "default": "\"Timezone\"",
+        "deprecated": "Use `labels.timezone`. Removed in 5.0."
       }
     ]
   },
@@ -606,35 +740,35 @@
         "name": "placement",
         "optional": true,
         "type": "'auto' | 'top' | 'bottom'",
-        "description": "Popover placement relative to input in compact-wheel mode.\r\nWhen unset, compact-wheel opens as a modal.\r\nSet 'auto' | 'top' | 'bottom' to show compact-wheel as a popover:\r\n'auto' opens below if space allows, otherwise above. 'top' / 'bottom' open on that side\r\nwhile it has room for at least three wheel rows, otherwise on the other side.\r\nIn every placement the popover stays inside the viewport and scrolls when it is too tall.",
+        "description": "Popover placement relative to input in compact-wheel mode.\nWhen unset, compact-wheel opens as a modal.\nSet 'auto' | 'top' | 'bottom' to show compact-wheel as a popover:\n'auto' opens below if space allows, otherwise above. 'top' / 'bottom' open on that side\nwhile it has room for at least three wheel rows, otherwise on the other side.\nIn every placement the popover stays inside the viewport and scrolls when it is too tall.",
         "default": "undefined (modal)"
       },
       {
         "name": "hideFooter",
         "optional": true,
         "type": "boolean",
-        "description": "When true, the footer (OK/Cancel/Clear buttons + switch icon)\r\nis not rendered in the DOM at all. Only works in compact-wheel mode.\r\nUseful when commitOnScroll is enabled and buttons are unnecessary.",
+        "description": "When true, the footer (OK/Cancel/Clear buttons + switch icon)\nis not rendered in the DOM at all. Only works in compact-wheel mode.\nUseful when commitOnScroll is enabled and buttons are unnecessary.",
         "default": "false"
       },
       {
         "name": "commitOnScroll",
         "optional": true,
         "type": "boolean",
-        "description": "When enabled, the timepicker automatically commits the selected time\r\nat the end of wheel scrolling, updating the input value and emitting a change event\r\nwithout requiring the user to press OK. Only applies to wheel and compact-wheel modes.",
+        "description": "When enabled, the timepicker automatically commits the selected time\nat the end of wheel scrolling, updating the input value and emitting a change event\nwithout requiring the user to press OK. Only applies to wheel and compact-wheel modes.",
         "default": "false"
       },
       {
         "name": "hideDisabled",
         "optional": true,
         "type": "boolean",
-        "description": "When true, disabled hours/minutes/seconds are completely removed from the wheel list\r\ninstead of being dimmed. Only applies to wheel and compact-wheel modes.\r\nUseful when many values are disabled (e.g., business hours only).",
+        "description": "When true, disabled hours/minutes/seconds are completely removed from the wheel list\ninstead of being dimmed. Only applies to wheel and compact-wheel modes.\nUseful when many values are disabled (e.g., business hours only).",
         "default": "false"
       },
       {
         "name": "ignoreOutsideClick",
         "optional": true,
         "type": "boolean",
-        "description": "When true, clicking outside the picker area does not close it.\r\nOnly applies to wheel and compact-wheel modes (popover and modal).\r\nThe user must explicitly press OK or Cancel to close the picker.",
+        "description": "When true, clicking outside the picker area does not close it.\nOnly applies to wheel and compact-wheel modes (popover and modal).\nThe user must explicitly press OK or Cancel to close the picker.",
         "default": "false"
       }
     ]
@@ -666,14 +800,16 @@
         "optional": true,
         "type": "string",
         "description": "Label for \"from\" segment",
-        "default": "\"From\""
+        "default": "\"From\"",
+        "deprecated": "Use `labels.rangeFrom`. Removed in 5.0."
       },
       {
         "name": "toLabel",
         "optional": true,
         "type": "string",
         "description": "Label for \"to\" segment",
-        "default": "\"To\""
+        "default": "\"To\"",
+        "deprecated": "Use `labels.rangeTo`. Removed in 5.0."
       }
     ]
   },
@@ -738,13 +874,15 @@
         "name": "onSelectAM",
         "optional": true,
         "type": "TimepickerEventCallback<SelectAMEventData>",
-        "description": "Triggered when AM is selected"
+        "description": "Triggered when AM is selected",
+        "deprecated": "Use `onSelectPeriod`. Removed in 5.0."
       },
       {
         "name": "onSelectPM",
         "optional": true,
         "type": "TimepickerEventCallback<SelectPMEventData>",
-        "description": "Triggered when PM is selected"
+        "description": "Triggered when PM is selected",
+        "deprecated": "Use `onSelectPeriod`. Removed in 5.0."
       },
       {
         "name": "onSwitchView",
@@ -816,7 +954,8 @@
         "optional": true,
         "type": "boolean",
         "description": "Whether clicking clear also empties the input field value",
-        "default": "true"
+        "default": "true",
+        "deprecated": "Use `ui.clearButton: { clearInput }`. Removed in 5.0."
       }
     ]
   }

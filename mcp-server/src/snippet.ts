@@ -4,7 +4,8 @@ export interface SnippetArgs {
   selector: string;
   theme: string;
   mode: string;
-  clockType: '12h' | '24h';
+  clockType: '12h' | '24h' | 'auto';
+  showSeconds: boolean;
   plugins: string[];
   framework: 'vanilla' | 'react';
 }
@@ -27,6 +28,7 @@ function optionsFor(args: SnippetArgs): string {
   if (args.mode && args.mode !== 'clock') ui.push(`mode: '${args.mode}'`);
 
   const clock: string[] = [`type: '${args.clockType}'`];
+  if (args.showSeconds) clock.push('showSeconds: true');
 
   const groups: string[] = [];
   if (ui.length) groups.push(`  ui: { ${ui.join(', ')} },`);
@@ -65,7 +67,11 @@ export function buildSnippet(args: SnippetArgs): string {
       '    picker.create();',
       '    return () => picker.destroy();',
       '  }, []);',
-      '  return <input ref={ref} />;',
+      '  return (',
+      '    <div className="tp-ui">',
+      '      <input ref={ref} type="text" />',
+      '    </div>',
+      '  );',
       '}',
     ].join('\n');
   }

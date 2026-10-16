@@ -1,0 +1,99 @@
+:root {
+  color-scheme: light;
+
+  --paper: #ffffff;
+  --ink: #0d0d0d;
+  --ink-2: #474747;
+  --ink-3: #6b6b6b;
+  --hair: #e2e2e2;
+  --scene: #f3f3f3;
+  --scene-dark: #1a1a1a;
+  --scene-dark-ink: #ececec;
+  --scene-light: #f3f3f3;
+  --scene-light-ink: #0d0d0d;
+  --code: #f6f6f6;
+  --danger: #b3261e;
+
+  --font-text: var(--font-atkinson), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-atkinson-mono), ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  --text-display: clamp(2.375rem, 1.6rem + 3.3vw, 3.625rem);
+  --text-h1: clamp(2.125rem, 1.75rem + 1.25vw, 2.75rem);
+  --text-h2-home: clamp(1.75rem, 1.5rem + 0.9vw, 2.125rem);
+  --text-h2: clamp(1.5rem, 1.4rem + 0.3vw, 1.625rem);
+  --text-h3: 1.25rem;
+  --text-lede: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+  --text-body: clamp(1.03125rem, 1rem + 0.1vw, 1.0625rem);
+  --text-meta: 0.9375rem;
+  --text-small: 0.875rem;
+  --text-code: 0.90625rem;
+
+  --leading-tight: 1.06;
+  --leading-heading: 1.15;
+  --leading-body: 1.65;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 72px;
+  --space-9: 112px;
+
+  --radius-0: 0;
+  --radius-1: 2px;
+
+  --dur-fast: 120ms;
+  --dur: 200ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  --header-h: 56px;
+  --sidebar-w: 250px;
+  --toc-w: 230px;
+  --article-max: 1040px;
+  --measure: 70ch;
+  --content-max: 1280px;
+  --gutter: 16px;
+  --control-h: 2.125rem;
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  --paper: #111111;
+  --ink: #ececec;
+  --ink-2: #b8b8b8;
+  --ink-3: #969696;
+  --hair: #2b2b2b;
+  --scene: #2a2a2a;
+  --code: #181818;
+  --danger: #f2b8b5;
+}
+
+@media (pointer: coarse) {
+  :root {
+    --control-h: 2.75rem;
+  }
+}
+
+@media (min-width: 40rem) {
+  :root {
+    --gutter: 24px;
+  }
+}
+
+@media (min-width: 60rem) {
+  :root {
+    --gutter: 32px;
+    --header-h: 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur: 0ms;
+  }
+}

@@ -6,6 +6,13 @@ export interface CustomThemeArgs {
   onlyCommon: boolean;
 }
 
+export interface CustomThemeResult {
+  css: string;
+  warnings: string[];
+}
+
+export const CLASS_NAME = /^[a-z_][a-z0-9_-]*$/i;
+
 function normalizeVarName(key: string): string {
   const trimmed = key.trim();
   if (trimmed.startsWith('--')) return trimmed;
@@ -13,39 +20,55 @@ function normalizeVarName(key: string): string {
   return `--tp-${trimmed}`;
 }
 
-export function buildCustomTheme(args: CustomThemeArgs): string {
+export function buildCustomTheme(args: CustomThemeArgs): CustomThemeResult {
   const known = new Map(CSS_VARS.map((v) => [v.name, v]));
-  const base = args.onlyCommon ? CSS_VARS.filter((v) => v.commonlyThemed) : CSS_VARS;
+  const scaffold = CSS_VARS.filter((v) => v.read && !v.readOutsideWrapper && (!args.onlyCommon || v.commonlyThemed));
+  const overrides = new Map(Object.entries(args.overrides).map(([k, v]) => [normalizeVarName(k), v] as const));
 
-  const overridePairs = Object.entries(args.overrides).map(([k, v]) => [normalizeVarName(k), v] as const);
-  const overrideMap = new Map(overridePairs);
+  const wrapper = `.tp-ui-wrapper.${args.name}`;
+  const root = `.tp-ui.${args.name}`;
+  const modal = '.tp-ui-modal[data-theme]';
+  const blocks = new Map<string, string[]>([[wrapper, []]]);
+  const add = (selector: string, line: string) => blocks.set(selector, [...(blocks.get(selector) ?? []), line]);
+  const warnings: string[] = [];
 
-  const lines: string[] = [`[data-theme='${args.name}'] {`];
-
-  if (overrideMap.size > 0) {
-    for (const [name, value] of overrideMap) {
-      const fallback = known.get(name);
-      const suffix = fallback ? '' : '  /* not a known --tp- variable, verify the name */';
-      lines.push(`  ${name}: ${value};${suffix}`);
+  if (overrides.size > 0) {
+    for (const [name, value] of overrides) {
+      const info = known.get(name);
+      if (!info) {
+        warnings.push(`${name} is not a --tp- variable timepicker-ui defines. Check the name with list_css_variables.`);
+        add(wrapper, `  ${name}: ${value};`);
+      } else if (!info.read) {
+        warnings.push(`${name} has no effect: no rule reads it, and 5.0 removes it. It was left out.`);
+      } else if (info.readOutsideWrapper?.includes('tp-ui-modal')) {
+        add(modal, `  ${name}: ${value};`);
+        warnings.push(`${name} is read on .tp-ui-modal, outside .tp-ui-wrapper, so it is set there and applies to every picker.`);
+      } else if (info.readOutsideWrapper) {
+        add(root, `  ${name}: ${value};`);
+      } else {
+        add(wrapper, `  ${name}: ${value};`);
+      }
     }
   } else {
-    for (const v of base) {
-      lines.push(`  ${v.name}: ${v.value};`);
-    }
+    for (const v of scaffold) add(wrapper, `  ${v.name}: ${v.default ?? 'initial'};`);
   }
-
-  lines.push('}');
 
   const header = [
     `/* Custom timepicker-ui theme: "${args.name}"`,
     ' *',
-    ' * 1. Save this CSS and import it in your app (after timepicker-ui/main.css).',
-    " * 2. Pass ui.theme = '" + args.name + "' (cast as any in TS — custom names are not in the union).",
+    " * 1. Import this CSS after 'timepicker-ui/main.css' (and after a built-in theme file if you combine them).",
+    ` * 2. Pass the class: new TimepickerUI(input, { ui: { cssClass: '${args.name}' } }).`,
+    " *    It can be combined with a built-in theme as the base: ui: { theme: 'dark', cssClass: '" + args.name + "' }.",
     ' *',
-    " * The picker sets data-theme on its modal, so [data-theme='" + args.name + "'] scopes your overrides.",
+    ` * The picker adds the class to .tp-ui-wrapper when it opens, so .tp-ui-wrapper.${args.name} scopes these values.`,
     ' */',
     '',
   ].join('\n');
 
-  return `${header}${lines.join('\n')}\n`;
+  const css = [...blocks]
+    .filter(([, lines]) => lines.length > 0)
+    .map(([selector, lines]) => `${selector} {\n${lines.join('\n')}\n}`)
+    .join('\n\n');
+
+  return { css: `${header}${css}\n`, warnings };
 }

@@ -37,3 +37,12 @@ export function useDarkMode(): boolean {
     getDarkServerSnapshot,
   );
 }
+
+export function toggleDarkMode(): void {
+  const dark = document.documentElement.classList.toggle("dark");
+  try {
+    localStorage.setItem("theme", dark ? "dark" : "light");
+  } catch {
+    // Storage can be blocked (private mode); the class toggle still applies.
+  }
+}
