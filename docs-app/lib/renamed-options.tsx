@@ -112,7 +112,7 @@ export const renamedOptions: RenamedRow[] = [
     note: (
       <>
         Method. See{" "}
-        <Link href="/docs/api/methods" className="text-primary underline">
+        <Link href="/docs/api/methods">
           Methods
         </Link>
         .

@@ -1,0 +1,130 @@
+.wrap {
+  margin: var(--space-4) 0 var(--space-6);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-meta);
+}
+
+.table,
+.table tbody,
+.table tr,
+.table td {
+  display: block;
+}
+
+.table thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.caption {
+  display: block;
+  padding-top: var(--space-2);
+  color: var(--ink-2);
+  font-size: var(--text-small);
+  text-align: left;
+  caption-side: bottom;
+}
+
+.table tr {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.table tbody tr:first-child {
+  border-top: 1px solid var(--ink);
+}
+
+.table td + td {
+  margin-top: var(--space-1);
+}
+
+.table td + td::before {
+  content: attr(data-label) ": ";
+  color: var(--ink-3);
+  font-size: var(--text-small);
+}
+
+.first {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.first code {
+  padding: 0;
+  background: none;
+  font-weight: 700;
+}
+
+.mono {
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+}
+
+@media (min-width: 40rem) {
+  .wrap {
+    overflow-x: auto;
+  }
+
+  .table {
+    display: table;
+  }
+
+  .table thead {
+    position: static;
+    display: table-header-group;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+  }
+
+  .caption {
+    display: table-caption;
+  }
+
+  .table tbody {
+    display: table-row-group;
+  }
+
+  .table tr {
+    display: table-row;
+    padding: 0;
+  }
+
+  .table th,
+  .table td {
+    display: table-cell;
+    padding: var(--space-3) var(--space-3) var(--space-3) 0;
+    border-bottom: 1px solid var(--hair);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .table th {
+    padding-block: var(--space-2);
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    font-size: var(--text-small);
+    font-weight: 700;
+  }
+
+  .table tbody tr:first-child {
+    border-top: 0;
+  }
+
+  .table td + td {
+    margin-top: 0;
+  }
+
+  .table td + td::before {
+    content: none;
+  }
+}

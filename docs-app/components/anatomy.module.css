@@ -1,0 +1,132 @@
+.frame {
+  width: 100%;
+  container: anatomy / inline-size;
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  justify-items: safe center;
+  gap: var(--space-5);
+  overflow-x: auto;
+}
+
+.host {
+  position: relative;
+}
+
+.balloon {
+  position: absolute;
+  z-index: 2;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font: 700 12px/22px var(--font-mono);
+  text-align: center;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.notes {
+  width: 100%;
+  max-width: 40rem;
+  margin: 0;
+  padding: 0 var(--gutter);
+  list-style: none;
+}
+
+.note {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--hair);
+  color: var(--ink-2);
+  font-size: var(--text-meta);
+}
+
+.number {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font: 700 12px/22px var(--font-mono);
+  text-align: center;
+}
+
+.noteText code {
+  display: block;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.lines {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.lines polyline {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.lines circle {
+  fill: var(--ink);
+}
+
+.stage[data-wide] {
+  display: block;
+}
+
+.stage[data-wide] .host {
+  width: max-content;
+  margin: 0 auto;
+}
+
+@container anatomy (min-width: 1032px) {
+  .stage {
+    padding-bottom: 24px;
+    overflow: visible;
+  }
+
+  .notes {
+    max-width: none;
+    padding: 0;
+  }
+
+  .stage:not([data-wide]) .notes {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .note {
+    position: absolute;
+    display: block;
+    width: 280px;
+    padding: 0;
+    border: 0;
+    line-height: 1.4;
+  }
+
+  .note[data-side="left"] {
+    text-align: right;
+  }
+
+  .note:not([data-placed]) {
+    visibility: hidden;
+  }
+
+  .number {
+    display: none;
+  }
+}

@@ -1,0 +1,274 @@
+.root {
+  opacity: 0;
+  animation-name: skeleton-in;
+  animation-duration: var(--dur);
+  animation-timing-function: var(--ease);
+  animation-delay: 300ms;
+  animation-fill-mode: forwards;
+}
+
+:not(:empty) + .root {
+  display: none;
+}
+
+.card {
+  --skeleton-block: color-mix(in srgb, var(--ink) 50%, var(--paper));
+  --skeleton-tint: color-mix(in srgb, var(--ink) 12%, var(--paper));
+  width: 328px;
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 8px;
+  outline: 1px solid var(--skeleton-tint);
+  outline-offset: -1px;
+  background-color: var(--paper);
+}
+
+.card[data-mode="compact-wheel"] {
+  padding-top: 12px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  height: calc(1lh + 48px);
+  padding: 0 24px;
+  font-size: 12px;
+}
+
+.titleLine {
+  width: 64px;
+  height: 8px;
+  border-radius: 4px;
+  background-color: var(--skeleton-block);
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  height: 116px;
+  padding: 0 24px 36px;
+}
+
+.field {
+  flex: none;
+  width: 96px;
+  height: 80px;
+  border-radius: 8px;
+  background-color: var(--skeleton-block);
+}
+
+.colon {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 24px;
+}
+
+.colonDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--skeleton-block);
+}
+
+.period {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 2px;
+  width: 52px;
+  margin-left: 12px;
+}
+
+.periodHalf {
+  flex: 1;
+  background-color: var(--skeleton-block);
+}
+
+.periodHalf:first-child {
+  border-radius: 7px 7px 0 0;
+}
+
+.periodHalf:last-child {
+  border-radius: 0 0 7px 7px;
+}
+
+.face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 256px;
+}
+
+.dial {
+  position: relative;
+  flex: none;
+  width: 256px;
+  height: 256px;
+  border-radius: 50%;
+  background-color: var(--skeleton-block);
+}
+
+.tip {
+  position: absolute;
+  top: calc(50% - 5px);
+  left: calc(50% - 5px);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--paper);
+  transform: rotate(var(--angle)) translateY(-103px);
+}
+
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: calc(50% - 1px);
+  width: 2px;
+  height: 31%;
+  background-color: var(--paper);
+}
+
+.hand::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background-color: var(--paper);
+  transform: translate(-50%, -100%);
+}
+
+.pivot {
+  position: absolute;
+  top: calc(50% - 4px);
+  left: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--paper);
+}
+
+.wheel {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 0;
+}
+
+.band {
+  position: absolute;
+  top: calc(50% - 22px);
+  right: 8px;
+  left: 8px;
+  height: 44px;
+  border-radius: 8px;
+  background-color: var(--skeleton-tint);
+}
+
+.column {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  width: 76px;
+}
+
+.periodColumn {
+  width: 64px;
+  margin-left: 4px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+}
+
+.line {
+  width: 20px;
+  height: 8px;
+  border-radius: 4px;
+  background-color: var(--skeleton-block);
+}
+
+.selected {
+  width: 24px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--skeleton-block);
+}
+
+.separator {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 20px;
+}
+
+.separatorDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--skeleton-block);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 4px;
+  padding: 24px;
+  font-size: 14px;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(1lh + 20px);
+  padding: 0 24px;
+}
+
+.cancel {
+  width: 44px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--skeleton-block);
+}
+
+.ok {
+  width: 20px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--skeleton-block);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card {
+    animation: skeleton-pulse 1s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes skeleton-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes skeleton-pulse {
+  to {
+    opacity: 0.85;
+  }
+}

@@ -1,0 +1,64 @@
+.stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0 var(--space-3);
+}
+
+.stage[data-reserve="clock"] {
+  min-height: 535px;
+}
+
+.stage[data-reserve="wheel"] {
+  min-height: 535px;
+}
+
+.stage[data-reserve="compact-wheel"] {
+  min-height: 363px;
+}
+
+.stage[data-reserve="field"] {
+  min-height: 140px;
+}
+
+.stage[data-display="field"] {
+  align-items: center;
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 20rem;
+}
+
+.inlineHost {
+  width: 100%;
+}
+
+.skeleton {
+  position: absolute;
+  top: 0;
+  right: var(--space-3);
+  left: var(--space-3);
+}
+
+.select select {
+  min-height: var(--control-h);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--ink-3);
+  border-radius: var(--radius-1);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: var(--text-small);
+}
+
+.toggle {
+  composes: button from "./copy-button.module.css";
+}
+
+.switch {
+  display: inline-flex;
+  gap: var(--space-1);
+}

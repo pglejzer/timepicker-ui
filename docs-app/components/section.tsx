@@ -1,46 +1,28 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
+import { slugify } from "@/lib/slugify";
+import styles from "./section.module.css";
 
-interface SectionProps {
-  icon: React.ComponentType<{ className?: string }>;
+type SectionProps = {
   title: string;
-  /** Optional muted lead rendered under the title. */
   description?: ReactNode;
-  /** Optional mono eyebrow above the title. */
-  eyebrow?: string;
-  /** Optional anchor id for links into the section. */
   id?: string;
-  children: React.ReactNode;
-}
+  children: ReactNode;
+};
 
-export function Section({
-  icon: Icon,
-  title,
-  description,
-  eyebrow,
-  id,
-  children,
-}: SectionProps) {
+export function Section({ title, description, id, children }: SectionProps) {
+  const anchor = id ?? slugify(title);
+
   return (
-    <section id={id} className="mb-12 scroll-mt-24">
-      <div className="mb-5">
-        <div className="flex items-center gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/60 text-primary">
-            <Icon className="h-4 w-4" />
-          </span>
-          <div className="min-w-0">
-            {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-            <h2 className="display text-xl font-semibold text-foreground sm:text-2xl">
-              {title}
-            </h2>
-          </div>
-        </div>
-        {description && (
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-            {description}
-          </p>
-        )}
-        <div className="mt-4 h-px w-full bg-border" aria-hidden="true" />
+    <section className={styles.section}>
+      <div className={styles.head}>
+        <h2 id={anchor} className={styles.title}>
+          {title}
+        </h2>
+        <a href={`#${anchor}`} className={styles.anchor} aria-label={`Link to section: ${title}`}>
+          #
+        </a>
       </div>
+      {description && <p className={styles.description}>{description}</p>}
       {children}
     </section>
   );

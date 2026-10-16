@@ -1,0 +1,74 @@
+.block {
+  margin: var(--space-4) 0 var(--space-5);
+  border: 1px solid var(--ink);
+}
+
+.bare {
+  margin: 0;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 40px;
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
+  border-bottom: 1px solid var(--hair);
+}
+
+.filename {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.surface {
+  background: var(--code);
+}
+
+.scroller {
+  overflow-x: auto;
+}
+
+.scroller[data-collapsed] {
+  max-height: 24rem;
+  overflow-y: hidden;
+}
+
+.scroller:focus-visible {
+  outline-offset: -2px;
+}
+
+.pre {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--text-code);
+  line-height: 1.65;
+  tab-size: 2;
+}
+
+.number {
+  display: inline-block;
+  width: 2ch;
+  margin-right: var(--space-4);
+  color: var(--ink-3);
+  text-align: right;
+  user-select: none;
+}
+
+.toggle {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2);
+  border-top: 1px solid var(--hair);
+  background: var(--paper);
+}
+
+.toggleButton {
+  composes: button from "./copy-button.module.css";
+}
