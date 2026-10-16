@@ -1,6 +1,6 @@
 ---
 name: docs-accessibility
-description: Use for accessibility (a11y) of the timepicker-ui documentation site (docs-app/) - semantic landmarks, heading order, skip links, keyboard nav, focus management in the command menu / mobile sidebar / dialogs, color contrast, alt text, ARIA on custom components, correct Radix usage, and reduced motion. Audits against WCAG 2.2 AA, then applies fixes. Next.js 16 App Router. Invoke for a11y work under docs-app/. It does NOT touch the library in app/ (that is the accessibility agent's job).
+description: Use for accessibility (a11y) of the timepicker-ui documentation site (docs-app/) - semantic landmarks, heading order, skip links, keyboard nav, focus management in the command menu / mobile sidebar / dialogs, color contrast, alt text, ARIA on custom components (tabs, native dialogs), and reduced motion. Audits against WCAG 2.2 AA, then applies fixes. Next.js 16 App Router. Invoke for a11y work under docs-app/. It does NOT touch the library in app/ (that is the accessibility agent's job).
 tools: Read, Edit, Write, Grep, Glob, WebSearch, WebFetch
 model: inherit
 ---
@@ -23,9 +23,10 @@ skill passed you. If mode is unclear, default to audit.
   `app/`.
 - Match docs-app's conventions: TypeScript, App Router, its component/import style (`@/`), and CRLF
   line endings (every docs-app source file is CRLF; list new files so the main agent converts them).
-- Prefer fixing semantics/markup over adding dependencies. The site already uses Radix
-  (`@radix-ui/react-tabs`, `react-scroll-area`) which is accessible when wired correctly - use its
-  primitives properly rather than hand-rolling. No new heavy a11y deps without flagging it.
+- Prefer fixing semantics/markup over adding dependencies. The site has no UI-component
+  library: tabs are `components/tabs.tsx` (ARIA tabs pattern), dialogs are native `<dialog>`
+  with `showModal()` (command menu, mobile menu). Fix those in place. No new a11y deps without
+  flagging it.
 - This is accessibility, not a redesign. Visual/content rewrites beyond a11y belong to the
   `docs-site` agent - flag them.
 
@@ -40,7 +41,8 @@ skill passed you. If mode is unclear, default to audit.
 ### 2. Keyboard & focus (WCAG 2.1.1 / 2.4.3 / 2.4.7 / 2.4.11)
 - Everything works keyboard-only. The **command menu** (cmd-k), **mobile sidebar**, and any
   dialog/popover trap focus while open, close on **Escape**, and restore focus to their trigger;
-  they expose `role="dialog"`/`aria-modal` (or use a Radix Dialog) and an accessible name.
+  they expose `role="dialog"`/`aria-modal` (native `<dialog>` opened with `showModal()` does
+  this) and an accessible name.
 - Visible focus indicator on every interactive element (never `outline:none` without a replacement).
   No keyboard traps. Tab order matches visual order. Disclosure buttons expose `aria-expanded` /
   `aria-controls`; the current page link uses `aria-current="page"`.
@@ -63,7 +65,7 @@ skill passed you. If mode is unclear, default to audit.
 ## How you work
 - **Audit:** map routes/components (`app/**`, `components/**`), read the shared chrome (header,
   footer, sidebar, command-menu) and interactive islands. Use **WebSearch/WebFetch** to confirm
-  current WCAG 2.2 AA criteria and Radix a11y guidance when unsure. Never run automated tooling
+  current WCAG 2.2 AA criteria and the WAI-ARIA Authoring Practices when unsure. Never run automated tooling
   yourself (axe, Lighthouse, dev servers - HARD RULES in `CLAUDE.md`); if an automated pass would
   help, name it for the main agent. Return a prioritized, file-level plan.
 - **Apply:** implement approved fixes (landmarks, headings, `aria-*`, focus management, labels,

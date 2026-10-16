@@ -52,8 +52,8 @@ put in its brief, not a second source of truth (if the agent's rules change, its
   optimizing from memory. Live sources win over anything hardcoded; it cites sources + dates.
 - **Run the AI-slop check on text AND icons** in both modes. Scan existing and proposed titles/descriptions/
   FAQ copy for slop and long dashes (`—`/`–`), and the SEO/OG surface for stray Unicode emojis
-  or native/system icons (the site uses `lucide-react` — emoji/native icons are a defect to
-  flag, not ship).
+  or native/system icons (the site draws its few icons as inline SVG in `components/icons.tsx`;
+  emoji/native icons are a defect to flag, not ship).
 
 It makes NO edits in this phase.
 
@@ -70,7 +70,7 @@ Dispatch the `seo-optimizer` subagent again in **apply mode** with the exact app
 (files + the decided titles/descriptions/answer-first copy/structured data). It implements the
 changes under `docs-app/` using real Next 16 typed APIs, keeping titles/descriptions unique,
 on-keyword, answer-first where it's a docs page, and written like a human — short, specific, no
-AI slop, no long dashes, and no emojis/native icons (lucide or none). It keeps the entity
+AI slop, no long dashes, and no emojis/native icons (the site's own SVG icons or none). It keeps the entity
 footprint consistent across hero copy, metadata, OG, and JSON-LD.
 
 ### Phase 4 — Verify & report
@@ -95,7 +95,7 @@ footprint consistent across hero copy, metadata, OG, and JSON-LD.
   *current* guidance.
 - The generated copy is human, short, slop-free: no filler openers or empty intensifiers, no
   keyword stuffing, no long dashes (`—`/`–`, use short hyphens), and no Unicode emojis or
-  native icons (use `lucide-react`).
+  native icons (use the SVG icons in `components/icons.tsx`, or none).
 - Keep this skill, the agent file and `docs-app/` files in CRLF; otherwise follow docs-app's
   own conventions.
 - One run optimizes discoverability; it does not redesign the site. Visual/content rewrites
