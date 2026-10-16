@@ -2,7 +2,9 @@
 
 import { useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
-import { Package, Zap, Ruler } from "lucide-react";
+import { CodeBlock } from "@/components/code-block";
+import { PageHeader } from "@/components/page-header";
+import { Section } from "@/components/section";
 import {
   BundleCard,
   ComparisonSection,
@@ -16,11 +18,18 @@ import {
   type BundleData,
 } from "@/components/bundleStats";
 import bundleData from "@/public/bundle-data.json";
+import styles from "./page.module.css";
 
 const BUNDLE_DATA: BundleData = bundleData as BundleData;
 
-const TAB_PANEL_FOCUS =
-  "rounded-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+// The labels in bundle-data.json start with emoji, so the page names the variants itself.
+const VARIANTS = [
+  { key: "core", label: "Core only" },
+  { key: "full", label: "Full static" },
+  { key: "lazy", label: "Lazy load" },
+] as const;
+
+type BundlerResults = BundleData["results"]["rollup"];
 
 export default function BundleStatsPage() {
   const [activeTab, setActiveTab] = useState<
@@ -83,12 +92,12 @@ export default function BundleStatsPage() {
 
   // Composition for the measuring-tape bar: Core + each plugin = Full.
   const compositionSegments = [
-    { label: "Core", bytes: rollupCore, tone: "primary" as const },
-    { label: "Range plugin", bytes: pluginRangeSize, tone: "info" as const },
+    { label: "Core", bytes: rollupCore, tone: "ink" as const },
+    { label: "Range plugin", bytes: pluginRangeSize, tone: "ink3" as const },
     {
       label: "Timezone plugin",
       bytes: pluginTimezoneSize,
-      tone: "ok" as const,
+      tone: "hair" as const,
     },
   ];
 
@@ -137,119 +146,67 @@ export default function BundleStatsPage() {
   };
 
   return (
-    <main id="main-content" className="flex flex-col">
-      {/* Header */}
-      <section className="relative overflow-hidden border-b border-border">
-        <div className="bp-grid pointer-events-none absolute inset-0 -z-10 opacity-40" />
-        <div className="container mx-auto px-4 py-14 sm:py-16 md:px-6">
-          <p className="eyebrow reveal">Telemetry · gzip + brotli</p>
-          <h1
-            className="display reveal mt-4 text-4xl font-semibold sm:text-5xl md:text-6xl"
-            style={{ animationDelay: "60ms" }}
-          >
-            Bundle analysis
-          </h1>
-          <p
-            className="reveal mt-4 max-w-xl text-muted-foreground"
-            style={{ animationDelay: "120ms" }}
-          >
-            A measurement report of the published bundles - core, full, and
-            lazy-loaded - across four bundlers, with gzip and brotli sizes.
-          </p>
-          <p
-            className="reveal nums mt-5 text-xs text-muted-foreground"
-            style={{ animationDelay: "180ms" }}
-          >
-            Generated{" "}
-            <time dateTime={data.timestamp}>
-              {data.timestamp.slice(0, 10)}
-            </time>
-          </p>
-        </div>
-      </section>
+    <main id="main-content">
+      <div className={styles.inner}>
+        <PageHeader
+          title="Bundle analysis"
+          description="A measurement report of the published bundles - core, full, and lazy-loaded - across four bundlers, with gzip and brotli sizes."
+          meta={
+            <>
+              Generated <time dateTime={data.timestamp}>{data.timestamp.slice(0, 10)}</time>
+            </>
+          }
+        />
 
-      <div className="container mx-auto space-y-10 px-4 py-12 md:px-6">
-        {/* Overview instrument panel */}
-        <div className="reveal">
-          <SummaryStats
-            rollupCore={rollupCore}
-            rollupFull={rollupFull}
-            pluginOverhead={pluginOverhead}
-            criteria={[
-              {
-                passed: rollupFull > rollupCore,
-                text: "Core bundle exists and Full > Core",
-              },
-              {
-                passed: pluginOverhead < rollupCore * 0.5,
-                text: `Plugin overhead reasonable (${formatBytes(pluginOverhead)} < 50% of core)`,
-              },
-              {
-                passed: lazyVsCoreRollup < rollupCore * 0.25,
-                text: `Lazy main ≈ core (delta: ${formatBytes(lazyVsCoreRollup)}, ${((lazyVsCoreRollup / rollupCore) * 100).toFixed(1)}%)`,
-              },
-              { passed: true, text: "Plugin chunks loaded separately" },
-              {
-                passed: rollupVsViteCore < rollupCore * 0.05,
-                text: `Rollup ≈ Vite (diff: ${((rollupVsViteCore / rollupCore) * 100).toFixed(1)}%)`,
-              },
-            ]}
-          />
-        </div>
+        <SummaryStats
+          rollupCore={rollupCore}
+          rollupFull={rollupFull}
+          pluginOverhead={pluginOverhead}
+          criteria={[
+            {
+              passed: rollupFull > rollupCore,
+              text: "Core bundle exists and Full > Core",
+            },
+            {
+              passed: pluginOverhead < rollupCore * 0.5,
+              text: `Plugin overhead reasonable (${formatBytes(pluginOverhead)} < 50% of core)`,
+            },
+            {
+              passed: lazyVsCoreRollup < rollupCore * 0.25,
+              text: `Lazy main ≈ core (delta: ${formatBytes(lazyVsCoreRollup)}, ${((lazyVsCoreRollup / rollupCore) * 100).toFixed(1)}%)`,
+            },
+            { passed: true, text: "Plugin chunks loaded separately" },
+            {
+              passed: rollupVsViteCore < rollupCore * 0.05,
+              text: `Rollup ≈ Vite (diff: ${((rollupVsViteCore / rollupCore) * 100).toFixed(1)}%)`,
+            },
+          ]}
+        />
 
-        {/* Signature: measuring-tape composition bar */}
-        <section className="reveal rounded-xl border border-border bg-card p-6">
-          <div className="mb-5 flex items-center justify-between gap-3">
-            <div>
-              <p className="eyebrow">Composition · gzip</p>
-              <h2 className="display mt-2 text-lg font-medium text-foreground">
-                What makes up the full bundle
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Core plus each lazy plugin, measured to scale.
-              </p>
-            </div>
-            <Ruler
-              className="hidden h-5 w-5 shrink-0 text-muted-foreground sm:block"
-              aria-hidden="true"
-            />
-          </div>
+        <Section
+          title="What makes up the full bundle"
+          description="Core plus each lazy plugin, measured to scale."
+        >
           <CompositionBar
             segments={compositionSegments}
             total={rollupCore + pluginRangeSize + pluginTimezoneSize}
           />
-        </section>
+        </Section>
 
-        {/* Grouped bar chart */}
-        <section className="reveal rounded-xl border border-border bg-card p-6">
-          <div className="mb-5">
-            <p className="eyebrow">Cross-bundler · gzip</p>
-            <h2 className="display mt-2 text-lg font-medium text-foreground">
-              Core vs full, by bundler
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Gzipped size of the minified core and full bundles.
-            </p>
-          </div>
+        <Section
+          title="Core vs full, by bundler"
+          description="Gzipped size of the minified core and full bundles."
+        >
           <BarChart data={chartData} />
           {(!webpackCore || !esbuildCore) && (
-            <p className="mt-4 text-xs text-muted-foreground">
-              Run{" "}
-              <code className="nums rounded border border-border bg-muted px-1.5 py-0.5">
-                npm run analyze:all
-              </code>{" "}
-              in consumer-test to add Webpack &amp; esbuild results.
+            <p className={styles.note}>
+              Run <code>npm run analyze:all</code> in consumer-test to add Webpack &amp; esbuild results.
             </p>
           )}
-        </section>
+        </Section>
 
-        {/* Tabs */}
-        <div className="border-b border-border">
-          <div
-            role="tablist"
-            aria-label="Bundler results"
-            className="-mb-px flex gap-6 overflow-x-auto overflow-y-hidden"
-          >
+        <div className={styles.tabs}>
+          <div role="tablist" aria-label="Bundler results" className={styles.tablist}>
             {tabs.map((t, i) => (
               <TabButton
                 key={t.id}
@@ -275,11 +232,9 @@ export default function BundleStatsPage() {
             id="panel-rollup"
             aria-labelledby="tab-rollup"
             tabIndex={0}
-            className={`grid grid-cols-1 gap-6 lg:grid-cols-3 ${TAB_PANEL_FOCUS}`}
+            className={styles.panel}
           >
-            <BundleCard title="Core only" result={data.results.rollup.core} />
-            <BundleCard title="Full static" result={data.results.rollup.full} />
-            <BundleCard title="Lazy load" result={data.results.rollup.lazy} />
+            <BundleCards results={data.results.rollup} />
           </div>
         )}
 
@@ -289,11 +244,9 @@ export default function BundleStatsPage() {
             id="panel-vite"
             aria-labelledby="tab-vite"
             tabIndex={0}
-            className={`grid grid-cols-1 gap-6 lg:grid-cols-3 ${TAB_PANEL_FOCUS}`}
+            className={styles.panel}
           >
-            <BundleCard title="Core only" result={data.results.vite.core} />
-            <BundleCard title="Full static" result={data.results.vite.full} />
-            <BundleCard title="Lazy load" result={data.results.vite.lazy} />
+            <BundleCards results={data.results.vite} />
           </div>
         )}
 
@@ -303,26 +256,12 @@ export default function BundleStatsPage() {
             id="panel-webpack"
             aria-labelledby="tab-webpack"
             tabIndex={0}
-            className={TAB_PANEL_FOCUS}
+            className={styles.panel}
           >
             {webpackCore > 0 ? (
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <BundleCard
-                  title="Core only"
-                  result={data.results.webpack.core}
-                />
-                <BundleCard
-                  title="Full static"
-                  result={data.results.webpack.full}
-                />
-                <BundleCard
-                  title="Lazy load"
-                  result={data.results.webpack.lazy}
-                />
-              </div>
+              <BundleCards results={data.results.webpack} />
             ) : (
               <EmptyState
-                icon={Package}
                 label="Webpack 5"
                 command={`npm install && npm run analyze:webpack:core &&\nnpm run analyze:webpack:full && npm run analyze:webpack:lazy`}
               />
@@ -336,26 +275,12 @@ export default function BundleStatsPage() {
             id="panel-esbuild"
             aria-labelledby="tab-esbuild"
             tabIndex={0}
-            className={TAB_PANEL_FOCUS}
+            className={styles.panel}
           >
             {esbuildCore > 0 ? (
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <BundleCard
-                  title="Core only"
-                  result={data.results.esbuild.core}
-                />
-                <BundleCard
-                  title="Full static"
-                  result={data.results.esbuild.full}
-                />
-                <BundleCard
-                  title="Lazy load"
-                  result={data.results.esbuild.lazy}
-                />
-              </div>
+              <BundleCards results={data.results.esbuild} />
             ) : (
               <EmptyState
-                icon={Zap}
                 label="esbuild"
                 command={`npm install && npm run analyze:esbuild:core &&\nnpm run analyze:esbuild:full && npm run analyze:esbuild:lazy`}
               />
@@ -369,10 +294,9 @@ export default function BundleStatsPage() {
             id="panel-comparison"
             aria-labelledby="tab-comparison"
             tabIndex={0}
-            className={`grid grid-cols-1 gap-6 lg:grid-cols-2 ${TAB_PANEL_FOCUS}`}
+            className={`${styles.panel} ${styles.comparison}`}
           >
             <ComparisonSection
-              eyebrow="Baseline"
               title="Base bundle sizes"
               description="Production-ready minified bundles with gzip compression."
             >
@@ -381,19 +305,16 @@ export default function BundleStatsPage() {
                 value={formatBytes(rollupCore)}
                 description="Timepicker without any plugins - minimum size"
                 badge="Baseline"
-                badgeColor="ok"
               />
               <ComparisonMetric
                 label="Full bundle"
                 value={formatBytes(rollupFull)}
                 description="Core + all plugins (Range, Timezone)"
                 badge={`+${((pluginOverhead / rollupCore) * 100).toFixed(0)}%`}
-                badgeColor="info"
               />
             </ComparisonSection>
 
             <ComparisonSection
-              eyebrow="Plugins"
               title="Plugin impact"
               description="Additional size cost when using plugins."
             >
@@ -402,33 +323,28 @@ export default function BundleStatsPage() {
                 value={formatBytes(pluginOverhead)}
                 description="Extra size for Range + Timezone plugins"
                 badge={`${((pluginOverhead / rollupCore) * 100).toFixed(1)}%`}
-                badgeColor="warn"
               />
               <ComparisonMetric
                 label="Range plugin"
                 value={formatBytes(pluginRangeSize)}
                 description="Time range selection functionality (lazy-loaded)"
                 badge="Lazy"
-                badgeColor="neutral"
               />
               <ComparisonMetric
                 label="Timezone plugin"
                 value={formatBytes(pluginTimezoneSize)}
                 description="Timezone selection support (lazy-loaded)"
                 badge="Lazy"
-                badgeColor="neutral"
               />
             </ComparisonSection>
 
             <ComparisonSection
-              eyebrow="Ranking"
               title="Bundler comparison"
               description="Core bundle size across all bundlers (minified + gzip)."
             >
               {allBundlerCores.map((b) => {
                 const delta = b.value - rollupCore;
                 const isReference = b.label === "Rollup";
-                const within = Math.abs(delta) < rollupCore * 0.05;
                 return (
                   <ComparisonMetric
                     key={b.label}
@@ -441,43 +357,39 @@ export default function BundleStatsPage() {
                         ? "Reference"
                         : `${delta > 0 ? "+" : ""}${((delta / rollupCore) * 100).toFixed(1)}%`
                     }
-                    badgeColor={isReference || within ? "ok" : "warn"}
                   />
                 );
               })}
             </ComparisonSection>
 
             <ComparisonSection
-              eyebrow="Health"
               title="Optimization quality"
               description="Bundle optimization health checks."
             >
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <OptimizationCard
-                  passed={rollupFull > rollupCore}
-                  title="Tree-shaking"
-                  description="Unused code is properly removed"
-                  metric={`Full: ${formatBytes(rollupFull)} > Core: ${formatBytes(rollupCore)}`}
-                />
-                <OptimizationCard
-                  passed={pluginOverhead < rollupCore * 0.5}
-                  title="Plugin efficiency"
-                  description="Plugins add less than 50% overhead"
-                  metric={`${formatBytes(pluginOverhead)} (${((pluginOverhead / rollupCore) * 100).toFixed(0)}%)`}
-                />
-                <OptimizationCard
-                  passed={rollupVsViteCore < rollupCore * 0.05}
-                  title="Bundler consistency"
-                  description="Rollup and Vite produce similar sizes"
-                  metric={`Diff: ${formatBytes(rollupVsViteCore)} (${((rollupVsViteCore / rollupCore) * 100).toFixed(1)}%)`}
-                />
-                <OptimizationCard
-                  passed={pluginRangeSize > 0 && pluginTimezoneSize > 0}
-                  title="Code splitting"
-                  description="Plugins can be loaded separately"
-                  metric={`${formatBytes(pluginRangeSize + pluginTimezoneSize)} in chunks`}
-                />
-              </div>
+              <OptimizationCard
+                passed={rollupFull > rollupCore}
+                title="Tree-shaking"
+                description="Unused code is properly removed"
+                metric={`Full: ${formatBytes(rollupFull)} > Core: ${formatBytes(rollupCore)}`}
+              />
+              <OptimizationCard
+                passed={pluginOverhead < rollupCore * 0.5}
+                title="Plugin efficiency"
+                description="Plugins add less than 50% overhead"
+                metric={`${formatBytes(pluginOverhead)} (${((pluginOverhead / rollupCore) * 100).toFixed(0)}%)`}
+              />
+              <OptimizationCard
+                passed={rollupVsViteCore < rollupCore * 0.05}
+                title="Bundler consistency"
+                description="Rollup and Vite produce similar sizes"
+                metric={`Diff: ${formatBytes(rollupVsViteCore)} (${((rollupVsViteCore / rollupCore) * 100).toFixed(1)}%)`}
+              />
+              <OptimizationCard
+                passed={pluginRangeSize > 0 && pluginTimezoneSize > 0}
+                title="Code splitting"
+                description="Plugins can be loaded separately"
+                metric={`${formatBytes(pluginRangeSize + pluginTimezoneSize)} in chunks`}
+              />
             </ComparisonSection>
           </div>
         )}
@@ -486,33 +398,24 @@ export default function BundleStatsPage() {
   );
 }
 
-function EmptyState({
-  icon: Icon,
-  label,
-  command,
-}: {
-  icon: typeof Package;
-  label: string;
-  command: string;
-}) {
+function BundleCards({ results }: { results: BundlerResults }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-6">
-      <div className="mx-auto max-w-md py-10 text-center">
-        <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-border bg-muted/40">
-          <Icon className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
-        </span>
-        <p className="eyebrow">No data yet</p>
-        <h3 className="display mt-2 text-lg font-medium">
-          {label} results not generated
-        </h3>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Run the following in consumer-test to generate {label} bundle data:
-        </p>
-        <pre className="nums mt-4 overflow-x-auto rounded-lg border border-border bg-muted/40 px-4 py-3 text-left text-xs text-foreground">
-          {command}
-        </pre>
-      </div>
+    <div className={styles.cards}>
+      {VARIANTS.map((variant) => (
+        <BundleCard key={variant.key} title={variant.label} result={results[variant.key]} />
+      ))}
     </div>
   );
 }
 
+function EmptyState({ label, command }: { label: string; command: string }) {
+  return (
+    <div className={styles.empty}>
+      <h3 className={styles.emptyTitle}>{label} results not generated</h3>
+      <p className={styles.emptyText}>
+        Run the following in consumer-test to generate {label} bundle data:
+      </p>
+      <CodeBlock code={command} language="bash" />
+    </div>
+  );
+}

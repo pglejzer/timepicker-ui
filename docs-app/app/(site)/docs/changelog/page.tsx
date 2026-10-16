@@ -1,22 +1,11 @@
-import { Section } from "@/components/section";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
-import { InfoBox } from "@/components/info-box";
-import {
-  History,
-  Sparkles,
-  Wrench,
-  Bug,
-  Zap,
-  Code,
-  Package,
-  AlertTriangle,
-  Shield,
-  Rocket,
-  type LucideIcon,
-} from "lucide-react";
+import { Callout } from "@/components/callout";
 import Link from "next/link";
 import { CodeBlock } from "@/components/code-block";
+import { JsonLdBreadcrumb } from "@/components/json-ld";
+import { ChangeSection, ChangelogSwitcher, Release } from "@/components/changelog";
+import styles from "./page.module.css";
 
 export const metadata = buildMetadata({
   title: "Changelog",
@@ -24,49 +13,6 @@ export const metadata = buildMetadata({
     "Changelog for timepicker-ui - every notable release, feature and fix for the zero-dependency, framework-agnostic, SSR-safe time picker, listed by version.",
   path: "/docs/changelog",
 });
-
-interface ChangeItemProps {
-  title: string;
-  description?: string;
-}
-
-function ChangeItem({ title, description }: ChangeItemProps) {
-  return (
-    <li className="text-sm">
-      <strong className="text-foreground">{title}</strong>
-      {description && (
-        <span className="text-muted-foreground"> - {description}</span>
-      )}
-    </li>
-  );
-}
-
-function ChangeSection({
-  icon: Icon,
-  label,
-  color,
-  items,
-}: {
-  icon: LucideIcon;
-  label: string;
-  color: string;
-  items: ChangeItemProps[];
-}) {
-  return (
-    <div>
-      <h3 className="text-lg font-semibold mb-2 flex items-center gap-2 text-foreground">
-        <Icon className={`h-5 w-5 text-${color}`} />
-        {label}
-      </h3>
-
-      <ul className="space-y-1 ml-7">
-        {items.map((item) => (
-          <ChangeItem key={item.title} {...item} />
-        ))}
-      </ul>
-    </div>
-  );
-}
 
 const CHANGELOG_450 = {
   security: [
@@ -1159,404 +1105,220 @@ const CHANGELOG_320 = {
 
 export default function ChangelogPage() {
   return (
-    <div>
+    <div data-toc-depth="2">
+      <JsonLdBreadcrumb pathname="/docs/changelog" />
       <PageHeader
         title="Changelog"
         description="All notable changes to this project are documented here"
-        eyebrow="Guide"
       />
 
-      <InfoBox title="Current Version" variant="purple" className="mb-6">
+      <ChangelogSwitcher current="library" />
+
+      <Callout title="Current Version">
         <strong>v4.5.0</strong> - Released October 14, 2026
-      </InfoBox>
+      </Callout>
 
-      <Section icon={Sparkles} title="Version 4.5.0 - October 14, 2026">
-        <div className="space-y-4">
-          <div className="bg-gradient-to-br from-red-500/5 to-orange-500/5 rounded-lg p-4 border border-red-500/20">
-            <h4 className="font-semibold mb-2 text-foreground flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-red-500" />
-              Check before upgrading
-            </h4>
-            <p className="text-sm text-muted-foreground mb-2">
-              These changes can affect an existing setup. Each one is described
-              under Changed.
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-              <li>
-                The <code>.tp-ui-ripple</code> /{" "}
-                <code>.tp-ui-ripple-effect</code> classes and the{" "}
-                <code>ripple</code> keyframes are removed
-              </li>
-              <li>
-                <code>--tp-wheel-highlight-radius</code>,{" "}
-                <code>--tp-popover-radius</code> and{" "}
-                <code>--tp-btn-radius</code> are no longer defined on{" "}
-                <code>:root</code>
-              </li>
-              <li>
-                <code>--tp-focus-ring-halo</code> is no longer read, and{" "}
-                <code>--tp-shadow-focus-ring</code> defaults to{" "}
-                <code>none</code>
-              </li>
-              <li>
-                The AM/PM value is always <code>AM</code> / <code>PM</code>,
-                whatever <code>labels.am</code> / <code>labels.pm</code> are set
-                to
-              </li>
-              <li>
-                Out-of-range <code>clock.disabledTime.interval</code> edges such
-                as <code>25:00</code> are now rejected and reported through{" "}
-                <code>error</code> / <code>callbacks.onError</code>
-              </li>
-              <li>
-                <code>setValue()</code> with a string that is not a time now
-                emits <code>error</code> / <code>callbacks.onError</code>{" "}
-                instead of being ignored
-              </li>
-              <li>
-                The scroll lock now styles <code>&lt;html&gt;</code>, and{" "}
-                <code>&lt;body&gt;</code> only when it scrolls. CSS that relied
-                on the <code>padding-right</code> added to <code>body</code>{" "}
-                should use <code>--tp-scrollbar-gap</code>
-              </li>
-              <li>
-                With CSS anchor positioning, the compact-wheel popover gets{" "}
-                <code>tp-ui-popover-anchored</code> and no inline{" "}
-                <code>top</code>, <code>left</code> or <code>width</code>.
-                Review CSS that positions <code>.tp-ui-popover</code> by hand
-              </li>
-              <li>
-                With <code>ui.inline.showButtons: true</code>, inline OK and
-                Cancel no longer remove the picker from its container
-              </li>
-              <li>
-                <code>behavior.delayHandler</code> defaults to <code>0</code>{" "}
-                instead of <code>300</code>, so the picker closes without a
-                pause
-              </li>
-            </ul>
-          </div>
+      <Release title="Version 4.5.0 - October 14, 2026">
+        <Callout title="Check before upgrading" tone="danger">
+          <p>
+            These changes can affect an existing setup. Each one is described
+            under Changed.
+          </p>
+          <ul>
+            <li>
+              The <code>.tp-ui-ripple</code> /{" "}
+              <code>.tp-ui-ripple-effect</code> classes and the{" "}
+              <code>ripple</code> keyframes are removed
+            </li>
+            <li>
+              <code>--tp-wheel-highlight-radius</code>,{" "}
+              <code>--tp-popover-radius</code> and{" "}
+              <code>--tp-btn-radius</code> are no longer defined on{" "}
+              <code>:root</code>
+            </li>
+            <li>
+              <code>--tp-focus-ring-halo</code> is no longer read, and{" "}
+              <code>--tp-shadow-focus-ring</code> defaults to{" "}
+              <code>none</code>
+            </li>
+            <li>
+              The AM/PM value is always <code>AM</code> / <code>PM</code>,
+              whatever <code>labels.am</code> / <code>labels.pm</code> are set
+              to
+            </li>
+            <li>
+              Out-of-range <code>clock.disabledTime.interval</code> edges such
+              as <code>25:00</code> are now rejected and reported through{" "}
+              <code>error</code> / <code>callbacks.onError</code>
+            </li>
+            <li>
+              <code>setValue()</code> with a string that is not a time now
+              emits <code>error</code> / <code>callbacks.onError</code>{" "}
+              instead of being ignored
+            </li>
+            <li>
+              The scroll lock now styles <code>&lt;html&gt;</code>, and{" "}
+              <code>&lt;body&gt;</code> only when it scrolls. CSS that relied
+              on the <code>padding-right</code> added to <code>body</code>{" "}
+              should use <code>--tp-scrollbar-gap</code>
+            </li>
+            <li>
+              With CSS anchor positioning, the compact-wheel popover gets{" "}
+              <code>tp-ui-popover-anchored</code> and no inline{" "}
+              <code>top</code>, <code>left</code> or <code>width</code>.
+              Review CSS that positions <code>.tp-ui-popover</code> by hand
+            </li>
+            <li>
+              With <code>ui.inline.showButtons: true</code>, inline OK and
+              Cancel no longer remove the picker from its container
+            </li>
+            <li>
+              <code>behavior.delayHandler</code> defaults to <code>0</code>{" "}
+              instead of <code>300</code>, so the picker closes without a
+              pause
+            </li>
+          </ul>
+        </Callout>
 
-          <ChangeSection
-            icon={Shield}
-            label="Security"
-            color="red-500"
-            items={CHANGELOG_450.security}
-          />
+        <ChangeSection label="Security" items={CHANGELOG_450.security} />
 
-          <ChangeSection
-            icon={Sparkles}
-            label="Added"
-            color="green-500"
-            items={CHANGELOG_450.added}
-          />
+        <ChangeSection label="Added" items={CHANGELOG_450.added} />
 
-          <ChangeSection
-            icon={Zap}
-            label="Changed"
-            color="blue-500"
-            items={CHANGELOG_450.changed}
-          />
+        <ChangeSection label="Changed" items={CHANGELOG_450.changed} />
 
-          <div>
-            <ChangeSection
-              icon={AlertTriangle}
-              label="Deprecated"
-              color="amber-500"
-              items={CHANGELOG_450.deprecated}
-            />
-            <p className="mt-2 ml-7 text-sm text-muted-foreground">
-              Each item still works unless its entry says otherwise. All of them
-              are removed in 5.0.
-            </p>
-          </div>
+        <ChangeSection label="Deprecated" items={CHANGELOG_450.deprecated} />
+        <p>
+          Each item still works unless its entry says otherwise. All of them
+          are removed in 5.0.
+        </p>
 
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_450.fixed}
-          />
+        <ChangeSection label="Fixed" items={CHANGELOG_450.fixed} />
 
-          <div className="bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-lg p-4 border border-blue-500/20">
-            <h4 className="font-semibold mb-2 text-foreground flex items-center gap-2">
-              <Rocket className="h-4 w-4 text-blue-500" />
-              Upcoming in 5.0
-            </h4>
-            <p className="text-sm text-muted-foreground">
-              5.0 will change how plugins are built and registered, and will
-              rename the part of each CSS class after the <code>tp-ui-</code>{" "}
-              prefix to follow Material Design component naming. It also removes
-              the items deprecated above and other unused API, and ships with a
-              migration guide. See the{" "}
-              <Link
-                href="/docs/roadmap"
-                className="text-primary hover:underline font-medium"
-              >
-                roadmap
-              </Link>{" "}
-              for details.
-            </p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              In 5.0, <code>behavior.returnFocus</code> defaults to{" "}
-              <code>true</code>: on close, focus goes back to the input, or to
-              the <code>data-open</code> element that opened the picker. Set{" "}
-              <code>behavior.returnFocus: true</code> now to return focus to
-              the input.
-            </p>
-          </div>
-        </div>
-      </Section>
+        <Callout title="Upcoming in 5.0">
+          <p>
+            5.0 will change how plugins are built and registered, and will
+            rename the part of each CSS class after the <code>tp-ui-</code>{" "}
+            prefix to follow Material Design component naming. It also removes
+            the items deprecated above and other unused API, and ships with a
+            migration guide. See the{" "}
+            <Link href="/docs/roadmap">
+              roadmap
+            </Link>{" "}
+            for details.
+          </p>
+          <p>
+            In 5.0, <code>behavior.returnFocus</code> defaults to{" "}
+            <code>true</code>: on close, focus goes back to the input, or to
+            the <code>data-open</code> element that opened the picker. Set{" "}
+            <code>behavior.returnFocus: true</code> now to return focus to
+            the input.
+          </p>
+        </Callout>
+      </Release>
 
-      <Section icon={Sparkles} title="Version 4.4.0 - June 10, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Sparkles}
-            label="Added"
-            color="green-500"
-            items={CHANGELOG_440.added}
-          />
+      <Release title="Version 4.4.0 - June 10, 2026">
+        <ChangeSection label="Added" items={CHANGELOG_440.added} />
 
-          <ChangeSection
-            icon={Zap}
-            label="Changed"
-            color="blue-500"
-            items={CHANGELOG_440.changed}
-          />
+        <ChangeSection label="Changed" items={CHANGELOG_440.changed} />
 
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_440.fixed}
-          />
-        </div>
-      </Section>
+        <ChangeSection label="Fixed" items={CHANGELOG_440.fixed} />
+      </Release>
 
-      <Section icon={Sparkles} title="Version 4.3.0 - March 26, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Sparkles}
-            label="Added"
-            color="green-500"
-            items={CHANGELOG_430.added}
-          />
+      <Release title="Version 4.3.0 - March 26, 2026">
+        <ChangeSection label="Added" items={CHANGELOG_430.added} />
 
-          <ChangeSection
-            icon={Zap}
-            label="Changed"
-            color="blue-500"
-            items={CHANGELOG_430.changed}
-          />
-        </div>
-      </Section>
+        <ChangeSection label="Changed" items={CHANGELOG_430.changed} />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.2.2 - March 24, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_422.fixed}
-          />
-        </div>
-      </Section>
+      <Release title="Version 4.2.2 - March 24, 2026">
+        <ChangeSection label="Fixed" items={CHANGELOG_422.fixed} />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.2.1 - March 18, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_421.fixed}
-          />
-        </div>
-      </Section>
+      <Release title="Version 4.2.1 - March 18, 2026">
+        <ChangeSection label="Fixed" items={CHANGELOG_421.fixed} />
+      </Release>
 
-      <Section icon={History} title="Version 4.2.0 - March 18, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Sparkles}
-            label="Added"
-            color="green-500"
-            items={CHANGELOG_420.added}
-          />
+      <Release title="Version 4.2.0 - March 18, 2026">
+        <ChangeSection label="Added" items={CHANGELOG_420.added} />
 
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_420.fixed}
-          />
-        </div>
-      </Section>
+        <ChangeSection label="Fixed" items={CHANGELOG_420.fixed} />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.1.7 - March 8, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_417.fixed}
-          />
-        </div>
-      </Section>
+      <Release title="Version 4.1.7 - March 8, 2026">
+        <ChangeSection label="Fixed" items={CHANGELOG_417.fixed} />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.1.6 - February 14, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_416.fixed}
-          />
-        </div>
-      </Section>
+      <Release title="Version 4.1.6 - February 14, 2026">
+        <ChangeSection label="Fixed" items={CHANGELOG_416.fixed} />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.1.5 - February 10, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_415.fixed}
-          />
-        </div>
-      </Section>
+      <Release title="Version 4.1.5 - February 10, 2026">
+        <ChangeSection label="Fixed" items={CHANGELOG_415.fixed} />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.1.4 - February 9, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_414.fixed}
-          />
-        </div>
-      </Section>
+      <Release title="Version 4.1.4 - February 9, 2026">
+        <ChangeSection label="Fixed" items={CHANGELOG_414.fixed} />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.1.3 - February 9, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_413.fixed}
-          />
+      <Release title="Version 4.1.3 - February 9, 2026">
+        <ChangeSection label="Fixed" items={CHANGELOG_413.fixed} />
 
-          <ChangeSection
-            icon={Sparkles}
-            label="Added"
-            color="green-500"
-            items={CHANGELOG_413.added}
-          />
-        </div>
-      </Section>
+        <ChangeSection label="Added" items={CHANGELOG_413.added} />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.1.2 - February 8, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_412.fixed}
-          />
+      <Release title="Version 4.1.2 - February 8, 2026">
+        <ChangeSection label="Fixed" items={CHANGELOG_412.fixed} />
 
-          <ChangeSection
-            icon={Sparkles}
-            label="Added"
-            color="green-500"
-            items={CHANGELOG_412.added}
-          />
-        </div>
-      </Section>
+        <ChangeSection label="Added" items={CHANGELOG_412.added} />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.1.1 - February 1, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_411.fixed}
-          />
+      <Release title="Version 4.1.1 - February 1, 2026">
+        <ChangeSection label="Fixed" items={CHANGELOG_411.fixed} />
 
-          <ChangeSection
-            icon={Code}
-            label="Internal"
-            color="slate-500"
-            items={CHANGELOG_411.internal}
-          />
-        </div>
-      </Section>
+        <ChangeSection label="Internal" items={CHANGELOG_411.internal} />
+      </Release>
 
-      <Section icon={History} title="Version 4.1.0 - January 31, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Sparkles}
-            label="Added"
-            color="green-500"
-            items={CHANGELOG_410.added}
-          />
+      <Release title="Version 4.1.0 - January 31, 2026">
+        <ChangeSection label="Added" items={CHANGELOG_410.added} />
 
-          <ChangeSection
-            icon={Code}
-            label="Changed"
-            color="blue-500"
-            items={CHANGELOG_410.changed}
-          />
-        </div>
-      </Section>
+        <ChangeSection label="Changed" items={CHANGELOG_410.changed} />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.0.3 - January 23, 2026">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={CHANGELOG_403.fixed}
-          />
-        </div>
-      </Section>
+      <Release title="Version 4.0.3 - January 23, 2026">
+        <ChangeSection label="Fixed" items={CHANGELOG_403.fixed} />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.0.2 - November 23, 2025">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={[
-              {
-                title: "Firefox Compatibility",
-                description:
-                  "Fixed 'TouchEvent is not defined' error in DragHandlers - changed from instanceof TouchEvent to 'touches' in event check",
-              },
-            ]}
-          />
+      <Release title="Version 4.0.2 - November 23, 2025">
+        <ChangeSection
+          label="Fixed"
+          items={[
+            {
+              title: "Firefox Compatibility",
+              description:
+                "Fixed 'TouchEvent is not defined' error in DragHandlers - changed from instanceof TouchEvent to 'touches' in event check",
+            },
+          ]}
+        />
 
-          <ChangeSection
-            icon={Sparkles}
-            label="Added"
-            color="green-500"
-            items={[
-              {
-                title: "Exported Grouped Option Types",
-                description:
-                  "Added exports for TimepickerOptions, ClockOptions, UIOptions, LabelsOptions, BehaviorOptions, CallbacksOptions to support type-safe option composition",
-              },
-              {
-                title: "onUpdate Event Emissions",
-                description:
-                  "Added missing onUpdate event emissions in EventManager and ClockManager for real-time value synchronization",
-              },
-            ]}
-          />
+        <ChangeSection
+          label="Added"
+          items={[
+            {
+              title: "Exported Grouped Option Types",
+              description:
+                "Added exports for TimepickerOptions, ClockOptions, UIOptions, LabelsOptions, BehaviorOptions, CallbacksOptions to support type-safe option composition",
+            },
+            {
+              title: "onUpdate Event Emissions",
+              description:
+                "Added missing onUpdate event emissions in EventManager and ClockManager for real-time value synchronization",
+            },
+          ]}
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6 mt-6">
-            <h4 className="font-semibold mb-3 text-foreground">
-              Firefox Fix Details
-            </h4>
-            <CodeBlock
-              code={`// Before (causing error on Firefox)
+        <h4>Firefox Fix Details</h4>
+        <CodeBlock
+          code={`// Before (causing error on Firefox)
 if (event instanceof TouchEvent) { // ERROR: TouchEvent not defined
   const touch = event.touches[0];
 }
@@ -1565,57 +1327,47 @@ if (event instanceof TouchEvent) { // ERROR: TouchEvent not defined
 if ('touches' in event) { // OK: Works everywhere
   const touch = event.touches[0];
 }`}
-              language="typescript"
-            />
-          </div>
-        </div>
-      </Section>
+          language="typescript"
+        />
+      </Release>
 
-      <Section icon={Bug} title="Version 4.0.1 - November 21, 2025">
-        <div className="space-y-4">
-          <ChangeSection
-            icon={Wrench}
-            label="Fixed"
-            color="orange-500"
-            items={[
-              {
-                title: "TypeScript Callback Types",
-                description:
-                  "All callback functions now have proper generic types instead of unknown",
-              },
-              {
-                title: "Type-safe Event Payloads",
-                description:
-                  "onConfirm, onOpen, onUpdate, and other callbacks now correctly infer event data types",
-              },
-              {
-                title: "Improved IntelliSense",
-                description:
-                  "Full autocomplete for event data properties without requiring manual type annotations",
-              },
-            ]}
-          />
+      <Release title="Version 4.0.1 - November 21, 2025">
+        <ChangeSection
+          label="Fixed"
+          items={[
+            {
+              title: "TypeScript Callback Types",
+              description:
+                "All callback functions now have proper generic types instead of unknown",
+            },
+            {
+              title: "Type-safe Event Payloads",
+              description:
+                "onConfirm, onOpen, onUpdate, and other callbacks now correctly infer event data types",
+            },
+            {
+              title: "Improved IntelliSense",
+              description:
+                "Full autocomplete for event data properties without requiring manual type annotations",
+            },
+          ]}
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6 mt-6">
-            <h4 className="font-semibold mb-3 text-foreground">
-              Before (4.0.0)
-            </h4>
-            <CodeBlock
-              code={`// Callbacks had unknown types
+        <h4>Before (4.0.0)</h4>
+        <CodeBlock
+          code={`// Callbacks had unknown types
 callbacks: {
   onConfirm: (data) => {
     // data: unknown - no autocomplete
     console.log(data.hour); // TypeScript error
   }
 }`}
-              language="typescript"
-            />
+          language="typescript"
+        />
 
-            <h4 className="font-semibold mb-3 mt-6 text-foreground">
-              After (4.0.1)
-            </h4>
-            <CodeBlock
-              code={`// Callbacks are now properly typed
+        <h4>After (4.0.1)</h4>
+        <CodeBlock
+          code={`// Callbacks are now properly typed
 callbacks: {
   onConfirm: (data) => {
     // data: ConfirmEventData - full autocomplete
@@ -1624,28 +1376,20 @@ callbacks: {
     console.log(data.type); // string | undefined
   }
 }`}
-              language="typescript"
-            />
-          </div>
-        </div>
-      </Section>
+          language="typescript"
+        />
+      </Release>
 
-      <Section icon={Package} title="Version 4.0.0 - November 21, 2025">
-        <div className="space-y-6">
-          <div className="bg-gradient-to-br from-red-500/5 to-orange-500/5 rounded-lg p-4 border border-red-500/20 mb-6">
-            <h4 className="font-semibold mb-2 text-foreground flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-red-500" />
-              BREAKING CHANGES - Migration Required
-            </h4>
+      <Release title="Version 4.0.0 - November 21, 2025">
+        <Callout title="BREAKING CHANGES - Migration Required" tone="danger">
+          <p>
+            <strong>
+              All CSS class names and CSS variable names have been renamed:
+            </strong>
+          </p>
 
-            <p className="text-sm text-muted-foreground mb-3">
-              <strong className="text-red-600 dark:text-red-400">
-                All CSS class names and CSS variable names have been renamed:
-              </strong>
-            </p>
-
-            <CodeBlock
-              code={`// CSS Class Names (ALL classes changed)
+          <CodeBlock
+            code={`// CSS Class Names (ALL classes changed)
 - .timepicker-ui-*
 + .tp-ui-*
 
@@ -1707,315 +1451,250 @@ Examples:
 3. Reorganize options into groups: clock, ui, labels, behavior, callbacks
 4. Update clockType -> clock.type, theme -> ui.theme, onConfirm -> callbacks.onConfirm
 5. Test all customizations and themes thoroughly`}
-              language="diff"
-            />
-
-            <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-950 rounded border border-amber-200 dark:border-amber-800">
-              <p className="text-sm text-amber-900 dark:text-amber-100">
-                <strong>Important:</strong> The NPM package name remains{" "}
-                <code className="bg-amber-100 dark:bg-amber-900 px-1 py-0.5 rounded">
-                  timepicker-ui
-                </code>
-                . Only CSS classes and variables changed.
-              </p>
-            </div>
-          </div>
-
-          <ChangeSection
-            icon={Wrench}
-            label="Changed (Breaking)"
-            color="red-500"
-            items={[
-              {
-                title: "CSS Class Renaming",
-                description: "All .timepicker-ui-* classes renamed to .tp-ui-*",
-              },
-              {
-                title: "CSS Variable Renaming",
-                description: "All --timepicker-* variables renamed to --tp-*",
-              },
-              {
-                title: "Options Structure Reorganization",
-                description:
-                  "Options now grouped into: clock, ui, labels, behavior, callbacks",
-              },
-              {
-                title: "Legacy DOM Events Removed",
-                description:
-                  "timepicker:* custom events completely removed - use EventEmitter API or callbacks",
-              },
-              {
-                title: "setTheme() Method Removed",
-                description:
-                  "Programmatic theming removed - use CSS classes with CSS variables instead",
-              },
-            ]}
+            language="diff"
           />
 
-          <ChangeSection
-            icon={Sparkles}
-            label="Added"
-            color="green-500"
-            items={[
-              {
-                title: "EventEmitter API with Callback Bridge",
-                description:
-                  "All 9 callback options automatically bridge to EventEmitter with on(), off(), once() methods",
-              },
-              {
-                title: "SSR-Safe Architecture",
-                description:
-                  "All modules can be imported in Node.js (Next.js, Nuxt, Remix, Astro compatible)",
-              },
-              {
-                title: "Composition-Based Architecture",
-                description:
-                  "Pure composition with CoreState, Managers, Lifecycle - no inheritance, fully testable",
-              },
-              {
-                title: "Auto-Focus Improvements",
-                description:
-                  "Modal auto-focuses on open, minutes auto-focus with autoSwitchToMinutes",
-              },
-              {
-                title: "TypeScript Enhancements",
-                description:
-                  "No any types, fully typed event payloads, grouped options types, stricter type safety",
-              },
-            ]}
-          />
+          <p>
+            <strong>Important:</strong> The NPM package name remains{" "}
+            <code>timepicker-ui</code>
+            . Only CSS classes and variables changed.
+          </p>
+        </Callout>
 
-          <ChangeSection
-            icon={Wrench}
-            label="Changed"
-            color="blue-500"
-            items={[
-              {
-                title: "Architecture Refactored",
-                description:
-                  "Composition-only pattern - removed all extends, pure dependency injection",
-              },
-              {
-                title: "Bundle Size Reduced",
-                description: "80 KB -> 63.3 KB ESM (-20.9%)",
-              },
-              {
-                title: "Theme Count",
-                description:
-                  "11 -> 10 themes (removed theme-custom from production)",
-              },
-              {
-                title: "Event System Unified",
-                description:
-                  "Single source of truth - callbacks bridge to EventEmitter automatically",
-              },
-              {
-                title: "Options API Restructured",
-                description: "40+ flat options -> 5 logical groups",
-              },
-            ]}
-          />
+        <ChangeSection
+          label="Changed (Breaking)"
+          breaking
+          items={[
+            {
+              title: "CSS Class Renaming",
+              description: "All .timepicker-ui-* classes renamed to .tp-ui-*",
+            },
+            {
+              title: "CSS Variable Renaming",
+              description: "All --timepicker-* variables renamed to --tp-*",
+            },
+            {
+              title: "Options Structure Reorganization",
+              description:
+                "Options now grouped into: clock, ui, labels, behavior, callbacks",
+            },
+            {
+              title: "Legacy DOM Events Removed",
+              description:
+                "timepicker:* custom events completely removed - use EventEmitter API or callbacks",
+            },
+            {
+              title: "setTheme() Method Removed",
+              description:
+                "Programmatic theming removed - use CSS classes with CSS variables instead",
+            },
+          ]}
+        />
 
-          <ChangeSection
-            icon={Package}
-            label="Removed"
-            color="orange-500"
-            items={[
-              {
-                title: "Legacy DOM Events",
-                description:
-                  "timepicker:open, timepicker:confirm, timepicker:cancel, etc. - use picker.on() instead",
-              },
-              {
-                title: "setTheme() Method",
-                description:
-                  "Programmatic theme setting removed - use CSS classes instead",
-              },
-              {
-                title: "theme-custom",
-                description:
-                  "Removed from production bundle - users create custom themes via CSS variables",
-              },
-            ]}
-          />
+        <ChangeSection
+          label="Added"
+          items={[
+            {
+              title: "EventEmitter API with Callback Bridge",
+              description:
+                "All 9 callback options automatically bridge to EventEmitter with on(), off(), once() methods",
+            },
+            {
+              title: "SSR-Safe Architecture",
+              description:
+                "All modules can be imported in Node.js (Next.js, Nuxt, Remix, Astro compatible)",
+            },
+            {
+              title: "Composition-Based Architecture",
+              description:
+                "Pure composition with CoreState, Managers, Lifecycle - no inheritance, fully testable",
+            },
+            {
+              title: "Auto-Focus Improvements",
+              description:
+                "Modal auto-focuses on open, minutes auto-focus with autoSwitchToMinutes",
+            },
+            {
+              title: "TypeScript Enhancements",
+              description:
+                "No any types, fully typed event payloads, grouped options types, stricter type safety",
+            },
+          ]}
+        />
 
-          <ChangeSection
-            icon={Bug}
-            label="Fixed"
-            color="red-500"
-            items={[
-              {
-                title: "Focus Trap Auto-Focus",
-                description:
-                  "Modal wrapper auto-focuses on open (no Tab press needed)",
-              },
-              {
-                title: "Auto-Switch Focus",
-                description:
-                  "Minute input receives focus when autoSwitchToMinutes enabled",
-              },
-              {
-                title: "SSR Compatibility",
-                description:
-                  "No DOM globals during initialization - safe for server rendering",
-              },
-              {
-                title: "currentTime Parsing",
-                description: "Simplified time parsing for better reliability",
-              },
-              {
-                title: "Dynamic Updates",
-                description:
-                  "Fixed React useEffect patterns to prevent infinite loops",
-              },
-            ]}
-          />
+        <ChangeSection
+          label="Changed"
+          items={[
+            {
+              title: "Architecture Refactored",
+              description:
+                "Composition-only pattern - removed all extends, pure dependency injection",
+            },
+            {
+              title: "Bundle Size Reduced",
+              description: "80 KB -> 63.3 KB ESM (-20.9%)",
+            },
+            {
+              title: "Theme Count",
+              description:
+                "11 -> 10 themes (removed theme-custom from production)",
+            },
+            {
+              title: "Event System Unified",
+              description:
+                "Single source of truth - callbacks bridge to EventEmitter automatically",
+            },
+            {
+              title: "Options API Restructured",
+              description: "40+ flat options -> 5 logical groups",
+            },
+          ]}
+        />
 
-          <ChangeSection
-            icon={Zap}
-            label="Benefits"
-            color="green-500"
-            items={[
-              {
-                title: "Shorter class names",
-                description: "Reduced HTML size and improved readability",
-              },
-              {
-                title: "Smaller bundle",
-                description: "-20.9% bundle size reduction (80 KB -> 63.3 KB)",
-              },
-              {
-                title: "Better DX",
-                description:
-                  "Cleaner API with grouped options and EventEmitter",
-              },
-              {
-                title: "SSR Compatible",
-                description: "Works with Next.js, Nuxt, Remix, Astro.",
-              },
-              {
-                title: "Type Safety",
-                description: "No any types, fully typed events and options",
-              },
-            ]}
-          />
-        </div>
-      </Section>
+        <ChangeSection
+          label="Removed"
+          breaking
+          items={[
+            {
+              title: "Legacy DOM Events",
+              description:
+                "timepicker:open, timepicker:confirm, timepicker:cancel, etc. - use picker.on() instead",
+            },
+            {
+              title: "setTheme() Method",
+              description:
+                "Programmatic theme setting removed - use CSS classes instead",
+            },
+            {
+              title: "theme-custom",
+              description:
+                "Removed from production bundle - users create custom themes via CSS variables",
+            },
+          ]}
+        />
 
-      <Section icon={Package} title="Version 3.2.0 - November 14, 2025">
-        <div className="space-y-6">
-          <ChangeSection
-            icon={Sparkles}
-            label="Added"
-            color="green-500"
-            items={CHANGELOG_320.added}
-          />
+        <ChangeSection
+          label="Fixed"
+          items={[
+            {
+              title: "Focus Trap Auto-Focus",
+              description:
+                "Modal wrapper auto-focuses on open (no Tab press needed)",
+            },
+            {
+              title: "Auto-Switch Focus",
+              description:
+                "Minute input receives focus when autoSwitchToMinutes enabled",
+            },
+            {
+              title: "SSR Compatibility",
+              description:
+                "No DOM globals during initialization - safe for server rendering",
+            },
+            {
+              title: "currentTime Parsing",
+              description: "Simplified time parsing for better reliability",
+            },
+            {
+              title: "Dynamic Updates",
+              description:
+                "Fixed React useEffect patterns to prevent infinite loops",
+            },
+          ]}
+        />
 
-          <ChangeSection
-            icon={Wrench}
-            label="Changed"
-            color="blue-500"
-            items={CHANGELOG_320.changed}
-          />
+        <ChangeSection
+          label="Benefits"
+          items={[
+            {
+              title: "Shorter class names",
+              description: "Reduced HTML size and improved readability",
+            },
+            {
+              title: "Smaller bundle",
+              description: "-20.9% bundle size reduction (80 KB -> 63.3 KB)",
+            },
+            {
+              title: "Better DX",
+              description:
+                "Cleaner API with grouped options and EventEmitter",
+            },
+            {
+              title: "SSR Compatible",
+              description: "Works with Next.js, Nuxt, Remix, Astro.",
+            },
+            {
+              title: "Type Safety",
+              description: "No any types, fully typed events and options",
+            },
+          ]}
+        />
+      </Release>
 
-          <ChangeSection
-            icon={Bug}
-            label="Fixed"
-            color="red-500"
-            items={CHANGELOG_320.fixed}
-          />
+      <Release title="Version 3.2.0 - November 14, 2025">
+        <ChangeSection label="Added" items={CHANGELOG_320.added} />
 
-          <ChangeSection
-            icon={Zap}
-            label="Performance"
-            color="yellow-500"
-            items={CHANGELOG_320.performance}
-          />
+        <ChangeSection label="Changed" items={CHANGELOG_320.changed} />
 
-          <div className="bg-gradient-to-br from-orange-500/5 to-yellow-500/5 rounded-lg p-4 border border-orange-500/20">
-            <h4 className="font-semibold mb-2 text-foreground flex items-center gap-2">
-              <Code className="h-4 w-4 text-orange-500" />
-              Migration Guide
-            </h4>
+        <ChangeSection label="Fixed" items={CHANGELOG_320.fixed} />
 
-            <p className="text-sm text-muted-foreground mb-3">
-              <strong className="text-orange-600 dark:text-orange-400">
-                Breaking Changes:
-              </strong>
-            </p>
+        <ChangeSection label="Performance" items={CHANGELOG_320.performance} />
 
-            <CodeBlock
-              code={`// Theme rename
+        <Callout title="Migration Guide" tone="warning">
+          <p>
+            <strong className={styles.breaking}>Breaking Changes:</strong>
+          </p>
+
+          <CodeBlock
+            code={`// Theme rename
 - theme: 'm3'
 + theme: 'm3-green'
 
 // Option rename
 - switchToMinutesAfterSelectHour: true
 + autoSwitchToMinutes: true`}
-              language="diff"
-            />
-          </div>
-        </div>
-      </Section>
+            language="diff"
+          />
+        </Callout>
+      </Release>
 
-      <Section icon={History} title="Previous Versions">
-        <div className="space-y-4">
-          <div className="rounded-lg border border-border bg-card p-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-base font-semibold text-foreground">
-                Version 3.1.2
-              </h3>
-              <span className="text-xs text-muted-foreground">Nov 7, 2025</span>
-            </div>
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-              <li>Fixed CSS variable issues with var(--timepicker-text)</li>
-              <li>Resolved input color styling problems</li>
-            </ul>
-          </div>
+      <Release title="Previous Versions">
+        <h3>Version 3.1.2</h3>
+        <p>Nov 7, 2025</p>
+        <ul>
+          <li>Fixed CSS variable issues with var(--timepicker-text)</li>
+          <li>Resolved input color styling problems</li>
+        </ul>
 
-          <div className="rounded-lg border border-border bg-card p-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-base font-semibold text-foreground">
-                Version 3.1.1
-              </h3>
-              <span className="text-xs text-muted-foreground">Nov 7, 2025</span>
-            </div>
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-              <li>Virtual DOM caching - 25% performance improvement</li>
-              <li>RAF batching for smoother animations</li>
-              <li>Input sanitization for XSS protection</li>
-            </ul>
-          </div>
+        <h3>Version 3.1.1</h3>
+        <p>Nov 7, 2025</p>
+        <ul>
+          <li>Virtual DOM caching - 25% performance improvement</li>
+          <li>RAF batching for smoother animations</li>
+          <li>Input sanitization for XSS protection</li>
+        </ul>
 
-          <div className="rounded-lg border border-border bg-card p-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-base font-semibold text-foreground">
-                Version 3.1.0
-              </h3>
-              <span className="text-xs text-muted-foreground">Nov 7, 2025</span>
-            </div>
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-              <li>
-                <strong className="text-foreground">EventEmitter API</strong> -
-                on(), once(), off()
-              </li>
-              <li>Deprecated DOM events - migrate to EventEmitter</li>
-            </ul>
-          </div>
-        </div>
-      </Section>
+        <h3>Version 3.1.0</h3>
+        <p>Nov 7, 2025</p>
+        <ul>
+          <li>
+            <strong>EventEmitter API</strong> -
+            on(), once(), off()
+          </li>
+          <li>Deprecated DOM events - migrate to EventEmitter</li>
+        </ul>
+      </Release>
 
-      <InfoBox title="Full Changelog" variant="blue">
+      <Callout title="Full Changelog">
         View the complete changelog with all versions on{" "}
         <a
           href="https://github.com/pglejzer/timepicker-ui/blob/main/CHANGELOG.md"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-primary hover:underline font-medium"
         >
           GitHub
         </a>
-      </InfoBox>
+      </Callout>
     </div>
   );
 }

@@ -1,9 +1,10 @@
+import { Fragment } from "react";
 import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
-import { InfoBox } from "@/components/info-box";
-import { Code2, FileCode, Package, Archive } from "lucide-react";
+import { Callout } from "@/components/callout";
+import { ApiTable } from "@/components/api-table";
 
 export const metadata = buildMetadata({
   title: "TypeScript",
@@ -317,11 +318,10 @@ export default function TypeScriptPage() {
       <PageHeader
         title="TypeScript"
         description="Full TypeScript support with type definitions"
-        eyebrow="API"
       />
 
-      <Section icon={Package} title="Installation">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Installation">
+        <p>
           TypeScript definitions are included with the package:
         </p>
         <CodeBlock
@@ -334,91 +334,54 @@ import type { TimepickerOptions, ConfirmEventData } from 'timepicker-ui';`}
         />
       </Section>
 
-      <Section icon={Code2} title="Main Interfaces">
-        <div className="space-y-8">
-          {mainInterfaces.map((item) => (
-            <div key={item.name} className="group relative">
-              <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-primary/0 via-primary/5 to-purple-500/5 opacity-0 transition-opacity group-hover:opacity-100" />
-              <div className="relative rounded-xl border border-border bg-card p-6 transition-all group-hover:border-primary/30">
-                <h3 className="text-xl font-bold mb-2 text-foreground">
-                  <code className="text-primary">{item.name}</code>
-                </h3>
-                <p className="text-muted-foreground mb-4">{item.description}</p>
-                <CodeBlock code={item.code} language="typescript" />
-              </div>
-            </div>
-          ))}
-        </div>
+      <Section title="Main Interfaces">
+        {mainInterfaces.map((item) => (
+          <Fragment key={item.name}>
+            <h3>
+              <code>{item.name}</code>
+            </h3>
+            <p>{item.description}</p>
+            <CodeBlock code={item.code} language="typescript" />
+          </Fragment>
+        ))}
       </Section>
 
-      <Section icon={FileCode} title="Inline Unions">
-        <div className="space-y-6">
-          {typeAliases.map((item) => (
-            <div
-              key={item.name}
-              className="rounded-lg border border-border bg-card p-6"
-            >
-              <h3 className="text-lg font-semibold mb-2 text-foreground">
-                <code className="text-primary">{item.name}</code>
-              </h3>
-              <p className="text-muted-foreground mb-4">{item.description}</p>
-              <CodeBlock code={item.code} language="typescript" />
-            </div>
-          ))}
-        </div>
+      <Section title="Inline Unions">
+        {typeAliases.map((item) => (
+          <Fragment key={item.name}>
+            <h3>
+              <code>{item.name}</code>
+            </h3>
+            <p>{item.description}</p>
+            <CodeBlock code={item.code} language="typescript" />
+          </Fragment>
+        ))}
       </Section>
 
-      <Section icon={Archive} title="Deprecated Types and Fields">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Deprecated Types and Fields">
+        <p>
           These are marked <code>@deprecated</code> in the type definitions and
           will be removed in 5.0. They still compile, so existing code keeps
           working until then.
         </p>
-        <div className="overflow-x-auto rounded-lg border border-border">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/50">
-              <tr className="border-b border-border">
-                <th className="px-4 py-3 text-left font-semibold text-foreground">
-                  Type or field
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-foreground">
-                  Note
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {deprecatedItems.map((item) => (
-                <tr
-                  key={item.name}
-                  className="hover:bg-muted/30 transition-colors"
-                >
-                  <td className="px-4 py-3">
-                    <code className="text-primary bg-primary/10 px-2 py-1 rounded text-xs font-mono">
-                      {item.name}
-                    </code>
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    {item.note}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <ApiTable
+          columns={[
+            { key: "name", label: "Type or field" },
+            { key: "note", label: "Note" },
+          ]}
+          rows={deprecatedItems.map((item) => ({
+            id: item.name,
+            name: <code>{item.name}</code>,
+            note: item.note,
+          }))}
+          rowKey="id"
+        />
       </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Usage Examples
-        </h2>
-
-        <div className="space-y-8">
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-              Basic TypeScript Usage
-            </h3>
-            <CodeBlock
-              code={`import { TimepickerUI } from 'timepicker-ui';
+      <Section title="Usage Examples">
+        <h3>Basic TypeScript Usage</h3>
+        <CodeBlock
+          code={`import { TimepickerUI } from 'timepicker-ui';
 import type { TimepickerOptions, ConfirmEventData } from 'timepicker-ui';
 
 const options: TimepickerOptions = {
@@ -436,16 +399,12 @@ if (input) {
   const picker = new TimepickerUI(input, options);
   picker.create();
 }`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-              Typed Event Subscriptions
-            </h3>
-            <CodeBlock
-              code={`import { TimepickerUI } from 'timepicker-ui';
+        <h3>Typed Event Subscriptions</h3>
+        <CodeBlock
+          code={`import { TimepickerUI } from 'timepicker-ui';
 
 const picker = new TimepickerUI('#timepicker', {
   clock: { showSeconds: true }
@@ -488,16 +447,12 @@ picker.once('open', (data) => {
   // data: OpenEventData
   console.log(data.hour, data.minutes, data.seconds);
 });`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-              React with TypeScript
-            </h3>
-            <CodeBlock
-              code={`import { useEffect, useRef } from 'react';
+        <h3>React with TypeScript</h3>
+        <CodeBlock
+          code={`import { useEffect, useRef } from 'react';
 import { TimepickerUI } from 'timepicker-ui';
 import type { TimepickerOptions } from 'timepicker-ui';
 
@@ -532,16 +487,12 @@ export function TimePicker({ onTimeSelect, theme = 'basic' }: TimePickerProps) {
 
   return <input ref={inputRef} type="text" placeholder="Select time" />;
 }`}
-              language="tsx"
-            />
-          </div>
+          language="tsx"
+        />
 
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-              Error Handling
-            </h3>
-            <CodeBlock
-              code={`import type { ConfirmEventData, ErrorEventData } from 'timepicker-ui';
+        <h3>Error Handling</h3>
+        <CodeBlock
+          code={`import type { ConfirmEventData, ErrorEventData } from 'timepicker-ui';
 import { TimepickerUI } from 'timepicker-ui';
 
 const picker = new TimepickerUI('#timepicker', {
@@ -555,16 +506,12 @@ const picker = new TimepickerUI('#timepicker', {
     }
   }
 });`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-              Extending Types
-            </h3>
-            <CodeBlock
-              code={`import type { TimepickerOptions, ConfirmEventData } from 'timepicker-ui';
+        <h3>Extending Types</h3>
+        <CodeBlock
+          code={`import type { TimepickerOptions, ConfirmEventData } from 'timepicker-ui';
 import { TimepickerUI } from 'timepicker-ui';
 
 // Extend options with custom properties
@@ -612,17 +559,15 @@ class CustomTimepicker {
     this.picker.destroy();
   }
 }`}
-              language="typescript"
-            />
-          </div>
-        </div>
-      </section>
+          language="typescript"
+        />
+      </Section>
 
-      <InfoBox title="IntelliSense Support" variant="blue">
+      <Callout title="IntelliSense Support">
         All options and methods have full IntelliSense support in VS Code and
         other TypeScript-aware editors. Hover over any property to see its
         documentation.
-      </InfoBox>
+      </Callout>
     </div>
   );
 }

@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Palette } from "lucide-react";
 
 export default function BasicThemePage() {
   return (
@@ -11,14 +10,14 @@ export default function BasicThemePage() {
       <PageHeader
         title="Basic Theme"
         description="Default Material Design inspired theme"
-        eyebrow="Example · Themes"
       />
 
-      <Section icon={Palette} title="Default Basic Theme">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Default Basic Theme">
+        <p>
           The basic theme is the default Material Design inspired style:
         </p>
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'basic' }
 });
@@ -29,8 +28,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Palette} title="Basic Theme with 12h">
+      <Section title="Basic Theme with 12h">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'basic' },
   clock: {
@@ -49,8 +49,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Palette} title="Basic Theme with 24h">
+      <Section title="Basic Theme with 24h">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'basic' },
   clock: { type: '24h' }
@@ -63,8 +64,10 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Palette} title="Basic with Custom Labels">
+      <Section title="Basic with Custom Labels">
         <TimepickerExample
+          display="field"
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'basic' },
   labels: {

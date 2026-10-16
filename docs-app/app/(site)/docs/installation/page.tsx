@@ -2,8 +2,7 @@ import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
-import { InfoBox } from "@/components/info-box";
-import { Terminal, Package, FileCode, Globe } from "lucide-react";
+import { Callout } from "@/components/callout";
 import Link from "next/link";
 
 export const metadata = buildMetadata({
@@ -19,11 +18,10 @@ export default function InstallationPage() {
       <PageHeader
         title="Installation"
         description="Get started with Timepicker-UI in your project"
-        eyebrow="Guide"
       />
 
-      <Section icon={Terminal} title="Package Manager">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Package Manager">
+        <p>
           Install via npm, yarn, or pnpm:
         </p>
         <CodeBlock
@@ -36,13 +34,13 @@ pnpm add timepicker-ui`}
         />
       </Section>
 
-      <Section icon={Package} title="Box Sizing">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Box Sizing">
+        <p>
           You do not need a global <code>box-sizing</code> reset for the
           picker. It sets <code>box-sizing: border-box</code> on its own modal
           and on every element inside it.
         </p>
-        <p className="text-muted-foreground mb-4">
+        <p>
           If your own layout already uses the common reset below, keep it. It
           does not conflict with the picker.
         </p>
@@ -56,8 +54,8 @@ pnpm add timepicker-ui`}
         />
       </Section>
 
-      <Section icon={FileCode} title="Import Styles">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Import Styles">
+        <p>
           Import the library styles in your main entry file:
         </p>
         <CodeBlock
@@ -66,8 +64,8 @@ pnpm add timepicker-ui`}
         />
       </Section>
 
-      <Section icon={Globe} title="CDN">
-        <p className="text-muted-foreground mb-4">
+      <Section title="CDN">
+        <p>
           For quick prototyping, use the CDN version:
         </p>
         <CodeBlock
@@ -82,16 +80,11 @@ pnpm add timepicker-ui`}
         />
       </Section>
 
-      <InfoBox title="Ready for the next step?" variant="emerald">
+      <Callout title="Ready for the next step?" tone="tip">
         Check out the{" "}
-        <Link
-          href="/docs/quick-start"
-          className="text-primary hover:underline font-medium"
-        >
-          Quick Start
-        </Link>{" "}
+        <Link href="/docs/quick-start">Quick Start</Link>{" "}
         guide to start building with Timepicker-UI
-      </InfoBox>
+      </Callout>
     </div>
   );
 }

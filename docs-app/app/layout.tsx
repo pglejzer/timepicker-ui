@@ -1,22 +1,18 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata, Viewport } from "next";
+import { fontMono, fontText } from "./fonts";
+import "./styles/tokens.css";
+import "./styles/base.css";
 import "timepicker-ui/index.css";
 import { CommandMenu } from "@/components/command-menu";
 import { ConsoleBanner } from "@/components/console-banner";
 import { Analytics } from "@vercel/analytics/next";
 
-const geistSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist-sans",
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
-  display: "swap",
-});
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#111111" },
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://timepicker-ui.vercel.app"),
@@ -79,7 +75,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${fontText.variable} ${fontMono.variable}`}
     >
       <head>
         <script
@@ -94,11 +90,8 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
-        >
+      <body>
+        <a href="#main-content" className="skip-link">
           Skip to content
         </a>
         {children}

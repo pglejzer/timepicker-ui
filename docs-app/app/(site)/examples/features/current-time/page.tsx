@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Clock } from "lucide-react";
 
 export default function CurrentTimePage() {
   return (
@@ -16,11 +15,10 @@ export default function CurrentTimePage() {
             <code>clock.defaultTime</code>.
           </>
         }
-        eyebrow="Example · Features"
       />
 
-      <Section icon={Clock} title="Simple Current Time">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Simple Current Time">
+        <p>
           Set <code>defaultTime</code> to <code>&apos;now&apos;</code> to show
           the current time and write it to the input:
         </p>
@@ -35,13 +33,14 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Clock} title="Current Time Without Updating the Input">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Current Time Without Updating the Input">
+        <p>
           With the object form and <code>updateInput: false</code>, the picker
           opens on the current time and the input stays empty until the user
           confirms:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   clock: {
     defaultTime: {
@@ -62,8 +61,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Clock} title="Clock Type from the Locale">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Clock Type from the Locale">
+        <p>
           Use <code>clock.type: &apos;auto&apos;</code> to pick 12h or 24h from
           the browser locale:
         </p>
@@ -84,8 +83,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Clock} title="Custom Time">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Custom Time">
+        <p>
           Set specific time instead of current:
         </p>
         <TimepickerExample

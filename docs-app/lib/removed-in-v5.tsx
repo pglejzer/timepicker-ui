@@ -7,8 +7,6 @@ export interface RemovedItem {
   action: ReactNode;
 }
 
-const linkClassName = "text-primary hover:underline font-medium";
-
 export const removedItems: RemovedItem[] = [
   {
     id: "renamed-options",
@@ -21,7 +19,7 @@ export const removedItems: RemovedItem[] = [
     action: (
       <>
         Use the new names. The{" "}
-        <Link href="/docs/api/options#renamed" className={linkClassName}>
+        <Link href="/docs/api/options#renamed">
           Renamed in 4.5.0
         </Link>{" "}
         table lists every pair.

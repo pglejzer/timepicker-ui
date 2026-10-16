@@ -70,6 +70,9 @@ Dispatch `build-release` again in **apply mode** with the approved version and f
 It edits root `package.json`, README (badge + affected sections), `CHANGELOG.md`, and the
 docs-app changelog/what's-new/version strings — bumping only current-version references and
 leaving historical ones intact. docs-app files follow docs-app's own conventions and stay CRLF.
+After the docs-app `timepicker-ui` dependency is updated (the user runs the install), the main
+agent runs `node docs-app/scripts/generate-css-reference.mjs` and reviews the diff of
+`docs-app/lib/generated/css-reference.json`.
 
 ### Phase 5 — Sanity build & report
 - Run the full suite and a build to confirm nothing broke: `cd app && npm test && npm run build:prod`,

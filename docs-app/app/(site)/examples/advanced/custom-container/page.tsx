@@ -4,8 +4,7 @@ import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
 import { CodeBlock } from "@/components/code-block";
-import { Box, Layout } from "lucide-react";
-import { InfoBox } from "@/components/info-box";
+import { Callout } from "@/components/callout";
 
 export default function CustomContainerPage() {
   return (
@@ -13,29 +12,29 @@ export default function CustomContainerPage() {
       <PageHeader
         title="Custom Container"
         description="Control where the timepicker modal is rendered in the DOM"
-        eyebrow="Example · Advanced"
       />
 
-      <InfoBox title="ui.appendTo" variant="blue" className="mb-8">
+      <Callout title="ui.appendTo">
         By default, the timepicker modal is appended to{" "}
-        <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
+        <code>
           document.body
         </code>
         . Set{" "}
-        <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
+        <code>
           ui.appendTo
         </code>{" "}
         to a CSS selector or an element to render it inside another element. The
         picker looks a selector up with <code>document.querySelector</code> each
         time it opens, so the element must exist by then. A selector cannot point
         into a shadow root or another frame&apos;s document.
-      </InfoBox>
+      </Callout>
 
-      <Section icon={Box} title="Custom Container">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Custom Container">
+        <p>
           Append the modal to a specific container:
         </p>
         <TimepickerExample
+          display="field"
           code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
@@ -53,8 +52,8 @@ picker.create();
         />
       </Section>
 
-      <Section icon={Layout} title="Within Modal Dialog">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Within Modal Dialog">
+        <p>
           Use inside a modal or dialog component:
         </p>
         <CodeBlock
@@ -79,8 +78,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Layout} title="React">
-        <p className="text-muted-foreground mb-4">
+      <Section title="React">
+        <p>
           Render the container in your component and pass its selector. Create
           the picker in an effect, so it only runs in the browser:
         </p>
@@ -115,8 +114,8 @@ function TimepickerWithContainer() {
         />
       </Section>
 
-      <Section icon={Box} title="Iframe Integration">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Iframe Integration">
+        <p>
           Load timepicker-ui in the iframe&apos;s own page. The modal is
           appended to that document&apos;s <code>body</code>, so it stays inside
           the frame:
@@ -133,8 +132,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Layout} title="Scoped Styles">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Scoped Styles">
+        <p>
           Use custom container with scoped CSS:
         </p>
         <CodeBlock
@@ -164,8 +163,8 @@ picker.create();
         />
       </Section>
 
-      <Section icon={Box} title="Multiple Containers">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Multiple Containers">
+        <p>
           Different pickers in different containers:
         </p>
         <CodeBlock

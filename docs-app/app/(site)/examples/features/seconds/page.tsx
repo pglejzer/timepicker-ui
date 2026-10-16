@@ -3,9 +3,8 @@ import { buildMetadata } from "@/lib/metadata";
 import { JsonLdBreadcrumb } from "@/components/json-ld";
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
-import { InfoBox } from "@/components/info-box";
+import { Callout } from "@/components/callout";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Timer, Layers, Ban, ArrowLeftRight, Smartphone } from "lucide-react";
 
 export const metadata = buildMetadata({
   title: "Seconds Example",
@@ -24,21 +23,20 @@ export default function SecondsExamplePage() {
           <>
             Pick hours, minutes and seconds with{" "}
             <code>clock.showSeconds</code>. Full reference on the{" "}
-            <Link href="/docs/features/seconds" className="text-primary underline">
+            <Link href="/docs/features/seconds">
               Seconds docs page
             </Link>
             .
           </>
         }
-        eyebrow="Example · Features"
       />
 
-      <InfoBox title="Version" variant="blue" className="mb-8">
+      <Callout title="Version">
         Seconds need timepicker-ui 4.5.0 or later.
-      </InfoBox>
+      </Callout>
 
-      <Section icon={Timer} title="Clock with Seconds (12h)">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Clock with Seconds (12h)">
+        <p>
           Pick an hour, then a minute. The face then switches to seconds. The
           value looks like <code>02:30:15 PM</code>.
         </p>
@@ -53,8 +51,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Timer} title="24h with a 5-Second Step">
-        <p className="text-muted-foreground mb-4">
+      <Section title="24h with a 5-Second Step">
+        <p>
           <code>incrementSeconds</code> sets the step on the seconds face and
           the keyboard. The value looks like <code>14:30:15</code>.
         </p>
@@ -73,8 +71,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Timer} title="No Auto-Switch to Seconds">
-        <p className="text-muted-foreground mb-4">
+      <Section title="No Auto-Switch to Seconds">
+        <p>
           With <code>autoSwitchToSeconds: false</code>, the face stays on
           minutes. Click the seconds field in the header to set seconds.
         </p>
@@ -92,8 +90,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Layers} title="Wheel with Seconds">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Wheel with Seconds">
+        <p>
           Three columns: hours, minutes and seconds.
         </p>
         <TimepickerExample
@@ -115,13 +113,14 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Layers} title="Compact Wheel Popover with Seconds">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Compact Wheel Popover with Seconds">
+        <p>
           Columns <code>HH : MM : SS</code> in a popover. With{" "}
           <code>placement: &apos;auto&apos;</code> it opens below the input
           when there is room, otherwise above.
         </p>
         <TimepickerExample
+          display="field"
           code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
 
@@ -143,8 +142,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Ban} title="Disabled Seconds">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Disabled Seconds">
+        <p>
           <code>disabledTime.seconds</code> blocks the same seconds in every
           minute. Here :55 to :59 cannot be picked.
         </p>
@@ -167,8 +166,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Ban} title="Disabled Range with Seconds">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Disabled Range with Seconds">
+        <p>
           Blocks 10:00:30 AM up to and including 10:05:59 AM. Minute 10:00
           stays selectable for seconds :00 to :29.
         </p>
@@ -193,8 +192,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={ArrowLeftRight} title="Range with Seconds">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Range with Seconds">
+        <p>
           <code>range:confirm</code> carries <code>durationSeconds</code>.{" "}
           <code>minDuration</code> stays in minutes but is compared to the
           second, so this range must be at least 60 seconds long.
@@ -224,8 +223,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Smartphone} title="Keyboard View">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Keyboard View">
+        <p>
           Three editable fields, each with a caption. The captions here are in
           Polish. The seconds caption comes from <code>labels.second</code>.
         </p>

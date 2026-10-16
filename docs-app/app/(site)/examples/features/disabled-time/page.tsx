@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Ban } from "lucide-react";
 
 export default function DisabledTimePage() {
   return (
@@ -11,11 +10,10 @@ export default function DisabledTimePage() {
       <PageHeader
         title="Disabled Time"
         description="Restrict specific hours, minutes, or time ranges"
-        eyebrow="Example · Features"
       />
 
-      <Section icon={Ban} title="Disabled Hours">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Disabled Hours">
+        <p>
           Disable specific hours from selection:
         </p>
         <TimepickerExample
@@ -37,8 +35,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Ban} title="Disabled Minutes">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Disabled Minutes">
+        <p>
           Disable specific minutes from selection:
         </p>
         <TimepickerExample
@@ -60,8 +58,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Ban} title="Time Range">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Time Range">
+        <p>
           Disable a time range with <code>disabledTime.ranges</code> (the
           hours, minutes and seconds lists are ignored when ranges is set):
         </p>
@@ -86,8 +84,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Ban} title="Multiple Time Ranges">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Multiple Time Ranges">
+        <p>
           Disable multiple time ranges:
         </p>
         <TimepickerExample
@@ -119,8 +117,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Ban} title="24h Format with Range">
-        <p className="text-muted-foreground mb-4">
+      <Section title="24h Format with Range">
+        <p>
           Disable time range in 24h format:
         </p>
         <TimepickerExample
@@ -144,8 +142,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Ban} title="Dynamic DisabledTime Update">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Dynamic DisabledTime Update">
+        <p>
           Update disabled times at runtime with the setOptions() method:
         </p>
         <TimepickerExample
@@ -174,8 +172,8 @@ picker.setOptions({
         />
       </Section>
 
-      <Section icon={Ban} title="Dynamic Range Update">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Dynamic Range Update">
+        <p>
           Update disabled ranges at runtime for shift scheduling or business
           rules:
         </p>

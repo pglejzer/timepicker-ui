@@ -2,10 +2,10 @@
 
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
-import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { X } from "lucide-react";
 import { useState } from "react";
 
 export default function OnCancelPage() {
@@ -16,40 +16,16 @@ export default function OnCancelPage() {
       <PageHeader
         title="onCancel"
         description="Handle cancellation when user closes the picker"
-        eyebrow="React · Callbacks"
       />
 
-      <Section icon={X} title="Cancel Callback">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Cancel Callback">
+        <p>
           The onCancel event fires when user clicks Cancel or backdrop:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Cancellation Handler
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Tracks how many times picker was cancelled
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 rounded-lg border border-border bg-background p-6 space-y-4">
-              <Timepicker
-                placeholder="Try cancelling"
-                className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                onCancel={() => {
-                  setCancelCount((prev) => prev + 1);
-                }}
-              />
-              <div className="rounded-lg bg-muted p-4">
-                <p className="text-sm">
-                  <strong>Cancelled:</strong> {cancelCount}{" "}
-                  {cancelCount === 1 ? "time" : "times"}
-                </p>
-              </div>
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Cancellation Handler</h3>
+        <p>Tracks how many times picker was cancelled</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 import { useState } from "react";
 
 function App() {
@@ -66,14 +42,26 @@ function App() {
     </div>
   );
 }`}
-              language="tsx"
+          language="tsx"
+        >
+          <div className={demo.form}>
+            <Timepicker
+              placeholder="Try cancelling"
+              className={demo.input}
+              onCancel={() => {
+                setCancelCount((prev) => prev + 1);
+              }}
             />
+            <p className={demo.output} aria-live="polite">
+              <strong>Cancelled:</strong> {cancelCount}{" "}
+              {cancelCount === 1 ? "time" : "times"}
+            </p>
           </div>
-        </div>
+        </Figure>
       </Section>
 
-      <Section icon={X} title="Use Cases">
-        <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+      <Section title="Use Cases">
+        <ul>
           <li>Revert form changes</li>
           <li>Track user behavior analytics</li>
           <li>Reset temporary state</li>

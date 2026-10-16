@@ -1,9 +1,8 @@
 import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
-import { LinkCard } from "@/components/link-card";
-import { InfoBox } from "@/components/info-box";
-import { Palette, Paintbrush, Wand2, Keyboard } from "lucide-react";
+import { Callout } from "@/components/callout";
+import { Anatomy } from "@/components/anatomy";
 import { Section } from "@/components/section";
 import Link from "next/link";
 
@@ -20,25 +19,35 @@ export default function StylingPage() {
       <PageHeader
         title="Custom Styling"
         description="Customize the timepicker appearance to match your brand"
-        eyebrow="Guide"
       />
 
-      <Section icon={Palette} title="CSS Variables">
-        <p className="text-muted-foreground mb-4">
+      <Anatomy
+        notes={[
+          { selector: ".tp-ui-select-time", side: "left", code: ".tp-ui-select-time", text: "Header label." },
+          { selector: ".tp-ui-hour", side: "left", code: ".tp-ui-hour", text: "Hour field." },
+          { selector: ".tp-ui-clock-face", side: "left", code: ".tp-ui-clock-face", text: "Clock face with the hour and minute tips." },
+          { selector: ".tp-ui-footer", side: "left", code: ".tp-ui-footer", text: "Footer with the buttons." },
+          { selector: ".tp-ui-wrapper", side: "right", code: ".tp-ui-wrapper", text: "The picker's root element." },
+          { selector: ".tp-ui-type-mode, .tp-ui-am", side: "right", code: ".tp-ui-type-mode", text: "AM/PM switch in 12-hour mode." },
+          { selector: ".tp-ui-minutes", side: "right", code: ".tp-ui-minutes", text: "Minute field." },
+          { selector: ".tp-ui-clock-hand", side: "right", code: ".tp-ui-clock-hand", text: "Clock hand." },
+        ]}
+        options={{ ui: { inline: { enabled: true, showButtons: true } } }}
+        caption="Classes you can target in your own CSS."
+      />
+
+      <Section title="CSS Variables">
+        <p>
           Timepicker-UI uses CSS custom properties (variables) for easy
           customization. Override these variables to change colors and styles:
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Color and Shape Tokens
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              Defaults of the <code>basic</code> theme. Each built-in theme
-              sets its own values.
-            </p>
-            <CodeBlock
-              code={`:root {
+        <h3>Color and Shape Tokens</h3>
+        <p>
+          Defaults of the <code>basic</code> theme. Each built-in theme
+          sets its own values.
+        </p>
+        <CodeBlock
+          code={`:root {
   /* Surfaces */
   --tp-bg: #ece6ee;
   --tp-surface: #e6e0e9;
@@ -83,65 +92,55 @@ export default function StylingPage() {
      --tp-dropdown-option-text. Text color of a hovered or
      keyboard-focused option. */
 }`}
-              language="css"
-            />
-            <p className="text-muted-foreground mt-4">
-              Themes other than <code>basic</code> set their values on{" "}
-              <code>.tp-ui-modal[data-theme]</code>, which wins over{" "}
-              <code>:root</code>. To override a token for every theme, set it
-              on <code>.tp-ui-wrapper</code>. For one picker, use the class you
-              pass in <code>ui.cssClass</code> (
-              <code>.tp-ui-wrapper.my-theme</code>).
-            </p>
-            <InfoBox
-              title="Tokens that do nothing"
-              variant="orange"
-              className="mt-4"
-            >
-              <p>
-                No rule reads <code>--tp-tertiary-container</code>,{" "}
-                <code>--tp-on-tertiary-container</code>,{" "}
-                <code>--tp-hover-bg</code> or <code>--tp-radius</code>. Setting
-                them changes nothing, and 5.0 removes them.
-              </p>
-            </InfoBox>
-          </div>
+          language="css"
+        />
+        <p>
+          Themes other than <code>basic</code> set their values on{" "}
+          <code>.tp-ui-modal[data-theme]</code>, which wins over{" "}
+          <code>:root</code>. To override a token for every theme, set it
+          on <code>.tp-ui-wrapper</code>. For one picker, use the class you
+          pass in <code>ui.cssClass</code> (
+          <code>.tp-ui-wrapper.my-theme</code>).
+        </p>
+        <Callout title="Tokens that do nothing" tone="warning">
+          <p>
+            No rule reads <code>--tp-tertiary-container</code>,{" "}
+            <code>--tp-on-tertiary-container</code>,{" "}
+            <code>--tp-hover-bg</code> or <code>--tp-radius</code>. Setting
+            them changes nothing, and 5.0 removes them.
+          </p>
+        </Callout>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">Font</h3>
-            <p className="text-muted-foreground mb-4">
-              To change the font, set <code>--tp-font-family</code>.{" "}
-              <code>.tp-ui-wrapper</code> reads it with{" "}
-              <code>font-family: var(--tp-font-family, &apos;Roboto&apos;, sans-serif)</code>
-              , and the time fields and buttons in the modal inherit it. Set
-              the variable on <code>:root</code> or <code>.tp-ui-modal</code>{" "}
-              for every picker, or on the class you pass in{" "}
-              <code>ui.cssClass</code> for one picker. The picker adds that
-              class to <code>.tp-ui-wrapper</code>.
-            </p>
-            <CodeBlock
-              code={`/* ui: { cssClass: 'my-theme' } */
+        <h3>Font</h3>
+        <p>
+          To change the font, set <code>--tp-font-family</code>.{" "}
+          <code>.tp-ui-wrapper</code> reads it with{" "}
+          <code>font-family: var(--tp-font-family, &apos;Roboto&apos;, sans-serif)</code>
+          , and the time fields and buttons in the modal inherit it. Set
+          the variable on <code>:root</code> or <code>.tp-ui-modal</code>{" "}
+          for every picker, or on the class you pass in{" "}
+          <code>ui.cssClass</code> for one picker. The picker adds that
+          class to <code>.tp-ui-wrapper</code>.
+        </p>
+        <CodeBlock
+          code={`/* ui: { cssClass: 'my-theme' } */
 .tp-ui-wrapper.my-theme {
   --tp-font-family: 'Inter', system-ui, sans-serif;
 }`}
-              language="css"
-            />
-            <p className="text-muted-foreground mt-4 text-sm">
-              Setting <code>font-family</code> directly on{" "}
-              <code>.tp-ui-wrapper.my-theme</code> also works.
-            </p>
-          </div>
+          language="css"
+        />
+        <p>
+          Setting <code>font-family</code> directly on{" "}
+          <code>.tp-ui-wrapper.my-theme</code> also works.
+        </p>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Seconds Sizes
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              Used when <code>clock.showSeconds</code> is on, so three fields
-              fit in the header, the wheel and the range tabs.
-            </p>
-            <CodeBlock
-              code={`:root {
+        <h3>Seconds Sizes</h3>
+        <p>
+          Used when <code>clock.showSeconds</code> is on, so three fields
+          fit in the header, the wheel and the range tabs.
+        </p>
+        <CodeBlock
+          code={`:root {
   /* Header fields, 12h */
   --tp-size-input-seconds-12h: 64px;
   --tp-size-input-seconds-12h-narrow: 58px; /* screens 330px wide or less */
@@ -159,42 +158,34 @@ export default function StylingPage() {
   --tp-wheel-separator-width-seconds: 16px;
   --tp-range-tab-value-font-size-seconds: 14px;
 }`}
-              language="css"
-            />
-          </div>
+          language="css"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Keyboard View in Landscape
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              Size of the keyboard input view on landscape screens up to 480px
-              tall.
-            </p>
-            <CodeBlock
-              code={`:root {
+        <h3>Keyboard View in Landscape</h3>
+        <p>
+          Size of the keyboard input view on landscape screens up to 480px
+          tall.
+        </p>
+        <CodeBlock
+          code={`:root {
   --tp-mobile-landscape-width: 328px;
   --tp-mobile-landscape-height: 258px;
   --tp-mobile-landscape-height-range: 287px;    /* range plugin */
   --tp-mobile-landscape-height-timezone: 326px; /* timezone selector */
 }`}
-              language="css"
-            />
-          </div>
+          language="css"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Compact-Wheel Popover
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              Used when <code>compact-wheel</code> opens as a popover next to
-              the input (<code>wheel.placement</code> is set). The popover is
-              at least as wide as the input and <code>--tp-popover-min-width</code>,
-              at most <code>--tp-popover-max-width</code>, and never closer to
-              the viewport edge than <code>--tp-popover-edge-margin</code>.
-            </p>
-            <CodeBlock
-              code={`:root {
+        <h3>Compact-Wheel Popover</h3>
+        <p>
+          Used when <code>compact-wheel</code> opens as a popover next to
+          the input (<code>wheel.placement</code> is set). The popover is
+          at least as wide as the input and <code>--tp-popover-min-width</code>,
+          at most <code>--tp-popover-max-width</code>, and never closer to
+          the viewport edge than <code>--tp-popover-edge-margin</code>.
+        </p>
+        <CodeBlock
+          code={`:root {
   --tp-popover-gap: 4px;          /* space between the input and the popover */
   --tp-popover-edge-margin: 4px;  /* smallest space to the viewport edge */
   --tp-popover-min-width: 260px;
@@ -202,49 +193,40 @@ export default function StylingPage() {
   --tp-popover-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
   /* --tp-popover-radius: not set, falls back to --tp-border-radius */
 }`}
-              language="css"
-            />
-            <p className="text-muted-foreground mt-4 text-sm">
-              The gap, edge margin and widths are read from{" "}
-              <code>.tp-ui-modal</code>, so set them on <code>:root</code> or{" "}
-              <code>.tp-ui-modal</code>, not on <code>.tp-ui-wrapper</code>.
-              Any CSS length works, for example <code>px</code>,{" "}
-              <code>rem</code> or <code>calc()</code>.
-            </p>
-          </div>
+          language="css"
+        />
+        <p>
+          The gap, edge margin and widths are read from{" "}
+          <code>.tp-ui-modal</code>, so set them on <code>:root</code> or{" "}
+          <code>.tp-ui-modal</code>, not on <code>.tp-ui-wrapper</code>.
+          Any CSS length works, for example <code>px</code>,{" "}
+          <code>rem</code> or <code>calc()</code>.
+        </p>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Scrollbar Gap
-            </h3>
-            <p className="text-muted-foreground">
-              <code>--tp-scrollbar-gap</code> is set by the picker, not by you.
-              While a picker locks page scroll (
-              <code>ui.allowPageScroll: false</code>, the default), it is set
-              on <code>&lt;html&gt;</code> to the width of the removed
-              scrollbar, or <code>0px</code> when there was none. Read it in
-              your own CSS to keep fixed elements in place. See{" "}
-              <Link
-                href="/docs/configuration#scroll-lock"
-                className="text-primary underline"
-              >
-                Scroll lock and fixed headers
-              </Link>
-              .
-            </p>
-          </div>
-        </div>
+        <h3>Scrollbar Gap</h3>
+        <p>
+          <code>--tp-scrollbar-gap</code> is set by the picker, not by you.
+          While a picker locks page scroll (
+          <code>ui.allowPageScroll: false</code>, the default), it is set
+          on <code>&lt;html&gt;</code> to the width of the removed
+          scrollbar, or <code>0px</code> when there was none. Read it in
+          your own CSS to keep fixed elements in place. See{" "}
+          <Link href="/docs/configuration#scroll-lock">
+            Scroll lock and fixed headers
+          </Link>
+          .
+        </p>
       </Section>
 
-      <Section icon={Keyboard} title="Focus Ring">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Focus Ring">
+        <p>
           Keyboard focus shows one 3px ring in <code>--tp-focus-ring</code>, 2px
           outside the control. When <code>--tp-focus-ring</code> is not set, the
           ring uses <code>--tp-primary</code>. The width and offset come from{" "}
           <code>--tp-outline-width-thick</code> and{" "}
           <code>--tp-outline-offset</code>.
         </p>
-        <ul className="list-disc pl-6 space-y-2 text-muted-foreground mb-4">
+        <ul>
           <li>
             AM/PM and the time fields draw the ring inside their edge. On the
             selected field it uses <code>--tp-on-primary-container</code>, on
@@ -280,16 +262,13 @@ export default function StylingPage() {
         />
       </Section>
 
-      <Section icon={Paintbrush} title="Creating Custom Themes">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Creating Custom Themes">
+        <p>
           Timepicker-UI comes with several built-in themes:
         </p>
-        <div className="rounded-lg border border-border bg-card p-6 mb-6">
-          <h3 className="font-semibold mb-3 text-foreground">
-            Available Themes
-          </h3>
-          <CodeBlock
-            code={`import { TimepickerUI } from 'timepicker-ui';
+        <h3>Available Themes</h3>
+        <CodeBlock
+          code={`import { TimepickerUI } from 'timepicker-ui';
 
 // Material Design 2 theme (purple/magenta)
 const picker1 = new TimepickerUI(input1, { ui: { theme: 'm2' } });
@@ -305,24 +284,19 @@ const picker4 = new TimepickerUI(input4, { ui: { theme: 'crane' } });
 
 // Crane-straight theme (sharp edges)
 const picker5 = new TimepickerUI(input5, { ui: { theme: 'crane-straight' } });`}
-            language="typescript"
-          />
-        </div>
+          language="typescript"
+        />
 
-        <p className="text-muted-foreground mb-4">
+        <p>
           To make your own theme, give the picker a class with{" "}
-          <code className="text-primary">ui.cssClass</code> and set the CSS
+          <code>ui.cssClass</code> and set the CSS
           variables under <code>.tp-ui-wrapper.your-class</code>. The picker
           adds the class to its <code>.tp-ui-wrapper</code> when it opens.{" "}
           <code>ui.theme</code> accepts only the 12 built-in names.
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Custom Theme Example
-            </h3>
-            <CodeBlock
-              code={`.tp-ui-wrapper.my-theme {
+        <h3>Custom Theme Example</h3>
+        <CodeBlock
+          code={`.tp-ui-wrapper.my-theme {
   --tp-bg: #ffffff;
   --tp-text: #000000;
   --tp-primary: #6200ee;
@@ -338,45 +312,37 @@ const picker5 = new TimepickerUI(input5, { ui: { theme: 'crane-straight' } });`}
   --tp-shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.25);
   --tp-border-radius: 4px;
 }`}
-              language="css"
-            />
-          </div>
+          language="css"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Using Your Custom Theme
-            </h3>
-            <CodeBlock
-              code={`import { TimepickerUI } from 'timepicker-ui';
+        <h3>Using Your Custom Theme</h3>
+        <CodeBlock
+          code={`import { TimepickerUI } from 'timepicker-ui';
 
 const picker = new TimepickerUI('#timepicker', {
   ui: { cssClass: 'my-theme' }
 });
 
 picker.create();`}
-              language="typescript"
-            />
-            <p className="text-muted-foreground mt-4 text-sm">
-              You can also start from a built-in theme:{" "}
-              <code>{"ui: { theme: 'dark', cssClass: 'my-theme' }"}</code>. Your
-              values win because the wrapper sits inside the themed modal.
-            </p>
-          </div>
+          language="typescript"
+        />
+        <p>
+          You can also start from a built-in theme:{" "}
+          <code>{"ui: { theme: 'dark', cssClass: 'my-theme' }"}</code>. Your
+          values win because the wrapper sits inside the themed modal.
+        </p>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Switching Themes at Runtime
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              There is no <code>setTheme()</code> method. Change{" "}
-              <code>ui.theme</code> or <code>ui.cssClass</code> with{" "}
-              <code>setOptions()</code>. The picker builds its modal when it opens,
-              so the new theme shows the next time it opens. A picker that is
-              open re-renders right away. Load the CSS file of every theme you
-              switch to.
-            </p>
-            <CodeBlock
-              code={`import 'timepicker-ui/main.css';
+        <h3>Switching Themes at Runtime</h3>
+        <p>
+          There is no <code>setTheme()</code> method. Change{" "}
+          <code>ui.theme</code> or <code>ui.cssClass</code> with{" "}
+          <code>setOptions()</code>. The picker builds its modal when it opens,
+          so the new theme shows the next time it opens. A picker that is
+          open re-renders right away. Load the CSS file of every theme you
+          switch to.
+        </p>
+        <CodeBlock
+          code={`import 'timepicker-ui/main.css';
 import 'timepicker-ui/theme-dark.css';
 
 const picker = new TimepickerUI('#timepicker', {
@@ -386,18 +352,12 @@ const picker = new TimepickerUI('#timepicker', {
 picker.create();
 
 picker.setOptions({ ui: { theme: 'dark' } });`}
-              language="typescript"
-            />
-          </div>
-        </div>
+          language="typescript"
+        />
       </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground flex items-center gap-2">
-          <Wand2 className="h-6 w-6" />
-          Material Design 3 Ripple Effect
-        </h2>
-        <p className="text-muted-foreground mb-4">
+      <Section title="Material Design 3 Ripple Effect">
+        <p>
           Pressing a control shows a ripple that grows from the press point.
           Hover, keyboard focus and press also show a state layer, a faint
           overlay in the control&apos;s text color. Keyboard activation does not
@@ -405,34 +365,27 @@ picker.setOptions({ ui: { theme: 'dark' } });`}
           shows only the pressed layer, without the ripple.
         </p>
 
-        <div className="rounded-lg border border-border bg-card p-6 mb-6">
-          <h3 className="font-semibold mb-3 text-foreground">
-            Where It Applies
-          </h3>
-          <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-            <li>OK, Cancel and Clear buttons</li>
-            <li>AM/PM buttons</li>
-            <li>Hour, minute and second fields</li>
-            <li>The view-switch icon</li>
-            <li>Range tabs (range plugin) and the timezone trigger (timezone plugin)</li>
-          </ul>
-        </div>
+        <h3>Where It Applies</h3>
+        <ul>
+          <li>OK, Cancel and Clear buttons</li>
+          <li>AM/PM buttons</li>
+          <li>Hour, minute and second fields</li>
+          <li>The view-switch icon</li>
+          <li>Range tabs (range plugin) and the timezone trigger (timezone plugin)</li>
+        </ul>
 
-        <div className="rounded-lg border border-border bg-card p-6">
-          <h3 className="font-semibold mb-3 text-foreground">
-            Customizing the Ripple
-          </h3>
-          <p className="text-muted-foreground mb-4">
-            Controls with the effect carry the{" "}
-            <code className="text-primary">data-md3-ripple</code> attribute.
-            Their <code>::before</code> is the state layer and{" "}
-            <code>::after</code> is the ripple. Both use the control&apos;s text
-            color (<code>currentColor</code>). On the selected time field that
-            is <code>--tp-on-primary-container</code>. Strength and timing come
-            from these tokens (defaults shown):
-          </p>
-          <CodeBlock
-            code={`.tp-ui-wrapper.my-theme {
+        <h3>Customizing the Ripple</h3>
+        <p>
+          Controls with the effect carry the{" "}
+          <code>data-md3-ripple</code> attribute.
+          Their <code>::before</code> is the state layer and{" "}
+          <code>::after</code> is the ripple. Both use the control&apos;s text
+          color (<code>currentColor</code>). On the selected time field that
+          is <code>--tp-on-primary-container</code>. Strength and timing come
+          from these tokens (defaults shown):
+        </p>
+        <CodeBlock
+          code={`.tp-ui-wrapper.my-theme {
   --tp-state-hover-opacity: 0.08;
   --tp-state-focus-opacity: 0.1;
   --tp-state-pressed-opacity: 0.1;
@@ -445,16 +398,12 @@ picker.setOptions({ ui: { theme: 'dark' } });`}
 .tp-ui-wrapper.no-ripple {
   --tp-ripple-opacity: 0;
 }`}
-            language="css"
-          />
-        </div>
-      </section>
+          language="css"
+        />
+      </Section>
 
-      <section id="complete-custom-theme" className="mb-12 scroll-mt-24">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Complete Custom Theme Example
-        </h2>
-        <p className="text-muted-foreground mb-4">
+      <Section id="complete-custom-theme" title="Complete Custom Theme Example">
+        <p>
           Here&apos;s a complete example of a custom purple theme:
         </p>
         <CodeBlock
@@ -478,9 +427,8 @@ picker.setOptions({ ui: { theme: 'dark' } });`}
 }`}
           language="css"
         />
-        <div className="mt-4">
-          <CodeBlock
-            code={`import { TimepickerUI } from 'timepicker-ui';
+        <CodeBlock
+          code={`import { TimepickerUI } from 'timepicker-ui';
 import 'timepicker-ui/main.css';
 import './theme-purple.css';
 
@@ -489,19 +437,24 @@ const picker = new TimepickerUI('#timepicker', {
 });
 
 picker.create();`}
-            language="typescript"
-          />
-        </div>
-      </section>
+          language="typescript"
+        />
+      </Section>
 
-      <LinkCard
-        icon={Palette}
-        title="Browser Compatibility"
-        description="CSS custom properties are supported in all modern browsers. For older browsers, provide fallback values or use a PostCSS plugin to generate static CSS. Test your custom themes across different browsers to ensure consistent appearance."
-        linkText="View built-in themes"
-        linkHref="/docs/features/themes"
-        variant="purple"
-      />
+      <dl>
+        <div>
+          <dt>Browser Compatibility</dt>
+          <dd>
+            CSS custom properties are supported in all modern browsers. For
+            older browsers, provide fallback values or use a PostCSS plugin to
+            generate static CSS. Test your custom themes across different
+            browsers to ensure consistent appearance.
+          </dd>
+          <dd>
+            <Link href="/docs/features/themes">View built-in themes</Link>
+          </dd>
+        </div>
+      </dl>
     </div>
   );
 }

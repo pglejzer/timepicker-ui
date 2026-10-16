@@ -2,10 +2,11 @@
 
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
-import { CodeBlock } from "@/components/code-block";
+import { ApiTable } from "@/components/api-table";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 
 export default function OnUpdatePage() {
@@ -16,43 +17,16 @@ export default function OnUpdatePage() {
       <PageHeader
         title="onUpdate Event"
         description="React to every time change in real-time"
-        eyebrow="React · Controlled"
       />
 
-      <Section icon={RefreshCw} title="Live Updates">
-        <p className="text-muted-foreground mb-4">
-          The{" "}
-          <code className="text-sm bg-muted px-1 py-0.5 rounded">onUpdate</code>{" "}
-          event fires on every time change:
+      <Section title="Live Updates">
+        <p>
+          The <code>onUpdate</code> event fires on every time change:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Real-time Updates
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              See changes as you select hours and minutes
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 rounded-lg border border-border bg-background p-6 space-y-4">
-              <Timepicker
-                placeholder="Select time"
-                className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                onUpdate={(data) => {
-                  setLiveTime(
-                    `${data.hour}:${data.minutes} ${data.type || ""}`
-                  );
-                }}
-              />
-              <div className="rounded-lg bg-muted p-4">
-                <p className="text-sm">
-                  <strong>Live value:</strong> {liveTime || "Not selected"}
-                </p>
-              </div>
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Real-time Updates</h3>
+        <p>See changes as you select hours and minutes</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 import { useState } from "react";
 
 function App() {
@@ -69,47 +43,49 @@ function App() {
     </div>
   );
 }`}
-              language="tsx"
+          language="tsx"
+        >
+          <div className={demo.form}>
+            <Timepicker
+              placeholder="Select time"
+              className={demo.input}
+              onUpdate={(data) => {
+                setLiveTime(
+                  `${data.hour}:${data.minutes} ${data.type || ""}`
+                );
+              }}
             />
+            <p className={demo.output} aria-live="polite">
+              <strong>Live value:</strong> {liveTime || "Not selected"}
+            </p>
           </div>
-        </div>
+        </Figure>
       </Section>
 
-      <Section icon={RefreshCw} title="onUpdate vs onConfirm">
-        <p className="text-muted-foreground mb-4">
+      <Section title="onUpdate vs onConfirm">
+        <p>
           Choose the right event for your use case:
         </p>
-        <div className="rounded-lg border border-border bg-card p-6">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="text-left py-2 pr-4">Event</th>
-                <th className="text-left py-2 pr-4">When it fires</th>
-                <th className="text-left py-2">Use case</th>
-              </tr>
-            </thead>
-            <tbody className="text-muted-foreground">
-              <tr className="border-b border-border">
-                <td className="py-2 pr-4">
-                  <code className="text-xs bg-muted px-1 py-0.5 rounded">
-                    onUpdate
-                  </code>
-                </td>
-                <td className="py-2 pr-4">Every time change</td>
-                <td className="py-2">Live preview, real-time sync</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4">
-                  <code className="text-xs bg-muted px-1 py-0.5 rounded">
-                    onConfirm
-                  </code>
-                </td>
-                <td className="py-2 pr-4">OK button click</td>
-                <td className="py-2">Form submission, final value</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ApiTable
+          columns={[
+            { key: "event", label: "Event" },
+            { key: "when", label: "When it fires" },
+            { key: "useCase", label: "Use case" },
+          ]}
+          rows={[
+            {
+              event: <code>onUpdate</code>,
+              when: "Every time change",
+              useCase: "Live preview, real-time sync",
+            },
+            {
+              event: <code>onConfirm</code>,
+              when: "OK button click",
+              useCase: "Form submission, final value",
+            },
+          ]}
+          rowKey="event"
+        />
       </Section>
     </div>
   );

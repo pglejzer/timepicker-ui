@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Focus } from "lucide-react";
 
 export default function FocusTrapPage() {
   return (
@@ -11,14 +10,14 @@ export default function FocusTrapPage() {
       <PageHeader
         title="Focus Trap"
         description="Control focus behavior for accessibility"
-        eyebrow="Example · Features"
       />
 
-      <Section icon={Focus} title="Enable Focus Trap (Default)">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Enable Focus Trap (Default)">
+        <p>
           Keep focus within modal for accessibility:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   behavior: { focusTrap: true } // This is the default
 });
@@ -29,11 +28,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Focus} title="Disable Focus Trap">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Disable Focus Trap">
+        <p>
           Allow focus to move outside modal:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   behavior: { focusTrap: false }
 });
@@ -44,12 +44,13 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Focus} title="Return Focus After Close">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Return Focus After Close">
+        <p>
           Return focus to the input after closing the modal with{" "}
           <code>behavior.returnFocus</code>:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   behavior: {
     focusTrap: true,
@@ -66,11 +67,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Focus} title="Complete Accessibility Setup">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Complete Accessibility Setup">
+        <p>
           Recommended accessibility configuration:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   behavior: {
     focusTrap: true,

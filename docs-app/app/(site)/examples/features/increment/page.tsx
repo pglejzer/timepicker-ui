@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { FastForward } from "lucide-react";
 
 export default function IncrementPage() {
   return (
@@ -11,11 +10,10 @@ export default function IncrementPage() {
       <PageHeader
         title="Increment Steps"
         description="Control hour and minute increment steps"
-        eyebrow="Example · Features"
       />
 
-      <Section icon={FastForward} title="Increment Minutes">
-        <p className="text-muted-foreground mb-4">Jump by 5 minutes:</p>
+      <Section title="Increment Minutes">
+        <p>Jump by 5 minutes:</p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   clock: { incrementMinutes: 5 }
@@ -27,8 +25,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={FastForward} title="Increment by 15 Minutes">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Increment by 15 Minutes">
+        <p>
           Larger steps for faster selection:
         </p>
         <TimepickerExample
@@ -42,8 +40,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={FastForward} title="Increment Hours">
-        <p className="text-muted-foreground mb-4">Jump by 2 hours:</p>
+      <Section title="Increment Hours">
+        <p>Jump by 2 hours:</p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   clock: { incrementHours: 2 }
@@ -55,8 +53,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={FastForward} title="Combined Increments">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Combined Increments">
+        <p>
           Increment both hours and minutes:
         </p>
         <TimepickerExample
@@ -76,7 +74,7 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={FastForward} title="With 24h Format">
+      <Section title="With 24h Format">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   clock: {

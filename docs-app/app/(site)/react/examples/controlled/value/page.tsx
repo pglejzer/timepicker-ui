@@ -2,10 +2,10 @@
 
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
-import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { Code2 } from "lucide-react";
 import { useState } from "react";
 
 export default function ControlledValuePage() {
@@ -16,47 +16,16 @@ export default function ControlledValuePage() {
       <PageHeader
         title="Controlled Value"
         description="Manage timepicker value with React state"
-        eyebrow="React · Controlled"
       />
 
-      <Section icon={Code2} title="Controlled Component">
-        <p className="text-muted-foreground mb-4">
-          Use the{" "}
-          <code className="text-sm bg-muted px-1 py-0.5 rounded">value</code>{" "}
-          prop to control the timepicker:
+      <Section title="Controlled Component">
+        <p>
+          Use the <code>value</code> prop to control the timepicker:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Controlled Timepicker
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Value is managed by React state
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 rounded-lg border border-border bg-background p-6 space-y-4">
-              <Timepicker
-                value={time}
-                className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                onUpdate={(data) => {
-                  setTime(`${data.hour}:${data.minutes} ${data.type}`);
-                }}
-              />
-              <div className="rounded-lg bg-muted p-4">
-                <p className="text-sm">
-                  <strong>Current value:</strong> {time}
-                </p>
-              </div>
-              <button
-                onClick={() => setTime("3:30 PM")}
-                className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm"
-              >
-                Set to 3:30 PM
-              </button>
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Controlled Timepicker</h3>
+        <p>Value is managed by React state</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 import { useState } from "react";
 
 function App() {
@@ -77,32 +46,42 @@ function App() {
     </div>
   );
 }`}
-              language="tsx"
+          language="tsx"
+        >
+          <div className={demo.form}>
+            <Timepicker
+              value={time}
+              className={demo.input}
+              onUpdate={(data) => {
+                setTime(`${data.hour}:${data.minutes} ${data.type}`);
+              }}
             />
+            <p className={demo.output} aria-live="polite">
+              <strong>Current value:</strong> {time}
+            </p>
+            <div className={demo.row}>
+              <button
+                type="button"
+                onClick={() => setTime("3:30 PM")}
+                className={demo.button}
+              >
+                Set to 3:30 PM
+              </button>
+            </div>
           </div>
-        </div>
+        </Figure>
       </Section>
 
-      <Section icon={Code2} title="Key Points">
-        <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+      <Section title="Key Points">
+        <ul>
           <li>
-            Use{" "}
-            <code className="text-sm bg-muted px-1 py-0.5 rounded">value</code>{" "}
-            prop to control the input
+            Use <code>value</code> prop to control the input
           </li>
           <li>
-            Use{" "}
-            <code className="text-sm bg-muted px-1 py-0.5 rounded">
-              onUpdate
-            </code>{" "}
-            to sync state on every change
+            Use <code>onUpdate</code> to sync state on every change
           </li>
           <li>
-            Use{" "}
-            <code className="text-sm bg-muted px-1 py-0.5 rounded">
-              onConfirm
-            </code>{" "}
-            to sync state only on confirm
+            Use <code>onConfirm</code> to sync state only on confirm
           </li>
           <li>The component handles internal state synchronization</li>
         </ul>

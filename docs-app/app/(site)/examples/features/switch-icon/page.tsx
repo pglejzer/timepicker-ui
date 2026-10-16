@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { ArrowLeftRight } from "lucide-react";
 
 export default function SwitchIconPage() {
   return (
@@ -16,11 +15,10 @@ export default function SwitchIconPage() {
             keyboard view, with <code>ui.viewSwitch</code>.
           </>
         }
-        eyebrow="Example · Features"
       />
 
-      <Section icon={ArrowLeftRight} title="Enable the View Switch">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Enable the View Switch">
+        <p>
           Show the icon that switches between the clock face and the keyboard
           view:
         </p>
@@ -35,8 +33,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={ArrowLeftRight} title="Start in the Keyboard View">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Start in the Keyboard View">
+        <p>
           Open in the keyboard view, with the icon to switch to the clock face:
         </p>
         <TimepickerExample
@@ -56,7 +54,7 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={ArrowLeftRight} title="With Theme">
+      <Section title="With Theme">
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   ui: {

@@ -1,10 +1,10 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import Link from "next/link";
 import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
-import { Bell, Zap, Database, AlertCircle, X } from "lucide-react";
 import { Section } from "@/components/section";
+import { Callout } from "@/components/callout";
 
 export const metadata = buildMetadata({
   title: "Events",
@@ -92,10 +92,7 @@ const availableEvents: DocEntry[] = [
       <>
         Triggered when the user asks to open the picker: a click on the input
         or a{" "}
-        <Link
-          href="/examples/features/open-from-button"
-          className="text-primary underline"
-        >
+        <Link href="/examples/features/open-from-button">
           <code>data-open</code> element
         </Link>
         , or Enter or Space on it. Empty
@@ -116,7 +113,7 @@ const availableEvents: DocEntry[] = [
     name: "hide",
     description: (
       <>
-        <span className="font-medium text-foreground">Deprecated.</span> Never
+        <strong>Deprecated.</strong> Never
         emitted. The event and <code>HideEventData</code> will be removed in
         5.0.
       </>
@@ -175,7 +172,7 @@ const availableEvents: DocEntry[] = [
     name: "select:am / select:pm",
     description: (
       <>
-        <span className="font-medium text-foreground">Deprecated.</span> Use{" "}
+        <strong>Deprecated.</strong> Use{" "}
         <code>select:period</code>. Both still fire next to{" "}
         <code>select:period</code> and will be removed in 5.0.
       </>
@@ -427,7 +424,7 @@ const callbacks: DocEntry[] = [
     name: "onSelectAM / onSelectPM",
     description: (
       <>
-        <span className="font-medium text-foreground">Deprecated.</span> Use{" "}
+        <strong>Deprecated.</strong> Use{" "}
         <code>onSelectPeriod</code>. Both still work and will be removed in
         5.0.
       </>
@@ -566,88 +563,75 @@ export default function EventsPage() {
       <PageHeader
         title="Events"
         description="Handle timepicker events using EventEmitter API or callbacks"
-        eyebrow="API"
       />
 
-      <Section icon={Zap} title="EventEmitter API (Recommended)">
-        <p className="text-muted-foreground mb-6">
+      <Section title="EventEmitter API (Recommended)">
+        <p>
           The new EventEmitter API provides a clean, type-safe way to handle
           events:
         </p>
-        <div className="space-y-8">
-          {eventEmitterMethods.map((method) => (
-            <div key={method.name}>
-              <h3 className="text-lg font-semibold mb-2 text-foreground">
-                <code className="text-primary">{method.name}</code>
-              </h3>
-              <p className="text-muted-foreground mb-4">{method.description}</p>
-              <CodeBlock code={method.code} language="typescript" />
-            </div>
-          ))}
-        </div>
+        {eventEmitterMethods.map((method) => (
+          <Fragment key={method.name}>
+            <h3>
+              <code>{method.name}</code>
+            </h3>
+            <p>{method.description}</p>
+            <CodeBlock code={method.code} language="typescript" />
+          </Fragment>
+        ))}
       </Section>
 
-      <Section icon={Bell} title="Available Events">
-        <p className="text-muted-foreground mb-6">
+      <Section title="Available Events">
+        <p>
           All events you can subscribe to. These events work in both{" "}
           <strong>clock</strong> (default) and <strong>wheel</strong> mode.{" "}
-          <code className="text-sm">range:minute:commit</code> is an internal
+          <code>range:minute:commit</code> is an internal
           event between the clock and the range plugin and is not part of the
-          public contract. With <code className="text-sm">showSeconds</code> its
-          payload also has <code className="text-sm">seconds</code>.{" "}
-          <code className="text-sm">range:get-disabled-time</code> and{" "}
-          <code className="text-sm">range:update-disabled</code> are deprecated,
+          public contract. With <code>showSeconds</code> its
+          payload also has <code>seconds</code>.{" "}
+          <code>range:get-disabled-time</code> and{" "}
+          <code>range:update-disabled</code> are deprecated,
           never emitted, and will be removed in 5.0.
         </p>
-        <div className="space-y-8">
-          {availableEvents.map((event) => (
-            <div key={event.name}>
-              <h3 className="text-lg font-semibold mb-2 text-foreground">
-                <code className="text-primary">{event.name}</code>
-              </h3>
-              <p className="text-muted-foreground mb-4">{event.description}</p>
-              <CodeBlock code={event.code} language="typescript" />
-            </div>
-          ))}
-        </div>
+        {availableEvents.map((event) => (
+          <Fragment key={event.name}>
+            <h3>
+              <code>{event.name}</code>
+            </h3>
+            <p>{event.description}</p>
+            <CodeBlock code={event.code} language="typescript" />
+          </Fragment>
+        ))}
       </Section>
 
-      <Section icon={Bell} title="Callback Options (Alternative)">
-        <p className="text-muted-foreground mb-6">
+      <Section title="Callback Options (Alternative)">
+        <p>
           You can also use callback options in the constructor:
         </p>
-        <div className="space-y-8">
-          {callbacks.map((callback) => (
-            <div key={callback.name}>
-              <h3 className="text-lg font-semibold mb-2 text-foreground">
-                <code className="text-primary">{callback.name}</code>
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                {callback.description}
-              </p>
-              <CodeBlock code={callback.code} language="typescript" />
-            </div>
-          ))}
-        </div>
+        {callbacks.map((callback) => (
+          <Fragment key={callback.name}>
+            <h3>
+              <code>{callback.name}</code>
+            </h3>
+            <p>{callback.description}</p>
+            <CodeBlock code={callback.code} language="typescript" />
+          </Fragment>
+        ))}
       </Section>
 
-      <Section icon={AlertCircle} title="Legacy DOM Events (Removed)">
-        <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-6 mb-6">
-          <p className="flex items-center gap-2 text-red-600 dark:text-red-400 font-semibold mb-2">
-            <X className="h-4 w-4" />
-            Removed in v4.0.0
-          </p>
-          <p className="text-muted-foreground mb-4">
+      <Section title="Legacy DOM Events (Removed)">
+        <Callout title="Removed in v4.0.0" tone="danger">
+          <p>
             DOM events (e.g.,{" "}
-            <code className="text-sm">timepicker:confirm</code>) have been
+            <code>timepicker:confirm</code>) have been
             removed in v4.0.0. If you&apos;re upgrading from v3.x, you must migrate
             to the EventEmitter API.
           </p>
-          <p className="text-muted-foreground">
+          <p>
             The EventEmitter API provides better type safety, error handling,
             and performance.
           </p>
-        </div>
+        </Callout>
         <CodeBlock
           code={`// REMOVED in v4.0.0
 input.addEventListener('timepicker:confirm', (e) => {
@@ -662,12 +646,12 @@ picker.on('confirm', (data) => {
         />
       </Section>
 
-      <Section icon={Database} title="Event Data">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Event Data">
+        <p>
           Every event has its own payload type, exported from{" "}
-          <code className="text-sm">timepicker-ui</code>. Fields marked{" "}
-          <code className="text-sm">showSeconds</code> appear only when{" "}
-          <code className="text-sm">clock.showSeconds</code> is on. The most
+          <code>timepicker-ui</code>. Fields marked{" "}
+          <code>showSeconds</code> appear only when{" "}
+          <code>clock.showSeconds</code> is on. The most
           important ones:
         </p>
         <CodeBlock
@@ -741,10 +725,7 @@ type RangeConfirmEventData = {
         />
       </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Complete Example
-        </h2>
+      <Section title="Complete Example">
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'dark' },
@@ -793,7 +774,7 @@ picker.on('update', updateHandler);
 picker.off('update', updateHandler);`}
           language="typescript"
         />
-      </section>
+      </Section>
     </div>
   );
 }

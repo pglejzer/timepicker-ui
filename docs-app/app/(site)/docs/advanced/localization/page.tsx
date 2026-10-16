@@ -1,8 +1,6 @@
 import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
-import { LinkCard } from "@/components/link-card";
-import { Globe, Languages, Type, MapPin } from "lucide-react";
 import { Section } from "@/components/section";
 import Link from "next/link";
 
@@ -19,29 +17,24 @@ export default function LocalizationPage() {
       <PageHeader
         title="Localization"
         description="Customize labels and formats for international audiences"
-        eyebrow="Guide"
       />
 
-      <Section icon={Globe} title="Custom Labels">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Custom Labels">
+        <p>
           Timepicker-UI allows you to customize all text labels to support any
           language:
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Default Labels
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              The <code>labels</code> group with its English defaults, without
-              the deprecated keys. Keys you leave out keep these values.{" "}
-              <code>clock</code>, <code>period</code>, <code>timeFields</code>,{" "}
-              <code>range</code>, <code>switchToKeyboard</code>,{" "}
-              <code>switchToClock</code> and the keys that start with{" "}
-              <code>announce</code> are read by screen readers only.
-            </p>
-            <CodeBlock
-              code={`// Default English labels
+        <h3>Default Labels</h3>
+        <p>
+          The <code>labels</code> group with its English defaults, without
+          the deprecated keys. Keys you leave out keep these values.{" "}
+          <code>clock</code>, <code>period</code>, <code>timeFields</code>,{" "}
+          <code>range</code>, <code>switchToKeyboard</code>,{" "}
+          <code>switchToClock</code> and the keys that start with{" "}
+          <code>announce</code> are read by screen readers only.
+        </p>
+        <CodeBlock
+          code={`// Default English labels
 {
   labels: {
     am: 'AM',
@@ -69,40 +62,33 @@ export default function LocalizationPage() {
     invalidTimeFormat: 'Invalid time format'
   }
 }`}
-              language="typescript"
-            />
-            <p className="text-muted-foreground mt-4 text-sm">
-              <code>hour</code>, <code>minute</code> and <code>second</code>{" "}
-              each set the field caption, the field&apos;s accessible name, the
-              dial name and the prefix of the screen-reader announcement. Until
-              5.0, the minute announcement says <code>Minutes</code> when{" "}
-              <code>minute</code> is not set. <code>second</code> is used only
-              with <code>clock.showSeconds: true</code>. <code>range</code>,{" "}
-              <code>rangeFrom</code> and <code>rangeTo</code> are used by the
-              range plugin, and <code>timezone</code> by the timezone plugin.
-              Keys renamed in 4.5.0 are listed on the{" "}
-              <Link
-                href="/docs/api/options#renamed"
-                className="text-primary underline"
-              >
-                Options
-              </Link>{" "}
-              page.
-            </p>
-            <p className="text-muted-foreground mt-2 text-sm">
-              <code>labels.am</code> and <code>labels.pm</code> change only the
-              text on screen and what screen readers announce. The input value
-              and <code>getValue().type</code> always use <code>AM</code> /{" "}
-              <code>PM</code>.
-            </p>
-          </div>
+          language="typescript"
+        />
+        <p>
+          <code>hour</code>, <code>minute</code> and <code>second</code>{" "}
+          each set the field caption, the field&apos;s accessible name, the
+          dial name and the prefix of the screen-reader announcement. Until
+          5.0, the minute announcement says <code>Minutes</code> when{" "}
+          <code>minute</code> is not set. <code>second</code> is used only
+          with <code>clock.showSeconds: true</code>. <code>range</code>,{" "}
+          <code>rangeFrom</code> and <code>rangeTo</code> are used by the
+          range plugin, and <code>timezone</code> by the timezone plugin.
+          Keys renamed in 4.5.0 are listed on the{" "}
+          <Link href="/docs/api/options#renamed">
+            Options
+          </Link>{" "}
+          page.
+        </p>
+        <p>
+          <code>labels.am</code> and <code>labels.pm</code> change only the
+          text on screen and what screen readers announce. The input value
+          and <code>getValue().type</code> always use <code>AM</code> /{" "}
+          <code>PM</code>.
+        </p>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Spanish Localization
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>Spanish Localization</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   labels: {
     ok: 'Aceptar',
     cancel: 'Cancelar',
@@ -112,16 +98,12 @@ export default function LocalizationPage() {
 });
 
 picker.create();`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              French Localization
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>French Localization</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   labels: {
     ok: 'Valider',
     cancel: 'Annuler',
@@ -131,16 +113,12 @@ picker.create();`}
 });
 
 picker.create();`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              German Localization
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>German Localization</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   labels: {
     ok: 'OK',
     cancel: 'Abbrechen',
@@ -150,23 +128,17 @@ picker.create();`}
 });
 
 picker.create();`}
-              language="typescript"
-            />
-          </div>
-        </div>
+          language="typescript"
+        />
       </Section>
 
-      <Section icon={Languages} title="Language Configuration Object">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Language Configuration Object">
+        <p>
           Create reusable language configuration objects for consistency:
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Language Config Files
-            </h3>
-            <CodeBlock
-              code={`// locales/es.ts
+        <h3>Language Config Files</h3>
+        <CodeBlock
+          code={`// locales/es.ts
 export const esLocale = {
   labels: {
     ok: 'Aceptar',
@@ -215,16 +187,12 @@ export const zhLocale = {
     pm: '下午'
   }
 };`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Using Language Configs
-            </h3>
-            <CodeBlock
-              code={`import TimepickerUI from 'timepicker-ui';
+        <h3>Using Language Configs</h3>
+        <CodeBlock
+          code={`import TimepickerUI from 'timepicker-ui';
 import { esLocale } from './locales/es';
 
 const picker = new TimepickerUI(input, {
@@ -233,16 +201,12 @@ const picker = new TimepickerUI(input, {
 });
 
 picker.create();`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Dynamic Language Switching
-            </h3>
-            <CodeBlock
-              code={`import { esLocale, frLocale, deLocale } from './locales';
+        <h3>Dynamic Language Switching</h3>
+        <CodeBlock
+          code={`import { esLocale, frLocale, deLocale } from './locales';
 
 const locales = {
   es: esLocale,
@@ -252,12 +216,12 @@ const locales = {
 
 function createLocalizedPicker(language: string) {
   const locale = locales[language] || esLocale;
-  
+
   const picker = new TimepickerUI(input, {
     ...locale,
     clock: { type: '24h' }
   });
-  
+
   return picker;
 }
 
@@ -269,24 +233,18 @@ picker.create();
 picker.destroy();
 picker = createLocalizedPicker('fr');
 picker.create();`}
-              language="typescript"
-            />
-          </div>
-        </div>
+          language="typescript"
+        />
       </Section>
 
-      <Section icon={Type} title="Time Format Localization">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Time Format Localization">
+        <p>
           Different regions use different time formats. Configure the clock type
           based on locale:
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              12-hour Format (US, UK, Canada)
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>12-hour Format (US, UK, Canada)</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clock: { type: '12h' },
   labels: {
     ok: 'OK',
@@ -295,16 +253,12 @@ picker.create();`}
     pm: 'PM'
   }
 });`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              24-hour Format (Europe, Asia, Most of World)
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>24-hour Format (Europe, Asia, Most of World)</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clock: { type: '24h' },
   labels: {
     ok: 'OK',
@@ -312,74 +266,56 @@ picker.create();`}
   }
   // No am/pm labels needed for 24h format
 });`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Auto-detect User Locale
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              <code>clock.type: &apos;auto&apos;</code> picks 12h or 24h from
-              the browser locale when the picker is created and each time its
-              options are set. New in 4.5.0.
-            </p>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>Auto-detect User Locale</h3>
+        <p>
+          <code>clock.type: &apos;auto&apos;</code> picks 12h or 24h from
+          the browser locale when the picker is created and each time its
+          options are set. New in 4.5.0.
+        </p>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clock: { type: 'auto' }
 });
 
 picker.create();`}
-              language="typescript"
-            />
-          </div>
-        </div>
+          language="typescript"
+        />
       </Section>
 
-      <Section icon={MapPin} title="Complete Locale Examples">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Complete Locale Examples">
+        <p>
           Ready-to-use configurations for common languages:
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Japanese (日本語)
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>Japanese (日本語)</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clock: { type: '24h' },
   labels: {
     ok: '確認',
     cancel: 'キャンセル'
   }
 });`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Chinese Simplified (简体中文)
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>Chinese Simplified (简体中文)</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clock: { type: '24h' },
   labels: {
     ok: '确定',
     cancel: '取消'
   }
 });`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Arabic (العربية)
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>Arabic (العربية)</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clock: { type: '12h' },
   labels: {
     ok: 'موافق',
@@ -388,74 +324,53 @@ picker.create();`}
     pm: 'م'
   }
 });`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Russian (Русский)
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>Russian (Русский)</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clock: { type: '24h' },
   labels: {
     ok: 'ОК',
     cancel: 'Отмена'
   }
 });`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Portuguese (Português)
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>Portuguese (Português)</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clock: { type: '24h' },
   labels: {
     ok: 'Confirmar',
     cancel: 'Cancelar'
   }
 });`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Italian (Italiano)
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>Italian (Italiano)</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clock: { type: '24h' },
   labels: {
     ok: 'OK',
     cancel: 'Annulla'
   }
 });`}
-              language="typescript"
-            />
-          </div>
-        </div>
+          language="typescript"
+        />
       </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          React i18n Integration
-        </h2>
-        <p className="text-muted-foreground mb-4">
+      <Section title="React i18n Integration">
+        <p>
           Integrate with popular i18n libraries:
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              react-i18next
-            </h3>
-            <CodeBlock
-              code={`import { useTranslation } from 'react-i18next';
+        <h3>react-i18next</h3>
+        <CodeBlock
+          code={`import { useTranslation } from 'react-i18next';
 import { useEffect, useRef } from 'react';
 import TimepickerUI from 'timepicker-ui';
 
@@ -477,7 +392,7 @@ function LocalizedTimePicker() {
           pm: t('timepicker.pm')
         }
       });
-      
+
       pickerRef.current.create();
     }
 
@@ -488,16 +403,12 @@ function LocalizedTimePicker() {
 
   return <input ref={inputRef} type="text" />;
 }`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              i18n Translation File
-            </h3>
-            <CodeBlock
-              code={`// locales/en/translation.json
+        <h3>i18n Translation File</h3>
+        <CodeBlock
+          code={`// locales/en/translation.json
 {
   "timepicker": {
     "ok": "OK",
@@ -526,17 +437,12 @@ function LocalizedTimePicker() {
     "pm": "PM"
   }
 }`}
-              language="json"
-            />
-          </div>
-        </div>
-      </section>
+          language="json"
+        />
+      </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Right-to-Left (RTL) Support
-        </h2>
-        <p className="text-muted-foreground mb-4">
+      <Section title="Right-to-Left (RTL) Support">
+        <p>
           The picker has no built-in RTL layout. The modal is appended to{" "}
           <code>body</code> unless <code>ui.appendTo</code> is set,
           so a <code>dir</code> attribute on a wrapper around the input does not
@@ -549,9 +455,8 @@ function LocalizedTimePicker() {
 </div>`}
           language="html"
         />
-        <div className="mt-4">
-          <CodeBlock
-            code={`const picker = new TimepickerUI('#timepicker', {
+        <CodeBlock
+          code={`const picker = new TimepickerUI('#timepicker', {
   clock: { type: '12h' },
   ui: { appendTo: '#rtl-root' },
   labels: {
@@ -563,10 +468,9 @@ function LocalizedTimePicker() {
 });
 
 picker.create();`}
-            language="typescript"
-          />
-        </div>
-        <p className="text-muted-foreground mt-4 mb-4">
+          language="typescript"
+        />
+        <p>
           <code>direction: rtl</code> also reverses flex rows, including the
           hour and minute fields. To keep them in HH:MM order, reset the
           direction on the field group:
@@ -577,16 +481,28 @@ picker.create();`}
 }`}
           language="css"
         />
-      </section>
+      </Section>
 
-      <LinkCard
-        icon={Globe}
-        title="Contributing Translations"
-        description="If you'd like to contribute translations for additional languages to the official documentation or create a locale pack, please open a pull request on GitHub. Community translations help make Timepicker-UI accessible to users worldwide."
-        linkText="View on GitHub"
-        linkHref="https://github.com/pglejzer/timepicker-ui/pulls"
-        variant="blue"
-      />
+      <dl>
+        <div>
+          <dt>Contributing Translations</dt>
+          <dd>
+            If you&apos;d like to contribute translations for additional
+            languages to the official documentation or create a locale pack,
+            please open a pull request on GitHub. Community translations help
+            make Timepicker-UI accessible to users worldwide.
+          </dd>
+          <dd>
+            <a
+              href="https://github.com/pglejzer/timepicker-ui/pulls"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on GitHub
+            </a>
+          </dd>
+        </div>
+      </dl>
     </div>
   );
 }

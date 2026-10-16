@@ -1,67 +1,393 @@
-[
-  "tp-ui-am",
-  "tp-ui-body",
-  "tp-ui-cancel-btn",
-  "tp-ui-circle-hand",
-  "tp-ui-clear-btn",
-  "tp-ui-clock-face",
-  "tp-ui-clock-hand",
-  "tp-ui-compact-wheel-mode",
-  "tp-ui-dot",
-  "tp-ui-dots",
-  "tp-ui-footer",
-  "tp-ui-has-seconds",
-  "tp-ui-header",
-  "tp-ui-hour",
-  "tp-ui-hour-text",
-  "tp-ui-input-ripple-wrapper",
-  "tp-ui-input-wrapper",
-  "tp-ui-keyboard-icon",
-  "tp-ui-keyboard-icon-wrapper",
-  "tp-ui-label-",
-  "tp-ui-minute-text",
-  "tp-ui-minutes",
-  "tp-ui-mobile-clock-wrapper",
-  "tp-ui-modal",
-  "tp-ui-ok-btn",
-  "tp-ui-pm",
-  "tp-ui-range-from",
-  "tp-ui-range-from-time",
-  "tp-ui-range-header",
-  "tp-ui-range-mode",
-  "tp-ui-range-tab",
-  "tp-ui-range-tab-label",
-  "tp-ui-range-tab-value",
-  "tp-ui-range-to",
-  "tp-ui-range-to-time",
-  "tp-ui-second-text",
-  "tp-ui-seconds",
-  "tp-ui-select-time",
-  "tp-ui-timezone",
-  "tp-ui-timezone-arrow",
-  "tp-ui-timezone-dropdown",
-  "tp-ui-timezone-label",
-  "tp-ui-timezone-menu",
-  "tp-ui-timezone-selected",
-  "tp-ui-tips-wrapper",
-  "tp-ui-tips-wrapper-24h",
-  "tp-ui-type-mode",
-  "tp-ui-tz-mode",
-  "tp-ui-wheel-ampm",
-  "tp-ui-wheel-column",
-  "tp-ui-wheel-column-wrapper",
-  "tp-ui-wheel-container",
-  "tp-ui-wheel-highlight",
-  "tp-ui-wheel-hours",
-  "tp-ui-wheel-item",
-  "tp-ui-wheel-minutes",
-  "tp-ui-wheel-mode",
-  "tp-ui-wheel-padding",
-  "tp-ui-wheel-seconds",
-  "tp-ui-wheel-separator",
-  "tp-ui-wrapper",
-  "tp-ui-wrapper-btn",
-  "tp-ui-wrapper-time",
-  "tp-ui-wrapper-time-24h",
-  "tp-ui-wrapper-type-time"
-]
+{
+  "classes": [
+    {
+      "name": "tp-ui",
+      "example": ".tp-ui .sr-only"
+    },
+    {
+      "name": "tp-ui--inline",
+      "example": ".tp-ui--inline"
+    },
+    {
+      "name": "tp-ui-am",
+      "example": ".tp-ui-am"
+    },
+    {
+      "name": "tp-ui-body",
+      "example": ".tp-ui-body"
+    },
+    {
+      "name": "tp-ui-cancel-btn",
+      "example": ".tp-ui-cancel-btn"
+    },
+    {
+      "name": "tp-ui-circle-hand",
+      "example": ".tp-ui-circle-hand"
+    },
+    {
+      "name": "tp-ui-circle-hand-24h",
+      "example": ".tp-ui-circle-hand-24h"
+    },
+    {
+      "name": "tp-ui-clear-btn",
+      "example": ".tp-ui-clear-btn"
+    },
+    {
+      "name": "tp-ui-clock-face",
+      "example": ".tp-ui-clock-face"
+    },
+    {
+      "name": "tp-ui-clock-hand",
+      "example": ".tp-ui-clock-hand"
+    },
+    {
+      "name": "tp-ui-compact-wheel-mode",
+      "example": ".tp-ui--inline:not(.tp-ui-wheel-mode):not(.tp-ui-compact-wheel-mode) .tp-ui-wrapper.expanded"
+    },
+    {
+      "name": "tp-ui-dot",
+      "example": ".tp-ui-dot"
+    },
+    {
+      "name": "tp-ui-dots",
+      "example": ".tp-ui-dots"
+    },
+    {
+      "name": "tp-ui-footer",
+      "example": ".tp-ui-footer"
+    },
+    {
+      "name": "tp-ui-has-seconds",
+      "example": ".tp-ui-has-seconds .tp-ui-wrapper-time:not(.tp-ui-wrapper-time-24h) .tp-ui-input-wrapper"
+    },
+    {
+      "name": "tp-ui-header",
+      "example": ".tp-ui-header"
+    },
+    {
+      "name": "tp-ui-hour",
+      "example": ".tp-ui-hour"
+    },
+    {
+      "name": "tp-ui-hour-text",
+      "example": ".tp-ui-hour-text"
+    },
+    {
+      "name": "tp-ui-hour-time-12",
+      "example": ".tp-ui-clock-face:active .tp-ui-hour-time-12"
+    },
+    {
+      "name": "tp-ui-hour-time-24",
+      "example": ".tp-ui-clock-face:active .tp-ui-hour-time-24"
+    },
+    {
+      "name": "tp-ui-input",
+      "example": ".tp-ui-input"
+    },
+    {
+      "name": "tp-ui-input-ripple-wrapper",
+      "example": ".tp-ui-input-ripple-wrapper"
+    },
+    {
+      "name": "tp-ui-input-wrapper",
+      "example": ".tp-ui-input-wrapper"
+    },
+    {
+      "name": "tp-ui-invalid-format",
+      "example": ".tp-ui-invalid-format"
+    },
+    {
+      "name": "tp-ui-invalid-text",
+      "example": ".tp-ui-invalid-text"
+    },
+    {
+      "name": "tp-ui-keyboard-icon",
+      "example": ".tp-ui-keyboard-icon"
+    },
+    {
+      "name": "tp-ui-keyboard-icon-wrapper",
+      "example": ".tp-ui-footer.expanded .tp-ui-keyboard-icon-wrapper"
+    },
+    {
+      "name": "tp-ui-label-"
+    },
+    {
+      "name": "tp-ui-minute-text",
+      "example": ".tp-ui-minute-text"
+    },
+    {
+      "name": "tp-ui-minutes",
+      "example": ".tp-ui-minutes"
+    },
+    {
+      "name": "tp-ui-minutes-time",
+      "example": ".tp-ui-clock-face:active .tp-ui-minutes-time"
+    },
+    {
+      "name": "tp-ui-mobile-clock-wrapper",
+      "example": ".tp-ui-mobile-clock-wrapper"
+    },
+    {
+      "name": "tp-ui-modal",
+      "example": ".tp-ui-modal"
+    },
+    {
+      "name": "tp-ui-ok-btn",
+      "example": ".tp-ui-ok-btn"
+    },
+    {
+      "name": "tp-ui-open-element",
+      "example": ".tp-ui-open-element.disabled"
+    },
+    {
+      "name": "tp-ui-pm",
+      "example": ".tp-ui-pm"
+    },
+    {
+      "name": "tp-ui-pointer",
+      "example": ".tp-ui-keyboard-icon-wrapper:has(>.tp-ui-keyboard-icon:focus-visible):not(:where(.tp-ui-modal.tp-ui-pointer *)):before"
+    },
+    {
+      "name": "tp-ui-popover",
+      "example": ".tp-ui-modal.tp-ui-popover"
+    },
+    {
+      "name": "tp-ui-popover-anchored",
+      "example": ".tp-ui-modal.tp-ui-popover.tp-ui-popover-anchored"
+    },
+    {
+      "name": "tp-ui-popover-constrained",
+      "example": ".tp-ui-modal.tp-ui-popover-constrained .tp-ui-wrapper"
+    },
+    {
+      "name": "tp-ui-range-from"
+    },
+    {
+      "name": "tp-ui-range-from-time"
+    },
+    {
+      "name": "tp-ui-range-header",
+      "example": ".tp-ui-range-header"
+    },
+    {
+      "name": "tp-ui-range-mode",
+      "example": ".tp-ui-range-mode .tp-ui-wrapper.mobile"
+    },
+    {
+      "name": "tp-ui-range-tab",
+      "example": ".tp-ui-range-tab:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *))"
+    },
+    {
+      "name": "tp-ui-range-tab-label",
+      "example": ".tp-ui-range-tab-label"
+    },
+    {
+      "name": "tp-ui-range-tab-value",
+      "example": ".tp-ui-range-tab.active .tp-ui-range-tab-value:after"
+    },
+    {
+      "name": "tp-ui-range-to"
+    },
+    {
+      "name": "tp-ui-range-to-time"
+    },
+    {
+      "name": "tp-ui-second-text",
+      "example": ".tp-ui-second-text"
+    },
+    {
+      "name": "tp-ui-seconds",
+      "example": ".tp-ui-seconds"
+    },
+    {
+      "name": "tp-ui-select-time",
+      "example": ".tp-ui-wrapper.expanded .tp-ui-select-time"
+    },
+    {
+      "name": "tp-ui-timezone",
+      "example": ".tp-ui-timezone"
+    },
+    {
+      "name": "tp-ui-timezone-arrow",
+      "example": ".tp-ui-timezone-dropdown[aria-expanded=true] .tp-ui-timezone-arrow"
+    },
+    {
+      "name": "tp-ui-timezone-dropdown",
+      "example": ".tp-ui-timezone-dropdown:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *))"
+    },
+    {
+      "name": "tp-ui-timezone-label",
+      "example": ".tp-ui-timezone-label"
+    },
+    {
+      "name": "tp-ui-timezone-menu",
+      "example": ".tp-ui-timezone-dropdown[aria-expanded=true] .tp-ui-timezone-menu"
+    },
+    {
+      "name": "tp-ui-timezone-option",
+      "example": ".tp-ui-timezone-option[data-focused=true]:not(:where(.tp-ui-modal.tp-ui-pointer *))"
+    },
+    {
+      "name": "tp-ui-timezone-selected",
+      "example": ".tp-ui-timezone-dropdown:focus .tp-ui-timezone-selected"
+    },
+    {
+      "name": "tp-ui-tips-animation",
+      "example": ".tp-ui-tips-animation"
+    },
+    {
+      "name": "tp-ui-tips-disabled",
+      "example": ".tp-ui-tips-disabled"
+    },
+    {
+      "name": "tp-ui-tips-wrapper",
+      "example": ".tp-ui-tips-wrapper"
+    },
+    {
+      "name": "tp-ui-tips-wrapper-24h",
+      "example": ".tp-ui-tips-wrapper-24h"
+    },
+    {
+      "name": "tp-ui-tips-wrapper-24h-disabled",
+      "example": ".tp-ui-tips-wrapper-24h-disabled"
+    },
+    {
+      "name": "tp-ui-type-mode"
+    },
+    {
+      "name": "tp-ui-tz-mode",
+      "example": ".tp-ui-tz-mode .tp-ui-wrapper.mobile"
+    },
+    {
+      "name": "tp-ui-value-tips",
+      "example": ".tp-ui-value-tips"
+    },
+    {
+      "name": "tp-ui-value-tips-24h",
+      "example": ".tp-ui-value-tips-24h"
+    },
+    {
+      "name": "tp-ui-view-switching",
+      "example": ".tp-ui-view-switching .tp-ui-wrapper>*"
+    },
+    {
+      "name": "tp-ui-wheel-ampm",
+      "example": ".tp-ui-wheel-ampm"
+    },
+    {
+      "name": "tp-ui-wheel-column",
+      "example": ".tp-ui-wheel-column:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *))"
+    },
+    {
+      "name": "tp-ui-wheel-column-wrapper",
+      "example": ".tp-ui-wheel-column-wrapper"
+    },
+    {
+      "name": "tp-ui-wheel-container",
+      "example": ".tp-ui-wheel-container"
+    },
+    {
+      "name": "tp-ui-wheel-highlight",
+      "example": ".tp-ui-wheel-highlight"
+    },
+    {
+      "name": "tp-ui-wheel-hours"
+    },
+    {
+      "name": "tp-ui-wheel-item",
+      "example": ".tp-ui-wheel-item"
+    },
+    {
+      "name": "tp-ui-wheel-minutes"
+    },
+    {
+      "name": "tp-ui-wheel-mode",
+      "example": ".tp-ui--inline:not(.tp-ui-wheel-mode):not(.tp-ui-compact-wheel-mode) .tp-ui-wrapper.expanded"
+    },
+    {
+      "name": "tp-ui-wheel-padding",
+      "example": ".tp-ui-wheel-padding"
+    },
+    {
+      "name": "tp-ui-wheel-seconds"
+    },
+    {
+      "name": "tp-ui-wheel-separator",
+      "example": ".tp-ui-wheel-separator"
+    },
+    {
+      "name": "tp-ui-wrapper",
+      "example": ".tp-ui-wrapper"
+    },
+    {
+      "name": "tp-ui-wrapper-btn",
+      "example": ".tp-ui-wrapper-btn"
+    },
+    {
+      "name": "tp-ui-wrapper-time",
+      "example": ".tp-ui-header.mobile.expanded .tp-ui-wrapper-time.mobile"
+    },
+    {
+      "name": "tp-ui-wrapper-time-24h",
+      "example": ".tp-ui-wrapper-time-24h"
+    },
+    {
+      "name": "tp-ui-wrapper-type-time",
+      "example": ".tp-ui-wrapper-type-time"
+    }
+  ],
+  "modifiers": [
+    {
+      "name": "active",
+      "example": ".tp-ui-value-tips-24h.active"
+    },
+    {
+      "name": "at-end",
+      "example": ".tp-ui-wheel-column-wrapper.at-end:after"
+    },
+    {
+      "name": "at-start",
+      "example": ".tp-ui-wheel-column-wrapper.at-start:before"
+    },
+    {
+      "name": "disabled",
+      "example": ".tp-ui-open-element.disabled"
+    },
+    {
+      "name": "expanded",
+      "example": ".tp-ui-wrapper.expanded"
+    },
+    {
+      "name": "is-center",
+      "example": ".tp-ui-wheel-item.is-center"
+    },
+    {
+      "name": "is-disabled",
+      "example": ".tp-ui-wheel-item.is-disabled"
+    },
+    {
+      "name": "is-dragging",
+      "example": ".tp-ui-wheel-column.is-dragging"
+    },
+    {
+      "name": "mobile",
+      "example": ".tp-ui-wrapper.mobile"
+    },
+    {
+      "name": "none",
+      "example": ".tp-ui-tips-wrapper-24h.none"
+    },
+    {
+      "name": "removed",
+      "example": ".tp-ui-modal.removed"
+    },
+    {
+      "name": "scale-in",
+      "example": ".tp-ui-clock-face.scale-in"
+    },
+    {
+      "name": "show",
+      "example": ".tp-ui-modal.show"
+    }
+  ]
+}

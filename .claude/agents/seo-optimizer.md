@@ -90,9 +90,9 @@ is the strategy: specifics get cited, vagueness gets ignored.
 
 **Icon rule (owner standing preference — audit + apply):** never introduce a Unicode
 emoji or a native/system icon into copy, metadata, OG images, or components. The site
-uses **`lucide-react`** for all iconography. When auditing, flag any stray system emoji
-or non-lucide icon in the SEO/OG surface; when writing, use a `lucide-react` icon (or no
-icon), never an emoji glyph.
+draws its few icons as inline SVG components in **`components/icons.tsx`** (no icon
+package). When auditing, flag any stray system emoji or icon from outside that file in the
+SEO/OG surface; when writing, use one of those icons (or no icon), never an emoji glyph.
 
 ## Scope boundaries (hard rules)
 - Work ONLY under `docs-app/`. Never touch the library in `app/`, the `dist/` contract, or
@@ -177,7 +177,7 @@ Most are framework-locked or carry dependencies — your differentiators are the
 - Root `twitter`: `card: 'summary_large_image'`, `title`, `description`, `images`, `creator`.
 - Open Graph image: `app/opengraph-image.tsx` already ships (dynamic `next/og` `ImageResponse`).
   Keep it branded and truthful; add per-section OG images only where it materially helps. No
-  emoji/native icons in the OG art (lucide or none).
+  emoji/native icons in the OG art (the site's own SVG icons or none).
 
 ### 4. AEO — win the direct-answer slot
 - **Answer-first structure.** Lead each docs section with a direct one-or-two-sentence answer,
@@ -261,7 +261,7 @@ Most are framework-locked or carry dependencies — your differentiators are the
    search demand, sanity-check competitor titles/positioning, and confirm the AEO/GEO/AIO tactics
    are still current. Cite what you used.
 5. **Run the always-on checks:** scan existing titles/descriptions/FAQ copy for AI slop and long
-   dashes, and the SEO/OG surface for stray emojis/native icons (should be lucide/none).
+   dashes, and the SEO/OG surface for stray emojis/native icons (should be the site's own SVG icons or none).
 6. Return a **prioritized plan** grouped by area — (1) SEO technical files, (2) per-page metadata,
    (3) root + OG/Twitter, (4) AEO answer-first + FAQPage, (5) GEO entity-footprint + JSON-LD,
    (6) AIO/AI-crawler/CWV flags. List exact files to create or edit; for each give the concrete
@@ -282,7 +282,7 @@ Most are framework-locked or carry dependencies — your differentiators are the
 - You listed `cd docs-app && npm run build` for the main agent (metadata, robots, sitemap, OG
   are typed routes; they must compile). Never claim a check passed — you run none.
 - Copy reads like a person wrote it: specific, plain, no slop, no long dashes, no emojis/native
-  icons (lucide or none). Structured data is truthful and parses.
+  icons (the site's own SVG icons or none). Structured data is truthful and parses.
 - Every indexable route has a unique title/description + canonical; OG/Twitter present; FAQPage +
   SoftwareApplication JSON-LD truthful and current.
 

@@ -5,7 +5,6 @@ import { PageHeader } from "@/components/page-header";
 import { CodeBlock } from "@/components/code-block";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
 import type { TimepickerEventData } from "@/components/examples/types";
-import { Zap } from "lucide-react";
 
 export default function EventsPage() {
   return (
@@ -13,11 +12,10 @@ export default function EventsPage() {
       <PageHeader
         title="Event Handling"
         description="Handle timepicker events using EventEmitter API or callbacks"
-        eyebrow="Example · Advanced"
       />
 
-      <Section icon={Zap} title="EventEmitter API (Recommended)">
-        <p className="text-muted-foreground mb-4">
+      <Section title="EventEmitter API (Recommended)">
+        <p>
           The new EventEmitter API provides a clean, type-safe way to handle
           events:
         </p>
@@ -64,11 +62,12 @@ picker.off('confirm', handler);`}
         />
       </Section>
 
-      <Section icon={Zap} title="Callback Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Callback Options">
+        <p>
           You can also use callback options (check console):
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   callbacks: {
     onOpen: (data) => {
@@ -121,8 +120,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Zap} title="Legacy DOM Events (Removed in v4.0.0)">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Legacy DOM Events (Removed in v4.0.0)">
+        <p>
           DOM events have been removed in v4.0.0. Use EventEmitter API or callback options instead:
         </p>
         <CodeBlock
@@ -148,8 +147,8 @@ const picker = new TimepickerUI(input, {
         />
       </Section>
 
-      <Section icon={Zap} title="TypeScript Event Types">
-        <p className="text-muted-foreground mb-4">
+      <Section title="TypeScript Event Types">
+        <p>
           Payload types are exported from timepicker-ui, and{" "}
           <code>on()</code> infers them from the event name:
         </p>

@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Trash2, Settings, Bell } from "lucide-react";
 
 export default function ClearButtonPage() {
   return (
@@ -11,15 +10,15 @@ export default function ClearButtonPage() {
       <PageHeader
         title="Clear Button"
         description="Reset time selection with a dedicated clear button"
-        eyebrow="Example · Features"
       />
 
-      <Section icon={Trash2} title="Enable Clear Button">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Enable Clear Button">
+        <p>
           The clear button is off by default. Turn it on with{" "}
           <code>ui.clearButton: true</code>:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   ui: { clearButton: true }
 });
@@ -30,11 +29,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Settings} title="Disabled Clear Button">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Disabled Clear Button">
+        <p>
           Hide the clear button (this is the default):
         </p>
         <TimepickerExample
+          display="field"
           code={`new TimepickerUI(input, {
   ui: { clearButton: false }
 }).create();`}
@@ -44,12 +44,13 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Settings} title="Keep Input Value on Clear">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Keep Input Value on Clear">
+        <p>
           Clear the clock state but keep the input value, with the object form
           of <code>ui.clearButton</code>:
         </p>
         <TimepickerExample
+          display="field"
           code={`new TimepickerUI(input, {
   ui: { clearButton: { clearInput: false } }
 }).create();`}
@@ -59,11 +60,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Trash2} title="Custom Label">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Custom Label">
+        <p>
           Use a custom label for the clear button:
         </p>
         <TimepickerExample
+          display="field"
           code={`new TimepickerUI(input, {
   ui: { clearButton: true },
   labels: { clear: 'Reset' }
@@ -75,11 +77,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Bell} title="With Clear Callback">
-        <p className="text-muted-foreground mb-4">
+      <Section title="With Clear Callback">
+        <p>
           Handle the clear event via callback:
         </p>
         <TimepickerExample
+          display="field"
           code={`new TimepickerUI(input, {
   ui: { clearButton: true },
   callbacks: {

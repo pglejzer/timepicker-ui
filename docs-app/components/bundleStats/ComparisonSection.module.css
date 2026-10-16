@@ -1,0 +1,17 @@
+.section {
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--text-h3);
+}
+
+.description {
+  margin-top: var(--space-1);
+  color: var(--ink-2);
+}
+
+.list {
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--ink);
+}

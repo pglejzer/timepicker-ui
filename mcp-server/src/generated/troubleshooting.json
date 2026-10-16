@@ -1,0 +1,234 @@
+[
+  {
+    "group": "Setup",
+    "symptom": "The picker opens but has no styles",
+    "fix": [
+      {
+        "text": "Import `timepicker-ui/main.css` once, for example in your app's entry file. It contains the core styles and the default `basic` theme."
+      },
+      {
+        "text": "For another theme, also import `timepicker-ui/theme-<name>.css` and set `ui.theme` to the same name.",
+        "code": {
+          "language": "typescript",
+          "source": "import { TimepickerUI } from 'timepicker-ui';\nimport 'timepicker-ui/main.css';\nimport 'timepicker-ui/theme-dark.css';\n\nconst picker = new TimepickerUI('#time', { ui: { theme: 'dark' } });\npicker.create();"
+        }
+      }
+    ],
+    "why": "The package ships its CSS as separate files, so you load only the themes you use. `timepicker-ui/index.css` contains the core styles and all 12 themes in one file.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#the-picker-opens-but-has-no-styles"
+  },
+  {
+    "group": "Setup",
+    "symptom": "Nothing happens when the input is clicked",
+    "fix": [
+      {
+        "text": "Call `create()` after `new TimepickerUI(...)`. The handlers that open the picker on click and on Enter are added by `create()`, not by the constructor.",
+        "code": {
+          "language": "typescript",
+          "source": "import { TimepickerUI } from 'timepicker-ui';\n\nconst picker = new TimepickerUI('#time');\npicker.create();"
+        }
+      },
+      {
+        "text": "If the console shows `Input element not found`, the selector matched nothing when the code ran, or the element has no `<input>` inside it. Run the code after the element is in the page."
+      }
+    ],
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#nothing-happens-when-the-input-is-clicked"
+  },
+  {
+    "group": "Setup",
+    "symptom": "A range, timezone or wheel option is ignored, or an error event fires",
+    "fix": [
+      {
+        "text": "Import the plugin from `timepicker-ui/plugins/<name>` and pass it to `PluginRegistry.register()` once, before the first `new TimepickerUI(...)`.",
+        "code": {
+          "language": "typescript",
+          "source": "import { TimepickerUI, PluginRegistry } from 'timepicker-ui';\nimport { RangePlugin } from 'timepicker-ui/plugins/range';\n\nPluginRegistry.register(RangePlugin);\n\nconst picker = new TimepickerUI('#time', { range: { enabled: true } });\npicker.create();"
+        }
+      },
+      {
+        "text": "A missing plugin is reported only through the `error` event, when the picker opens. Listen to it to see the message.",
+        "code": {
+          "language": "typescript",
+          "source": "picker.on('error', ({ error }) => console.warn(error));"
+        }
+      }
+    ],
+    "why": "Each picker sets up its plugins in its constructor, so a plugin registered after `new TimepickerUI(...)` does not work in that picker. Without its plugin, the picker leaves out the range and timezone controls and shows the clock instead of the wheel. With `range.enabled` set, OK then does not close the picker.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#a-range-timezone-or-wheel-option-is-ignored-or-an-error-event-fires"
+  },
+  {
+    "group": "Styling",
+    "symptom": "ui.theme: 'my-theme' has no effect",
+    "fix": [
+      {
+        "text": "Pass your class name in `ui.cssClass` instead. The picker adds the class to `.tp-ui-wrapper` when it opens.",
+        "code": {
+          "language": "typescript",
+          "source": "const picker = new TimepickerUI('#time', {\n  ui: { cssClass: 'my-theme' },\n});\npicker.create();"
+        }
+      },
+      {
+        "text": "Set the `--tp-*` variables under `.tp-ui-wrapper.my-theme`. [CSS Variables](https://timepicker-ui.vercel.app/docs/api/css-variables) lists them.",
+        "code": {
+          "language": "css",
+          "source": ".tp-ui-wrapper.my-theme {\n  --tp-bg: #ffffff;\n  --tp-text: #1d1b20;\n  --tp-primary: #0b57d0;\n  --tp-on-primary: #ffffff;\n}"
+        }
+      }
+    ],
+    "why": "`ui.theme` selects one of the 12 built-in themes. The picker writes the name to the `data-theme` attribute of the modal and does not add it as a class, so a rule such as `.my-theme` never matches.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#uitheme-my-theme-has-no-effect"
+  },
+  {
+    "group": "Styling",
+    "symptom": "TypeScript rejects a custom ui.theme name",
+    "fix": [
+      {
+        "text": "Leave `ui.theme` unset or use a built-in name, and pass your own class in `ui.cssClass`. [The `ui.theme` entry above](https://timepicker-ui.vercel.app/docs/guides/troubleshooting#uitheme-my-theme-has-no-effect) shows the CSS."
+      }
+    ],
+    "why": "`ui.theme` is typed as a union of the 12 built-in theme names.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#typescript-rejects-a-custom-uitheme-name"
+  },
+  {
+    "group": "Styling",
+    "symptom": "The modal shows behind a header or inside a clipped container",
+    "fix": [
+      {
+        "text": "If you set `ui.appendTo`, point it at an element outside the clipped container, or remove the option so the modal goes to `<body>`."
+      },
+      {
+        "text": "The modal has `z-index: 5000`. If your header has a higher `z-index`, lower the header's value, or raise the modal's in CSS that loads after `timepicker-ui/main.css`.",
+        "code": {
+          "language": "css",
+          "source": ".tp-ui-modal {\n  z-index: 10000;\n}"
+        }
+      }
+    ],
+    "why": "The modal is `position: fixed`. Inside an ancestor with `transform` or `filter`, a fixed element is placed relative to that ancestor instead of the viewport, and its `z-index` only counts inside it. `--tp-z-modal` is defined in `:root`, but no rule reads it, so changing it does nothing.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#the-modal-shows-behind-a-header-or-inside-a-clipped-container"
+  },
+  {
+    "group": "Styling",
+    "symptom": "My CSS does not override the built-in styles",
+    "fix": [
+      {
+        "text": "Give the picker a class with `ui.cssClass`, for example `'my-picker'`."
+      },
+      {
+        "text": "Start each selector with `.tp-ui-wrapper.my-picker`. Built-in state rules such as `.tp-ui-hour.active` and `.tp-ui-hour.mobile.active` use two or three classes, and the prefix adds two more.",
+        "code": {
+          "language": "css",
+          "source": ".tp-ui-wrapper.my-picker .tp-ui-hour.active,\n.tp-ui-wrapper.my-picker .tp-ui-minutes.active {\n  background-color: #111111;\n  color: #ffffff;\n}"
+        }
+      },
+      {
+        "text": "See [Specificity](https://timepicker-ui.vercel.app/docs/api/css-classes#specificity) on the CSS Classes page."
+      }
+    ],
+    "why": "A rule loses when it has fewer classes than the built-in one, or the same number and loads earlier.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#my-css-does-not-override-the-built-in-styles"
+  },
+  {
+    "group": "Frameworks",
+    "symptom": "ReferenceError: document is not defined or TimepickerUI requires browser environment in Next.js, Nuxt or SvelteKit",
+    "fix": [
+      {
+        "text": "Create the picker in a hook that runs only in the browser: `useEffect` in React, `onMounted` in Vue and Nuxt, `onMount` in Svelte and SvelteKit. In the Next.js App Router, the file also needs `'use client'`.",
+        "code": {
+          "language": "tsx",
+          "source": "'use client';\n\nimport { useEffect, useRef } from 'react';\nimport { TimepickerUI } from 'timepicker-ui';\n\nexport function TimeField() {\n  const inputRef = useRef<HTMLInputElement>(null);\n\n  useEffect(() => {\n    if (!inputRef.current) return;\n    const picker = new TimepickerUI(inputRef.current);\n    picker.create();\n    return () => picker.destroy();\n  }, []);\n\n  return <div className=\"tp-ui\"><input ref={inputRef} type=\"text\" /></div>;\n}"
+        }
+      },
+      {
+        "text": "Read `document` and `window` only inside that hook as well."
+      },
+      {
+        "text": "[Server Rendering](https://timepicker-ui.vercel.app/docs/guides/server-rendering) shows the setup for Next.js, Nuxt and SvelteKit."
+      }
+    ],
+    "why": "Importing `timepicker-ui` on the server is safe, because no module reads `window` or `document` when it loads. The constructor needs a browser: it throws `TimepickerUI requires browser environment` when `window` is undefined. `ReferenceError: document is not defined` comes from your own code, for example a `document.querySelector()` call in the component body.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#referenceerror-document-is-not-defined-nextjs-nuxt-sveltekit"
+  },
+  {
+    "group": "Frameworks",
+    "symptom": "Two pickers open, or events fire twice, in React development mode",
+    "fix": [
+      {
+        "text": "Return `() => picker.destroy()` from the effect that creates the picker.",
+        "code": {
+          "language": "tsx",
+          "source": "useEffect(() => {\n  if (!inputRef.current) return;\n  const picker = new TimepickerUI(inputRef.current);\n  picker.create();\n  return () => picker.destroy();\n}, []);"
+        }
+      }
+    ],
+    "why": "In development, Strict Mode runs each effect, then its cleanup, then the effect again. Without a cleanup, the first picker stays on the input next to the second one, and both open on click. `destroy()` removes the picker's listeners and its modal.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#two-pickers-open-or-events-fire-twice-in-react-development-mode"
+  },
+  {
+    "group": "Frameworks",
+    "symptom": "Failed to execute 'removeChild' on 'Node' when a React component unmounts",
+    "fix": [
+      {
+        "text": "Wrap the input in an element with the `tp-ui` class. The picker then uses that element as its root and leaves the input where React rendered it.",
+        "code": {
+          "language": "tsx",
+          "source": "return (\n  <div className=\"tp-ui\">\n    <input ref={inputRef} type=\"text\" />\n  </div>\n);"
+        }
+      }
+    ],
+    "why": "Given a bare `<input>`, the constructor moves it into a new `div.tp-ui`, and `destroy()` does not remove that div. React still expects the input in its original parent, so removing it can fail. `timepicker-ui-react` renders the wrapper for you.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#failed-to-execute-removechild-on-node-when-a-react-component-unmounts"
+  },
+  {
+    "group": "Frameworks",
+    "symptom": "The input value does not update React state",
+    "fix": [
+      {
+        "text": "Set state in `callbacks.onConfirm`. It runs when the user confirms a time, after the picker has written it to the input.",
+        "code": {
+          "language": "tsx",
+          "source": "const [time, setTime] = useState('');\n\nuseEffect(() => {\n  const input = inputRef.current;\n  if (!input) return;\n  const picker = new TimepickerUI(input, {\n    callbacks: { onConfirm: () => setTime(input.value) },\n  });\n  picker.create();\n  return () => picker.destroy();\n}, []);"
+        }
+      },
+      {
+        "text": "With `timepicker-ui-react`, pass `value` and update it in `onConfirm`.",
+        "code": {
+          "language": "tsx",
+          "source": "import { useState } from 'react';\nimport { Timepicker } from 'timepicker-ui-react';\n\nexport function TimeField() {\n  const [time, setTime] = useState('10:00 AM');\n\n  return (\n    <Timepicker\n      value={time}\n      onConfirm={({ hour, minutes, type }) => setTime(`${hour}:${minutes} ${type}`)}\n    />\n  );\n}"
+        }
+      }
+    ],
+    "why": "The picker sets `input.value` directly and does not dispatch `input` or `change` events, so React's `onChange` never runs.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#the-input-value-does-not-update-react-state"
+  },
+  {
+    "group": "Frameworks",
+    "symptom": "Listeners or a modal stay after a route change",
+    "fix": [
+      {
+        "text": "Call `picker.destroy()` in your framework's cleanup hook: the function returned from `useEffect` in React, `onBeforeUnmount` in Vue, `ngOnDestroy` in Angular, or the function returned from `onMount` in Svelte.",
+        "code": {
+          "language": "vue",
+          "source": "<script setup lang=\"ts\">\nimport { onBeforeUnmount, onMounted, ref } from 'vue';\nimport { TimepickerUI } from 'timepicker-ui';\n\nconst input = ref<HTMLInputElement | null>(null);\nlet picker: TimepickerUI | undefined;\n\nonMounted(() => {\n  picker = new TimepickerUI(input.value!);\n  picker.create();\n});\n\nonBeforeUnmount(() => picker?.destroy());\n</script>\n\n<template>\n  <div class=\"tp-ui\"><input ref=\"input\" type=\"text\" /></div>\n</template>"
+        }
+      }
+    ],
+    "why": "An open modal sits in `<body>`, or in the `ui.appendTo` element, outside your component. If the route changes while the picker is open, the modal stays, and by default the page scroll stays locked. `destroy()` removes the modal, the picker's listeners and the scroll lock.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#listeners-or-a-modal-stay-after-a-route-change"
+  },
+  {
+    "group": "Plugins",
+    "symptom": "ui.mode: 'wheel' or 'compact-wheel' still shows a clock",
+    "fix": [
+      {
+        "text": "Import `WheelPlugin` from `timepicker-ui/plugins/wheel` and register it once, before creating the picker.",
+        "code": {
+          "language": "typescript",
+          "source": "import { TimepickerUI, PluginRegistry } from 'timepicker-ui';\nimport { WheelPlugin } from 'timepicker-ui/plugins/wheel';\n\nPluginRegistry.register(WheelPlugin);\n\nconst picker = new TimepickerUI('#time', { ui: { mode: 'wheel' } });\npicker.create();"
+        }
+      }
+    ],
+    "why": "Without the plugin, the picker falls back to the clock face and emits `error` with the message `WheelPlugin is not registered. Import and register it: PluginRegistry.register(WheelPlugin)`.",
+    "docs": "https://timepicker-ui.vercel.app/docs/guides/troubleshooting#uimode-wheel-or-compact-wheel-still-shows-a-clock"
+  }
+]

@@ -1,6 +1,6 @@
 ---
 name: docs-a11y
-description: Audit and improve the accessibility of the timepicker-ui documentation site (docs-app/) - landmarks, heading order, skip links, keyboard nav, focus management in the command menu / sidebar / dialogs, color contrast, alt text, ARIA on custom components, Radix usage, reduced motion - against WCAG 2.2 AA. Use when the user wants an a11y audit/fix of the docs site. Drives the docs-accessibility subagent in an audit → approve → apply flow. Does NOT cover the library (use /a11y for that).
+description: Audit and improve the accessibility of the timepicker-ui documentation site (docs-app/) - landmarks, heading order, skip links, keyboard nav, focus management in the command menu / sidebar / dialogs, color contrast, alt text, ARIA on custom components (tabs, native dialogs), reduced motion - against WCAG 2.2 AA. Use when the user wants an a11y audit/fix of the docs site. Drives the docs-accessibility subagent in an audit → approve → apply flow. Does NOT cover the library (use /a11y for that).
 disable-model-invocation: true
 ---
 
@@ -41,7 +41,8 @@ which groups/items to apply, or skip. Capture the approved set. Do not skip this
 ### Phase 3 — Apply
 Dispatch `docs-accessibility` again in **apply mode** with the exact approved list. It implements
 fixes (landmarks, headings, `aria-*`, focus management, labels, contrast/markup) in docs-app's own
-TS/App-Router style and line endings, using Radix primitives correctly and adding no heavy deps.
+TS/App-Router style and line endings, using native elements and the WAI-ARIA patterns correctly
+and adding no heavy deps.
 
 ### Phase 4 — Verify & report
 - Run `npm run build` / `npm run lint` inside `docs-app/` (and an axe/Lighthouse a11y pass if the

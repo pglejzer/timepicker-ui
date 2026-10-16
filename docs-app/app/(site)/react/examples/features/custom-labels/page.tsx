@@ -3,9 +3,10 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { Type } from "lucide-react";
 
 export default function CustomLabelsPage() {
   return (
@@ -13,37 +14,16 @@ export default function CustomLabelsPage() {
       <PageHeader
         title="Custom Labels"
         description="Customize button and label text"
-        eyebrow="React · Features"
       />
 
-      <Section icon={Type} title="Button Labels">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Button Labels">
+        <p>
           Change OK and Cancel button text:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Custom Buttons
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Confirm and Close instead of OK and Cancel
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="Custom labels"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-                options={{
-                  labels: {
-                    ok: "Confirm",
-                    cancel: "Close",
-                  },
-                }}
-              />
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Custom Buttons</h3>
+        <p>Confirm and Close instead of OK and Cancel</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 
 function App() {
   return (
@@ -57,32 +37,27 @@ function App() {
     />
   );
 }`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <Timepicker
+            placeholder="Custom labels"
+            className={demo.input}
+            options={{
+              labels: {
+                ok: "Confirm",
+                cancel: "Close",
+              },
+            }}
+          />
+        </Figure>
       </Section>
 
-      <Section icon={Type} title="Localization">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Localization">
+        <p>
           Translate labels to different languages:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="Wybierz czas"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-                options={{
-                  labels: {
-                    ok: "Potwierdź",
-                    cancel: "Anuluj",
-                  },
-                }}
-              />
-            </div>
-            <CodeBlock
-              code={`// Polish localization
+        <Figure
+          code={`// Polish localization
 <Timepicker
   placeholder="Wybierz czas"
   options={{
@@ -92,16 +67,24 @@ function App() {
     }
   }}
 />`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <Timepicker
+            placeholder="Wybierz czas"
+            className={demo.input}
+            options={{
+              labels: {
+                ok: "Potwierdź",
+                cancel: "Anuluj",
+              },
+            }}
+          />
+        </Figure>
       </Section>
 
-      <Section icon={Type} title="Available Labels">
-        <div className="rounded-lg border border-border bg-card p-6">
-          <CodeBlock
-            code={`// Visible text labels (options.labels)
+      <Section title="Available Labels">
+        <CodeBlock
+          code={`// Visible text labels (options.labels)
 interface LabelsOptions {
   am?: string;            // Default: "AM"
   pm?: string;            // Default: "PM"
@@ -114,9 +97,8 @@ interface LabelsOptions {
   minute?: string;        // Default: "Minute"
   second?: string;        // Default: "Second"
 }`}
-            language="typescript"
-          />
-        </div>
+          language="typescript"
+        />
       </Section>
     </div>
   );

@@ -103,13 +103,18 @@ changelog page is a **presentation of the library changelog** - it shows what ch
 library entries you wrote to `CHANGELOG.md`; do not add docs-site work to it. Anything beyond
 mechanical version/changelog propagation (page structure, new content sections, component
 changes) stays with the `docs-site` agent - flag those instead of reaching over.
-- Add a new `<Section ...>` block at the TOP of `docs-app/app/(site)/docs/changelog/page.tsx`,
-  matching the existing pattern exactly: `title="Version x.y.z - <Month D, YYYY>"` (the CHANGELOG.md date, or Unreleased), an
-  appropriate lucide icon (Sparkles for features, Bug for fixes, History for releases),
-  and bullet copy mirroring the CHANGELOG.md entry. Update any "latest release" banner.
+- Add the release at the TOP of `docs-app/app/(site)/docs/changelog/page.tsx`, matching the
+  existing pattern exactly: a `CHANGELOG_xyz` data object (`added` / `changed` / `fixed` / ...
+  arrays of `{ title, description }`) and a `<Release title="Version x.y.z - <Month D, YYYY>">`
+  block (the CHANGELOG.md date, or Unreleased) with one `<ChangeSection>` per category, copy
+  mirroring the CHANGELOG.md entry. No icons. Update any "latest release" banner.
 - Update `docs-app/app/(site)/docs/whats-new/page.tsx` to highlight the headline changes.
 - Match docs-app's own conventions (TS, App Router, its import style) and keep its CRLF
   line endings; do not apply the library's lint/build rules to docs-app source.
+- In your report, remind the main agent: after the docs-app `timepicker-ui` dependency is
+  updated (the user runs the install), the main agent runs
+  `node docs-app/scripts/generate-css-reference.mjs` and reviews the diff of
+  `docs-app/lib/generated/css-reference.json`. Never edit that JSON by hand.
 
 ### Keep the root README.md current (the npm/GitHub shopfront)
 On every release, review `README.md` and update what the release changed - it's the first

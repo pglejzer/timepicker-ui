@@ -3,9 +3,10 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { Smartphone } from "lucide-react";
 
 export default function MobilePage() {
   return (
@@ -18,35 +19,17 @@ export default function MobilePage() {
             with <code>ui.initialView: &quot;keyboard&quot;</code>.
           </>
         }
-        eyebrow="React · Features"
       />
 
-      <Section icon={Smartphone} title="Keyboard View">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Keyboard View">
+        <p>
           Open in the keyboard view, where the time is typed into the hour and
           minute fields:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Keyboard View
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Better for touch interactions
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="Keyboard view"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-                options={{
-                  ui: { initialView: "keyboard" },
-                }}
-              />
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Keyboard View</h3>
+        <p>Better for touch interactions</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 
 function App() {
   return (
@@ -57,33 +40,25 @@ function App() {
     />
   );
 }`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <Timepicker
+            placeholder="Keyboard view"
+            className={demo.input}
+            options={{
+              ui: { initialView: "keyboard" },
+            }}
+          />
+        </Figure>
       </Section>
 
-      <Section icon={Smartphone} title="With Switch Icon">
-        <p className="text-muted-foreground mb-4">
+      <Section title="With Switch Icon">
+        <p>
           Add the switch icon with <code>ui.viewSwitch</code> to toggle between
           the keyboard view and the clock face:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="Keyboard view with icon"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-                options={{
-                  ui: {
-                    initialView: "keyboard",
-                    viewSwitch: true,
-                  },
-                }}
-              />
-            </div>
-            <CodeBlock
-              code={`<Timepicker
+        <Figure
+          code={`<Timepicker
   options={{
     ui: {
       initialView: "keyboard",
@@ -91,14 +66,23 @@ function App() {
     }
   }}
 />`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <Timepicker
+            placeholder="Keyboard view with icon"
+            className={demo.input}
+            options={{
+              ui: {
+                initialView: "keyboard",
+                viewSwitch: true,
+              },
+            }}
+          />
+        </Figure>
       </Section>
 
-      <Section icon={Smartphone} title="Responsive Design">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Responsive Design">
+        <p>
           Open in the keyboard view on small screens:
         </p>
         <CodeBlock

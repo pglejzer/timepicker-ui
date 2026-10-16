@@ -3,17 +3,19 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 
 export default function RequiredPage() {
   const [time, setTime] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Submitted: ${time}`);
+    setMessage(`Submitted: ${time}`);
   };
 
   return (
@@ -21,59 +23,26 @@ export default function RequiredPage() {
       <PageHeader
         title="Required Field"
         description="Use HTML5 required attribute for validation"
-        eyebrow="React · Forms"
       />
 
-      <Section icon={AlertCircle} title="Required Input">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Required Input">
+        <p>
           Add required attribute for browser validation:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Required Field
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Try submitting without selecting time
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 rounded-lg border border-border bg-background p-6">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Time *
-                  </label>
-                  <Timepicker
-                    name="appointment-time"
-                    placeholder="Required field"
-                    required
-                    value={time}
-                    className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                    onUpdate={(data) => {
-                      setTime(`${data.hour}:${data.minutes} ${data.type}`);
-                    }}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Required Field</h3>
+        <p>Try submitting without selecting time</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 import { useState } from "react";
 
 function App() {
   const [time, setTime] = useState("");
+  const [message, setMessage] = useState("");
 
   return (
     <form onSubmit={(e) => {
       e.preventDefault();
-      alert(\`Submitted: \${time}\`);
+      setMessage(\`Submitted: \${time}\`);
     }}>
       <Timepicker
         name="time"
@@ -84,17 +53,41 @@ function App() {
         }}
       />
       <button type="submit">Submit</button>
+      <p role="status">{message}</p>
     </form>
   );
 }`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <form onSubmit={handleSubmit} className={demo.form}>
+            <div className={demo.field}>
+              <label htmlFor="required-time" className={demo.label}>
+                Time *
+              </label>
+              <Timepicker
+                id="required-time"
+                name="appointment-time"
+                placeholder="Required field"
+                required
+                value={time}
+                className={demo.input}
+                onUpdate={(data) => {
+                  setTime(`${data.hour}:${data.minutes} ${data.type}`);
+                }}
+              />
+            </div>
+            <button type="submit" className={demo.button}>
+              Submit
+            </button>
+            <p role="status" aria-live="polite" className={demo.output}>
+              {message}
+            </p>
+          </form>
+        </Figure>
       </Section>
 
-      <Section icon={AlertCircle} title="HTML5 Attributes">
-        <p className="text-muted-foreground mb-4">
+      <Section title="HTML5 Attributes">
+        <p>
           Timepicker supports all standard input attributes:
         </p>
         <CodeBlock

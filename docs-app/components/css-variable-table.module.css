@@ -1,0 +1,269 @@
+.controls {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+  max-width: 28rem;
+}
+
+.label {
+  padding: 0;
+  font-size: var(--text-small);
+  font-weight: 700;
+}
+
+.legend {
+  margin-bottom: var(--space-1);
+}
+
+.input {
+  width: 100%;
+  min-height: var(--control-h);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--ink-3);
+  border-radius: var(--radius-1);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.input::placeholder {
+  color: var(--ink-3);
+}
+
+.input:focus-visible {
+  border-color: var(--ink);
+}
+
+.hint,
+.count {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--text-small);
+}
+
+.groups {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--ink-3);
+  border-radius: var(--radius-1);
+  background: var(--paper);
+  font-size: var(--text-small);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.chip:hover {
+  background: var(--code);
+}
+
+.chip:has(input:checked) {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.chip:has(input:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.chip input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.empty {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--ink);
+}
+
+.empty p {
+  margin: 0 0 var(--space-3);
+}
+
+.reset {
+  min-height: var(--control-h);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-1);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.reset:hover {
+  background: var(--code);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-meta);
+}
+
+.table,
+.table tbody,
+.table tr,
+.table td {
+  display: block;
+}
+
+.table thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.table tr {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.table tbody tr:first-child {
+  border-top: 1px solid var(--ink);
+}
+
+.table td + td {
+  margin-top: var(--space-1);
+}
+
+.table td + td::before {
+  content: attr(data-label) ": ";
+  color: var(--ink-3);
+  font-size: var(--text-small);
+}
+
+.table code {
+  overflow-wrap: anywhere;
+}
+
+.name {
+  font-weight: 700;
+}
+
+.name code {
+  padding: 0;
+  background: none;
+}
+
+.swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: var(--space-2);
+  border: 1px solid var(--ink);
+  vertical-align: -1px;
+}
+
+.note {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--ink-2);
+  font-size: var(--text-small);
+}
+
+.more {
+  margin-top: var(--space-1);
+}
+
+.more summary {
+  width: fit-content;
+  padding-block: var(--space-1);
+  color: var(--ink-2);
+  font-size: var(--text-small);
+  cursor: pointer;
+}
+
+@media (min-width: 40rem) {
+  .scroll {
+    overflow-x: auto;
+  }
+
+  .table {
+    display: table;
+  }
+
+  .table thead {
+    position: static;
+    display: table-header-group;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+  }
+
+  .table tbody {
+    display: table-row-group;
+  }
+
+  .table tr {
+    display: table-row;
+    padding: 0;
+  }
+
+  .table th,
+  .table td {
+    display: table-cell;
+    padding: var(--space-3) var(--space-3) var(--space-3) 0;
+    border-bottom: 1px solid var(--hair);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .table th {
+    padding-block: var(--space-2);
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    font-size: var(--text-small);
+    font-weight: 700;
+  }
+
+  .table tbody tr:first-child {
+    border-top: 0;
+  }
+
+  .table td + td {
+    margin-top: 0;
+  }
+
+  .table td + td::before {
+    content: none;
+  }
+
+  .name {
+    white-space: nowrap;
+  }
+
+  .name code {
+    overflow-wrap: normal;
+  }
+}

@@ -2,8 +2,8 @@ import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
-import { InfoBox } from "@/components/info-box";
-import { Zap, Code2, Box } from "lucide-react";
+import { Callout } from "@/components/callout";
+import Link from "next/link";
 
 export const metadata = buildMetadata({
   title: "Quick Start",
@@ -18,23 +18,20 @@ export default function QuickStartPage() {
       <PageHeader
         title="Quick Start"
         description="Get up and running with Timepicker-UI in minutes"
-        eyebrow="Guide"
       />
 
-      <Section icon={Zap} title="Basic Usage">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Basic Usage">
+        <p>
           Create a simple time picker with default settings:
         </p>
 
-        <h3 className="text-lg font-semibold mb-3 text-foreground">HTML</h3>
+        <h3>HTML</h3>
         <CodeBlock
           code={`<input id="timepicker" type="text" placeholder="Select time" />`}
           language="html"
         />
 
-        <h3 className="text-lg font-semibold mb-3 mt-6 text-foreground">
-          JavaScript
-        </h3>
+        <h3>JavaScript</h3>
         <CodeBlock
           code={`import { TimepickerUI } from 'timepicker-ui';
 
@@ -45,8 +42,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Code2} title="With Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="With Options">
+        <p>
           Customize the picker with options (v4.0.0 grouped structure):
         </p>
         <CodeBlock
@@ -70,20 +67,19 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Box} title="Framework Integration">
-        <h3 className="text-lg font-semibold mb-3 text-foreground">React</h3>
-        <InfoBox title="Important for React" variant="orange" className="mb-4">
-          Use{" "}
-          <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
-            useRef
-          </code>{" "}
+      <Section title="Framework Integration">
+        <h3>React</h3>
+        <Callout title="Important for React" tone="warning">
+          Use <code>useRef</code>{" "}
           to store the picker instance and avoid re-initialization on every
           render. If you pass options as an object, memoize them with{" "}
-          <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
-            useMemo
-          </code>{" "}
-          to prevent unnecessary re-renders.
-        </InfoBox>
+          <code>useMemo</code>{" "}
+          to prevent unnecessary re-renders. Render the input inside{" "}
+          <code>{'<div className="tp-ui">'}</code>, so unmounting the
+          component does not throw.{" "}
+          <Link href="/docs/guides/server-rendering">Server Rendering</Link>{" "}
+          explains why.
+        </Callout>
         <CodeBlock
           code={`import { useEffect, useRef, useMemo } from 'react';
 import { TimepickerUI } from 'timepicker-ui';
@@ -112,12 +108,16 @@ export default function TimePicker() {
     };
   }, []); // Empty deps - create only once
 
-  return <input ref={inputRef} type="text" />;
+  return (
+    <div className="tp-ui">
+      <input ref={inputRef} type="text" />
+    </div>
+  );
 }`}
           language="tsx"
         />
 
-        <h3 className="text-lg font-semibold mb-3 mt-6 text-foreground">Vue</h3>
+        <h3>Vue</h3>
         <CodeBlock
           code={`<template>
   <input ref="timepickerInput" type="text" />
@@ -144,9 +144,7 @@ onUnmounted(() => {
           language="vue"
         />
 
-        <h3 className="text-lg font-semibold mb-3 mt-6 text-foreground">
-          Angular
-        </h3>
+        <h3>Angular</h3>
         <CodeBlock
           code={`import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { TimepickerUI } from 'timepicker-ui';
@@ -170,19 +168,41 @@ export class TimepickerComponent implements AfterViewInit, OnDestroy {
 }`}
           language="typescript"
         />
+
+        <h3>Svelte</h3>
+        <CodeBlock
+          code={`<script>
+  import { onMount } from 'svelte';
+  import { TimepickerUI } from 'timepicker-ui';
+  import 'timepicker-ui/index.css';
+
+  let input;
+
+  onMount(() => {
+    const picker = new TimepickerUI(input);
+    picker.create();
+    return () => picker.destroy();
+  });
+</script>
+
+<input bind:this={input} type="text" />`}
+          language="svelte"
+        />
+        <p>
+          For SvelteKit, see{" "}
+          <Link href="/docs/guides/server-rendering#sveltekit">
+            Server Rendering
+          </Link>
+          .
+        </p>
       </Section>
 
-      <InfoBox title="Pro tip" variant="emerald">
-        Always call{" "}
-        <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
-          destroy()
-        </code>{" "}
+      <Callout title="Pro tip" tone="tip">
+        Always call <code>destroy()</code>{" "}
         when unmounting to prevent memory leaks. In React, use{" "}
-        <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
-          useMemo
-        </code>{" "}
+        <code>useMemo</code>{" "}
         for options objects to avoid re-initialization on every render.
-      </InfoBox>
+      </Callout>
     </div>
   );
 }

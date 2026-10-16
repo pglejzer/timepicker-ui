@@ -1,9 +1,8 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
-import { Zap } from "lucide-react";
-import { MethodCard } from "@/components/method-card";
+import { Section } from "@/components/section";
 
 export const metadata = buildMetadata({
   title: "Methods",
@@ -173,37 +172,29 @@ export default function MethodsPage() {
       <PageHeader
         title="Methods"
         description="Available methods on TimepickerUI instance"
-        eyebrow="API"
       />
 
-      <div className="space-y-8 mb-16">
-        {methods.map((method) => (
-          <MethodCard key={method.name} {...method} />
-        ))}
-      </div>
+      {methods.map((method) => (
+        <Fragment key={method.name}>
+          <h2>
+            <code>{method.name}</code>
+          </h2>
+          <p>{method.description}</p>
+          <CodeBlock code={method.code} language="typescript" />
+        </Fragment>
+      ))}
 
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500/10 to-orange-500/10">
-            <Zap className="h-5 w-5 text-amber-500" />
-          </div>
-          <h2 className="text-2xl font-bold tracking-tight">Static Methods</h2>
-        </div>
-        <div className="space-y-6">
-          {staticMethods.map((method) => (
-            <div
-              key={method.name}
-              className="rounded-lg border border-border bg-card p-6"
-            >
-              <h3 className="text-lg font-semibold mb-2">
-                <code className="text-primary">{method.name}</code>
-              </h3>
-              <p className="text-muted-foreground mb-4">{method.description}</p>
-              <CodeBlock code={method.code} language="typescript" />
-            </div>
-          ))}
-        </div>
-      </div>
+      <Section title="Static Methods">
+        {staticMethods.map((method) => (
+          <Fragment key={method.name}>
+            <h3>
+              <code>{method.name}</code>
+            </h3>
+            <p>{method.description}</p>
+            <CodeBlock code={method.code} language="typescript" />
+          </Fragment>
+        ))}
+      </Section>
     </div>
   );
 }

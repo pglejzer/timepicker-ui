@@ -1,0 +1,91 @@
+.figure {
+  display: flex;
+  flex-direction: column;
+  margin: var(--space-5) 0 var(--space-6);
+  border: 1px solid var(--ink);
+  counter-increment: figure;
+}
+
+.scene {
+  order: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--space-5) 0;
+  overflow-x: auto;
+  background-color: var(--scene);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.scene:has([data-theme="glassmorphic"]) {
+  --ink: var(--scene-dark-ink);
+  --paper: var(--scene-dark);
+  background-color: var(--scene-dark);
+  color: var(--ink);
+  color-scheme: dark;
+}
+
+.scene[data-tone="light"] {
+  --ink: var(--scene-light-ink);
+  --paper: var(--scene-light);
+  background-color: var(--scene-light);
+  color: var(--ink);
+  color-scheme: light;
+}
+
+.scene[data-scene="phone"] > * {
+  width: 100%;
+  max-width: 390px;
+}
+
+.bar {
+  order: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border-top: 1px solid var(--ink);
+  color: var(--ink-2);
+  font-size: var(--text-small);
+}
+
+.caption {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.label {
+  margin-right: var(--space-2);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.label:empty::before {
+  content: "Fig. " counter(figure);
+}
+
+.caption code {
+  color: var(--ink);
+  font-size: 0.95em;
+}
+
+.status {
+  color: var(--ink);
+  font-family: var(--font-mono);
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tool {
+  composes: button from "./copy-button.module.css";
+}
+
+.code {
+  order: 3;
+  border-top: 1px solid var(--hair);
+}

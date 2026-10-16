@@ -1,0 +1,17 @@
+.keys kbd {
+  padding: 0 var(--space-1);
+  border: 1px solid var(--hair);
+  font-size: var(--text-small);
+}
+
+.checklist {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+}
+
+.checklist label {
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+}

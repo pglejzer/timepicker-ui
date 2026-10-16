@@ -1,0 +1,30 @@
+.check {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.title {
+  font-weight: 700;
+}
+
+.status {
+  margin-left: var(--space-1);
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.description {
+  margin-top: var(--space-1);
+  color: var(--ink-2);
+  font-size: var(--text-small);
+}
+
+.metric {
+  margin-top: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,133 @@
+.switcher {
+  margin: 0 0 var(--space-6);
+}
+
+.packages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-meta);
+}
+
+.packages li {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.separator {
+  padding: 0 var(--space-2);
+  color: var(--ink-3);
+}
+
+.package {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink-2);
+  text-decoration-line: underline;
+}
+
+.package:hover {
+  color: var(--ink);
+}
+
+.package[aria-current="page"] {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration-line: none;
+}
+
+.breaking {
+  color: var(--danger);
+}
+
+.release {
+  margin-top: var(--space-7);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--ink);
+}
+
+.version {
+  max-width: none;
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  border: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-h3);
+  letter-spacing: 0;
+}
+
+.stamp {
+  display: block;
+  color: inherit;
+  text-decoration-line: none;
+}
+
+.number,
+.date {
+  display: block;
+}
+
+.stamp:hover .number {
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+}
+
+.date {
+  margin-top: var(--space-1);
+  color: var(--ink-3);
+  font-family: var(--font-text);
+  font-size: var(--text-meta);
+  font-weight: 400;
+}
+
+.entries {
+  min-width: 0;
+}
+
+.entries > :first-child {
+  margin-top: 0;
+}
+
+.category {
+  max-width: none;
+  margin: var(--space-5) 0 var(--space-2);
+  color: var(--ink-2);
+  font-size: var(--text-meta);
+  font-weight: 700;
+}
+
+.entries h4 {
+  font-size: var(--text-meta);
+}
+
+@media (min-width: 60rem) {
+  .package {
+    min-height: 32px;
+  }
+
+  .release {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    column-gap: var(--space-6);
+  }
+
+  .version {
+    margin: 0;
+  }
+
+  .stamp {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-7) + var(--space-4));
+  }
+}
+
+@media (min-width: 80rem) {
+  .stamp {
+    top: calc(var(--header-h) + var(--space-4));
+  }
+}

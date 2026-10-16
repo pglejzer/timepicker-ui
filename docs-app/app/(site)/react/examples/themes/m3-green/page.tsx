@@ -2,10 +2,10 @@
 
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
-import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { Palette } from "lucide-react";
 import Link from "next/link";
 
 export default function M3GreenPage() {
@@ -14,34 +14,16 @@ export default function M3GreenPage() {
       <PageHeader
         title="Material 3 Green"
         description="Material Design 3 green theme"
-        eyebrow="React · Themes"
       />
 
-      <Section icon={Palette} title="M3 Green Theme">
-        <p className="text-muted-foreground mb-4">
+      <Section title="M3 Green Theme">
+        <p>
           Modern Material Design 3 aesthetics with green accent:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              M3 Green
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Material Design 3 specification
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-              <Timepicker
-                placeholder="M3 Green"
-                className="w-full max-w-xs px-4 py-2 rounded-lg border border-border bg-background"
-                options={{
-                  ui: { theme: "m3-green" },
-                }}
-              />
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>M3 Green</h3>
+        <p>Material Design 3 specification</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
 import "timepicker-ui/theme-m3-green.css";
 
@@ -54,55 +36,40 @@ function App() {
     />
   );
 }`}
-              language="tsx"
-            />
-          </div>
-        </div>
+          language="tsx"
+        >
+          <Timepicker
+            placeholder="M3 Green"
+            className={demo.input}
+            options={{
+              ui: { theme: "m3-green" },
+            }}
+          />
+        </Figure>
       </Section>
 
-      <Section icon={Palette} title="Available Themes">
-        <div className="rounded-lg border border-border bg-card p-6">
-          <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
-            <li>
-              <code className="text-xs bg-muted px-1 py-0.5 rounded">
-                basic
-              </code>{" "}
-              - Default light theme
-            </li>
-            <li>
-              <code className="text-xs bg-muted px-1 py-0.5 rounded">dark</code>{" "}
-              - Dark mode
-            </li>
-            <li>
-              <code className="text-xs bg-muted px-1 py-0.5 rounded">
-                m3-green
-              </code>{" "}
-              - Material Design 3 green
-            </li>
-            <li>
-              <code className="text-xs bg-muted px-1 py-0.5 rounded">
-                crane
-              </code>{" "}
-              - Crane theme
-            </li>
-            <li>
-              <code className="text-xs bg-muted px-1 py-0.5 rounded">
-                crane-straight
-              </code>{" "}
-              - Crane straight variant
-            </li>
-            <li>
-              Check{" "}
-              <Link
-                href="/examples/themes/basic"
-                className="text-primary hover:underline"
-              >
-                vanilla examples
-              </Link>{" "}
-              for more themes
-            </li>
-          </ul>
-        </div>
+      <Section title="Available Themes">
+        <ul>
+          <li>
+            <code>basic</code> - Default light theme
+          </li>
+          <li>
+            <code>dark</code> - Dark mode
+          </li>
+          <li>
+            <code>m3-green</code> - Material Design 3 green
+          </li>
+          <li>
+            <code>crane</code> - Crane theme
+          </li>
+          <li>
+            <code>crane-straight</code> - Crane straight variant
+          </li>
+          <li>
+            Check <Link href="/examples/themes/basic">vanilla examples</Link>{" "}
+            for more themes
+          </li>
+        </ul>
       </Section>
     </div>
   );

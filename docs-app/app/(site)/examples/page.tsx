@@ -1,217 +1,62 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { TimepickerUI } from "timepicker-ui";
-import { CodeBlock } from "@/components/code-block";
-import { Section } from "@/components/section";
-import { InfoBox } from "@/components/info-box";
-import { Clock, Palette, Calendar, Settings, Zap, Lock } from "lucide-react";
 import Link from "next/link";
-
-interface ExampleCardProps {
-  title: string;
-  description: string;
-  code: string;
-  children: React.ReactNode;
-}
-
-function ExampleCard({ title, description, code, children }: ExampleCardProps) {
-  return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
-      <div className="p-6 border-b border-border bg-muted/30">
-        <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </div>
-      <div className="p-6">
-        <div className="mb-6 flex items-center justify-center min-h-[80px] rounded-lg border border-border bg-background p-4">
-          {children}
-        </div>
-        <CodeBlock code={code} language="tsx" />
-      </div>
-    </div>
-  );
-}
-
-function BasicExample() {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (!inputRef.current) return;
-    const picker = new TimepickerUI(inputRef.current);
-    picker.create();
-    return () => picker.destroy();
-  }, []);
-
-  return (
-    <input
-      ref={inputRef}
-      type="text"
-      placeholder="Select time"
-      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-    />
-  );
-}
-
-function ClockTypeExample() {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (!inputRef.current) return;
-    const picker = new TimepickerUI(inputRef.current, {
-      clock: { type: "24h" },
-    });
-    picker.create();
-    return () => picker.destroy();
-  }, []);
-
-  return (
-    <input
-      ref={inputRef}
-      type="text"
-      placeholder="24-hour format"
-      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-    />
-  );
-}
-
-function ThemeExample() {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (!inputRef.current) return;
-    const picker = new TimepickerUI(inputRef.current, {
-      ui: { theme: "dark" },
-    });
-    picker.create();
-    return () => picker.destroy();
-  }, []);
-
-  return (
-    <input
-      ref={inputRef}
-      type="text"
-      placeholder="Dark theme"
-      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-    />
-  );
-}
-
-function CallbackExample() {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [selectedTime, setSelectedTime] = useState<string>("");
-
-  useEffect(() => {
-    if (!inputRef.current) return;
-    const picker = new TimepickerUI(inputRef.current, {
-      callbacks: {
-        onConfirm: (data) => {
-          const time = `${data.hour}:${data.minutes}${
-            data.type ? " " + data.type : ""
-          }`;
-          setSelectedTime(time);
-        },
-      },
-    });
-    picker.create();
-    return () => picker.destroy();
-  }, []);
-
-  return (
-    <div className="w-full max-w-xs space-y-3">
-      <input
-        ref={inputRef}
-        type="text"
-        placeholder="Select time"
-        className="w-full rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-      />
-      {selectedTime && (
-        <p className="text-sm text-muted-foreground text-center">
-          Selected:{" "}
-          <span className="text-primary font-medium">{selectedTime}</span>
-        </p>
-      )}
-    </div>
-  );
-}
-
-function IncrementExample() {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (!inputRef.current) return;
-    const picker = new TimepickerUI(inputRef.current, {
-      clock: { incrementMinutes: 15 },
-    });
-    picker.create();
-    return () => picker.destroy();
-  }, []);
-
-  return (
-    <input
-      ref={inputRef}
-      type="text"
-      placeholder="15-minute intervals"
-      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-    />
-  );
-}
-
-function DisabledTimeExample() {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (!inputRef.current) return;
-    const picker = new TimepickerUI(inputRef.current, {
-      clock: {
-        disabledTime: {
-          ranges: "12:00 PM - 1:00 PM",
-        },
-      },
-    });
-    picker.create();
-    return () => picker.destroy();
-  }, []);
-
-  return (
-    <input
-      ref={inputRef}
-      type="text"
-      placeholder="Restricted hours"
-      className="w-full max-w-xs rounded-lg border border-border bg-background px-4 py-2 text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-    />
-  );
-}
+import { PageHeader } from "@/components/page-header";
+import { Section } from "@/components/section";
+import { Callout } from "@/components/callout";
+import { TimepickerExample } from "@/components/examples/timepicker-example";
+import { examplesNav } from "@/lib/nav";
+import styles from "./page.module.css";
 
 export default function ExamplesPage() {
   return (
     <div>
-      <div className="mb-10">
-        <h1 className="display text-4xl font-semibold tracking-tight">
-          Examples
-        </h1>
-        <p className="mt-3 text-lg text-muted-foreground">
-          Working configurations you can copy into your project.
-        </p>
-      </div>
+      <PageHeader
+        title="Examples"
+        description="Working configurations you can copy into your project."
+      />
 
-      <InfoBox title="React examples" variant="blue" className="mb-8">
+      <p>
+        Demos run inline so you can try them right away. In your app the picker
+        opens in a modal when the input is clicked. Switch a demo to Modal to
+        see that.
+      </p>
+
+      <nav aria-label="All examples" className={styles.catalog}>
+        {examplesNav.map((group) => (
+          <section key={group.title} className={styles.group}>
+            <h2 className={styles.groupTitle}>
+              {group.title}{" "}
+              <span className={styles.count}>
+                {group.links.filter((link) => link.href !== "/examples").length}
+              </span>
+            </h2>
+            <ul className={styles.links}>
+              {group.links
+                .filter((link) => link.href !== "/examples")
+                .map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href}>{link.title}</Link>
+                  </li>
+                ))}
+            </ul>
+          </section>
+        ))}
+      </nav>
+
+      <Callout title="React examples">
         These examples use React and Next.js, but{" "}
         <strong>TimepickerUI works with any JavaScript framework</strong> or
         vanilla JS. The same API is available in Vue, Angular, Svelte, or plain
         JavaScript. Check the{" "}
-        <Link
-          href="/docs/quick-start"
-          className="text-primary hover:underline font-medium"
-        >
-          Quick Start
-        </Link>{" "}
+        <Link href="/docs/quick-start">Quick Start</Link>{" "}
         guide for framework-specific examples.
-      </InfoBox>
+      </Callout>
 
-      <Section icon={Zap} title="Basic Usage">
-        <ExampleCard
-          title="Default Timepicker"
-          description="Simple time picker with default settings"
+      <Section title="Basic Usage">
+        <h3>Default Timepicker</h3>
+        <p>Simple time picker with default settings</p>
+        <TimepickerExample
           code={`import { useEffect, useRef } from "react";
 import { TimepickerUI } from "timepicker-ui";
 
@@ -227,15 +72,13 @@ export default function BasicTimePicker() {
 
   return <input ref={inputRef} type="text" placeholder="Select time" />;
 }`}
-        >
-          <BasicExample />
-        </ExampleCard>
+        />
       </Section>
 
-      <Section icon={Clock} title="Clock Format">
-        <ExampleCard
-          title="24-Hour Format"
-          description="Use 24-hour clock instead of 12-hour with AM/PM"
+      <Section title="Clock Format">
+        <h3>24-Hour Format</h3>
+        <p>Use 24-hour clock instead of 12-hour with AM/PM</p>
+        <TimepickerExample
           code={`import { useEffect, useRef } from "react";
 import { TimepickerUI } from "timepicker-ui";
 
@@ -253,15 +96,17 @@ export default function Clock24Example() {
 
   return <input ref={inputRef} type="text" />;
 }`}
-        >
-          <ClockTypeExample />
-        </ExampleCard>
+          options={{
+            clock: { type: "24h" },
+          }}
+          inputPlaceholder="24-hour format"
+        />
       </Section>
 
-      <Section icon={Palette} title="Theming">
-        <ExampleCard
-          title="Dark Theme"
-          description="Apply dark theme for better visual hierarchy"
+      <Section title="Theming">
+        <h3>Dark Theme</h3>
+        <p>Apply dark theme for better visual hierarchy</p>
+        <TimepickerExample
           code={`import { useEffect, useRef } from "react";
 import { TimepickerUI } from "timepicker-ui";
 import "timepicker-ui/main.css";
@@ -281,15 +126,17 @@ export default function DarkThemeExample() {
 
   return <input ref={inputRef} type="text" />;
 }`}
-        >
-          <ThemeExample />
-        </ExampleCard>
+          options={{
+            ui: { theme: "dark" },
+          }}
+          inputPlaceholder="Dark theme"
+        />
       </Section>
 
-      <Section icon={Settings} title="Callbacks">
-        <ExampleCard
-          title="Handle Time Selection"
-          description="React to user actions with callback functions"
+      <Section title="Callbacks">
+        <h3>Handle Time Selection</h3>
+        <p>React to user actions with callback functions</p>
+        <TimepickerExample
           code={`import { useEffect, useRef, useState } from "react";
 import { TimepickerUI } from "timepicker-ui";
 
@@ -318,15 +165,13 @@ export default function CallbackExample() {
     </div>
   );
 }`}
-        >
-          <CallbackExample />
-        </ExampleCard>
+        />
       </Section>
 
-      <Section icon={Calendar} title="Increments">
-        <ExampleCard
-          title="Custom Minute Steps"
-          description="Allow only specific minute intervals (e.g., 15-minute increments)"
+      <Section title="Increments">
+        <h3>Custom Minute Steps</h3>
+        <p>Allow only specific minute intervals (e.g., 15-minute increments)</p>
+        <TimepickerExample
           code={`import { useEffect, useRef } from "react";
 import { TimepickerUI } from "timepicker-ui";
 
@@ -344,15 +189,17 @@ export default function IncrementExample() {
 
   return <input ref={inputRef} type="text" />;
 }`}
-        >
-          <IncrementExample />
-        </ExampleCard>
+          options={{
+            clock: { incrementMinutes: 15 },
+          }}
+          inputPlaceholder="15-minute intervals"
+        />
       </Section>
 
-      <Section icon={Lock} title="Restrictions">
-        <ExampleCard
-          title="Disabled Time Ranges"
-          description="Prevent selection of specific hours or time ranges"
+      <Section title="Restrictions">
+        <h3>Disabled Time Ranges</h3>
+        <p>Prevent selection of specific hours or time ranges</p>
+        <TimepickerExample
           code={`import { useEffect, useRef } from "react";
 import { TimepickerUI } from "timepicker-ui";
 
@@ -374,9 +221,15 @@ export default function DisabledTimeExample() {
 
   return <input ref={inputRef} type="text" />;
 }`}
-        >
-          <DisabledTimeExample />
-        </ExampleCard>
+          options={{
+            clock: {
+              disabledTime: {
+                ranges: "12:00 PM - 1:00 PM",
+              },
+            },
+          }}
+          inputPlaceholder="Restricted hours"
+        />
       </Section>
     </div>
   );

@@ -1,0 +1,28 @@
+.demo {
+  display: grid;
+  gap: var(--space-4);
+  width: calc(100% - 2 * var(--space-3));
+  max-width: 28rem;
+}
+
+.log {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: var(--control-h);
+}
+
+.entries {
+  max-height: 16rem;
+  padding: var(--space-3);
+  overflow-y: auto;
+  border: 1px solid var(--hair);
+  background: var(--paper);
+  overflow-wrap: anywhere;
+}

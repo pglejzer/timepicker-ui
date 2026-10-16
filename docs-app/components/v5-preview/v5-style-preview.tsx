@@ -377,11 +377,11 @@ export function V5StylePreview() {
 
   return (
     <figure aria-labelledby={titleId}>
-      <figcaption className="mb-4">
-        <p id={titleId} className="font-medium text-foreground">
+      <figcaption>
+        <p id={titleId}>
           Design preview: new style in 5.0
         </p>
-        <p className="mt-1">
+        <p>
           A static picture, not a working picker. The switches show or hide
           the range and time zone parts. The style is not in 4.5, and its
           final look and option name may change.

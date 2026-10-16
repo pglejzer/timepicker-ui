@@ -7,9 +7,8 @@ export type SeoRoute = {
 
 /**
  * Canonical list of every public route on the docs site.
- * Derived from the App Router page tree (app/.../page.tsx), lib/docs-nav.ts,
- * and the nav arrays in components/examples-sidebar.tsx and
- * components/react-sidebar.tsx. Keep in sync when routes are added/removed.
+ * Derived from the App Router page tree (app/.../page.tsx) and the nav data
+ * in lib/nav.ts. Keep in sync when routes are added/removed.
  *
  * Tiers map to sitemap priority + changeFrequency:
  *   top     -> priority 1.0 / 0.9, weekly  (home + section index pages)
@@ -24,8 +23,9 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/react/examples", tier: "top" },
 
   { path: "/bundle-stats", tier: "section" },
+  { path: "/playground", tier: "section" },
 
-  // docs — getting started
+  // docs - getting started
   { path: "/docs/installation", tier: "section" },
   { path: "/docs/quick-start", tier: "section" },
   { path: "/docs/configuration", tier: "section" },
@@ -34,15 +34,25 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/docs/legacy-migration", tier: "leaf" },
   { path: "/docs/whats-new", tier: "leaf" },
   { path: "/docs/changelog", tier: "leaf" },
+  { path: "/docs/changelog/react", tier: "leaf" },
+  { path: "/docs/changelog/mcp", tier: "leaf" },
   { path: "/docs/roadmap", tier: "leaf" },
 
-  // docs — api
+  // docs - guides
+  { path: "/docs/guides/server-rendering", tier: "section" },
+  { path: "/docs/guides/testing", tier: "leaf" },
+  { path: "/docs/guides/ai", tier: "section" },
+  { path: "/docs/guides/troubleshooting", tier: "section" },
+
+  // docs - api
   { path: "/docs/api/options", tier: "section" },
   { path: "/docs/api/methods", tier: "section" },
   { path: "/docs/api/events", tier: "section" },
   { path: "/docs/api/typescript", tier: "section" },
+  { path: "/docs/api/css-variables", tier: "section" },
+  { path: "/docs/api/css-classes", tier: "section" },
 
-  // docs — features
+  // docs - features
   { path: "/docs/features/clock-format", tier: "leaf" },
   { path: "/docs/features/seconds", tier: "leaf" },
   { path: "/docs/features/themes", tier: "section" },
@@ -53,19 +63,19 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/docs/features/validation", tier: "leaf" },
   { path: "/docs/features/plugins", tier: "section" },
 
-  // docs — advanced
+  // docs - advanced
   { path: "/docs/advanced/styling", tier: "leaf" },
   { path: "/docs/advanced/localization", tier: "leaf" },
   { path: "/docs/advanced/accessibility", tier: "leaf" },
 
-  // examples — basic
+  // examples - basic
   { path: "/examples/basic/getting-started", tier: "leaf" },
   { path: "/examples/basic/12h-format", tier: "leaf" },
   { path: "/examples/basic/24h-format", tier: "leaf" },
   { path: "/examples/basic/backdrop", tier: "leaf" },
   { path: "/examples/basic/no-animation", tier: "leaf" },
 
-  // examples — themes
+  // examples - themes
   { path: "/examples/themes/basic", tier: "leaf" },
   { path: "/examples/themes/crane", tier: "leaf" },
   { path: "/examples/themes/crane-straight", tier: "leaf" },
@@ -79,7 +89,7 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/examples/themes/blueprint", tier: "leaf" },
   { path: "/examples/themes/blueprint-dark", tier: "leaf" },
 
-  // examples — features
+  // examples - features
   { path: "/examples/features/inline-mode", tier: "leaf" },
   { path: "/examples/features/mobile", tier: "leaf" },
   { path: "/examples/features/editable", tier: "leaf" },
@@ -94,7 +104,7 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/examples/features/smooth-hour-snap", tier: "leaf" },
   { path: "/examples/features/clear-button", tier: "leaf" },
 
-  // examples — advanced
+  // examples - advanced
   { path: "/examples/advanced/events", tier: "leaf" },
   { path: "/examples/advanced/custom-styling", tier: "leaf" },
   { path: "/examples/advanced/multiple", tier: "leaf" },
@@ -104,43 +114,43 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/examples/advanced/custom-container", tier: "leaf" },
   { path: "/examples/advanced/external-api", tier: "leaf" },
 
-  // examples — plugins
+  // examples - plugins
   { path: "/examples/plugins/range", tier: "section" },
   { path: "/examples/plugins/timezone", tier: "section" },
   { path: "/examples/plugins/wheel", tier: "section" },
 
-  // react — overview
+  // react - overview
   { path: "/react/installation", tier: "section" },
   { path: "/react/quick-start", tier: "section" },
 
-  // react — basic examples
+  // react - basic examples
   { path: "/react/examples/basic/getting-started", tier: "leaf" },
   { path: "/react/examples/basic/with-callbacks", tier: "leaf" },
   { path: "/react/examples/basic/24h-format", tier: "leaf" },
 
-  // react — controlled
+  // react - controlled
   { path: "/react/examples/controlled/value", tier: "leaf" },
   { path: "/react/examples/controlled/multiple", tier: "leaf" },
   { path: "/react/examples/controlled/on-update", tier: "leaf" },
 
-  // react — callbacks
+  // react - callbacks
   { path: "/react/examples/callbacks/all-events", tier: "leaf" },
   { path: "/react/examples/callbacks/on-confirm", tier: "leaf" },
   { path: "/react/examples/callbacks/selection", tier: "leaf" },
   { path: "/react/examples/callbacks/on-cancel", tier: "leaf" },
 
-  // react — themes
+  // react - themes
   { path: "/react/examples/themes/dark", tier: "leaf" },
   { path: "/react/examples/themes/custom", tier: "leaf" },
   { path: "/react/examples/themes/m3-green", tier: "leaf" },
 
-  // react — features
+  // react - features
   { path: "/react/examples/features/mobile", tier: "leaf" },
   { path: "/react/examples/features/disabled", tier: "leaf" },
   { path: "/react/examples/features/custom-labels", tier: "leaf" },
   { path: "/react/examples/features/increment", tier: "leaf" },
 
-  // react — forms
+  // react - forms
   { path: "/react/examples/forms/validation", tier: "leaf" },
   { path: "/react/examples/forms/required", tier: "leaf" },
   { path: "/react/examples/forms/state", tier: "leaf" },

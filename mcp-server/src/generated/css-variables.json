@@ -1,772 +1,1187 @@
 [
   {
     "name": "--tp-bg",
-    "value": "#ece6ee",
+    "group": "Color",
+    "default": "#ece6ee",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-surface",
-    "value": "#e6e0e9",
+    "group": "Color",
+    "default": "#e6e0e9",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-surface-hover",
-    "value": "#c8b3fd",
+    "group": "Color",
+    "default": "#c8b3fd",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-input-bg",
-    "value": "#e6e0e9",
+    "group": "Color",
+    "default": "#e6e0e9",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-text",
-    "value": "#1d1b20",
+    "group": "Color",
+    "default": "#1d1b20",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-text-secondary",
-    "value": "#49454f",
+    "group": "Color",
+    "default": "#49454f",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-text-disabled",
-    "value": "rgba(156, 155, 155, 0.6)",
+    "group": "Color",
+    "default": "hsla(0,1%,61%,.6)",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-text-type-time",
-    "value": "#49454f",
+    "group": "Color",
+    "default": "#49454f",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-text-icon",
-    "value": "#4e545a",
+    "group": "Color",
+    "default": "#4e545a",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-am-pm-active",
-    "value": "#ffd8e4",
+    "group": "Color",
+    "default": "#ffd8e4",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-am-pm-text-selected",
-    "value": "#633b48",
+    "group": "Color",
+    "default": "#633b48",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-am-pm-text-unselected",
-    "value": "#49454f",
+    "group": "Color",
+    "default": "#49454f",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-primary",
-    "value": "#6750a4",
+    "group": "Color",
+    "default": "#6750a4",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-on-primary",
-    "value": "#ffffff",
+    "group": "Color",
+    "default": "#fff",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-primary-container",
-    "value": "#eaddff",
+    "group": "Color",
+    "default": "#eaddff",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-on-primary-container",
-    "value": "#21005d",
+    "group": "Color",
+    "default": "#21005d",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-primary-rgb",
-    "value": "103, 80, 164",
+    "group": "Color",
+    "default": "103,80,164",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-on-surface",
-    "value": "#1d1b20",
+    "group": "Color",
+    "default": "#1d1b20",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-on-surface-variant",
-    "value": "#49454f",
+    "group": "Color",
+    "default": "#49454f",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-on-surface-rgb",
-    "value": "29, 27, 32",
+    "group": "Color",
+    "default": "29,27,32",
+    "read": false,
     "commonlyThemed": true
   },
   {
     "name": "--tp-surface-container",
-    "value": "#f3edf7",
+    "group": "Color",
+    "default": "#f3edf7",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-outline-variant",
-    "value": "#cac4d0",
+    "group": "Color",
+    "default": "#cac4d0",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-tertiary-container",
-    "value": "#ffd8e4",
+    "group": "Color",
+    "default": "#ffd8e4",
+    "read": false,
     "commonlyThemed": true
   },
   {
     "name": "--tp-on-tertiary-container",
-    "value": "#633b48",
+    "group": "Color",
+    "default": "#633b48",
+    "read": false,
     "commonlyThemed": true
   },
   {
     "name": "--tp-border",
-    "value": "#000",
+    "group": "Color",
+    "default": "#000",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-outline",
-    "value": "#6750a4",
+    "group": "Color",
+    "default": "#6750a4",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-hover-bg",
-    "value": "#d6d6d6",
+    "group": "Color",
+    "default": "#d6d6d6",
+    "read": false,
     "commonlyThemed": true
   },
   {
     "name": "--tp-backdrop",
-    "value": "rgba(0, 0, 0, 0.5)",
+    "group": "Backdrop",
+    "default": "rgba(0,0,0,.5)",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-backdrop-filter",
-    "value": "unset",
-    "commonlyThemed": true
+    "group": "Backdrop",
+    "default": "unset",
+    "read": true,
+    "commonlyThemed": true,
+    "readOutsideWrapper": [
+      "tp-ui-modal"
+    ]
   },
   {
     "name": "--tp-dropdown-option-bg",
-    "value": "#ffffff",
+    "group": "Timezone",
+    "default": "#fff",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-dropdown-option-text",
-    "value": "#000000",
+    "group": "Timezone",
+    "default": "#000",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-error",
-    "value": "#d50000",
+    "group": "Color",
+    "default": "#d50000",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-shadow",
-    "value": "unset",
+    "group": "Elevation",
+    "default": "unset",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-border-radius",
-    "value": "28px",
+    "group": "Shape",
+    "default": "28px",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-spacing-xs",
-    "value": "4px",
+    "group": "Spacing",
+    "default": "4px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-spacing-sm",
-    "value": "8px",
+    "group": "Spacing",
+    "default": "8px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-spacing-md",
-    "value": "12px",
+    "group": "Spacing",
+    "default": "12px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-spacing-lg",
-    "value": "16px",
+    "group": "Spacing",
+    "default": "16px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-spacing-xl",
-    "value": "24px",
+    "group": "Spacing",
+    "default": "24px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-spacing-2xl",
-    "value": "36px",
+    "group": "Spacing",
+    "default": "36px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-spacing-3xl",
-    "value": "48px",
+    "group": "Spacing",
+    "default": "48px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-border-width",
-    "value": "1px",
+    "group": "Shape",
+    "default": "1px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-border-width-thick",
-    "value": "2px",
+    "group": "Shape",
+    "default": "2px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-border-width-half",
-    "value": "calc(0.7504px / 2)",
+    "group": "Shape",
+    "default": "0.3752px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-border-width-pm",
-    "value": "1.5008px",
+    "group": "Shape",
+    "default": "1.5008px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-outline-width",
-    "value": "2px",
+    "group": "Focus",
+    "default": "2px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-outline-width-thick",
-    "value": "3px",
+    "group": "Focus",
+    "default": "3px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-outline-width-contrast",
-    "value": "4px",
+    "group": "Focus",
+    "default": "4px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-outline-offset",
-    "value": "2px",
+    "group": "Focus",
+    "default": "2px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-font-size-xs",
-    "value": "12px",
+    "group": "Typography",
+    "default": "12px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-font-size-sm",
-    "value": "12.8px",
+    "group": "Typography",
+    "default": "12.8px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-font-size-base",
-    "value": "14px",
+    "group": "Typography",
+    "default": "14px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-font-size-lg",
-    "value": "16px",
+    "group": "Typography",
+    "default": "16px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-font-size-number",
-    "value": "17.6px",
+    "group": "Typography",
+    "default": "17.6px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-font-size-xl",
-    "value": "51.2px",
+    "group": "Typography",
+    "default": "51.2px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-font-size-seconds-12h",
-    "value": "36px",
+    "group": "Typography",
+    "default": "36px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-font-size-seconds-24h",
-    "value": "44px",
+    "group": "Typography",
+    "default": "44px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-range-tab-value-font-size-seconds",
-    "value": "14px",
+    "group": "Range",
+    "default": "14px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-radius-sm",
-    "value": "7px",
+    "group": "Shape",
+    "default": "7px",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-radius-md",
-    "value": "8px",
+    "group": "Shape",
+    "default": "8px",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-radius-lg",
-    "value": "20px",
+    "group": "Shape",
+    "default": "20px",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-radius-circle",
-    "value": "50%",
+    "group": "Shape",
+    "default": "50%",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-radius-full",
-    "value": "100%",
+    "group": "Shape",
+    "default": "100%",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-clock",
-    "value": "256px",
+    "group": "Size",
+    "default": "256px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-wrapper",
-    "value": "328px",
+    "group": "Size",
+    "default": "328px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-wrapper-expanded",
-    "value": "584px",
+    "group": "Size",
+    "default": "584px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-wrapper-portrait",
-    "value": "315px",
+    "group": "Size",
+    "default": "315px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-wrapper-landscape-height",
-    "value": "360px",
+    "group": "Size",
+    "default": "360px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-wrapper-mobile-height",
-    "value": "258px",
+    "group": "Size",
+    "default": "258px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-mobile-landscape-width",
-    "value": "328px",
+    "group": "Mobile",
+    "default": "328px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-mobile-landscape-height",
-    "value": "258px",
+    "group": "Mobile",
+    "default": "258px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-mobile-landscape-height-range",
-    "value": "287px",
+    "group": "Mobile",
+    "default": "287px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-mobile-landscape-height-timezone",
-    "value": "326px",
+    "group": "Mobile",
+    "default": "326px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-input",
-    "value": "96px",
+    "group": "Size",
+    "default": "96px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-input-height",
-    "value": "80px",
+    "group": "Size",
+    "default": "80px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-input-mobile",
-    "value": "72px",
+    "group": "Size",
+    "default": "72px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-hand-circle",
-    "value": "46px",
+    "group": "Size",
+    "default": "46px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-hand-circle-small",
-    "value": "36px",
+    "group": "Size",
+    "default": "36px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-hand-width",
-    "value": "2px",
+    "group": "Size",
+    "default": "2px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-hand-offset",
-    "value": "calc(50% - 1px)",
+    "group": "Size",
+    "default": "calc(50% - 1px)",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-hand-top",
-    "value": "4px",
+    "group": "Size",
+    "default": "4px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-hand-left",
-    "value": "1px",
+    "group": "Size",
+    "default": "1px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-button-min",
-    "value": "44px",
+    "group": "Size",
+    "default": "44px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-dot",
-    "value": "6px",
+    "group": "Size",
+    "default": "6px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-dot-center",
-    "value": "8px",
+    "group": "Size",
+    "default": "8px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-am-pm-width",
-    "value": "52px",
+    "group": "Size",
+    "default": "52px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-am-pm-height",
-    "value": "40px",
+    "group": "Size",
+    "default": "40px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-am-pm-height-landscape",
-    "value": "44px",
+    "group": "Size",
+    "default": "44px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-icon",
-    "value": "24px",
+    "group": "Size",
+    "default": "24px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-colon-width",
-    "value": "24px",
+    "group": "Size",
+    "default": "24px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-colon-height",
-    "value": "48px",
+    "group": "Size",
+    "default": "48px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-input-seconds-12h",
-    "value": "64px",
+    "group": "Size",
+    "default": "64px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-input-seconds-12h-narrow",
-    "value": "58px",
+    "group": "Size",
+    "default": "58px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-colon-seconds-12h",
-    "value": "12px",
+    "group": "Size",
+    "default": "12px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-input-seconds-24h",
-    "value": "80px",
+    "group": "Size",
+    "default": "80px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-input-seconds-24h-narrow",
-    "value": "74px",
+    "group": "Size",
+    "default": "74px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-colon-seconds-24h",
-    "value": "20px",
+    "group": "Size",
+    "default": "20px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-number",
-    "value": "32px",
+    "group": "Size",
+    "default": "32px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-inner-circle",
-    "value": "200px",
+    "group": "Size",
+    "default": "200px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-inline-min-height",
-    "value": "500px",
+    "group": "Size",
+    "default": "500px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-size-padding",
-    "value": "10px",
+    "group": "Size",
+    "default": "10px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-duration-fast",
-    "value": "150ms",
+    "group": "Motion",
+    "default": "150ms",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-duration-base",
-    "value": "200ms",
+    "group": "Motion",
+    "default": "200ms",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-duration-slow",
-    "value": "300ms",
+    "group": "Motion",
+    "default": "300ms",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-duration-slower",
-    "value": "400ms",
+    "group": "Motion",
+    "default": "400ms",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-duration-slowest",
-    "value": "450ms",
+    "group": "Motion",
+    "default": "450ms",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-duration-animation",
-    "value": "350ms",
+    "group": "Motion",
+    "default": "350ms",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-duration-ripple",
-    "value": "700ms",
+    "group": "Motion",
+    "default": "700ms",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-duration-ripple-fade",
-    "value": "500ms",
+    "group": "Motion",
+    "default": "500ms",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-duration-reduced",
-    "value": "0.01ms",
-    "commonlyThemed": false
+    "group": "Motion",
+    "default": "0.01ms",
+    "read": true,
+    "commonlyThemed": false,
+    "readOutsideWrapper": [
+      "tp-ui"
+    ]
   },
   {
     "name": "--tp-easing-standard",
-    "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+    "group": "Motion",
+    "default": "cubic-bezier(0.4,0,0.2,1)",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-easing-decelerate",
-    "value": "cubic-bezier(0, 0, 0.2, 1)",
+    "group": "Motion",
+    "default": "cubic-bezier(0,0,0.2,1)",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-easing-accelerate",
-    "value": "cubic-bezier(0.4, 0, 1, 1)",
-    "commonlyThemed": false
+    "group": "Motion",
+    "default": "cubic-bezier(0.4,0,1,1)",
+    "read": true,
+    "commonlyThemed": false,
+    "readOutsideWrapper": [
+      "tp-ui-modal"
+    ]
   },
   {
     "name": "--tp-easing-ease",
-    "value": "ease",
+    "group": "Motion",
+    "default": "ease",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-easing-linear",
-    "value": "linear",
+    "group": "Motion",
+    "default": "linear",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-z-backdrop",
-    "value": "5000",
+    "group": "Elevation",
+    "default": "5000",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-z-modal",
-    "value": "5001",
+    "group": "Elevation",
+    "default": "5001",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-z-keyboard-icon",
-    "value": "10",
+    "group": "Elevation",
+    "default": "10",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-z-hidden",
-    "value": "-9999",
+    "group": "Elevation",
+    "default": "-9999",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-opacity-hover",
-    "value": "0.08",
+    "group": "State",
+    "default": "0.08",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-opacity-focus",
-    "value": "0.12",
+    "group": "State",
+    "default": "0.12",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-opacity-active",
-    "value": "0.16",
+    "group": "State",
+    "default": "0.16",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-opacity-disabled",
-    "value": "0.38",
+    "group": "State",
+    "default": "0.38",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-opacity-backdrop",
-    "value": "0.6",
+    "group": "Backdrop",
+    "default": "0.6",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-state-hover-opacity",
-    "value": "0.08",
+    "group": "State",
+    "default": "0.08",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-state-focus-opacity",
-    "value": "0.1",
+    "group": "State",
+    "default": "0.1",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-state-pressed-opacity",
-    "value": "0.1",
+    "group": "State",
+    "default": "0.1",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-ripple-opacity",
-    "value": "1",
+    "group": "State",
+    "default": "1",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-shadow-inline",
-    "value": "0 2px 8px rgba(0, 0, 0, 0.15)",
+    "group": "Elevation",
+    "default": "0 2px 8px rgba(0,0,0,.15)",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-shadow-focus",
-    "value": "0 0 0 4px rgba(98, 0, 238, 0.2)",
+    "group": "Focus",
+    "default": "0 0 0 4px rgba(98,0,238,.2)",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-gap-sm",
-    "value": "8px",
+    "group": "Spacing",
+    "default": "8px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-gap-md",
-    "value": "12px",
+    "group": "Spacing",
+    "default": "12px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-position-hidden",
-    "value": "-10000px",
+    "group": "Spacing",
+    "default": "-10000px",
+    "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-item-height",
-    "value": "44px",
+    "group": "Wheel",
+    "default": "44px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-visible-items",
-    "value": "5",
+    "group": "Wheel",
+    "default": "5",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-column-width",
-    "value": "76px",
+    "group": "Wheel",
+    "default": "76px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-separator-width",
-    "value": "20px",
+    "group": "Wheel",
+    "default": "20px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-column-width-seconds",
-    "value": "64px",
+    "group": "Wheel",
+    "default": "64px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-separator-width-seconds",
-    "value": "16px",
+    "group": "Wheel",
+    "default": "16px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-landscape-footer-offset",
-    "value": "72px",
+    "group": "Wheel",
+    "default": "72px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-landscape-compact-width",
-    "value": "360px",
+    "group": "Wheel",
+    "default": "360px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-landscape-compact-visible-items",
-    "value": "3",
+    "group": "Wheel",
+    "default": "3",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-highlight-bg",
-    "value": "var(--tp-primary-container, rgba(103, 80, 164, 0.08))",
+    "group": "Wheel",
+    "default": "var(--tp-primary-container,rgba(103,80,164,.08))",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-wheel-highlight-border",
-    "value": "var(--tp-outline-variant, rgba(0, 0, 0, 0.12))",
+    "group": "Wheel",
+    "default": "var(--tp-outline-variant,rgba(0,0,0,.12))",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-wheel-text-color",
-    "value": "var(--tp-on-surface, #1d1b20)",
+    "group": "Wheel",
+    "default": "var(--tp-on-surface,#1d1b20)",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-wheel-selected-color",
-    "value": "var(--tp-primary, #6750a4)",
+    "group": "Wheel",
+    "default": "var(--tp-primary,#6750a4)",
+    "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-wheel-disabled-opacity",
-    "value": "var(--tp-opacity-disabled, 0.38)",
+    "group": "Wheel",
+    "default": "var(--tp-opacity-disabled,0.38)",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-font-size",
-    "value": "var(--tp-font-size-lg, 16px)",
+    "group": "Wheel",
+    "default": "var(--tp-font-size-lg,16px)",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-selected-font-size",
-    "value": "22px",
+    "group": "Wheel",
+    "default": "22px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-popover-gap",
-    "value": "4px",
+    "group": "Popover",
+    "default": "4px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-popover-edge-margin",
-    "value": "4px",
+    "group": "Popover",
+    "default": "4px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-popover-min-width",
-    "value": "260px",
+    "group": "Popover",
+    "default": "260px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-popover-max-width",
-    "value": "328px",
+    "group": "Popover",
+    "default": "328px",
+    "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-popover-shadow",
-    "value": "0 4px 24px rgba(0, 0, 0, 0.15)",
+    "group": "Popover",
+    "default": "0 4px 24px rgba(0,0,0,.15)",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-font-family",
+    "group": "Typography",
+    "default": "\"Roboto\",sans-serif",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-btn-radius",
+    "group": "Shape",
+    "default": "var(--tp-radius-lg)",
+    "read": true,
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-btn-text",
+    "group": "Color",
+    "default": "var(--tp-primary)",
+    "read": true,
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-shadow-focus-ring",
+    "group": "Focus",
+    "default": "none",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-focus-ring",
+    "group": "Focus",
+    "default": "var(--tp-primary)",
+    "read": true,
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-dropdown-option-hover-text",
+    "group": "Timezone",
+    "default": "var(--tp-dropdown-option-text)",
+    "read": true,
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-wheel-highlight-radius",
+    "group": "Wheel",
+    "default": "var(--tp-radius-md)",
+    "read": true,
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-wheel-fade-opacity",
+    "group": "Wheel",
+    "default": ".6",
+    "read": true,
+    "commonlyThemed": true
+  },
+  {
+    "name": "--tp-wheel-ampm-column-width",
+    "group": "Wheel",
+    "default": "64px",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-span",
+    "group": "Popover",
+    "default": "span-right",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-anchor",
+    "group": "Popover",
+    "default": null,
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-radius",
+    "group": "Popover",
+    "default": "var(--tp-border-radius)",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-available-height",
+    "group": "Popover",
+    "default": null,
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-scrollbar-gap",
+    "group": "Spacing",
+    "default": null,
+    "read": false,
     "commonlyThemed": false
   }
 ]

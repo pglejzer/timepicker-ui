@@ -4,30 +4,33 @@ import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
 import { CodeBlock } from "@/components/code-block";
-import { ShieldCheck, AlertCircle } from "lucide-react";
-import { InfoBox } from "@/components/info-box";
+import { Callout } from "@/components/callout";
 import type { TimepickerEventData } from "@/components/examples/types";
+import demo from "@/components/demo-controls.module.css";
+import { useState } from "react";
 
 export default function ValidationPage() {
+  const [error, setError] = useState("");
+
   return (
     <div>
       <PageHeader
         title="Validation"
         description="Validate time input and handle invalid entries"
-        eyebrow="Example · Advanced"
       />
 
-      <InfoBox title="Built-in Validation" variant="blue" className="mb-8">
+      <Callout title="Built-in Validation">
         Timepicker-UI includes built-in validation that adds error classes to
         invalid inputs. Use event callbacks to implement custom validation
         logic.
-      </InfoBox>
+      </Callout>
 
-      <Section icon={ShieldCheck} title="Basic Validation">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Basic Validation">
+        <p>
           The timepicker automatically validates input format:
         </p>
         <TimepickerExample
+          display="field"
           code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
@@ -47,14 +50,17 @@ picker.create();
         />
       </Section>
 
-      <Section icon={AlertCircle} title="Custom Validation">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Custom Validation">
+        <p>
           Implement custom validation in the onConfirm callback:
         </p>
         <TimepickerExample
+          display="field"
           code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
+// Markup: <p id="time-error" role="alert"></p> next to the input
+const timeError = document.querySelector('#time-error');
 const picker = new TimepickerUI(input, {
   clock: { type: '24h' },
   callbacks: {
@@ -63,12 +69,13 @@ const picker = new TimepickerUI(input, {
       
       // Custom rule: Only allow working hours (9 AM - 5 PM)
       if (hour < 9 || hour > 17) {
-        alert('Please select time between 9 AM and 5 PM');
+        timeError.textContent = 'Please select time between 9 AM and 5 PM';
         input.classList.add('error');
         return;
       }
-      
+
       input.classList.remove('error');
+      timeError.textContent = '';
       console.log('Valid time:', data);
     }
   }
@@ -82,16 +89,23 @@ picker.create();`}
                 if (!data.hour) return;
                 const hour = parseInt(data.hour);
                 if (hour < 9 || hour > 17) {
-                  alert("Please select time between 9 AM and 5 PM");
+                  setError("Please select time between 9 AM and 5 PM");
+                  return;
                 }
+                setError("");
               },
             },
           }}
+          message={
+            <p role="alert" className={demo.error}>
+              {error}
+            </p>
+          }
         />
       </Section>
 
-      <Section icon={ShieldCheck} title="Required Field">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Required Field">
+        <p>
           Validate that a time has been selected:
         </p>
         <CodeBlock
@@ -126,8 +140,8 @@ form.addEventListener('submit', (e) => {
         />
       </Section>
 
-      <Section icon={AlertCircle} title="Time Range Validation">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Time Range Validation">
+        <p>
           Validate time is within a specific range:
         </p>
         <CodeBlock
@@ -146,19 +160,22 @@ function validateTimeRange(time: string, min: string, max: string): boolean {
 }
 
 const input = document.querySelector('#timepicker');
+// Markup: <p id="time-error" role="alert"></p> next to the input
+const timeError = document.querySelector('#time-error');
 const picker = new TimepickerUI(input, {
   clock: { type: '24h' },
   callbacks: {
     onConfirm: (data) => {
       const time = \`\${data.hour}:\${data.minutes}\`;
-      
+
       if (!validateTimeRange(time, '08:00', '18:00')) {
-        alert('Time must be between 8:00 AM and 6:00 PM');
+        timeError.textContent = 'Time must be between 8:00 AM and 6:00 PM';
         input.classList.add('error');
         return;
       }
-      
+
       input.classList.remove('error');
+      timeError.textContent = '';
     }
   }
 });
@@ -168,8 +185,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={ShieldCheck} title="React Form Integration">
-        <p className="text-muted-foreground mb-4">
+      <Section title="React Form Integration">
+        <p>
           Integrate with React form validation libraries:
         </p>
         <CodeBlock
@@ -242,8 +259,8 @@ function TimePickerForm() {
         />
       </Section>
 
-      <Section icon={AlertCircle} title="Server-Side Validation">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Server-Side Validation">
+        <p>
           Handle validation errors from server responses:
         </p>
         <CodeBlock

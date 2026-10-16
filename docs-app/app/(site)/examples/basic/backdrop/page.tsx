@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Sparkles } from "lucide-react";
 
 export default function BackdropPage() {
   return (
@@ -11,14 +10,14 @@ export default function BackdropPage() {
       <PageHeader
         title="Backdrop"
         description="Control backdrop overlay behavior"
-        eyebrow="Example · Basic"
       />
 
-      <Section icon={Sparkles} title="With Backdrop (Default)">
-        <p className="text-muted-foreground mb-4">
+      <Section title="With Backdrop (Default)">
+        <p>
           Backdrop is enabled by default and darkens the background:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   ui: { backdrop: true } // This is the default
 });
@@ -29,11 +28,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Sparkles} title="Without Backdrop">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Without Backdrop">
+        <p>
           Disable backdrop to keep background visible:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   ui: { backdrop: false }
 });
@@ -44,11 +44,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Sparkles} title="Backdrop with Scroll">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Backdrop with Scroll">
+        <p>
           Let the page scroll while the backdrop is visible:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   ui: {
     backdrop: true,
@@ -65,11 +66,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Sparkles} title="Backdrop with Focus Trap">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Backdrop with Focus Trap">
+        <p>
           Combine backdrop with focus trap for better accessibility:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   ui: {
     backdrop: true
@@ -90,11 +92,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Sparkles} title="No Backdrop, No Animation">
-        <p className="text-muted-foreground mb-4">
+      <Section title="No Backdrop, No Animation">
+        <p>
           Minimal setup without backdrop and animations:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   ui: {
     backdrop: false,

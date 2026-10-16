@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Type } from "lucide-react";
 
 export default function CustomLabelsPage() {
   return (
@@ -11,14 +10,14 @@ export default function CustomLabelsPage() {
       <PageHeader
         title="Custom Labels"
         description="Customize all text labels for localization"
-        eyebrow="Example · Features"
       />
 
-      <Section icon={Type} title="Button Labels">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Button Labels">
+        <p>
           Customize OK and Cancel button text:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   labels: {
     ok: 'Confirm',
@@ -35,31 +34,31 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Type} title="AM/PM Labels">
-        <p className="text-muted-foreground mb-4">
+      <Section title="AM/PM Labels">
+        <p>
           Customize AM and PM labels:
         </p>
         <TimepickerExample
           code={`const picker = new TimepickerUI(input, {
   clock: { type: '12h' },
   labels: {
-    am: 'Morning',
-    pm: 'Evening'
+    am: 'a.m.',
+    pm: 'p.m.'
   }
 });
 picker.create();`}
           options={{
             clock: { type: "12h" },
             labels: {
-              am: "Morning",
-              pm: "Evening",
+              am: "a.m.",
+              pm: "p.m.",
             },
           }}
         />
       </Section>
 
-      <Section icon={Type} title="Clock View Title">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Clock View Title">
+        <p>
           Change the heading of the clock face view with{" "}
           <code>labels.clockTitle</code>:
         </p>
@@ -74,8 +73,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Type} title="Keyboard View Labels">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Keyboard View Labels">
+        <p>
           Change the labels of the keyboard view. <code>labels.hour</code> and{" "}
           <code>labels.minute</code> also name the fields for screen readers:
         </p>
@@ -100,11 +99,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Type} title="Polish Localization">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Polish Localization">
+        <p>
           Example with Polish labels:
         </p>
         <TimepickerExample
+          display="field"
           code={`const picker = new TimepickerUI(input, {
   labels: {
     ok: 'Zatwierdź',

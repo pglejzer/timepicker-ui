@@ -1,0 +1,31 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-h);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--ink-3);
+  border-radius: var(--radius-1);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: var(--text-small);
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.button:hover {
+  background: var(--code);
+}
+
+.button[data-copied],
+.button[aria-pressed="true"],
+.button[aria-expanded="true"] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}

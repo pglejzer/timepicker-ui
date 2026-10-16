@@ -1,0 +1,28 @@
+.callout {
+  max-width: var(--measure);
+  margin: var(--space-5) 0 var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--ink);
+}
+
+.callout:has(pre, table, figure) {
+  max-width: none;
+}
+
+.callout[data-tone="warning"],
+.callout[data-tone="danger"] {
+  border-width: 2px;
+}
+
+.label {
+  margin-bottom: var(--space-1);
+  font-weight: 700;
+}
+
+.callout[data-tone="danger"] .label {
+  color: var(--danger);
+}
+
+.body > :last-child {
+  margin-bottom: 0;
+}

@@ -3,10 +3,12 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { MousePointer } from "lucide-react";
 import { useState } from "react";
+import styles from "./page.module.css";
 
 export default function SelectionEventsPage() {
   const [lastHour, setLastHour] = useState("");
@@ -18,49 +20,16 @@ export default function SelectionEventsPage() {
       <PageHeader
         title="Selection Events"
         description="Track hour, minute, and AM/PM selections"
-        eyebrow="React · Callbacks"
       />
 
-      <Section icon={MousePointer} title="Individual Selection Callbacks">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Individual Selection Callbacks">
+        <p>
           Listen to specific selection events:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Selection Tracking
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              See individual hour/minute selections
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 rounded-lg border border-border bg-background p-6 space-y-4">
-              <Timepicker
-                placeholder="Select time"
-                className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                onSelectHour={(data) => setLastHour(data.hour)}
-                onSelectMinute={(data) => setLastMinute(data.minutes)}
-                onSelectAM={() => setPeriod("AM")}
-                onSelectPM={() => setPeriod("PM")}
-              />
-              <div className="grid grid-cols-3 gap-3">
-                <div className="rounded-lg bg-muted p-3 text-center">
-                  <p className="text-xs text-muted-foreground mb-1">Hour</p>
-                  <p className="text-lg font-semibold">{lastHour || "-"}</p>
-                </div>
-                <div className="rounded-lg bg-muted p-3 text-center">
-                  <p className="text-xs text-muted-foreground mb-1">Minute</p>
-                  <p className="text-lg font-semibold">{lastMinute || "-"}</p>
-                </div>
-                <div className="rounded-lg bg-muted p-3 text-center">
-                  <p className="text-xs text-muted-foreground mb-1">Period</p>
-                  <p className="text-lg font-semibold">{period || "-"}</p>
-                </div>
-              </div>
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Selection Tracking</h3>
+        <p>See individual hour/minute selections</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 import { useState } from "react";
 
 function App() {
@@ -77,13 +46,36 @@ function App() {
     />
   );
 }`}
-              language="tsx"
+          language="tsx"
+        >
+          <div className={demo.form}>
+            <Timepicker
+              placeholder="Select time"
+              className={demo.input}
+              onSelectHour={(data) => setLastHour(data.hour)}
+              onSelectMinute={(data) => setLastMinute(data.minutes)}
+              onSelectAM={() => setPeriod("AM")}
+              onSelectPM={() => setPeriod("PM")}
             />
+            <dl className={styles.stats} aria-live="polite">
+              <div>
+                <dt className={demo.hint}>Hour</dt>
+                <dd className={demo.output}>{lastHour || "-"}</dd>
+              </div>
+              <div>
+                <dt className={demo.hint}>Minute</dt>
+                <dd className={demo.output}>{lastMinute || "-"}</dd>
+              </div>
+              <div>
+                <dt className={demo.hint}>Period</dt>
+                <dd className={demo.output}>{period || "-"}</dd>
+              </div>
+            </dl>
           </div>
-        </div>
+        </Figure>
       </Section>
 
-      <Section icon={MousePointer} title="Event Data Structure">
+      <Section title="Event Data Structure">
         <CodeBlock
           code={`// onSelectHour
 interface HourSelectData {

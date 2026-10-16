@@ -3,9 +3,10 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { CodeBlock } from "@/components/code-block";
+import { Figure } from "@/components/figure";
+import demo from "@/components/demo-controls.module.css";
 import { Timepicker } from "timepicker-ui-react";
 import "timepicker-ui/main.css";
-import { CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 
 export default function OnConfirmPage() {
@@ -16,42 +17,16 @@ export default function OnConfirmPage() {
       <PageHeader
         title="onConfirm"
         description="Handle time confirmation when user clicks OK"
-        eyebrow="React · Callbacks"
       />
 
-      <Section icon={CheckCircle2} title="Confirm Callback">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Confirm Callback">
+        <p>
           The onConfirm event fires when user clicks the OK button:
         </p>
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              Confirmation Handler
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Only saves value when confirmed
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="mb-6 rounded-lg border border-border bg-background p-6 space-y-4">
-              <Timepicker
-                placeholder="Select and confirm time"
-                className="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                onConfirm={(data) => {
-                  setConfirmedTime(`${data.hour}:${data.minutes} ${data.type}`);
-                }}
-              />
-              {confirmedTime && (
-                <div className="rounded-lg bg-green-500/10 border border-green-500/20 p-4">
-                  <p className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
-                    <CheckCircle2 className="h-4 w-4" />
-                    Confirmed: <strong>{confirmedTime}</strong>
-                  </p>
-                </div>
-              )}
-            </div>
-            <CodeBlock
-              code={`import { Timepicker } from "timepicker-ui-react";
+        <h3>Confirmation Handler</h3>
+        <p>Only saves value when confirmed</p>
+        <Figure
+          code={`import { Timepicker } from "timepicker-ui-react";
 import { useState } from "react";
 
 function App() {
@@ -68,14 +43,29 @@ function App() {
     </div>
   );
 }`}
-              language="tsx"
+          language="tsx"
+        >
+          <div className={demo.form}>
+            <Timepicker
+              placeholder="Select and confirm time"
+              className={demo.input}
+              onConfirm={(data) => {
+                setConfirmedTime(`${data.hour}:${data.minutes} ${data.type}`);
+              }}
             />
+            <p className={demo.output} aria-live="polite">
+              {confirmedTime && (
+                <>
+                  Confirmed: <strong>{confirmedTime}</strong>
+                </>
+              )}
+            </p>
           </div>
-        </div>
+        </Figure>
       </Section>
 
-      <Section icon={CheckCircle2} title="Event Data">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Event Data">
+        <p>
           The onConfirm callback receives an object with selected time:
         </p>
         <CodeBlock

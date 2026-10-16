@@ -1,0 +1,16 @@
+.chart {
+  width: 100%;
+  height: 20rem;
+}
+
+@media (min-width: 40rem) {
+  .chart {
+    height: 22.5rem;
+  }
+}
+
+@media (min-width: 60rem) {
+  .chart {
+    height: 26.25rem;
+  }
+}

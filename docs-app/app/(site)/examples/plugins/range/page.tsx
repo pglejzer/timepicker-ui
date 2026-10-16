@@ -1,27 +1,25 @@
 "use client";
 
+import { PageHeader } from "@/components/page-header";
+import { Section } from "@/components/section";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
 
 export default function RangePluginPage() {
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight mb-3 text-foreground">
-          Range Plugin
-        </h1>
-        <p className="text-muted-foreground">
-          Select time ranges with &quot;from&quot; and &quot;to&quot; segments.
-          Automatic validation blocks invalid time selections.
-        </p>
-      </div>
+      <PageHeader
+        title="Range Plugin"
+        description={
+          <>
+            Select time ranges with &quot;from&quot; and &quot;to&quot; segments.
+            Automatic validation blocks invalid time selections.
+          </>
+        }
+      />
 
-      <div className="space-y-8">
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Basic Range
-          </h2>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="Basic Range">
+        <TimepickerExample
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { RangePlugin } from 'timepicker-ui/plugins/range';
 
 PluginRegistry.register(RangePlugin);
@@ -32,22 +30,19 @@ const picker = new TimepickerUI(input, {
   }
 });
 picker.create();`}
-            options={{
-              range: {
-                enabled: true,
-              },
-            }}
-            plugins={["range"]}
-            inputPlaceholder="Select time range"
-          />
-        </section>
+          options={{
+            range: {
+              enabled: true,
+            },
+          }}
+          plugins={["range"]}
+          inputPlaceholder="Select time range"
+        />
+      </Section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            Custom Labels
-          </h2>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="Custom Labels">
+        <TimepickerExample
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { RangePlugin } from 'timepicker-ui/plugins/range';
 
 PluginRegistry.register(RangePlugin);
@@ -62,26 +57,23 @@ const picker = new TimepickerUI(input, {
   }
 });
 picker.create();`}
-            options={{
-              range: {
-                enabled: true,
-              },
-              labels: {
-                rangeFrom: "Start",
-                rangeTo: "End",
-              },
-            }}
-            plugins={["range"]}
-            inputPlaceholder="Select start and end time"
-          />
-        </section>
+          options={{
+            range: {
+              enabled: true,
+            },
+            labels: {
+              rangeFrom: "Start",
+              rangeTo: "End",
+            },
+          }}
+          plugins={["range"]}
+          inputPlaceholder="Select start and end time"
+        />
+      </Section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            With Duration Constraints
-          </h2>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="With Duration Constraints">
+        <TimepickerExample
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { RangePlugin } from 'timepicker-ui/plugins/range';
 
 PluginRegistry.register(RangePlugin);
@@ -94,24 +86,21 @@ const picker = new TimepickerUI(input, {
   }
 });
 picker.create();`}
-            options={{
-              range: {
-                enabled: true,
-                minDuration: 30,
-                maxDuration: 240,
-              },
-            }}
-            plugins={["range"]}
-            inputPlaceholder="30min - 4h range"
-          />
-        </section>
+          options={{
+            range: {
+              enabled: true,
+              minDuration: 30,
+              maxDuration: 240,
+            },
+          }}
+          plugins={["range"]}
+          inputPlaceholder="30min - 4h range"
+        />
+      </Section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-4 text-foreground">
-            24h Format Range
-          </h2>
-          <TimepickerExample
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+      <Section title="24h Format Range">
+        <TimepickerExample
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { RangePlugin } from 'timepicker-ui/plugins/range';
 
 PluginRegistry.register(RangePlugin);
@@ -125,19 +114,18 @@ const picker = new TimepickerUI(input, {
   }
 });
 picker.create();`}
-            options={{
-              clock: {
-                type: "24h",
-              },
-              range: {
-                enabled: true,
-              },
-            }}
-            plugins={["range"]}
-            inputPlaceholder="24h range selection"
-          />
-        </section>
-      </div>
+          options={{
+            clock: {
+              type: "24h",
+            },
+            range: {
+              enabled: true,
+            },
+          }}
+          plugins={["range"]}
+          inputPlaceholder="24h range selection"
+        />
+      </Section>
     </div>
   );
 }

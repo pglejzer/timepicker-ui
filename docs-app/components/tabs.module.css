@@ -1,0 +1,31 @@
+.tabs {
+  border: 1px solid var(--ink);
+}
+
+.list {
+  display: flex;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--ink);
+}
+
+.tab {
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-right: 1px solid var(--hair);
+  background: none;
+  color: var(--ink-2);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.tab[aria-selected="true"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.panel > div {
+  margin: 0;
+  border: 0;
+}

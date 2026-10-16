@@ -3,7 +3,6 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
-import { Palette } from "lucide-react";
 
 export default function CraneStraightPage() {
   return (
@@ -11,14 +10,14 @@ export default function CraneStraightPage() {
       <PageHeader
         title="Crane Straight Theme"
         description="Google Crane inspired theme with straight edges"
-        eyebrow="Example · Themes"
       />
 
-      <Section icon={Palette} title="Crane Straight Theme">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Crane Straight Theme">
+        <p>
           Modern theme with sharp, straight edges:
         </p>
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'crane-straight' }
 });
@@ -29,8 +28,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Palette} title="With 12h Format">
+      <Section title="With 12h Format">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'crane-straight' },
   clock: { type: '12h' }
@@ -43,8 +43,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Palette} title="With 24h Format">
+      <Section title="With 24h Format">
         <TimepickerExample
+          themeControl
           code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'crane-straight' },
   clock: { type: '24h' }

@@ -5,7 +5,6 @@ import { PageHeader } from "@/components/page-header";
 import { CodeBlock } from "@/components/code-block";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
 import type { TimepickerEventData } from "@/components/examples/types";
-import { Clock } from "lucide-react";
 
 export default function GettingStartedPage() {
   return (
@@ -13,11 +12,10 @@ export default function GettingStartedPage() {
       <PageHeader
         title="Getting Started"
         description="Simple examples to start using Timepicker-UI"
-        eyebrow="Example · Basic"
       />
 
-      <Section icon={Clock} title="Basic Usage">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Basic Usage">
+        <p>
           The simplest way to create a timepicker with default settings:
         </p>
         <TimepickerExample
@@ -30,11 +28,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Clock} title="With Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="With Options">
+        <p>
           Add custom options to personalize your timepicker:
         </p>
         <TimepickerExample
+          display="field"
           code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker-input');
@@ -63,11 +62,12 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Clock} title="Event Handling">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Event Handling">
+        <p>
           Listen to events and handle user interactions:
         </p>
         <TimepickerExample
+          display="field"
           code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker-input');
@@ -99,8 +99,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Clock} title="React Integration">
-        <p className="text-muted-foreground mb-4">
+      <Section title="React Integration">
+        <p>
           Use timepicker in React applications with proper instance management:
         </p>
         <CodeBlock
@@ -142,8 +142,8 @@ function TimePickerComponent() {
         />
       </Section>
 
-      <Section icon={Clock} title="Vue Integration">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Vue Integration">
+        <p>
           Use timepicker in Vue applications with proper cleanup:
         </p>
         <CodeBlock
