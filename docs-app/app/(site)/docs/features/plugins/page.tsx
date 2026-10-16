@@ -2,7 +2,6 @@ import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
-import { Package, Zap, Clock, Globe, Disc3, Check } from "lucide-react";
 
 export const metadata = buildMetadata({
   title: "Plugins",
@@ -17,40 +16,25 @@ export default function PluginsPage() {
       <PageHeader
         title="Plugins"
         description="Optional features as separate imports for smaller bundle sizes"
-        eyebrow="Feature"
       />
 
-      <Section icon={Package} title="Overview">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Overview">
+        <p>
           Plugins are optional features that can be imported and registered
           separately. Register plugins once at app startup via PluginRegistry,
           then use features via options. If you don&apos;t need a feature,
           don&apos;t import it - your bundle stays small.
         </p>
-        <div className="rounded-lg border border-border bg-card p-6">
-          <ul className="space-y-2 text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>Tree-shaking friendly - unused plugins are excluded</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>Manual registration - import, register, use</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>Full TypeScript support with type definitions</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>3 plugins available: Range, Timezone, and Wheel</span>
-            </li>
-          </ul>
-        </div>
+        <ul>
+          <li>Tree-shaking friendly - unused plugins are excluded</li>
+          <li>Manual registration - import, register, use</li>
+          <li>Full TypeScript support with type definitions</li>
+          <li>3 plugins available: Range, Timezone, and Wheel</li>
+        </ul>
       </Section>
 
-      <Section icon={Clock} title="Range Plugin">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Range Plugin">
+        <p>
           Enables time range selection with &quot;from&quot; and &quot;to&quot;
           segments. Includes automatic validation and disabled time blocking.
         </p>
@@ -84,8 +68,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Globe} title="Timezone Plugin">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Timezone Plugin">
+        <p>
           Adds a timezone selector dropdown to the timepicker. Display-only -
           does not convert times automatically.
         </p>
@@ -122,11 +106,11 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Disc3} title="Wheel Plugin">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Wheel Plugin">
+        <p>
           Replaces the analog clock face with a touch-friendly scroll-spinner.
-          Two modes available: <code className="text-primary">wheel</code> (with
-          header) and <code className="text-primary">compact-wheel</code>{" "}
+          Two modes available: <code>wheel</code> (with
+          header) and <code>compact-wheel</code>{" "}
           (headerless: a popover when <code>wheel.placement</code> is set,
           otherwise a modal). Supports all themes, 12h/24h, disabled time, and
           keyboard navigation.
@@ -158,8 +142,8 @@ popoverPicker.create();`}
         />
       </Section>
 
-      <Section icon={Zap} title="Using Multiple Plugins">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Using Multiple Plugins">
+        <p>
           Register all plugins you need at app startup before creating
           TimepickerUI instances.
         </p>

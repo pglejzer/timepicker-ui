@@ -2,8 +2,8 @@ import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
-import { InfoBox } from "@/components/info-box";
-import { Trash2, Settings, Bell, Code2 } from "lucide-react";
+import { Callout } from "@/components/callout";
+import { ApiTable } from "@/components/api-table";
 
 export const metadata = buildMetadata({
   title: "Clear Button",
@@ -18,22 +18,17 @@ export default function ClearButtonPage() {
       <PageHeader
         title="Clear Button"
         description="Reset time selection with a dedicated button in the picker footer"
-        eyebrow="Feature"
       />
 
-      <InfoBox
-        title="Available since v4.2.0"
-        variant="emerald"
-        className="mb-8"
-      >
+      <Callout title="Available since v4.2.0" tone="tip">
         The clear button is <strong>off by default</strong>. Turn it on with{" "}
         <code>ui.clearButton: true</code>. It resets the clock hands to 12:00,
         disables the confirm button, and optionally empties the input value.
-      </InfoBox>
+      </Callout>
 
-      <Section icon={Trash2} title="Basic Usage">
-        <p className="text-muted-foreground mb-4">
-          Set <code className="text-primary">ui.clearButton: true</code> to
+      <Section title="Basic Usage">
+        <p>
+          Set <code>ui.clearButton: true</code> to
           show the button:
         </p>
         <CodeBlock
@@ -45,9 +40,9 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Settings} title="Disable Clear Button">
-        <p className="text-muted-foreground mb-4">
-          <code className="text-primary">ui.clearButton</code> is{" "}
+      <Section title="Disable Clear Button">
+        <p>
+          <code>ui.clearButton</code> is{" "}
           <code>false</code> by default. Leave it out, or set it to{" "}
           <code>false</code>, to hide the button:
         </p>
@@ -59,10 +54,10 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Settings} title="Clear Behavior Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Clear Behavior Options">
+        <p>
           Pass an object to{" "}
-          <code className="text-primary">ui.clearButton</code> to control what
+          <code>ui.clearButton</code> to control what
           happens when the user clicks Clear. The object form also shows the
           button. It is new in 4.5.0 and replaces{" "}
           <code>clearBehavior.clearInput</code>, which still works until 5.0:
@@ -75,50 +70,31 @@ picker.create();`}
 }).create();`}
           language="typescript"
         />
-        <div className="mt-4 overflow-x-auto rounded-lg border border-border">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/50">
-              <tr className="border-b border-border">
-                <th className="px-4 py-3 text-left font-semibold text-foreground">
-                  Option
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-foreground">
-                  Type
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-foreground">
-                  Default
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-foreground">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="px-4 py-3">
-                  <code className="text-primary bg-primary/10 px-2 py-1 rounded text-xs font-mono">
-                    clearInput
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground font-mono text-xs">
-                  boolean
-                </td>
-                <td className="px-4 py-3">
-                  <code className="text-xs">true</code>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  Whether clearing also empties the input field value
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ApiTable
+          columns={[
+            { key: "name", label: "Option" },
+            { key: "type", label: "Type", mono: true },
+            { key: "default", label: "Default", mono: true },
+            { key: "description", label: "Description" },
+          ]}
+          rows={[
+            {
+              id: "clearInput",
+              name: <code>clearInput</code>,
+              type: "boolean",
+              default: <code>true</code>,
+              description:
+                "Whether clearing also empties the input field value",
+            },
+          ]}
+          rowKey="id"
+        />
       </Section>
 
-      <Section icon={Code2} title="Custom Label">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Custom Label">
+        <p>
           Customize the button text with{" "}
-          <code className="text-primary">labels.clear</code>:
+          <code>labels.clear</code>:
         </p>
         <CodeBlock
           code={`new TimepickerUI(input, {
@@ -129,26 +105,20 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Bell} title="Clear Event">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Clear Event">
+        <p>
           Listen for the clear event via EventEmitter or callback:
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">EventEmitter</h3>
-            <CodeBlock
-              code={`picker.on('clear', (data) => {
+        <h3>EventEmitter</h3>
+        <CodeBlock
+          code={`picker.on('clear', (data) => {
   console.log('Cleared! Previous value:', data.previousValue);
 });`}
-              language="typescript"
-            />
-          </div>
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Callback option
-            </h3>
-            <CodeBlock
-              code={`new TimepickerUI(input, {
+          language="typescript"
+        />
+        <h3>Callback option</h3>
+        <CodeBlock
+          code={`new TimepickerUI(input, {
   ui: { clearButton: true },
   callbacks: {
     onClear: (data) => {
@@ -156,14 +126,12 @@ picker.create();`}
     }
   }
 }).create();`}
-              language="typescript"
-            />
-          </div>
-        </div>
+          language="typescript"
+        />
       </Section>
 
-      <Section icon={Settings} title="Behavior Details">
-        <ul className="space-y-2 text-muted-foreground ml-4 list-disc list-inside">
+      <Section title="Behavior Details">
+        <ul>
           <li>Clock hands reset to the 12:00 (neutral) position</li>
           <li>
             Confirm (OK) button becomes disabled until a new time is selected
@@ -176,7 +144,7 @@ picker.create();`}
         </ul>
       </Section>
 
-      <Section icon={Code2} title="TypeScript Types">
+      <Section title="TypeScript Types">
         <CodeBlock
           code={`import type { ClearEventData, UIOptions } from 'timepicker-ui';
 

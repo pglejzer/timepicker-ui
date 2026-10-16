@@ -2,15 +2,8 @@ import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
-import {
-  Settings,
-  Tag,
-  Layout,
-  Clock,
-  Zap,
-  Bell,
-} from "lucide-react";
-import { InfoBox } from "@/components/info-box";
+import { ApiTable } from "@/components/api-table";
+import { Callout } from "@/components/callout";
 import Link from "next/link";
 
 export const metadata = buildMetadata({
@@ -377,49 +370,22 @@ interface OptionRow {
 
 function OptionsTable({ options }: { options: OptionRow[] }) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-border">
-      <table className="w-full text-sm">
-        <thead className="bg-muted/50">
-          <tr className="border-b border-border">
-            <th className="px-4 py-3 text-left font-semibold text-foreground">
-              Property
-            </th>
-            <th className="px-4 py-3 text-left font-semibold text-foreground">
-              Type
-            </th>
-            <th className="px-4 py-3 text-left font-semibold text-foreground">
-              Default
-            </th>
-            <th className="px-4 py-3 text-left font-semibold text-foreground">
-              Description
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-border">
-          {options.map((option) => (
-            <tr
-              key={option.name}
-              className="hover:bg-muted/30 transition-colors"
-            >
-              <td className="px-4 py-3">
-                <code className="text-primary bg-primary/10 px-2 py-1 rounded text-xs font-mono">
-                  {option.name}
-                </code>
-              </td>
-              <td className="px-4 py-3 text-muted-foreground font-mono text-xs">
-                {option.type}
-              </td>
-              <td className="px-4 py-3">
-                <code className="text-xs">{option.default}</code>
-              </td>
-              <td className="px-4 py-3 text-muted-foreground">
-                {option.description}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <ApiTable
+      columns={[
+        { key: "name", label: "Property" },
+        { key: "type", label: "Type", mono: true },
+        { key: "default", label: "Default", mono: true },
+        { key: "description", label: "Description" },
+      ]}
+      rows={options.map((option) => ({
+        id: option.name,
+        name: <code>{option.name}</code>,
+        type: option.type,
+        default: <code>{option.default}</code>,
+        description: option.description,
+      }))}
+      rowKey="id"
+    />
   );
 }
 
@@ -429,120 +395,100 @@ export default function ConfigurationPage() {
       <PageHeader
         title="Configuration"
         description="Complete configuration guide for v4.0.0 (grouped options structure)"
-        eyebrow="Guide"
       />
 
-      <InfoBox title="v4.0.0 Breaking Change" variant="orange" className="mb-8">
+      <Callout title="v4.0.0 Breaking Change" tone="warning">
         Options are now organized into groups: <code>clock</code>,{" "}
         <code>ui</code>, <code>labels</code>, <code>behavior</code>,{" "}
         <code>callbacks</code>, <code>timezone</code>, <code>range</code> and{" "}
         <code>wheel</code>. See the{" "}
-        <Link href="/docs/migration-guide" className="text-primary underline">
-          migration guide
-        </Link>
+        <Link href="/docs/migration-guide">migration guide</Link>
         . This page uses the option names from 4.5.0. The older names still
         work until 5.0 and are listed in{" "}
-        <Link
-          href="/docs/api/options#renamed"
-          className="text-primary underline"
-        >
-          Renamed in 4.5.0
-        </Link>
+        <Link href="/docs/api/options#renamed">Renamed in 4.5.0</Link>
         .
-      </InfoBox>
+      </Callout>
 
-      <Section icon={Clock} title="Clock Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Clock Options">
+        <p>
           Configure clock behavior, format, and time restrictions:
         </p>
         <OptionsTable options={clockOptions} />
       </Section>
 
-      <Section icon={Layout} title="UI Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="UI Options">
+        <p>
           Customize appearance, theme, and display modes:
         </p>
         <OptionsTable options={uiOptions} />
-        <p className="text-sm text-muted-foreground mt-4">
+        <p>
           <code>keyboardIcon</code> and <code>clockIcon</code> are inserted as
           raw HTML, so pass only trusted markup. Every other label and text
           option is escaped.
         </p>
-        <div className="mt-6 rounded-lg border border-border bg-card p-6">
-          <h3 id="scroll-lock" className="font-semibold mb-3 text-foreground">
-            Scroll lock and fixed headers
-          </h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            With <code>allowPageScroll: false</code> (the default), the page
-            cannot scroll while the picker is open as a modal. Inline pickers
-            and the compact-wheel popover do not lock it. The lock is set on{" "}
-            <code>&lt;html&gt;</code>, and also on <code>&lt;body&gt;</code>{" "}
-            when the body is the element that scrolls. If a scrollbar
-            disappears, the picker adds its width as right padding, so the
-            page content does not move.
-          </p>
-          <p className="text-sm text-muted-foreground mb-4">
-            That padding does not reach <code>position: fixed</code> elements.
-            While the page is locked, <code>&lt;html&gt;</code> has{" "}
-            <code>--tp-scrollbar-gap</code> set to the width of the removed
-            scrollbar (<code>0px</code> when there was none). Use it to keep a
-            fixed header from jumping:
-          </p>
-          <CodeBlock
-            code={`.site-header {
+        <h3 id="scroll-lock">Scroll lock and fixed headers</h3>
+        <p>
+          With <code>allowPageScroll: false</code> (the default), the page
+          cannot scroll while the picker is open as a modal. Inline pickers
+          and the compact-wheel popover do not lock it. The lock is set on{" "}
+          <code>&lt;html&gt;</code>, and also on <code>&lt;body&gt;</code>{" "}
+          when the body is the element that scrolls. If a scrollbar
+          disappears, the picker adds its width as right padding, so the
+          page content does not move.
+        </p>
+        <p>
+          That padding does not reach <code>position: fixed</code> elements.
+          While the page is locked, <code>&lt;html&gt;</code> has{" "}
+          <code>--tp-scrollbar-gap</code> set to the width of the removed
+          scrollbar (<code>0px</code> when there was none). Use it to keep a
+          fixed header from jumping:
+        </p>
+        <CodeBlock
+          code={`.site-header {
   padding-right: var(--tp-scrollbar-gap, 0px);
 }`}
-            language="css"
-          />
-          <p className="text-sm text-muted-foreground mt-4">
-            The variable is removed when the last open picker closes.
-          </p>
-        </div>
+          language="css"
+        />
+        <p>
+          The variable is removed when the last open picker closes.
+        </p>
       </Section>
 
-      <Section icon={Layout} title="Wheel Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Wheel Options">
+        <p>
           Wheel / compact-wheel mode configuration:
         </p>
         <OptionsTable options={wheelOptions} />
       </Section>
 
-      <Section icon={Tag} title="Labels Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Labels Options">
+        <p>
           Customize the main text labels and button texts. The full list,
           including the accessibility labels, is on the{" "}
-          <Link href="/docs/api/options" className="text-primary underline">
-            Options
-          </Link>{" "}
+          <Link href="/docs/api/options">Options</Link>{" "}
           page:
         </p>
         <OptionsTable options={labelsOptions} />
       </Section>
 
-      <Section icon={Settings} title="Behavior Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Behavior Options">
+        <p>
           Control focus, delays, and instance behavior:
         </p>
         <OptionsTable options={behaviorOptions} />
       </Section>
 
-      <Section icon={Bell} title="Callbacks Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Callbacks Options">
+        <p>
           Event handlers for user interactions. Plugin and wheel callbacks are
           listed on the{" "}
-          <Link href="/docs/api/events" className="text-primary underline">
-            Events
-          </Link>{" "}
+          <Link href="/docs/api/events">Events</Link>{" "}
           page:
         </p>
         <OptionsTable options={callbacksOptions} />
       </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground flex items-center gap-2">
-          <Zap className="h-6 w-6" />
-          Complete Example
-        </h2>
+      <Section title="Complete Example">
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
   clock: {
@@ -588,19 +534,12 @@ export default function ConfigurationPage() {
 });`}
           language="typescript"
         />
-      </section>
+      </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Disabled Time Examples
-        </h2>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Disable Specific Hours/Minutes
-            </h3>
-            <CodeBlock
-              code={`{
+      <Section title="Disabled Time Examples">
+        <h3>Disable Specific Hours/Minutes</h3>
+        <CodeBlock
+          code={`{
   clock: {
     disabledTime: {
       hours: [1, 3, 5, 23],
@@ -611,16 +550,12 @@ export default function ConfigurationPage() {
     hideDisabled: true
   }
 }`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Disable Seconds
-            </h3>
-            <CodeBlock
-              code={`{
+        <h3>Disable Seconds</h3>
+        <CodeBlock
+          code={`{
   clock: {
     showSeconds: true,
     disabledTime: {
@@ -628,44 +563,30 @@ export default function ConfigurationPage() {
     }
   }
 }`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Disable Time Ranges
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              When <code>ranges</code> is set, the <code>hours</code>,{" "}
-              <code>minutes</code> and <code>seconds</code> lists are ignored.
-              Edges can carry seconds. See{" "}
-              <Link
-                href="/docs/features/seconds"
-                className="text-primary underline"
-              >
-                Seconds
-              </Link>
-              .
-            </p>
-            <CodeBlock
-              code={`{
+        <h3>Disable Time Ranges</h3>
+        <p>
+          When <code>ranges</code> is set, the <code>hours</code>,{" "}
+          <code>minutes</code> and <code>seconds</code> lists are ignored.
+          Edges can carry seconds. See{" "}
+          <Link href="/docs/features/seconds">Seconds</Link>
+          .
+        </p>
+        <CodeBlock
+          code={`{
   clock: {
     disabledTime: {
       ranges: ['10:00 AM - 2:00 PM', '5:00 PM - 8:00 PM']
     }
   }
 }`}
-              language="typescript"
-            />
-          </div>
-        </div>
-      </section>
+          language="typescript"
+        />
+      </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Inline Mode
-        </h2>
+      <Section title="Inline Mode">
         <CodeBlock
           code={`{
   ui: {
@@ -679,12 +600,9 @@ export default function ConfigurationPage() {
 }`}
           language="typescript"
         />
-      </section>
+      </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Wheel Mode
-        </h2>
+      <Section title="Wheel Mode">
         <CodeBlock
           code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
@@ -703,13 +621,10 @@ const picker = new TimepickerUI(input, {
 picker.create();`}
           language="typescript"
         />
-      </section>
+      </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Default Time
-        </h2>
-        <p className="text-muted-foreground mb-4">
+      <Section title="Default Time">
+        <p>
           <code>&apos;now&apos;</code> shows the current time and writes it to
           the input. The object form with <code>updateInput: false</code> only
           shows the time in the picker.
@@ -728,7 +643,7 @@ picker.create();`}
 }`}
           language="typescript"
         />
-      </section>
+      </Section>
     </div>
   );
 }

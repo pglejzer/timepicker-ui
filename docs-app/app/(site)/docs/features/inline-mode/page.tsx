@@ -2,8 +2,7 @@ import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
-import { LinkCard } from "@/components/link-card";
-import { Eye, Code, Settings, Check } from "lucide-react";
+import Link from "next/link";
 
 export const metadata = buildMetadata({
   title: "Inline Mode",
@@ -18,64 +17,41 @@ export default function InlineModePage() {
       <PageHeader
         title="Inline Mode"
         description="Display the timepicker directly on your page without a modal"
-        eyebrow="Feature"
       />
 
-      <Section icon={Eye} title="What is Inline Mode?">
-        <p className="text-muted-foreground mb-4">
+      <Section title="What is Inline Mode?">
+        <p>
           Inline mode displays the timepicker clock directly in your page
           layout, always visible without requiring a click to open. Perfect for
           dashboards, settings pages, or when you want the time selection to be
           immediately accessible.
         </p>
-        <div className="rounded-lg border border-border bg-card p-6">
-          <ul className="space-y-2 text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>No modal or backdrop - stays in document flow</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>Always visible - no click needed to open</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>Works with all themes and customization options</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>Perfect for embedded forms and settings panels</span>
-            </li>
-          </ul>
-        </div>
+        <ul>
+          <li>No modal or backdrop - stays in document flow</li>
+          <li>Always visible - no click needed to open</li>
+          <li>Works with all themes and customization options</li>
+          <li>Perfect for embedded forms and settings panels</li>
+        </ul>
       </Section>
 
-      <Section icon={Code} title="Basic Usage">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Basic Usage">
+        <p>
           Set{" "}
-          <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-sm">
-            ui.inline.enabled
-          </code>{" "}
+          <code>ui.inline.enabled</code>{" "}
           to <code>true</code> and pass the element to render into, or its
           selector, as <code>ui.inline.container</code>. The picker renders
           there when you call <code>create()</code>.
         </p>
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-semibold mb-3 text-foreground">
-              HTML Structure
-            </h3>
-            <CodeBlock
-              code={`<input type="text" id="timepicker" />
+        <h3>HTML Structure</h3>
+        <CodeBlock
+          code={`<input type="text" id="timepicker" />
 <div id="timepicker-container"></div>`}
-              language="html"
-            />
-          </div>
+          language="html"
+        />
 
-          <div>
-            <h3 className="font-semibold mb-3 text-foreground">JavaScript</h3>
-            <CodeBlock
-              code={`import { TimepickerUI } from 'timepicker-ui';
+        <h3>JavaScript</h3>
+        <CodeBlock
+          code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector('#timepicker');
 const picker = new TimepickerUI(input, {
@@ -88,11 +64,9 @@ const picker = new TimepickerUI(input, {
 });
 
 picker.create();`}
-              language="typescript"
-            />
-          </div>
-        </div>
-        <ul className="mt-6 list-disc pl-6 space-y-2 text-muted-foreground">
+          language="typescript"
+        />
+        <ul>
           <li>
             <code>container</code> is required. The constructor throws if it
             is missing or the element is not found.
@@ -115,17 +89,13 @@ picker.create();`}
         </ul>
       </Section>
 
-      <Section icon={Settings} title="Configuration Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Configuration Options">
+        <p>
           Combine inline mode with other options for complete customization:
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              12-hour Inline Picker
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>12-hour Inline Picker</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   ui: {
     inline: { enabled: true, container: '#timepicker-container' },
     theme: 'basic'
@@ -134,16 +104,12 @@ picker.create();`}
 });
 
 picker.create();`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              24-hour Inline with Theme
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>24-hour Inline with Theme</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   ui: {
     inline: { enabled: true, container: '#timepicker-container' },
     theme: 'cyberpunk'
@@ -152,16 +118,12 @@ picker.create();`}
 });
 
 picker.create();`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Inline with Time Restrictions
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>Inline with Time Restrictions</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   ui: {
     inline: { enabled: true, container: '#timepicker-container' }
   },
@@ -175,56 +137,38 @@ picker.create();`}
 });
 
 picker.create();`}
-              language="typescript"
-            />
-          </div>
-        </div>
+          language="typescript"
+        />
       </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Styling Inline Mode
-        </h2>
-        <p className="text-muted-foreground mb-4">
+      <Section title="Styling Inline Mode">
+        <p>
           In inline mode the picker&apos;s root (<code>.tp-ui-modal</code>)
           gets the <code>tp-ui--inline</code> class. Its card,{" "}
           <code>.tp-ui-wrapper</code>, stays in the page flow, is centered, and
           fills the container up to 328px. These inline rules use{" "}
           <code>!important</code>, so your overrides need it too.
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Card Border Instead of Shadow
-            </h3>
-            <CodeBlock
-              code={`.tp-ui--inline .tp-ui-wrapper {
+        <h3>Card Border Instead of Shadow</h3>
+        <CodeBlock
+          code={`.tp-ui--inline .tp-ui-wrapper {
   box-shadow: none !important;
   border: 1px solid #e0e0e0;
 }`}
-              language="css"
-            />
-          </div>
+          language="css"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Sidebar Integration
-            </h3>
-            <CodeBlock
-              code={`.sidebar .tp-ui--inline .tp-ui-wrapper {
+        <h3>Sidebar Integration</h3>
+        <CodeBlock
+          code={`.sidebar .tp-ui--inline .tp-ui-wrapper {
   margin: 20px auto !important;
 }`}
-              language="css"
-            />
-          </div>
-        </div>
-      </section>
+          language="css"
+        />
+      </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          React Example
-        </h2>
-        <p className="text-muted-foreground mb-4">
+      <Section title="React Example">
+        <p>
           Using inline mode in React components. <code>container</code> takes
           the element from a ref, so the container needs no id:
         </p>
@@ -267,16 +211,21 @@ function InlineTimepicker() {
 }`}
           language="typescript"
         />
-      </section>
+      </Section>
 
-      <LinkCard
-        icon={Eye}
-        title="Best Practices"
-        description="When using inline mode, make sure to provide enough space in your layout for the clock face (minimum 280x280px recommended). Consider using CSS media queries to adjust the size on smaller screens."
-        linkText="Mobile optimization tips"
-        linkHref="/docs/features/mobile"
-        variant="blue"
-      />
+      <dl>
+        <div>
+          <dt>Best Practices</dt>
+          <dd>
+            When using inline mode, make sure to provide enough space in your
+            layout for the clock face (minimum 280x280px recommended). Consider
+            using CSS media queries to adjust the size on smaller screens.
+          </dd>
+          <dd>
+            <Link href="/docs/features/mobile">Mobile optimization tips</Link>
+          </dd>
+        </div>
+      </dl>
     </div>
   );
 }

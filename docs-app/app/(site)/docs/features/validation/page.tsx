@@ -2,14 +2,7 @@ import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
-import { LinkCard } from "@/components/link-card";
-import {
-  Shield,
-  CheckCircle,
-  AlertTriangle,
-  XCircle,
-  Check,
-} from "lucide-react";
+import Link from "next/link";
 
 export const metadata = buildMetadata({
   title: "Validation",
@@ -24,63 +17,45 @@ export default function ValidationPage() {
       <PageHeader
         title="Validation"
         description="Built-in validation with custom rules and error handling"
-        eyebrow="Feature"
       />
 
-      <Section icon={Shield} title="Built-in Validation">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Built-in Validation">
+        <p>
           The picker checks the value already in the input, the values people
           pick, and its own options:
         </p>
-        <div className="rounded-lg border border-border bg-card p-6">
-          <ul className="space-y-2 text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>
-                When the picker opens, it reads the input value. If it cannot
-                read it, it shows <code>labels.invalidTimeFormat</code> after
-                the input and emits <code>error</code>. An empty input is not
-                an error.
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>
-                It reads <code>2:30 PM</code> or <code>02:30 pm</code> on a
-                12-hour clock (the default) and <code>14:30</code> on a 24-hour
-                clock. With <code>clock.showSeconds</code>, seconds are
-                optional: <code>14:30:15</code>.
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>
-                Times blocked by <code>clock.disabledTime</code> are shown as
-                disabled on the clock face and the wheel (or left out, with{" "}
-                <code>wheel.hideDisabled</code>) and cannot be picked there.
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>
-                The hour and minute fields inside the picker keep typed values
-                in range: hours 1-12 or 0-23, minutes 0-59.
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>
-                <code>create()</code> and <code>setOptions()</code> check{" "}
-                <code>clock.disabledTime</code> and report invalid values
-                through <code>error</code>.
-              </span>
-            </li>
-          </ul>
-        </div>
+        <ul>
+          <li>
+            When the picker opens, it reads the input value. If it cannot
+            read it, it shows <code>labels.invalidTimeFormat</code> after
+            the input and emits <code>error</code>. An empty input is not
+            an error.
+          </li>
+          <li>
+            It reads <code>2:30 PM</code> or <code>02:30 pm</code> on a
+            12-hour clock (the default) and <code>14:30</code> on a 24-hour
+            clock. With <code>clock.showSeconds</code>, seconds are
+            optional: <code>14:30:15</code>.
+          </li>
+          <li>
+            Times blocked by <code>clock.disabledTime</code> are shown as
+            disabled on the clock face and the wheel (or left out, with{" "}
+            <code>wheel.hideDisabled</code>) and cannot be picked there.
+          </li>
+          <li>
+            The hour and minute fields inside the picker keep typed values
+            in range: hours 1-12 or 0-23, minutes 0-59.
+          </li>
+          <li>
+            <code>create()</code> and <code>setOptions()</code> check{" "}
+            <code>clock.disabledTime</code> and report invalid values
+            through <code>error</code>.
+          </li>
+        </ul>
       </Section>
 
-      <Section icon={CheckCircle} title="Valid Time Detection">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Valid Time Detection">
+        <p>
           Read the selected time in <code>callbacks.onConfirm</code> or with{" "}
           <code>picker.on(&apos;confirm&apos;)</code>. Both run after the
           picker has written the new value to the input:
@@ -103,7 +78,7 @@ picker.on('confirm', () => {
 });`}
           language="typescript"
         />
-        <p className="text-muted-foreground mt-4">
+        <p>
           The payload has <code>hour</code> and <code>minutes</code>,{" "}
           <code>type</code> (<code>&apos;AM&apos;</code> or{" "}
           <code>&apos;PM&apos;</code>, <code>undefined</code> on a 24-hour
@@ -112,7 +87,7 @@ picker.on('confirm', () => {
           <code>wheel.commitOnScroll</code>, <code>confirm</code> also fires
           when a wheel stops scrolling, with <code>autoCommit: true</code>.
         </p>
-        <p className="text-muted-foreground mt-2">
+        <p>
           The picker sets <code>input.value</code> directly and does not fire{" "}
           <code>input</code> or <code>change</code> events. A listener on the
           input only sees what people type into it, so check picked values in{" "}
@@ -120,8 +95,8 @@ picker.on('confirm', () => {
         </p>
       </Section>
 
-      <Section icon={AlertTriangle} title="Error Handling">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Error Handling">
+        <p>
           The <code>error</code> event and <code>callbacks.onError</code>{" "}
           report four kinds of problems: an input value the picker cannot
           read, a <code>setValue()</code> string that is not a time, invalid
@@ -129,20 +104,16 @@ picker.on('confirm', () => {
           example <code>ui.mode: &apos;wheel&apos;</code> without{" "}
           <code>WheelPlugin</code>).
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Invalid Input Detection
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              Each time the picker opens, it reads the input value. When it
-              cannot, for example <code>25:00</code> on a 24-hour clock or{" "}
-              <code>2:30</code> without AM/PM on a 12-hour clock, it adds the{" "}
-              <code>tp-ui-invalid-format</code> class to the input, puts a
-              message right after the input and emits <code>error</code>:
-            </p>
-            <CodeBlock
-              code={`const picker = new TimepickerUI('#timepicker', {
+        <h3>Invalid Input Detection</h3>
+        <p>
+          Each time the picker opens, it reads the input value. When it
+          cannot, for example <code>25:00</code> on a 24-hour clock or{" "}
+          <code>2:30</code> without AM/PM on a 12-hour clock, it adds the{" "}
+          <code>tp-ui-invalid-format</code> class to the input, puts a
+          message right after the input and emits <code>error</code>:
+        </p>
+        <CodeBlock
+          code={`const picker = new TimepickerUI('#timepicker', {
   clock: { type: '24h' },
   labels: { invalidTimeFormat: 'Enter a time as HH:MM' },
   callbacks: {
@@ -156,46 +127,42 @@ picker.create();
 
 // Input value '25:00', picker opened:
 // Invalid 24h time. 25 0`}
-              language="typescript"
-            />
-            <p className="text-muted-foreground mt-4 mb-4">
-              The message the picker inserts after the input:
-            </p>
-            <CodeBlock
-              code={`<div class="tp-ui-invalid-text" role="alert"><b>Enter a time as HH:MM</b></div>`}
-              language="html"
-            />
-            <p className="text-muted-foreground mt-4">
-              <code>role=&quot;alert&quot;</code> makes screen readers announce
-              it. The text comes from <code>labels.invalidTimeFormat</code>{" "}
-              (default <code>Invalid time format</code>). The picker still
-              opens. The message and the class are removed when a time is
-              confirmed or set with <code>setValue()</code>, and on the next
-              open if the value can be read by then. With{" "}
-              <code>range.enabled</code> this check is skipped.
-            </p>
-            <p className="text-muted-foreground mt-4">
-              <code>setValue()</code> converts a time in the other clock
-              format: <code>14:30</code> sets <code>02:30 PM</code> on a
-              12-hour clock. A string that is not a time, such as{" "}
-              <code>25:00</code> or <code>abc</code>, leaves the value and the
-              input as they were and emits <code>error</code>. It does not add
-              the class or the message.
-            </p>
-          </div>
+          language="typescript"
+        />
+        <p>
+          The message the picker inserts after the input:
+        </p>
+        <CodeBlock
+          code={`<div class="tp-ui-invalid-text" role="alert"><b>Enter a time as HH:MM</b></div>`}
+          language="html"
+        />
+        <p>
+          <code>role=&quot;alert&quot;</code> makes screen readers announce
+          it. The text comes from <code>labels.invalidTimeFormat</code>{" "}
+          (default <code>Invalid time format</code>). The picker still
+          opens. The message and the class are removed when a time is
+          confirmed or set with <code>setValue()</code>, and on the next
+          open if the value can be read by then. With{" "}
+          <code>range.enabled</code> this check is skipped.
+        </p>
+        <p>
+          <code>setValue()</code> converts a time in the other clock
+          format: <code>14:30</code> sets <code>02:30 PM</code> on a
+          12-hour clock. A string that is not a time, such as{" "}
+          <code>25:00</code> or <code>abc</code>, leaves the value and the
+          input as they were and emits <code>error</code>. It does not add
+          the class or the message.
+        </p>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Disabled Time Validation
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              <code>create()</code> and <code>setOptions()</code> check{" "}
-              <code>clock.disabledTime</code>. An hour, minute or second out of
-              range, or a time range that cannot be parsed or overlaps another,
-              is reported through <code>error</code>:
-            </p>
-            <CodeBlock
-              code={`const picker = new TimepickerUI('#timepicker', {
+        <h3>Disabled Time Validation</h3>
+        <p>
+          <code>create()</code> and <code>setOptions()</code> check{" "}
+          <code>clock.disabledTime</code>. An hour, minute or second out of
+          range, or a time range that cannot be parsed or overlaps another,
+          is reported through <code>error</code>:
+        </p>
+        <CodeBlock
+          code={`const picker = new TimepickerUI('#timepicker', {
   clock: {
     disabledTime: { hours: [0, 22, 23] }
   },
@@ -208,18 +175,18 @@ picker.create();
 // [TimepickerUI] Invalid hours or minutes in disabledTime option
 
 console.log(picker.isDestroyed); // true`}
-              language="typescript"
-            />
-            <p className="text-muted-foreground mt-4 mb-4">
-              The default clock is 12-hour, where <code>hours</code> takes 1 to
-              12, so <code>0</code>, <code>22</code> and <code>23</code> are
-              rejected. Set <code>clock.type: &apos;24h&apos;</code> to use
-              them. After a failed <code>create()</code> the picker is not set
-              up and does not open. On a working picker, a failed{" "}
-              <code>setOptions()</code> keeps the previous options:
-            </p>
-            <CodeBlock
-              code={`const picker = new TimepickerUI('#meeting-time', {
+          language="typescript"
+        />
+        <p>
+          The default clock is 12-hour, where <code>hours</code> takes 1 to
+          12, so <code>0</code>, <code>22</code> and <code>23</code> are
+          rejected. Set <code>clock.type: &apos;24h&apos;</code> to use
+          them. After a failed <code>create()</code> the picker is not set
+          up and does not open. On a working picker, a failed{" "}
+          <code>setOptions()</code> keeps the previous options:
+        </p>
+        <CodeBlock
+          code={`const picker = new TimepickerUI('#meeting-time', {
   callbacks: {
     onError: (data) => console.error(data.error)
   }
@@ -235,78 +202,64 @@ picker.setOptions({
   }
 });
 // Logs that the two ranges overlap; the previous options stay`}
-              language="typescript"
-            />
-            <p className="text-muted-foreground mt-4">
-              If you use <code>picker.on(&apos;error&apos;, ...)</code> instead
-              of <code>callbacks.onError</code>, subscribe before{" "}
-              <code>create()</code>, so the handler is in place when the
-              options are checked.
-            </p>
-          </div>
+          language="typescript"
+        />
+        <p>
+          If you use <code>picker.on(&apos;error&apos;, ...)</code> instead
+          of <code>callbacks.onError</code>, subscribe before{" "}
+          <code>create()</code>, so the handler is in place when the
+          options are checked.
+        </p>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Error Payload
-            </h3>
-            <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-              <li>
-                <code>error</code>: a short English description, for example{" "}
-                <code>Invalid 24h time.</code> Use it for logging. The text
-                people see comes from <code>labels.invalidTimeFormat</code>.
-              </li>
-              <li>
-                <code>inputHour</code>, <code>inputMinute</code>: the hour and
-                minute read from the input.
-              </li>
-              <li>
-                <code>inputSecond</code>: the seconds, only with{" "}
-                <code>clock.showSeconds</code>.
-              </li>
-              <li>
-                <code>inputType</code>: the AM/PM part as typed.
-              </li>
-              <li>
-                <code>inputLength</code>: the length of the value, set when the
-                AM/PM part or the length is wrong.
-              </li>
-            </ul>
-            <p className="text-muted-foreground mt-4 text-sm">
-              Which <code>input*</code> fields are set depends on what went
-              wrong. Option, plugin and <code>setValue()</code> errors carry
-              only <code>error</code>.{" "}
-              <code>rejectedHour</code> and <code>rejectedMinute</code> are
-              deprecated and always <code>undefined</code>.
-            </p>
-          </div>
-        </div>
+        <h3>Error Payload</h3>
+        <ul>
+          <li>
+            <code>error</code>: a short English description, for example{" "}
+            <code>Invalid 24h time.</code> Use it for logging. The text
+            people see comes from <code>labels.invalidTimeFormat</code>.
+          </li>
+          <li>
+            <code>inputHour</code>, <code>inputMinute</code>: the hour and
+            minute read from the input.
+          </li>
+          <li>
+            <code>inputSecond</code>: the seconds, only with{" "}
+            <code>clock.showSeconds</code>.
+          </li>
+          <li>
+            <code>inputType</code>: the AM/PM part as typed.
+          </li>
+          <li>
+            <code>inputLength</code>: the length of the value, set when the
+            AM/PM part or the length is wrong.
+          </li>
+        </ul>
+        <p>
+          Which <code>input*</code> fields are set depends on what went
+          wrong. Option, plugin and <code>setValue()</code> errors carry
+          only <code>error</code>.{" "}
+          <code>rejectedHour</code> and <code>rejectedMinute</code> are
+          deprecated and always <code>undefined</code>.
+        </p>
       </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Custom Validation Rules
-        </h2>
-        <p className="text-muted-foreground mb-4">
+      <Section title="Custom Validation Rules">
+        <p>
           <code>clock.disabledTime</code> covers fixed rules. For anything
           else, such as a limit that changes or a rule that depends on another
           field, check the value in <code>callbacks.onConfirm</code>. The input
           already holds the new value at that point, so you can clear it and
           show your own message. The picker closes either way.
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Minimum Time Validation
-            </h3>
-            <CodeBlock
-              code={`<label for="pickup-time">Pickup time</label>
+        <h3>Minimum Time Validation</h3>
+        <CodeBlock
+          code={`<label for="pickup-time">Pickup time</label>
 <input id="pickup-time" type="text" aria-describedby="pickup-time-error" />
 <p id="pickup-time-error" role="alert"></p>`}
-              language="html"
-            />
-            <div className="mt-4">
-              <CodeBlock
-                code={`import { TimepickerUI } from 'timepicker-ui';
+          language="html"
+        />
+        <CodeBlock
+          code={`import { TimepickerUI } from 'timepicker-ui';
 
 const input = document.querySelector<HTMLInputElement>('#pickup-time')!;
 const message = document.querySelector<HTMLElement>('#pickup-time-error')!;
@@ -344,28 +297,23 @@ const picker = new TimepickerUI(input, {
 });
 
 picker.create();`}
-                language="typescript"
-              />
-            </div>
-            <p className="text-sm text-muted-foreground mt-3">
-              <code>toMinutes</code> works for both clock types;{" "}
-              <code>type</code> is <code>undefined</code> on a 24-hour clock.
-              The message element has <code>role=&quot;alert&quot;</code>, so
-              screen readers announce it when its text changes.
-            </p>
-          </div>
+          language="typescript"
+        />
+        <p>
+          <code>toMinutes</code> works for both clock types;{" "}
+          <code>type</code> is <code>undefined</code> on a 24-hour clock.
+          The message element has <code>role=&quot;alert&quot;</code>, so
+          screen readers announce it when its text changes.
+        </p>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Time Range Validation
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              For a fixed window, use <code>clock.disabledTime.ranges</code>{" "}
-              instead of a check after the fact. Times outside the window
-              cannot be picked on the clock face or the wheel:
-            </p>
-            <CodeBlock
-              code={`const picker = new TimepickerUI('#meeting-time', {
+        <h3>Time Range Validation</h3>
+        <p>
+          For a fixed window, use <code>clock.disabledTime.ranges</code>{" "}
+          instead of a check after the fact. Times outside the window
+          cannot be picked on the clock face or the wheel:
+        </p>
+        <CodeBlock
+          code={`const picker = new TimepickerUI('#meeting-time', {
   clock: {
     type: '24h',
     disabledTime: {
@@ -375,22 +323,18 @@ picker.create();`}
 });
 
 picker.create();`}
-              language="typescript"
-            />
-            <p className="text-sm text-muted-foreground mt-3">
-              Ranges include both ends, so this leaves 09:00 to 17:00. If
-              people can type into the hour and minute fields (
-              <code>ui.editable</code> or the keyboard view), also check the
-              confirmed value as in the example above.
-            </p>
-          </div>
+          language="typescript"
+        />
+        <p>
+          Ranges include both ends, so this leaves 09:00 to 17:00. If
+          people can type into the hour and minute fields (
+          <code>ui.editable</code> or the keyboard view), also check the
+          confirmed value as in the example above.
+        </p>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Date-Time Validation
-            </h3>
-            <CodeBlock
-              code={`const dateInput = document.querySelector<HTMLInputElement>('#pickup-date')!;
+        <h3>Date-Time Validation</h3>
+        <CodeBlock
+          code={`const dateInput = document.querySelector<HTMLInputElement>('#pickup-date')!;
 
 const picker = new TimepickerUI(input, {
   clock: { type: '24h' },
@@ -416,24 +360,19 @@ const picker = new TimepickerUI(input, {
 });
 
 picker.create();`}
-              language="typescript"
-            />
-            <p className="text-sm text-muted-foreground mt-3">
-              <code>#pickup-date</code> is an{" "}
-              <code>&lt;input type=&quot;date&quot;&gt;</code>, whose value is{" "}
-              <code>YYYY-MM-DD</code>. <code>input</code>,{" "}
-              <code>showError</code> and <code>clearError</code> come from the
-              first example.
-            </p>
-          </div>
-        </div>
-      </section>
+          language="typescript"
+        />
+        <p>
+          <code>#pickup-date</code> is an{" "}
+          <code>&lt;input type=&quot;date&quot;&gt;</code>, whose value is{" "}
+          <code>YYYY-MM-DD</code>. <code>input</code>,{" "}
+          <code>showError</code> and <code>clearError</code> come from the
+          first example.
+        </p>
+      </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          HTML5 Validation
-        </h2>
-        <p className="text-muted-foreground mb-4">
+      <Section title="HTML5 Validation">
+        <p>
           Native form validation works on the input the picker is attached to.
           Use <code>type=&quot;text&quot;</code>. A{" "}
           <code>type=&quot;time&quot;</code> input only takes values like{" "}
@@ -444,47 +383,37 @@ picker.create();`}
           <code>clock.disabledTime</code> and{" "}
           <code>clock.incrementMinutes</code> instead.
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Required Time Input
-            </h3>
-            <CodeBlock
-              code={`<form>
+        <h3>Required Time Input</h3>
+        <CodeBlock
+          code={`<form>
   <label for="meeting-time">Meeting time</label>
   <input id="meeting-time" type="text" required />
   <button type="submit">Schedule</button>
 </form>`}
-              language="html"
-            />
-            <div className="mt-4">
-              <CodeBlock
-                code={`const picker = new TimepickerUI('#meeting-time', {
+          language="html"
+        />
+        <CodeBlock
+          code={`const picker = new TimepickerUI('#meeting-time', {
   clock: { type: '24h' }
 });
 
 picker.create();`}
-                language="typescript"
-              />
-            </div>
-            <p className="text-sm text-muted-foreground mt-3">
-              With <code>required</code>, the browser blocks the submit and
-              shows its own message while the input is empty. No extra code is
-              needed.
-            </p>
-          </div>
+          language="typescript"
+        />
+        <p>
+          With <code>required</code>, the browser blocks the submit and
+          shows its own message while the input is empty. No extra code is
+          needed.
+        </p>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Custom Validation Messages
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              <code>setCustomValidity()</code> adds your own rule to the
-              browser&apos;s check. Call it from <code>onConfirm</code> for
-              picked values and from <code>change</code> for typed ones:
-            </p>
-            <CodeBlock
-              code={`const input = document.querySelector<HTMLInputElement>('#meeting-time')!;
+        <h3>Custom Validation Messages</h3>
+        <p>
+          <code>setCustomValidity()</code> adds your own rule to the
+          browser&apos;s check. Call it from <code>onConfirm</code> for
+          picked values and from <code>change</code> for typed ones:
+        </p>
+        <CodeBlock
+          code={`const input = document.querySelector<HTMLInputElement>('#meeting-time')!;
 
 function checkBusinessHours(): void {
   const { hour, minutes } = picker.getValue();
@@ -501,22 +430,17 @@ const picker = new TimepickerUI(input, {
 picker.create();
 
 input.addEventListener('change', checkBusinessHours);`}
-              language="typescript"
-            />
-            <p className="text-sm text-muted-foreground mt-3">
-              During <code>onConfirm</code> the input already holds the
-              confirmed time, so <code>getValue()</code> returns it. The
-              browser shows the message when the form is submitted.
-            </p>
-          </div>
-        </div>
-      </section>
+          language="typescript"
+        />
+        <p>
+          During <code>onConfirm</code> the input already holds the
+          confirmed time, so <code>getValue()</code> returns it. The
+          browser shows the message when the form is submitted.
+        </p>
+      </Section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground">
-          Visual Error States
-        </h2>
-        <p className="text-muted-foreground mb-4">
+      <Section title="Visual Error States">
+        <p>
           When the picker cannot read the input value, it adds{" "}
           <code>tp-ui-invalid-format</code> to the input and inserts a{" "}
           <code>tp-ui-invalid-text</code> element after it.{" "}
@@ -524,13 +448,9 @@ input.addEventListener('change', checkBusinessHours);`}
           text and the message with <code>--tp-error</code>. The message text
           comes from <code>labels.invalidTimeFormat</code>.
         </p>
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Error Styling
-            </h3>
-            <CodeBlock
-              code={`:root {
+        <h3>Error Styling</h3>
+        <CodeBlock
+          code={`:root {
   --tp-error: #b3261e;
 }
 
@@ -542,24 +462,20 @@ input.addEventListener('change', checkBusinessHours);`}
   margin-top: 4px;
   font-size: 0.875rem;
 }`}
-              language="css"
-            />
-            <p className="text-sm text-muted-foreground mt-3">
-              The message is text, so the error is not shown by color alone.
-            </p>
-          </div>
+          language="css"
+        />
+        <p>
+          The message is text, so the error is not shown by color alone.
+        </p>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Complete Example
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              The picker&apos;s own check for values it cannot read, plus a
-              rule of your own with its own message. Both states get the same
-              border:
-            </p>
-            <CodeBlock
-              code={`<div class="field">
+        <h3>Complete Example</h3>
+        <p>
+          The picker&apos;s own check for values it cannot read, plus a
+          rule of your own with its own message. Both states get the same
+          border:
+        </p>
+        <CodeBlock
+          code={`<div class="field">
   <label for="pickup-time">Pickup time</label>
   <input id="pickup-time" type="text" aria-describedby="pickup-time-error" />
   <p id="pickup-time-error" class="field-error" role="alert"></p>
@@ -584,11 +500,10 @@ input.addEventListener('change', checkBusinessHours);`}
     font-size: 0.875rem;
   }
 </style>`}
-              language="html"
-            />
-            <div className="mt-4">
-              <CodeBlock
-                code={`import { TimepickerUI } from 'timepicker-ui';
+          language="html"
+        />
+        <CodeBlock
+          code={`import { TimepickerUI } from 'timepicker-ui';
 import 'timepicker-ui/main.css';
 
 const input = document.querySelector<HTMLInputElement>('#pickup-time')!;
@@ -621,21 +536,23 @@ const picker = new TimepickerUI(input, {
 });
 
 picker.create();`}
-                language="typescript"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+          language="typescript"
+        />
+      </Section>
 
-      <LinkCard
-        icon={XCircle}
-        title="Server-Side Validation"
-        description="Check the time again on your server. Anything that runs in the browser, including clock.disabledTime and the checks on this page, can be bypassed."
-        linkText="Learn about events"
-        linkHref="/docs/api/events"
-        variant="blue"
-      />
+      <dl>
+        <div>
+          <dt>Server-Side Validation</dt>
+          <dd>
+            Check the time again on your server. Anything that runs in the
+            browser, including clock.disabledTime and the checks on this page,
+            can be bypassed.
+          </dd>
+          <dd>
+            <Link href="/docs/api/events">Learn about events</Link>
+          </dd>
+        </div>
+      </dl>
     </div>
   );
 }

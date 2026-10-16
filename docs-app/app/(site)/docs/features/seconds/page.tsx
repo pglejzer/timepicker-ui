@@ -2,20 +2,10 @@ import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
-import { InfoBox } from "@/components/info-box";
-import { LinkCard } from "@/components/link-card";
+import { Callout } from "@/components/callout";
+import { ApiTable } from "@/components/api-table";
 import { JsonLdBreadcrumb } from "@/components/json-ld";
-import {
-  Timer,
-  SlidersHorizontal,
-  Type,
-  Layers,
-  Ban,
-  ArrowLeftRight,
-  Bell,
-  Languages,
-  Play,
-} from "lucide-react";
+import Link from "next/link";
 
 export const metadata = buildMetadata({
   title: "Seconds",
@@ -76,51 +66,22 @@ const secondsOptions: OptionRow[] = [
 
 function OptionsTable({ options }: { options: OptionRow[] }) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-border">
-      <table className="w-full text-sm">
-        <thead className="bg-muted/50">
-          <tr className="border-b border-border">
-            <th className="px-4 py-3 text-left font-semibold text-foreground">
-              Option
-            </th>
-            <th className="px-4 py-3 text-left font-semibold text-foreground">
-              Type
-            </th>
-            <th className="px-4 py-3 text-left font-semibold text-foreground">
-              Default
-            </th>
-            <th className="px-4 py-3 text-left font-semibold text-foreground">
-              Description
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-border">
-          {options.map((option) => (
-            <tr
-              key={option.name}
-              className="hover:bg-muted/30 transition-colors"
-            >
-              <td className="px-4 py-3">
-                <code className="text-primary bg-primary/10 px-2 py-1 rounded text-xs font-mono">
-                  {option.name}
-                </code>
-              </td>
-              <td className="px-4 py-3 text-muted-foreground">
-                <code className="text-xs">{option.type}</code>
-              </td>
-              <td className="px-4 py-3">
-                <code className="text-xs text-muted-foreground">
-                  {option.default}
-                </code>
-              </td>
-              <td className="px-4 py-3 text-muted-foreground">
-                {option.description}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <ApiTable
+      columns={[
+        { key: "name", label: "Option" },
+        { key: "type", label: "Type", mono: true },
+        { key: "default", label: "Default", mono: true },
+        { key: "description", label: "Description" },
+      ]}
+      rows={options.map((option) => ({
+        id: option.name,
+        name: <code>{option.name}</code>,
+        type: option.type,
+        default: <code>{option.default}</code>,
+        description: option.description,
+      }))}
+      rowKey="id"
+    />
   );
 }
 
@@ -136,11 +97,9 @@ export default function SecondsPage() {
             <code>clock.showSeconds</code>. Added in 4.5.0.
           </>
         }
-        eyebrow="Feature"
       />
 
       <Section
-        icon={Timer}
         title="How do I show seconds?"
         description={
           <>
@@ -157,35 +116,30 @@ export default function SecondsPage() {
 picker.create();`}
           language="typescript"
         />
-        <div className="mt-6 rounded-lg border border-border bg-card p-6">
-          <h3 className="font-semibold mb-3 text-foreground">
-            What changes:
-          </h3>
-          <ul className="list-disc pl-5 marker:text-primary space-y-2 text-sm text-muted-foreground">
-            <li>The header gets a seconds field.</li>
-            <li>The analog clock gets a seconds face.</li>
-            <li>
-              The <code>wheel</code> and <code>compact-wheel</code> modes get
-              a seconds column.
-            </li>
-            <li>
-              The input value, <code>getValue()</code> and the event payloads
-              include seconds.
-            </li>
-          </ul>
-        </div>
-        <p className="text-muted-foreground mt-4">
+        <h3>What changes:</h3>
+        <ul>
+          <li>The header gets a seconds field.</li>
+          <li>The analog clock gets a seconds face.</li>
+          <li>
+            The <code>wheel</code> and <code>compact-wheel</code> modes get
+            a seconds column.
+          </li>
+          <li>
+            The input value, <code>getValue()</code> and the event payloads
+            include seconds.
+          </li>
+        </ul>
+        <p>
           <code>showSeconds</code> is off by default. When it is off, there is
           no seconds field, face or column, and the values,{" "}
           <code>getValue()</code> and the event payloads have no seconds.
         </p>
       </Section>
 
-      <Section icon={SlidersHorizontal} title="Which options control seconds?">
+      <Section title="Which options control seconds?">
         <OptionsTable options={secondsOptions} />
-        <div className="mt-6">
-          <CodeBlock
-            code={`const picker = new TimepickerUI(input, {
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clock: {
     type: '24h',
     showSeconds: true,
@@ -194,20 +148,17 @@ picker.create();`}
   }
 });
 picker.create();`}
-            language="typescript"
-          />
-        </div>
+          language="typescript"
+        />
       </Section>
 
-      <Section icon={Type} title="What does the value look like?">
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">24-hour</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              <code>HH:MM:SS</code>, for example <code>14:30:15</code>.
-            </p>
-            <CodeBlock
-              code={`// clock: { type: '24h', showSeconds: true }
+      <Section title="What does the value look like?">
+        <h3>24-hour</h3>
+        <p>
+          <code>HH:MM:SS</code>, for example <code>14:30:15</code>.
+        </p>
+        <CodeBlock
+          code={`// clock: { type: '24h', showSeconds: true }
 const value = picker.getValue();
 
 // Output:
@@ -219,20 +170,18 @@ const value = picker.getValue();
   time: '14:30:15',
   // degreesHours and degreesMinutes are still returned but deprecated
 }`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">12-hour</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              <code>HH:MM:SS AM</code> or <code>HH:MM:SS PM</code>, for example{" "}
-              <code>02:30:15 PM</code>. The hour is zero-padded. The period is
-              always <code>AM</code> or <code>PM</code>, even if you translate{" "}
-              <code>labels.am</code> and <code>labels.pm</code>.
-            </p>
-            <CodeBlock
-              code={`// clock: { type: '12h', showSeconds: true }
+        <h3>12-hour</h3>
+        <p>
+          <code>HH:MM:SS AM</code> or <code>HH:MM:SS PM</code>, for example{" "}
+          <code>02:30:15 PM</code>. The hour is zero-padded. The period is
+          always <code>AM</code> or <code>PM</code>, even if you translate{" "}
+          <code>labels.am</code> and <code>labels.pm</code>.
+        </p>
+        <CodeBlock
+          code={`// clock: { type: '12h', showSeconds: true }
 const value = picker.getValue();
 
 // Output:
@@ -244,79 +193,68 @@ const value = picker.getValue();
   time: '02:30:15 PM',
   // degreesHours and degreesMinutes are still returned but deprecated
 }`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Setting a value
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              <code>setValue()</code> accepts seconds. A value without seconds,
-              typed or set, is read as <code>:00</code>. If{" "}
-              <code>showSeconds</code> is off, seconds in the string are
-              dropped. <code>clock.defaultTime: &apos;now&apos;</code> fills in
-              the current seconds too.
-            </p>
-            <CodeBlock
-              code={`// clock: { type: '24h', showSeconds: true }
+        <h3>Setting a value</h3>
+        <p>
+          <code>setValue()</code> accepts seconds. A value without seconds,
+          typed or set, is read as <code>:00</code>. If{" "}
+          <code>showSeconds</code> is off, seconds in the string are
+          dropped. <code>clock.defaultTime: &apos;now&apos;</code> fills in
+          the current seconds too.
+        </p>
+        <CodeBlock
+          code={`// clock: { type: '24h', showSeconds: true }
 picker.setValue('14:30:15');
 picker.setValue('14:30');        // becomes 14:30:00
 
 // clock: { type: '12h', showSeconds: true }
 picker.setValue('2:30:15 PM');   // the input shows 02:30:15 PM`}
-              language="typescript"
-            />
-          </div>
-        </div>
+          language="typescript"
+        />
       </Section>
 
-      <Section icon={Layers} title="How do seconds work in each mode?">
-        <div className="grid gap-6 sm:grid-cols-2">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-2 text-foreground">Clock</h3>
-            <p className="text-sm text-muted-foreground">
+      <Section title="How do seconds work in each mode?">
+        <dl>
+          <div>
+            <dt>Clock</dt>
+            <dd>
               The face goes hours, then minutes, then seconds. With{" "}
               <code>autoSwitchToSeconds</code> on (the default), picking a
               minute opens the seconds face. Click the seconds field in the
               header to open it at any time.
-            </p>
+            </dd>
           </div>
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-2 text-foreground">Wheel</h3>
-            <p className="text-sm text-muted-foreground">
+          <div>
+            <dt>Wheel</dt>
+            <dd>
               Three columns: hours, minutes and seconds. In 12h, AM and PM stay
               in the header.
-            </p>
+            </dd>
           </div>
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-2 text-foreground">
-              Compact wheel
-            </h3>
-            <p className="text-sm text-muted-foreground">
+          <div>
+            <dt>Compact wheel</dt>
+            <dd>
               Columns <code>HH : MM : SS</code>, plus <code>AM/PM</code> in
               12h. Keyboard navigation and <code>wheel.hideDisabled</code> cover
               the seconds column.
-            </p>
+            </dd>
           </div>
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-2 text-foreground">
-              Keyboard view
-            </h3>
-            <p className="text-sm text-muted-foreground">
+          <div>
+            <dt>Keyboard view</dt>
+            <dd>
               Three editable fields, each with a caption. The seconds caption
               comes from <code>labels.second</code>.
-            </p>
+            </dd>
           </div>
-        </div>
-        <p className="text-muted-foreground mt-4">
+        </dl>
+        <p>
           Every built-in theme styles the seconds field, face and column. The
           wheel modes need the wheel plugin:
         </p>
-        <div className="mt-4">
-          <CodeBlock
-            code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+        <CodeBlock
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
 import { WheelPlugin } from 'timepicker-ui/plugins/wheel';
 
 PluginRegistry.register(WheelPlugin);
@@ -327,13 +265,12 @@ const picker = new TimepickerUI(input, {
   wheel: { placement: 'auto' }
 });
 picker.create();`}
-            language="typescript"
-          />
-        </div>
+          language="typescript"
+        />
       </Section>
 
-      <Section icon={Ban} title="How do I disable seconds?">
-        <p className="text-muted-foreground mb-4">
+      <Section title="How do I disable seconds?">
+        <p>
           List the seconds to block in <code>clock.disabledTime.seconds</code>.
           They are blocked in every minute. The list is used only with{" "}
           <code>showSeconds</code>.
@@ -351,10 +288,8 @@ picker.create();`}
           language="typescript"
         />
 
-        <h3 className="font-semibold mt-8 mb-3 text-foreground">
-          Ranges with seconds
-        </h3>
-        <p className="text-muted-foreground mb-4">
+        <h3>Ranges with seconds</h3>
+        <p>
           The edges of <code>clock.disabledTime.ranges</code> can carry
           seconds. This example blocks 10:00:30 AM up to and including
           10:05:59 AM:
@@ -375,52 +310,46 @@ picker.create();
 // ranges: ['12:00:00 - 12:00:30', '18:30 - 18:45:15']`}
           language="typescript"
         />
-        <div className="mt-6 rounded-lg border border-border bg-card p-6">
-          <h3 className="font-semibold mb-3 text-foreground">
-            How edges are read
-          </h3>
-          <ul className="list-disc pl-5 marker:text-primary space-y-2 text-sm text-muted-foreground">
-            <li>Both edges are inclusive.</li>
-            <li>
-              An edge without seconds covers its whole minute. A start of{" "}
-              <code>10:00</code> means <code>10:00:00</code>. An end of{" "}
-              <code>12:30</code> means <code>12:30:59</code>. So a range
-              written for 4.4.0 disables exactly the same minutes.
-            </li>
-            <li>An edge with seconds is exact.</li>
-            <li>
-              12h edges need <code>AM</code> or <code>PM</code>. 24h edges
-              must not have them.
-            </li>
-            <li>
-              Ranges must not overlap. Because an edge without seconds
-              covers its whole minute, <code>&apos;10:00 - 10:05&apos;</code>{" "}
-              and <code>&apos;10:05 - 10:10&apos;</code> overlap. Start the
-              second one at <code>10:06</code>.
-            </li>
-            <li>
-              Overnight ranges (start later than end) are not supported.
-              Split them in two, for example{" "}
-              <code>[&apos;22:00 - 23:59&apos;, &apos;00:00 - 06:00&apos;]</code>.
-            </li>
-            <li>
-              When <code>ranges</code> is set, the <code>hours</code>,{" "}
-              <code>minutes</code> and <code>seconds</code> lists are
-              ignored.
-            </li>
-            <li>
-              With seconds on, a minute is disabled only when all of its
-              seconds fall inside a range, and an hour only when all of
-              its minutes do. In the example above, minute 10:00 stays
-              selectable because 10:00:00 to 10:00:29 are free.
-            </li>
-          </ul>
-        </div>
+        <h3>How edges are read</h3>
+        <ul>
+          <li>Both edges are inclusive.</li>
+          <li>
+            An edge without seconds covers its whole minute. A start of{" "}
+            <code>10:00</code> means <code>10:00:00</code>. An end of{" "}
+            <code>12:30</code> means <code>12:30:59</code>. So a range
+            written for 4.4.0 disables exactly the same minutes.
+          </li>
+          <li>An edge with seconds is exact.</li>
+          <li>
+            12h edges need <code>AM</code> or <code>PM</code>. 24h edges
+            must not have them.
+          </li>
+          <li>
+            Ranges must not overlap. Because an edge without seconds
+            covers its whole minute, <code>&apos;10:00 - 10:05&apos;</code>{" "}
+            and <code>&apos;10:05 - 10:10&apos;</code> overlap. Start the
+            second one at <code>10:06</code>.
+          </li>
+          <li>
+            Overnight ranges (start later than end) are not supported.
+            Split them in two, for example{" "}
+            <code>[&apos;22:00 - 23:59&apos;, &apos;00:00 - 06:00&apos;]</code>.
+          </li>
+          <li>
+            When <code>ranges</code> is set, the <code>hours</code>,{" "}
+            <code>minutes</code> and <code>seconds</code> lists are
+            ignored.
+          </li>
+          <li>
+            With seconds on, a minute is disabled only when all of its
+            seconds fall inside a range, and an hour only when all of
+            its minutes do. In the example above, minute 10:00 stays
+            selectable because 10:00:00 to 10:00:29 are free.
+          </li>
+        </ul>
 
-        <h3 className="font-semibold mt-8 mb-3 text-foreground">
-          Invalid ranges
-        </h3>
-        <p className="text-muted-foreground mb-4">
+        <h3>Invalid ranges</h3>
+        <p>
           A malformed or overlapping range is rejected and reported through
           the <code>error</code> event and <code>callbacks.onError</code>. On{" "}
           <code>create()</code>, the picker then does not open. On{" "}
@@ -444,8 +373,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={ArrowLeftRight} title="How do seconds work with the range plugin?">
-        <ul className="list-disc pl-5 marker:text-primary space-y-2 text-muted-foreground mb-6">
+      <Section title="How do seconds work with the range plugin?">
+        <ul>
           <li>
             <code>range:confirm</code> and <code>range:validation</code>{" "}
             carry <code>durationSeconds</code>, the exact length in seconds.
@@ -485,8 +414,8 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Bell} title="Which events carry seconds?">
-        <ul className="list-disc pl-5 marker:text-primary space-y-2 text-muted-foreground mb-6">
+      <Section title="Which events carry seconds?">
+        <ul>
           <li>
             <code>select:second</code> (and <code>onSelectSecond</code>) with{" "}
             <code>{"{ seconds }"}</code>. It fires when the seconds field or
@@ -502,7 +431,7 @@ picker.create();`}
             input&apos;s seconds are invalid.
           </li>
         </ul>
-        <p className="text-muted-foreground mb-4">
+        <p>
           These fields appear only when <code>showSeconds</code> is on.
         </p>
         <CodeBlock
@@ -517,8 +446,8 @@ picker.on('confirm', (data) => {
         />
       </Section>
 
-      <Section icon={Languages} title="How do I translate the seconds labels?">
-        <p className="text-muted-foreground mb-4">
+      <Section title="How do I translate the seconds labels?">
+        <p>
           One label covers seconds: <code>labels.second</code> is the caption
           in the keyboard view, the accessible name of the seconds field and
           wheel column, and the prefix of the announced value. A Polish
@@ -541,18 +470,24 @@ picker.create();`}
         />
       </Section>
 
-      <InfoBox title="Version" variant="blue">
+      <Callout title="Version">
         Seconds need timepicker-ui 4.5.0 or later.
-      </InfoBox>
+      </Callout>
 
-      <LinkCard
-        icon={Play}
-        title="Try it"
-        description="Live pickers with seconds in clock, wheel, compact-wheel and range modes."
-        linkText="Open the seconds examples"
-        linkHref="/examples/features/seconds"
-        variant="blue"
-      />
+      <dl>
+        <div>
+          <dt>Try it</dt>
+          <dd>
+            Live pickers with seconds in clock, wheel, compact-wheel and range
+            modes.
+          </dd>
+          <dd>
+            <Link href="/examples/features/seconds">
+              Open the seconds examples
+            </Link>
+          </dd>
+        </div>
+      </dl>
     </div>
   );
 }

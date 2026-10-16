@@ -3,21 +3,10 @@ import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
-import { InfoBox } from "@/components/info-box";
+import { Callout } from "@/components/callout";
+import { ApiTable } from "@/components/api-table";
 import { RenamedOptionsTable } from "@/components/renamed-options-table";
 import { renamedOptions } from "@/lib/renamed-options";
-import {
-  Layout,
-  Lock,
-  Clock,
-  Type,
-  Palette,
-  Sliders,
-  Bell,
-  Globe,
-  ArrowLeftRight,
-  ArrowRight,
-} from "lucide-react";
 import Link from "next/link";
 
 export const metadata = buildMetadata({
@@ -36,7 +25,7 @@ type OptionRow = {
 
 const Deprecated = ({ children }: { children: ReactNode }) => (
   <>
-    <span className="font-medium text-foreground">Deprecated.</span>{" "}
+    <strong>Deprecated.</strong>{" "}
     {children}
   </>
 );
@@ -80,9 +69,7 @@ const clockOptions: OptionRow[] = [
       <>
         Show a seconds field, clock face and wheel column. Values become{" "}
         <code>HH:MM:SS</code>. New in 4.5.0. See{" "}
-        <Link href="/docs/features/seconds" className="text-primary underline">
-          Seconds
-        </Link>
+        <Link href="/docs/features/seconds">Seconds</Link>
         .
       </>
     ),
@@ -192,10 +179,7 @@ const uiOptions: OptionRow[] = [
         pickers and the compact-wheel popover never lock it), and{" "}
         <code>&lt;html&gt;</code> gets <code>--tp-scrollbar-gap</code> with the
         width of the removed scrollbar, for fixed headers. See{" "}
-        <Link
-          href="/docs/configuration#scroll-lock"
-          className="text-primary underline"
-        >
+        <Link href="/docs/configuration#scroll-lock">
           Scroll lock and fixed headers
         </Link>
         .
@@ -633,10 +617,7 @@ const callbacksOptions: OptionRow[] = [
     description: (
       <>
         Triggered when the user clicks the input or a{" "}
-        <Link
-          href="/examples/features/open-from-button"
-          className="text-primary underline"
-        >
+        <Link href="/examples/features/open-from-button">
           <code>data-open</code> element
         </Link>
         , or presses Enter or Space on it, to open the picker.{" "}
@@ -762,48 +743,22 @@ const callbacksOptions: OptionRow[] = [
 ];
 
 const OptionsTable = ({ options }: { options: OptionRow[] }) => (
-  <div className="overflow-x-auto rounded-lg border border-border">
-    <table className="w-full text-sm">
-      <thead className="bg-muted/50">
-        <tr className="border-b border-border">
-          <th className="px-4 py-3 text-left font-semibold text-foreground">
-            Option
-          </th>
-          <th className="px-4 py-3 text-left font-semibold text-foreground">
-            Type
-          </th>
-          <th className="px-4 py-3 text-left font-semibold text-foreground">
-            Default
-          </th>
-          <th className="px-4 py-3 text-left font-semibold text-foreground">
-            Description
-          </th>
-        </tr>
-      </thead>
-      <tbody className="divide-y divide-border">
-        {options.map((option) => (
-          <tr key={option.name} className="hover:bg-muted/30 transition-colors">
-            <td className="px-4 py-3">
-              <code className="text-primary bg-primary/10 px-2 py-1 rounded text-xs font-mono">
-                {option.name}
-              </code>
-            </td>
-            <td className="px-4 py-3 text-muted-foreground">
-              <code className="text-xs">{option.type}</code>
-            </td>
-            <td className="px-4 py-3">
-              <code className="text-xs text-muted-foreground">
-                {option.default}
-              </code>
-            </td>
-            <td className="px-4 py-3 text-muted-foreground">
-              {option.description}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+  <ApiTable
+    columns={[
+      { key: "name", label: "Option" },
+      { key: "type", label: "Type", mono: true },
+      { key: "default", label: "Default", mono: true },
+      { key: "description", label: "Description" },
+    ]}
+    rows={options.map((option) => ({
+      id: option.name,
+      name: <code>{option.name}</code>,
+      type: <code>{option.type}</code>,
+      default: <code>{option.default}</code>,
+      description: option.description,
+    }))}
+    rowKey="id"
+  />
 );
 
 const themes = [
@@ -836,153 +791,131 @@ export default function OptionsPage() {
       <PageHeader
         title="Options API Reference"
         description="Complete v4.0.0 configuration options reference with grouped structure"
-        eyebrow="API"
       />
 
-      <InfoBox title="Important notice" variant="emerald" className="mb-8">
+      <Callout title="Important notice" tone="tip">
         <strong>v4.0.0 Breaking Change:</strong> Options are now organized into
-        groups:
-        <code className="mx-1">clock</code>, <code className="mx-1">ui</code>,{" "}
-        <code className="mx-1">labels</code>,
-        <code className="mx-1">behavior</code>,{" "}
-        <code className="mx-1">callbacks</code>,{" "}
-        <code className="mx-1">timezone</code>,{" "}
-        <code className="mx-1">range</code> and{" "}
-        <code className="mx-1">wheel</code>. See the{" "}
-        <Link href="/docs/migration-guide" className="text-primary underline">
-          migration guide
-        </Link>
+        groups:{" "}
+        <code>clock</code>, <code>ui</code>,{" "}
+        <code>labels</code>,{" "}
+        <code>behavior</code>,{" "}
+        <code>callbacks</code>,{" "}
+        <code>timezone</code>,{" "}
+        <code>range</code> and{" "}
+        <code>wheel</code>. See the{" "}
+        <Link href="/docs/migration-guide">migration guide</Link>
         . 4.5.0 renames some options. The old names still work until 5.0 and
         are listed in{" "}
-        <a href="#renamed" className="text-primary underline">
-          Renamed in 4.5.0
-        </a>
+        <a href="#renamed">Renamed in 4.5.0</a>
         .
-      </InfoBox>
+      </Callout>
 
-      <Section icon={Clock} title="Clock Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Clock Options">
+        <p>
           Clock behavior and time configuration options:
         </p>
         <OptionsTable options={clockOptions} />
       </Section>
 
-      <Section icon={Palette} title="UI Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="UI Options">
+        <p>
           Visual appearance and display options:
         </p>
         <OptionsTable options={uiOptions} />
       </Section>
 
-      <Section icon={Layout} title="Wheel Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Wheel Options">
+        <p>
           Wheel / compact-wheel mode configuration via{" "}
-          <code className="text-primary">wheel</code>:
+          <code>wheel</code>:
         </p>
         <OptionsTable options={wheelOptions} />
       </Section>
 
-      <Section icon={Type} title="Labels Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Labels Options">
+        <p>
           Every text the picker shows or gives to screen readers, for
-          localization. <code className="text-primary">second</code> and{" "}
-          <code className="text-primary">announceCleared</code> are new in
+          localization. <code>second</code> and{" "}
+          <code>announceCleared</code> are new in
           4.5.0. Keys that got a new name in 4.5.0 are listed in{" "}
-          <a href="#renamed" className="text-primary underline">
-            Renamed in 4.5.0
-          </a>
+          <a href="#renamed">Renamed in 4.5.0</a>
           .
         </p>
         <OptionsTable options={labelsOptions} />
       </Section>
 
-      <Section icon={Sliders} title="Behavior Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Behavior Options">
+        <p>
           Interaction and accessibility behavior:
         </p>
         <OptionsTable options={behaviorOptions} />
       </Section>
 
-      <Section icon={Bell} title="Callbacks Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Callbacks Options">
+        <p>
           Event handlers and lifecycle callbacks:
         </p>
         <OptionsTable options={callbacksOptions} />
       </Section>
 
-      <Section icon={Globe} title="Timezone Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Timezone Options">
+        <p>
           Optional timezone selector (requires the timezone plugin) via{" "}
-          <code className="text-primary">timezone</code>. Its label is{" "}
-          <code className="text-primary">labels.timezone</code>:
+          <code>timezone</code>. Its label is{" "}
+          <code>labels.timezone</code>:
         </p>
         <OptionsTable options={timezoneOptions} />
       </Section>
 
-      <Section icon={ArrowLeftRight} title="Range Options">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Range Options">
+        <p>
           Optional from-to range selection (requires the range plugin) via{" "}
-          <code className="text-primary">range</code>. The tab texts are{" "}
-          <code className="text-primary">labels.rangeFrom</code> and{" "}
-          <code className="text-primary">labels.rangeTo</code>:
+          <code>range</code>. The tab texts are{" "}
+          <code>labels.rangeFrom</code> and{" "}
+          <code>labels.rangeTo</code>:
         </p>
         <OptionsTable options={rangeOptions} />
       </Section>
 
-      <Section id="renamed" icon={ArrowRight} title="Renamed in 4.5.0">
-        <p className="text-muted-foreground mb-4">
+      <Section id="renamed" title="Renamed in 4.5.0">
+        <p>
           These options got clearer names in 4.5.0. The old names still work
           and are removed in 5.0. When both names are set, the new one wins.{" "}
-          <code className="text-primary">picker.options</code> keeps returning
+          <code>picker.options</code> keeps returning
           the old names until 5.0. To prepare for 5.0, see the{" "}
-          <Link
-            href="/docs/migration-guide-v5"
-            className="text-primary underline"
-          >
-            Migration Guide v4 to v5
-          </Link>
+          <Link href="/docs/migration-guide-v5">Migration Guide v4 to v5</Link>
           .
         </p>
         <RenamedOptionsTable rows={renamedOptions} />
       </Section>
 
-      <Section icon={Palette} title="Available Themes">
-        <p className="text-muted-foreground mb-6">
+      <Section title="Available Themes">
+        <p>
           Choose from 12 built-in themes via{" "}
-          <code className="text-primary">ui.theme</code>:
+          <code>ui.theme</code>:
         </p>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <dl>
           {themes.map((theme) => (
-            <div
-              key={theme.name}
-              className="group relative overflow-hidden rounded-lg border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-lg"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/5 opacity-0 transition-opacity group-hover:opacity-100" />
-              <div className="relative">
-                <h3 className="font-semibold mb-2 text-foreground">
-                  <code className="text-primary">{theme.name}</code>
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {theme.description}
-                </p>
-              </div>
+            <div key={theme.name}>
+              <dt>
+                <code>{theme.name}</code>
+              </dt>
+              <dd>{theme.description}</dd>
             </div>
           ))}
-        </div>
-        <div className="mt-6">
-          <CodeBlock
-            code={`const picker = new TimepickerUI(input, {
+        </dl>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   ui: { theme: 'cyberpunk' }
 });`}
-            language="typescript"
-          />
-        </div>
+          language="typescript"
+        />
       </Section>
 
-      <Section icon={Layout} title="Inline Mode Configuration">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Inline Mode Configuration">
+        <p>
           Configure inline mode via{" "}
-          <code className="text-primary">ui.inline</code>:
+          <code>ui.inline</code>:
         </p>
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
@@ -999,13 +932,13 @@ export default function OptionsPage() {
         />
       </Section>
 
-      <Section icon={Layout} title="Wheel Mode Configuration">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Wheel Mode Configuration">
+        <p>
           Configure wheel/compact-wheel mode via{" "}
-          <code className="text-primary">wheel</code>. Both modes need the
-          wheel plugin. <code className="text-primary">placement</code> and{" "}
-          <code className="text-primary">hideFooter</code> apply to{" "}
-          <code className="text-primary">compact-wheel</code> only:
+          <code>wheel</code>. Both modes need the
+          wheel plugin. <code>placement</code> and{" "}
+          <code>hideFooter</code> apply to{" "}
+          <code>compact-wheel</code> only:
         </p>
         <CodeBlock
           code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
@@ -1026,16 +959,14 @@ picker.create();`}
         />
       </Section>
 
-      <Section icon={Lock} title="Disabled Time Configuration">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Disabled Time Configuration">
+        <p>
           Disable specific hours, minutes, seconds or time ranges via{" "}
-          <code className="text-primary">clock.disabledTime</code>. Use either
-          the lists or <code className="text-primary">ranges</code>: when{" "}
-          <code className="text-primary">ranges</code> is set, the lists are
+          <code>clock.disabledTime</code>. Use either
+          the lists or <code>ranges</code>: when{" "}
+          <code>ranges</code> is set, the lists are
           ignored. See{" "}
-          <Link href="/docs/features/seconds" className="text-primary underline">
-            Seconds
-          </Link>{" "}
+          <Link href="/docs/features/seconds">Seconds</Link>{" "}
           for ranges with seconds.
         </p>
         <CodeBlock
@@ -1064,14 +995,14 @@ const rangesPicker = new TimepickerUI(input, {
         />
       </Section>
 
-      <Section icon={Clock} title="Default Time Configuration">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Default Time Configuration">
+        <p>
           Set the time the picker shows while the input is empty via{" "}
-          <code className="text-primary">clock.defaultTime</code>.{" "}
-          <code className="text-primary">&apos;now&apos;</code> also writes the
+          <code>clock.defaultTime</code>.{" "}
+          <code>&apos;now&apos;</code> also writes the
           current time to the input when the picker is created, replacing its
           value. The object form with{" "}
-          <code className="text-primary">updateInput: false</code> only shows
+          <code>updateInput: false</code> only shows
           it:
         </p>
         <CodeBlock
@@ -1090,10 +1021,7 @@ const morningPicker = new TimepickerUI(input, {
         />
       </Section>
 
-      <div className="mt-12 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-purple-500/5 p-8">
-        <h2 className="text-2xl font-bold tracking-tight mb-4 text-foreground">
-          Complete v4.0.0 Example
-        </h2>
+      <Section title="Complete v4.0.0 Example">
         <CodeBlock
           code={`const picker = new TimepickerUI(input, {
   // Clock options
@@ -1168,7 +1096,7 @@ const morningPicker = new TimepickerUI(input, {
 });`}
           language="typescript"
         />
-      </div>
+      </Section>
     </div>
   );
 }

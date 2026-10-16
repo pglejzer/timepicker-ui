@@ -1,17 +1,11 @@
 import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { Section } from "@/components/section";
-import { InfoBox } from "@/components/info-box";
+import { Callout } from "@/components/callout";
 import { PageHeader } from "@/components/page-header";
-import {
-  Sparkles,
-  Layers,
-  Code2,
-  Zap,
-  Package,
-  CheckCircle2,
-} from "lucide-react";
+import { ApiTable } from "@/components/api-table";
 import Link from "next/link";
+import styles from "./page.module.css";
 
 export const metadata = buildMetadata({
   title: "What's New",
@@ -20,33 +14,34 @@ export const metadata = buildMetadata({
   path: "/docs/whats-new",
 });
 
+const optionMapping = [
+  { v3: "clockType", v4: "clock.type" },
+  { v3: "theme", v4: "ui.theme" },
+  { v3: "mobile", v4: "ui.mobile" },
+  { v3: "animation", v4: "ui.animation" },
+  { v3: "okLabel", v4: "labels.ok" },
+  { v3: "cancelLabel", v4: "labels.cancel" },
+  { v3: "incrementMinutes", v4: "clock.incrementMinutes" },
+  { v3: "focusTrap", v4: "behavior.focusTrap" },
+];
+
 export default function WhatsNewPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Guide"
-        badge={
-          <span className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--ok)/0.25)] bg-[hsl(var(--ok)/0.06)] px-3 py-1 text-xs font-medium text-[hsl(var(--ok))]">
-            <Sparkles className="h-3.5 w-3.5" />
-            Latest Release
-          </span>
-        }
+        badge="Latest Release"
         title="What's New"
         description="Stay up to date with the latest features and improvements"
       />
 
-      <InfoBox
-        title="Version 4.5.0 - October 14, 2026"
-        variant="emerald"
-        className="mb-8"
-      >
-        <p className="mb-3">
+      <Callout title="Version 4.5.0 - October 14, 2026" tone="tip">
+        <p>
           Optional seconds, clearer option names, keyboard control of the clock
           face, a callback for every event, Material Design 3 press feedback,
           and keyboard, screen-reader and theme fixes
         </p>
-        <p className="text-sm">What&apos;s new:</p>
-        <ul className="mt-2 space-y-1 text-sm ml-4">
+        <p>What&apos;s new:</p>
+        <ul>
           <li>
             <strong>Optional seconds</strong> - Set{" "}
             <code>clock.showSeconds: true</code> for <code>HH:MM:SS</code> in
@@ -60,12 +55,7 @@ export default function WhatsNewPage() {
             <code>mobileHour</code> and <code>announceHour</code>, plus{" "}
             <code>setOptions()</code> in place of <code>update()</code>. The
             old names keep working until 5.0, and the{" "}
-            <Link
-              href="/docs/api/options"
-              className="text-primary hover:underline font-medium"
-            >
-              options page
-            </Link>{" "}
+            <Link href="/docs/api/options">options page</Link>{" "}
             lists every pair
           </li>
           <li>
@@ -123,29 +113,19 @@ export default function WhatsNewPage() {
             input on close. 5.0 does this by default
           </li>
         </ul>
-        <div className="mt-3 flex flex-wrap gap-4">
-          <Link
-            href="/docs/features/seconds"
-            className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-          >
-            Seconds guide
-          </Link>
-          <Link
-            href="/docs/changelog"
-            className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-          >
-            Full 4.5.0 changelog
-          </Link>
+        <div className={styles.links}>
+          <Link href="/docs/features/seconds">Seconds guide</Link>
+          <Link href="/docs/changelog">Full 4.5.0 changelog</Link>
         </div>
-      </InfoBox>
+      </Callout>
 
-      <InfoBox title="Version 4.4.0" variant="blue" className="mb-8">
-        <p className="mb-3">
+      <Callout title="Version 4.4.0">
+        <p>
           <strong>June 10, 2026</strong> - Two new Blueprint themes, localizable
           accessibility labels, and extended keyboard navigation
         </p>
-        <p className="text-sm">What&apos;s new:</p>
-        <ul className="mt-2 space-y-1 text-sm ml-4">
+        <p>What&apos;s new:</p>
+        <ul>
           <li>
             <strong>
               New <code>blueprint</code> theme
@@ -181,21 +161,18 @@ export default function WhatsNewPage() {
             keys
           </li>
         </ul>
-        <Link
-          href="/docs/features/themes"
-          className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-3"
-        >
-          Browse all themes
-        </Link>
-      </InfoBox>
+        <p>
+          <Link href="/docs/features/themes">Browse all themes</Link>
+        </p>
+      </Callout>
 
-      <InfoBox title="Version 4.3.0" variant="blue" className="mb-8">
-        <p className="mb-3">
+      <Callout title="Version 4.3.0">
+        <p>
           <strong>March 26, 2026</strong> - Tree-shakeable plugin system,
           smaller core bundle
         </p>
-        <p className="text-sm">What&apos;s new:</p>
-        <ul className="mt-2 space-y-1 text-sm ml-4">
+        <p>What&apos;s new:</p>
+        <ul>
           <li>
             <strong>Tree-shakeable plugins</strong> - Unused plugins (wheel,
             range, timezone) are completely excluded from the final bundle when
@@ -214,14 +191,14 @@ export default function WhatsNewPage() {
             and <code>ClearHandler</code> for plugin authors
           </li>
         </ul>
-      </InfoBox>
+      </Callout>
 
-      <InfoBox title="Version 4.2.0" variant="blue" className="mb-8">
-        <p className="mb-3">
+      <Callout title="Version 4.2.0">
+        <p>
           <strong>March 18, 2026</strong> - Wheel mode, clear button, and more
         </p>
-        <p className="text-sm">What&apos;s new:</p>
-        <ul className="mt-2 space-y-1 text-sm ml-4">
+        <p>What&apos;s new:</p>
+        <ul>
           <li>
             <strong>Wheel mode</strong> - Scroll-spinner interface replacing the
             analog clock face. Enable via{" "}
@@ -283,20 +260,17 @@ export default function WhatsNewPage() {
             uses theme variable instead of hardcoded black
           </li>
         </ul>
-        <Link
-          href="/docs/changelog"
-          className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-3"
-        >
-          View full changelog
-        </Link>
-      </InfoBox>
+        <p>
+          <Link href="/docs/changelog">View full changelog</Link>
+        </p>
+      </Callout>
 
-      <InfoBox title="Version 4.1.0" variant="blue" className="mb-8">
-        <p className="mb-3">
+      <Callout title="Version 4.1.0">
+        <p>
           <strong>January 31, 2026</strong> - New features and UX improvements
         </p>
-        <p className="text-sm">What&apos;s new:</p>
-        <ul className="mt-2 space-y-1 text-sm ml-4">
+        <p>What&apos;s new:</p>
+        <ul>
           <li>
             <strong>Range Plugin</strong> - New! Select time ranges with
             start/end pickers, duration calculation, and validation
@@ -314,33 +288,26 @@ export default function WhatsNewPage() {
             animation (new default)
           </li>
         </ul>
-        <Link
-          href="/docs/changelog"
-          className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-3"
-        >
-          View full changelog
-        </Link>
-      </InfoBox>
+        <p>
+          <Link href="/docs/changelog">View full changelog</Link>
+        </p>
+      </Callout>
 
-      <Section icon={Layers} title="What's New in v4.0.0">
-        <p className="text-muted-foreground mb-4">
+      <Section title="What's New in v4.0.0">
+        <p>
           Version 4.0.0 brought major improvements in architecture, TypeScript
           support, and developer experience.
         </p>
       </Section>
 
-      <Section icon={Layers} title="Grouped Options Architecture">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Grouped Options Architecture">
+        <p>
           Options are now organized into logical groups for better clarity and
           maintainability.
         </p>
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-semibold mb-3 text-foreground">
-              Old API (v3.x)
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>Old API (v3.x)</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clockType: '12h',
   theme: 'dark',
   mobile: true,
@@ -349,16 +316,12 @@ export default function WhatsNewPage() {
   okLabel: 'Confirm',
   cancelLabel: 'Close'
 });`}
-              language="typescript"
-            />
-          </div>
+          language="typescript"
+        />
 
-          <div>
-            <h3 className="font-semibold mb-3 text-foreground">
-              New API (v4.0.0)
-            </h3>
-            <CodeBlock
-              code={`const picker = new TimepickerUI(input, {
+        <h3>New API (v4.0.0)</h3>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
   clock: {
     type: '12h',
     incrementMinutes: 5
@@ -373,283 +336,126 @@ export default function WhatsNewPage() {
     cancel: 'Close'
   }
 });`}
-              language="typescript"
-            />
-          </div>
-        </div>
+          language="typescript"
+        />
 
-        <div className="mt-6 rounded-lg border border-border bg-card p-6">
-          <h4 className="font-semibold mb-3 text-foreground">
-            Five Main Groups
-          </h4>
-          <ul className="space-y-2 text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>
-                <strong>clock:</strong> Time format, increments, disabled times,
-                auto-switch behavior
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>
-                <strong>ui:</strong> Theme, animations, mobile mode, backdrop,
-                icons
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>
-                <strong>labels:</strong> All text labels (OK, Cancel, AM/PM,
-                etc.)
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>
-                <strong>behavior:</strong> Focus trap, delays, input focus after
-                close
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>
-                <strong>callbacks:</strong> All event handlers in one place
-              </span>
-            </li>
-          </ul>
-        </div>
+        <h4>Five Main Groups</h4>
+        <ul>
+          <li>
+            <strong>clock:</strong> Time format, increments, disabled times,
+            auto-switch behavior
+          </li>
+          <li>
+            <strong>ui:</strong> Theme, animations, mobile mode, backdrop,
+            icons
+          </li>
+          <li>
+            <strong>labels:</strong> All text labels (OK, Cancel, AM/PM,
+            etc.)
+          </li>
+          <li>
+            <strong>behavior:</strong> Focus trap, delays, input focus after
+            close
+          </li>
+          <li>
+            <strong>callbacks:</strong> All event handlers in one place
+          </li>
+        </ul>
       </Section>
 
-      <Section icon={Code2} title="Enhanced TypeScript Support">
-        <p className="text-muted-foreground mb-4">
+      <Section title="Typed Options and Event Payloads">
+        <p>
           Complete type safety with strict interfaces and better IntelliSense.
         </p>
-        <div className="rounded-lg border border-border bg-card p-6">
-          <ul className="space-y-2 text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>Fully typed options with detailed documentation</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>Typed event payloads for all callbacks</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>Better autocomplete in modern IDEs</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>Strict mode compatible (no any, no unknown)</span>
-            </li>
-          </ul>
-        </div>
+        <ul>
+          <li>Fully typed options with detailed documentation</li>
+          <li>Typed event payloads for all callbacks</li>
+          <li>Better autocomplete in modern IDEs</li>
+          <li>Strict mode compatible (no any, no unknown)</li>
+        </ul>
       </Section>
 
-      <Section icon={Zap} title="New Features">
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-primary" />
-              Keyboard Navigation
-            </h3>
-            <p className="text-muted-foreground mb-3">
-              Use Arrow Up/Down keys to increment/decrement hour and minute
-              values with live clockface updates.
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-              <li>Works in both 12h and 24h modes</li>
-              <li>Proper wrap-around (59 to 00, 12 to 01)</li>
-              <li>Smooth clock hand animations</li>
-            </ul>
-          </div>
+      <Section title="New Features">
+        <h3>Keyboard Navigation</h3>
+        <p>
+          Use Arrow Up/Down keys to increment/decrement hour and minute
+          values with live clockface updates.
+        </p>
+        <ul>
+          <li>Works in both 12h and 24h modes</li>
+          <li>Proper wrap-around (59 to 00, 12 to 01)</li>
+          <li>Smooth clock hand animations</li>
+        </ul>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-primary" />
-              Improved Accessibility
-            </h3>
-            <p className="text-muted-foreground mb-3">
-              Dynamic tabindex management ensures hidden elements are not
-              focusable.
-            </p>
-          </div>
+        <h3>Improved Accessibility</h3>
+        <p>
+          Dynamic tabindex management ensures hidden elements are not
+          focusable.
+        </p>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-primary" />
-              Glassmorphic Theme
-            </h3>
-            <p className="text-muted-foreground">
-              New theme with backdrop-filter blur effect for modern glass UI.
-            </p>
-          </div>
-        </div>
+        <h3>Glassmorphic Theme</h3>
+        <p>
+          New theme with backdrop-filter blur effect for modern glass UI.
+        </p>
       </Section>
 
-      <Section icon={Package} title="Architecture Improvements">
-        <div className="rounded-lg border border-border bg-card p-6">
-          <ul className="space-y-2 text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>
-                <strong>Composition over Inheritance:</strong> No class
-                hierarchies, only explicit composition
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>
-                <strong>Manager Pattern:</strong> Independent, testable managers
-                for each concern
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>
-                <strong>SSR Safety:</strong> Full compatibility with Next.js,
-                Nuxt, Remix, and other SSR frameworks
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>
-                <strong>Pure State Container:</strong> Centralized state with no
-                side effects
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-              <span>
-                <strong>Event-Driven:</strong> Clean event system for all
-                interactions
-              </span>
-            </li>
-          </ul>
-        </div>
+      <Section title="Architecture Improvements">
+        <ul>
+          <li>
+            <strong>Composition over Inheritance:</strong> No class
+            hierarchies, only explicit composition
+          </li>
+          <li>
+            <strong>Manager Pattern:</strong> Independent, testable managers
+            for each concern
+          </li>
+          <li>
+            <strong>SSR Safety:</strong> Full compatibility with Next.js,
+            Nuxt, Remix, and other SSR frameworks
+          </li>
+          <li>
+            <strong>Pure State Container:</strong> Centralized state with no
+            side effects
+          </li>
+          <li>
+            <strong>Event-Driven:</strong> Clean event system for all
+            interactions
+          </li>
+        </ul>
       </Section>
 
-      <InfoBox title="Breaking Changes" variant="emerald" className="mb-8">
-        <div className="flex items-start gap-3">
-          <div>
-            <p className="text-sm mb-3">
-              v4.0.0 introduces breaking changes in the options structure. See
-              the migration guide below.
-            </p>
-            <div className="space-y-2 text-sm">
-              <div>
-                <strong>Old:</strong>{" "}
-                <code className="bg-muted px-1.5 py-0.5 rounded">
-                  clockType: &apos;12h&apos;
-                </code>
-              </div>
-              <div>
-                <strong>New:</strong>{" "}
-                <code className="bg-muted px-1.5 py-0.5 rounded">
-                  clock: &#123; type: &apos;12h&apos; &#125;
-                </code>
-              </div>
-            </div>
-          </div>
-        </div>
-      </InfoBox>
+      <Callout title="Breaking Changes" tone="tip">
+        <p>
+          v4.0.0 introduces breaking changes in the options structure. See
+          the migration guide below.
+        </p>
+        <p>
+          <strong>Old:</strong> <code>clockType: &apos;12h&apos;</code>
+        </p>
+        <p>
+          <strong>New:</strong>{" "}
+          <code>clock: &#123; type: &apos;12h&apos; &#125;</code>
+        </p>
+      </Callout>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-6 text-foreground flex items-center gap-2">
-          <Code2 className="h-6 w-6" />
-          Migration Guide
-        </h2>
+      <Section title="Migration Guide">
+        <h3>Option Mapping</h3>
+        <ApiTable
+          columns={[
+            { key: "v3", label: "v3.x" },
+            { key: "v4", label: "v4.0.0", mono: true },
+          ]}
+          rows={optionMapping.map((row) => ({
+            id: row.v3,
+            v3: <code>{row.v3}</code>,
+            v4: <code>{row.v4}</code>,
+          }))}
+          rowKey="id"
+        />
 
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Option Mapping
-            </h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-2 pr-4">v3.x</th>
-                    <th className="text-left py-2 px-4">v4.0.0</th>
-                  </tr>
-                </thead>
-                <tbody className="text-muted-foreground">
-                  <tr className="border-b border-border">
-                    <td className="py-2 pr-4">
-                      <code>clockType</code>
-                    </td>
-                    <td className="py-2 px-4">
-                      <code>clock.type</code>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-border">
-                    <td className="py-2 pr-4">
-                      <code>theme</code>
-                    </td>
-                    <td className="py-2 px-4">
-                      <code>ui.theme</code>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-border">
-                    <td className="py-2 pr-4">
-                      <code>mobile</code>
-                    </td>
-                    <td className="py-2 px-4">
-                      <code>ui.mobile</code>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-border">
-                    <td className="py-2 pr-4">
-                      <code>animation</code>
-                    </td>
-                    <td className="py-2 px-4">
-                      <code>ui.animation</code>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-border">
-                    <td className="py-2 pr-4">
-                      <code>okLabel</code>
-                    </td>
-                    <td className="py-2 px-4">
-                      <code>labels.ok</code>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-border">
-                    <td className="py-2 pr-4">
-                      <code>cancelLabel</code>
-                    </td>
-                    <td className="py-2 px-4">
-                      <code>labels.cancel</code>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-border">
-                    <td className="py-2 pr-4">
-                      <code>incrementMinutes</code>
-                    </td>
-                    <td className="py-2 px-4">
-                      <code>clock.incrementMinutes</code>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-border">
-                    <td className="py-2 pr-4">
-                      <code>focusTrap</code>
-                    </td>
-                    <td className="py-2 px-4">
-                      <code>behavior.focusTrap</code>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3 text-foreground">
-              Complete Migration Example
-            </h3>
-            <CodeBlock
-              code={`// v3.x
+        <h3>Complete Migration Example</h3>
+        <CodeBlock
+          code={`// v3.x
 const picker = new TimepickerUI(input, {
   clockType: '24h',
   theme: 'dark',
@@ -680,42 +486,21 @@ const picker = new TimepickerUI(input, {
     focusTrap: true
   }
 });`}
-              language="typescript"
-            />
-          </div>
-        </div>
-      </section>
+          language="typescript"
+        />
+      </Section>
 
-      <div className="rounded-lg border border-primary/20 bg-primary/5 p-6">
-        <h3 className="font-semibold mb-2 text-foreground flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
-          Ready to upgrade?
-        </h3>
-        <p className="text-muted-foreground mb-4">
+      <Callout title="Ready to upgrade?">
+        <p>
           Check out the full documentation to explore all new features and
           options.
         </p>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/docs/installation"
-            className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-          >
-            Installation Guide
-          </Link>
-          <Link
-            href="/docs/api/options"
-            className="inline-flex items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
-          >
-            API Reference
-          </Link>
-          <Link
-            href="/docs/changelog"
-            className="inline-flex items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
-          >
-            Full Changelog
-          </Link>
+        <div className={styles.links}>
+          <Link href="/docs/installation">Installation Guide</Link>
+          <Link href="/docs/api/options">API Reference</Link>
+          <Link href="/docs/changelog">Full Changelog</Link>
         </div>
-      </div>
+      </Callout>
     </div>
   );
 }
