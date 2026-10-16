@@ -2,7 +2,7 @@
   "name": "timepicker-ui-mcp",
   "version": "1.0.0",
   "mcpName": "io.github.pglejzer/timepicker-ui-mcp",
-  "description": "MCP server for timepicker-ui: exposes themes, UI modes, plugins, grouped options, events, the public API, config-snippet and custom-theme generation, and time validation as tools for Claude and other MCP clients.",
+  "description": "MCP server for timepicker-ui: options, events, themes, public API, snippets and time validation.",
   "type": "module",
   "bin": {
     "timepicker-ui-mcp": "build/index.js"
