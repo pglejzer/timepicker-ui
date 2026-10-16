@@ -1,0 +1,2880 @@
+{
+  "package": "timepicker-ui",
+  "version": "4.5.0",
+  "groups": [
+    "Color",
+    "Typography",
+    "Size",
+    "Spacing",
+    "Shape",
+    "Focus",
+    "Elevation",
+    "Motion",
+    "State",
+    "Backdrop",
+    "Wheel",
+    "Popover",
+    "Range",
+    "Timezone",
+    "Mobile"
+  ],
+  "variables": [
+    {
+      "name": "--tp-bg",
+      "group": "Color",
+      "default": "#ece6ee",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wheel-column-wrapper",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-surface",
+      "group": "Color",
+      "default": "#e6e0e9",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-clock-face"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-surface-hover",
+      "group": "Color",
+      "default": "#c8b3fd",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-hour",
+        "tp-ui-minutes",
+        "tp-ui-seconds",
+        "tp-ui-timezone-dropdown",
+        "tp-ui-timezone-option"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-input-bg",
+      "group": "Color",
+      "default": "#e6e0e9",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-hour",
+        "tp-ui-minutes",
+        "tp-ui-seconds",
+        "tp-ui-timezone-dropdown"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-text",
+      "group": "Color",
+      "default": "#1d1b20",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-dots",
+        "tp-ui-hour",
+        "tp-ui-input-ripple-wrapper",
+        "tp-ui-minutes",
+        "tp-ui-range-tab",
+        "tp-ui-seconds",
+        "tp-ui-timezone-dropdown",
+        "tp-ui-timezone-selected",
+        "tp-ui-value-tips",
+        "tp-ui-value-tips-24h"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-text-secondary",
+      "group": "Color",
+      "default": "#49454f",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-hour-text",
+        "tp-ui-minute-text",
+        "tp-ui-range-tab-label",
+        "tp-ui-second-text",
+        "tp-ui-select-time",
+        "tp-ui-timezone-arrow",
+        "tp-ui-timezone-label",
+        "tp-ui-timezone-menu",
+        "tp-ui-timezone-selected"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-text-disabled",
+      "group": "Color",
+      "default": "hsla(0,1%,61%,.6)",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-tips-disabled"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-text-type-time",
+      "group": "Color",
+      "default": "#49454f",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wrapper-type-time"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-text-icon",
+      "group": "Color",
+      "default": "#4e545a",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-keyboard-icon",
+        "tp-ui-keyboard-icon-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-am-pm-active",
+      "group": "Color",
+      "default": "#ffd8e4",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-pm"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-am-pm-text-selected",
+      "group": "Color",
+      "default": "#633b48",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-pm"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-am-pm-text-unselected",
+      "group": "Color",
+      "default": "#49454f",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-pm"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-primary",
+      "group": "Color",
+      "default": "#6750a4",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-cancel-btn",
+        "tp-ui-circle-hand",
+        "tp-ui-clear-btn",
+        "tp-ui-clock-face",
+        "tp-ui-clock-hand",
+        "tp-ui-dot",
+        "tp-ui-hour",
+        "tp-ui-keyboard-icon",
+        "tp-ui-minutes",
+        "tp-ui-ok-btn",
+        "tp-ui-pm",
+        "tp-ui-range-tab",
+        "tp-ui-range-tab-value",
+        "tp-ui-seconds",
+        "tp-ui-timezone-dropdown",
+        "tp-ui-timezone-option",
+        "tp-ui-wheel-column"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [
+        "--tp-wheel-selected-color"
+      ],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-on-primary",
+      "group": "Color",
+      "default": "#fff",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-value-tips",
+        "tp-ui-value-tips-24h"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-primary-container",
+      "group": "Color",
+      "default": "#eaddff",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-hour",
+        "tp-ui-minutes",
+        "tp-ui-seconds",
+        "tp-ui-timezone-option"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [
+        "--tp-wheel-highlight-bg"
+      ],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-on-primary-container",
+      "group": "Color",
+      "default": "#21005d",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-hour",
+        "tp-ui-input-ripple-wrapper",
+        "tp-ui-minutes",
+        "tp-ui-seconds",
+        "tp-ui-timezone-option"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-primary-rgb",
+      "group": "Color",
+      "default": "103,80,164",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-on-surface",
+      "group": "Color",
+      "default": "#1d1b20",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-range-tab-value"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [
+        "--tp-wheel-text-color"
+      ],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-on-surface-variant",
+      "group": "Color",
+      "default": "#49454f",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-on-surface-rgb",
+      "group": "Color",
+      "default": "29,27,32",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-surface-container",
+      "group": "Color",
+      "default": "#f3edf7",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-outline-variant",
+      "group": "Color",
+      "default": "#cac4d0",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [
+        "--tp-wheel-highlight-border"
+      ],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-tertiary-container",
+      "group": "Color",
+      "default": "#ffd8e4",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-on-tertiary-container",
+      "group": "Color",
+      "default": "#633b48",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-border",
+      "group": "Color",
+      "default": "#000",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-pm"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-outline",
+      "group": "Color",
+      "default": "#6750a4",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-timezone-dropdown"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-hover-bg",
+      "group": "Color",
+      "default": "#d6d6d6",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-backdrop",
+      "group": "Backdrop",
+      "default": "rgba(0,0,0,.5)",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-backdrop-filter",
+      "group": "Backdrop",
+      "default": "unset",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-dropdown-option-bg",
+      "group": "Timezone",
+      "default": "#fff",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-timezone-menu"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-dropdown-option-text",
+      "group": "Timezone",
+      "default": "#000",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-timezone-option"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-error",
+      "group": "Color",
+      "default": "#d50000",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-invalid-format",
+        "tp-ui-invalid-text"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-shadow",
+      "group": "Elevation",
+      "default": "unset",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-timezone-menu",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-border-radius",
+      "group": "Shape",
+      "default": "28px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-spacing-xs",
+      "group": "Spacing",
+      "default": "4px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-cancel-btn",
+        "tp-ui-compact-wheel-mode",
+        "tp-ui-wheel-column-wrapper",
+        "tp-ui-wheel-container"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-spacing-sm",
+      "group": "Spacing",
+      "default": "8px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-keyboard-icon",
+        "tp-ui-keyboard-icon-wrapper",
+        "tp-ui-range-header",
+        "tp-ui-range-mode",
+        "tp-ui-range-tab",
+        "tp-ui-wheel-container",
+        "tp-ui-wheel-mode"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-spacing-md",
+      "group": "Spacing",
+      "default": "12px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-compact-wheel-mode",
+        "tp-ui-range-header",
+        "tp-ui-range-mode",
+        "tp-ui-range-tab",
+        "tp-ui-wrapper",
+        "tp-ui-wrapper-type-time"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-spacing-lg",
+      "group": "Spacing",
+      "default": "16px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-range-header",
+        "tp-ui-wheel-container",
+        "tp-ui-wheel-highlight",
+        "tp-ui-wrapper-time"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-spacing-xl",
+      "group": "Spacing",
+      "default": "24px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-cancel-btn",
+        "tp-ui-clear-btn",
+        "tp-ui-footer",
+        "tp-ui-header",
+        "tp-ui-ok-btn",
+        "tp-ui-range-header",
+        "tp-ui-select-time"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-spacing-2xl",
+      "group": "Spacing",
+      "default": "36px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-header"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-spacing-3xl",
+      "group": "Spacing",
+      "default": "48px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-border-width",
+      "group": "Shape",
+      "default": "1px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-pm"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-border-width-thick",
+      "group": "Shape",
+      "default": "2px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-clock-face",
+        "tp-ui-hour",
+        "tp-ui-invalid-format",
+        "tp-ui-minutes",
+        "tp-ui-seconds",
+        "tp-ui-timezone-dropdown",
+        "tp-ui-timezone-option",
+        "tp-ui-wheel-highlight",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-border-width-half",
+      "group": "Shape",
+      "default": "0.3752px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-pm"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-border-width-pm",
+      "group": "Shape",
+      "default": "1.5008px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-pm"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-outline-width",
+      "group": "Focus",
+      "default": "2px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-timezone-option"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-outline-width-thick",
+      "group": "Focus",
+      "default": "3px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-cancel-btn",
+        "tp-ui-clear-btn",
+        "tp-ui-clock-face",
+        "tp-ui-hour",
+        "tp-ui-keyboard-icon",
+        "tp-ui-minutes",
+        "tp-ui-ok-btn",
+        "tp-ui-pm",
+        "tp-ui-range-tab",
+        "tp-ui-seconds",
+        "tp-ui-timezone-dropdown",
+        "tp-ui-timezone-option",
+        "tp-ui-wheel-column"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-outline-width-contrast",
+      "group": "Focus",
+      "default": "4px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-cancel-btn",
+        "tp-ui-clear-btn",
+        "tp-ui-clock-face",
+        "tp-ui-hour",
+        "tp-ui-keyboard-icon",
+        "tp-ui-minutes",
+        "tp-ui-ok-btn",
+        "tp-ui-pm",
+        "tp-ui-range-tab",
+        "tp-ui-seconds",
+        "tp-ui-timezone-dropdown",
+        "tp-ui-wheel-column"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-outline-offset",
+      "group": "Focus",
+      "default": "2px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-cancel-btn",
+        "tp-ui-clear-btn",
+        "tp-ui-clock-face",
+        "tp-ui-hour",
+        "tp-ui-keyboard-icon",
+        "tp-ui-minutes",
+        "tp-ui-ok-btn",
+        "tp-ui-pm",
+        "tp-ui-range-tab",
+        "tp-ui-seconds",
+        "tp-ui-timezone-dropdown",
+        "tp-ui-timezone-option",
+        "tp-ui-wheel-column"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-font-size-xs",
+      "group": "Typography",
+      "default": "12px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-select-time"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-font-size-sm",
+      "group": "Typography",
+      "default": "12.8px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-font-size-base",
+      "group": "Typography",
+      "default": "14px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-font-size-lg",
+      "group": "Typography",
+      "default": "16px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wrapper-type-time"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [
+        "--tp-wheel-font-size"
+      ],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-font-size-number",
+      "group": "Typography",
+      "default": "17.6px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-font-size-xl",
+      "group": "Typography",
+      "default": "51.2px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-hour",
+        "tp-ui-minutes",
+        "tp-ui-seconds"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-font-size-seconds-12h",
+      "group": "Typography",
+      "default": "36px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-has-seconds",
+        "tp-ui-hour",
+        "tp-ui-minutes",
+        "tp-ui-seconds",
+        "tp-ui-wrapper-time"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-font-size-seconds-24h",
+      "group": "Typography",
+      "default": "44px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-has-seconds",
+        "tp-ui-hour",
+        "tp-ui-minutes",
+        "tp-ui-seconds",
+        "tp-ui-wrapper-time-24h"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-range-tab-value-font-size-seconds",
+      "group": "Range",
+      "default": "14px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-has-seconds",
+        "tp-ui-range-tab-value"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-radius-sm",
+      "group": "Shape",
+      "default": "7px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-pm",
+        "tp-ui-timezone-dropdown",
+        "tp-ui-wheel-column"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-radius-md",
+      "group": "Shape",
+      "default": "8px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui--inline",
+        "tp-ui-hour",
+        "tp-ui-input-ripple-wrapper",
+        "tp-ui-input-wrapper",
+        "tp-ui-minutes",
+        "tp-ui-range-tab",
+        "tp-ui-seconds",
+        "tp-ui-timezone-menu",
+        "tp-ui-wheel-highlight",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-radius-lg",
+      "group": "Shape",
+      "default": "20px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-cancel-btn",
+        "tp-ui-clear-btn",
+        "tp-ui-ok-btn"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-radius-circle",
+      "group": "Shape",
+      "default": "50%",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-keyboard-icon-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-radius-full",
+      "group": "Shape",
+      "default": "100%",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-clock",
+      "group": "Size",
+      "default": "256px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-wrapper",
+      "group": "Size",
+      "default": "328px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-wrapper-expanded",
+      "group": "Size",
+      "default": "584px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-wrapper-portrait",
+      "group": "Size",
+      "default": "315px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-wrapper-landscape-height",
+      "group": "Size",
+      "default": "360px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-wrapper-mobile-height",
+      "group": "Size",
+      "default": "258px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-mobile-landscape-width",
+      "group": "Mobile",
+      "default": "328px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-mobile-landscape-height",
+      "group": "Mobile",
+      "default": "258px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-mobile-landscape-height-range",
+      "group": "Mobile",
+      "default": "287px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-range-mode",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-mobile-landscape-height-timezone",
+      "group": "Mobile",
+      "default": "326px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-tz-mode",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-input",
+      "group": "Size",
+      "default": "96px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-hour",
+        "tp-ui-input-wrapper",
+        "tp-ui-minutes",
+        "tp-ui-seconds"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-input-height",
+      "group": "Size",
+      "default": "80px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-hour",
+        "tp-ui-input-ripple-wrapper",
+        "tp-ui-minutes",
+        "tp-ui-seconds"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-input-mobile",
+      "group": "Size",
+      "default": "72px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-input-ripple-wrapper",
+        "tp-ui-input-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-hand-circle",
+      "group": "Size",
+      "default": "46px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-hand-circle-small",
+      "group": "Size",
+      "default": "36px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-hand-width",
+      "group": "Size",
+      "default": "2px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-hand-offset",
+      "group": "Size",
+      "default": "calc(50% - 1px)",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-hand-top",
+      "group": "Size",
+      "default": "4px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-hand-left",
+      "group": "Size",
+      "default": "1px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-button-min",
+      "group": "Size",
+      "default": "44px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-dot",
+      "group": "Size",
+      "default": "6px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-dots"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-dot-center",
+      "group": "Size",
+      "default": "8px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-am-pm-width",
+      "group": "Size",
+      "default": "52px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-pm"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-am-pm-height",
+      "group": "Size",
+      "default": "40px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-pm"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-am-pm-height-landscape",
+      "group": "Size",
+      "default": "44px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-pm"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-icon",
+      "group": "Size",
+      "default": "24px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-colon-width",
+      "group": "Size",
+      "default": "24px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-dots"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-colon-height",
+      "group": "Size",
+      "default": "48px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-input-seconds-12h",
+      "group": "Size",
+      "default": "64px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-has-seconds",
+        "tp-ui-hour",
+        "tp-ui-input-wrapper",
+        "tp-ui-minutes",
+        "tp-ui-seconds",
+        "tp-ui-wrapper-time"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-input-seconds-12h-narrow",
+      "group": "Size",
+      "default": "58px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-has-seconds",
+        "tp-ui-wrapper-time"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [
+        "--tp-size-input-seconds-12h"
+      ],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-colon-seconds-12h",
+      "group": "Size",
+      "default": "12px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-dots",
+        "tp-ui-has-seconds",
+        "tp-ui-wrapper-time"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-input-seconds-24h",
+      "group": "Size",
+      "default": "80px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-has-seconds",
+        "tp-ui-hour",
+        "tp-ui-input-wrapper",
+        "tp-ui-minutes",
+        "tp-ui-seconds",
+        "tp-ui-wrapper-time-24h"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-input-seconds-24h-narrow",
+      "group": "Size",
+      "default": "74px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-has-seconds",
+        "tp-ui-wrapper-time-24h"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [
+        "--tp-size-input-seconds-24h"
+      ],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-colon-seconds-24h",
+      "group": "Size",
+      "default": "20px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-dots",
+        "tp-ui-has-seconds",
+        "tp-ui-wrapper-time-24h"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-number",
+      "group": "Size",
+      "default": "32px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-inner-circle",
+      "group": "Size",
+      "default": "200px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-size-inline-min-height",
+      "group": "Size",
+      "default": "500px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui--inline",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-size-padding",
+      "group": "Size",
+      "default": "10px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-cancel-btn",
+        "tp-ui-clear-btn",
+        "tp-ui-hour",
+        "tp-ui-minutes",
+        "tp-ui-ok-btn",
+        "tp-ui-seconds"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-duration-fast",
+      "group": "Motion",
+      "default": "150ms",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-range-tab-value",
+        "tp-ui-wheel-column-wrapper",
+        "tp-ui-wheel-item"
+      ],
+      "usedByAttributes": [
+        "data-md3-ripple"
+      ],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-duration-base",
+      "group": "Motion",
+      "default": "200ms",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-range-tab-value"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-duration-slow",
+      "group": "Motion",
+      "default": "300ms",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-hour",
+        "tp-ui-minutes",
+        "tp-ui-seconds",
+        "tp-ui-view-switching",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-duration-slower",
+      "group": "Motion",
+      "default": "400ms",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-duration-slowest",
+      "group": "Motion",
+      "default": "450ms",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-duration-animation",
+      "group": "Motion",
+      "default": "350ms",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-duration-ripple",
+      "group": "Motion",
+      "default": "700ms",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [
+        "data-md3-ripple"
+      ],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-duration-ripple-fade",
+      "group": "Motion",
+      "default": "500ms",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [
+        "data-md3-ripple"
+      ],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-duration-reduced",
+      "group": "Motion",
+      "default": "0.01ms",
+      "declared": true,
+      "usedBy": [
+        "tp-ui"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-easing-standard",
+      "group": "Motion",
+      "default": "cubic-bezier(0.4,0,0.2,1)",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-range-tab-value",
+        "tp-ui-wheel-column-wrapper",
+        "tp-ui-wheel-item"
+      ],
+      "usedByAttributes": [
+        "data-md3-ripple"
+      ],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-easing-decelerate",
+      "group": "Motion",
+      "default": "cubic-bezier(0,0,0.2,1)",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-view-switching",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-easing-accelerate",
+      "group": "Motion",
+      "default": "cubic-bezier(0.4,0,1,1)",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-easing-ease",
+      "group": "Motion",
+      "default": "ease",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-hour",
+        "tp-ui-minutes",
+        "tp-ui-seconds"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-easing-linear",
+      "group": "Motion",
+      "default": "linear",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [
+        "data-md3-ripple"
+      ],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-z-backdrop",
+      "group": "Elevation",
+      "default": "5000",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-z-modal",
+      "group": "Elevation",
+      "default": "5001",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-z-keyboard-icon",
+      "group": "Elevation",
+      "default": "10",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-z-hidden",
+      "group": "Elevation",
+      "default": "-9999",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-opacity-hover",
+      "group": "State",
+      "default": "0.08",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-opacity-focus",
+      "group": "State",
+      "default": "0.12",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-opacity-active",
+      "group": "State",
+      "default": "0.16",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-opacity-disabled",
+      "group": "State",
+      "default": "0.38",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-ok-btn",
+        "tp-ui-range-mode",
+        "tp-ui-range-tab"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [
+        "--tp-wheel-disabled-opacity"
+      ],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-opacity-backdrop",
+      "group": "Backdrop",
+      "default": "0.6",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-state-hover-opacity",
+      "group": "State",
+      "default": "0.08",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [
+        "data-md3-ripple"
+      ],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-state-focus-opacity",
+      "group": "State",
+      "default": "0.1",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-keyboard-icon-wrapper"
+      ],
+      "usedByAttributes": [
+        "data-md3-ripple"
+      ],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-state-pressed-opacity",
+      "group": "State",
+      "default": "0.1",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [
+        "data-md3-ripple"
+      ],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-ripple-opacity",
+      "group": "State",
+      "default": "1",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [
+        "data-md3-ripple"
+      ],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-shadow-inline",
+      "group": "Elevation",
+      "default": "0 2px 8px rgba(0,0,0,.15)",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-shadow-focus",
+      "group": "Focus",
+      "default": "0 0 0 4px rgba(98,0,238,.2)",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-gap-sm",
+      "group": "Spacing",
+      "default": "8px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-gap-md",
+      "group": "Spacing",
+      "default": "12px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-position-hidden",
+      "group": "Spacing",
+      "default": "-10000px",
+      "declared": true,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": false
+    },
+    {
+      "name": "--tp-wheel-item-height",
+      "group": "Wheel",
+      "default": "44px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-compact-wheel-mode",
+        "tp-ui-wheel-column-wrapper",
+        "tp-ui-wheel-container",
+        "tp-ui-wheel-highlight",
+        "tp-ui-wheel-item",
+        "tp-ui-wheel-padding"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-visible-items",
+      "group": "Wheel",
+      "default": "5",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wheel-column-wrapper",
+        "tp-ui-wheel-container"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-column-width",
+      "group": "Wheel",
+      "default": "76px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wheel-column-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-separator-width",
+      "group": "Wheel",
+      "default": "20px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wheel-separator"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-column-width-seconds",
+      "group": "Wheel",
+      "default": "64px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-has-seconds",
+        "tp-ui-wheel-container"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [
+        "--tp-wheel-column-width"
+      ],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-separator-width-seconds",
+      "group": "Wheel",
+      "default": "16px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-has-seconds",
+        "tp-ui-wheel-container"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [
+        "--tp-wheel-separator-width"
+      ],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-landscape-footer-offset",
+      "group": "Wheel",
+      "default": "72px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-mobile-clock-wrapper",
+        "tp-ui-wheel-mode"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-landscape-compact-width",
+      "group": "Wheel",
+      "default": "360px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-compact-wheel-mode",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-landscape-compact-visible-items",
+      "group": "Wheel",
+      "default": "3",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-compact-wheel-mode",
+        "tp-ui-wheel-column-wrapper",
+        "tp-ui-wheel-container"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-highlight-bg",
+      "group": "Wheel",
+      "default": "var(--tp-primary-container,rgba(103,80,164,.08))",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wheel-highlight"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-highlight-border",
+      "group": "Wheel",
+      "default": "var(--tp-outline-variant,rgba(0,0,0,.12))",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wheel-highlight"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-text-color",
+      "group": "Wheel",
+      "default": "var(--tp-on-surface,#1d1b20)",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wheel-item",
+        "tp-ui-wheel-separator"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-selected-color",
+      "group": "Wheel",
+      "default": "var(--tp-primary,#6750a4)",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wheel-item"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-disabled-opacity",
+      "group": "Wheel",
+      "default": "var(--tp-opacity-disabled,0.38)",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wheel-item"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-font-size",
+      "group": "Wheel",
+      "default": "var(--tp-font-size-lg,16px)",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wheel-item"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-selected-font-size",
+      "group": "Wheel",
+      "default": "22px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-wheel-separator"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-gap",
+      "group": "Popover",
+      "default": "4px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-popover-anchored"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-edge-margin",
+      "group": "Popover",
+      "default": "4px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-popover-anchored"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-min-width",
+      "group": "Popover",
+      "default": "260px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-popover-anchored"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-max-width",
+      "group": "Popover",
+      "default": "328px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-popover-anchored"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-shadow",
+      "group": "Popover",
+      "default": "0 4px 24px rgba(0,0,0,.15)",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-font-family",
+      "group": "Typography",
+      "default": "\"Roboto\",sans-serif",
+      "declared": false,
+      "usedBy": [
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-btn-radius",
+      "group": "Shape",
+      "default": "var(--tp-radius-lg)",
+      "declared": false,
+      "usedBy": [
+        "tp-ui-cancel-btn",
+        "tp-ui-clear-btn",
+        "tp-ui-ok-btn"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-btn-text",
+      "group": "Color",
+      "default": "var(--tp-primary)",
+      "declared": false,
+      "usedBy": [
+        "tp-ui-cancel-btn",
+        "tp-ui-clear-btn",
+        "tp-ui-ok-btn",
+        "tp-ui-range-tab",
+        "tp-ui-range-tab-value"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-shadow-focus-ring",
+      "group": "Focus",
+      "default": "none",
+      "declared": false,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-cancel-btn",
+        "tp-ui-clear-btn",
+        "tp-ui-clock-face",
+        "tp-ui-hour",
+        "tp-ui-keyboard-icon",
+        "tp-ui-minutes",
+        "tp-ui-ok-btn",
+        "tp-ui-pm",
+        "tp-ui-range-tab",
+        "tp-ui-seconds",
+        "tp-ui-timezone-dropdown",
+        "tp-ui-wheel-column"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-focus-ring",
+      "group": "Focus",
+      "default": "var(--tp-primary)",
+      "declared": false,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-cancel-btn",
+        "tp-ui-clear-btn",
+        "tp-ui-clock-face",
+        "tp-ui-hour",
+        "tp-ui-keyboard-icon",
+        "tp-ui-minutes",
+        "tp-ui-ok-btn",
+        "tp-ui-pm",
+        "tp-ui-range-tab",
+        "tp-ui-seconds",
+        "tp-ui-timezone-dropdown",
+        "tp-ui-timezone-option",
+        "tp-ui-wheel-column"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-dropdown-option-hover-text",
+      "group": "Timezone",
+      "default": "var(--tp-dropdown-option-text)",
+      "declared": false,
+      "usedBy": [
+        "tp-ui-timezone-option"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-highlight-radius",
+      "group": "Wheel",
+      "default": "var(--tp-radius-md)",
+      "declared": false,
+      "usedBy": [
+        "tp-ui-wheel-highlight"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-fade-opacity",
+      "group": "Wheel",
+      "default": ".6",
+      "declared": false,
+      "usedBy": [
+        "tp-ui-wheel-column-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-wheel-ampm-column-width",
+      "group": "Wheel",
+      "default": "64px",
+      "declared": false,
+      "usedBy": [
+        "tp-ui-wheel-ampm",
+        "tp-ui-wheel-column-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-span",
+      "group": "Popover",
+      "default": "span-right",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-popover-anchored"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-anchor",
+      "group": "Popover",
+      "default": null,
+      "declared": false,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-popover-anchored"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": true,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-radius",
+      "group": "Popover",
+      "default": "var(--tp-border-radius)",
+      "declared": false,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-available-height",
+      "group": "Popover",
+      "default": null,
+      "declared": false,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover-constrained",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": true,
+      "read": true
+    },
+    {
+      "name": "--tp-scrollbar-gap",
+      "group": "Spacing",
+      "default": null,
+      "declared": false,
+      "usedBy": [],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": true,
+      "read": false
+    }
+  ],
+  "classes": [
+    {
+      "name": "tp-ui",
+      "example": ".tp-ui .sr-only"
+    },
+    {
+      "name": "tp-ui--inline",
+      "example": ".tp-ui--inline"
+    },
+    {
+      "name": "tp-ui-am",
+      "example": ".tp-ui-am"
+    },
+    {
+      "name": "tp-ui-body",
+      "example": ".tp-ui-body"
+    },
+    {
+      "name": "tp-ui-cancel-btn",
+      "example": ".tp-ui-cancel-btn"
+    },
+    {
+      "name": "tp-ui-circle-hand",
+      "example": ".tp-ui-circle-hand"
+    },
+    {
+      "name": "tp-ui-circle-hand-24h",
+      "example": ".tp-ui-circle-hand-24h"
+    },
+    {
+      "name": "tp-ui-clear-btn",
+      "example": ".tp-ui-clear-btn"
+    },
+    {
+      "name": "tp-ui-clock-face",
+      "example": ".tp-ui-clock-face"
+    },
+    {
+      "name": "tp-ui-clock-hand",
+      "example": ".tp-ui-clock-hand"
+    },
+    {
+      "name": "tp-ui-compact-wheel-mode",
+      "example": ".tp-ui--inline:not(.tp-ui-wheel-mode):not(.tp-ui-compact-wheel-mode) .tp-ui-wrapper.expanded"
+    },
+    {
+      "name": "tp-ui-dot",
+      "example": ".tp-ui-dot"
+    },
+    {
+      "name": "tp-ui-dots",
+      "example": ".tp-ui-dots"
+    },
+    {
+      "name": "tp-ui-footer",
+      "example": ".tp-ui-footer"
+    },
+    {
+      "name": "tp-ui-has-seconds",
+      "example": ".tp-ui-has-seconds .tp-ui-wrapper-time:not(.tp-ui-wrapper-time-24h) .tp-ui-input-wrapper"
+    },
+    {
+      "name": "tp-ui-header",
+      "example": ".tp-ui-header"
+    },
+    {
+      "name": "tp-ui-hour",
+      "example": ".tp-ui-hour"
+    },
+    {
+      "name": "tp-ui-hour-text",
+      "example": ".tp-ui-hour-text"
+    },
+    {
+      "name": "tp-ui-hour-time-12",
+      "example": ".tp-ui-clock-face:active .tp-ui-hour-time-12"
+    },
+    {
+      "name": "tp-ui-hour-time-24",
+      "example": ".tp-ui-clock-face:active .tp-ui-hour-time-24"
+    },
+    {
+      "name": "tp-ui-input",
+      "example": ".tp-ui-input"
+    },
+    {
+      "name": "tp-ui-input-ripple-wrapper",
+      "example": ".tp-ui-input-ripple-wrapper"
+    },
+    {
+      "name": "tp-ui-input-wrapper",
+      "example": ".tp-ui-input-wrapper"
+    },
+    {
+      "name": "tp-ui-invalid-format",
+      "example": ".tp-ui-invalid-format"
+    },
+    {
+      "name": "tp-ui-invalid-text",
+      "example": ".tp-ui-invalid-text"
+    },
+    {
+      "name": "tp-ui-keyboard-icon",
+      "example": ".tp-ui-keyboard-icon"
+    },
+    {
+      "name": "tp-ui-keyboard-icon-wrapper",
+      "example": ".tp-ui-footer.expanded .tp-ui-keyboard-icon-wrapper"
+    },
+    {
+      "name": "tp-ui-minute-text",
+      "example": ".tp-ui-minute-text"
+    },
+    {
+      "name": "tp-ui-minutes",
+      "example": ".tp-ui-minutes"
+    },
+    {
+      "name": "tp-ui-minutes-time",
+      "example": ".tp-ui-clock-face:active .tp-ui-minutes-time"
+    },
+    {
+      "name": "tp-ui-mobile-clock-wrapper",
+      "example": ".tp-ui-mobile-clock-wrapper"
+    },
+    {
+      "name": "tp-ui-modal",
+      "example": ".tp-ui-modal"
+    },
+    {
+      "name": "tp-ui-ok-btn",
+      "example": ".tp-ui-ok-btn"
+    },
+    {
+      "name": "tp-ui-open-element",
+      "example": ".tp-ui-open-element.disabled"
+    },
+    {
+      "name": "tp-ui-pm",
+      "example": ".tp-ui-pm"
+    },
+    {
+      "name": "tp-ui-pointer",
+      "example": ".tp-ui-keyboard-icon-wrapper:has(>.tp-ui-keyboard-icon:focus-visible):not(:where(.tp-ui-modal.tp-ui-pointer *)):before"
+    },
+    {
+      "name": "tp-ui-popover",
+      "example": ".tp-ui-modal.tp-ui-popover"
+    },
+    {
+      "name": "tp-ui-popover-anchored",
+      "example": ".tp-ui-modal.tp-ui-popover.tp-ui-popover-anchored"
+    },
+    {
+      "name": "tp-ui-popover-constrained",
+      "example": ".tp-ui-modal.tp-ui-popover-constrained .tp-ui-wrapper"
+    },
+    {
+      "name": "tp-ui-range-header",
+      "example": ".tp-ui-range-header"
+    },
+    {
+      "name": "tp-ui-range-mode",
+      "example": ".tp-ui-range-mode .tp-ui-wrapper.mobile"
+    },
+    {
+      "name": "tp-ui-range-tab",
+      "example": ".tp-ui-range-tab:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *))"
+    },
+    {
+      "name": "tp-ui-range-tab-label",
+      "example": ".tp-ui-range-tab-label"
+    },
+    {
+      "name": "tp-ui-range-tab-value",
+      "example": ".tp-ui-range-tab.active .tp-ui-range-tab-value:after"
+    },
+    {
+      "name": "tp-ui-second-text",
+      "example": ".tp-ui-second-text"
+    },
+    {
+      "name": "tp-ui-seconds",
+      "example": ".tp-ui-seconds"
+    },
+    {
+      "name": "tp-ui-select-time",
+      "example": ".tp-ui-wrapper.expanded .tp-ui-select-time"
+    },
+    {
+      "name": "tp-ui-timezone",
+      "example": ".tp-ui-timezone"
+    },
+    {
+      "name": "tp-ui-timezone-arrow",
+      "example": ".tp-ui-timezone-dropdown[aria-expanded=true] .tp-ui-timezone-arrow"
+    },
+    {
+      "name": "tp-ui-timezone-dropdown",
+      "example": ".tp-ui-timezone-dropdown:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *))"
+    },
+    {
+      "name": "tp-ui-timezone-label",
+      "example": ".tp-ui-timezone-label"
+    },
+    {
+      "name": "tp-ui-timezone-menu",
+      "example": ".tp-ui-timezone-dropdown[aria-expanded=true] .tp-ui-timezone-menu"
+    },
+    {
+      "name": "tp-ui-timezone-option",
+      "example": ".tp-ui-timezone-option[data-focused=true]:not(:where(.tp-ui-modal.tp-ui-pointer *))"
+    },
+    {
+      "name": "tp-ui-timezone-selected",
+      "example": ".tp-ui-timezone-dropdown:focus .tp-ui-timezone-selected"
+    },
+    {
+      "name": "tp-ui-tips-animation",
+      "example": ".tp-ui-tips-animation"
+    },
+    {
+      "name": "tp-ui-tips-disabled",
+      "example": ".tp-ui-tips-disabled"
+    },
+    {
+      "name": "tp-ui-tips-wrapper",
+      "example": ".tp-ui-tips-wrapper"
+    },
+    {
+      "name": "tp-ui-tips-wrapper-24h",
+      "example": ".tp-ui-tips-wrapper-24h"
+    },
+    {
+      "name": "tp-ui-tips-wrapper-24h-disabled",
+      "example": ".tp-ui-tips-wrapper-24h-disabled"
+    },
+    {
+      "name": "tp-ui-tz-mode",
+      "example": ".tp-ui-tz-mode .tp-ui-wrapper.mobile"
+    },
+    {
+      "name": "tp-ui-value-tips",
+      "example": ".tp-ui-value-tips"
+    },
+    {
+      "name": "tp-ui-value-tips-24h",
+      "example": ".tp-ui-value-tips-24h"
+    },
+    {
+      "name": "tp-ui-view-switching",
+      "example": ".tp-ui-view-switching .tp-ui-wrapper>*"
+    },
+    {
+      "name": "tp-ui-wheel-ampm",
+      "example": ".tp-ui-wheel-ampm"
+    },
+    {
+      "name": "tp-ui-wheel-column",
+      "example": ".tp-ui-wheel-column:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *))"
+    },
+    {
+      "name": "tp-ui-wheel-column-wrapper",
+      "example": ".tp-ui-wheel-column-wrapper"
+    },
+    {
+      "name": "tp-ui-wheel-container",
+      "example": ".tp-ui-wheel-container"
+    },
+    {
+      "name": "tp-ui-wheel-highlight",
+      "example": ".tp-ui-wheel-highlight"
+    },
+    {
+      "name": "tp-ui-wheel-item",
+      "example": ".tp-ui-wheel-item"
+    },
+    {
+      "name": "tp-ui-wheel-mode",
+      "example": ".tp-ui--inline:not(.tp-ui-wheel-mode):not(.tp-ui-compact-wheel-mode) .tp-ui-wrapper.expanded"
+    },
+    {
+      "name": "tp-ui-wheel-padding",
+      "example": ".tp-ui-wheel-padding"
+    },
+    {
+      "name": "tp-ui-wheel-separator",
+      "example": ".tp-ui-wheel-separator"
+    },
+    {
+      "name": "tp-ui-wrapper",
+      "example": ".tp-ui-wrapper"
+    },
+    {
+      "name": "tp-ui-wrapper-btn",
+      "example": ".tp-ui-wrapper-btn"
+    },
+    {
+      "name": "tp-ui-wrapper-time",
+      "example": ".tp-ui-header.mobile.expanded .tp-ui-wrapper-time.mobile"
+    },
+    {
+      "name": "tp-ui-wrapper-time-24h",
+      "example": ".tp-ui-wrapper-time-24h"
+    },
+    {
+      "name": "tp-ui-wrapper-type-time",
+      "example": ".tp-ui-wrapper-type-time"
+    }
+  ],
+  "modifiers": [
+    {
+      "name": "active",
+      "example": ".tp-ui-value-tips-24h.active"
+    },
+    {
+      "name": "at-end",
+      "example": ".tp-ui-wheel-column-wrapper.at-end:after"
+    },
+    {
+      "name": "at-start",
+      "example": ".tp-ui-wheel-column-wrapper.at-start:before"
+    },
+    {
+      "name": "disabled",
+      "example": ".tp-ui-open-element.disabled"
+    },
+    {
+      "name": "expanded",
+      "example": ".tp-ui-wrapper.expanded"
+    },
+    {
+      "name": "is-center",
+      "example": ".tp-ui-wheel-item.is-center"
+    },
+    {
+      "name": "is-disabled",
+      "example": ".tp-ui-wheel-item.is-disabled"
+    },
+    {
+      "name": "is-dragging",
+      "example": ".tp-ui-wheel-column.is-dragging"
+    },
+    {
+      "name": "mobile",
+      "example": ".tp-ui-wrapper.mobile"
+    },
+    {
+      "name": "none",
+      "example": ".tp-ui-tips-wrapper-24h.none"
+    },
+    {
+      "name": "removed",
+      "example": ".tp-ui-modal.removed"
+    },
+    {
+      "name": "scale-in",
+      "example": ".tp-ui-clock-face.scale-in"
+    },
+    {
+      "name": "show",
+      "example": ".tp-ui-modal.show"
+    }
+  ],
+  "themes": [
+    {
+      "name": "ai",
+      "tokens": {
+        "--tp-bg": "#f3f4f6",
+        "--tp-primary": "#2563eb",
+        "--tp-surface": "#e5e7eb",
+        "--tp-text": "#111827"
+      }
+    },
+    {
+      "name": "basic",
+      "tokens": {
+        "--tp-bg": "#ece6ee",
+        "--tp-primary": "#6750a4",
+        "--tp-surface": "#e6e0e9",
+        "--tp-text": "#1d1b20"
+      }
+    },
+    {
+      "name": "blueprint",
+      "tokens": {
+        "--tp-bg": "#e8f1fb",
+        "--tp-primary": "#0b4ea2",
+        "--tp-surface": "#f3f8fe",
+        "--tp-text": "#0a2e6e"
+      }
+    },
+    {
+      "name": "blueprint-dark",
+      "tokens": {
+        "--tp-bg": "#0a2747",
+        "--tp-primary": "#56c5ff",
+        "--tp-surface": "#103257",
+        "--tp-text": "#dbeafe"
+      }
+    },
+    {
+      "name": "crane",
+      "tokens": {
+        "--tp-bg": "#5d1049",
+        "--tp-primary": "#e30425",
+        "--tp-surface": "#71135c",
+        "--tp-text": "#fff"
+      }
+    },
+    {
+      "name": "crane-straight",
+      "tokens": {
+        "--tp-bg": "#5d1049",
+        "--tp-primary": "#e30425",
+        "--tp-surface": "#71135c",
+        "--tp-text": "#fff"
+      }
+    },
+    {
+      "name": "cyberpunk",
+      "tokens": {
+        "--tp-bg": "#0f0c29",
+        "--tp-primary": "#00f0ff",
+        "--tp-surface": "#1a1a2e",
+        "--tp-text": "#f8f8ff"
+      }
+    },
+    {
+      "name": "dark",
+      "tokens": {
+        "--tp-bg": "#1c1b1f",
+        "--tp-primary": "#bb86fc",
+        "--tp-surface": "#2c2b30",
+        "--tp-text": "#e5e5e5"
+      }
+    },
+    {
+      "name": "glassmorphic",
+      "tokens": {
+        "--tp-bg": "hsla(0,0%,100%,.12)",
+        "--tp-primary": "hsla(0,0%,100%,.75)",
+        "--tp-surface": "hsla(0,0%,100%,.18)",
+        "--tp-text": "hsla(0,0%,100%,.95)"
+      }
+    },
+    {
+      "name": "m2",
+      "tokens": {
+        "--tp-bg": "#fff",
+        "--tp-primary": "#6200ee",
+        "--tp-surface": "#e0e0e0",
+        "--tp-text": "#000"
+      }
+    },
+    {
+      "name": "m3-green",
+      "tokens": {
+        "--tp-bg": "#e5eadc",
+        "--tp-primary": "#386a20",
+        "--tp-surface": "#dfe4d6",
+        "--tp-text": "#1a1c18"
+      }
+    },
+    {
+      "name": "pastel",
+      "tokens": {
+        "--tp-bg": "#fdf6f0",
+        "--tp-primary": "#ffb6b9",
+        "--tp-surface": "#fae3d9",
+        "--tp-text": "#3b3b3b"
+      }
+    }
+  ]
+}
