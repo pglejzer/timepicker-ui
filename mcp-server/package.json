@@ -1,6 +1,6 @@
 {
   "name": "timepicker-ui-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "mcpName": "io.github.pglejzer/timepicker-ui-mcp",
   "description": "MCP server for timepicker-ui: options, events, themes, public API, snippets and time validation.",
   "type": "module",
