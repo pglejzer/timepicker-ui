@@ -1,0 +1,17 @@
+.related {
+  max-width: var(--measure);
+  margin: var(--space-3) 0 var(--space-4);
+  color: var(--ink-2);
+  font-size: var(--text-meta);
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.label,
+.separator {
+  color: var(--ink-3);
+}
+
+.related a {
+  text-decoration-line: underline;
+}

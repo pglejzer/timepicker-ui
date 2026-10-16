@@ -1,0 +1,161 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-bottom: 1px solid var(--ink);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--header-h);
+  padding: 0 var(--space-2) 0 var(--gutter);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.nav {
+  display: none;
+}
+
+.navLink {
+  padding: var(--space-2) 0;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+.navLink[aria-current="page"] {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.55em;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+.search {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.searchLabel,
+.kbd,
+.version,
+.textLink {
+  display: none;
+}
+
+.iconButton {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.themeButton {
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .bar {
+    gap: var(--space-6);
+    padding: 0 var(--gutter);
+  }
+
+  .nav {
+    display: flex;
+    gap: var(--space-5);
+  }
+
+  .actions {
+    gap: var(--space-4);
+  }
+
+  .version {
+    display: inline;
+    color: var(--ink-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    text-decoration: none;
+  }
+
+  .version:hover {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+
+  .textLink {
+    display: inline;
+  }
+
+  .themeButton {
+    display: inline-grid;
+  }
+
+  .menuButton {
+    display: none;
+  }
+}
+
+@media (min-width: 72rem) {
+  .search {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: auto;
+    min-width: 15rem;
+    height: var(--control-h);
+    padding: 0 var(--space-2);
+    border: 1px solid var(--ink-3);
+    border-radius: var(--radius-1);
+    color: var(--ink-3);
+  }
+
+  .search:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .searchLabel {
+    display: inline;
+    margin-right: auto;
+  }
+
+  .kbd {
+    display: inline;
+    padding: 0 var(--space-1);
+    border: 1px solid var(--ink-3);
+    border-radius: var(--radius-1);
+    font-size: var(--text-small);
+  }
+}

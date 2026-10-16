@@ -1,0 +1,29 @@
+.breadcrumb {
+  display: none;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-3);
+  font-size: var(--text-small);
+}
+
+.list li + li::before {
+  content: "/";
+  margin: 0 var(--space-2);
+}
+
+.list a {
+  color: var(--ink-2);
+}
+
+@media (min-width: 60rem) {
+  .breadcrumb {
+    display: block;
+    padding-top: var(--space-6);
+  }
+}

@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/lib/seo-routes";
+import { LIBRARY_VERSION } from "@/lib/site";
 
 /**
  * Site-wide SoftwareApplication structured data. Rendered once from the root
@@ -12,7 +13,7 @@ export function SoftwareApplicationJsonLd() {
     name: "timepicker-ui",
     applicationCategory: "DeveloperApplication",
     operatingSystem: "Any",
-    softwareVersion: "4.5.0",
+    softwareVersion: LIBRARY_VERSION,
     description:
       "Zero-dependency, framework-agnostic, SSR-safe time picker with analog clock, scroll wheel and compact-wheel modes, 12 themes, full TypeScript types and tree-shakeable plugins.",
     url: SITE_URL,
@@ -149,6 +150,11 @@ const SEGMENT_LABELS: Record<string, string> = {
   callbacks: "Callbacks",
   controlled: "Controlled",
   forms: "Forms",
+  guides: "Guides",
+  ai: "Use with AI",
+  mcp: "MCP Server",
+  "css-variables": "CSS Variables",
+  "css-classes": "CSS Classes",
   "bundle-stats": "Bundle Size Analysis",
 };
 
