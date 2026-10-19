@@ -46,3 +46,14 @@
 .tp-ui--inline:not(.tp-ui-wheel-mode):not(.tp-ui-compact-wheel-mode) .tp-ui-wrapper.expanded {
   min-height: var(--tp-size-inline-min-height) !important;
 }
+
+.tp-ui--inline.tp-ui--embedded {
+  .tp-ui-wrapper,
+  .tp-ui-wrapper.mobile {
+    box-shadow: none !important;
+  }
+}
+
+.tp-ui--inline.tp-ui--embedded:not(.tp-ui-wheel-mode):not(.tp-ui-compact-wheel-mode) .tp-ui-wrapper.expanded {
+  min-height: auto !important;
+}

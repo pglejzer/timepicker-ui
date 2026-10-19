@@ -27,3 +27,7 @@ export function isPopoverMode(options: Opts): boolean {
 export function isInlineMode(options: Opts): boolean {
   return !!options.ui.inline?.enabled;
 }
+
+export function isEmbeddedInlineMode(options: Opts): boolean {
+  return !!options.ui.inline?.enabled && !!options.ui.inline.embedded;
+}

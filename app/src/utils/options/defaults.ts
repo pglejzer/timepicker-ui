@@ -103,6 +103,7 @@ export const DEFAULT_OPTIONS: Required<TimepickerOptions> = {
     enabled: false,
     minDuration: undefined,
     maxDuration: undefined,
+    linked: true,
     fromLabel: 'From',
     toLabel: 'To',
   },

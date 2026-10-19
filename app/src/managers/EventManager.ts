@@ -34,6 +34,10 @@ export default class EventManager {
     this.buttonHandlers.handleOkButton();
   }
 
+  syncOkButton(): void {
+    this.buttonHandlers.syncOkButton();
+  }
+
   handleBackdropClick(): void {
     this.modalHandlers.handleBackdropClick();
   }

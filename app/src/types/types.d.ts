@@ -1,3 +1,13 @@
+import type { PluginManager } from '../core/PluginRegistry';
+import type { RangeTimeState } from './options';
+
+/** Structural contract core uses to reach the range plugin without importing it. */
+export interface RangeApi extends PluginManager {
+  setRange(from: string, to: string, updateInput: boolean): boolean;
+  getRange(): RangeTimeState;
+  setActivePart(part: 'from' | 'to', options?: { focus?: boolean }): boolean;
+}
+
 /** Payload when timepicker opens */
 export type OpenEventData = {
   hour: string;
@@ -288,6 +298,8 @@ export type OptionTypes = {
     showButtons?: boolean;
     /** @default false */
     autoUpdate?: boolean;
+    /** @default false */
+    embedded?: boolean;
   };
   /** Additional CSS class */
   cssClass?: string;

@@ -5,11 +5,13 @@ import { EventEmitter, type TimepickerEventMap } from '../utils/EventEmitter';
 import { generateUUID } from '../utils/config';
 import { getInputValue } from '../utils/input';
 import { mergeOptions } from '../utils/options';
-import { getTimeFormat, isCompactWheelMode } from '../utils/options/predicates';
+import { getTimeFormat, isCompactWheelMode, isEmbeddedInlineMode } from '../utils/options/predicates';
 import { clockDegrees, formatTime, type ClockType, type TimeValue } from '../utils/time/parse';
 import { sanitizeTimeInput } from '../utils/validation';
-import type { TimepickerOptions } from '../types/options';
-import type { UpdateEventData } from '../types/types';
+import type { TimepickerOptions, RangeTimeState } from '../types/options';
+import type { RangeApi, UpdateEventData } from '../types/types';
+import { PluginRegistry } from '../core/PluginRegistry';
+import { missingPluginError } from './LifecycleCallbacks';
 import { isDocument, isNode } from '../utils/node';
 import { getInlineContainer } from '../utils/dom';
 import {
@@ -46,7 +48,9 @@ export default class TimepickerUI {
 
     const mergedOptions = mergeOptions(options || {});
 
-    if (mergedOptions.ui.inline?.enabled && typeof options?.behavior?.focusTrap === 'undefined') {
+    if (isEmbeddedInlineMode(mergedOptions)) {
+      mergedOptions.behavior.focusTrap = false;
+    } else if (mergedOptions.ui.inline?.enabled && typeof options?.behavior?.focusTrap === 'undefined') {
       mergedOptions.behavior.focusTrap = false;
     }
 
@@ -341,6 +345,79 @@ export default class TimepickerUI {
     syncClockVisual(this.core, this.managers, parsed);
   }
 
+  private resolveRangeApi(): RangeApi | null {
+    if (!PluginRegistry.has('range')) {
+      this.emitter.emit('error', missingPluginError('RangePlugin'));
+      return null;
+    }
+    if (!this.core.options.range?.enabled) {
+      this.emitter.emit('error', { error: 'range.enabled is false: enable range mode to use the range API' });
+      return null;
+    }
+    const api = this.managers.getPlugin<RangeApi>('range');
+    if (!api) {
+      this.emitter.emit('error', missingPluginError('RangePlugin'));
+      return null;
+    }
+    return api;
+  }
+
+  /**
+   * Set both ends of the range. Each time uses the `setValue` format ("14:30" or "2:30 PM").
+   * Works open or closed. With `updateInput` the input shows "from - to".
+   * Requires RangePlugin and `range.enabled`; otherwise emits `error` and does nothing.
+   * Invalid times emit `error` and leave the range unchanged.
+   * @param range - `{ from, to }` times.
+   * @param updateInput - Write the range to the input. Default `true`.
+   */
+  public setRange(range: { from: string; to: string }, updateInput: boolean = true): void {
+    if (this.core.isDestroyed) return;
+
+    const api = this.resolveRangeApi();
+    if (!api) return;
+
+    if (!this.core.isInitialized) {
+      this.create();
+      if (this.core.isDestroyed) return;
+    }
+
+    if (!api.setRange(range?.from, range?.to, updateInput)) {
+      this.emitter.emit('error', {
+        error: `Invalid range time. Expected "from" and "to" in the setValue format, got "${range?.from}" and "${range?.to}"`,
+      });
+    }
+  }
+
+  /**
+   * Read both ends of the range.
+   * @returns `{ from, to }`, or `null` without RangePlugin / `range.enabled`.
+   */
+  public getRange(): RangeTimeState | null {
+    if (this.core.isDestroyed) return null;
+    return this.resolveRangeApi()?.getRange() ?? null;
+  }
+
+  /**
+   * Switch the clock to the given end without moving focus.
+   * Updates the tabs and emits `range:switch`. With `range.linked` (default), switching to "to"
+   * is refused until From is complete.
+   * @returns `true` when the active end changed or was already that end.
+   */
+  public setActivePart(part: 'from' | 'to'): boolean {
+    if (this.core.isDestroyed) return false;
+    return this.resolveRangeApi()?.setActivePart(part, { focus: false }) ?? false;
+  }
+
+  /**
+   * Re-apply `clock.disabledTime` and `clock.isTimeDisabled` without re-rendering: clears the
+   * `isTimeDisabled` cache and updates disabled marks on the clock or wheel and the OK button.
+   * Safe to call while closed (the next open uses fresh results).
+   */
+  public refreshDisabledTime(): void {
+    if (this.core.isDestroyed) return;
+    this.lifecycle.refreshDisabledTime();
+  }
+
   /**
    * Get the root element of the timepicker instance.
    * @returns - The HTMLElement that serves as the root of the timepicker instance.
@@ -425,28 +502,28 @@ export default class TimepickerUI {
    * Subscribe to a timepicker event with a handler function.
    * @param event - The name of the event to subscribe to.
    * @param handler - The function to handle the event.
-   * @returns - void
+   * @returns A function that removes this handler. Calling it more than once is a no-op.
    */
   public on<K extends keyof TimepickerEventMap>(
     event: K,
     handler: (data: TimepickerEventMap[K]) => void,
-  ): void {
-    if (this.core.isDestroyed) return;
-    this.emitter.on(event, handler);
+  ): () => void {
+    if (this.core.isDestroyed) return () => {};
+    return this.emitter.on(event, handler);
   }
 
   /**
    * Subscribe to a timepicker event with a handler function that will be called only once.
    * @param event - The name of the event to subscribe to.
    * @param handler - The function to handle the event.
-   * @returns - void
+   * @returns A function that removes the handler before it runs. Calling it more than once is a no-op.
    */
   public once<K extends keyof TimepickerEventMap>(
     event: K,
     handler: (data: TimepickerEventMap[K]) => void,
-  ): void {
-    if (this.core.isDestroyed) return;
-    this.emitter.once(event, handler);
+  ): () => void {
+    if (this.core.isDestroyed) return () => {};
+    return this.emitter.once(event, handler);
   }
 
   /**

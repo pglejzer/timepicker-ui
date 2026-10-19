@@ -30,6 +30,13 @@ import type {
   WheelScrollEndEventData,
 } from './types';
 
+/** A time of day passed to `clock.isTimeDisabled`. `hour` is always 0-23. */
+export interface TimeOfDay {
+  hour: number;
+  minutes: number;
+  seconds: number;
+}
+
 /**
  * Clock behavior configuration
  */
@@ -127,6 +134,17 @@ export interface ClockOptions {
      */
     interval?: string | string[];
   };
+
+  /**
+   * @description Return `true` to disable a time. Combined with `disabledTime` as a union: a time is
+   * disabled when either says so. `hour` is 0-23 in both clock types; `seconds` is 0 unless
+   * `showSeconds` is on. An hour or minute is disabled when every time inside it is disabled.
+   * Results are cached; call `refreshDisabledTime()` after the data behind the function changes.
+   * If the function throws, that time counts as enabled and the error is rethrown asynchronously.
+   * @example
+   * isTimeDisabled: ({ hour }) => hour < 9 || hour >= 17
+   */
+  isTimeDisabled?: (time: TimeOfDay) => boolean;
 
   /**
    * @description Time the picker shows while the input is empty. `'now'` shows the current time and also writes it to the input when the picker is created, replacing a value that is already there.
@@ -332,6 +350,15 @@ export interface UIOptions {
      */
     showButtons?: boolean;
     autoUpdate?: boolean;
+    /**
+     * @description Render the inline picker as part of a host component instead of a standalone card:
+     * the root gets `role="group"` with an accessible name (no `role="dialog"`, no `aria-modal`), the card
+     * has no shadow and no minimum height, focus is not trapped and the wrapper does not take focus on
+     * mount. Use it when the picker sits inside your own dialog, popover or form.
+     * Ignored unless `enabled` is true.
+     * @default false
+     */
+    embedded?: boolean;
   };
 }
 
@@ -729,6 +756,22 @@ export interface WheelOptions {
   ignoreOutsideClick?: boolean;
 }
 
+/** A time of one range end, as `getValue()` returns it. */
+export interface RangeTimeValue {
+  hour: string;
+  minutes: string;
+  /** Present only with `clock.showSeconds`. */
+  seconds?: string;
+  /** `AM` / `PM` in 12h mode. */
+  type?: string;
+}
+
+/** Both ends of a range. An end is `null` until it has a full time. */
+export interface RangeTimeState {
+  from: RangeTimeValue | null;
+  to: RangeTimeValue | null;
+}
+
 /**
  * Range mode configuration (opt-in)
  */
@@ -748,6 +791,15 @@ export interface RangeOptions {
    * @description Maximum duration in minutes
    */
   maxDuration?: number;
+
+  /**
+   * @description When false, From and To are independent: To times before From are not disabled,
+   * the To tab is enabled from the start, and `minDuration` / `maxDuration` are not checked, so a
+   * range may cross midnight. Use it when the host validates the range with dates.
+   * `range:validation` still fires and reports `valid: true` once both ends are complete.
+   * @default true
+   */
+  linked?: boolean;
 
   /**
    * @description Label for "from" segment

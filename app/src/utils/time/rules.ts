@@ -15,6 +15,7 @@ export interface DisabledRules {
   seconds?: ReadonlyArray<string | number>;
   intervals?: ReadonlyArray<string>;
   clockType: ClockType;
+  predicate?: (secondOfDay: number) => boolean;
 }
 
 export interface IntervalRange {
@@ -125,16 +126,19 @@ const inList = (
   return false;
 };
 
+const isBlocked = (rules: DisabledRules, ranges: ReadonlyArray<IntervalRange>, second: number): boolean =>
+  inRanges(ranges, second) || (rules.predicate !== undefined && rules.predicate(second));
+
 const isMinuteCovered = (
   rules: DisabledRules,
   ranges: ReadonlyArray<IntervalRange>,
   minuteStart: number,
   showSeconds: boolean,
 ): boolean => {
-  if (!showSeconds) return inRanges(ranges, minuteStart);
+  if (!showSeconds) return isBlocked(rules, ranges, minuteStart);
 
   for (let second = 0; second < SECONDS_PER_MINUTE; second++) {
-    if (!inList(rules.seconds, second) && !inRanges(ranges, minuteStart + second)) return false;
+    if (!inList(rules.seconds, second) && !isBlocked(rules, ranges, minuteStart + second)) return false;
   }
   return true;
 };
@@ -148,8 +152,8 @@ export function isSecondDisabled(rules: DisabledRules | null, time: TimeValue): 
   ) {
     return true;
   }
-  if (!rules.intervals?.length) return false;
-  return inRanges(toRanges(rules.intervals, rules.clockType), timeToSeconds(time, rules.clockType));
+  if (!rules.intervals?.length && !rules.predicate) return false;
+  return isBlocked(rules, toRanges(rules.intervals, rules.clockType), timeToSeconds(time, rules.clockType));
 }
 
 export function isMinuteDisabled(
@@ -172,7 +176,7 @@ export function isHourDisabled(
 ): boolean {
   if (!rules) return false;
   if (inList(rules.hours, time.hour)) return true;
-  if (!rules.intervals?.length) return false;
+  if (!rules.intervals?.length && !rules.predicate) return false;
 
   const ranges = toRanges(rules.intervals, rules.clockType);
   const hourStart = hourToSeconds(time, rules.clockType);

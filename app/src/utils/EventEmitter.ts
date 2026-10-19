@@ -79,20 +79,32 @@ type TaggedHandler = EventHandler<unknown> & { __originalHandler?: EventHandler<
 export class EventEmitter<EventMap extends Record<string, unknown> = TimepickerEventMap> {
   private events = new Map<keyof EventMap, Set<EventHandler<unknown>>>();
 
-  on<K extends keyof EventMap>(event: K, handler: EventHandler<EventMap[K]>): void {
+  /**
+   * Subscribe to an event.
+   * @returns A function that removes this handler. Calling it more than once is a no-op.
+   */
+  on<K extends keyof EventMap>(event: K, handler: EventHandler<EventMap[K]>): () => void {
     if (!this.events.has(event)) {
       this.events.set(event, new Set());
     }
-    this.events.get(event)!.add(handler as EventHandler<unknown>);
+    const registered = handler as EventHandler<unknown>;
+    this.events.get(event)!.add(registered);
+    return () => {
+      this.events.get(event)?.delete(registered);
+    };
   }
 
-  once<K extends keyof EventMap>(event: K, handler: EventHandler<EventMap[K]>): void {
+  /**
+   * Subscribe to an event for one call.
+   * @returns A function that removes the handler before it runs. Calling it more than once is a no-op.
+   */
+  once<K extends keyof EventMap>(event: K, handler: EventHandler<EventMap[K]>): () => void {
     const wrapped: TaggedHandler = ((data: unknown) => {
       handler(data as EventMap[K]);
       this.events.get(event)?.delete(wrapped);
     }) as TaggedHandler;
     wrapped.__originalHandler = handler as EventHandler<unknown>;
-    this.on(event, wrapped as EventHandler<EventMap[K]>);
+    return this.on(event, wrapped as EventHandler<EventMap[K]>);
   }
 
   off<K extends keyof EventMap>(event: K, handler?: EventHandler<EventMap[K]>): void {
