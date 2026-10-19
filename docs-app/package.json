@@ -17,7 +17,7 @@
     "react-dom": "19.3.0",
     "recharts": "^3.7.0",
     "timepicker-ui": "4.6.0",
-    "timepicker-ui-react": "1.6.0"
+    "timepicker-ui-react": "1.6.1"
   },
   "devDependencies": {
     "@types/node": "^20",
