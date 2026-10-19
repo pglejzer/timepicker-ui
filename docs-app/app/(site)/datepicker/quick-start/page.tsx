@@ -13,7 +13,6 @@ const JS_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const picker = new DatepickerUI("#date", {
-  calendar: { minDate: "today" },
   ui: { theme: "m3-green" },
   callbacks: {
     onConfirm: ({ value }) => console.log(value),

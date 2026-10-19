@@ -29,7 +29,6 @@ const FEATURES = [
 ];
 
 const QUICK_START: DatepickerOptions = {
-  calendar: { minDate: "today" },
   ui: { theme: "m3-green" },
 };
 
@@ -37,7 +36,6 @@ const QUICK_START_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const picker = new DatepickerUI("#date", {
-  calendar: { minDate: "today" },
   ui: { theme: "m3-green" },
   callbacks: {
     onConfirm: ({ value }) => console.log(value),
@@ -73,8 +71,8 @@ export default function DatepickerPage() {
 
       <h2>Try it</h2>
       <p>
-        The demo uses the quick start options: days before today are disabled and the <code>m3-green</code> theme
-        is applied. Pick another theme from the menu, or switch the preview to an inline calendar.
+        The demo uses the quick start options with the <code>m3-green</code> theme. Pick another theme from the
+        menu, or switch the preview to an inline calendar.
       </p>
       <DatepickerExample label="Quick start" options={QUICK_START} code={QUICK_START_CODE} themeControl />
 
