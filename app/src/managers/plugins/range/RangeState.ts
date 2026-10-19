@@ -15,6 +15,7 @@ export class RangeState {
   private readonly maxDuration: number | undefined;
   private readonly emitter: EventEmitter<TimepickerEventMap>;
   readonly showSeconds: boolean;
+  readonly linked: boolean;
   readonly chosenFields = new Set<keyof RangeValue>();
 
   constructor(
@@ -23,12 +24,14 @@ export class RangeState {
     maxDuration: number | undefined,
     emitter: EventEmitter<TimepickerEventMap>,
     showSeconds = false,
+    linked = true,
   ) {
     this.clockType = clockType;
     this.minDuration = minDuration;
     this.maxDuration = maxDuration;
     this.emitter = emitter;
     this.showSeconds = showSeconds;
+    this.linked = linked;
   }
 
   getActivePart(): RangePart {
@@ -68,7 +71,7 @@ export class RangeState {
   }
 
   canSwitchToEnd(): boolean {
-    return this.isFromComplete();
+    return !this.linked || this.isFromComplete();
   }
 
   getCompletePreview(part: RangePart): RangeValue | null {
@@ -86,6 +89,9 @@ export class RangeState {
   canConfirm(): boolean {
     const preview = this.chosenFields.size > 0 ? this.getCompletePreview('to') : null;
     const committed = this.isFromComplete() && this.isToComplete() ? this.toValue : null;
+    if (!this.linked) {
+      return this.isFromComplete() && (preview ?? committed) !== null;
+    }
     const durationSeconds = calculateDurationSeconds(this.fromValue, preview ?? committed, this.clockType);
     return durationSeconds > 0 && this.isWithinLimits(durationSeconds);
   }
@@ -142,7 +148,7 @@ export class RangeState {
 
     const duration = this.getDuration();
     const durationSeconds = this.getDurationSeconds();
-    const valid = this.isWithinLimits(durationSeconds);
+    const valid = !this.linked || this.isWithinLimits(durationSeconds);
 
     const result: RangeValidationResult = this.showSeconds
       ? { valid, duration, durationSeconds }
@@ -158,7 +164,7 @@ export class RangeState {
   }
 
   getDisabledTimeForEndPart(): DisabledTimeConfig | null {
-    if (this.activePart === 'from') return null;
+    if (!this.linked || this.activePart === 'from') return null;
     if (!this.fromValue || !this.isFromComplete()) return null;
 
     const fromHour = parseInt(this.fromValue.hour, 10);

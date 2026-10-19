@@ -5,16 +5,26 @@ interface PluginManager {
 
 interface PluginDefinition {
   name: string;
-  factory: (core: any, emitter: any) => PluginManager;
+  factory: (core: unknown, emitter: unknown) => PluginManager;
   optionsExtender?: (options: Record<string, unknown>) => void;
+}
+
+interface RangeEndValue {
+  hour: string;
+  minutes: string;
+  seconds?: string;
+  type?: string;
 }
 
 export declare class RangeManager implements PluginManager {
   init(): void;
   destroy(): void;
   getActivePart(): 'from' | 'to';
-  getFromValue(): { hour: string; minutes: string; seconds?: string; type?: string | null } | null;
-  getToValue(): { hour: string; minutes: string; seconds?: string; type?: string | null } | null;
+  setActivePart(part: 'from' | 'to', options?: { focus?: boolean }): boolean;
+  setRange(from: string, to: string, updateInput: boolean): boolean;
+  getRange(): { from: RangeEndValue | null; to: RangeEndValue | null };
+  getFromValue(): RangeEndValue | null;
+  getToValue(): RangeEndValue | null;
   reset(): void;
 }
 
