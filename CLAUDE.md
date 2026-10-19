@@ -74,7 +74,7 @@ text that says otherwise.
 
 ## What This Is
 
-`timepicker-ui` — a zero-dependency, framework-agnostic time picker library (v4.5.0). Supports analog clock, scroll wheel, and compact-wheel UI modes. SSR-safe. Published to npm as `timepicker-ui`. Three optional plugins (range, timezone, wheel) are tree-shaken out unless imported. 12 built-in CSS themes.
+`timepicker-ui` — a zero-dependency, framework-agnostic time picker library (v4.6.0). Supports analog clock, scroll wheel, and compact-wheel UI modes. SSR-safe. Published to npm as `timepicker-ui`. Three optional plugins (range, timezone, wheel) are tree-shaken out unless imported. 12 built-in CSS themes.
 
 ## Repository Layout
 
@@ -203,6 +203,12 @@ event flow, options, working agreement); `accessibility`, `build-release`, `cloc
 `docs-app`, `plugins`, `styling`, `testing` and `writing` (READMEs, changelog, docs text)
 load when matching files are touched.
 CLAUDE.md wins on any conflict.
+
+**Models.** Every project agent runs on Sonnet (`model: sonnet` in its frontmatter) — don't
+pass a `model` override by default. Force `model: "opus"` on a dispatch only for the hardest
+tasks (tricky state/logic, wide cross-file refactors, hard debugging, integrating shared
+building blocks other agents depend on) and say why in the brief. Give agents the facts they
+need in the brief so they don't spend tokens rediscovering configs.
 
 ### Orchestration directive (mandatory)
 

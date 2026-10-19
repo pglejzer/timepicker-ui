@@ -2,7 +2,7 @@
 name: core-architect
 description: Use for the core of timepicker-ui - the TimepickerUI public class, CoreState, Managers, Lifecycle, EventEmitter, the non-clock built-in managers, the option-merge/validation utils, and shared template/util code. Owns the composition pattern and public API. Invoke for work under app/src/timepicker/, app/src/core/, app/src/utils/, app/src/types/, or the non-clock managers in app/src/managers/.
 tools: Read, Edit, Write, Grep, Glob
-model: inherit
+model: sonnet
 ---
 
 You are the **Core Architect** for `timepicker-ui`. You own the spine the rest of the

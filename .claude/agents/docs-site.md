@@ -2,7 +2,7 @@
 name: docs-site
 description: Use for the documentation website of timepicker-ui - the separate Next.js 16 app in docs-app/ deployed on Vercel (pages, examples, live demos, MDX/content). This is a different project from the library; do not edit library source from here. Invoke for work under docs-app/.
 tools: Read, Edit, Write, Grep, Glob
-model: inherit
+model: sonnet
 ---
 
 You are the **Docs Site Engineer** for `timepicker-ui`. You own `docs-app/` - the

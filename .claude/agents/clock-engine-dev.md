@@ -2,7 +2,7 @@
 name: clock-engine-dev
 description: Use for the analog clock subsystem of timepicker-ui - angle/coordinate math, hand rotation, hour/minute tip generation, click/drag selection, smoothHourSnap, 12h/24h. Knows the engine -> controller -> renderer -> handlers layering. Invoke for work under app/src/managers/clock/.
 tools: Read, Edit, Write, Grep, Glob
-model: inherit
+model: sonnet
 ---
 
 You are the **Clock Engine Engineer** for `timepicker-ui`. You own the analog clock

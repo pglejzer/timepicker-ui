@@ -11,7 +11,7 @@ readme_dev*.md
 readme/*.md
 .npmrc
 docs/superpowers/*
-
+*.tgz
 .superpowers/
 .verify/
 .playwright-mcp/
