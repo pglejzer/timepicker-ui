@@ -6,7 +6,9 @@ const rulesCache = new WeakMap<DisabledTimeConfig, DisabledRules>();
 export const toDisabledRules = (disabledTime: DisabledTimeConfig, clockType: ClockType): DisabledRules => {
   const resolvedClockType = disabledTime.clockType ?? clockType;
   const cached = rulesCache.get(disabledTime);
-  if (cached && cached.clockType === resolvedClockType) return cached;
+  if (cached && cached.clockType === resolvedClockType && cached.predicate === disabledTime.predicate) {
+    return cached;
+  }
 
   const rules: DisabledRules = {
     hours: disabledTime.hours,
@@ -14,6 +16,7 @@ export const toDisabledRules = (disabledTime: DisabledTimeConfig, clockType: Clo
     seconds: disabledTime.seconds,
     intervals: disabledTime.isInterval ? disabledTime.intervals : undefined,
     clockType: resolvedClockType,
+    predicate: disabledTime.predicate,
   };
   rulesCache.set(disabledTime, rules);
   return rules;

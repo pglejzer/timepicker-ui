@@ -106,6 +106,7 @@ export class ClockSystemInitializer {
       isInterval: disabledTimeData.isInterval,
       intervals,
       clockType: disabledTimeData.clockType as '12h' | '24h' | undefined,
+      predicate: disabledTimeData.predicate,
     };
   }
 

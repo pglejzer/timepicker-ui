@@ -15,6 +15,7 @@ export interface DisabledTimeConfig {
   isInterval?: boolean;
   intervals?: string[];
   clockType?: ClockType;
+  predicate?: (secondOfDay: number) => boolean;
   rangeFromType?: string | null;
   rangeFromHour?: number;
   rangeFromMinute?: number;

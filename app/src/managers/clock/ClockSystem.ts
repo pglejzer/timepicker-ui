@@ -189,6 +189,14 @@ export class ClockSystem {
   updateDisabledTime(disabledTime: DisabledTimeConfig | null): void {
     this.disabledTime = disabledTime;
     this.controller.updateDisabledTime(disabledTime);
+    this.renderCurrentTips();
+  }
+
+  refreshDisabledTime(): void {
+    this.controller.followHand(this.renderCurrentTips());
+  }
+
+  private renderCurrentTips(): ClockMode {
     const { mode } = this.controller.getState();
 
     if (mode === 'hours') {
@@ -196,6 +204,7 @@ export class ClockSystem {
     } else {
       this.renderSixtyTips(mode);
     }
+    return mode;
   }
 
   private switchToSixty(unit: SixtyMode): void {
