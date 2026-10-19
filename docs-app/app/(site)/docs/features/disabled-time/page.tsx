@@ -244,6 +244,79 @@ dateInput.addEventListener('change', (e) => {
         />
       </Section>
 
+      <Section title="Disable with a function">
+        <p>
+          When the rule does not fit lists or ranges, pass{" "}
+          <code>clock.isTimeDisabled</code>. It gets a{" "}
+          <code>TimeOfDay</code>, <code>&#123; hour, minutes, seconds &#125;</code>,
+          and returns <code>true</code> to disable that time. <code>hour</code>{" "}
+          is 0 to 23 in both clock types, and <code>seconds</code> is 0 unless{" "}
+          <code>clock.showSeconds</code> is on.
+        </p>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
+  clock: {
+    type: '24h',
+    isTimeDisabled: ({ hour }) => hour < 9 || hour >= 17
+  }
+});
+
+picker.create();`}
+          language="typescript"
+        />
+        <ul>
+          <li>
+            The function is combined with <code>clock.disabledTime</code> as a
+            union. A time is disabled when either one disables it.
+          </li>
+          <li>
+            An hour or a minute is disabled when every time inside it is
+            disabled.
+          </li>
+          <li>
+            It applies to the clock face, the wheel, arrow-key skipping, typed
+            input and the OK button. The compact-wheel mode never blocks OK, a
+            known limitation.
+          </li>
+          <li>
+            If the function throws, that time counts as enabled and the error
+            is rethrown asynchronously.
+          </li>
+        </ul>
+
+        <h3>Refresh after the data changes</h3>
+        <p>
+          Results are cached. When the data behind the function changes, call{" "}
+          <code>refreshDisabledTime()</code>. It clears the cache and updates
+          the disabled marks and the OK button without a re-render. It does
+          not write to the input. Calling it while the picker is closed is
+          safe, because the next open uses fresh results.
+        </p>
+        <CodeBlock
+          code={`let lunchBreak = false;
+
+const picker = new TimepickerUI(input, {
+  clock: {
+    type: '24h',
+    isTimeDisabled: ({ hour }) => {
+      if (hour < 9 || hour >= 17) return true;
+      return lunchBreak && hour === 12;
+    }
+  }
+});
+
+picker.create();
+
+lunchBreak = true;
+picker.refreshDisabledTime();`}
+          language="typescript"
+        />
+        <p>
+          See the{" "}
+          <Link href="/examples/features/disabled-time">live example</Link>.
+        </p>
+      </Section>
+
       <Section title="Visual Styling">
         <p>
           Disabled values are dimmed and cannot be clicked. On the clock face

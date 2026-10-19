@@ -34,7 +34,46 @@ export default function WhatsNewPage() {
         description="Stay up to date with the latest features and improvements"
       />
 
-      <Callout title="Version 4.5.0 - October 14, 2026" tone="tip">
+      <Callout title="Version 4.6.0 - October 19, 2026" tone="tip">
+        <p>
+          Opt-in hooks for embedding the picker in your own dialog, linking or
+          splitting a time range, disabling times with a function, and removing
+          event handlers
+        </p>
+        <p>What&apos;s new:</p>
+        <ul>
+          <li>
+            <strong>ui.inline.embedded</strong> - Renders the inline picker for
+            use inside your own dialog, popover or form. It never takes or
+            traps focus
+          </li>
+          <li>
+            <strong>range.linked and range methods</strong> -{" "}
+            <code>range.linked: false</code> makes From and To independent.{" "}
+            <code>setRange()</code>, <code>getRange()</code> and{" "}
+            <code>setActivePart()</code> control the range from code
+          </li>
+          <li>
+            <strong>clock.isTimeDisabled</strong> - Disable times with a
+            function, and call <code>refreshDisabledTime()</code> when its data
+            changes
+          </li>
+          <li>
+            <strong>on() and once() return a remover</strong> - Call the
+            returned function to remove the handler
+          </li>
+        </ul>
+        <div className={styles.links}>
+          <Link href="/docs/features/inline-mode">Inline mode</Link>
+          <Link href="/docs/features/plugins">Plugins</Link>
+          <Link href="/docs/features/disabled-time">Disabled time</Link>
+          <Link href="/docs/api/methods">Methods</Link>
+          <Link href="/docs/api/options">Options</Link>
+          <Link href="/docs/changelog">Full 4.6.0 changelog</Link>
+        </div>
+      </Callout>
+
+      <Callout title="Version 4.5.0 - October 14, 2026">
         <p>
           Optional seconds, clearer option names, keyboard control of the clock
           face, a callback for every event, Material Design 3 press feedback,

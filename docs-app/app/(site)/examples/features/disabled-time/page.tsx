@@ -3,6 +3,8 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
+import { Figure } from "@/components/figure";
+import { DisabledFunctionDemo } from "@/components/disabled-function-demo";
 
 export default function DisabledTimePage() {
   return (
@@ -217,6 +219,37 @@ picker.setOptions({
             },
           }}
         />
+      </Section>
+
+      <Section title="Disable with a Function">
+        <p>
+          <code>clock.isTimeDisabled</code> decides per time. This one allows
+          09:00 to 16:59 only. The button adds a lunch break at 12:00 and
+          calls <code>refreshDisabledTime()</code>, so the picker re-reads the
+          function without a re-render.
+        </p>
+        <Figure
+          code={`let lunchBreak = false;
+
+const picker = new TimepickerUI(input, {
+  clock: {
+    type: '24h',
+    isTimeDisabled: ({ hour }) => {
+      if (hour < 9 || hour >= 17) return true;
+      return lunchBreak && hour === 12;
+    }
+  },
+  ui: { inline: { enabled: true, container: '#picker', autoUpdate: true } }
+});
+picker.create();
+
+toggleButton.addEventListener('click', () => {
+  lunchBreak = !lunchBreak;
+  picker.refreshDisabledTime();
+});`}
+        >
+          <DisabledFunctionDemo />
+        </Figure>
       </Section>
     </div>
   );

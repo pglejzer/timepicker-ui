@@ -1,0 +1,38 @@
+.dialog {
+  width: min(24rem, calc(100% - var(--space-4)));
+  padding: var(--space-4);
+  border: 1px solid var(--ink-3);
+  border-radius: var(--radius-1);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 0.4);
+}
+
+.dialogTitle {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-small);
+  font-weight: 500;
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-3);
+}
+
+.stage {
+  display: grid;
+  gap: var(--space-4);
+  width: 100%;
+  padding: 0 var(--space-3);
+}
+
+.log {
+  min-height: 4.5rem;
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

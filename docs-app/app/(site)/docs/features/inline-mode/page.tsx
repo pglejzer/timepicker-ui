@@ -167,6 +167,61 @@ picker.create();`}
         />
       </Section>
 
+      <Section title="Embedded in a host component">
+        <p>
+          Set <code>ui.inline.embedded</code> to <code>true</code> when the
+          picker sits inside your own dialog, popover or form. The picker then
+          behaves as part of that component instead of a standalone card:
+        </p>
+        <ul>
+          <li>
+            The root is <code>role=&quot;group&quot;</code> with an accessible
+            name, not a dialog. It has no <code>aria-modal</code>.
+          </li>
+          <li>
+            The card has no shadow and no minimum height. The{" "}
+            <code>max-width</code> of 328px stays.
+          </li>
+          <li>
+            Focus is not trapped, whatever <code>behavior.focusTrap</code>{" "}
+            says, and the picker does not take focus when it mounts.
+          </li>
+          <li>
+            <code>embedded</code> is ignored unless <code>enabled</code> is{" "}
+            <code>true</code>. The default is <code>false</code>.
+          </li>
+        </ul>
+        <CodeBlock
+          code={`const dialog = document.querySelector('dialog');
+const input = document.querySelector('#time');
+let picker = null;
+
+openButton.addEventListener('click', () => {
+  dialog.showModal();
+  if (picker) return;
+
+  picker = new TimepickerUI(input, {
+    ui: {
+      inline: {
+        enabled: true,
+        container: '#dialog-picker',
+        embedded: true,
+        autoUpdate: true
+      }
+    }
+  });
+  picker.create();
+});`}
+          language="typescript"
+        />
+        <p>
+          Create the picker once the container is visible, as above. The clock
+          face measures itself on creation and gets a size of 0 inside a
+          hidden container, such as a closed <code>&lt;dialog&gt;</code>. See{" "}
+          <Link href="/examples/features/inline-mode">the live example</Link>.
+        </p>
+      </Section>
+
       <Section title="React Example">
         <p>
           Using inline mode in React components. <code>container</code> takes

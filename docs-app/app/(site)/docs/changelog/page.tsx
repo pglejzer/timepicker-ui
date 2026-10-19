@@ -14,6 +14,40 @@ export const metadata = buildMetadata({
   path: "/docs/changelog",
 });
 
+const CHANGELOG_460 = {
+  added: [
+    {
+      title: "ui.inline.embedded",
+      description:
+        'Renders the inline picker as a role="group" with no aria-modal, shadow or minimum height. It never takes or traps focus. Default false',
+    },
+    {
+      title: "Range methods",
+      description:
+        "setRange({ from, to }), getRange() and setActivePart(part). They need RangePlugin, and setRange emits range:validation. The types TimeOfDay, RangeTimeValue and RangeTimeState are exported",
+    },
+    {
+      title: "range.linked",
+      description:
+        "Set false to make From and To independent: no To-before-From limit, no minDuration / maxDuration check, and the To tab is enabled at once. Default true",
+    },
+    {
+      title: "clock.isTimeDisabled",
+      description:
+        "Disables times with a function (hour 0-23), combined with clock.disabledTime. A function that throws counts as enabled, and its error is rethrown",
+    },
+    {
+      title: "refreshDisabledTime()",
+      description:
+        "Re-applies disabled times after the data behind isTimeDisabled changes, without re-rendering",
+    },
+    {
+      title: "on() and once() return a remover",
+      description: "Both return a function that removes the handler",
+    },
+  ],
+};
+
 const CHANGELOG_450 = {
   security: [
     {
@@ -1115,8 +1149,12 @@ export default function ChangelogPage() {
       <ChangelogSwitcher current="library" />
 
       <Callout title="Current Version">
-        <strong>v4.5.0</strong> - Released October 14, 2026
+        <strong>v4.6.0</strong> - Released October 19, 2026
       </Callout>
+
+      <Release title="Version 4.6.0 - October 19, 2026">
+        <ChangeSection label="Added" items={CHANGELOG_460.added} />
+      </Release>
 
       <Release title="Version 4.5.0 - October 14, 2026">
         <Callout title="Check before upgrading" tone="danger">
