@@ -64,6 +64,54 @@ describe('re-rendering an inline picker after update() does not open it again', 
     expect(face).toHaveClass('scale-in');
   });
 
+  describe('ui.inline.embedded toggled through setOptions', () => {
+    const EMBEDDED_ID = 'tp-embedded-toggle';
+    const inlineOptions = (embedded?: boolean) => ({
+      ui: {
+        animation: false,
+        inline: {
+          enabled: true,
+          containerId: CONTAINER_ID,
+          showButtons: true,
+          ...(embedded === undefined ? {} : { embedded }),
+        },
+      },
+    });
+    const modalMarkup = (): string => container.querySelector('.tp-ui-modal')?.outerHTML ?? '';
+
+    const createInline = (): TimepickerUI => {
+      const instance = new TimepickerUI(container.previousElementSibling as HTMLInputElement, {
+        ...inlineOptions(),
+        behavior: { id: EMBEDDED_ID },
+      });
+      instance.create();
+      return instance;
+    };
+
+    it('should return the markup to the unset version after embedded is turned on and off', () => {
+      picker.destroy();
+      const reference = createInline();
+      reference.setOptions(inlineOptions());
+      const unsetMarkup = modalMarkup();
+      reference.destroy();
+
+      const toggled = createInline();
+      toggled.setOptions(inlineOptions(true));
+
+      const modal = container.querySelector('.tp-ui-modal');
+      expect(modal).toHaveClass('tp-ui--embedded');
+      expect(modal).toHaveAttribute('role', 'group');
+      expect(modal).not.toHaveAttribute('aria-modal');
+      expect(modalMarkup()).not.toBe(unsetMarkup);
+
+      toggled.setOptions(inlineOptions(false));
+
+      expect(container.querySelector('.tp-ui-modal')).not.toHaveClass('tp-ui--embedded');
+      expect(container.querySelector('.tp-ui-modal')).toHaveAttribute('role', 'dialog');
+      expect(modalMarkup()).toBe(unsetMarkup);
+    });
+  });
+
   it.each<[string, (cancel: HTMLElement) => void]>([
     ['a click', (cancel) => cancel.click()],
     [

@@ -150,6 +150,84 @@ describe('EventEmitter', () => {
     });
   });
 
+  describe('unsubscribe functions', () => {
+    it('on() returns a function that removes only that handler', () => {
+      const removed = jest.fn();
+      const kept = jest.fn();
+
+      const remove = emitter.on('testEvent', removed);
+      emitter.on('testEvent', kept);
+
+      expect(typeof remove).toBe('function');
+      remove();
+      emitter.emit('testEvent', { value: 'x' });
+
+      expect(removed).not.toHaveBeenCalled();
+      expect(kept).toHaveBeenCalledTimes(1);
+    });
+
+    it('on() remover called twice is a no-op and does not affect others', () => {
+      const removed = jest.fn();
+      const kept = jest.fn();
+
+      const remove = emitter.on('testEvent', removed);
+      emitter.on('testEvent', kept);
+
+      remove();
+      expect(() => remove()).not.toThrow();
+      emitter.emit('testEvent', { value: 'x' });
+
+      expect(removed).not.toHaveBeenCalled();
+      expect(kept).toHaveBeenCalledTimes(1);
+    });
+
+    it('once() remover called before emit prevents the call', () => {
+      const handler = jest.fn();
+      const other = jest.fn();
+
+      const remove = emitter.once('testEvent', handler);
+      emitter.on('testEvent', other);
+
+      expect(typeof remove).toBe('function');
+      remove();
+      emitter.emit('testEvent', { value: 'x' });
+
+      expect(handler).not.toHaveBeenCalled();
+      expect(other).toHaveBeenCalledTimes(1);
+    });
+
+    it('once() remover called after the handler fired is a no-op', () => {
+      const handler = jest.fn();
+      const other = jest.fn();
+
+      const remove = emitter.once('testEvent', handler);
+      emitter.on('testEvent', other);
+
+      emitter.emit('testEvent', { value: 'first' });
+      expect(() => remove()).not.toThrow();
+      expect(() => remove()).not.toThrow();
+      emitter.emit('testEvent', { value: 'second' });
+
+      expect(handler).toHaveBeenCalledTimes(1);
+      expect(other).toHaveBeenCalledTimes(2);
+    });
+
+    it('once() remover called twice leaves other once handlers intact', () => {
+      const removed = jest.fn();
+      const kept = jest.fn();
+
+      const remove = emitter.once('testEvent', removed);
+      emitter.once('testEvent', kept);
+
+      remove();
+      remove();
+      emitter.emit('testEvent', { value: 'x' });
+
+      expect(removed).not.toHaveBeenCalled();
+      expect(kept).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('once off-by-reference', () => {
     it('off() removes a once-registered handler when called with the original reference', () => {
       const emitter = new EventEmitter<{ ping: { n: number } }>();
