@@ -2,12 +2,19 @@ import type { CoreState } from './CoreState';
 import type { Managers } from './Managers';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 import type { TimepickerOptions } from '../types/options';
-import { PluginRegistry } from '../core/PluginRegistry';
+import { PluginRegistry, type PluginManager } from '../core/PluginRegistry';
 import { initMd3Ripple } from '../utils/ripple';
-import { isWheelMode, isCompactWheelMode, isPopoverMode, isInlineMode } from '../utils/options/predicates';
+import {
+  isWheelMode,
+  isCompactWheelMode,
+  isPopoverMode,
+  isInlineMode,
+  isEmbeddedInlineMode,
+} from '../utils/options/predicates';
 import { setupCallbackBridge, emitMissingPluginErrors } from './LifecycleCallbacks';
 
 type TypeFunction = () => void;
+type DisabledMarksRefresher = PluginManager & { updateDisabledItems?(): void };
 
 export class Lifecycle {
   private core: CoreState;
@@ -70,6 +77,19 @@ export class Lifecycle {
     this.managers.config.checkMobileOption();
     this.managers.config.syncInputFormat(previousOptions);
     return true;
+  }
+
+  refreshDisabledTime(): void {
+    this.managers.config.clearPredicateCache();
+    if (!this.core.isOpen) return;
+
+    if (isWheelMode(this.core.options) && PluginRegistry.has('wheel')) {
+      this.managers.getPlugin<DisabledMarksRefresher>('wheel')?.updateDisabledItems?.();
+    } else {
+      this.managers.clock.refreshDisabledTime();
+    }
+
+    this.managers.events.syncOkButton();
   }
 
   private reportError(error: unknown): void {
@@ -390,7 +410,7 @@ export class Lifecycle {
       this.managers.events.handlePmClick();
     }
 
-    if (this.core.options.behavior.focusTrap) {
+    if (this.core.options.behavior.focusTrap && !isEmbeddedInlineMode(this.core.options)) {
       this.managers.events.focusTrapHandler();
     }
 

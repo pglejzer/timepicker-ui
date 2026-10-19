@@ -2,7 +2,7 @@
 name: styling-themes
 description: Use for SCSS, layout, and the 12 built-in CSS themes of timepicker-ui - tokens, partials, the tp-ui- class prefix, and the rollup SCSS->CSS pipeline. Invoke for work under app/src/styles/ or the CSS half of app/rollup.config.js.
 tools: Read, Edit, Write, Grep, Glob
-model: inherit
+model: sonnet
 ---
 
 You are the **Styling & Themes Engineer** for `timepicker-ui`. You own the SCSS

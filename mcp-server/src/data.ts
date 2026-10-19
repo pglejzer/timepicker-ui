@@ -142,6 +142,26 @@ export const API_METHODS: ApiMethod[] = [
   },
   { signature: 'setOptions(options)', description: 'Change options at runtime; groups you leave out keep their values.' },
   {
+    signature: 'setRange({ from, to }, updateInput = true)',
+    description:
+      'Range plugin: set both ends, e.g. { from: "09:00", to: "17:00" }, without moving focus. Emits range:validation. On a closed picker the value is used on the next open. Since 4.6.0.',
+  },
+  {
+    signature: 'getRange()',
+    description:
+      'Range plugin: { from, to }, each { hour, minutes, seconds?, type? } or null when that end is not set. Returns null without the range plugin. Since 4.6.0.',
+  },
+  {
+    signature: 'setActivePart(part)',
+    description:
+      'Range plugin: switch to "from" or "to" without moving focus. Returns false when the part cannot be selected. On a closed picker it applies on the next open. Since 4.6.0.',
+  },
+  {
+    signature: 'refreshDisabledTime()',
+    description:
+      'Re-run clock.isTimeDisabled after the state it reads has changed, and redraw the disabled tips or wheel items. Since 4.6.0.',
+  },
+  {
     signature: 'update({ options, create? }, callback?)',
     description: 'Change options at runtime.',
     deprecated: 'Use setOptions(options). Removed in 5.0.',
@@ -155,8 +175,14 @@ export const API_METHODS: ApiMethod[] = [
     description: 'Undocumented getters that return internal DOM elements.',
     deprecated: 'Removed in 5.0. Read the time with getValue().',
   },
-  { signature: 'on(event, handler)', description: 'Subscribe to an event.' },
-  { signature: 'once(event, handler)', description: 'Subscribe once.' },
+  {
+    signature: 'on(event, handler)',
+    description: 'Subscribe to an event. Returns a function that removes this handler (since 4.6.0).',
+  },
+  {
+    signature: 'once(event, handler)',
+    description: 'Subscribe once. Returns a function that removes this handler (since 4.6.0).',
+  },
   { signature: 'off(event, handler?)', description: 'Unsubscribe.' },
   { signature: 'TimepickerUI.getById(id)', description: 'Get an instance by its behavior.id.', static: true },
   { signature: 'TimepickerUI.getAllInstances()', description: 'All live instances.', static: true },

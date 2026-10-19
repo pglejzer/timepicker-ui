@@ -8,7 +8,7 @@ export type NavLink = {
 
 export type NavSection = { title: string; links: NavLink[] };
 
-export type SiteArea = "docs" | "examples" | "react";
+export type SiteArea = "docs" | "examples" | "react" | "datepicker";
 
 export type SearchItem = NavLink & { group: string; area: SiteArea };
 
@@ -246,19 +246,211 @@ export const reactNav: NavSection[] = [
   },
 ];
 
+export const datepickerNav: NavSection[] = [
+  {
+    title: "Overview",
+    links: [
+      { title: "Introduction", href: "/datepicker", badge: "New", keywords: "date picker calendar companion" },
+      { title: "Installation", href: "/datepicker/installation", keywords: "npm yarn pnpm cdn" },
+      { title: "Quick Start", href: "/datepicker/quick-start" },
+      { title: "All datepicker examples", href: "/datepicker/examples" },
+    ],
+  },
+  {
+    title: "Guides",
+    links: [
+      {
+        title: "Display Modes",
+        href: "/datepicker/docs/display-modes",
+        keywords: "docked modal inline popover dialog fullscreen",
+      },
+      {
+        title: "Selection Modes",
+        href: "/datepicker/docs/selection-modes",
+        keywords: "single range multiple value forms",
+      },
+      {
+        title: "Layouts and Fields",
+        href: "/datepicker/docs/layouts",
+        keywords: "months presets endInput fixed weeks outside days renderDate",
+      },
+      { title: "Month and Year Pickers", href: "/datepicker/docs/precision", keywords: "precision startView" },
+      { title: "Typed Input", href: "/datepicker/docs/typed-input", keywords: "format mask parse validate" },
+      {
+        title: "Disabled Dates",
+        href: "/datepicker/docs/disabled-dates",
+        keywords: "minDate maxDate weekdays isDateDisabled",
+      },
+      { title: "Themes", href: "/datepicker/docs/themes", keywords: "dark colorScheme custom css" },
+      {
+        title: "Custom Styling",
+        href: "/datepicker/docs/styling",
+        keywords: "css variables cssClass dp-ui tokens scope dialog",
+      },
+      {
+        title: "Localization",
+        href: "/datepicker/docs/localization",
+        keywords: "locale intl rtl weekStart labels i18n",
+      },
+      { title: "Accessibility", href: "/datepicker/docs/accessibility", keywords: "a11y aria keyboard" },
+      {
+        title: "Frameworks and SSR",
+        href: "/datepicker/docs/frameworks",
+        keywords: "react next vue svelte angular ssr",
+      },
+      {
+        title: "Date and Time",
+        href: "/datepicker/docs/with-timepicker",
+        keywords: "datetime timepicker-ui together",
+      },
+      { title: "Kit", href: "/datepicker/docs/kit", keywords: "companion packages hosts parseDate" },
+    ],
+  },
+  {
+    title: "API Reference",
+    links: [
+      { title: "Options", href: "/datepicker/api/options" },
+      { title: "Methods", href: "/datepicker/api/methods" },
+      { title: "Events", href: "/datepicker/api/events", keywords: "callbacks error codes" },
+      { title: "TypeScript", href: "/datepicker/api/typescript", keywords: "types ts" },
+      { title: "CSS Classes", href: "/datepicker/api/css-classes", keywords: "dp-ui bem selectors" },
+      {
+        title: "CSS Variables",
+        href: "/datepicker/api/css-variables",
+        keywords: "tokens custom properties --dp-ui",
+      },
+    ],
+  },
+  {
+    title: "Basic Examples",
+    links: [
+      { title: "Getting Started", href: "/datepicker/examples/basic/getting-started" },
+      { title: "Docked Popover", href: "/datepicker/examples/basic/docked" },
+      { title: "Modal Dialog", href: "/datepicker/examples/basic/modal" },
+      { title: "Inline Calendar", href: "/datepicker/examples/basic/inline" },
+    ],
+  },
+  {
+    title: "Selection",
+    links: [
+      { title: "Date Range", href: "/datepicker/examples/selection/range" },
+      { title: "Multiple Dates", href: "/datepicker/examples/selection/multiple" },
+      { title: "Range Presets", href: "/datepicker/examples/selection/range-presets" },
+      {
+        title: "Two Range Fields",
+        href: "/datepicker/examples/selection/two-fields",
+        keywords: "endInput check-in check-out",
+      },
+      {
+        title: "Range Limits",
+        href: "/datepicker/examples/selection/range-limits",
+        keywords: "minLength maxLength",
+      },
+    ],
+  },
+  {
+    title: "Constraints",
+    links: [
+      { title: "Min and Max Date", href: "/datepicker/examples/constraints/min-max" },
+      {
+        title: "Disabled Dates",
+        href: "/datepicker/examples/constraints/disabled-dates",
+        keywords: "weekends holidays",
+      },
+      { title: "Validation", href: "/datepicker/examples/constraints/validation" },
+    ],
+  },
+  {
+    title: "Features",
+    links: [
+      { title: "Month Picker", href: "/datepicker/examples/features/month-picker" },
+      { title: "Year Picker", href: "/datepicker/examples/features/year-picker" },
+      { title: "Start View", href: "/datepicker/examples/features/start-view", keywords: "birthday" },
+      { title: "Several Months", href: "/datepicker/examples/features/several-months" },
+      { title: "Week Numbers", href: "/datepicker/examples/features/week-numbers" },
+      { title: "Outside Days", href: "/datepicker/examples/features/outside-days", keywords: "fixed weeks" },
+      {
+        title: "Decorated Dates",
+        href: "/datepicker/examples/features/decorate-dates",
+        keywords: "badge events",
+      },
+      {
+        title: "Per-day Content",
+        href: "/datepicker/examples/features/per-day-content",
+        keywords: "prices renderDate",
+      },
+      { title: "Typed Input and Mask", href: "/datepicker/examples/features/typed-input" },
+      { title: "Today and Clear Buttons", href: "/datepicker/examples/features/footer-buttons" },
+      {
+        title: "Toggle Button",
+        href: "/datepicker/examples/features/toggle-button",
+        keywords: "calendar icon",
+      },
+      {
+        title: "Localization",
+        href: "/datepicker/examples/features/localization",
+        keywords: "locale rtl arabic",
+      },
+    ],
+  },
+  {
+    title: "Themes",
+    links: [
+      { title: "All Themes", href: "/datepicker/examples/themes/all-themes" },
+      { title: "Dark Mode", href: "/datepicker/examples/themes/dark-mode", keywords: "colorScheme" },
+      { title: "Custom Theme", href: "/datepicker/examples/themes/custom-theme", keywords: "css variables" },
+    ],
+  },
+  {
+    title: "Advanced",
+    links: [
+      { title: "Events", href: "/datepicker/examples/advanced/events", keywords: "callbacks" },
+      {
+        title: "Custom Styling",
+        href: "/datepicker/examples/advanced/custom-styling",
+        keywords: "css variables cssClass brand dense contrast dark",
+      },
+      { title: "Dynamic Options", href: "/datepicker/examples/advanced/set-options", keywords: "setOptions" },
+      { title: "Forms", href: "/datepicker/examples/advanced/forms", keywords: "hidden input iso submit" },
+      {
+        title: "Date and Time",
+        href: "/datepicker/examples/advanced/date-and-time",
+        keywords: "datetime timepicker",
+      },
+      {
+        title: "External API",
+        href: "/datepicker/examples/advanced/external-api",
+        keywords: "methods setValue open",
+      },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { title: "GitHub", href: "https://github.com/pglejzer/datepicker-ui", external: true },
+      { title: "npm Package", href: "https://www.npmjs.com/package/@pglejzer/datepicker-ui", external: true },
+      { title: "Changelog", href: "/docs/changelog/datepicker" },
+      { title: "timepicker-ui Docs", href: "/docs" },
+    ],
+  },
+];
+
 export const navByArea: Record<SiteArea, NavSection[]> = {
   docs: docsNav,
   examples: examplesNav,
   react: reactNav,
+  datepicker: datepickerNav,
 };
 
 const AREA_LABEL: Record<SiteArea, string> = {
   docs: "Docs",
   examples: "Examples",
   react: "React",
+  datepicker: "Datepicker",
 };
 
 export function areaOf(pathname: string): SiteArea {
+  if (pathname.startsWith("/datepicker")) return "datepicker";
   if (pathname.startsWith("/react")) return "react";
   if (pathname.startsWith("/examples")) return "examples";
   return "docs";

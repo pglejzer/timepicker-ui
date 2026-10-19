@@ -76,7 +76,7 @@ export interface Meta {
 }
 
 export const META = load<Meta>('meta.json', {
-  library: '4.5.0',
+  library: '4.6.0',
   cssReference: null,
   siteUrl: 'https://timepicker-ui.vercel.app',
 });

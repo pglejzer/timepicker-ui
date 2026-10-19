@@ -1,0 +1,95 @@
+.stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0 var(--space-3);
+}
+
+.stage[data-display="field"] {
+  align-items: center;
+  min-height: 140px;
+}
+
+.stage[data-display="inline"] {
+  min-height: 420px;
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 20rem;
+}
+
+.row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.row > :global(.dp-ui),
+.row > input {
+  flex: 1;
+  min-width: 0;
+}
+
+.field :global(.dp-ui__input--active) {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.iconButton {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--ink-3);
+  border-radius: var(--radius-1);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+.iconButton:hover {
+  background: var(--code);
+}
+
+.iconButton[aria-expanded="true"] {
+  border-color: var(--ink);
+}
+
+.inlineHost {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.message {
+  color: var(--ink-2);
+  font-size: var(--text-small);
+}
+
+.select select {
+  min-height: var(--control-h);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--ink-3);
+  border-radius: var(--radius-1);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: var(--text-small);
+}
+
+.toggle {
+  composes: button from "./copy-button.module.css";
+}
+
+.switch {
+  display: inline-flex;
+  gap: var(--space-1);
+}

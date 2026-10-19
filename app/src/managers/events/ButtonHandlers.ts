@@ -8,7 +8,7 @@ import { bindEmitter, requestOpen, runCleanups } from '../../utils/managerHelper
 import type { CoreState } from '../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../utils/EventEmitter';
 import type { ConfirmEventData } from '../../types/types';
-import { buildUpdatePayload, isTimeDisabled } from './timeFields';
+import { buildUpdatePayload, isSelectedTimeDisabled } from './timeFields';
 
 export class ButtonHandlers {
   private core: CoreState;
@@ -16,6 +16,7 @@ export class ButtonHandlers {
   private cleanupHandlers: Array<() => void> = [];
   private persistentCleanups: Array<() => void> = [];
   private okBlocked = false;
+  private syncOk: (() => void) | null = null;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -75,12 +76,13 @@ export class ButtonHandlers {
     if (this.core.options.range?.enabled) return;
 
     const sync = (): void => {
-      const blocked = isTimeDisabled(this.core);
+      const blocked = isSelectedTimeDisabled(this.core);
       if (!blocked && !this.okBlocked) return;
       this.okBlocked = blocked;
       setElementDisabled(okButton, blocked);
     };
 
+    this.syncOk = sync;
     sync();
     bindEmitter(this.emitter, this.cleanupHandlers, 'update', ({ hour }) => {
       if (hour) sync();
@@ -154,8 +156,13 @@ export class ButtonHandlers {
     this.cleanupHandlers.push(bindActivate(switchButton, handler));
   }
 
+  syncOkButton(): void {
+    this.syncOk?.();
+  }
+
   detach(): void {
     runCleanups(this.cleanupHandlers);
+    this.syncOk = null;
   }
 
   destroy(): void {

@@ -18,6 +18,20 @@ import {
   PART_PLACEHOLDER,
 } from './utils';
 import { bindEmitter } from '../../../utils/managerHelpers';
+import { sanitizeTimeInput } from '../../../utils/validation';
+import { resolveTimeFor } from '../../../timepicker/SetValue';
+import { buildUpdatePayload, emitSelect } from '../../events/timeFields';
+
+interface PendingRange {
+  from: string;
+  to: string;
+  inputValue: string;
+}
+
+interface ParsedRange {
+  from: RangeValue | null;
+  to: RangeValue | null;
+}
 
 export default class RangeManager {
   private readonly core: CoreState;
@@ -26,6 +40,9 @@ export default class RangeManager {
   private ui!: RangeUI;
   private cleanupHandlers: Array<() => void> = [];
   private isSyncingAmPm = false;
+  private isBound = false;
+  private pendingRange: PendingRange | null = null;
+  private pendingPart: RangePart | null = null;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -37,6 +54,10 @@ export default class RangeManager {
     return this.core.options.range?.enabled === true;
   }
 
+  private get isLive(): boolean {
+    return this.isBound && this.core.isOpen;
+  }
+
   private createState(): void {
     const { range, clock } = this.core.options;
     this.state = new RangeState(
@@ -45,6 +66,7 @@ export default class RangeManager {
       range?.maxDuration,
       this.emitter,
       clock.showSeconds === true,
+      range?.linked !== false,
     );
     this.ui = new RangeUI(this.core, this.state);
   }
@@ -54,22 +76,56 @@ export default class RangeManager {
     if (!this.isEnabled) return;
 
     this.createState();
-    const { from, to } = parseRangeInput(this.core.getInput()?.value || '', this.state.showSeconds);
+    const { from, to } = this.readInitialRange();
     this.state.setFromValue(from);
     this.state.setToValue(to);
 
     this.bindEvents();
+    this.isBound = true;
+    this.applyPendingPart();
     this.ui.syncClockToActivePart();
     this.emitAmPmSyncEvent();
     this.ui.updateAll();
+  }
+
+  private readInitialRange(): ParsedRange {
+    const inputValue = this.core.getInput()?.value || '';
+    const pending = this.pendingRange;
+
+    if (pending && pending.inputValue === inputValue) {
+      const from = this.parseEnd(pending.from);
+      const to = this.parseEnd(pending.to);
+      if (from && to) return { from, to };
+    }
+
+    this.pendingRange = null;
+    return parseRangeInput(inputValue, this.state.showSeconds);
+  }
+
+  private applyPendingPart(): void {
+    const part = this.pendingPart;
+    this.pendingPart = null;
+    if (!part || !this.state.setActivePart(part)) return;
+
+    this.emitter.emit('range:switch', {
+      active: part,
+      disabledTime: this.state.getDisabledTimeForEndPart(),
+    });
   }
 
   getActivePart(): RangePart {
     return this.state.getActivePart();
   }
 
-  setActivePart(part: RangePart): void {
-    if (!this.isEnabled) return;
+  setActivePart(part: RangePart, options: { focus?: boolean } = {}): boolean {
+    if (!this.isEnabled) return false;
+
+    if (options.focus === false && !this.isLive) {
+      this.state.setActivePart(part);
+      const applied = this.state.getActivePart() === part;
+      this.pendingPart = applied ? part : null;
+      return applied;
+    }
 
     const changed = this.state.setActivePart(part);
 
@@ -80,9 +136,88 @@ export default class RangeManager {
       });
     }
 
-    this.ui.syncClockToActivePart();
+    if (options.focus === false) {
+      this.syncClockWithoutFocus();
+    } else {
+      this.ui.syncClockToActivePart();
+    }
     this.emitAmPmSyncEvent();
     this.ui.updateAll();
+
+    return this.state.getActivePart() === part;
+  }
+
+  setRange(from: string, to: string, updateInput: boolean): boolean {
+    if (!this.isEnabled) return false;
+
+    const fromValue = this.parseEnd(from);
+    const toValue = this.parseEnd(to);
+    if (!fromValue || !toValue) return false;
+
+    this.state.setFromValue(fromValue);
+    this.state.setToValue(toValue);
+    this.state.setPreviewValue(null);
+    this.state.chosenFields.clear();
+
+    if (updateInput) {
+      this.ui.updateInputValue();
+    }
+
+    this.pendingRange = { from, to, inputValue: this.core.getInput()?.value || '' };
+
+    if (this.isLive) {
+      this.syncOpenRange();
+    }
+
+    this.state.validate();
+    this.ui.updateAll();
+    return true;
+  }
+
+  getRange(): ParsedRange {
+    return {
+      from: this.state.isFromComplete() ? this.copyValue(this.state.getFromValue()) : null,
+      to: this.state.isToComplete() ? this.copyValue(this.state.getToValue()) : null,
+    };
+  }
+
+  private copyValue(value: RangeValue | null): RangeValue | null {
+    return value ? { ...value } : null;
+  }
+
+  private parseEnd(text: unknown): RangeValue | null {
+    if (typeof text !== 'string' || !text.trim()) return null;
+
+    const resolved = resolveTimeFor(this.core, sanitizeTimeInput(text.trim()));
+    if (!resolved) return null;
+
+    const { hour, minutes, seconds, type } = resolved.parsed;
+    const value: RangeValue = { hour, minutes };
+    if (this.core.options.clock.showSeconds === true) {
+      value.seconds = seconds ?? '00';
+    }
+    if (this.core.options.clock.type === '12h') {
+      value.type = type;
+    }
+    return value;
+  }
+
+  private syncOpenRange(): void {
+    const disabledTime = this.state.getDisabledTimeForEndPart();
+    if (this.state.getActivePart() === 'to' && disabledTime) {
+      this.emitter.emit('range:switch', { active: 'to', disabledTime });
+    }
+
+    this.syncClockWithoutFocus();
+    this.emitAmPmSyncEvent();
+  }
+
+  private syncClockWithoutFocus(): void {
+    const hourInput = this.ui.showActivePartHours();
+    if (!hourInput) return;
+
+    emitSelect(this.emitter, 'hour', hourInput.value);
+    this.emitter.emit('update', buildUpdatePayload(this.core));
   }
 
   getFromValue(): RangeValue | null {
@@ -352,6 +487,7 @@ export default class RangeManager {
     if (!this.isEnabled) return;
 
     this.state.commitPreview();
+    this.pendingRange = null;
 
     const { showSeconds } = this.state;
     const payload: RangeConfirmEventData = {
@@ -369,6 +505,8 @@ export default class RangeManager {
 
   reset(): void {
     this.state.reset();
+    this.pendingRange = null;
+    this.pendingPart = null;
   }
 
   destroy(): void {
@@ -379,5 +517,6 @@ export default class RangeManager {
   private releaseHandlers(): void {
     this.cleanupHandlers.forEach((fn) => fn());
     this.cleanupHandlers = [];
+    this.isBound = false;
   }
 }

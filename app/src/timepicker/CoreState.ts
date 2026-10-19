@@ -1,6 +1,7 @@
 import { isDocument } from '../utils/node';
 import { mergeOptionGroups } from '../utils/options/defaults';
 import type { TimepickerOptions } from '../types/options';
+import type { TimePredicate } from '../utils/time/predicate';
 
 export interface CoreStateData {
   readonly degreesHours: number | null;
@@ -19,8 +20,10 @@ export interface CoreStateData {
       hours?: string[];
       minutes?: string[];
       seconds?: string[];
+      predicate?: TimePredicate;
     };
   } | null;
+  readonly timePredicate: TimePredicate | null;
   readonly cloned: Node | null;
   readonly isModalRemove: boolean;
   readonly isOpen: boolean;
@@ -39,6 +42,7 @@ export class CoreState {
   private _isMobileView = false;
   private _isTouchMouseMove = false;
   private _disabledTime: CoreStateData['disabledTime'] = null;
+  private _timePredicate: TimePredicate | null = null;
   private _cloned: Node | null = null;
   private _isModalRemove = true;
   private _isOpen = false;
@@ -84,6 +88,9 @@ export class CoreState {
   get disabledTime(): CoreStateData['disabledTime'] {
     return this._disabledTime;
   }
+  get timePredicate(): TimePredicate | null {
+    return this._timePredicate;
+  }
   get cloned(): Node | null {
     return this._cloned;
   }
@@ -124,6 +131,9 @@ export class CoreState {
   setDisabledTime(value: CoreStateData['disabledTime']): void {
     this._disabledTime = value;
   }
+  setTimePredicate(value: TimePredicate | null): void {
+    this._timePredicate = value;
+  }
   setCloned(value: Node | null): void {
     this._cloned = value;
   }
@@ -153,6 +163,7 @@ export class CoreState {
     this._degreesSeconds = null;
     this._isTouchMouseMove = false;
     this._disabledTime = null;
+    this._timePredicate = null;
     this._cloned = null;
     this._isModalRemove = true;
     this._isOpen = false;

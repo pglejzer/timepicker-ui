@@ -74,6 +74,16 @@
   color: var(--ink);
 }
 
+.secondary {
+  composes: primary;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.secondary:hover {
+  background: var(--code);
+}
+
 .h2 {
   font-size: var(--text-h2-home);
 }

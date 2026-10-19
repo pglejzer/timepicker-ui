@@ -3,6 +3,8 @@
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
+import { Figure } from "@/components/figure";
+import { RangeApiDemo } from "@/components/range-api-demo";
 
 export default function RangePluginPage() {
   return (
@@ -125,6 +127,44 @@ picker.create();`}
           plugins={["range"]}
           inputPlaceholder="24h range selection"
         />
+      </Section>
+
+      <Section title="Range API and Independent Ends">
+        <p>
+          <code>setRange()</code>, <code>getRange()</code> and{" "}
+          <code>setActivePart()</code> control the range from code. With{" "}
+          <code>range.linked: false</code> From and To are independent, so a
+          range can cross midnight: 22:00 to 01:00 is accepted, and{" "}
+          <code>minDuration</code> and <code>maxDuration</code> are not
+          checked.
+        </p>
+        <Figure
+          code={`import { TimepickerUI, PluginRegistry } from 'timepicker-ui';
+import { RangePlugin } from 'timepicker-ui/plugins/range';
+
+PluginRegistry.register(RangePlugin);
+
+const picker = new TimepickerUI(input, {
+  clock: { type: '24h' },
+  range: { enabled: true }
+});
+picker.create();
+
+picker.setRange({ from: '09:00', to: '17:00' });
+console.log(picker.getRange());
+
+picker.open();
+picker.setActivePart('to');
+
+const overnight = new TimepickerUI(otherInput, {
+  clock: { type: '24h' },
+  range: { enabled: true, linked: false, minDuration: 30 }
+});
+overnight.create();
+overnight.setRange({ from: '22:00', to: '01:00' });`}
+        >
+          <RangeApiDemo />
+        </Figure>
       </Section>
     </div>
   );

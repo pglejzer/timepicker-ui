@@ -2,7 +2,7 @@ import { getModalTemplate } from '../utils/template';
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 import { isDocument } from '../utils/node';
-import { isPopoverMode } from '../utils/options/predicates';
+import { isEmbeddedInlineMode, isPopoverMode } from '../utils/options/predicates';
 import { getInlineContainer, resolveElement } from '../utils/dom';
 
 const SCROLLBAR_GAP_PROPERTY = '--tp-scrollbar-gap';
@@ -101,6 +101,7 @@ export default class ModalManager {
       const modalElement = containerElement.querySelector('.tp-ui-modal') as HTMLDivElement;
       if (modalElement) {
         modalElement.classList.add('tp-ui--inline');
+        if (isEmbeddedInlineMode(this.core.options)) modalElement.classList.add('tp-ui--embedded');
 
         const { showButtons } = this.core.options.ui.inline;
         if (showButtons === false || showButtons === undefined) {
@@ -168,6 +169,7 @@ export default class ModalManager {
   setInitialFocus(): void {
     const { options } = this.core;
     if (!options.behavior.focusTrap || typeof requestAnimationFrame === 'undefined') return;
+    if (isEmbeddedInlineMode(options)) return;
     if (!options.ui.backdrop && !options.ui.inline?.enabled && !isPopoverMode(options)) return;
 
     requestAnimationFrame(() => this.focusWrapperUnlessInside());

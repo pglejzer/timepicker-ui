@@ -1,5 +1,6 @@
 import type { CoreState } from '../../../timepicker/CoreState';
 import { isDocument } from '../../../utils/node';
+import { getClockType } from '../../../utils/options/predicates';
 import { pad, type TimeValue } from '../../../utils/time/parse';
 import {
   isHourDisabled,
@@ -76,8 +77,10 @@ export class WheelRenderer {
       this.invalidateItemCache();
     }
 
-    if (disabled.value.isInterval && disabled.value.intervals) {
-      this.updateDisabledByInterval(disabled.value, shouldHide, wheelTime);
+    if (disabled.value.predicate) {
+      this.updateDisabledByRules(this.buildPredicateRules(disabled.value), disabled.value, shouldHide, wheelTime);
+    } else if (disabled.value.isInterval && disabled.value.intervals) {
+      this.updateDisabledByRules(this.buildIntervalRules(disabled.value), null, shouldHide, wheelTime);
     } else {
       this.updateDisabledByFlatLists(disabled.value, shouldHide);
     }
@@ -97,28 +100,50 @@ export class WheelRenderer {
     });
   }
 
-  private updateDisabledByInterval(
-    value: DisabledValue,
+  private buildIntervalRules(value: DisabledValue): DisabledRules {
+    return {
+      intervals: value.intervals,
+      clockType: value.clockType === '24h' ? '24h' : '12h',
+    };
+  }
+
+  private buildPredicateRules(value: DisabledValue): DisabledRules {
+    return {
+      intervals: value.isInterval ? value.intervals : undefined,
+      predicate: value.predicate,
+      clockType: (value.clockType ?? getClockType(this.core.options)) === '24h' ? '24h' : '12h',
+    };
+  }
+
+  private updateDisabledByRules(
+    rules: DisabledRules,
+    lists: DisabledValue | null,
     shouldHide: boolean,
     wheelTime: WheelTime | null,
   ): void {
-    const rules: DisabledRules = {
-      intervals: value.intervals,
-      clockType: value.clockType === '24h' ? '24h' : '12h',
+    const listed = (type: WheelTimeColumn, item: string): boolean => {
+      const list = lists && !lists.isInterval ? lists[type] : undefined;
+      return list ? isListed(new Set(list.map(String)), item) : false;
     };
     const showSeconds = this.core.options.clock.showSeconds === true;
     const type = wheelTime?.type ?? this.getHeaderPeriod();
     const hour = this.getHeaderValue(this.core.getHour()) ?? wheelTime?.hour ?? NEUTRAL_HOUR;
     const minutes = this.getHeaderValue(this.core.getMinutes()) ?? wheelTime?.minutes ?? NEUTRAL_ZERO;
 
-    this.markDisabled('hours', shouldHide, (item) =>
-      isHourDisabled(rules, { hour: item, type }, showSeconds),
+    this.markDisabled(
+      'hours',
+      shouldHide,
+      (item) => listed('hours', item) || isHourDisabled(rules, { hour: item, type }, showSeconds),
     );
-    this.markDisabled('minutes', shouldHide, (item) =>
-      isMinuteDisabled(rules, { hour, minutes: item, type }, showSeconds),
+    this.markDisabled(
+      'minutes',
+      shouldHide,
+      (item) => listed('minutes', item) || isMinuteDisabled(rules, { hour, minutes: item, type }, showSeconds),
     );
-    this.markDisabled('seconds', shouldHide, (item) =>
-      isSecondDisabled(rules, { hour, minutes, seconds: item, type }),
+    this.markDisabled(
+      'seconds',
+      shouldHide,
+      (item) => listed('seconds', item) || isSecondDisabled(rules, { hour, minutes, seconds: item, type }),
     );
   }
 

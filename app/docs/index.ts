@@ -13,3 +13,4 @@ import './examples/timezone-advanced';
 import './examples/api-demo';
 import './examples/clear-button';
 import './examples/seconds';
+import './examples/companion-hooks';

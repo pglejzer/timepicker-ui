@@ -107,6 +107,57 @@ picker.update({ options: { ui: { theme: 'dark' } } });
 picker.setOptions({ ui: { theme: 'dark' } });`,
   },
   {
+    name: "setRange({ from, to }, updateInput?)",
+    description:
+      "Set both ends of the range. Each time uses the setValue() format. updateInput defaults to true and writes 'from - to' to the input. It works while the picker is open or closed and emits range:validation. Needs RangePlugin and range.enabled: without them it emits error and does nothing. A time that is not valid emits error and leaves the range as it was.",
+    code: `picker.setRange({ from: '09:00', to: '17:00' });
+
+picker.setRange({ from: '9:00 AM', to: '5:00 PM' }, false);`,
+  },
+  {
+    name: "getRange()",
+    description:
+      "Read both ends of the range. Returns { from, to }, where each end is { hour, minutes, seconds?, type? } or null until it is complete. Returns null, and emits error, without RangePlugin or range.enabled.",
+    code: `const range = picker.getRange();
+
+// { from: { hour: '09', minutes: '00' }, to: { hour: '17', minutes: '00' } }`,
+  },
+  {
+    name: "setActivePart('from' | 'to')",
+    description:
+      "Switch the clock to one end of the range without moving focus. Updates the tabs and emits range:switch. Returns true when the active end changed or was already that end. With the default range.linked, 'to' is refused until From is complete and the method returns false.",
+    code: `picker.open();
+
+const switched = picker.setActivePart('to');`,
+  },
+  {
+    name: "refreshDisabledTime()",
+    description:
+      "Apply clock.disabledTime and clock.isTimeDisabled again without a re-render. It clears the cached isTimeDisabled results and updates the disabled marks on the clock or wheel and the OK button. It does not write to the input. Safe to call while the picker is closed.",
+    code: `let lunchBreak = false;
+
+const picker = new TimepickerUI(input, {
+  clock: {
+    type: '24h',
+    isTimeDisabled: ({ hour }) => lunchBreak && hour === 12
+  }
+});
+picker.create();
+
+lunchBreak = true;
+picker.refreshDisabledTime();`,
+  },
+  {
+    name: "on(event, handler) / once(event, handler)",
+    description:
+      "Subscribe to an event. Both return a function that removes the handler, and calling it more than once does nothing. With once(), the function removes the handler before it runs. See Events for off().",
+    code: `const unsubscribe = picker.on('confirm', (data) => {
+  console.log(data.hour, data.minutes);
+});
+
+unsubscribe();`,
+  },
+  {
     name: "destroy(options?)",
     description: "Destroy the picker instance and clean up.",
     code: `picker.destroy();

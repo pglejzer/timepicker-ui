@@ -3,6 +3,13 @@ import type { RangeState } from './RangeState';
 import type { RangePart, RangeValue } from './types';
 import { formatDisplayTime, formatRangePart, getTimePlaceholder } from './utils';
 import { setActivePeriod, setSpinbuttonValue } from '../../../utils/accessibility';
+import { activateField } from '../../events/timeFields';
+
+interface ActivePartInputs {
+  hourInput: HTMLInputElement | null;
+  minutesInput: HTMLInputElement | null;
+  secondsInput: HTMLInputElement | null;
+}
 
 export class RangeUI {
   private readonly core: CoreState;
@@ -21,7 +28,7 @@ export class RangeUI {
     const toBtn = modal.querySelector('.tp-ui-range-tab.tp-ui-range-to');
 
     const isFromActive = this.state.getActivePart() === 'from';
-    const isToAvailable = this.state.isFromComplete() || this.state.getPendingFrom() !== null;
+    const isToAvailable = this.state.canSwitchToEnd() || this.state.getPendingFrom() !== null;
 
     fromBtn?.classList.toggle('active', isFromActive);
     toBtn?.classList.toggle('active', !isFromActive);
@@ -85,6 +92,27 @@ export class RangeUI {
   }
 
   syncClockToActivePart(): void {
+    const { hourInput, minutesInput, secondsInput } = this.writeActivePartValues();
+
+    [minutesInput, secondsInput].forEach((input) => {
+      input?.blur();
+      input?.classList.remove('active');
+    });
+
+    if (hourInput) {
+      hourInput.click();
+    }
+  }
+
+  showActivePartHours(): HTMLInputElement | null {
+    const { hourInput } = this.writeActivePartValues();
+    if (hourInput) {
+      activateField(this.core, 'hour');
+    }
+    return hourInput;
+  }
+
+  private writeActivePartValues(): ActivePartInputs {
     const value = this.state.getSavedValue();
     const hourInput = this.core.getHour();
     const minutesInput = this.core.getMinutes();
@@ -98,14 +126,7 @@ export class RangeUI {
       setActivePeriod(this.core.getAM(), this.core.getPM(), value?.type);
     }
 
-    [minutesInput, secondsInput].forEach((input) => {
-      input?.blur();
-      input?.classList.remove('active');
-    });
-
-    if (hourInput) {
-      hourInput.click();
-    }
+    return { hourInput, minutesInput, secondsInput };
   }
 
   updateAll(): void {

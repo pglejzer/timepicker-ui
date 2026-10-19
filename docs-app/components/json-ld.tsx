@@ -1,3 +1,9 @@
+import {
+  DATEPICKER_NPM_URL,
+  DATEPICKER_PACKAGE,
+  DATEPICKER_REPO_URL,
+  DATEPICKER_VERSION,
+} from "@/lib/datepicker";
 import { SITE_URL } from "@/lib/seo-routes";
 import { LIBRARY_VERSION } from "@/lib/site";
 
@@ -60,6 +66,70 @@ export function SoftwareApplicationJsonLd() {
       "https://www.npmjs.com/package/timepicker-ui",
       "https://github.com/pglejzer/timepicker-ui",
     ],
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
+/**
+ * SoftwareApplication structured data for the companion package
+ * @pglejzer/datepicker-ui. Rendered only on /datepicker. Server component,
+ * JSON stringified from a static object.
+ */
+export function DatepickerSoftwareApplicationJsonLd() {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: DATEPICKER_PACKAGE,
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Any",
+    softwareVersion: DATEPICKER_VERSION,
+    description:
+      "Zero-dependency, framework-agnostic, SSR-safe date picker, the companion of timepicker-ui, with docked, modal and inline display, single, range and multiple selection, and 10 themes.",
+    url: `${SITE_URL}/datepicker`,
+    codeRepository: DATEPICKER_REPO_URL,
+    programmingLanguage: "TypeScript",
+    featureList: [
+      "Docked popover, modal dialog and inline calendar",
+      "Single date, date range and multiple dates",
+      "Month and year pickers",
+      "Typed input with an optional mask",
+      "10 built-in themes with light and dark detection",
+      "Any Intl locale and RTL",
+      "Keyboard and screen reader support",
+      "First-class TypeScript types",
+    ],
+    keywords: [
+      "date picker",
+      "datepicker",
+      "date range picker",
+      "javascript date picker",
+      "typescript date picker",
+      "zero dependency date picker",
+      "accessible date picker",
+      "inline calendar",
+      "ssr date picker",
+    ],
+    isRelatedTo: {
+      "@type": "SoftwareApplication",
+      name: "timepicker-ui",
+      url: SITE_URL,
+    },
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+    author: {
+      "@type": "Person",
+      name: "Piotr Glejzer",
+    },
+    sameAs: [DATEPICKER_NPM_URL, DATEPICKER_REPO_URL],
   };
 
   return (
@@ -156,6 +226,14 @@ const SEGMENT_LABELS: Record<string, string> = {
   "css-variables": "CSS Variables",
   "css-classes": "CSS Classes",
   "bundle-stats": "Bundle Size Analysis",
+  datepicker: "Datepicker",
+  selection: "Selection",
+  constraints: "Constraints",
+  typescript: "TypeScript",
+  "with-timepicker": "Date and Time",
+  "date-and-time": "Date and Time",
+  "min-max": "Min and Max Date",
+  "set-options": "Dynamic Options",
 };
 
 function humanize(segment: string): string {

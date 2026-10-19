@@ -2,6 +2,7 @@ import type { CoreState } from '../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../utils/EventEmitter';
 import type { LabelsOptions } from '../../types/options';
 import { TIMINGS } from '../../constants/timings';
+import { isEmbeddedInlineMode } from '../../utils/options/predicates';
 import { prefersReducedMotion, setOrRemoveAttribute, syncClockSlider } from '../../utils/accessibility';
 import { emitSelect, getActiveField, getTimeInput } from '../events/timeFields';
 import keyboardSvg from '../../../assets/keyboard.svg';
@@ -227,6 +228,9 @@ export class MobileViewHandler {
     const headingText = isKeyboardView ? labels.mobileTime : labels.time;
     if (heading && headingText) {
       heading.textContent = headingText;
+    }
+    if (!heading && headingText && isEmbeddedInlineMode(this.core.options)) {
+      modal.setAttribute('aria-label', headingText);
     }
 
     this.setClockFaceHidden(parts.clockFace, isKeyboardView);

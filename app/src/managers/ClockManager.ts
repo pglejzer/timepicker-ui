@@ -61,6 +61,10 @@ export default class ClockManager {
     return true;
   }
 
+  refreshDisabledTime(): void {
+    this.systemInitializer.getClockSystem()?.refreshDisabledTime();
+  }
+
   destroy(): void {
     this.destroyClockSystem();
   }

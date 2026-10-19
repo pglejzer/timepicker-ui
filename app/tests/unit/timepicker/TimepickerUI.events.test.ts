@@ -585,6 +585,61 @@ describe('TimepickerUI EventEmitter public API (v4.1.7 compat)', () => {
     });
   });
 
+  describe('unsubscribe functions returned by on() / once()', () => {
+    it('on() returns a remover that stops the handler and leaves others', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+
+      const removed = jest.fn<void, [ConfirmEventData]>();
+      const kept = jest.fn<void, [ConfirmEventData]>();
+      const remove = timepicker.on('confirm', removed);
+      timepicker.on('confirm', kept);
+
+      const emitter = getEmitter(timepicker);
+      emitter.emit('confirm', { hour: '10', minutes: '00' });
+      remove();
+      remove();
+      emitter.emit('confirm', { hour: '11', minutes: '00' });
+
+      expect(removed).toHaveBeenCalledTimes(1);
+      expect(kept).toHaveBeenCalledTimes(2);
+
+      timepicker.destroy();
+    });
+
+    it('once() returns a remover that prevents the call when used before emit', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+
+      const handler = jest.fn<void, [ConfirmEventData]>();
+      const remove = timepicker.once('confirm', handler);
+      remove();
+      remove();
+
+      getEmitter(timepicker).emit('confirm', { hour: '10', minutes: '00' });
+
+      expect(handler).not.toHaveBeenCalled();
+
+      timepicker.destroy();
+    });
+
+    it('on() and once() return callable no-ops after destroy', () => {
+      const timepicker = new TimepickerUI(input);
+      timepicker.create();
+      timepicker.destroy();
+
+      const handler = jest.fn();
+      const removeOn = timepicker.on('confirm', handler);
+      const removeOnce = timepicker.once('confirm', handler);
+
+      expect(typeof removeOn).toBe('function');
+      expect(typeof removeOnce).toBe('function');
+      expect(() => removeOn()).not.toThrow();
+      expect(() => removeOnce()).not.toThrow();
+      expect(handler).not.toHaveBeenCalled();
+    });
+  });
+
   // ── autoCommit flag ─────────────────────────────────────────
 
   describe('autoCommit flag on confirm event', () => {

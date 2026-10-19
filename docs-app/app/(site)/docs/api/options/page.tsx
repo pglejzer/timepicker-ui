@@ -105,6 +105,22 @@ const clockOptions: OptionRow[] = [
     ),
   },
   {
+    name: "isTimeDisabled",
+    type: "(time: TimeOfDay) => boolean",
+    default: "undefined",
+    description: (
+      <>
+        Return <code>true</code> to disable a time. <code>TimeOfDay</code> is{" "}
+        <code>{"{ hour, minutes, seconds }"}</code>, with <code>hour</code> from
+        0 to 23. Combined with <code>disabledTime</code> as a union. An hour or
+        minute is disabled when every time inside it is. Results are cached:
+        call <code>refreshDisabledTime()</code> after the data behind the
+        function changes. A throwing function counts as enabled. See{" "}
+        <Link href="/docs/features/disabled-time">Disabled Time</Link>.
+      </>
+    ),
+  },
+  {
     name: "discreteHourJump",
     type: "boolean",
     default: "false",
@@ -225,7 +241,12 @@ const uiOptions: OptionRow[] = [
       <>
         Inline mode configuration. <code>container</code> takes an element or
         a selector and is required when <code>enabled</code> is{" "}
-        <code>true</code>.
+        <code>true</code>. <code>embedded</code> (default{" "}
+        <code>false</code>) renders the picker as part of a host component:
+        the root is a <code>group</code> instead of a dialog, with no shadow
+        and no minimum height, no focus trap and no focus on mount. Ignored
+        unless <code>enabled</code> is <code>true</code>. See{" "}
+        <Link href="/docs/features/inline-mode">Inline Mode</Link>.
       </>
     ),
   },
@@ -537,6 +558,21 @@ const rangeOptions: OptionRow[] = [
       <>
         Maximum duration in minutes. With <code>clock.showSeconds</code>, it is
         compared to the exact length in seconds.
+      </>
+    ),
+  },
+  {
+    name: "linked",
+    type: "boolean",
+    default: "true",
+    description: (
+      <>
+        With <code>false</code>, From and To are independent: times before
+        From are not disabled in To, the To tab is enabled from the start, and{" "}
+        <code>minDuration</code> and <code>maxDuration</code> are not checked,
+        so a range can cross midnight. <code>range:validation</code> still
+        fires and reports <code>valid: true</code> once both ends are
+        complete.
       </>
     ),
   },

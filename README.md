@@ -7,14 +7,14 @@ A time picker for web forms. Attach it to an `<input>` and users pick a time on 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://img.shields.io/npm/l/timepicker-ui)
 [![Coverage Status](https://coveralls.io/repos/github/pglejzer/timepicker-ui/badge.svg?branch=main)](https://coveralls.io/github/pglejzer/timepicker-ui?branch=main)
 [![Tests](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml/badge.svg)](https://github.com/pglejzer/timepicker-ui/actions/workflows/tests.yml)
-[![Socket Badge](https://badge.socket.dev/npm/package/timepicker-ui/4.5.0)](https://badge.socket.dev/npm/package/timepicker-ui/4.5.0)
+[![Socket Badge](https://badge.socket.dev/npm/package/timepicker-ui/4.6.0)](https://badge.socket.dev/npm/package/timepicker-ui/4.6.0)
 
 [Live demo](https://timepicker-ui.vercel.app/) · [Documentation](https://timepicker-ui.vercel.app/docs) · [Changelog](./CHANGELOG.md) · [React wrapper](https://github.com/pglejzer/timepicker-ui-react)
 
 ## Why timepicker-ui
 
 - Zero dependencies.
-- ~26 KB gzipped core. The range and timezone plugins are about 3-4 KB each, the wheel plugin about 9 KB, and a plugin only gets bundled if you import it ([bundle stats](https://timepicker-ui.vercel.app/bundle-stats)).
+- ~27 KB gzipped core. The range plugin is about 5 KB, the timezone plugin about 3 KB, the wheel plugin about 10 KB, and a plugin only gets bundled if you import it ([bundle stats](https://timepicker-ui.vercel.app/bundle-stats)).
 - [Clock](https://timepicker-ui.vercel.app/examples/basic/getting-started), [wheel](https://timepicker-ui.vercel.app/examples/plugins/wheel) or compact wheel (a small dropdown under the input).
 - Plain JS API, so it works the same in React, Vue, Angular, Svelte or without a framework.
 - Doesn't touch `window` or `document` on import, so it's safe in Next.js, Nuxt and other SSR setups.
@@ -25,8 +25,9 @@ A time picker for web forms. Attach it to an `<input>` and users pick a time on 
 - 12h / 24h, hour and minute steps, [disabled times](https://timepicker-ui.vercel.app/docs/features/disabled-time)
 - Optional [seconds](https://timepicker-ui.vercel.app/docs/features/seconds) (`HH:MM:SS`) in the clock, wheel and compact wheel
 - [12 themes](https://timepicker-ui.vercel.app/docs/features/themes) (Material 2/3, Crane, Dark, Cyberpunk, Blueprint, ...)
-- [Inline mode](https://timepicker-ui.vercel.app/docs/features/inline-mode), [clear button](https://timepicker-ui.vercel.app/docs/features/clear-button), [mobile layout](https://timepicker-ui.vercel.app/docs/features/mobile)
-- [Time ranges](https://timepicker-ui.vercel.app/examples/plugins/range) and [timezones](https://timepicker-ui.vercel.app/examples/plugins/timezone) via plugins
+- [Inline mode](https://timepicker-ui.vercel.app/docs/features/inline-mode) (with an embedded variant for your own dialog), [clear button](https://timepicker-ui.vercel.app/docs/features/clear-button), [mobile layout](https://timepicker-ui.vercel.app/docs/features/mobile)
+- [Time ranges](https://timepicker-ui.vercel.app/examples/plugins/range) (linked or independent From/To) and [timezones](https://timepicker-ui.vercel.app/examples/plugins/timezone) via plugins
+- Disable times with a function (`clock.isTimeDisabled`)
 - [TypeScript](https://timepicker-ui.vercel.app/docs/api/typescript) types included
 
 ## Installation
@@ -69,7 +70,13 @@ picker.getValue();             // { hour, minutes, seconds, type, time }, second
 picker.setValue("14:30");      // "2:30 PM" works too
 picker.setValue("14:30:15");   // with clock.showSeconds
 picker.setOptions({ ui: { theme: "crane" } });
+picker.setRange({ from: "09:00", to: "17:00" });  // needs RangePlugin
+picker.getRange();
+picker.setActivePart("to");
+picker.refreshDisabledTime();  // after the data behind clock.isTimeDisabled changes
 
+const off = picker.on("confirm", (data) => {});  // on() and once() return a function that removes the handler
+off();
 picker.on("confirm", (data) => {});
 picker.on("cancel", (data) => {});
 picker.on("open", () => {});
@@ -100,6 +107,7 @@ new TimepickerUI(input, {
     showSeconds: false,         // true adds seconds (HH:MM:SS)
     incrementSeconds: 1,
     disabledTime: { hours: [], minutes: [], seconds: [], ranges: "" },
+    isTimeDisabled: ({ hour, minutes, seconds }) => false,  // hour is 0-23
     defaultTime: "now" | { time, updateInput },
   },
   ui: {
@@ -109,7 +117,7 @@ new TimepickerUI(input, {
     backdrop: true,
     initialView: "clock",       // or "keyboard"
     editable: false,
-    inline: { enabled: false, container: "#picker" | element, showButtons: false, autoUpdate: false },
+    inline: { enabled: false, container: "#picker" | element, showButtons: false, autoUpdate: false, embedded: false },
     clearButton: false,         // or { clearInput: false } to keep the input value on Clear
     cssClass: "",
   },
@@ -117,7 +125,7 @@ new TimepickerUI(input, {
   behavior: { focusTrap: true, returnFocus: false, delayHandler: 0, id: "" },
   callbacks: { onConfirm, onCancel, onOpen, onUpdate, onSelectHour, onSelectMinute, onSelectSecond, onSelectPeriod, onClear, onError, ... },
   wheel: { placement: "auto" | "top" | "bottom", hideFooter: false, commitOnScroll: false, hideDisabled: false, ignoreOutsideClick: false },
-  range: { enabled: false, minDuration, maxDuration },
+  range: { enabled: false, linked: true, minDuration, maxDuration },
   timezone: { enabled: false, default, list },
 });
 ```
@@ -156,6 +164,8 @@ new TimepickerUI(input, { range: { enabled: true } });
 
 ## Upgrading
 
+From 4.5 nothing breaks. 4.6 adds `ui.inline.embedded`, `range.linked`, `clock.isTimeDisabled` with `refreshDisabledTime()`, the `setRange()` / `getRange()` / `setActivePart()` methods, and a remover returned by `on()` / `once()`. See the [CHANGELOG](./CHANGELOG.md).
+
 From 4.4, 4.5 adds optional seconds (`clock.showSeconds`) and fixes many bugs. It also renames many options to clearer names, for example `ui.initialView` instead of `ui.mobile`, and adds `setOptions()` in place of `update()`. The old names keep working until 5.0, and the [options page](https://timepicker-ui.vercel.app/docs/api/options) lists every pair. A few changes can affect an existing setup: the AM/PM part of the value is always `AM` / `PM` whatever `labels.am` / `labels.pm` say, out-of-range `clock.disabledTime.ranges` edges such as `25:00` are reported as errors, the old `.tp-ui-ripple` classes are gone, and some focus-ring and radius tokens changed. The [CHANGELOG](./CHANGELOG.md) lists them under "Check before upgrading".
 
 From 4.3 nothing breaks. 4.4 adds the `blueprint` and `blueprint-dark` themes, 16 new `labels.*` for screen-reader text, and Home/End/PageUp/PageDown keys. See the [CHANGELOG](./CHANGELOG.md).
@@ -186,6 +196,16 @@ function TimePicker() {
 ```
 
 There's also a [React wrapper](https://github.com/pglejzer/timepicker-ui-react) ([docs](https://timepicker-ui.vercel.app/react)). Vue and Angular examples are in the [quick start docs](https://timepicker-ui.vercel.app/docs/quick-start).
+
+## Need a date picker?
+
+[datepicker-ui](https://timepicker-ui.vercel.app/datepicker) is the companion calendar from the same author. It has no dependencies, follows Material Design 3, is safe to import during server rendering and uses the same theme names, so the two pickers match. It covers single dates, ranges and multiple dates.
+
+```bash
+npm install @pglejzer/datepicker-ui
+```
+
+The [date and time guide](https://timepicker-ui.vercel.app/datepicker/docs/with-timepicker) shows how to use both pickers in one form.
 
 ## Coming in 5.0
 

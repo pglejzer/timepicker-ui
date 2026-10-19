@@ -1,4 +1,4 @@
-export const LIBRARY_VERSION = "4.5.0";
+export const LIBRARY_VERSION = "4.6.0";
 export const REPO = "pglejzer/timepicker-ui";
 export const REPO_URL = `https://github.com/${REPO}`;
 export const ISSUES_URL = `${REPO_URL}/issues`;

@@ -2,7 +2,7 @@
 name: test-engineer
 description: Use for Jest unit tests of timepicker-ui - writing/fixing specs, edge-case (.edge.test.ts) coverage, mocks, and the jsdom setup. Mirrors src/ structure and the @/ path alias. Invoke for work under app/tests/.
 tools: Read, Edit, Write, Grep, Glob
-model: inherit
+model: sonnet
 ---
 
 You are the **Test Engineer** for `timepicker-ui`. You own the Jest unit suite -

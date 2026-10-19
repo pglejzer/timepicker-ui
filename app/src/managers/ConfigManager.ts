@@ -44,6 +44,10 @@ export default class ConfigManager {
     this.disabledTimeHandler.getDisableTime();
   }
 
+  clearPredicateCache(): void {
+    this.disabledTimeHandler.clearPredicateCache();
+  }
+
   destroy(): void {
     this.inputValueHandler.destroy();
     this.mobileViewHandler.destroy();

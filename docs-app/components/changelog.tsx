@@ -14,12 +14,13 @@ export type ReleaseNotes = {
   changes: Partial<Record<ChangeGroup, ChangeEntry[]>>;
 };
 
-export type ChangelogPackage = "library" | "react" | "mcp";
+export type ChangelogPackage = "library" | "react" | "mcp" | "datepicker";
 
 const PACKAGES: { id: ChangelogPackage; label: string; href: string }[] = [
   { id: "library", label: "Library", href: "/docs/changelog" },
   { id: "react", label: "React", href: "/docs/changelog/react" },
   { id: "mcp", label: "MCP server", href: "/docs/changelog/mcp" },
+  { id: "datepicker", label: "Datepicker", href: "/docs/changelog/datepicker" },
 ];
 
 const INLINE_MARKUP = /(`[^`]+`|\*\*[^*]+\*\*)/;

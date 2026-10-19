@@ -185,8 +185,43 @@ interface TimepickerEventMap {
     containerId?: string;             // deprecated, use container
     showButtons?: boolean;
     autoUpdate?: boolean;
+    embedded?: boolean;               // part of a host component, default false
   };
 }`,
+  },
+  {
+    name: "TimeOfDay",
+    description:
+      "The argument of clock.isTimeDisabled. hour is always 0 to 23, in both clock types. seconds is 0 unless clock.showSeconds is on.",
+    code: `import type { TimeOfDay } from 'timepicker-ui';
+
+interface TimeOfDay {
+  hour: number;
+  minutes: number;
+  seconds: number;
+}
+
+const isTimeDisabled = ({ hour }: TimeOfDay): boolean => hour < 9 || hour >= 17;`,
+  },
+  {
+    name: "RangeTimeValue and RangeTimeState",
+    description:
+      "What picker.getRange() returns. An end is null until it has a full time.",
+    code: `import type { RangeTimeValue, RangeTimeState } from 'timepicker-ui';
+
+interface RangeTimeValue {
+  hour: string;
+  minutes: string;
+  seconds?: string;              // showSeconds
+  type?: string;                 // 'AM' or 'PM' (12h mode)
+}
+
+interface RangeTimeState {
+  from: RangeTimeValue | null;
+  to: RangeTimeValue | null;
+}
+
+const range: RangeTimeState | null = picker.getRange();`,
   },
   {
     name: "Disabled time shape (clock.disabledTime)",
@@ -200,6 +235,7 @@ interface TimepickerEventMap {
     ranges?: string | string[];       // e.g. "10:00 AM - 12:00 PM", "10:00:30 AM - 10:05 AM"
     interval?: string | string[];     // deprecated, use ranges
   };
+  isTimeDisabled?: (time: TimeOfDay) => boolean;  // union with disabledTime
 }`,
   },
   {

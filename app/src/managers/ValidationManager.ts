@@ -130,6 +130,11 @@ export default class ValidationManager {
   }
 
   checkDisabledValuesOnStart(): void {
+    const { isTimeDisabled } = this.core.options.clock;
+    if (isTimeDisabled && typeof isTimeDisabled !== 'function') {
+      throw new TimepickerError('clock.isTimeDisabled must be a function', ERROR_CODES.INVALID_PARAMETER);
+    }
+
     if (!this.core.options.clock.disabledTime) return;
 
     const { disabledTime, type } = this.core.options.clock;

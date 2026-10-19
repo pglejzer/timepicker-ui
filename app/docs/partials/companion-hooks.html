@@ -1,0 +1,95 @@
+<section class="mb-12">
+  <div
+    id="companion-hooks"
+    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-200 dark:border-gray-700"
+  >
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Companion hooks</h3>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">
+      Opt-in hooks for hosts that compose the picker:
+      <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">ui.inline.embedded</code>, the range API,
+      <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">clock.isTimeDisabled</code> with
+      <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">refreshDisabledTime()</code>, and
+      <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">on()</code> returning an unsubscribe function.
+    </p>
+
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
+      <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 min-w-0">
+        <h4 class="font-semibold text-gray-900 dark:text-white">Embedded in a dialog</h4>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+          <code>role="group"</code>, no <code>aria-modal</code>, no card shadow, no focus trap.
+        </p>
+        <button id="ch-embedded-open" type="button" class="mt-3 px-3 py-2 rounded bg-blue-600 text-white text-sm">
+          Open dialog
+        </button>
+        <dialog id="ch-embedded-dialog" aria-labelledby="ch-embedded-title" class="rounded-xl p-6">
+          <h5 id="ch-embedded-title" class="font-semibold mb-3">Pick a time</h5>
+          <input id="ch-embedded-input" type="text" value="10:30 AM" aria-label="Embedded time" class="border rounded px-2 py-1" />
+          <div id="ch-embedded-container" class="mt-3"></div>
+          <button id="ch-embedded-close" type="button" class="mt-3 px-3 py-2 rounded bg-gray-200 text-sm">Close</button>
+        </dialog>
+      </div>
+
+      <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 min-w-0">
+        <h4 class="font-semibold text-gray-900 dark:text-white">Range API</h4>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+          <code>setRange()</code>, <code>getRange()</code> and <code>setActivePart()</code> without moving focus.
+        </p>
+        <input id="ch-range-input" type="text" aria-label="Range" class="mt-3 border rounded px-2 py-1 w-full" />
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button id="ch-range-set" type="button" class="px-3 py-2 rounded bg-blue-600 text-white text-sm">Set 09:00 - 17:00</button>
+          <button id="ch-range-get" type="button" class="px-3 py-2 rounded bg-gray-200 text-sm">getRange()</button>
+          <button id="ch-range-to" type="button" class="px-3 py-2 rounded bg-gray-200 text-sm">Open on To</button>
+        </div>
+        <h5 class="mt-4 text-sm font-semibold text-gray-900 dark:text-white"><code>range.linked: false</code></h5>
+        <input id="ch-range-overnight" type="text" aria-label="Overnight range" class="mt-2 border rounded px-2 py-1 w-full" />
+        <button id="ch-range-overnight-set" type="button" class="mt-2 px-3 py-2 rounded bg-blue-600 text-white text-sm">
+          Set 22:00 - 01:00
+        </button>
+        <pre id="ch-range-output" class="mt-3 text-xs bg-gray-100 dark:bg-gray-900 rounded p-2 overflow-x-auto"></pre>
+      </div>
+
+      <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 min-w-0">
+        <h4 class="font-semibold text-gray-900 dark:text-white">Business hours with a function</h4>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+          <code>isTimeDisabled</code> allows 09:00-17:00. The button toggles a lunch break and calls
+          <code>refreshDisabledTime()</code>.
+        </p>
+        <input id="ch-disabled-input" type="text" value="10:00" aria-label="Business hours time" class="mt-3 border rounded px-2 py-1" />
+        <div id="ch-disabled-container" class="mt-3"></div>
+        <button id="ch-disabled-lunch" type="button" class="mt-3 px-3 py-2 rounded bg-blue-600 text-white text-sm">
+          Toggle lunch break (12:00-13:00)
+        </button>
+        <p id="ch-disabled-state" class="mt-2 text-sm text-gray-600 dark:text-gray-300"></p>
+      </div>
+
+      <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 min-w-0">
+        <h4 class="font-semibold text-gray-900 dark:text-white">Unsubscribe</h4>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+          <code>on()</code> returns a function that removes the handler.
+        </p>
+        <input id="ch-events-input" type="text" value="08:15 AM" aria-label="Events time" class="mt-3 border rounded px-2 py-1" />
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button id="ch-events-sub" type="button" class="px-3 py-2 rounded bg-blue-600 text-white text-sm">Subscribe to confirm</button>
+          <button id="ch-events-unsub" type="button" class="px-3 py-2 rounded bg-gray-200 text-sm">Unsubscribe</button>
+        </div>
+        <pre id="ch-events-log" class="mt-3 text-xs bg-gray-100 dark:bg-gray-900 rounded p-2 overflow-x-auto"></pre>
+      </div>
+
+      <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 min-w-0 md:col-span-2">
+        <h4 class="font-semibold text-gray-900 dark:text-white">Hidden container check</h4>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+          An inline picker created inside a hidden container, then shown. "Re-render" calls
+          <code>setOptions({})</code>.
+        </p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button id="ch-hidden-show" type="button" class="px-3 py-2 rounded bg-blue-600 text-white text-sm">Show</button>
+          <button id="ch-hidden-rerender" type="button" class="px-3 py-2 rounded bg-gray-200 text-sm">Re-render</button>
+        </div>
+        <div id="ch-hidden-wrap" hidden class="mt-3">
+          <input id="ch-hidden-input" type="text" value="03:45 PM" aria-label="Hidden container time" class="border rounded px-2 py-1" />
+          <div id="ch-hidden-container" class="mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

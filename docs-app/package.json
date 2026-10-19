@@ -9,14 +9,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@pglejzer/datepicker-ui": "1.0.0",
     "@vercel/analytics": "^1.6.1",
     "next": "^16.4.0",
     "prism-react-renderer": "^2.4.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "recharts": "^3.7.0",
-    "timepicker-ui": "4.5.0",
-    "timepicker-ui-react": "1.5.0"
+    "timepicker-ui": "4.6.0",
+    "timepicker-ui-react": "1.6.0"
   },
   "devDependencies": {
     "@types/node": "^20",

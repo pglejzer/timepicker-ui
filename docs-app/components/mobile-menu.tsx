@@ -18,6 +18,7 @@ const AREAS: { href: string; label: string; match: (pathname: string) => boolean
   { href: "/examples", label: "Examples", match: (p) => areaOf(p) === "examples" },
   { href: "/playground", label: "Playground", match: isPlayground },
   { href: "/react", label: "React", match: (p) => areaOf(p) === "react" },
+  { href: "/datepicker", label: "Datepicker", match: (p) => areaOf(p) === "datepicker" },
 ];
 
 export function MobileMenu() {

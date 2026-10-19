@@ -1,4 +1,10 @@
-import { docsNav, examplesNav, reactNav, type NavSection } from "@/lib/nav";
+import { datepickerNav, docsNav, examplesNav, reactNav, type NavSection } from "@/lib/nav";
+import {
+  DATEPICKER_NPM_URL,
+  DATEPICKER_REPO_URL,
+  DATEPICKER_THEMES,
+  DATEPICKER_VERSION,
+} from "@/lib/datepicker";
 import { SITE_URL } from "@/lib/seo-routes";
 import { LIBRARY_VERSION, THEMES } from "@/lib/site";
 
@@ -24,6 +30,8 @@ const INTRO = [
   "React projects can use the `timepicker-ui-react` wrapper. The `timepicker-ui-mcp` package is an MCP server that lets AI assistants look up options, events and themes, generate config snippets and validate times.",
   "",
 ];
+
+const DATEPICKER_INTRO = `\`@pglejzer/datepicker-ui\` ${DATEPICKER_VERSION} is a zero-dependency, framework-agnostic date picker and the companion of timepicker-ui. It shows a docked popover, a modal dialog or an inline calendar, selects a single date, a range or multiple dates, and ships ${DATEPICKER_THEMES.length} themes. Install it with \`npm install @pglejzer/datepicker-ui\` ([npm](${DATEPICKER_NPM_URL}), [GitHub](${DATEPICKER_REPO_URL})).`;
 
 function isInternal(href: string): boolean {
   return href.startsWith("/") && !href.startsWith("//");
@@ -55,6 +63,7 @@ export function GET() {
     ...main.flatMap((section) => block(section.title, links([section], seen))),
     ...block("Examples", links(examplesNav, seen)),
     ...block("React", links(reactNav, seen)),
+    ...block("Datepicker", [DATEPICKER_INTRO, "", ...links(datepickerNav, seen)]),
     ...block("Tools", links(TOOLS, seen)),
     ...block("Optional", links(optional, seen)),
   ].join("\n");

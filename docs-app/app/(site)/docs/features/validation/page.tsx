@@ -40,7 +40,11 @@ export default function ValidationPage() {
           <li>
             Times blocked by <code>clock.disabledTime</code> are shown as
             disabled on the clock face and the wheel (or left out, with{" "}
-            <code>wheel.hideDisabled</code>) and cannot be picked there.
+            <code>wheel.hideDisabled</code>) and cannot be picked there.{" "}
+            <code>clock.isTimeDisabled</code> works the same way. A time is
+            disabled when <code>clock.disabledTime</code> or the function
+            disables it. See{" "}
+            <Link href="/docs/features/disabled-time">Disabled Time</Link>.
           </li>
           <li>
             The hour and minute fields inside the picker keep typed values

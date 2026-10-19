@@ -1,0 +1,798 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`companion baseline - options unset inline inline with buttons: inline with buttons - events 1`] = `
+[
+  {
+    "event": "open",
+    "payload": {
+      "degreesHours": 300,
+      "degreesMinutes": 90,
+      "hour": "10",
+      "minutes": "15",
+      "type": "AM",
+    },
+  },
+  {
+    "event": "select:hour",
+    "payload": {
+      "hour": "11",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "11",
+      "minutes": "15",
+      "type": "AM",
+    },
+  },
+  {
+    "event": "select:period",
+    "payload": {
+      "type": "PM",
+    },
+  },
+  {
+    "event": "select:pm",
+    "payload": {},
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "11",
+      "minutes": "15",
+      "type": "PM",
+    },
+  },
+  {
+    "event": "confirm",
+    "payload": {
+      "hour": "11",
+      "minutes": "15",
+      "type": "PM",
+    },
+  },
+]
+`;
+
+exports[`companion baseline - options unset inline inline with buttons: inline with buttons - markup 1`] = `"<div class="tp-ui-modal normalize tp-ui--inline tp-ui-normalize show" data-theme="basic" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-tp-baseline" data-owner-id="tp-baseline" style="transition:none"><div class="tp-ui-wrapper tp-ui-normalize expanded" tabindex="0"><div class="tp-ui-select-time " id="tp-ui-label-tp-baseline">Select time</div><div class="tp-ui-header expanded"><div class="tp-ui-wrapper-time expanded" role="group" aria-label="Time"><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="hour" readonly="" class="tp-ui-hour expanded active" tabindex="0" type="number" min="1" max="12" aria-label="Hour" role="spinbutton" aria-valuemin="1" aria-valuemax="12" aria-valuenow="11" aria-valuetext="11"></div><div class="tp-ui-hour-text expanded">Hour</div></div><div class="tp-ui-dots expanded" aria-hidden="true"><span class="expanded"></span><span class="expanded"></span></div><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="minutes" readonly="" class="tp-ui-minutes expanded" tabindex="0" type="number" min="0" max="59" aria-label="Minute" role="spinbutton" aria-valuemin="0" aria-valuemax="59" aria-valuenow="15" aria-valuetext="15"></div><div class="tp-ui-minute-text expanded">Minute</div></div></div><div class="tp-ui-wrapper-type-time expanded" role="group" aria-label="Period"><div class="tp-ui-type-mode tp-ui-am expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="AM" aria-pressed="false" data-type="AM">AM</div><div class="tp-ui-type-mode tp-ui-pm expanded active" data-md3-ripple="" tabindex="0" role="button" aria-label="PM" aria-pressed="true" data-type="PM">PM</div></div></div><div class="tp-ui-mobile-clock-wrapper expanded"><div class="tp-ui-body expanded" role="group" aria-label="Clock"><div class="tp-ui-clock-face expanded scale-in" role="slider" tabindex="0" aria-label="Hour" aria-valuemin="1" aria-valuemax="12" aria-valuenow="11" aria-valuetext="11"><div class="tp-ui-dot expanded" aria-hidden="true"></div><div class="tp-ui-clock-hand expanded" aria-hidden="true" style="transform: rotateZ(-30deg);"><div class="tp-ui-circle-hand expanded"></div></div><div class="tp-ui-tips-wrapper expanded" aria-hidden="true"><span class="tp-ui-hour-time-12" style="left: -16px; bottom: -41px;"><span tabindex="-1" class="tp-ui-value-tips">12</span></span><span class="tp-ui-hour-time-12" style="left: -28.5px; bottom: -37.65063509461097px;"><span tabindex="-1" class="tp-ui-value-tips">1</span></span><span class="tp-ui-hour-time-12" style="left: -37.65063509461096px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips">2</span></span><span class="tp-ui-hour-time-12" style="left: -41px; bottom: -16px;"><span tabindex="-1" class="tp-ui-value-tips">3</span></span><span class="tp-ui-hour-time-12" style="left: -37.65063509461097px; bottom: -3.5000000000000053px;"><span tabindex="-1" class="tp-ui-value-tips">4</span></span><span class="tp-ui-hour-time-12" style="left: -28.5px; bottom: 5.650635094610969px;"><span tabindex="-1" class="tp-ui-value-tips">5</span></span><span class="tp-ui-hour-time-12" style="left: -16.000000000000004px; bottom: 9px;"><span tabindex="-1" class="tp-ui-value-tips">6</span></span><span class="tp-ui-hour-time-12" style="left: -3.4999999999999964px; bottom: 5.650635094610966px;"><span tabindex="-1" class="tp-ui-value-tips">7</span></span><span class="tp-ui-hour-time-12" style="left: 5.650635094610962px; bottom: -3.4999999999999893px;"><span tabindex="-1" class="tp-ui-value-tips">8</span></span><span class="tp-ui-hour-time-12" style="left: 9px; bottom: -15.999999999999995px;"><span tabindex="-1" class="tp-ui-value-tips">9</span></span><span class="tp-ui-hour-time-12" style="left: 5.650635094610966px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips">10</span></span><span class="tp-ui-hour-time-12" style="left: -3.4999999999999893px; bottom: -37.65063509461096px;"><span tabindex="-1" class="tp-ui-value-tips active">11</span></span></div></div></div></div><div class="tp-ui-footer expanded" style="justify-content: flex-end;"><div class="tp-ui-wrapper-btn expanded"><div class="tp-ui-cancel-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="Cancel">Cancel</div><div class="tp-ui-ok-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="OK">OK</div></div></div></div><div class="timepicker-announcer sr-only tp-ui-normalize expanded" role="status" aria-live="polite" aria-atomic="true">PM selected</div></div>"`;
+
+exports[`companion baseline - options unset inline inline with buttons: inline with buttons - values 1`] = `
+{
+  "input": "11:15 PM",
+  "value": {
+    "degreesHours": 330,
+    "degreesMinutes": 90,
+    "hour": "11",
+    "minutes": "15",
+    "time": "11:15 PM",
+    "type": "PM",
+  },
+}
+`;
+
+exports[`companion baseline - options unset inline inline without buttons: inline without buttons - events 1`] = `
+[
+  {
+    "event": "open",
+    "payload": {
+      "degreesHours": 300,
+      "degreesMinutes": 90,
+      "hour": "10",
+      "minutes": "15",
+      "type": "AM",
+    },
+  },
+  {
+    "event": "select:hour",
+    "payload": {
+      "hour": "11",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "11",
+      "minutes": "15",
+      "type": "AM",
+    },
+  },
+  {
+    "event": "confirm",
+    "payload": {
+      "hour": "11",
+      "minutes": "15",
+      "type": "AM",
+    },
+  },
+]
+`;
+
+exports[`companion baseline - options unset inline inline without buttons: inline without buttons - markup 1`] = `"<div class="tp-ui-modal normalize tp-ui--inline tp-ui-normalize show" data-theme="basic" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-tp-baseline" data-owner-id="tp-baseline" style="transition:none"><div class="tp-ui-wrapper tp-ui-normalize expanded" tabindex="0"><div class="tp-ui-select-time " id="tp-ui-label-tp-baseline">Select time</div><div class="tp-ui-header expanded"><div class="tp-ui-wrapper-time expanded" role="group" aria-label="Time"><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="hour" readonly="" class="tp-ui-hour expanded active" tabindex="0" type="number" min="1" max="12" aria-label="Hour" role="spinbutton" aria-valuemin="1" aria-valuemax="12" aria-valuenow="11" aria-valuetext="11"></div><div class="tp-ui-hour-text expanded">Hour</div></div><div class="tp-ui-dots expanded" aria-hidden="true"><span class="expanded"></span><span class="expanded"></span></div><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="minutes" readonly="" class="tp-ui-minutes expanded" tabindex="0" type="number" min="0" max="59" aria-label="Minute" role="spinbutton" aria-valuemin="0" aria-valuemax="59" aria-valuenow="15" aria-valuetext="15"></div><div class="tp-ui-minute-text expanded">Minute</div></div></div><div class="tp-ui-wrapper-type-time expanded" role="group" aria-label="Period"><div class="tp-ui-type-mode tp-ui-am expanded active" data-md3-ripple="" tabindex="0" role="button" aria-label="AM" aria-pressed="true" data-type="AM">AM</div><div class="tp-ui-type-mode tp-ui-pm expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="PM" aria-pressed="false" data-type="PM">PM</div></div></div><div class="tp-ui-mobile-clock-wrapper expanded"><div class="tp-ui-body expanded" role="group" aria-label="Clock"><div class="tp-ui-clock-face expanded scale-in" role="slider" tabindex="0" aria-label="Hour" aria-valuemin="1" aria-valuemax="12" aria-valuenow="11" aria-valuetext="11"><div class="tp-ui-dot expanded" aria-hidden="true"></div><div class="tp-ui-clock-hand expanded" aria-hidden="true" style="transform: rotateZ(-30deg);"><div class="tp-ui-circle-hand expanded"></div></div><div class="tp-ui-tips-wrapper expanded" aria-hidden="true"><span class="tp-ui-hour-time-12" style="left: -16px; bottom: -41px;"><span tabindex="-1" class="tp-ui-value-tips">12</span></span><span class="tp-ui-hour-time-12" style="left: -28.5px; bottom: -37.65063509461097px;"><span tabindex="-1" class="tp-ui-value-tips">1</span></span><span class="tp-ui-hour-time-12" style="left: -37.65063509461096px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips">2</span></span><span class="tp-ui-hour-time-12" style="left: -41px; bottom: -16px;"><span tabindex="-1" class="tp-ui-value-tips">3</span></span><span class="tp-ui-hour-time-12" style="left: -37.65063509461097px; bottom: -3.5000000000000053px;"><span tabindex="-1" class="tp-ui-value-tips">4</span></span><span class="tp-ui-hour-time-12" style="left: -28.5px; bottom: 5.650635094610969px;"><span tabindex="-1" class="tp-ui-value-tips">5</span></span><span class="tp-ui-hour-time-12" style="left: -16.000000000000004px; bottom: 9px;"><span tabindex="-1" class="tp-ui-value-tips">6</span></span><span class="tp-ui-hour-time-12" style="left: -3.4999999999999964px; bottom: 5.650635094610966px;"><span tabindex="-1" class="tp-ui-value-tips">7</span></span><span class="tp-ui-hour-time-12" style="left: 5.650635094610962px; bottom: -3.4999999999999893px;"><span tabindex="-1" class="tp-ui-value-tips">8</span></span><span class="tp-ui-hour-time-12" style="left: 9px; bottom: -15.999999999999995px;"><span tabindex="-1" class="tp-ui-value-tips">9</span></span><span class="tp-ui-hour-time-12" style="left: 5.650635094610966px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips">10</span></span><span class="tp-ui-hour-time-12" style="left: -3.4999999999999893px; bottom: -37.65063509461096px;"><span tabindex="-1" class="tp-ui-value-tips active">11</span></span></div></div></div></div><div class="tp-ui-footer expanded" style="display: none; justify-content: flex-end;"><div class="tp-ui-wrapper-btn expanded" style="display: none;"><div class="tp-ui-cancel-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="Cancel">Cancel</div><div class="tp-ui-ok-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="OK">OK</div></div></div></div><div class="timepicker-announcer sr-only tp-ui-normalize expanded" role="status" aria-live="polite" aria-atomic="true">Hour: 11</div></div>"`;
+
+exports[`companion baseline - options unset inline inline without buttons: inline without buttons - values 1`] = `
+{
+  "input": "11:15 AM",
+  "value": {
+    "degreesHours": 330,
+    "degreesMinutes": 90,
+    "hour": "11",
+    "minutes": "15",
+    "time": "11:15 AM",
+    "type": "AM",
+  },
+}
+`;
+
+exports[`companion baseline - options unset modal modal 12h defaults: modal 12h defaults - events 1`] = `
+[
+  {
+    "event": "open",
+    "payload": {
+      "degreesHours": 300,
+      "degreesMinutes": 90,
+      "hour": "10",
+      "minutes": "15",
+      "type": "AM",
+    },
+  },
+  {
+    "event": "select:hour",
+    "payload": {
+      "hour": "11",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "11",
+      "minutes": "15",
+      "type": "AM",
+    },
+  },
+  {
+    "event": "select:period",
+    "payload": {
+      "type": "PM",
+    },
+  },
+  {
+    "event": "select:pm",
+    "payload": {},
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "11",
+      "minutes": "15",
+      "type": "PM",
+    },
+  },
+  {
+    "event": "confirm",
+    "payload": {
+      "hour": "11",
+      "minutes": "15",
+      "type": "PM",
+    },
+  },
+]
+`;
+
+exports[`companion baseline - options unset modal modal 12h defaults: modal 12h defaults - markup 1`] = `"<div class="tp-ui-modal normalize tp-ui-normalize show" data-theme="basic" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-tp-baseline" data-owner-id="tp-baseline" style="transition:none"><div class="tp-ui-wrapper tp-ui-normalize expanded" tabindex="0"><div class="tp-ui-select-time " id="tp-ui-label-tp-baseline">Select time</div><div class="tp-ui-header expanded"><div class="tp-ui-wrapper-time expanded" role="group" aria-label="Time"><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="hour" readonly="" class="tp-ui-hour expanded active" tabindex="0" type="number" min="1" max="12" aria-label="Hour" role="spinbutton" aria-valuemin="1" aria-valuemax="12" aria-valuenow="11" aria-valuetext="11"></div><div class="tp-ui-hour-text expanded">Hour</div></div><div class="tp-ui-dots expanded" aria-hidden="true"><span class="expanded"></span><span class="expanded"></span></div><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="minutes" readonly="" class="tp-ui-minutes expanded" tabindex="0" type="number" min="0" max="59" aria-label="Minute" role="spinbutton" aria-valuemin="0" aria-valuemax="59" aria-valuenow="15" aria-valuetext="15"></div><div class="tp-ui-minute-text expanded">Minute</div></div></div><div class="tp-ui-wrapper-type-time expanded" role="group" aria-label="Period"><div class="tp-ui-type-mode tp-ui-am expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="AM" aria-pressed="false" data-type="AM">AM</div><div class="tp-ui-type-mode tp-ui-pm expanded active" data-md3-ripple="" tabindex="0" role="button" aria-label="PM" aria-pressed="true" data-type="PM">PM</div></div></div><div class="tp-ui-mobile-clock-wrapper expanded"><div class="tp-ui-body expanded" role="group" aria-label="Clock"><div class="tp-ui-clock-face expanded scale-in" role="slider" tabindex="0" aria-label="Hour" aria-valuemin="1" aria-valuemax="12" aria-valuenow="11" aria-valuetext="11"><div class="tp-ui-dot expanded" aria-hidden="true"></div><div class="tp-ui-clock-hand expanded" aria-hidden="true" style="transform: rotateZ(-30deg);"><div class="tp-ui-circle-hand expanded"></div></div><div class="tp-ui-tips-wrapper expanded" aria-hidden="true"><span class="tp-ui-hour-time-12" style="left: -16px; bottom: -41px;"><span tabindex="-1" class="tp-ui-value-tips">12</span></span><span class="tp-ui-hour-time-12" style="left: -28.5px; bottom: -37.65063509461097px;"><span tabindex="-1" class="tp-ui-value-tips">1</span></span><span class="tp-ui-hour-time-12" style="left: -37.65063509461096px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips">2</span></span><span class="tp-ui-hour-time-12" style="left: -41px; bottom: -16px;"><span tabindex="-1" class="tp-ui-value-tips">3</span></span><span class="tp-ui-hour-time-12" style="left: -37.65063509461097px; bottom: -3.5000000000000053px;"><span tabindex="-1" class="tp-ui-value-tips">4</span></span><span class="tp-ui-hour-time-12" style="left: -28.5px; bottom: 5.650635094610969px;"><span tabindex="-1" class="tp-ui-value-tips">5</span></span><span class="tp-ui-hour-time-12" style="left: -16.000000000000004px; bottom: 9px;"><span tabindex="-1" class="tp-ui-value-tips">6</span></span><span class="tp-ui-hour-time-12" style="left: -3.4999999999999964px; bottom: 5.650635094610966px;"><span tabindex="-1" class="tp-ui-value-tips">7</span></span><span class="tp-ui-hour-time-12" style="left: 5.650635094610962px; bottom: -3.4999999999999893px;"><span tabindex="-1" class="tp-ui-value-tips">8</span></span><span class="tp-ui-hour-time-12" style="left: 9px; bottom: -15.999999999999995px;"><span tabindex="-1" class="tp-ui-value-tips">9</span></span><span class="tp-ui-hour-time-12" style="left: 5.650635094610966px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips">10</span></span><span class="tp-ui-hour-time-12" style="left: -3.4999999999999893px; bottom: -37.65063509461096px;"><span tabindex="-1" class="tp-ui-value-tips active">11</span></span></div></div></div></div><div class="tp-ui-footer expanded" style="justify-content: flex-end;"><div class="tp-ui-wrapper-btn expanded"><div class="tp-ui-cancel-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="Cancel">Cancel</div><div class="tp-ui-ok-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="OK">OK</div></div></div></div><div class="timepicker-announcer sr-only tp-ui-normalize expanded" role="status" aria-live="polite" aria-atomic="true">PM selected</div></div>"`;
+
+exports[`companion baseline - options unset modal modal 12h defaults: modal 12h defaults - values 1`] = `
+{
+  "input": "11:15 PM",
+  "value": {
+    "degreesHours": 330,
+    "degreesMinutes": 90,
+    "hour": "11",
+    "minutes": "15",
+    "time": "11:15 PM",
+    "type": "PM",
+  },
+}
+`;
+
+exports[`companion baseline - options unset modal modal 12h disabled ranges: modal 12h disabled ranges - events 1`] = `
+[
+  {
+    "event": "open",
+    "payload": {
+      "degreesHours": 270,
+      "degreesMinutes": 180,
+      "hour": "09",
+      "minutes": "30",
+      "type": "AM",
+    },
+  },
+  {
+    "event": "select:hour",
+    "payload": {
+      "hour": "12",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "12",
+      "minutes": "30",
+      "type": "AM",
+    },
+  },
+  {
+    "event": "confirm",
+    "payload": {
+      "hour": "12",
+      "minutes": "30",
+      "type": "AM",
+    },
+  },
+]
+`;
+
+exports[`companion baseline - options unset modal modal 12h disabled ranges: modal 12h disabled ranges - markup 1`] = `"<div class="tp-ui-modal normalize tp-ui-normalize show" data-theme="basic" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-tp-baseline" data-owner-id="tp-baseline" style="transition:none"><div class="tp-ui-wrapper tp-ui-normalize expanded" tabindex="0"><div class="tp-ui-select-time " id="tp-ui-label-tp-baseline">Select time</div><div class="tp-ui-header expanded"><div class="tp-ui-wrapper-time expanded" role="group" aria-label="Time"><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="hour" readonly="" class="tp-ui-hour expanded active" tabindex="0" type="number" min="1" max="12" aria-label="Hour" role="spinbutton" aria-valuemin="1" aria-valuemax="12" aria-valuenow="12" aria-valuetext="12"></div><div class="tp-ui-hour-text expanded">Hour</div></div><div class="tp-ui-dots expanded" aria-hidden="true"><span class="expanded"></span><span class="expanded"></span></div><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="minutes" readonly="" class="tp-ui-minutes expanded" tabindex="0" type="number" min="0" max="59" aria-label="Minute" role="spinbutton" aria-valuemin="0" aria-valuemax="59" aria-valuenow="30" aria-valuetext="30"></div><div class="tp-ui-minute-text expanded">Minute</div></div></div><div class="tp-ui-wrapper-type-time expanded" role="group" aria-label="Period"><div class="tp-ui-type-mode tp-ui-am expanded active" data-md3-ripple="" tabindex="0" role="button" aria-label="AM" aria-pressed="true" data-type="AM">AM</div><div class="tp-ui-type-mode tp-ui-pm expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="PM" aria-pressed="false" data-type="PM">PM</div></div></div><div class="tp-ui-mobile-clock-wrapper expanded"><div class="tp-ui-body expanded" role="group" aria-label="Clock"><div class="tp-ui-clock-face expanded scale-in" role="slider" tabindex="0" aria-label="Hour" aria-valuemin="1" aria-valuemax="12" aria-valuenow="12" aria-valuetext="12"><div class="tp-ui-dot expanded" aria-hidden="true"></div><div class="tp-ui-clock-hand expanded" aria-hidden="true" style="transform: rotateZ(0deg);"><div class="tp-ui-circle-hand expanded"></div></div><div class="tp-ui-tips-wrapper expanded" aria-hidden="true"><span class="tp-ui-hour-time-12" style="left: -16px; bottom: -41px;"><span tabindex="-1" class="tp-ui-value-tips active">12</span></span><span class="tp-ui-hour-time-12" style="left: -28.5px; bottom: -37.65063509461097px;"><span tabindex="-1" class="tp-ui-value-tips">1</span></span><span class="tp-ui-hour-time-12" style="left: -37.65063509461096px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips">2</span></span><span class="tp-ui-hour-time-12" style="left: -41px; bottom: -16px;"><span tabindex="-1" class="tp-ui-value-tips">3</span></span><span class="tp-ui-hour-time-12" style="left: -37.65063509461097px; bottom: -3.5000000000000053px;"><span tabindex="-1" class="tp-ui-value-tips">4</span></span><span class="tp-ui-hour-time-12" style="left: -28.5px; bottom: 5.650635094610969px;"><span tabindex="-1" class="tp-ui-value-tips">5</span></span><span class="tp-ui-hour-time-12" style="left: -16.000000000000004px; bottom: 9px;"><span tabindex="-1" class="tp-ui-value-tips">6</span></span><span class="tp-ui-hour-time-12" style="left: -3.4999999999999964px; bottom: 5.650635094610966px;"><span tabindex="-1" class="tp-ui-value-tips">7</span></span><span class="tp-ui-hour-time-12" style="left: 5.650635094610962px; bottom: -3.4999999999999893px;"><span tabindex="-1" class="tp-ui-value-tips">8</span></span><span class="tp-ui-hour-time-12" style="left: 9px; bottom: -15.999999999999995px;"><span tabindex="-1" class="tp-ui-value-tips">9</span></span><span class="tp-ui-hour-time-12 tp-ui-tips-disabled" style="left: 5.650635094610966px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips tp-ui-tips-disabled">10</span></span><span class="tp-ui-hour-time-12 tp-ui-tips-disabled" style="left: -3.4999999999999893px; bottom: -37.65063509461096px;"><span tabindex="-1" class="tp-ui-value-tips tp-ui-tips-disabled">11</span></span></div></div></div></div><div class="tp-ui-footer expanded" style="justify-content: flex-end;"><div class="tp-ui-wrapper-btn expanded"><div class="tp-ui-cancel-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="Cancel">Cancel</div><div class="tp-ui-ok-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="OK">OK</div></div></div></div><div class="timepicker-announcer sr-only tp-ui-normalize expanded" role="status" aria-live="polite" aria-atomic="true">Hour: 12</div></div>"`;
+
+exports[`companion baseline - options unset modal modal 12h disabled ranges: modal 12h disabled ranges - values 1`] = `
+{
+  "input": "12:30 AM",
+  "value": {
+    "degreesHours": 360,
+    "degreesMinutes": 180,
+    "hour": "12",
+    "minutes": "30",
+    "time": "12:30 AM",
+    "type": "AM",
+  },
+}
+`;
+
+exports[`companion baseline - options unset modal modal 24h seconds disabled hours and minutes: modal 24h seconds disabled hours and minutes - events 1`] = `
+[
+  {
+    "event": "open",
+    "payload": {
+      "degreesHours": 300,
+      "degreesMinutes": 120,
+      "hour": "10",
+      "minutes": "20",
+      "seconds": "30",
+      "type": undefined,
+    },
+  },
+  {
+    "event": "select:hour",
+    "payload": {
+      "hour": "11",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "11",
+      "minutes": "20",
+      "seconds": "30",
+      "type": undefined,
+    },
+  },
+  {
+    "event": "animation:clock",
+    "payload": {},
+  },
+  {
+    "event": "switch:face",
+    "payload": {
+      "face": "minutes",
+    },
+  },
+  {
+    "event": "select:minute",
+    "payload": {
+      "minutes": "19",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "11",
+      "minutes": "19",
+      "seconds": "30",
+      "type": undefined,
+    },
+  },
+  {
+    "event": "select:minute",
+    "payload": {
+      "minutes": "18",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "11",
+      "minutes": "18",
+      "seconds": "30",
+      "type": undefined,
+    },
+  },
+  {
+    "event": "select:minute",
+    "payload": {
+      "minutes": "17",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "11",
+      "minutes": "17",
+      "seconds": "30",
+      "type": undefined,
+    },
+  },
+  {
+    "event": "select:minute",
+    "payload": {
+      "minutes": "16",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "11",
+      "minutes": "16",
+      "seconds": "30",
+      "type": undefined,
+    },
+  },
+  {
+    "event": "select:minute",
+    "payload": {
+      "minutes": "14",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "11",
+      "minutes": "14",
+      "seconds": "30",
+      "type": undefined,
+    },
+  },
+  {
+    "event": "confirm",
+    "payload": {
+      "hour": "11",
+      "minutes": "14",
+      "seconds": "30",
+      "type": undefined,
+    },
+  },
+]
+`;
+
+exports[`companion baseline - options unset modal modal 24h seconds disabled hours and minutes: modal 24h seconds disabled hours and minutes - markup 1`] = `"<div class="tp-ui-modal normalize tp-ui-has-seconds tp-ui-normalize show" data-theme="basic" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-tp-baseline" data-owner-id="tp-baseline" style="transition:none"><div class="tp-ui-wrapper tp-ui-normalize expanded" tabindex="0"><div class="tp-ui-select-time " id="tp-ui-label-tp-baseline">Select time</div><div class="tp-ui-header expanded"><div class="tp-ui-wrapper-time tp-ui-wrapper-time-24h expanded" role="group" aria-label="Time"><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="hour" readonly="" class="tp-ui-hour expanded" tabindex="0" type="number" min="0" max="23" aria-label="Hour" role="spinbutton" aria-valuemin="0" aria-valuemax="23" aria-valuenow="11" aria-valuetext="11"></div><div class="tp-ui-hour-text expanded">Hour</div></div><div class="tp-ui-dots expanded" aria-hidden="true"><span class="expanded"></span><span class="expanded"></span></div><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="minutes" readonly="" class="tp-ui-minutes expanded active" tabindex="0" type="number" min="0" max="59" aria-label="Minute" role="spinbutton" aria-valuemin="0" aria-valuemax="59" aria-valuenow="14" aria-valuetext="14"></div><div class="tp-ui-minute-text expanded">Minute</div></div><div class="tp-ui-dots expanded" aria-hidden="true"><span class="expanded"></span><span class="expanded"></span></div><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="seconds" readonly="" class="tp-ui-seconds expanded" tabindex="0" type="number" min="0" max="59" aria-label="Second" role="spinbutton" aria-valuemin="0" aria-valuemax="59" aria-valuenow="30" aria-valuetext="30"></div><div class="tp-ui-second-text expanded">Second</div></div></div></div><div class="tp-ui-mobile-clock-wrapper expanded"><div class="tp-ui-body expanded" role="group" aria-label="Clock"><div class="tp-ui-clock-face expanded scale-in" role="slider" tabindex="0" aria-label="Minute" aria-valuemin="0" aria-valuemax="59" aria-valuenow="14" aria-valuetext="14"><div class="tp-ui-dot expanded" aria-hidden="true"></div><div class="tp-ui-clock-hand expanded" aria-hidden="true" style="transform: rotateZ(84deg);"><div class="tp-ui-circle-hand expanded"></div></div><div class="tp-ui-tips-wrapper expanded" aria-hidden="true"><span class="tp-ui-minutes-time" style="left: -16px; bottom: -41px;"><span tabindex="-1" class="tp-ui-value-tips">00</span></span><span class="tp-ui-minutes-time" style="left: -28.5px; bottom: -37.65063509461097px;"><span tabindex="-1" class="tp-ui-value-tips">05</span></span><span class="tp-ui-minutes-time" style="left: -37.65063509461096px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips">10</span></span><span class="tp-ui-minutes-time tp-ui-tips-disabled" style="left: -41px; bottom: -16px;"><span tabindex="-1" class="tp-ui-value-tips tp-ui-tips-disabled">15</span></span><span class="tp-ui-minutes-time" style="left: -37.65063509461097px; bottom: -3.5000000000000053px;"><span tabindex="-1" class="tp-ui-value-tips">20</span></span><span class="tp-ui-minutes-time" style="left: -28.5px; bottom: 5.650635094610969px;"><span tabindex="-1" class="tp-ui-value-tips">25</span></span><span class="tp-ui-minutes-time" style="left: -16.000000000000004px; bottom: 9px;"><span tabindex="-1" class="tp-ui-value-tips">30</span></span><span class="tp-ui-minutes-time" style="left: -3.4999999999999964px; bottom: 5.650635094610966px;"><span tabindex="-1" class="tp-ui-value-tips">35</span></span><span class="tp-ui-minutes-time" style="left: 5.650635094610962px; bottom: -3.4999999999999893px;"><span tabindex="-1" class="tp-ui-value-tips">40</span></span><span class="tp-ui-minutes-time" style="left: 9px; bottom: -15.999999999999995px;"><span tabindex="-1" class="tp-ui-value-tips">45</span></span><span class="tp-ui-minutes-time" style="left: 5.650635094610966px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips">50</span></span><span class="tp-ui-minutes-time" style="left: -3.4999999999999893px; bottom: -37.65063509461096px;"><span tabindex="-1" class="tp-ui-value-tips">55</span></span></div><div class="tp-ui-tips-wrapper-24h expanded none" aria-hidden="true"><span class="tp-ui-hour-time-24" style="left: -16px; bottom: -41px;"><span tabindex="-1" class="tp-ui-value-tips-24h">00</span></span><span class="tp-ui-hour-time-24" style="left: -28.5px; bottom: -37.65063509461097px;"><span tabindex="-1" class="tp-ui-value-tips-24h">13</span></span><span class="tp-ui-hour-time-24" style="left: -37.65063509461096px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips-24h active">14</span></span><span class="tp-ui-hour-time-24" style="left: -41px; bottom: -16px;"><span tabindex="-1" class="tp-ui-value-tips-24h">15</span></span><span class="tp-ui-hour-time-24" style="left: -37.65063509461097px; bottom: -3.5000000000000053px;"><span tabindex="-1" class="tp-ui-value-tips-24h">16</span></span><span class="tp-ui-hour-time-24" style="left: -28.5px; bottom: 5.650635094610969px;"><span tabindex="-1" class="tp-ui-value-tips-24h">17</span></span><span class="tp-ui-hour-time-24" style="left: -16.000000000000004px; bottom: 9px;"><span tabindex="-1" class="tp-ui-value-tips-24h">18</span></span><span class="tp-ui-hour-time-24" style="left: -3.4999999999999964px; bottom: 5.650635094610966px;"><span tabindex="-1" class="tp-ui-value-tips-24h">19</span></span><span class="tp-ui-hour-time-24" style="left: 5.650635094610962px; bottom: -3.4999999999999893px;"><span tabindex="-1" class="tp-ui-value-tips-24h">20</span></span><span class="tp-ui-hour-time-24" style="left: 9px; bottom: -15.999999999999995px;"><span tabindex="-1" class="tp-ui-value-tips-24h">21</span></span><span class="tp-ui-hour-time-24" style="left: 5.650635094610966px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips-24h">22</span></span><span class="tp-ui-hour-time-24" style="left: -3.4999999999999893px; bottom: -37.65063509461096px;"><span tabindex="-1" class="tp-ui-value-tips-24h">23</span></span></div></div></div></div><div class="tp-ui-footer expanded" style="justify-content: flex-end;"><div class="tp-ui-wrapper-btn expanded"><div class="tp-ui-cancel-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="Cancel">Cancel</div><div class="tp-ui-ok-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="OK">OK</div></div></div></div><div class="timepicker-announcer sr-only tp-ui-normalize expanded" role="status" aria-live="polite" aria-atomic="true">Minutes: 14</div></div>"`;
+
+exports[`companion baseline - options unset modal modal 24h seconds disabled hours and minutes: modal 24h seconds disabled hours and minutes - values 1`] = `
+{
+  "input": "11:14:30",
+  "value": {
+    "degreesHours": 330,
+    "degreesMinutes": 84,
+    "hour": "11",
+    "minutes": "14",
+    "seconds": "30",
+    "time": "11:14:30",
+    "type": undefined,
+  },
+}
+`;
+
+exports[`companion baseline - range plugin range minDuration 30 - from, switch to, to, confirm: range minDuration 30 - events 1`] = `
+[
+  {
+    "event": "open",
+    "payload": {
+      "degreesHours": 360,
+      "degreesMinutes": 0,
+      "hour": "12",
+      "minutes": "00",
+      "type": "PM",
+    },
+  },
+  {
+    "event": "range:minute:commit",
+    "payload": {
+      "hour": "09",
+      "minutes": "00",
+      "type": "AM",
+    },
+  },
+  {
+    "event": "range:switch",
+    "payload": {
+      "active": "to",
+      "disabledTime": {
+        "fromHour": 9,
+        "fromType": "AM",
+        "hours": [],
+        "minutes": [],
+      },
+    },
+  },
+  {
+    "event": "select:hour",
+    "payload": {
+      "hour": "12",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "12",
+      "minutes": "00",
+      "type": undefined,
+    },
+  },
+  {
+    "event": "range:minute:commit",
+    "payload": {
+      "hour": "09",
+      "minutes": "45",
+      "type": "AM",
+    },
+  },
+  {
+    "event": "range:validation",
+    "payload": {
+      "duration": 45,
+      "maxDuration": undefined,
+      "minDuration": 30,
+      "valid": true,
+    },
+  },
+  {
+    "event": "confirm",
+    "payload": {
+      "hour": "12",
+      "minutes": "00",
+      "type": undefined,
+    },
+  },
+  {
+    "event": "range:confirm",
+    "payload": {
+      "duration": 45,
+      "from": "09:00 AM",
+      "to": "09:45 AM",
+    },
+  },
+]
+`;
+
+exports[`companion baseline - range plugin range minDuration 30 - from, switch to, to, confirm: range minDuration 30 - markup 1`] = `"<div class="tp-ui-modal normalize tp-ui-range-mode tp-ui-normalize show" data-theme="basic" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-tp-baseline" data-owner-id="tp-baseline" style="transition:none"><div class="tp-ui-wrapper tp-ui-normalize expanded" tabindex="0"><div class="tp-ui-range-header expanded" role="tablist" aria-label="Range selection"><button type="button" class="tp-ui-range-tab tp-ui-range-from expanded" data-md3-ripple="" role="tab" tabindex="-1" aria-selected="false"><span class="tp-ui-range-tab-label expanded">From</span><span class="tp-ui-range-tab-value tp-ui-range-from-time expanded">09:00 AM</span></button><button type="button" class="tp-ui-range-tab tp-ui-range-to expanded active" data-md3-ripple="" role="tab" tabindex="0" aria-selected="true" aria-disabled="false"><span class="tp-ui-range-tab-label expanded">To</span><span class="tp-ui-range-tab-value tp-ui-range-to-time expanded">09:45 AM</span></button></div><div class="tp-ui-select-time " id="tp-ui-label-tp-baseline">Select time</div><div class="tp-ui-header expanded"><div class="tp-ui-wrapper-time expanded" role="group" aria-label="Time"><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="hour" readonly="" class="tp-ui-hour expanded active" tabindex="0" type="number" min="1" max="12" aria-label="Hour" role="spinbutton" aria-valuemin="1" aria-valuemax="12" aria-valuenow="12" aria-valuetext="12"></div><div class="tp-ui-hour-text expanded">Hour</div></div><div class="tp-ui-dots expanded" aria-hidden="true"><span class="expanded"></span><span class="expanded"></span></div><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="minutes" readonly="" class="tp-ui-minutes expanded" tabindex="0" type="number" min="0" max="59" aria-label="Minute" role="spinbutton" aria-valuemin="0" aria-valuemax="59" aria-valuenow="0" aria-valuetext="00"></div><div class="tp-ui-minute-text expanded">Minute</div></div></div><div class="tp-ui-wrapper-type-time expanded" role="group" aria-label="Period"><div class="tp-ui-type-mode tp-ui-am expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="AM" aria-pressed="false" data-type="AM">AM</div><div class="tp-ui-type-mode tp-ui-pm expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="PM" aria-pressed="false" data-type="PM">PM</div></div></div><div class="tp-ui-mobile-clock-wrapper expanded"><div class="tp-ui-body expanded" role="group" aria-label="Clock"><div class="tp-ui-clock-face expanded scale-in" role="slider" tabindex="0" aria-label="Hour" aria-valuemin="1" aria-valuemax="12" aria-valuenow="12" aria-valuetext="12"><div class="tp-ui-dot expanded" aria-hidden="true"></div><div class="tp-ui-clock-hand expanded" aria-hidden="true"><div class="tp-ui-circle-hand expanded"></div></div><div class="tp-ui-tips-wrapper expanded" aria-hidden="true"><span class="tp-ui-hour-time-12" style="left: -16px; bottom: -41px;"><span tabindex="-1" class="tp-ui-value-tips active">12</span></span><span class="tp-ui-hour-time-12" style="left: -28.5px; bottom: -37.65063509461097px;"><span tabindex="-1" class="tp-ui-value-tips">1</span></span><span class="tp-ui-hour-time-12" style="left: -37.65063509461096px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips">2</span></span><span class="tp-ui-hour-time-12" style="left: -41px; bottom: -16px;"><span tabindex="-1" class="tp-ui-value-tips">3</span></span><span class="tp-ui-hour-time-12" style="left: -37.65063509461097px; bottom: -3.5000000000000053px;"><span tabindex="-1" class="tp-ui-value-tips">4</span></span><span class="tp-ui-hour-time-12" style="left: -28.5px; bottom: 5.650635094610969px;"><span tabindex="-1" class="tp-ui-value-tips">5</span></span><span class="tp-ui-hour-time-12" style="left: -16.000000000000004px; bottom: 9px;"><span tabindex="-1" class="tp-ui-value-tips">6</span></span><span class="tp-ui-hour-time-12" style="left: -3.4999999999999964px; bottom: 5.650635094610966px;"><span tabindex="-1" class="tp-ui-value-tips">7</span></span><span class="tp-ui-hour-time-12" style="left: 5.650635094610962px; bottom: -3.4999999999999893px;"><span tabindex="-1" class="tp-ui-value-tips">8</span></span><span class="tp-ui-hour-time-12" style="left: 9px; bottom: -15.999999999999995px;"><span tabindex="-1" class="tp-ui-value-tips">9</span></span><span class="tp-ui-hour-time-12" style="left: 5.650635094610966px; bottom: -28.500000000000004px;"><span tabindex="-1" class="tp-ui-value-tips">10</span></span><span class="tp-ui-hour-time-12" style="left: -3.4999999999999893px; bottom: -37.65063509461096px;"><span tabindex="-1" class="tp-ui-value-tips">11</span></span></div></div></div></div><div class="tp-ui-footer expanded" style="justify-content: flex-end;"><div class="tp-ui-wrapper-btn expanded"><div class="tp-ui-cancel-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="Cancel">Cancel</div><div class="tp-ui-ok-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="OK" aria-disabled="false">OK</div></div></div></div><div class="timepicker-announcer sr-only tp-ui-normalize expanded" role="status" aria-live="polite" aria-atomic="true"></div></div>"`;
+
+exports[`companion baseline - range plugin range minDuration 30 - from, switch to, to, confirm: range minDuration 30 - tabs after From 1`] = `
+{
+  "from": {
+    "ariaDisabled": null,
+    "ariaSelected": "false",
+    "className": "tp-ui-range-tab tp-ui-range-from expanded",
+    "disabled": null,
+    "tabindex": "-1",
+  },
+  "to": {
+    "ariaDisabled": "false",
+    "ariaSelected": "true",
+    "className": "tp-ui-range-tab tp-ui-range-to expanded active",
+    "disabled": null,
+    "tabindex": "0",
+  },
+}
+`;
+
+exports[`companion baseline - range plugin range minDuration 30 - from, switch to, to, confirm: range minDuration 30 - tabs before From is complete 1`] = `
+{
+  "from": {
+    "ariaDisabled": null,
+    "ariaSelected": "true",
+    "className": "tp-ui-range-tab tp-ui-range-from active expanded",
+    "disabled": null,
+    "tabindex": "0",
+  },
+  "to": {
+    "ariaDisabled": "true",
+    "ariaSelected": "false",
+    "className": "tp-ui-range-tab tp-ui-range-to expanded disabled",
+    "disabled": null,
+    "tabindex": "-1",
+  },
+}
+`;
+
+exports[`companion baseline - range plugin range minDuration 30 - from, switch to, to, confirm: range minDuration 30 - values 1`] = `
+{
+  "input": "09:00 AM - 09:45 AM",
+  "value": {
+    "degreesHours": 270,
+    "degreesMinutes": 0,
+    "hour": "09",
+    "minutes": "00",
+    "time": "09:00 AM",
+    "type": "AM",
+  },
+}
+`;
+
+exports[`companion baseline - wheel plugin inline compact-wheel: inline compact-wheel - events 1`] = `
+[
+  {
+    "event": "open",
+    "payload": {
+      "degreesHours": 300,
+      "degreesMinutes": 90,
+      "hour": "10",
+      "minutes": "15",
+      "type": undefined,
+    },
+  },
+  {
+    "event": "confirm",
+    "payload": {
+      "hour": "02",
+      "minutes": "45",
+      "type": "PM",
+    },
+  },
+]
+`;
+
+exports[`companion baseline - wheel plugin inline compact-wheel: inline compact-wheel - markup 1`] = `"<div class="tp-ui-modal normalize tp-ui-compact-wheel-mode tp-ui--inline tp-ui-normalize show" data-theme="basic" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-tp-baseline" data-owner-id="tp-baseline" style="transition:none"><div class="tp-ui-wrapper tp-ui-normalize expanded" tabindex="0"><div class="tp-ui-mobile-clock-wrapper expanded"><div class="tp-ui-wheel-container expanded"><div class="tp-ui-wheel-column-wrapper expanded"><div class="tp-ui-wheel-column tp-ui-wheel-hours expanded" role="listbox" aria-label="Hour" aria-activedescendant="tp-baseline-wh-02" tabindex="0"><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-item expanded is-near" role="option" id="tp-baseline-wh-01" data-value="01" aria-label="Hour 01" aria-selected="false">01</div><div class="tp-ui-wheel-item expanded is-center" role="option" id="tp-baseline-wh-02" data-value="02" aria-label="Hour 02" aria-selected="true">02</div><div class="tp-ui-wheel-item expanded is-near" role="option" id="tp-baseline-wh-03" data-value="03" aria-label="Hour 03" aria-selected="false">03</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-04" data-value="04" aria-label="Hour 04" aria-selected="false">04</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-05" data-value="05" aria-label="Hour 05" aria-selected="false">05</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-06" data-value="06" aria-label="Hour 06" aria-selected="false">06</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-07" data-value="07" aria-label="Hour 07" aria-selected="false">07</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-08" data-value="08" aria-label="Hour 08" aria-selected="false">08</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-09" data-value="09" aria-label="Hour 09" aria-selected="false">09</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-10" data-value="10" aria-label="Hour 10" aria-selected="false">10</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-11" data-value="11" aria-label="Hour 11" aria-selected="false">11</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-12" data-value="12" aria-label="Hour 12" aria-selected="false">12</div><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-padding expanded"></div></div></div><div class="tp-ui-wheel-separator expanded" aria-hidden="true">:</div><div class="tp-ui-wheel-column-wrapper expanded"><div class="tp-ui-wheel-column tp-ui-wheel-minutes expanded" role="listbox" aria-label="Minute" aria-activedescendant="tp-baseline-wm-45" tabindex="0"><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-00" data-value="00" aria-label="Minute 00" aria-selected="false">00</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-01" data-value="01" aria-label="Minute 01" aria-selected="false">01</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-02" data-value="02" aria-label="Minute 02" aria-selected="false">02</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-03" data-value="03" aria-label="Minute 03" aria-selected="false">03</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-04" data-value="04" aria-label="Minute 04" aria-selected="false">04</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-05" data-value="05" aria-label="Minute 05" aria-selected="false">05</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-06" data-value="06" aria-label="Minute 06" aria-selected="false">06</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-07" data-value="07" aria-label="Minute 07" aria-selected="false">07</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-08" data-value="08" aria-label="Minute 08" aria-selected="false">08</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-09" data-value="09" aria-label="Minute 09" aria-selected="false">09</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-10" data-value="10" aria-label="Minute 10" aria-selected="false">10</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-11" data-value="11" aria-label="Minute 11" aria-selected="false">11</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-12" data-value="12" aria-label="Minute 12" aria-selected="false">12</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-13" data-value="13" aria-label="Minute 13" aria-selected="false">13</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-14" data-value="14" aria-label="Minute 14" aria-selected="false">14</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-15" data-value="15" aria-label="Minute 15" aria-selected="false">15</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-16" data-value="16" aria-label="Minute 16" aria-selected="false">16</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-17" data-value="17" aria-label="Minute 17" aria-selected="false">17</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-18" data-value="18" aria-label="Minute 18" aria-selected="false">18</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-19" data-value="19" aria-label="Minute 19" aria-selected="false">19</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-20" data-value="20" aria-label="Minute 20" aria-selected="false">20</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-21" data-value="21" aria-label="Minute 21" aria-selected="false">21</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-22" data-value="22" aria-label="Minute 22" aria-selected="false">22</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-23" data-value="23" aria-label="Minute 23" aria-selected="false">23</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-24" data-value="24" aria-label="Minute 24" aria-selected="false">24</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-25" data-value="25" aria-label="Minute 25" aria-selected="false">25</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-26" data-value="26" aria-label="Minute 26" aria-selected="false">26</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-27" data-value="27" aria-label="Minute 27" aria-selected="false">27</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-28" data-value="28" aria-label="Minute 28" aria-selected="false">28</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-29" data-value="29" aria-label="Minute 29" aria-selected="false">29</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-30" data-value="30" aria-label="Minute 30" aria-selected="false">30</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-31" data-value="31" aria-label="Minute 31" aria-selected="false">31</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-32" data-value="32" aria-label="Minute 32" aria-selected="false">32</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-33" data-value="33" aria-label="Minute 33" aria-selected="false">33</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-34" data-value="34" aria-label="Minute 34" aria-selected="false">34</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-35" data-value="35" aria-label="Minute 35" aria-selected="false">35</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-36" data-value="36" aria-label="Minute 36" aria-selected="false">36</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-37" data-value="37" aria-label="Minute 37" aria-selected="false">37</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-38" data-value="38" aria-label="Minute 38" aria-selected="false">38</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-39" data-value="39" aria-label="Minute 39" aria-selected="false">39</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-40" data-value="40" aria-label="Minute 40" aria-selected="false">40</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-41" data-value="41" aria-label="Minute 41" aria-selected="false">41</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-42" data-value="42" aria-label="Minute 42" aria-selected="false">42</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-43" data-value="43" aria-label="Minute 43" aria-selected="false">43</div><div class="tp-ui-wheel-item expanded is-near" role="option" id="tp-baseline-wm-44" data-value="44" aria-label="Minute 44" aria-selected="false">44</div><div class="tp-ui-wheel-item expanded is-center" role="option" id="tp-baseline-wm-45" data-value="45" aria-label="Minute 45" aria-selected="true">45</div><div class="tp-ui-wheel-item expanded is-near" role="option" id="tp-baseline-wm-46" data-value="46" aria-label="Minute 46" aria-selected="false">46</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-47" data-value="47" aria-label="Minute 47" aria-selected="false">47</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-48" data-value="48" aria-label="Minute 48" aria-selected="false">48</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-49" data-value="49" aria-label="Minute 49" aria-selected="false">49</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-50" data-value="50" aria-label="Minute 50" aria-selected="false">50</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-51" data-value="51" aria-label="Minute 51" aria-selected="false">51</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-52" data-value="52" aria-label="Minute 52" aria-selected="false">52</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-53" data-value="53" aria-label="Minute 53" aria-selected="false">53</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-54" data-value="54" aria-label="Minute 54" aria-selected="false">54</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-55" data-value="55" aria-label="Minute 55" aria-selected="false">55</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-56" data-value="56" aria-label="Minute 56" aria-selected="false">56</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-57" data-value="57" aria-label="Minute 57" aria-selected="false">57</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-58" data-value="58" aria-label="Minute 58" aria-selected="false">58</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-59" data-value="59" aria-label="Minute 59" aria-selected="false">59</div><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-padding expanded"></div></div></div><div class="tp-ui-wheel-column-wrapper expanded at-end"><div class="tp-ui-wheel-column tp-ui-wheel-ampm expanded" role="listbox" aria-label="Period" aria-activedescendant="tp-baseline-wp-PM" tabindex="0"><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-item expanded is-near" role="option" id="tp-baseline-wp-AM" data-value="AM" aria-label="Period AM" aria-selected="false">AM</div><div class="tp-ui-wheel-item expanded is-center" role="option" id="tp-baseline-wp-PM" data-value="PM" aria-label="Period PM" aria-selected="true">PM</div><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-padding expanded"></div></div></div><div class="tp-ui-wheel-highlight expanded" aria-hidden="true"></div></div></div><div class="tp-ui-footer expanded" style="display: none; justify-content: flex-end;"><div class="tp-ui-wrapper-btn expanded" style="display: none;"><div class="tp-ui-cancel-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="Cancel">Cancel</div><div class="tp-ui-ok-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="OK">OK</div></div></div></div><div class="timepicker-announcer sr-only tp-ui-normalize expanded" role="status" aria-live="polite" aria-atomic="true"></div></div>"`;
+
+exports[`companion baseline - wheel plugin inline compact-wheel: inline compact-wheel - values 1`] = `
+{
+  "input": "02:45 PM",
+  "value": {
+    "degreesHours": 60,
+    "degreesMinutes": 270,
+    "hour": "02",
+    "minutes": "45",
+    "time": "02:45 PM",
+    "type": "PM",
+  },
+}
+`;
+
+exports[`companion baseline - wheel plugin wheel mode with disabled time - disabled marks: wheel mode disabled time - events 1`] = `
+[
+  {
+    "event": "open",
+    "payload": {
+      "degreesHours": 300,
+      "degreesMinutes": 120,
+      "hour": "10",
+      "minutes": "20",
+      "type": "AM",
+    },
+  },
+  {
+    "event": "wheel:scroll:end",
+    "payload": {
+      "column": "hours",
+      "previousValue": "01",
+      "value": "12",
+    },
+  },
+  {
+    "event": "animation:clock",
+    "payload": {},
+  },
+  {
+    "event": "switch:face",
+    "payload": {
+      "face": "hours",
+    },
+  },
+  {
+    "event": "select:hour",
+    "payload": {
+      "hour": "12",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "12",
+      "minutes": "20",
+      "seconds": undefined,
+      "type": "AM",
+    },
+  },
+  {
+    "event": "wheel:scroll:end",
+    "payload": {
+      "column": "minutes",
+      "previousValue": "00",
+      "value": "19",
+    },
+  },
+  {
+    "event": "animation:clock",
+    "payload": {},
+  },
+  {
+    "event": "switch:face",
+    "payload": {
+      "face": "minutes",
+    },
+  },
+  {
+    "event": "select:minute",
+    "payload": {
+      "minutes": "19",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "12",
+      "minutes": "19",
+      "seconds": undefined,
+      "type": "AM",
+    },
+  },
+  {
+    "event": "wheel:scroll:end",
+    "payload": {
+      "column": "minutes",
+      "previousValue": "19",
+      "value": "18",
+    },
+  },
+  {
+    "event": "animation:clock",
+    "payload": {},
+  },
+  {
+    "event": "switch:face",
+    "payload": {
+      "face": "minutes",
+    },
+  },
+  {
+    "event": "select:minute",
+    "payload": {
+      "minutes": "18",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "12",
+      "minutes": "18",
+      "seconds": undefined,
+      "type": "AM",
+    },
+  },
+  {
+    "event": "wheel:scroll:end",
+    "payload": {
+      "column": "minutes",
+      "previousValue": "18",
+      "value": "17",
+    },
+  },
+  {
+    "event": "animation:clock",
+    "payload": {},
+  },
+  {
+    "event": "switch:face",
+    "payload": {
+      "face": "minutes",
+    },
+  },
+  {
+    "event": "select:minute",
+    "payload": {
+      "minutes": "17",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "12",
+      "minutes": "17",
+      "seconds": undefined,
+      "type": "AM",
+    },
+  },
+  {
+    "event": "wheel:scroll:end",
+    "payload": {
+      "column": "minutes",
+      "previousValue": "17",
+      "value": "16",
+    },
+  },
+  {
+    "event": "animation:clock",
+    "payload": {},
+  },
+  {
+    "event": "switch:face",
+    "payload": {
+      "face": "minutes",
+    },
+  },
+  {
+    "event": "select:minute",
+    "payload": {
+      "minutes": "16",
+    },
+  },
+  {
+    "event": "update",
+    "payload": {
+      "hour": "12",
+      "minutes": "16",
+      "seconds": undefined,
+      "type": "AM",
+    },
+  },
+  {
+    "event": "confirm",
+    "payload": {
+      "hour": "12",
+      "minutes": "16",
+      "type": "AM",
+    },
+  },
+]
+`;
+
+exports[`companion baseline - wheel plugin wheel mode with disabled time - disabled marks: wheel mode disabled time - marks after interaction 1`] = `
+{
+  "ampm": [],
+  "hours": [
+    "01 [tp-ui-wheel-item expanded is-disabled]",
+    "03 [tp-ui-wheel-item expanded is-disabled]",
+    "11 [tp-ui-wheel-item expanded is-disabled is-near]",
+  ],
+  "minutes": [
+    "15 [tp-ui-wheel-item expanded is-disabled is-near]",
+  ],
+}
+`;
+
+exports[`companion baseline - wheel plugin wheel mode with disabled time - disabled marks: wheel mode disabled time - marks after open 1`] = `
+{
+  "ampm": [],
+  "hours": [
+    "01 [tp-ui-wheel-item expanded is-disabled]",
+    "03 [tp-ui-wheel-item expanded is-disabled]",
+    "11 [tp-ui-wheel-item expanded is-disabled is-near]",
+  ],
+  "minutes": [
+    "15 [tp-ui-wheel-item expanded is-disabled]",
+  ],
+}
+`;
+
+exports[`companion baseline - wheel plugin wheel mode with disabled time - disabled marks: wheel mode disabled time - markup 1`] = `"<div class="tp-ui-modal normalize tp-ui-wheel-mode tp-ui-normalize show" data-theme="basic" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-tp-baseline" data-owner-id="tp-baseline" style="transition:none"><div class="tp-ui-wrapper tp-ui-normalize expanded" tabindex="0"><div class="tp-ui-select-time " id="tp-ui-label-tp-baseline">Select time</div><div class="tp-ui-header expanded"><div class="tp-ui-wrapper-time expanded" role="group" aria-label="Time"><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="hour" readonly="" class="tp-ui-hour expanded" tabindex="0" type="number" min="1" max="12" aria-label="Hour" role="spinbutton" aria-valuemin="1" aria-valuemax="12" aria-valuenow="12" aria-valuetext="12"></div><div class="tp-ui-hour-text expanded">Hour</div></div><div class="tp-ui-dots expanded" aria-hidden="true"><span class="expanded"></span><span class="expanded"></span></div><div class="tp-ui-input-wrapper expanded"><div class="tp-ui-input-ripple-wrapper expanded" data-md3-ripple=""><input name="minutes" readonly="" class="tp-ui-minutes expanded" tabindex="0" type="number" min="0" max="59" aria-label="Minute" role="spinbutton" aria-valuemin="0" aria-valuemax="59" aria-valuenow="16" aria-valuetext="16"></div><div class="tp-ui-minute-text expanded">Minute</div></div></div><div class="tp-ui-wrapper-type-time expanded" role="group" aria-label="Period"><div class="tp-ui-type-mode tp-ui-am expanded active" data-md3-ripple="" tabindex="0" role="button" aria-label="AM" aria-pressed="true" data-type="AM">AM</div><div class="tp-ui-type-mode tp-ui-pm expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="PM" aria-pressed="false" data-type="PM">PM</div></div></div><div class="tp-ui-mobile-clock-wrapper expanded"><div class="tp-ui-wheel-container expanded"><div class="tp-ui-wheel-column-wrapper expanded at-end"><div class="tp-ui-wheel-column tp-ui-wheel-hours expanded" role="listbox" aria-label="Hour" aria-activedescendant="tp-baseline-wh-12" tabindex="0"><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-item expanded is-disabled" role="option" id="tp-baseline-wh-01" data-value="01" aria-label="Hour 01" aria-selected="false" aria-disabled="true">01</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-02" data-value="02" aria-label="Hour 02" aria-selected="false" aria-disabled="false">02</div><div class="tp-ui-wheel-item expanded is-disabled" role="option" id="tp-baseline-wh-03" data-value="03" aria-label="Hour 03" aria-selected="false" aria-disabled="true">03</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-04" data-value="04" aria-label="Hour 04" aria-selected="false" aria-disabled="false">04</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-05" data-value="05" aria-label="Hour 05" aria-selected="false" aria-disabled="false">05</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-06" data-value="06" aria-label="Hour 06" aria-selected="false" aria-disabled="false">06</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-07" data-value="07" aria-label="Hour 07" aria-selected="false" aria-disabled="false">07</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-08" data-value="08" aria-label="Hour 08" aria-selected="false" aria-disabled="false">08</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-09" data-value="09" aria-label="Hour 09" aria-selected="false" aria-disabled="false">09</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wh-10" data-value="10" aria-label="Hour 10" aria-selected="false" aria-disabled="false">10</div><div class="tp-ui-wheel-item expanded is-disabled is-near" role="option" id="tp-baseline-wh-11" data-value="11" aria-label="Hour 11" aria-selected="false" aria-disabled="true">11</div><div class="tp-ui-wheel-item expanded is-center" role="option" id="tp-baseline-wh-12" data-value="12" aria-label="Hour 12" aria-selected="true" aria-disabled="false">12</div><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-padding expanded"></div></div></div><div class="tp-ui-wheel-separator expanded" aria-hidden="true">:</div><div class="tp-ui-wheel-column-wrapper expanded"><div class="tp-ui-wheel-column tp-ui-wheel-minutes expanded" role="listbox" aria-label="Minute" aria-activedescendant="tp-baseline-wm-16" tabindex="0"><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-00" data-value="00" aria-label="Minute 00" aria-selected="false" aria-disabled="false">00</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-01" data-value="01" aria-label="Minute 01" aria-selected="false" aria-disabled="false">01</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-02" data-value="02" aria-label="Minute 02" aria-selected="false" aria-disabled="false">02</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-03" data-value="03" aria-label="Minute 03" aria-selected="false" aria-disabled="false">03</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-04" data-value="04" aria-label="Minute 04" aria-selected="false" aria-disabled="false">04</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-05" data-value="05" aria-label="Minute 05" aria-selected="false" aria-disabled="false">05</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-06" data-value="06" aria-label="Minute 06" aria-selected="false" aria-disabled="false">06</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-07" data-value="07" aria-label="Minute 07" aria-selected="false" aria-disabled="false">07</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-08" data-value="08" aria-label="Minute 08" aria-selected="false" aria-disabled="false">08</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-09" data-value="09" aria-label="Minute 09" aria-selected="false" aria-disabled="false">09</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-10" data-value="10" aria-label="Minute 10" aria-selected="false" aria-disabled="false">10</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-11" data-value="11" aria-label="Minute 11" aria-selected="false" aria-disabled="false">11</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-12" data-value="12" aria-label="Minute 12" aria-selected="false" aria-disabled="false">12</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-13" data-value="13" aria-label="Minute 13" aria-selected="false" aria-disabled="false">13</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-14" data-value="14" aria-label="Minute 14" aria-selected="false" aria-disabled="false">14</div><div class="tp-ui-wheel-item expanded is-disabled is-near" role="option" id="tp-baseline-wm-15" data-value="15" aria-label="Minute 15" aria-selected="false" aria-disabled="true">15</div><div class="tp-ui-wheel-item expanded is-center" role="option" id="tp-baseline-wm-16" data-value="16" aria-label="Minute 16" aria-selected="true" aria-disabled="false">16</div><div class="tp-ui-wheel-item expanded is-near" role="option" id="tp-baseline-wm-17" data-value="17" aria-label="Minute 17" aria-selected="false" aria-disabled="false">17</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-18" data-value="18" aria-label="Minute 18" aria-selected="false" aria-disabled="false">18</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-19" data-value="19" aria-label="Minute 19" aria-selected="false" aria-disabled="false">19</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-20" data-value="20" aria-label="Minute 20" aria-selected="false" aria-disabled="false">20</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-21" data-value="21" aria-label="Minute 21" aria-selected="false" aria-disabled="false">21</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-22" data-value="22" aria-label="Minute 22" aria-selected="false" aria-disabled="false">22</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-23" data-value="23" aria-label="Minute 23" aria-selected="false" aria-disabled="false">23</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-24" data-value="24" aria-label="Minute 24" aria-selected="false" aria-disabled="false">24</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-25" data-value="25" aria-label="Minute 25" aria-selected="false" aria-disabled="false">25</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-26" data-value="26" aria-label="Minute 26" aria-selected="false" aria-disabled="false">26</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-27" data-value="27" aria-label="Minute 27" aria-selected="false" aria-disabled="false">27</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-28" data-value="28" aria-label="Minute 28" aria-selected="false" aria-disabled="false">28</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-29" data-value="29" aria-label="Minute 29" aria-selected="false" aria-disabled="false">29</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-30" data-value="30" aria-label="Minute 30" aria-selected="false" aria-disabled="false">30</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-31" data-value="31" aria-label="Minute 31" aria-selected="false" aria-disabled="false">31</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-32" data-value="32" aria-label="Minute 32" aria-selected="false" aria-disabled="false">32</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-33" data-value="33" aria-label="Minute 33" aria-selected="false" aria-disabled="false">33</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-34" data-value="34" aria-label="Minute 34" aria-selected="false" aria-disabled="false">34</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-35" data-value="35" aria-label="Minute 35" aria-selected="false" aria-disabled="false">35</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-36" data-value="36" aria-label="Minute 36" aria-selected="false" aria-disabled="false">36</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-37" data-value="37" aria-label="Minute 37" aria-selected="false" aria-disabled="false">37</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-38" data-value="38" aria-label="Minute 38" aria-selected="false" aria-disabled="false">38</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-39" data-value="39" aria-label="Minute 39" aria-selected="false" aria-disabled="false">39</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-40" data-value="40" aria-label="Minute 40" aria-selected="false" aria-disabled="false">40</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-41" data-value="41" aria-label="Minute 41" aria-selected="false" aria-disabled="false">41</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-42" data-value="42" aria-label="Minute 42" aria-selected="false" aria-disabled="false">42</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-43" data-value="43" aria-label="Minute 43" aria-selected="false" aria-disabled="false">43</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-44" data-value="44" aria-label="Minute 44" aria-selected="false" aria-disabled="false">44</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-45" data-value="45" aria-label="Minute 45" aria-selected="false" aria-disabled="false">45</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-46" data-value="46" aria-label="Minute 46" aria-selected="false" aria-disabled="false">46</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-47" data-value="47" aria-label="Minute 47" aria-selected="false" aria-disabled="false">47</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-48" data-value="48" aria-label="Minute 48" aria-selected="false" aria-disabled="false">48</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-49" data-value="49" aria-label="Minute 49" aria-selected="false" aria-disabled="false">49</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-50" data-value="50" aria-label="Minute 50" aria-selected="false" aria-disabled="false">50</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-51" data-value="51" aria-label="Minute 51" aria-selected="false" aria-disabled="false">51</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-52" data-value="52" aria-label="Minute 52" aria-selected="false" aria-disabled="false">52</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-53" data-value="53" aria-label="Minute 53" aria-selected="false" aria-disabled="false">53</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-54" data-value="54" aria-label="Minute 54" aria-selected="false" aria-disabled="false">54</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-55" data-value="55" aria-label="Minute 55" aria-selected="false" aria-disabled="false">55</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-56" data-value="56" aria-label="Minute 56" aria-selected="false" aria-disabled="false">56</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-57" data-value="57" aria-label="Minute 57" aria-selected="false" aria-disabled="false">57</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-58" data-value="58" aria-label="Minute 58" aria-selected="false" aria-disabled="false">58</div><div class="tp-ui-wheel-item expanded" role="option" id="tp-baseline-wm-59" data-value="59" aria-label="Minute 59" aria-selected="false" aria-disabled="false">59</div><div class="tp-ui-wheel-padding expanded"></div><div class="tp-ui-wheel-padding expanded"></div></div></div><div class="tp-ui-wheel-highlight expanded" aria-hidden="true"></div></div></div><div class="tp-ui-footer expanded" style="justify-content: flex-end;"><div class="tp-ui-wrapper-btn expanded"><div class="tp-ui-cancel-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="Cancel">Cancel</div><div class="tp-ui-ok-btn expanded" data-md3-ripple="" tabindex="0" role="button" aria-label="OK">OK</div></div></div></div><div class="timepicker-announcer sr-only tp-ui-normalize expanded" role="status" aria-live="polite" aria-atomic="true">Minutes: 16</div></div>"`;
+
+exports[`companion baseline - wheel plugin wheel mode with disabled time - disabled marks: wheel mode disabled time - values 1`] = `
+{
+  "input": "12:16 AM",
+  "value": {
+    "degreesHours": 360,
+    "degreesMinutes": 96,
+    "hour": "12",
+    "minutes": "16",
+    "time": "12:16 AM",
+    "type": "AM",
+  },
+}
+`;

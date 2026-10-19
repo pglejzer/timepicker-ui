@@ -2,6 +2,7 @@ import { CodeBlock } from "@/components/code-block";
 import { buildMetadata } from "@/lib/metadata";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
+import Link from "next/link";
 
 export const metadata = buildMetadata({
   title: "Plugins",
@@ -66,6 +67,77 @@ const picker = new TimepickerUI(input, {
 });
 picker.create();`}
         />
+
+        <h3>Range API</h3>
+        <p>
+          With the range plugin registered and <code>range.enabled</code> on,
+          the instance can read and change the range from code. Without the
+          plugin, or with <code>range.enabled</code> off, these methods emit an{" "}
+          <code>error</code> event and do nothing.
+        </p>
+        <ul>
+          <li>
+            <code>setRange(&#123; from, to &#125;, updateInput = true)</code>{" "}
+            sets both ends. Each time uses the <code>setValue()</code> format,{" "}
+            <code>&apos;14:30&apos;</code> or <code>&apos;2:30 PM&apos;</code>.
+            It works while the picker is open or closed and emits{" "}
+            <code>range:validation</code>.
+          </li>
+          <li>
+            <code>getRange()</code> returns <code>&#123; from, to &#125;</code>,
+            or <code>null</code>. Each end is{" "}
+            <code>&#123; hour, minutes, seconds?, type? &#125;</code> or{" "}
+            <code>null</code> until it is complete.
+          </li>
+          <li>
+            <code>setActivePart(&apos;from&apos; | &apos;to&apos;)</code>{" "}
+            switches the clock to that end without moving focus and emits{" "}
+            <code>range:switch</code>. It returns a boolean. With the default{" "}
+            <code>range.linked</code>, <code>&apos;to&apos;</code> is refused
+            until From is complete.
+          </li>
+        </ul>
+        <CodeBlock
+          language="typescript"
+          code={`const picker = new TimepickerUI(input, {
+  clock: { type: '24h' },
+  range: { enabled: true }
+});
+picker.create();
+
+picker.setRange({ from: '09:00', to: '17:00' });
+
+const range = picker.getRange();
+console.log(range?.from?.hour, range?.to?.hour);
+
+picker.open();
+const switched = picker.setActivePart('to');`}
+        />
+
+        <h3>Independent ends with range.linked</h3>
+        <p>
+          <code>range.linked</code> defaults to <code>true</code>. Set it to{" "}
+          <code>false</code> to make From and To independent. Times before From
+          are not disabled in To, the To tab is enabled from the start, and{" "}
+          <code>minDuration</code> and <code>maxDuration</code> are not
+          checked, so a range can cross midnight. <code>range:validation</code>{" "}
+          still fires and reports <code>valid: true</code> once both ends are
+          complete. Use it when your code validates the range with dates.
+        </p>
+        <CodeBlock
+          language="typescript"
+          code={`const picker = new TimepickerUI(input, {
+  clock: { type: '24h' },
+  range: { enabled: true, linked: false }
+});
+picker.create();
+
+picker.setRange({ from: '22:00', to: '01:00' });`}
+        />
+        <p>
+          See the{" "}
+          <Link href="/examples/plugins/range">live range example</Link>.
+        </p>
       </Section>
 
       <Section title="Timezone Plugin">

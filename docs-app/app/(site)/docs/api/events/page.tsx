@@ -23,20 +23,25 @@ const eventEmitterMethods: DocEntry[] = [
   {
     name: "on(event, handler)",
     description:
-      "Subscribe to an event. Handler is called every time the event fires.",
+      "Subscribe to an event. Handler is called every time the event fires. Returns a function that removes this handler. Calling it more than once does nothing.",
     code: `const picker = new TimepickerUI(input);
 picker.create();
 
-picker.on('confirm', (data) => {
+const unsubscribe = picker.on('confirm', (data) => {
   console.log('Time confirmed:', data);
-});`,
+});
+
+unsubscribe();`,
   },
   {
     name: "once(event, handler)",
-    description: "Subscribe to an event that fires only once.",
-    code: `picker.once('open', () => {
+    description:
+      "Subscribe to an event that fires only once. Returns a function that removes the handler before it runs.",
+    code: `const unsubscribe = picker.once('open', () => {
   console.log('Opened for the first time');
-});`,
+});
+
+unsubscribe();`,
   },
   {
     name: "off(event, handler?)",

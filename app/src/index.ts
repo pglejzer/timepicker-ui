@@ -33,8 +33,11 @@ import type {
   CallbacksOptions,
   TimezoneOptions,
   RangeOptions,
+  RangeTimeValue,
+  RangeTimeState,
   ClearBehaviorOptions,
   WheelOptions,
+  TimeOfDay,
 } from './types/options';
 import { EventEmitter } from './utils/EventEmitter';
 import type { TimepickerEventMap } from './utils/EventEmitter';
@@ -62,8 +65,11 @@ export {
   CallbacksOptions,
   TimezoneOptions,
   RangeOptions,
+  RangeTimeValue,
+  RangeTimeState,
   ClearBehaviorOptions,
   WheelOptions,
+  TimeOfDay,
   OpenEventData,
   CancelEventData,
   ConfirmEventData,

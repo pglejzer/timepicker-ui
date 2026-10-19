@@ -3,6 +3,7 @@ import keyboardSvg from '../../../assets/keyboard.svg';
 import scheduleSvg from '../../../assets/schedule.svg';
 import { PluginRegistry } from '../../core/PluginRegistry';
 import { DEFAULT_OPTIONS } from '../options/defaults';
+import { isEmbeddedInlineMode } from '../options/predicates';
 import { escapeHtml as text } from './escape';
 
 export const HOURS_24 = ['00', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
@@ -233,6 +234,12 @@ export const getModalTemplate = (options: Required<TimepickerOptions>, instanceI
   }
 
   const id = text(instanceId);
+  const embeddedName = isCompactWheel
+    ? `aria-label="${text(options.labels.time)}"`
+    : `aria-labelledby="tp-ui-label-${id}"`;
+  const roleAttributes = isEmbeddedInlineMode(options)
+    ? `role="group" ${embeddedName}`
+    : `role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-${id}"`;
 
-  return `<div class="tp-ui-modal normalize ${mobileClass}${isRangeMode ? ' tp-ui-range-mode' : ''}${isTzMode ? ' tp-ui-tz-mode' : ''}${wheelClass}${showSeconds ? ' tp-ui-has-seconds' : ''}" data-theme="${text(theme)}" role="dialog" aria-modal="true" aria-labelledby="tp-ui-label-${id}" data-owner-id="${id}"${animation ? '' : ' style="transition:none"'}><div class="tp-ui-wrapper ${mobileClass}" tabindex="0">${rangeSelector}${header}${timezoneSelector}${pickerBody}${footer}</div><div class="timepicker-announcer sr-only" role="status" aria-live="polite" aria-atomic="true"></div></div>`;
+  return `<div class="tp-ui-modal normalize ${mobileClass}${isRangeMode ? ' tp-ui-range-mode' : ''}${isTzMode ? ' tp-ui-tz-mode' : ''}${wheelClass}${showSeconds ? ' tp-ui-has-seconds' : ''}" data-theme="${text(theme)}" ${roleAttributes} data-owner-id="${id}"${animation ? '' : ' style="transition:none"'}><div class="tp-ui-wrapper ${mobileClass}" tabindex="0">${rangeSelector}${header}${timezoneSelector}${pickerBody}${footer}</div><div class="timepicker-announcer sr-only" role="status" aria-live="polite" aria-atomic="true"></div></div>`;
 };

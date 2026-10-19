@@ -6,7 +6,7 @@ import {
   announceField,
   fieldBounds,
   getActiveField,
-  isTimeDisabled,
+  isSelectedTimeDisabled,
   type TimeField,
 } from '@/managers/events/timeFields';
 import type { TimepickerOptions } from '@/types/options';
@@ -54,7 +54,7 @@ describe('fieldBounds', () => {
   });
 });
 
-describe('isTimeDisabled', () => {
+describe('isSelectedTimeDisabled', () => {
   const secondsInterval: DisabledValue = {
     isInterval: true,
     clockType: '24h',
@@ -65,43 +65,43 @@ describe('isTimeDisabled', () => {
     const allHours = Array.from({ length: 24 }, (_, hour) => String(hour));
     const core = createCore({ clock: { type: '24h' } }, { hours: allHours });
 
-    expect(isTimeDisabled(core)).toBe(false);
+    expect(isSelectedTimeDisabled(core)).toBe(false);
   });
 
   it('checks the header time against the disabled rules', () => {
     const core = createCore({ clock: { type: '24h' } }, { hours: ['10'] });
     mountHeader({ hour: '10', minutes: '15' });
 
-    expect(isTimeDisabled(core)).toBe(true);
+    expect(isSelectedTimeDisabled(core)).toBe(true);
 
     (core.getHour() as HTMLInputElement).value = '11';
 
-    expect(isTimeDisabled(core)).toBe(false);
+    expect(isSelectedTimeDisabled(core)).toBe(false);
   });
 
   it('with showSeconds, checks the header seconds', () => {
     const core = createCore({ clock: { type: '24h', showSeconds: true } }, secondsInterval);
     mountHeader({ hour: '10', minutes: '30', seconds: '20' });
 
-    expect(isTimeDisabled(core)).toBe(true);
+    expect(isSelectedTimeDisabled(core)).toBe(true);
 
     (core.getSeconds() as HTMLInputElement).value = '50';
 
-    expect(isTimeDisabled(core)).toBe(false);
+    expect(isSelectedTimeDisabled(core)).toBe(false);
   });
 
   it('with showSeconds, honours listed seconds', () => {
     const core = createCore({ clock: { type: '24h', showSeconds: true } }, { seconds: ['20'] });
     mountHeader({ hour: '10', minutes: '30', seconds: '20' });
 
-    expect(isTimeDisabled(core)).toBe(true);
+    expect(isSelectedTimeDisabled(core)).toBe(true);
   });
 
   it('without showSeconds, ignores the seconds and checks the whole minute', () => {
     const core = createCore({ clock: { type: '24h' } }, secondsInterval);
     mountHeader({ hour: '10', minutes: '30', seconds: '20' });
 
-    expect(isTimeDisabled(core)).toBe(false);
+    expect(isSelectedTimeDisabled(core)).toBe(false);
   });
 });
 

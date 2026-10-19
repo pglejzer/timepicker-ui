@@ -7,6 +7,7 @@ import "timepicker-ui/main.css";
 import { Section } from "@/components/section";
 import { Callout } from "@/components/callout";
 import { Figure } from "@/components/figure";
+import { UnsubscribeDemo } from "@/components/unsubscribe-demo";
 import demo from "@/components/demo-controls.module.css";
 import styles from "./page.module.css";
 
@@ -478,6 +479,28 @@ fetchWorldTime();`}
               </p>
             </div>
           </div>
+        </Figure>
+      </Section>
+
+      <Section title="Unsubscribe from an Event">
+        <p>
+          <code>on()</code> and <code>once()</code> return a function that
+          removes the handler. Call it when the code that subscribed goes
+          away, for example in a React effect cleanup.
+        </p>
+        <Figure
+          code={`const picker = new TimepickerUI(input, {
+  clock: { type: '24h' }
+});
+picker.create();
+
+const unsubscribe = picker.on('confirm', ({ hour, minutes }) => {
+  console.log('confirm', hour, minutes);
+});
+
+unsubscribe();`}
+        >
+          <UnsubscribeDemo />
         </Figure>
       </Section>
 

@@ -51,12 +51,16 @@ export function setupCallbackBridge(core: CoreState, emitter: EventEmitter<Timep
   }
 }
 
+export function missingPluginError(plugin: string): { error: string } {
+  return {
+    error: `${plugin} is not registered. Import and register it: PluginRegistry.register(${plugin})`,
+  };
+}
+
 export function emitMissingPluginErrors(core: CoreState, emitter: EventEmitter<TimepickerEventMap>): void {
   for (const gate of PLUGIN_GATES) {
     if (gate.needed(core.options) && !PluginRegistry.has(gate.name)) {
-      emitter.emit('error', {
-        error: `${gate.plugin} is not registered. Import and register it: PluginRegistry.register(${gate.plugin})`,
-      });
+      emitter.emit('error', missingPluginError(gate.plugin));
     }
   }
 }

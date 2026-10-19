@@ -165,16 +165,21 @@ export default class WheelManager {
   private listenForTimeSelection(): void {
     const { showSeconds } = this.core.options.clock;
     bindEmitter(this.emitter, this.cleanupHandlers, 'select:hour', ({ hour }) => {
-      if (this.core.disabledTime?.value?.isInterval) this.refreshDisabledItems();
+      if (this.hasTimeDependentMarks()) this.refreshDisabledItems();
       if (hour) this.scrollHandler.scrollToValue('hours', pad(hour));
     });
     bindEmitter(this.emitter, this.cleanupHandlers, 'select:minute', ({ minutes }) => {
-      if (showSeconds && this.core.disabledTime?.value?.isInterval) this.refreshDisabledItems();
+      if (showSeconds && this.hasTimeDependentMarks()) this.refreshDisabledItems();
       if (minutes) this.scrollHandler.scrollToValue('minutes', pad(minutes));
     });
     bindEmitter(this.emitter, this.cleanupHandlers, 'select:second', ({ seconds }) => {
       if (seconds) this.scrollHandler.scrollToValue('seconds', pad(seconds));
     });
+  }
+
+  private hasTimeDependentMarks(): boolean {
+    const value = this.core.disabledTime?.value;
+    return Boolean(value?.isInterval || value?.predicate);
   }
 
   private refreshDisabledItems(): void {

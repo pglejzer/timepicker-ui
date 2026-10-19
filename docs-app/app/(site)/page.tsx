@@ -219,6 +219,24 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section className={styles.section} aria-labelledby="datepicker-title">
+        <div className={styles.inner}>
+          <div className={styles.head}>
+            <h2 id="datepicker-title" className={styles.h2}>Need dates too? datepicker-ui</h2>
+            <div>
+              <p className={styles.text}>
+                <code>@pglejzer/datepicker-ui</code> is the companion date picker. It has the same architecture,
+                follows Material Design 3 and ships ten themes named like the timepicker ones. It opens as a docked
+                popover, a modal dialog or an inline calendar, for one date, a range or several dates.
+              </p>
+              <Link href="/datepicker" className={styles.secondary}>
+                Date picker docs
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className={styles.section} aria-labelledby="oss-title">
         <div className={`${styles.inner} ${styles.split}`}>
           <div>

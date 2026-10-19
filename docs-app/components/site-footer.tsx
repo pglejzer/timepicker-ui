@@ -21,6 +21,7 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
       { label: "Themes", href: "/examples/themes/basic" },
       { label: "Plugins", href: "/examples/plugins/range" },
       { label: "React", href: "/react" },
+      { label: "Datepicker", href: "/datepicker" },
       { label: "Bundle size", href: "/bundle-stats" },
     ],
   },

@@ -78,7 +78,7 @@ export const disabledCheckFor = (core: CoreState, field: TimeField): ((value: nu
   return (value) => isFieldDisabled(core, field, { ...time, [field]: pad(value) });
 };
 
-export const isTimeDisabled = (core: CoreState): boolean => {
+export const isSelectedTimeDisabled = (core: CoreState): boolean => {
   const time = buildUpdatePayload(core);
   const field = core.options.clock.showSeconds ? 'seconds' : 'minutes';
   return !!time.hour && !!time.minutes && isFieldDisabled(core, field, time);
