@@ -94,24 +94,12 @@
 
   .nav {
     display: flex;
-    gap: var(--space-5);
+    gap: var(--space-4);
+    white-space: nowrap;
   }
 
   .actions {
     gap: var(--space-4);
-  }
-
-  .version {
-    display: inline;
-    color: var(--ink-2);
-    font-family: var(--font-mono);
-    font-size: var(--text-small);
-    text-decoration: none;
-  }
-
-  .version:hover {
-    color: var(--ink);
-    text-decoration: underline;
   }
 
   .textLink {
@@ -157,5 +145,24 @@
     border: 1px solid var(--ink-3);
     border-radius: var(--radius-1);
     font-size: var(--text-small);
+  }
+}
+
+@media (min-width: 80rem) {
+  .nav {
+    gap: var(--space-5);
+  }
+
+  .version {
+    display: inline;
+    color: var(--ink-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    text-decoration: none;
+  }
+
+  .version:hover {
+    color: var(--ink);
+    text-decoration: underline;
   }
 }

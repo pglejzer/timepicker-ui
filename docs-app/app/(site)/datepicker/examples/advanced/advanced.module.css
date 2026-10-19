@@ -1,0 +1,97 @@
+.stage {
+  display: grid;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-3);
+}
+
+.log {
+  display: grid;
+  gap: var(--space-1);
+  min-height: 12rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+}
+
+.logItem {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--ink-3);
+  color: var(--ink-2);
+}
+
+.logName {
+  color: var(--ink);
+}
+
+.logData {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.empty {
+  color: var(--ink-3);
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.groupLabel {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-size: var(--text-small);
+  font-weight: 500;
+}
+
+.pressed[aria-pressed="true"],
+.pressed[aria-pressed="true"]:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.pressed[aria-pressed="false"],
+.pressed[aria-pressed="false"]:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.pressed[aria-pressed="false"]:hover {
+  background: var(--code);
+}
+
+.select select {
+  min-height: var(--control-h);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--ink-3);
+  border-radius: var(--radius-1);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: var(--text-small);
+}
+
+.entries {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+}
+
+.entry {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.entryKey {
+  color: var(--ink-2);
+}

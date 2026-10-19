@@ -1,0 +1,5 @@
+.scope :global(:is(.dp-ui__container, .dp-ui__dialog).guide) {
+  --dp-ui-sys-color-primary: light-dark(#0b6b3a, #7fdba0);
+  --dp-ui-sys-color-on-primary: light-dark(#ffffff, #00391c);
+  --dp-ui-container-shape-docked: 8px;
+}

@@ -1,0 +1,76 @@
+.scope :global(:is(.dp-ui__container, .dp-ui__dialog).brand) {
+  --dp-ui-sys-typescale-font: Georgia, "Times New Roman", serif;
+  --dp-ui-sys-color-surface-container-high: light-dark(#fff8f4, #2d2018);
+  --dp-ui-sys-color-primary: light-dark(#a04000, #ffb68a);
+  --dp-ui-sys-color-on-primary: light-dark(#ffffff, #4f2300);
+  --dp-ui-sys-color-secondary-container: light-dark(#ffdcc8, #703610);
+  --dp-ui-sys-color-on-secondary-container: light-dark(#331200, #ffdcc8);
+  --dp-ui-sys-color-on-primary-container: light-dark(#331200, #ffdcc8);
+  --dp-ui-container-shape-docked: 4px;
+}
+
+.scope :global(:is(.dp-ui__container, .dp-ui__dialog).soft) {
+  --dp-ui-sys-color-surface-container-high: light-dark(#f6f3ff, #26223a);
+  --dp-ui-sys-color-primary: light-dark(#5b4bd6, #c4bcff);
+  --dp-ui-sys-color-on-primary: light-dark(#ffffff, #261a8a);
+  --dp-ui-sys-color-secondary-container: light-dark(#e3deff, #3d3770);
+  --dp-ui-sys-color-on-secondary-container: light-dark(#1b1257, #e3deff);
+  --dp-ui-container-shape-docked: 28px;
+  --dp-ui-container-elevation: 0 12px 32px rgba(60, 40, 120, 0.18);
+  --dp-ui-date-today-outline-width: 2px;
+}
+
+.scope :global(:is(.dp-ui__container, .dp-ui__dialog).soft .dp-ui__date-indicator) {
+  border-radius: 12px;
+}
+
+.scope :global(:is(.dp-ui__container, .dp-ui__dialog).dense) {
+  --dp-ui-container-width: 304px;
+  --dp-ui-container-shape-docked: 4px;
+  --dp-ui-header-height-docked: 52px;
+  --dp-ui-date-container-size: 40px;
+  --dp-ui-date-state-layer-size: 32px;
+  --dp-ui-icon-button-size: 32px;
+  --dp-ui-icon-button-icon-size: 20px;
+  --dp-ui-menu-button-height: 32px;
+  --dp-ui-text-button-height: 32px;
+  --dp-ui-sys-typescale-body-large-size: 14px;
+  --dp-ui-sys-typescale-body-large-line-height: 20px;
+  --dp-ui-sys-typescale-label-large-size: 13px;
+}
+
+.scope :global(:is(.dp-ui__container, .dp-ui__dialog).contrast) {
+  --dp-ui-sys-color-surface-container-high: light-dark(#ffffff, #000000);
+  --dp-ui-sys-color-surface-variant: light-dark(#e0e0e0, #333333);
+  --dp-ui-sys-color-on-surface: light-dark(#000000, #ffffff);
+  --dp-ui-sys-color-on-surface-variant: light-dark(#000000, #ffffff);
+  --dp-ui-sys-color-primary: light-dark(#000000, #ffffff);
+  --dp-ui-sys-color-on-primary: light-dark(#ffffff, #000000);
+  --dp-ui-sys-color-secondary-container: #ffd400;
+  --dp-ui-sys-color-on-secondary-container: #000000;
+  --dp-ui-sys-color-outline: light-dark(#000000, #ffffff);
+  --dp-ui-sys-color-outline-variant: light-dark(#000000, #ffffff);
+  --dp-ui-sys-state-disabled-opacity: 0.5;
+  --dp-ui-container-shape-docked: 4px;
+  --dp-ui-container-elevation: none;
+  --dp-ui-date-today-outline-width: 2px;
+  --dp-ui-focus-ring-color: light-dark(#0b57d0, #8ab4ff);
+  --dp-ui-focus-ring-width: 3px;
+  border: 2px solid var(--dp-ui-sys-color-outline);
+}
+
+.scope :global(:is(.dp-ui__container, .dp-ui__dialog).night) {
+  --dp-ui-sys-color-surface-container-high: #0f1b2d;
+  --dp-ui-sys-color-surface-variant: #1c2b42;
+  --dp-ui-sys-color-on-surface: #e6edf7;
+  --dp-ui-sys-color-on-surface-variant: #9fb0c8;
+  --dp-ui-sys-color-primary: #5cc8ff;
+  --dp-ui-sys-color-on-primary: #00344d;
+  --dp-ui-sys-color-secondary-container: #17405c;
+  --dp-ui-sys-color-on-secondary-container: #cfeeff;
+  --dp-ui-sys-color-on-primary-container: #cfeeff;
+  --dp-ui-sys-color-outline: #4a5f7a;
+  --dp-ui-sys-color-outline-variant: #25364d;
+  --dp-ui-container-shape-docked: 12px;
+  --dp-ui-container-elevation: 0 0 0 1px #25364d, 0 12px 32px rgba(0, 0, 0, 0.5);
+}

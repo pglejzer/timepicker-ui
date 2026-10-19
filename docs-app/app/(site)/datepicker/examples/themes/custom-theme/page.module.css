@@ -1,0 +1,8 @@
+.scope :global(.dp-ui__container.brand),
+.scope :global(.dp-ui__dialog.brand) {
+  --dp-ui-sys-color-primary: light-dark(#006a6a, #4fd8d8);
+  --dp-ui-sys-color-on-primary: light-dark(#ffffff, #003737);
+  --dp-ui-sys-color-secondary-container: light-dark(#cce8e7, #324b4b);
+  --dp-ui-sys-color-on-secondary-container: light-dark(#05201f, #cce8e7);
+  --dp-ui-container-shape-docked: 8px;
+}

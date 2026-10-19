@@ -21,6 +21,8 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/examples", tier: "top" },
   { path: "/react", tier: "top" },
   { path: "/react/examples", tier: "top" },
+  { path: "/datepicker", tier: "top" },
+  { path: "/datepicker/examples", tier: "top" },
 
   { path: "/bundle-stats", tier: "section" },
   { path: "/playground", tier: "section" },
@@ -36,6 +38,7 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/docs/changelog", tier: "leaf" },
   { path: "/docs/changelog/react", tier: "leaf" },
   { path: "/docs/changelog/mcp", tier: "leaf" },
+  { path: "/docs/changelog/datepicker", tier: "leaf" },
   { path: "/docs/roadmap", tier: "leaf" },
 
   // docs - guides
@@ -154,6 +157,78 @@ export const seoRoutes: SeoRoute[] = [
   { path: "/react/examples/forms/validation", tier: "leaf" },
   { path: "/react/examples/forms/required", tier: "leaf" },
   { path: "/react/examples/forms/state", tier: "leaf" },
+
+  // datepicker - overview
+  { path: "/datepicker/installation", tier: "section" },
+  { path: "/datepicker/quick-start", tier: "section" },
+
+  // datepicker - guides
+  { path: "/datepicker/docs/display-modes", tier: "section" },
+  { path: "/datepicker/docs/selection-modes", tier: "section" },
+  { path: "/datepicker/docs/layouts", tier: "section" },
+  { path: "/datepicker/docs/precision", tier: "section" },
+  { path: "/datepicker/docs/typed-input", tier: "section" },
+  { path: "/datepicker/docs/disabled-dates", tier: "section" },
+  { path: "/datepicker/docs/themes", tier: "section" },
+  { path: "/datepicker/docs/styling", tier: "section" },
+  { path: "/datepicker/docs/localization", tier: "section" },
+  { path: "/datepicker/docs/accessibility", tier: "section" },
+  { path: "/datepicker/docs/frameworks", tier: "section" },
+  { path: "/datepicker/docs/with-timepicker", tier: "section" },
+  { path: "/datepicker/docs/kit", tier: "section" },
+
+  // datepicker - api
+  { path: "/datepicker/api/options", tier: "section" },
+  { path: "/datepicker/api/methods", tier: "section" },
+  { path: "/datepicker/api/events", tier: "section" },
+  { path: "/datepicker/api/typescript", tier: "section" },
+  { path: "/datepicker/api/css-classes", tier: "section" },
+  { path: "/datepicker/api/css-variables", tier: "section" },
+
+  // datepicker - basic examples
+  { path: "/datepicker/examples/basic/getting-started", tier: "leaf" },
+  { path: "/datepicker/examples/basic/docked", tier: "leaf" },
+  { path: "/datepicker/examples/basic/modal", tier: "leaf" },
+  { path: "/datepicker/examples/basic/inline", tier: "leaf" },
+
+  // datepicker - selection
+  { path: "/datepicker/examples/selection/range", tier: "leaf" },
+  { path: "/datepicker/examples/selection/multiple", tier: "leaf" },
+  { path: "/datepicker/examples/selection/range-presets", tier: "leaf" },
+  { path: "/datepicker/examples/selection/two-fields", tier: "leaf" },
+  { path: "/datepicker/examples/selection/range-limits", tier: "leaf" },
+
+  // datepicker - constraints
+  { path: "/datepicker/examples/constraints/min-max", tier: "leaf" },
+  { path: "/datepicker/examples/constraints/disabled-dates", tier: "leaf" },
+  { path: "/datepicker/examples/constraints/validation", tier: "leaf" },
+
+  // datepicker - features
+  { path: "/datepicker/examples/features/month-picker", tier: "leaf" },
+  { path: "/datepicker/examples/features/year-picker", tier: "leaf" },
+  { path: "/datepicker/examples/features/start-view", tier: "leaf" },
+  { path: "/datepicker/examples/features/several-months", tier: "leaf" },
+  { path: "/datepicker/examples/features/week-numbers", tier: "leaf" },
+  { path: "/datepicker/examples/features/outside-days", tier: "leaf" },
+  { path: "/datepicker/examples/features/decorate-dates", tier: "leaf" },
+  { path: "/datepicker/examples/features/per-day-content", tier: "leaf" },
+  { path: "/datepicker/examples/features/typed-input", tier: "leaf" },
+  { path: "/datepicker/examples/features/footer-buttons", tier: "leaf" },
+  { path: "/datepicker/examples/features/toggle-button", tier: "leaf" },
+  { path: "/datepicker/examples/features/localization", tier: "leaf" },
+
+  // datepicker - themes
+  { path: "/datepicker/examples/themes/all-themes", tier: "leaf" },
+  { path: "/datepicker/examples/themes/dark-mode", tier: "leaf" },
+  { path: "/datepicker/examples/themes/custom-theme", tier: "leaf" },
+
+  // datepicker - advanced
+  { path: "/datepicker/examples/advanced/events", tier: "leaf" },
+  { path: "/datepicker/examples/advanced/set-options", tier: "leaf" },
+  { path: "/datepicker/examples/advanced/forms", tier: "leaf" },
+  { path: "/datepicker/examples/advanced/custom-styling", tier: "leaf" },
+  { path: "/datepicker/examples/advanced/date-and-time", tier: "leaf" },
+  { path: "/datepicker/examples/advanced/external-api", tier: "leaf" },
 ];
 
 export const SITE_URL = "https://timepicker-ui.vercel.app";
