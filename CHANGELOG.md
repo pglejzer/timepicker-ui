@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.6.0] - 2026-10-19
+
+### Added
+
+- `ui.inline.embedded` renders the inline picker as a `role="group"` with no `aria-modal`, shadow or minimum height. It never takes or traps focus. Default `false`
+- Range methods `setRange({ from, to })`, `getRange()` and `setActivePart(part)`. They need RangePlugin, and `setRange` emits `range:validation`. The types `TimeOfDay`, `RangeTimeValue` and `RangeTimeState` are exported
+- `range.linked: false` makes From and To independent: no To-before-From limit, no `minDuration` / `maxDuration` check, and the To tab is enabled at once. Default `true`
+- `clock.isTimeDisabled(time)` disables times with a function (hour 0-23), combined with `clock.disabledTime`. A function that throws counts as enabled, and its error is rethrown
+- `refreshDisabledTime()` re-applies disabled times after the data behind `isTimeDisabled` changes, without re-rendering
+- `on()` and `once()` return a function that removes the handler
+
 ## [4.5.0] - 2026-10-14
 
 ### Check before upgrading
