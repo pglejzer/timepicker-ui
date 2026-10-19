@@ -105,6 +105,13 @@
         ]
       },
       {
+        "name": "isTimeDisabled",
+        "optional": true,
+        "type": "(time: TimeOfDay) => boolean",
+        "description": "Return `true` to disable a time. Combined with `disabledTime` as a union: a time is\ndisabled when either says so. `hour` is 0-23 in both clock types; `seconds` is 0 unless\n`showSeconds` is on. An hour or minute is disabled when every time inside it is disabled.\nResults are cached; call `refreshDisabledTime()` after the data behind the function changes.\nIf the function throws, that time counts as enabled and the error is rethrown asynchronously.",
+        "example": "isTimeDisabled: ({ hour }) => hour < 9 || hour >= 17"
+      },
+      {
         "name": "defaultTime",
         "optional": true,
         "type": "'now' | object",
@@ -343,6 +350,13 @@
             "name": "autoUpdate",
             "optional": true,
             "type": "boolean"
+          },
+          {
+            "name": "embedded",
+            "optional": true,
+            "type": "boolean",
+            "description": "Render the inline picker as part of a host component instead of a standalone card:\nthe root gets `role=\"group\"` with an accessible name (no `role=\"dialog\"`, no `aria-modal`), the card\nhas no shadow and no minimum height, focus is not trapped and the wrapper does not take focus on\nmount. Use it when the picker sits inside your own dialog, popover or form.\nIgnored unless `enabled` is true.",
+            "default": "false"
           }
         ]
       }
@@ -794,6 +808,13 @@
         "optional": true,
         "type": "number",
         "description": "Maximum duration in minutes"
+      },
+      {
+        "name": "linked",
+        "optional": true,
+        "type": "boolean",
+        "description": "When false, From and To are independent: To times before From are not disabled,\nthe To tab is enabled from the start, and `minDuration` / `maxDuration` are not checked, so a\nrange may cross midnight. Use it when the host validates the range with dates.\n`range:validation` still fires and reports `valid: true` once both ends are complete.",
+        "default": "true"
       },
       {
         "name": "fromLabel",

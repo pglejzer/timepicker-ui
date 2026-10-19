@@ -2,6 +2,17 @@
 
 Notable changes to `timepicker-ui-mcp`. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the package uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-10-19
+
+### Added
+
+- Reference data for timepicker-ui 4.6.0: the `ui.inline.embedded`, `range.linked` and `clock.isTimeDisabled` options.
+- `setRange`, `getRange`, `setActivePart` and `refreshDisabledTime` in the method list.
+
+### Changed
+
+- `on` and `once` are documented as returning a function that removes the handler.
+
 ## [2.0.0] - 2026-10-16
 
 ### Added
