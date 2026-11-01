@@ -112,7 +112,7 @@
     "rollup-plugin-scss": "^4.0.1",
     "rollup-plugin-serve": "^3.0.0",
     "rollup-plugin-string-import": "^1.2.6",
-    "rollup-plugin-typescript2": "^0.36.0",
+    "rollup-plugin-typescript2": "^0.37.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "sass": "1.89.2",
     "sass-loader": "16.0.5",
