@@ -157,5 +157,6 @@ thing consumers and npm see, so stale content here is a real bug.
 - Listing new files for CRLF conversion (library, `.claude` and docs-app are all CRLF)
   and confirming that the zero-dependency / tree-shaking guarantees still hold.
 - Leaving the actual release execution to the user: **never** run `git add/commit/tag/push`
-  or `npm publish`. Propose the version, the tag name (e.g. `v4.4.0`), and a commit message,
-  and let the user run them.
+  or `npm publish`. Propose the version, the tag name (e.g. `4.4.0`), and a commit message,
+  and let the user run them. The user publishes by creating a GitHub release with that tag;
+  `.github/workflows/publish.yml` then builds, tests and publishes to npm.

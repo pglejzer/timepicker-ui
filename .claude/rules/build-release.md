@@ -36,6 +36,13 @@ Applies to build configs and the package manifests. Pairs with `.claude/rules/ar
   (1.0.0) is the dev workspace - do NOT bump it to the public version without confirmation.
   `docs-app/package.json` versions the docs site, not the library - a release NEVER bumps it.
 - No new runtime dependencies (zero-dependency promise); dev/build deps must be justified.
-- Never run `npm publish` or git write ops - propose the version, tag (`vX.Y.Z`), and commit
-  message; the user executes. Full release flow (README + CHANGELOG + docs-app) is the `/release`
+- Never run `npm publish` or git write ops - propose the version, tag (`X.Y.Z`), and commit
+  message; the user executes.
+- **Publishing runs on GitHub:** `.github/workflows/publish.yml` (npm trusted publishing, no
+  token). A published GitHub release whose tag is the root version (`4.7.0` or `v4.7.0`)
+  installs, runs `build:prod` and the tests, then runs `npm publish`. A version with a `-` goes to
+  the `next` dist-tag. A manual run of the workflow is only a dry run. The MCP server has its own
+  `.github/workflows/publish-mcp.yml`: a release tagged `mcp-<version>` (e.g. `mcp-2.2.0`) checks
+  that `mcp-server/package.json` and `server.json` agree, builds, runs the smoke test, publishes
+  `timepicker-ui-mcp` to npm, then to the MCP Registry; `publish.yml` skips `mcp-` tags. Full release flow (README + CHANGELOG + docs-app) is the `/release`
   skill / `build-release` agent.
