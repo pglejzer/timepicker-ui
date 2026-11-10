@@ -120,6 +120,42 @@ describe('RangeUI', () => {
     });
   });
 
+  describe('updateTabs and the range panel', () => {
+    const mountPanel = (withIds: boolean): HTMLElement => {
+      const panelModal = document.createElement('div');
+      const idOf = (part: 'from' | 'to'): string => (withIds ? ` id="tp-ui-range-${part}-test"` : '');
+      panelModal.innerHTML =
+        '<div class="tp-ui-range-header" role="tablist">' +
+        `<button type="button" class="tp-ui-range-tab tp-ui-range-from" role="tab"${idOf('from')}></button>` +
+        `<button type="button" class="tp-ui-range-tab tp-ui-range-to" role="tab"${idOf('to')}></button>` +
+        '</div><div class="tp-ui-range-panel" role="tabpanel"></div>';
+      mockCore.getModalElement.mockReturnValue(panelModal);
+      return panelModal.querySelector('.tp-ui-range-panel') as HTMLElement;
+    };
+
+    it('should label the panel by the active tab id, From first and To after a switch', () => {
+      const panel = mountPanel(true);
+      state.setFromValue({ hour: '10', minutes: '30', type: 'AM' });
+      const ui = new RangeUI(mockCore as never, state);
+
+      ui.updateTabs();
+      expect(panel.getAttribute('aria-labelledby')).toBe('tp-ui-range-from-test');
+
+      state.setActivePart('to');
+      ui.updateTabs();
+      expect(panel.getAttribute('aria-labelledby')).toBe('tp-ui-range-to-test');
+    });
+
+    it('should leave the panel unlabelled when the tabs have no id', () => {
+      const panel = mountPanel(false);
+      const ui = new RangeUI(mockCore as never, state);
+
+      ui.updateTabs();
+
+      expect(panel.hasAttribute('aria-labelledby')).toBe(false);
+    });
+  });
+
   describe('updateTimeDisplay', () => {
     it('should show placeholder when no values', () => {
       const ui = new RangeUI(mockCore as never, state);
@@ -195,14 +231,34 @@ describe('RangeUI', () => {
   });
 
   describe('updateInputValue', () => {
-    it('should set input value with placeholder when no values', () => {
+    it('should write an empty input when both ends are empty', () => {
+      const input = document.createElement('input') as HTMLInputElement;
+      input.value = '10:30 AM - 02:45 PM';
+      mockCore.getInput.mockReturnValue(input);
+      const ui = new RangeUI(mockCore as never, state);
+
+      ui.updateInputValue();
+
+      expect(input.value).toBe('');
+    });
+
+    it.each<[string, 'from' | 'to', string]>([
+      ['From', 'from', '10:30 AM - --:--'],
+      ['To', 'to', '--:-- - 10:30 AM'],
+    ])('should write the placeholder for the empty end when only %s is set', (_label, part, expected) => {
+      const value = { hour: '10', minutes: '30', type: 'AM' };
+      if (part === 'from') {
+        state.setFromValue(value);
+      } else {
+        state.setToValue(value);
+      }
       const input = document.createElement('input') as HTMLInputElement;
       mockCore.getInput.mockReturnValue(input);
       const ui = new RangeUI(mockCore as never, state);
 
       ui.updateInputValue();
 
-      expect(input.value).toBe('--:-- - --:--');
+      expect(input.value).toBe(expected);
     });
 
     it('should set input value with times when values are set', () => {
@@ -287,7 +343,7 @@ describe('RangeUI', () => {
       ['PM', 'PM', [false, 'false'], [true, 'true']],
       ['no period', undefined, [false, 'false'], [false, 'false']],
     ])(
-      'should press only the matching AM/PM toggle for a saved part with %s in 12h mode',
+      'should check only the matching AM/PM radio for a saved part with %s in 12h mode',
       (_label, type, expectedAm, expectedPm) => {
         state.setFromValue({ hour: '10', minutes: '30', type });
         const hourInput = document.createElement('input');
@@ -295,8 +351,9 @@ describe('RangeUI', () => {
         const amBtn = document.createElement('div');
         const pmBtn = document.createElement('div');
         [amBtn, pmBtn].forEach((btn) => {
+          btn.setAttribute('role', 'radio');
           btn.classList.add('active');
-          btn.setAttribute('aria-pressed', 'true');
+          btn.setAttribute('aria-checked', 'true');
         });
         minutesInput.blur = jest.fn();
         hourInput.click = jest.fn();
@@ -306,7 +363,7 @@ describe('RangeUI', () => {
         mockCore.getPM.mockReturnValue(pmBtn);
         const toggleState = (btn: HTMLElement): [boolean, string | null] => [
           btn.classList.contains('active'),
-          btn.getAttribute('aria-pressed'),
+          btn.getAttribute('aria-checked'),
         ];
 
         const ui = new RangeUI(mockCore as never, state);

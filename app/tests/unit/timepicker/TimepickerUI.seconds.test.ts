@@ -125,7 +125,7 @@ describe('TimepickerUI with seconds', () => {
     press(secondsInput(), 'ArrowUp');
     expect(secondsInput().value).toBe('45');
     expect(secondsInput().getAttribute('aria-valuenow')).toBe('45');
-    expect(secondsInput().getAttribute('aria-valuetext')).toBe('45');
+    expect(secondsInput().getAttribute('aria-valuetext')).toBe('45 of 60');
     expect(onSelectSecond).toHaveBeenCalledWith({ seconds: '45' });
     jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY);
     expect(modal().querySelector('.timepicker-announcer')?.textContent).toBe('Sekunda: 45');
@@ -227,21 +227,29 @@ describe('TimepickerUI with seconds', () => {
       seconds: ariaOf('seconds'),
     });
 
-    it('opens 09:05:07 with numeric aria-valuenow 9/5/7 and displayed aria-valuetext 09/05/07', () => {
+    it('opens 09:05:07 with numeric aria-valuenow 9/5/7 and aria-valuetext "9 of 24" / "5 of 60" / "7 of 60"', () => {
       const picker = create('09:05:07', { clock: { type: '24h', showSeconds: true } });
 
       picker.open();
 
-      expect(spinbuttons()).toEqual({ hour: ['9', '09'], minutes: ['5', '05'], seconds: ['7', '07'] });
+      expect(spinbuttons()).toEqual({
+        hour: ['9', '9 of 24'],
+        minutes: ['5', '5 of 60'],
+        seconds: ['7', '7 of 60'],
+      });
     });
 
-    it('setValue 14:30:05 while open sets aria-valuenow 14/30/5 and aria-valuetext 14/30/05', () => {
+    it('setValue 14:30:05 while open sets aria-valuenow 14/30/5 and the matching "of" value text', () => {
       const picker = create('10:00:30', { clock: { type: '24h', showSeconds: true } });
       picker.open();
 
       picker.setValue('14:30:05');
 
-      expect(spinbuttons()).toEqual({ hour: ['14', '14'], minutes: ['30', '30'], seconds: ['5', '05'] });
+      expect(spinbuttons()).toEqual({
+        hour: ['14', '14 of 24'],
+        minutes: ['30', '30 of 60'],
+        seconds: ['5', '5 of 60'],
+      });
     });
   });
 });

@@ -1,7 +1,13 @@
-import { ClockSystem } from '../../../../src/managers/clock/ClockSystem';
+import { ClockSystem, type ClockSystemConfig } from '../../../../src/managers/clock/ClockSystem';
 import { ClockController } from '../../../../src/managers/clock/controller/ClockController';
-import type { ClockMode, ClockType } from '../../../../src/managers/clock/types';
+import type { ClockMode, ClockType, DisabledTimeConfig } from '../../../../src/managers/clock/types';
 import { HOURS_12, HOURS_24, MINUTES_STEP_5 } from '../../../../src/utils/template';
+import {
+  FakeResizeObserver,
+  installFakeResizeObserver,
+  removeResizeObserver,
+  sizeOf,
+} from '../../utils/resize-observer-helpers';
 
 describe('ClockSystem', () => {
   let clockFace: HTMLDivElement;
@@ -195,7 +201,9 @@ describe('ClockSystem', () => {
 
   describe('face switch highlight', () => {
     const tipValues = (wrapper: HTMLElement): string[] =>
-      [...wrapper.querySelectorAll('.tp-ui-value-tips, .tp-ui-value-tips-24h')].map((tip) => tip.textContent ?? '');
+      [...wrapper.querySelectorAll('.tp-ui-value-tips, .tp-ui-value-tips-24h')].map(
+        (tip) => tip.textContent ?? '',
+      );
     const activeTips = (wrapper: HTMLElement): string[] =>
       [...wrapper.querySelectorAll('.active')].map((tip) => tip.textContent ?? '');
 
@@ -227,12 +235,13 @@ describe('ClockSystem', () => {
     beforeEach(() => {
       const realFollowHand = ClockController.prototype.followHand;
       tipsWhenFollowed = [];
-      followHand = jest
-        .spyOn(ClockController.prototype, 'followHand')
-        .mockImplementation(function (this: ClockController, mode: ClockMode) {
-          tipsWhenFollowed.push([...tipValues(tipsWrapper), ...tipValues(tipsWrapperFor24h)]);
-          realFollowHand.call(this, mode);
-        });
+      followHand = jest.spyOn(ClockController.prototype, 'followHand').mockImplementation(function (
+        this: ClockController,
+        mode: ClockMode,
+      ) {
+        tipsWhenFollowed.push([...tipValues(tipsWrapper), ...tipValues(tipsWrapperFor24h)]);
+        realFollowHand.call(this, mode);
+      });
     });
 
     afterEach(() => {
@@ -541,6 +550,192 @@ describe('ClockSystem', () => {
     });
   });
 
+  describe('size watch for a clock that is shown hidden', () => {
+    let restoreResizeObserver: () => void;
+
+    const resize = (element: HTMLElement, size: number): void => {
+      Object.defineProperty(element, 'offsetWidth', { value: size, configurable: true });
+      Object.defineProperty(element, 'offsetHeight', { value: size, configurable: true });
+    };
+
+    const create = (overrides: Partial<ClockSystemConfig> = {}): ClockSystem =>
+      new ClockSystem({
+        clockFace,
+        tipsWrapper,
+        clockHand,
+        circle,
+        clockType: '12h',
+        disabledTime: null,
+        initialHour: '10',
+        initialMinute: '30',
+        initialAmPm: 'AM',
+        timepicker: {},
+        ...overrides,
+      });
+
+    const firstTipLeft = (className: string): string | undefined =>
+      tipsWrapper.querySelector<HTMLElement>(`.${className}`)?.style.left;
+    const activeTips = (): string[] =>
+      [...tipsWrapper.querySelectorAll('.active')].map((tip) => tip.textContent ?? '');
+    const showFaceSize = (size: number): void => {
+      resize(tipsWrapper, size);
+      sizeOf(clockFace, size);
+    };
+
+    describe('with ResizeObserver', () => {
+      beforeEach(() => {
+        restoreResizeObserver = installFakeResizeObserver();
+        resize(tipsWrapper, 0);
+      });
+
+      afterEach(() => {
+        restoreResizeObserver();
+      });
+
+      it('lays the hour tips out again once the face gets its first size', () => {
+        const system = create();
+        system.initialize();
+
+        expect(FakeResizeObserver.instances).toHaveLength(1);
+        expect(firstTipLeft('tp-ui-hour-time-12')).toBe('-16px');
+
+        showFaceSize(200);
+        FakeResizeObserver.instances[0].fire();
+
+        expect(tipsWrapper.querySelectorAll('.tp-ui-hour-time-12')).toHaveLength(HOURS_12.length);
+        expect(firstTipLeft('tp-ui-hour-time-12')).toBe('84px');
+        expect(activeTips()).toEqual(['10']);
+        expect(FakeResizeObserver.instances[0].disconnect).toHaveBeenCalledTimes(1);
+
+        system.destroy();
+      });
+
+      it('lays the tips of the face that is shown out again, not the hour tips', () => {
+        const system = create();
+        system.initialize();
+        system.switchToMinutes();
+        expect(firstTipLeft('tp-ui-minutes-time')).toBe('-16px');
+
+        showFaceSize(200);
+        FakeResizeObserver.instances[0].fire();
+
+        expect(tipsWrapper.querySelectorAll('.tp-ui-minutes-time')).toHaveLength(MINUTES_STEP_5.length);
+        expect(tipsWrapper.querySelectorAll('.tp-ui-hour-time-12')).toHaveLength(0);
+        expect(firstTipLeft('tp-ui-minutes-time')).toBe('84px');
+        expect(activeTips()).toEqual(['30']);
+
+        system.destroy();
+      });
+
+      it('does not watch a face that already has a size', () => {
+        showFaceSize(200);
+        const system = create();
+
+        system.initialize();
+
+        expect(FakeResizeObserver.instances).toHaveLength(0);
+        expect(firstTipLeft('tp-ui-hour-time-12')).toBe('84px');
+
+        system.destroy();
+      });
+
+      it('releases the observer on destroy', () => {
+        const system = create();
+        system.initialize();
+        const [observer] = FakeResizeObserver.instances;
+
+        system.destroy();
+
+        expect(observer.disconnect).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('without ResizeObserver', () => {
+      beforeEach(() => {
+        restoreResizeObserver = removeResizeObserver();
+        resize(tipsWrapper, 0);
+      });
+
+      afterEach(() => {
+        restoreResizeObserver();
+      });
+
+      it('initializes and destroys without throwing', () => {
+        const system = create();
+
+        expect(() => system.initialize()).not.toThrow();
+        expect(tipsWrapper.querySelectorAll('.tp-ui-hour-time-12')).toHaveLength(HOURS_12.length);
+        expect(() => system.destroy()).not.toThrow();
+      });
+    });
+  });
+
+  describe('range limit in the disabled config', () => {
+    const FROM_10_30_AM: DisabledTimeConfig = {
+      rangeFromType: 'AM',
+      rangeFromHour: 10,
+      rangeFromMinute: 30,
+    };
+    const HOURS_BEFORE_FROM = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const MINUTES_BEFORE_FROM = ['00', '05', '10', '15', '20', '25'];
+
+    const create = (disabledTime: DisabledTimeConfig | null): ClockSystem =>
+      new ClockSystem({
+        clockFace,
+        tipsWrapper,
+        clockHand,
+        circle,
+        clockType: '12h',
+        disabledTime,
+        initialHour: '10',
+        initialMinute: '45',
+        initialAmPm: 'AM',
+        timepicker: {},
+      });
+
+    const disabledTips = (): string[] =>
+      [...tipsWrapper.querySelectorAll('.tp-ui-value-tips.tp-ui-tips-disabled')].map(
+        (tip) => tip.textContent ?? '',
+      );
+
+    it('keeps the hours before "from" disabled after refreshDisabledTime()', () => {
+      const system = create(FROM_10_30_AM);
+      system.initialize();
+      expect(disabledTips()).toEqual(HOURS_BEFORE_FROM);
+
+      system.refreshDisabledTime();
+
+      expect(disabledTips()).toEqual(HOURS_BEFORE_FROM);
+      system.destroy();
+    });
+
+    it('keeps the minutes before "from" disabled after refreshDisabledTime()', () => {
+      const system = create(FROM_10_30_AM);
+      system.initialize();
+      system.switchToMinutes();
+      expect(disabledTips()).toEqual(MINUTES_BEFORE_FROM);
+
+      system.refreshDisabledTime();
+
+      expect(disabledTips()).toEqual(MINUTES_BEFORE_FROM);
+      system.destroy();
+    });
+
+    it('applies a limit handed over by updateDisabledTime() and keeps it after refreshDisabledTime()', () => {
+      const system = create(null);
+      system.initialize();
+      expect(disabledTips()).toEqual([]);
+
+      system.updateDisabledTime(FROM_10_30_AM);
+      expect(disabledTips()).toEqual(HOURS_BEFORE_FROM);
+
+      system.refreshDisabledTime();
+
+      expect(disabledTips()).toEqual(HOURS_BEFORE_FROM);
+      system.destroy();
+    });
+  });
+
   describe('callbacks', () => {
     it('should call onHourChange when hour changes', () => {
       const onHourChange = jest.fn();
@@ -587,4 +782,3 @@ describe('ClockSystem', () => {
     });
   });
 });
-

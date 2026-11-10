@@ -18,7 +18,7 @@ const periodMatching = (state: string): string | undefined =>
 
 const periodState = (): { active?: string; pressed?: string } => ({
   active: periodMatching('.active'),
-  pressed: periodMatching('[aria-pressed="true"]'),
+  pressed: periodMatching('[aria-checked="true"]'),
 });
 
 describe('setValue edge cases', () => {

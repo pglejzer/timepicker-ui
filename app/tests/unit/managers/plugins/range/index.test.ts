@@ -29,6 +29,16 @@ describe('range index exports', () => {
     expect(typeof rangeIndex.calculateDuration).toBe('function');
   });
 
+  describe('parseRangeInput with a placeholder end', () => {
+    it.each<[string, RangeValue | null, RangeValue | null]>([
+      ['09:00 - --:--', { hour: '09', minutes: '00' }, null],
+      ['--:-- - 17:00', null, { hour: '17', minutes: '00' }],
+      ['--:-- - --:--', null, null],
+    ])('should parse "%s" end by end', (input, from, to) => {
+      expect(rangeIndex.parseRangeInput(input)).toEqual({ from, to });
+    });
+  });
+
   it('should have types available from re-export', () => {
     const rangePart: RangePart = 'from';
     const rangeValue: RangeValue = { hour: '10', minutes: '00' };

@@ -1,5 +1,11 @@
 import * as node from '@/utils/node';
-import { getInlineContainer, resolveElement } from '@/utils/dom';
+import { getInlineContainer, resolveElement, whenSized } from '@/utils/dom';
+import {
+  FakeResizeObserver,
+  installFakeResizeObserver,
+  removeResizeObserver,
+  sizeOf,
+} from './resize-observer-helpers';
 
 const addHost = (id: string): HTMLElement => {
   const host = document.createElement('div');
@@ -50,7 +56,9 @@ describe('getInlineContainer', () => {
     expect(getInlineContainer({ enabled: true, container: '#preferred-host', containerId: 'id-host' })).toBe(
       preferred,
     );
-    expect(getInlineContainer({ enabled: true, container: preferred, containerId: 'id-host' })).toBe(preferred);
+    expect(getInlineContainer({ enabled: true, container: preferred, containerId: 'id-host' })).toBe(
+      preferred,
+    );
   });
 
   it('finds the container by containerId', () => {
@@ -74,5 +82,97 @@ describe('getInlineContainer', () => {
     jest.spyOn(node, 'isDocument').mockReturnValue(false);
 
     expect(getInlineContainer({ enabled: true, containerId: 'id-host' })).toBeNull();
+  });
+});
+
+describe('whenSized', () => {
+  let restoreResizeObserver: () => void;
+
+  afterEach(() => {
+    restoreResizeObserver();
+  });
+
+  describe('without ResizeObserver', () => {
+    beforeEach(() => {
+      restoreResizeObserver = removeResizeObserver();
+    });
+
+    it('does nothing and returns a cleanup that does not throw', () => {
+      const callback = jest.fn();
+      const element = document.createElement('div');
+      sizeOf(element, 0);
+
+      expect(() => whenSized(element, callback)()).not.toThrow();
+      expect(callback).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('with ResizeObserver', () => {
+    beforeEach(() => {
+      restoreResizeObserver = installFakeResizeObserver();
+    });
+
+    it('does nothing for a missing element', () => {
+      const callback = jest.fn();
+
+      expect(() => whenSized(null, callback)()).not.toThrow();
+      expect(() => whenSized(undefined, callback)()).not.toThrow();
+      expect(FakeResizeObserver.instances).toHaveLength(0);
+      expect(callback).not.toHaveBeenCalled();
+    });
+
+    it('calls back once on the first non-zero size, then disconnects', () => {
+      const element = document.createElement('div');
+      sizeOf(element, 0);
+      const callback = jest.fn();
+      whenSized(element, callback);
+      const [observer] = FakeResizeObserver.instances;
+
+      expect(observer.observe).toHaveBeenCalledWith(element);
+
+      observer.fire();
+      expect(callback).not.toHaveBeenCalled();
+      expect(observer.disconnect).not.toHaveBeenCalled();
+
+      sizeOf(element, 200);
+      observer.fire();
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(observer.disconnect).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps waiting while only one side has a size', () => {
+      const element = document.createElement('div');
+      sizeOf(element, 200, 0);
+      const callback = jest.fn();
+      whenSized(element, callback);
+      const [observer] = FakeResizeObserver.instances;
+
+      observer.fire();
+      expect(callback).not.toHaveBeenCalled();
+
+      sizeOf(element, 200, 100);
+      observer.fire();
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
+
+    it('skips an element that already has a size', () => {
+      const sized = document.createElement('div');
+      sizeOf(sized, 200);
+      const callback = jest.fn();
+
+      expect(() => whenSized(sized, callback)()).not.toThrow();
+      expect(FakeResizeObserver.instances).toHaveLength(0);
+      expect(callback).not.toHaveBeenCalled();
+    });
+
+    it('returns a cleanup that disconnects a pending observer', () => {
+      const hidden = document.createElement('div');
+      sizeOf(hidden, 0);
+
+      whenSized(hidden, jest.fn())();
+
+      expect(FakeResizeObserver.instances).toHaveLength(1);
+      expect(FakeResizeObserver.instances[0].disconnect).toHaveBeenCalledTimes(1);
+    });
   });
 });

@@ -85,13 +85,13 @@ describe('clock dial keyboard through TimepickerUI', () => {
       expect(dial()).toHaveAttribute('role', 'slider');
       expect(dial().tabIndex).toBe(0);
       expect(activeFields()).toEqual(['tp-ui-hour']);
-      expect(dialState()).toEqual({ label: 'Hour', min: '1', max: '12', now: '10', text: '10' });
+      expect(dialState()).toEqual({ label: 'Hour', min: '1', max: '12', now: '10', text: '10 of 12' });
     });
 
     it('mirrors the 24h hour range and value', () => {
       openPicker('07:05', { clock: { type: '24h' } });
 
-      expect(dialState()).toEqual({ label: 'Hour', min: '0', max: '23', now: '7', text: '07' });
+      expect(dialState()).toEqual({ label: 'Hour', min: '0', max: '23', now: '7', text: '7 of 24' });
     });
 
     it('takes its name from a custom hourLabel at runtime while the group keeps clockLabel', () => {
@@ -110,7 +110,7 @@ describe('clock dial keyboard through TimepickerUI', () => {
       const selectHour = jest.fn();
       picker.on('select:hour', selectHour);
 
-      expect(dialState()).toEqual({ label: 'Hour', min: '0', max: '23', now: '10', text: '10' });
+      expect(dialState()).toEqual({ label: 'Hour', min: '0', max: '23', now: '10', text: '10 of 24' });
 
       press(dial(), 'ArrowRight');
 
@@ -193,7 +193,7 @@ describe('clock dial keyboard through TimepickerUI', () => {
         .map((record) => record.attributeName)
         .sort();
       expect(dialWrites).toEqual(['aria-valuenow', 'aria-valuetext']);
-      expect(dialState()).toEqual({ label: 'Hour', min: '0', max: '23', now: '11', text: '11' });
+      expect(dialState()).toEqual({ label: 'Hour', min: '0', max: '23', now: '11', text: '11 of 24' });
     });
 
     it('moves the active tip and the hand in place, without rebuilding the tips', () => {
@@ -238,7 +238,7 @@ describe('clock dial keyboard through TimepickerUI', () => {
 
       expect(animationClock).toHaveBeenCalledTimes(1);
       expect(activeFields()).toEqual(['tp-ui-minutes']);
-      expect(dialState()).toEqual({ label: 'Minute', min: '0', max: '59', now: '31', text: '31' });
+      expect(dialState()).toEqual({ label: 'Minute', min: '0', max: '59', now: '31', text: '31 of 60' });
       expect(modal().querySelectorAll('.tp-ui-minutes-time')).toHaveLength(12);
       expect(modal().querySelectorAll('.tp-ui-hour-time-12')).toHaveLength(0);
       expect(handAngle(picker)).toBe(31 * 6);
@@ -261,17 +261,17 @@ describe('clock dial keyboard through TimepickerUI', () => {
       press(dial(), 'Enter');
 
       expect(activeFields()).toEqual(['tp-ui-minutes']);
-      expect(dialState()).toEqual({ label: 'Minute', min: '0', max: '59', now: '30', text: '30' });
+      expect(dialState()).toEqual({ label: 'Minute', min: '0', max: '59', now: '30', text: '30 of 60' });
       expect(modal().querySelectorAll('.tp-ui-minutes-time')).toHaveLength(12);
       expect(document.activeElement).toBe(dial());
       jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY);
-      expect(announcer().textContent).toBe('Minutes: 30');
+      expect(announcer().textContent).toBe('Minute: 30');
 
       settle();
       press(dial(), 'Enter');
 
       expect(activeFields()).toEqual(['tp-ui-seconds']);
-      expect(dialState()).toEqual({ label: 'Second', min: '0', max: '59', now: '15', text: '15' });
+      expect(dialState()).toEqual({ label: 'Second', min: '0', max: '59', now: '15', text: '15 of 60' });
       expect(document.activeElement).toBe(dial());
       jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY);
       expect(announcer().textContent).toBe('Second: 15');
@@ -304,7 +304,7 @@ describe('clock dial keyboard through TimepickerUI', () => {
 
       expect(field('hour').value).toBe('03');
       expect(activeFields()).toEqual(['tp-ui-minutes']);
-      expect(dialState()).toEqual({ label: 'Minute', min: '0', max: '59', now: '0', text: '00' });
+      expect(dialState()).toEqual({ label: 'Minute', min: '0', max: '59', now: '0', text: '0 of 60' });
       expect(document.activeElement).toBe(field('minutes'));
     });
   });
@@ -346,12 +346,12 @@ describe('clock dial keyboard through TimepickerUI', () => {
 
       picker.setValue('14:45');
 
-      expect(dialState()).toEqual({ label: 'Hour', min: '0', max: '23', now: '14', text: '14' });
+      expect(dialState()).toEqual({ label: 'Hour', min: '0', max: '23', now: '14', text: '14 of 24' });
 
       field('minutes').click();
       picker.setValue('15:50');
 
-      expect(dialState()).toEqual({ label: 'Minute', min: '0', max: '59', now: '50', text: '50' });
+      expect(dialState()).toEqual({ label: 'Minute', min: '0', max: '59', now: '50', text: '50 of 60' });
     });
 
     it('Clear points the dial back at the neutral hour', () => {
@@ -361,7 +361,7 @@ describe('clock dial keyboard through TimepickerUI', () => {
       (modal().querySelector('.tp-ui-clear-btn') as HTMLElement).click();
 
       expect(activeFields()).toEqual(['tp-ui-hour']);
-      expect(dialState()).toEqual({ label: 'Hour', min: '0', max: '23', now: '12', text: '12' });
+      expect(dialState()).toEqual({ label: 'Hour', min: '0', max: '23', now: '12', text: '12 of 24' });
     });
   });
 });

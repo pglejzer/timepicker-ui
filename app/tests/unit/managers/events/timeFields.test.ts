@@ -25,7 +25,15 @@ const createCore = (options: TimepickerOptions, disabled?: DisabledValue): CoreS
   return core;
 };
 
-const mountHeader = ({ hour, minutes, seconds }: { hour: string; minutes: string; seconds?: string }): void => {
+const mountHeader = ({
+  hour,
+  minutes,
+  seconds,
+}: {
+  hour: string;
+  minutes: string;
+  seconds?: string;
+}): void => {
   const secondsField = seconds === undefined ? '' : `<input class="tp-ui-seconds" value="${seconds}" />`;
   document.body.insertAdjacentHTML(
     'beforeend',
@@ -142,13 +150,16 @@ describe('getActiveField', () => {
     expect(getActiveField(core)).toBe('hour');
   });
 
-  it.each<TimeField>(['hour', 'minutes', 'seconds'])('reports %s when that field carries the active class', (field) => {
-    const core = createCore({ clock: { type: '24h', showSeconds: true } });
-    mountClockModal();
-    fieldInput(field).classList.add('active');
+  it.each<TimeField>(['hour', 'minutes', 'seconds'])(
+    'reports %s when that field carries the active class',
+    (field) => {
+      const core = createCore({ clock: { type: '24h', showSeconds: true } });
+      mountClockModal();
+      fieldInput(field).classList.add('active');
 
-    expect(getActiveField(core)).toBe(field);
-  });
+      expect(getActiveField(core)).toBe(field);
+    },
+  );
 });
 
 describe('activateField', () => {
@@ -215,7 +226,7 @@ describe('announceField', () => {
 
   it.each<[TimeField, string]>([
     ['hour', 'Hour: 10'],
-    ['minutes', 'Minutes: 25'],
+    ['minutes', 'Minute: 25'],
     ['seconds', 'Second: 40'],
   ])('announces %s with its default label and the field value after the announce delay', (field, message) => {
     const core = createCore({ clock: { type: '24h', showSeconds: true } });

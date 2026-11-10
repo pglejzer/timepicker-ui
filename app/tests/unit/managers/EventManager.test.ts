@@ -505,8 +505,10 @@ describe('EventManager', () => {
 
       expect(amBtn.classList.contains('active')).toBe(true);
       expect(pmBtn.classList.contains('active')).toBe(false);
-      expect(amBtn.getAttribute('aria-pressed')).toBe('true');
-      expect(pmBtn.getAttribute('aria-pressed')).toBe('false');
+      expect(amBtn.getAttribute('aria-checked')).toBe('true');
+      expect(pmBtn.getAttribute('aria-checked')).toBe('false');
+      expect(amBtn.getAttribute('tabindex')).toBe('0');
+      expect(pmBtn.getAttribute('tabindex')).toBe('-1');
       expect(emitSpy).toHaveBeenCalledWith('select:am', {});
     });
 
@@ -577,8 +579,10 @@ describe('EventManager', () => {
 
       expect(pmBtn.classList.contains('active')).toBe(true);
       expect(amBtn.classList.contains('active')).toBe(false);
-      expect(pmBtn.getAttribute('aria-pressed')).toBe('true');
-      expect(amBtn.getAttribute('aria-pressed')).toBe('false');
+      expect(pmBtn.getAttribute('aria-checked')).toBe('true');
+      expect(amBtn.getAttribute('aria-checked')).toBe('false');
+      expect(pmBtn.getAttribute('tabindex')).toBe('0');
+      expect(amBtn.getAttribute('tabindex')).toBe('-1');
       expect(emitSpy).toHaveBeenCalledWith('select:pm', {});
     });
 
@@ -1193,7 +1197,19 @@ describe('EventManager', () => {
       eventManager.handleSwitchViewButton();
       switchBtn.click();
 
-      expect(emitSpy).toHaveBeenCalledWith('switch:view', {});
+      expect(emitSpy).toHaveBeenCalledWith('switch:view', { view: 'keyboard' });
+    });
+
+    it('should emit the clock as the target while the keyboard view is shown', () => {
+      const switchBtn = document.createElement('button');
+      jest.spyOn(coreState, 'getKeyboardClockIcon').mockReturnValue(switchBtn);
+      coreState.setView('keyboard');
+      const emitSpy = jest.spyOn(emitter, 'emit');
+
+      eventManager.handleSwitchViewButton();
+      switchBtn.click();
+
+      expect(emitSpy).toHaveBeenCalledWith('switch:view', { view: 'clock' });
     });
 
     it('should not emit when destroyed', () => {
@@ -1438,4 +1454,3 @@ describe('EventManager blocks OK on a disabled time', () => {
     expect(okState()).toEqual({ ariaDisabled: 'false', disabledClass: false });
   });
 });
-

@@ -1,7 +1,7 @@
 import {
   announceToScreenReader,
-  updateAriaPressed,
   bindActivate,
+  formatValueText,
   isActivationKey,
   prefersReducedMotion,
   setActivePeriod,
@@ -110,78 +110,50 @@ describe('accessibility', () => {
     });
   });
 
-  describe('updateAriaPressed', () => {
-    let button: HTMLButtonElement;
-
-    beforeEach(() => {
-      button = document.createElement('button');
-      document.body.appendChild(button);
-    });
-
-    afterEach(() => {
-      document.body.innerHTML = '';
-    });
-
-    it('should set aria-pressed to true', () => {
-      updateAriaPressed(button, true);
-      expect(button.getAttribute('aria-pressed')).toBe('true');
-    });
-
-    it('should set aria-pressed to false', () => {
-      updateAriaPressed(button, false);
-      expect(button.getAttribute('aria-pressed')).toBe('false');
-    });
-
-    it('should do nothing when button is null', () => {
-      expect(() => {
-        updateAriaPressed(null, true);
-      }).not.toThrow();
-    });
-
-    it('should do nothing when button is undefined', () => {
-      expect(() => {
-        updateAriaPressed(undefined, true);
-      }).not.toThrow();
-    });
-
-    it('should toggle aria-pressed state', () => {
-      updateAriaPressed(button, true);
-      expect(button.getAttribute('aria-pressed')).toBe('true');
-
-      updateAriaPressed(button, false);
-      expect(button.getAttribute('aria-pressed')).toBe('false');
-    });
-  });
-
   describe('setActivePeriod', () => {
-    const periodButton = (type: 'AM' | 'PM', pressed: boolean): HTMLDivElement => {
-      const button = document.createElement('div');
-      button.setAttribute('role', 'button');
-      button.dataset.type = type;
-      button.classList.toggle('active', pressed);
-      button.setAttribute('aria-pressed', String(pressed));
-      return button;
+    const periodRadio = (type: 'AM' | 'PM', checked: boolean): HTMLDivElement => {
+      const radio = document.createElement('div');
+      radio.setAttribute('role', 'radio');
+      radio.dataset.type = type;
+      radio.classList.toggle('active', checked);
+      radio.setAttribute('aria-checked', String(checked));
+      radio.setAttribute('tabindex', checked ? '0' : '-1');
+      return radio;
     };
 
-    const stateOf = (button: HTMLElement): { active: boolean; pressed: string | null } => ({
-      active: button.classList.contains('active'),
-      pressed: button.getAttribute('aria-pressed'),
+    const stateOf = (
+      radio: HTMLElement,
+    ): { active: boolean; checked: string | null; tabindex: string | null; pressed: string | null } => ({
+      active: radio.classList.contains('active'),
+      checked: radio.getAttribute('aria-checked'),
+      tabindex: radio.getAttribute('tabindex'),
+      pressed: radio.getAttribute('aria-pressed'),
     });
 
     it.each([
-      { type: 'AM', am: true, pm: false },
-      { type: 'PM', am: false, pm: true },
-      { type: undefined, am: false, pm: false },
+      { type: 'AM', am: true, pm: false, amTab: '0', pmTab: '-1' },
+      { type: 'PM', am: false, pm: true, amTab: '-1', pmTab: '0' },
+      { type: undefined, am: false, pm: false, amTab: '0', pmTab: '-1' },
     ])(
-      'should set active and aria-pressed to $am on AM and $pm on PM for type $type',
-      ({ type, am, pm }) => {
-        const amButton = periodButton('AM', !am);
-        const pmButton = periodButton('PM', !pm);
+      'should set active, aria-checked and roving tabindex for type $type',
+      ({ type, am, pm, amTab, pmTab }) => {
+        const amRadio = periodRadio('AM', !am);
+        const pmRadio = periodRadio('PM', !pm);
 
-        setActivePeriod(amButton, pmButton, type);
+        setActivePeriod(amRadio, pmRadio, type);
 
-        expect(stateOf(amButton)).toEqual({ active: am, pressed: String(am) });
-        expect(stateOf(pmButton)).toEqual({ active: pm, pressed: String(pm) });
+        expect(stateOf(amRadio)).toEqual({
+          active: am,
+          checked: String(am),
+          tabindex: amTab,
+          pressed: null,
+        });
+        expect(stateOf(pmRadio)).toEqual({
+          active: pm,
+          checked: String(pm),
+          tabindex: pmTab,
+          pressed: null,
+        });
       },
     );
 
@@ -189,12 +161,12 @@ describe('accessibility', () => {
       expect(() => setActivePeriod(missing, missing, 'AM')).not.toThrow();
     });
 
-    it('should still update the present button when the other one is missing', () => {
-      const pmButton = periodButton('PM', false);
+    it('should still update the present radio when the other one is missing', () => {
+      const pmRadio = periodRadio('PM', false);
 
-      setActivePeriod(null, pmButton, 'PM');
+      setActivePeriod(null, pmRadio, 'PM');
 
-      expect(stateOf(pmButton)).toEqual({ active: true, pressed: 'true' });
+      expect(stateOf(pmRadio)).toEqual({ active: true, checked: 'true', tabindex: '0', pressed: null });
     });
   });
 
@@ -472,7 +444,9 @@ describe('accessibility', () => {
     });
 
     it('should return false when matchMedia reports no preference', () => {
-      window.matchMedia = jest.fn().mockReturnValue({ matches: false }) as unknown as typeof window.matchMedia;
+      window.matchMedia = jest
+        .fn()
+        .mockReturnValue({ matches: false }) as unknown as typeof window.matchMedia;
       expect(prefersReducedMotion()).toBe(false);
     });
   });
@@ -509,6 +483,93 @@ describe('accessibility', () => {
 
     it('should do nothing without an input', () => {
       expect(() => setSpinbuttonValue(null, '05')).not.toThrow();
+    });
+
+    describe('formatValueText', () => {
+      it('replaces {value} and {count}', () => {
+        expect(formatValueText('{value} of {count}', 7, 12)).toBe('7 of 12');
+      });
+
+      it('leaves a template without {count} with the value only', () => {
+        expect(formatValueText('{value}', 7, 12)).toBe('7');
+      });
+    });
+
+    describe('value text from the modal template', () => {
+      const VALUE_TEXT = '{value} of {count}';
+
+      const field = (min: number, max: number): HTMLInputElement => {
+        const input = spinbutton();
+        input.setAttribute('aria-valuemin', String(min));
+        input.setAttribute('aria-valuemax', String(max));
+        return input;
+      };
+
+      const inModal = (input: HTMLInputElement, template: string | null = VALUE_TEXT): HTMLDivElement => {
+        const modal = document.createElement('div');
+        modal.className = 'tp-ui-modal';
+        if (template) modal.setAttribute('data-value-text', template);
+        modal.appendChild(input);
+        document.body.appendChild(modal);
+        return modal;
+      };
+
+      afterEach(() => {
+        document.body.innerHTML = '';
+      });
+
+      it.each([
+        { min: 1, max: 12, value: '07', text: '7 of 12' },
+        { min: 0, max: 23, value: '00', text: '0 of 24' },
+        { min: 0, max: 59, value: '30', text: '30 of 60' },
+      ])('formats $value in $min-$max as "$text"', ({ min, max, value, text }) => {
+        const input = field(min, max);
+        inModal(input);
+
+        setSpinbuttonValue(input, value);
+
+        expect(input.getAttribute('aria-valuetext')).toBe(text);
+        expect(input.value).toBe(value);
+      });
+
+      it('keeps the bare value without a modal around the input', () => {
+        const input = field(1, 12);
+
+        setSpinbuttonValue(input, '07');
+
+        expect(input.getAttribute('aria-valuetext')).toBe('07');
+      });
+
+      it('keeps the bare value when the modal has no template', () => {
+        const input = field(1, 12);
+        inModal(input, null);
+
+        setSpinbuttonValue(input, '07');
+
+        expect(input.getAttribute('aria-valuetext')).toBe('07');
+      });
+
+      it('writes no aria-valuetext for an empty value', () => {
+        const input = field(1, 12);
+        inModal(input);
+        setSpinbuttonValue(input, '07');
+
+        setSpinbuttonValue(input, '');
+
+        expect(input.hasAttribute('aria-valuetext')).toBe(false);
+      });
+
+      it('gives the dial the same text through syncClockSlider', () => {
+        const { modal, dial, hour } = mountClockModal();
+        modal.setAttribute('data-value-text', VALUE_TEXT);
+        hour.classList.add('active');
+
+        setSpinbuttonValue(hour, '07');
+
+        expect(hour.getAttribute('aria-valuetext')).toBe('7 of 12');
+        expect(dial.getAttribute('aria-valuetext')).toBe('7 of 12');
+        expect(dial.getAttribute('aria-valuenow')).toBe('7');
+      });
     });
 
     describe('inside a picker modal', () => {
@@ -780,18 +841,10 @@ describe('accessibility', () => {
 
       expect(first.length).toBeGreaterThan(0);
       expect(second).toHaveLength(0);
-      expect(am.getAttribute('aria-pressed')).toBe('true');
-      expect(pm.getAttribute('aria-pressed')).toBe('false');
-    });
-
-    it('updateAriaPressed(button, true)', () => {
-      const button = document.createElement('button');
-
-      const first = recordMutations(button, () => updateAriaPressed(button, true));
-      const second = recordMutations(button, () => updateAriaPressed(button, true));
-
-      expect(first).toHaveLength(1);
-      expect(second).toHaveLength(0);
+      expect(am.getAttribute('aria-checked')).toBe('true');
+      expect(pm.getAttribute('aria-checked')).toBe('false');
+      expect(am.getAttribute('tabindex')).toBe('0');
+      expect(pm.getAttribute('tabindex')).toBe('-1');
     });
 
     it('syncClockSlider(modal)', () => {
@@ -867,4 +920,3 @@ describe('accessibility', () => {
     });
   });
 });
-

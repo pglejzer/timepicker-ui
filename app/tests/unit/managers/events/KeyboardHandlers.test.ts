@@ -160,6 +160,34 @@ describe('KeyboardHandlers spinbutton navigation', () => {
     });
   });
 
+  describe('aria-valuetext inside a modal with a value text template', () => {
+    beforeEach(() => {
+      setup('12h');
+      const container = hourInput.parentElement as HTMLElement;
+      container.classList.add('tp-ui-modal');
+      container.setAttribute('data-value-text', '{value} of {count}');
+      hourInput.setAttribute('aria-valuemin', '1');
+      hourInput.setAttribute('aria-valuemax', '12');
+      minuteInput.setAttribute('aria-valuemin', '0');
+      minuteInput.setAttribute('aria-valuemax', '59');
+    });
+
+    it('formats the hour as "value of count"', () => {
+      dispatchKey(hourInput, 'ArrowUp');
+
+      expect(hourInput.value).toBe('07');
+      expect(hourInput.getAttribute('aria-valuenow')).toBe('7');
+      expect(hourInput.getAttribute('aria-valuetext')).toBe('7 of 12');
+    });
+
+    it('formats the minute as "value of count"', () => {
+      dispatchKey(minuteInput, 'ArrowDown');
+
+      expect(minuteInput.value).toBe('29');
+      expect(minuteInput.getAttribute('aria-valuetext')).toBe('29 of 60');
+    });
+  });
+
   describe('custom announce labels', () => {
     let modal: HTMLElement;
     let announcer: HTMLElement;
@@ -872,22 +900,25 @@ describe('KeyboardHandlers clock dial', () => {
   });
 
   describe('Enter and Space on the dial switch to the next face', () => {
-    it.each(['Enter', ' '])('%p goes from hour to minutes, announces it and keeps focus on the dial', (key) => {
-      setup();
-      dial().focus();
-      const openMinutes = jest.spyOn(field('minutes'), 'click');
+    it.each(['Enter', ' '])(
+      '%p goes from hour to minutes, announces it and keeps focus on the dial',
+      (key) => {
+        setup();
+        dial().focus();
+        const openMinutes = jest.spyOn(field('minutes'), 'click');
 
-      const event = press(dial(), key);
+        const event = press(dial(), key);
 
-      expect(event.defaultPrevented).toBe(true);
-      expect(openMinutes).toHaveBeenCalledTimes(1);
-      expect(activeFields()).toEqual(['tp-ui-minutes']);
-      expect(dialState()).toEqual({ label: 'Minute', min: '0', max: '59', now: '30', text: '30' });
-      expect(document.activeElement).toBe(dial());
+        expect(event.defaultPrevented).toBe(true);
+        expect(openMinutes).toHaveBeenCalledTimes(1);
+        expect(activeFields()).toEqual(['tp-ui-minutes']);
+        expect(dialState()).toEqual({ label: 'Minute', min: '0', max: '59', now: '30', text: '30' });
+        expect(document.activeElement).toBe(dial());
 
-      jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY);
-      expect(announcer().textContent).toBe('Minutes: 30');
-    });
+        jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY);
+        expect(announcer().textContent).toBe('Minute: 30');
+      },
+    );
 
     it('goes from minutes to seconds with showSeconds', () => {
       setup({ clock: { type: '24h', showSeconds: true }, active: 'minutes' });
@@ -961,5 +992,78 @@ describe('KeyboardHandlers clock dial', () => {
 
       expect(field('hour').value).toBe('07');
     });
+  });
+});
+
+describe('KeyboardHandlers document Escape', () => {
+  let core: CoreState;
+  let emitSpy: jest.SpyInstance;
+  let handlers: KeyboardHandlers;
+  let inner: HTMLElement;
+
+  const pressEscape = (target: EventTarget): KeyboardEvent => {
+    const event = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    target.dispatchEvent(event);
+    return event;
+  };
+
+  const cancels = (): unknown[][] => emitSpy.mock.calls.filter(([name]) => name === 'cancel');
+
+  beforeEach(() => {
+    inner = document.createElement('div');
+    document.body.appendChild(inner);
+    core = new CoreState(inner, mergeOptions({}), 'esc-instance');
+    core.setIsOpen(true);
+    const emitter = new EventEmitter<TimepickerEventMap>();
+    emitSpy = jest.spyOn(emitter, 'emit');
+    handlers = new KeyboardHandlers(core, emitter);
+    handlers.handleEscClick();
+  });
+
+  afterEach(() => {
+    handlers.destroy();
+    document.body.innerHTML = '';
+    jest.restoreAllMocks();
+  });
+
+  it('cancels while the picker is open', () => {
+    const event = pressEscape(inner);
+
+    expect(cancels()).toEqual([['cancel', {}]]);
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it('does not cancel when the keydown was already handled on its way to the document', () => {
+    inner.addEventListener('keydown', (event) => event.preventDefault());
+
+    const event = pressEscape(inner);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(cancels()).toEqual([]);
+  });
+
+  it('cancels again for a later Escape that nobody handled', () => {
+    const consume = (event: Event): void => event.preventDefault();
+    inner.addEventListener('keydown', consume);
+    pressEscape(inner);
+    inner.removeEventListener('keydown', consume);
+
+    pressEscape(inner);
+
+    expect(cancels()).toEqual([['cancel', {}]]);
+  });
+
+  it('does not cancel when the picker is closed', () => {
+    core.setIsOpen(false);
+
+    pressEscape(inner);
+
+    expect(cancels()).toEqual([]);
+  });
+
+  it('ignores other keys', () => {
+    inner.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+
+    expect(cancels()).toEqual([]);
   });
 });

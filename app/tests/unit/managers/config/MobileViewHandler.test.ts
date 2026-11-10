@@ -134,9 +134,155 @@ describe('MobileViewHandler', () => {
       const toggleSpy = jest.spyOn(handler, 'toggleMobileClockFace');
       jest.spyOn(coreState, 'getModalElement').mockReturnValue(null);
 
-      emitter.emit('switch:view', {});
+      emitter.emit('switch:view', { view: 'keyboard' });
 
-      expect(toggleSpy).toHaveBeenCalled();
+      expect(toggleSpy).toHaveBeenCalledWith('keyboard');
+    });
+
+    it('should still toggle when the payload has no view', () => {
+      const toggleSpy = jest.spyOn(handler, 'toggleMobileClockFace');
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(null);
+
+      emitter.emit('switch:view', {} as never);
+
+      expect(toggleSpy).toHaveBeenCalledWith(undefined);
+    });
+  });
+
+  describe('view targets', () => {
+    let modal: HTMLDivElement;
+    let wrapper: HTMLElement;
+    let viewEvents: Array<{ view: string }>;
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+      modal = createMockModal();
+      wrapper = modal.querySelector('.tp-ui-wrapper') as HTMLElement;
+      jest.spyOn(coreState, 'getModalElement').mockReturnValue(modal);
+      jest.spyOn(coreState, 'getHour').mockReturnValue(modal.querySelector('.tp-ui-hour'));
+      jest.spyOn(coreState, 'getMinutes').mockReturnValue(modal.querySelector('.tp-ui-minutes'));
+      jest.spyOn(coreState, 'getClockFace').mockReturnValue(modal.querySelector('.tp-ui-clock-face'));
+      jest
+        .spyOn(coreState, 'getKeyboardClockIcon')
+        .mockReturnValue(modal.querySelector('.tp-ui-keyboard-icon'));
+      viewEvents = [];
+      emitter.on('switch:view', (data) => viewEvents.push(data));
+    });
+
+    it('should do nothing when the target equals the shown view', () => {
+      const selectHourSpy = jest.fn();
+      emitter.on('select:hour', selectHourSpy);
+      coreState.setView('keyboard');
+
+      handler.toggleMobileClockFace('keyboard');
+      jest.runAllTimers();
+
+      expect(wrapper.classList.contains('expanded')).toBe(false);
+      expect(selectHourSpy).not.toHaveBeenCalled();
+      expect(coreState.view).toBe('keyboard');
+    });
+
+    it('should switch to the clock when the target is clock', () => {
+      coreState.setView('keyboard');
+
+      handler.toggleMobileClockFace('clock');
+      jest.runAllTimers();
+
+      expect(wrapper.classList.contains('expanded')).toBe(true);
+      expect(coreState.view).toBe('clock');
+    });
+
+    it('should make core.view follow each switch', () => {
+      coreState.setView('keyboard');
+
+      handler.toggleMobileClockFace();
+      expect(coreState.view).toBe('clock');
+      jest.runAllTimers();
+
+      handler.toggleMobileClockFace();
+      expect(coreState.view).toBe('keyboard');
+      jest.runAllTimers();
+    });
+
+    it('should emit switch:view for a requested view that differs from the current one', () => {
+      coreState.setView('keyboard');
+
+      handler.requestView('clock');
+
+      expect(viewEvents).toEqual([{ view: 'clock' }]);
+    });
+
+    it('should not emit for a requested view that equals the current one', () => {
+      coreState.setView('clock');
+
+      handler.requestView('clock');
+
+      expect(viewEvents).toEqual([]);
+    });
+
+    it('should queue a request made during the animation and apply it at release', () => {
+      coreState.setView('keyboard');
+      handler.toggleMobileClockFace();
+      expect(coreState.view).toBe('clock');
+
+      handler.requestView('keyboard');
+      expect(viewEvents).toEqual([]);
+
+      jest.runAllTimers();
+
+      expect(viewEvents).toEqual([{ view: 'keyboard' }]);
+      jest.runAllTimers();
+      expect(coreState.view).toBe('keyboard');
+      expect(wrapper.classList.contains('expanded')).toBe(false);
+    });
+
+    it('should drop a queued request that equals the view at release', () => {
+      coreState.setView('keyboard');
+      handler.toggleMobileClockFace();
+
+      handler.requestView('clock');
+      jest.runAllTimers();
+
+      expect(viewEvents).toEqual([]);
+      expect(coreState.view).toBe('clock');
+    });
+
+    it('should forget a queued request on destroy', () => {
+      coreState.setView('keyboard');
+      handler.toggleMobileClockFace();
+      handler.requestView('keyboard');
+
+      handler.destroy();
+      jest.runAllTimers();
+
+      expect(viewEvents).toEqual([]);
+    });
+
+    it('should move focus from the dial to the active field on a keyboard switch', () => {
+      const clockFace = modal.querySelector('.tp-ui-clock-face') as HTMLElement;
+      const hourInput = modal.querySelector('.tp-ui-hour') as HTMLInputElement;
+      clockFace.tabIndex = 0;
+      wrapper.classList.add('expanded');
+      clockFace.focus();
+      expect(document.activeElement).toBe(clockFace);
+
+      handler.toggleMobileClockFace('keyboard');
+      jest.runAllTimers();
+
+      expect(document.activeElement).toBe(hourInput);
+    });
+
+    it('should leave focus alone when it is not on the dial', () => {
+      const clockFace = modal.querySelector('.tp-ui-clock-face') as HTMLElement;
+      const minuteInput = modal.querySelector('.tp-ui-minutes') as HTMLInputElement;
+      clockFace.tabIndex = 0;
+      wrapper.classList.add('expanded');
+      minuteInput.focus();
+
+      handler.toggleMobileClockFace('keyboard');
+      jest.runAllTimers();
+
+      expect(document.activeElement).toBe(minuteInput);
     });
   });
 
@@ -422,4 +568,3 @@ describe('MobileViewHandler', () => {
     });
   });
 });
-

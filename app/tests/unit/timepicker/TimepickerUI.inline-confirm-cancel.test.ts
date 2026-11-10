@@ -175,7 +175,7 @@ describe('an inline picker stays on screen after OK and Cancel', () => {
       settle();
 
       expect(picker.getValue()).toEqual(expect.objectContaining({ time: '10:30 AM', type: 'AM' }));
-      expect(part(container, '.tp-ui-am')).toHaveAttribute('aria-pressed', 'true');
+      expect(part(container, '.tp-ui-am')).toHaveAttribute('aria-checked', 'true');
       expect(input.value).toBe('10:30 AM');
     });
 

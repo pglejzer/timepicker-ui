@@ -131,7 +131,7 @@ describe('update() on an open picker re-renders it with the new options', () => 
     picker.update({ options: { clock: { type: '12h' } } });
 
     expect(input.value).toBe('10:30 AM');
-    expect(part('.tp-ui-am')).toHaveAttribute('aria-pressed', 'true');
+    expect(part('.tp-ui-am')).toHaveAttribute('aria-checked', 'true');
     expect(picker.getValue().type).toBe('AM');
 
     const setAmPm = jest.spyOn(ClockSystem.prototype, 'setAmPm');

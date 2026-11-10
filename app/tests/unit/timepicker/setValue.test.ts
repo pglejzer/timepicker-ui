@@ -104,7 +104,7 @@ describe('TimepickerUI.setValue()', () => {
     expect(result.type).toBe('PM');
   });
 
-  test('flips the active class and aria-pressed on both AM/PM buttons to the period it sets', () => {
+  test('flips the active class and aria-checked on both AM/PM radios to the period it sets', () => {
     const timepicker = new TimepickerUI(input, { clock: { type: '12h' }, ui: { animation: false } });
     timepicker.create();
     timepicker.open();
@@ -112,8 +112,8 @@ describe('TimepickerUI.setValue()', () => {
     const am = document.querySelector('.tp-ui-modal .tp-ui-am') as HTMLElement;
     const pm = document.querySelector('.tp-ui-modal .tp-ui-pm') as HTMLElement;
     const periodState = (): Record<'am' | 'pm', { active: boolean; pressed: string | null }> => ({
-      am: { active: am.classList.contains('active'), pressed: am.getAttribute('aria-pressed') },
-      pm: { active: pm.classList.contains('active'), pressed: pm.getAttribute('aria-pressed') },
+      am: { active: am.classList.contains('active'), pressed: am.getAttribute('aria-checked') },
+      pm: { active: pm.classList.contains('active'), pressed: pm.getAttribute('aria-checked') },
     });
 
     timepicker.setValue('09:15 AM');
@@ -303,4 +303,3 @@ describe('TimepickerUI.setValue() with a time in the other clock format', () => 
     expect(onError).not.toHaveBeenCalled();
   });
 });
-

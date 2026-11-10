@@ -112,10 +112,13 @@ describe('ClockStyleHandler', () => {
       expect(mockHour.classList.contains('active')).toBe(true);
     });
 
-    it('should not add class when mobile option is true', () => {
-      handlerWith({ ui: { mobile: true } }).handler.setClassActiveToHourOnOpen();
+    it('should add the class when ui.mobile is true but the rendered view is the clock', () => {
+      const { core, handler: mobileOptionHandler } = handlerWith({ ui: { mobile: true } });
+      core.setIsMobileView(false);
 
-      expect(mockHour.classList.contains('active')).toBe(false);
+      mobileOptionHandler.setClassActiveToHourOnOpen();
+
+      expect(mockHour.classList.contains('active')).toBe(true);
     });
 
     it('should not add class when isMobileView is true', () => {

@@ -407,7 +407,10 @@ describe('InputHandlers snaps a typed value to the nearest enabled time on blur'
   });
 
   const selections = (): unknown[][] =>
-    emitSpy.mock.calls.filter(([event]: [string]) => event !== 'animation:clock');
+    emitSpy.mock.calls.filter(([event]: [string]) => event !== 'animation:clock' && event !== 'input:commit');
+
+  const commits = (): unknown[][] =>
+    emitSpy.mock.calls.filter(([event]: [string]) => event === 'input:commit');
 
   afterEach(() => {
     handlers.destroy();
@@ -440,10 +443,14 @@ describe('InputHandlers snaps a typed value to the nearest enabled time on blur'
   });
 
   it('moves a typed minute out of a disabled interval to the nearest enabled minute', () => {
-    setup('24h', { isInterval: true, clockType: '24h', intervals: ['10:00 - 10:30'] }, {
-      hour: '10',
-      minutes: '45',
-    });
+    setup(
+      '24h',
+      { isInterval: true, clockType: '24h', intervals: ['10:00 - 10:30'] },
+      {
+        hour: '10',
+        minutes: '45',
+      },
+    );
 
     typeAndBlur(minuteInput, '15');
 
@@ -474,7 +481,100 @@ describe('InputHandlers snaps a typed value to the nearest enabled time on blur'
     typeAndBlur(hourInput, '3');
 
     expect(spinState(hourInput)).toEqual({ value: '3', now: null, text: null });
-    expect(emitSpy).not.toHaveBeenCalled();
+    expect(selections()).toEqual([]);
   });
 });
 
+describe('InputHandlers input:commit', () => {
+  let core: CoreState;
+  let emitter: EventEmitter<TimepickerEventMap>;
+  let handlers: InputHandlers;
+  let hourInput: HTMLInputElement;
+  let minuteInput: HTMLInputElement;
+  let recorded: Array<[string, unknown]>;
+
+  beforeEach(() => {
+    document.body.innerHTML = `
+      <div>
+        <input type="number" class="tp-ui-hour" value="12" />
+        <input type="number" class="tp-ui-minutes" value="00" />
+        <div class="tp-ui-type-mode tp-ui-am active" data-type="AM">AM</div>
+      </div>
+    `;
+    hourInput = document.querySelector('.tp-ui-hour') as HTMLInputElement;
+    minuteInput = document.querySelector('.tp-ui-minutes') as HTMLInputElement;
+
+    core = new CoreState(
+      hourInput,
+      mergeOptions({ clock: { type: '12h' }, ui: { editable: true } }),
+      'commit-instance',
+    );
+    jest.spyOn(core, 'getHour').mockReturnValue(hourInput);
+    jest.spyOn(core, 'getMinutes').mockReturnValue(minuteInput);
+    jest.spyOn(core, 'getActiveTypeMode').mockReturnValue(document.querySelector('.tp-ui-am'));
+
+    emitter = new EventEmitter<TimepickerEventMap>();
+    recorded = [];
+    (['update', 'input:commit', 'select:minute'] as const).forEach((name) => {
+      emitter.on(name, (data: unknown) => recorded.push([name, data]));
+    });
+    handlers = new InputHandlers(core, emitter);
+    handlers.handleHourEvents();
+    handlers.handleMinutesEvents();
+  });
+
+  afterEach(() => {
+    handlers.destroy();
+    document.body.innerHTML = '';
+    jest.restoreAllMocks();
+  });
+
+  it('emits update and then input:commit on blur of a typed hour', () => {
+    hourInput.value = '09';
+    hourInput.dispatchEvent(new FocusEvent('blur'));
+
+    expect(recorded.map(([name]) => name)).toEqual(['update', 'input:commit']);
+    expect(recorded[1]).toEqual(['input:commit', { field: 'hour' }]);
+  });
+
+  it('applies a typed minute on Enter like blur and emits input:commit', () => {
+    minuteInput.value = '75';
+    minuteInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(minuteInput.value).toBe('59');
+    expect(recorded.map(([name]) => name)).toEqual(['select:minute', 'update', 'input:commit']);
+    expect(recorded[2]).toEqual(['input:commit', { field: 'minutes' }]);
+  });
+
+  it('ignores other keys', () => {
+    minuteInput.value = '75';
+    minuteInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+
+    expect(recorded).toEqual([]);
+    expect(minuteInput.value).toBe('75');
+  });
+
+  it('emits input:commit for a readonly field without clamping', () => {
+    minuteInput.setAttribute('readonly', '');
+    minuteInput.value = '75';
+    minuteInput.dispatchEvent(new FocusEvent('blur'));
+
+    expect(minuteInput.value).toBe('75');
+    expect(recorded).toEqual([['input:commit', { field: 'minutes' }]]);
+  });
+
+  it('emits input:commit without update when the value did not change', () => {
+    hourInput.dispatchEvent(new FocusEvent('blur'));
+
+    expect(recorded).toEqual([['input:commit', { field: 'hour' }]]);
+  });
+
+  it('emits nothing once the core is destroyed', () => {
+    core.setIsDestroyed(true);
+    hourInput.value = '09';
+    hourInput.dispatchEvent(new FocusEvent('blur'));
+    hourInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(recorded).toEqual([]);
+  });
+});

@@ -33,6 +33,7 @@ describe('CoreState', () => {
       expect(coreState.disabledTime).toBeNull();
       expect(coreState.cloned).toBeNull();
       expect(coreState.isModalRemove).toBe(true);
+      expect(coreState.isRerendering).toBe(false);
       expect(coreState.isInitialized).toBe(false);
       expect(coreState.eventHandlersRegistered).toBe(false);
       expect(coreState.isDestroyed).toBe(false);
@@ -75,6 +76,14 @@ describe('CoreState', () => {
     it('should set isModalRemove', () => {
       coreState.setIsModalRemove(false);
       expect(coreState.isModalRemove).toBe(false);
+    });
+
+    it('should set isRerendering', () => {
+      coreState.setIsRerendering(true);
+      expect(coreState.isRerendering).toBe(true);
+
+      coreState.setIsRerendering(false);
+      expect(coreState.isRerendering).toBe(false);
     });
 
     it('should set isInitialized', () => {
@@ -149,6 +158,14 @@ describe('CoreState', () => {
       expect(coreState.isTouchMouseMove).toBe(false);
       expect(coreState.isInitialized).toBe(false);
       expect(coreState.isDestroyed).toBe(true);
+    });
+
+    it('should clear isRerendering', () => {
+      coreState.setIsRerendering(true);
+
+      coreState.reset();
+
+      expect(coreState.isRerendering).toBe(false);
     });
   });
 

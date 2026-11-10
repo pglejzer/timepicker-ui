@@ -79,6 +79,40 @@ describe('ModalManager with an embedded inline picker', () => {
     });
   });
 
+  describe('tp-ui--title-hidden class', () => {
+    const withTitle = (showTitle: boolean | undefined, enabled = true): TimepickerOptions => ({
+      ui: {
+        backdrop: false,
+        inline: {
+          enabled,
+          containerId: HOST_ID,
+          ...(showTitle === undefined ? {} : { showTitle }),
+        },
+      },
+    });
+
+    it('should be added with inline.enabled and showTitle false', () => {
+      render(withTitle(false), 'title-hidden');
+
+      expect(modal()).toHaveClass('tp-ui--title-hidden');
+    });
+
+    it.each<[string, boolean | undefined]>([
+      ['showTitle is true', true],
+      ['showTitle is unset', undefined],
+    ])('should be absent when %s', (_name, showTitle) => {
+      render(withTitle(showTitle), 'title-shown');
+
+      expect(modal()).not.toHaveClass('tp-ui--title-hidden');
+    });
+
+    it('should be absent when showTitle is false without enabling inline', () => {
+      render(withTitle(false, false), 'title-not-inline');
+
+      expect(document.querySelector('.tp-ui-modal')).not.toHaveClass('tp-ui--title-hidden');
+    });
+  });
+
   describe('setInitialFocus', () => {
     it('should focus the wrapper of a plain inline picker (control)', () => {
       const manager = render(inline(false), 'focus-control');

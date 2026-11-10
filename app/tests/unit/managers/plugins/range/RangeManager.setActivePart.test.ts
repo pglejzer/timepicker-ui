@@ -118,5 +118,62 @@ describe('RangeManager.setActivePart with focus: false', () => {
       expect(harness.manager.getActivePart()).toBe('to');
       expect(onClick).toHaveBeenCalled();
     });
+
+    it('should still click the hour input for a click on the tab that is already active', () => {
+      harness = mountRangeManager({ clockType: '24h' });
+      harness.manager.setRange('09:00', '17:00', false);
+      const onClick = jest.fn();
+      harness.hour.addEventListener('click', onClick);
+
+      harness.fromTab.click();
+
+      expect(harness.manager.getActivePart()).toBe('from');
+      expect(onClick).toHaveBeenCalledTimes(1);
+      expect(harness.hour.value).toBe('09');
+    });
+  });
+
+  describe('the dial stays put while the end does not change (P29)', () => {
+    const QUIET_EVENTS = ['select:hour', 'select:minute', 'select:am', 'select:pm', 'update'] as const;
+
+    const listenQuiet = (h: RangeHarness): string[] => {
+      const heard: string[] = [];
+      QUIET_EVENTS.forEach((event) => {
+        h.emitter.on(event, () => {
+          heard.push(event);
+        });
+      });
+      return heard;
+    };
+
+    it('should return true for the active end without select:* or update and keep a typed hour', () => {
+      harness = mountRangeManager({ clockType: '24h' });
+      harness.hour.dispatchEvent(new KeyboardEvent('keydown', { key: '1', bubbles: true }));
+      harness.hour.value = '11';
+      harness.emitter.emit('update', { hour: '11', minutes: '00' });
+      expect(harness.fromTime.textContent).toBe('11:--');
+      const heard = listenQuiet(harness);
+
+      expect(harness.manager.setActivePart('from', { focus: false })).toBe(true);
+
+      expect(heard).toEqual([]);
+      expect(harness.hour.value).toBe('11');
+      expect(harness.fromTime.textContent).toBe('11:--');
+      expect(harness.manager.getRange().from).toBeNull();
+    });
+
+    it('should still sync the dial with select:hour and update when the end changes', () => {
+      harness = mountRangeManager({ clockType: '24h' });
+      harness.manager.setRange('09:00', '17:00', false);
+      const heard = listenQuiet(harness);
+      const onSelectHour = jest.fn();
+      harness.emitter.on('select:hour', onSelectHour);
+
+      expect(harness.manager.setActivePart('to', { focus: false })).toBe(true);
+
+      expect(heard).toEqual(['select:hour', 'update']);
+      expect(onSelectHour).toHaveBeenCalledWith({ hour: '17' });
+      expect(harness.hour.value).toBe('17');
+    });
   });
 });

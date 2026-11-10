@@ -14,6 +14,7 @@ describe('TimezoneDropdown', () => {
   let emitter: EventEmitter<TimepickerEventMap>;
   let modal: HTMLDivElement;
   let dropdown: HTMLDivElement;
+  let combobox: HTMLSpanElement;
   let menu: HTMLDivElement;
 
   beforeEach(() => {
@@ -24,9 +25,9 @@ describe('TimezoneDropdown', () => {
     dropdown = document.createElement('div');
     dropdown.classList.add('tp-ui-timezone-dropdown');
 
-    const selectedDisplay = document.createElement('span');
-    selectedDisplay.classList.add('tp-ui-timezone-selected');
-    dropdown.appendChild(selectedDisplay);
+    combobox = document.createElement('span');
+    combobox.classList.add('tp-ui-timezone-selected');
+    dropdown.appendChild(combobox);
 
     menu = document.createElement('div');
     menu.classList.add('tp-ui-timezone-menu');
@@ -54,6 +55,61 @@ describe('TimezoneDropdown', () => {
       const tz = new TimezoneDropdown(mockCore as never, emitter);
 
       expect(tz.getDropdown()).toBeNull();
+    });
+  });
+
+  describe('getCombobox', () => {
+    it('should return the selected-display element inside the dropdown', () => {
+      const tz = new TimezoneDropdown(mockCore as never, emitter);
+
+      expect(tz.getCombobox()).toBe(combobox);
+    });
+
+    it('should return null when modal not found', () => {
+      mockCore.getModalElement.mockReturnValue(null);
+      const tz = new TimezoneDropdown(mockCore as never, emitter);
+
+      expect(tz.getCombobox()).toBeNull();
+    });
+  });
+
+  describe('getSelectedIndex', () => {
+    const addOption = (value: string): HTMLDivElement => {
+      const option = document.createElement('div');
+      option.classList.add('tp-ui-timezone-option');
+      option.setAttribute('data-value', value);
+      option.textContent = value;
+      menu.appendChild(option);
+      return option;
+    };
+
+    it('should be -1 before a zone is selected', () => {
+      addOption('Europe/London');
+      const tz = new TimezoneDropdown(mockCore as never, emitter);
+
+      expect(tz.getSelectedIndex()).toBe(-1);
+    });
+
+    it('should follow selectTimezone', () => {
+      addOption('Europe/London');
+      addOption('Europe/Paris');
+      const tz = new TimezoneDropdown(mockCore as never, emitter);
+
+      tz.selectTimezone('Europe/Paris', false);
+      expect(tz.getSelectedIndex()).toBe(1);
+
+      tz.selectTimezone('Europe/London', false);
+      expect(tz.getSelectedIndex()).toBe(0);
+    });
+
+    it('should be -1 again after clearSelection', () => {
+      addOption('Europe/London');
+      const tz = new TimezoneDropdown(mockCore as never, emitter);
+      tz.selectTimezone('Europe/London', false);
+
+      tz.clearSelection();
+
+      expect(tz.getSelectedIndex()).toBe(-1);
     });
   });
 
@@ -129,20 +185,41 @@ describe('TimezoneDropdown', () => {
   });
 
   describe('setOpen', () => {
-    it('should set aria-expanded to true when open', () => {
+    it('should set aria-expanded to true on the combobox and mark the wrapper open', () => {
       const tz = new TimezoneDropdown(mockCore as never, emitter);
 
       tz.setOpen(true);
 
-      expect(dropdown.getAttribute('aria-expanded')).toBe('true');
+      expect(combobox.getAttribute('aria-expanded')).toBe('true');
+      expect(dropdown.classList.contains('tp-ui-timezone-dropdown--open')).toBe(true);
+      expect(dropdown.hasAttribute('aria-expanded')).toBe(false);
     });
 
-    it('should set aria-expanded to false when closed', () => {
+    it('should set aria-expanded to false and unmark the wrapper when closed', () => {
       const tz = new TimezoneDropdown(mockCore as never, emitter);
+      tz.setOpen(true);
 
       tz.setOpen(false);
 
-      expect(dropdown.getAttribute('aria-expanded')).toBe('false');
+      expect(combobox.getAttribute('aria-expanded')).toBe('false');
+      expect(dropdown.classList.contains('tp-ui-timezone-dropdown--open')).toBe(false);
+    });
+
+    it('should remove aria-activedescendant from the combobox when closing', () => {
+      const tz = new TimezoneDropdown(mockCore as never, emitter);
+      tz.setOpen(true);
+      combobox.setAttribute('aria-activedescendant', 'tp-tz-opt-x-1');
+
+      tz.setOpen(false);
+
+      expect(combobox.hasAttribute('aria-activedescendant')).toBe(false);
+    });
+
+    it('should not throw when the combobox is missing', () => {
+      mockCore.getModalElement.mockReturnValue(null);
+      const tz = new TimezoneDropdown(mockCore as never, emitter);
+
+      expect(() => tz.setOpen(true)).not.toThrow();
     });
 
     it('should scroll selected option into view when opening', () => {
@@ -160,17 +237,26 @@ describe('TimezoneDropdown', () => {
   });
 
   describe('isOpen', () => {
-    it('should return true when dropdown is expanded', () => {
-      dropdown.setAttribute('aria-expanded', 'true');
+    it('should return true when the wrapper carries the open class', () => {
+      dropdown.classList.add('tp-ui-timezone-dropdown--open');
       const tz = new TimezoneDropdown(mockCore as never, emitter);
 
       expect(tz.isOpen()).toBe(true);
     });
 
-    it('should return false when dropdown is collapsed', () => {
-      dropdown.setAttribute('aria-expanded', 'false');
+    it('should return false when the wrapper does not carry the open class', () => {
       const tz = new TimezoneDropdown(mockCore as never, emitter);
 
+      expect(tz.isOpen()).toBe(false);
+    });
+
+    it('should follow setOpen', () => {
+      const tz = new TimezoneDropdown(mockCore as never, emitter);
+
+      tz.setOpen(true);
+      expect(tz.isOpen()).toBe(true);
+
+      tz.setOpen(false);
       expect(tz.isOpen()).toBe(false);
     });
 
@@ -255,4 +341,3 @@ describe('TimezoneDropdown', () => {
     });
   });
 });
-

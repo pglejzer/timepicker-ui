@@ -22,7 +22,7 @@ const AM_PRESSED: PeriodToggles = {
 
 const toggleState = (button: HTMLElement | null): ToggleState => ({
   active: button?.classList.contains('active') ?? false,
-  pressed: button?.getAttribute('aria-pressed') ?? null,
+  pressed: button?.getAttribute('aria-checked') ?? null,
 });
 
 describe('wheel AM/PM column keeps the header AM/PM toggles in sync', () => {
