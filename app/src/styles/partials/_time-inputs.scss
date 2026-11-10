@@ -116,6 +116,10 @@
       height: var(--tp-size-input-height);
     }
 
+    &[readonly] {
+      caret-color: transparent;
+    }
+
     @media (hover: hover) and (pointer: fine) {
       &:hover {
         color: var(--tp-text);

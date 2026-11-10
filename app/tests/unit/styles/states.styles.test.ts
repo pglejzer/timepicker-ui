@@ -1133,6 +1133,26 @@ describe('compiled main.scss states', () => {
     );
   });
 
+  describe('a read-only time field draws no text caret', () => {
+    const TIME_FIELDS = ['tp-ui-hour', 'tp-ui-minutes', SECONDS_INPUT];
+    const readOnly = (target: Target): Target => ({
+      ...target,
+      attributes: { ...target.attributes, readonly: '' },
+    });
+
+    it.each(TIME_FIELDS)('a focused read-only %s resolves caret-color: transparent', (className) => {
+      expect(computedValue(rules, readOnly(timeInput(className, false)), 'caret-color')).toBe('transparent');
+      expect(computedValue(rules, readOnly(activeTimeInput(className, false)), 'caret-color')).toBe(
+        'transparent',
+      );
+    });
+
+    it.each(TIME_FIELDS)('an editable %s keeps the caret: no rule hides it without [readonly]', (className) => {
+      expect(computedValue(rules, timeInput(className, false), 'caret-color')).toBeUndefined();
+      expect(computedValue(rules, activeTimeInput(className, true), 'caret-color')).toBeUndefined();
+    });
+  });
+
   describe('the header with seconds fits the wrapper content box', () => {
     const DESKTOP: Viewport = { name: 'desktop 1280x800', width: 1280, height: 800, hover: true };
     const PHONE: Viewport = { name: 'phone 390x844', width: 390, height: 844, hover: false };
