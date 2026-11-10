@@ -7,6 +7,7 @@
     width: 100%;
     border-radius: 100%;
     position: relative;
+    touch-action: none;
     transform: scale(0);
     opacity: 0;
     transition:
@@ -104,10 +105,14 @@
     position: absolute;
     background-color: var(--tp-primary);
     bottom: $tm50percent;
-    height: 31%;
+    height: calc(31% + (46px - var(--tp-size-hand-circle)) / 2);
     left: calc(50% - 1px);
     transform-origin: center bottom 0;
     width: 2px;
+  }
+
+  &-clock-hand.tp-ui-clock-hand-24h {
+    height: 31%;
   }
 
   &-circle-hand {
@@ -115,8 +120,8 @@
     top: 0;
     left: 50%;
     transform: translate(-50%, -100%);
-    width: 46px;
-    height: 46px;
+    width: var(--tp-size-hand-circle);
+    height: var(--tp-size-hand-circle);
     border-radius: 50%;
     background-color: var(--tp-primary);
     display: flex;

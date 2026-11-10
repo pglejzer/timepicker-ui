@@ -62,3 +62,28 @@
     color: var(--tp-text-secondary);
   }
 }
+
+.tp-ui--title-hidden {
+  .tp-ui-select-time,
+  .tp-ui-select-time.mobile {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  &:not(.tp-ui-range-mode) .tp-ui-header {
+    padding-top: var(--tp-spacing-xl);
+  }
+}
+
+@media screen and (orientation: landscape) and (max-height: 480px) {
+  .tp-ui--title-hidden:not(.tp-ui-range-mode) .tp-ui-wrapper.expanded .tp-ui-header {
+    padding-top: 0;
+  }
+}

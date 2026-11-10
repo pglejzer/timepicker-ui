@@ -46,7 +46,7 @@
     }
   }
 
-  &:focus {
+  &:focus-within {
     background-color: var(--tp-input-bg);
     border-bottom: 2px solid var(--tp-focus-ring, var(--tp-primary));
 
@@ -55,7 +55,7 @@
     }
   }
 
-  &[aria-expanded='true'] {
+  &.tp-ui-timezone-dropdown--open {
     border-bottom: 2px solid var(--tp-focus-ring, var(--tp-primary));
     border-radius: var(--tp-radius-sm) var(--tp-radius-sm) 0 0;
     z-index: 1000;
@@ -69,9 +69,15 @@
     }
 
     .tp-ui-timezone-menu {
+      display: block;
       opacity: 1;
       visibility: visible;
       transform: translateY(0) scaleY(1);
+
+      @starting-style {
+        opacity: 0;
+        transform: translateY(-8px) scaleY(0.9);
+      }
     }
   }
 
@@ -135,6 +141,7 @@
   border-radius: 0 0 var(--tp-radius-md) var(--tp-radius-md);
   box-shadow: var(--tp-shadow);
   overflow-y: auto;
+  display: none;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-8px) scaleY(0.9);
@@ -142,7 +149,9 @@
   transition:
     opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-    visibility 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    visibility 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    display 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-behavior: allow-discrete;
   z-index: 999;
 
   &::-webkit-scrollbar {
@@ -229,6 +238,10 @@
   .tp-ui-tz-mode .tp-ui-wrapper.expanded .tp-ui-select-time {
     grid-area: label;
     position: relative;
+  }
+
+  .tp-ui--title-hidden.tp-ui-tz-mode .tp-ui-wrapper.expanded .tp-ui-select-time {
+    position: absolute;
   }
 
   .tp-ui-tz-mode .tp-ui-header.expanded,

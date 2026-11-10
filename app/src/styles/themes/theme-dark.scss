@@ -1,41 +1,45 @@
 [data-theme='dark'] {
-  --tp-bg: #1c1b1f;
-  --tp-surface: #2c2b30;
-  --tp-surface-hover: #3b3940;
-  --tp-input-bg: #2c2b30;
+  --tp-bg: #2b2930;
+  --tp-surface: #36343b;
+  --tp-surface-hover: #444249;
+  --tp-input-bg: #36343b;
 
-  --tp-text: #e5e5e5;
-  --tp-text-secondary: #a1a1a1;
-  --tp-text-disabled: rgba(161, 161, 161, 0.6);
-  --tp-text-type-time: #a1a1a1;
-  --tp-text-icon: #a1a1a1;
+  --tp-text: #e6e0e9;
+  --tp-text-secondary: #cac4d0;
+  --tp-text-disabled: rgba(230, 224, 233, 0.38);
+  --tp-text-type-time: #cac4d0;
+  --tp-text-icon: #cac4d0;
 
-  --tp-on-surface: #e5e5e5;
-  --tp-on-surface-rgb: 229, 229, 229;
+  --tp-on-surface: #e6e0e9;
+  --tp-on-surface-variant: #cac4d0;
+  --tp-on-surface-rgb: 230, 224, 233;
+  --tp-surface-container: #211f26;
+  --tp-outline-variant: #49454f;
 
-  --tp-am-pm-active: var(--tp-primary);
-  --tp-am-pm-text-selected: #000000;
-  --tp-am-pm-text-unselected: #a1a1a1;
+  --tp-am-pm-active: #633b48;
+  --tp-am-pm-text-selected: #ffd8e4;
+  --tp-am-pm-text-unselected: #cac4d0;
 
-  --tp-primary: #bb86fc;
-  --tp-on-primary: #000000;
-  --tp-primary-container: var(--tp-primary);
-  --tp-on-primary-container: #000000;
+  --tp-primary: #d0bcff;
+  --tp-on-primary: #381e72;
+  --tp-primary-container: #4f378b;
+  --tp-on-primary-container: #eaddff;
+  --tp-primary-rgb: 208, 188, 255;
 
-  --tp-tertiary-container: var(--tp-primary);
-  --tp-on-tertiary-container: #000000;
+  --tp-tertiary-container: #633b48;
+  --tp-on-tertiary-container: #ffd8e4;
 
-  --tp-border: rgba(255, 255, 255, 0.12);
-  --tp-outline: #d8b4fe;
-  --tp-hover-bg: #3b3940;
+  --tp-border: #49454f;
+  --tp-outline: #d0bcff;
+  --tp-hover-bg: #444249;
   --tp-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6);
 
-  --tp-dropdown-option-bg: #2c2b30;
-  --tp-dropdown-option-text: #e5e5e5;
-  --tp-error: #ff6b6b;
+  --tp-dropdown-option-bg: #2b2930;
+  --tp-dropdown-option-text: #e6e0e9;
+  --tp-error: #f2b8b5;
 
-  --tp-wheel-highlight-bg: rgba(187, 134, 252, 0.12);
-  --tp-wheel-highlight-border: rgba(255, 255, 255, 0.12);
-  --tp-wheel-text-color: #e5e5e5;
-  --tp-wheel-selected-color: #bb86fc;
+  --tp-wheel-highlight-bg: #4f378b;
+  --tp-wheel-highlight-border: #49454f;
+  --tp-wheel-text-color: #e6e0e9;
+  --tp-wheel-selected-color: #eaddff;
 }
