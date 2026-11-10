@@ -18,11 +18,11 @@ All commands below run from `app/`.
 
 | Script | What it does |
 | --- | --- |
-| `npm run start` | Webpack dev server with the demo, port 8010 |
-| `npm run build:prod` | `eslint`, then `build:tsup`, then `build:rollup` |
-| `npm run build:tsup` | ESM and CJS bundles |
-| `npm run build:rollup` | CSS, UMD bundles and `.d.ts` files |
-| `npm run build:webpack`, `npm run build:vercel` | Build the demo. Both run the same webpack config. |
+| `npm run start` | Vite dev server with the demo, port 8010 |
+| `npm run build:prod` | `eslint`, then `build:js`, then `build:css` |
+| `npm run build:js` | Clears `../dist`, then builds ESM, CJS and UMD bundles and `.d.ts` files with tsdown |
+| `npm run build:css` | Compiles the SCSS to `../dist/css/` with the `sass` CLI |
+| `npm run build:demo`, `npm run build:vercel` | Build the demo into `app/dist`. Both run `vite build`. |
 | `npm test` | All Jest tests |
 | `npm run test:unit` | Only `tests/unit` |
 | `npm run test:watch` | Watch mode |
@@ -36,11 +36,11 @@ All commands below run from `app/`.
 
 ## How the build works
 
-tsup (`tsup.config.ts`) builds the ESM (`.js`) and CJS (`.cjs`) bundles for four entry points: `index`, `plugins/range`, `plugins/timezone` and `plugins/wheel`. Output is minified, targets ES2022, and SVGs are inlined as strings.
+tsdown (`tsdown.config.ts`) builds the ESM (`.js`), CJS (`.cjs`) and UMD (`.umd.js`) bundles for four entry points: `index`, `plugins/range`, `plugins/timezone` and `plugins/wheel`. Each entry has its own config, so the plugin bundles share no code with the core. Output is minified, targets ES2022, and SVGs are inlined as strings. tsdown also bundles `index.d.ts` and copies the hand-written `src/plugins/*.d.ts` into `dist/plugins/`.
 
-Rollup (`rollup.config.js`) does the rest. It compiles the SCSS, builds the UMD bundles (`index.umd.js` and one per plugin, through Babel and Terser) and bundles the `.d.ts` files.
+The `sass` CLI (`build:css`) compiles the SCSS to `dist/css/`.
 
-Webpack only runs the demo. It's not part of the production build.
+Vite (`vite.config.ts`) only runs the demo. It's not part of the production build.
 
 Everything lands in `../dist/`. Don't edit files there, the next build overwrites them. The four entry points match the `exports` field in `package.json`, so if you add one, update both.
 
@@ -64,12 +64,11 @@ app/
 │   └── __mocks__/        # CSS and SVG stubs
 ├── docs/                 # demo page for the dev server
 ├── assets/               # SVG icons
-├── tsup.config.ts
-├── rollup.config.js
-├── webpack.config.js     # demo only
+├── tsdown.config.ts
+├── vite.config.ts        # demo only
+├── vite-plugin-*.ts      # demo only
 ├── jest.config.ts
 ├── eslint.config.js
-├── tailwind.config.js    # demo only
 ├── tsconfig.json         # dev
 ├── tsconfig.prod.json    # production build
 └── tsconfig.test.json    # tests
