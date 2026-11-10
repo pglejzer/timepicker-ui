@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
 
 const RELEASES: ReleaseNotes[] = [
   {
-    title: "Version 1.1.0 - 2026-10-21",
+    title: "Version 1.1.0 - 2026-11-10",
     changes: {
       Added: [
         "`ui.layout` gives any surface the docked, modal or full-screen look, so a dialog can use the docked month and year menus",
@@ -57,7 +57,7 @@ const RELEASES: ReleaseNotes[] = [
     },
   },
   {
-    title: "Version 1.0.0",
+    title: "Version 1.0.0 - 2026-10-19",
     changes: {
       Added: [
         "Three surfaces: a docked popover, a modal dialog and an inline calendar (`ui.inline`). `ui.displayMode: \"auto\"` picks docked or modal from the viewport size",

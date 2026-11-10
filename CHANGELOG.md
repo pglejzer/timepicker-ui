@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [4.7.0] - 2026-10-21
+## [4.7.0] - 2026-11-10
 
 ### Check before upgrading
 
@@ -73,6 +73,7 @@ These changes can affect an existing setup. Each one is described under Changed 
 - Embedded inline fields no longer have a `name`, so they do not submit stray fields inside a `<form>`. The embedded wrapper has `tabindex="-1"` and is no longer a tab stop
 - Changing `clock.type` or `clock.showSeconds` now converts a half range such as `09:00 - --:--`
 - The plugin UMD builds work from a `<script>` tag. The UMD core now exposes `TimepickerUI.PluginRegistry`, so `TimepickerUI.PluginRegistry.register(TimepickerUIRange.RangePlugin)` works. Before, enabling a plugin there emitted `error`
+- A focused read-only time field no longer shows a text caret, for example after the dial moves on to minutes. Editable fields keep it
 
 ## [4.6.0] - 2026-10-19
 

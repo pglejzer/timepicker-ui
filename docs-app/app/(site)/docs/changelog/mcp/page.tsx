@@ -13,6 +13,32 @@ export const metadata = buildMetadata({
 
 const RELEASES: ReleaseNotes[] = [
   {
+    title: "Version 2.2.0 - 2026-11-10",
+    changes: {
+      Added: [
+        "Reference data for timepicker-ui 4.7.0: `clear`, `setView`, `getView`, `getActivePart` and `setRangeCaptions` in the method list, and the named exports `parseTime`, `formatTime` and `createDisabledTimeCheck`.",
+        "`migration_guide` path `v4.6->v4.7` with the ARIA, event and theme changes to check before upgrading.",
+        "`list_plugins` gives each plugin's `umdFile` and `umdGlobal`, plus `registerWithoutBundler`: since 4.7.0, plugins load from a `<script>` tag and register with `TimepickerUI.PluginRegistry.register()`.",
+      ],
+      Changed: [
+        "`setRange` accepts one end, and `setValue`, `setOptions` and `setActivePart` describe their 4.7.0 range behaviour. The range plugin is listed for clock, wheel and compact-wheel mode.",
+        "The `v4.5->v5` migration guide no longer says that 5.0 removes the plugin UMD builds.",
+      ],
+    },
+  },
+  {
+    title: "Version 2.1.0 - 2026-10-19",
+    changes: {
+      Added: [
+        "Reference data for timepicker-ui 4.6.0: the `ui.inline.embedded`, `range.linked` and `clock.isTimeDisabled` options.",
+        "`setRange`, `getRange`, `setActivePart` and `refreshDisabledTime` in the method list.",
+      ],
+      Changed: [
+        "`on` and `once` are documented as returning a function that removes the handler.",
+      ],
+    },
+  },
+  {
     title: "Version 2.0.0 - 2026-10-16",
     changes: {
       Added: [

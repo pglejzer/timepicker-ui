@@ -34,7 +34,7 @@ export default function WhatsNewPage() {
         description="Stay up to date with the latest features and improvements"
       />
 
-      <Callout title="Version 4.7.0 - October 21, 2026" tone="tip">
+      <Callout title="Version 4.7.0 - November 10, 2026" tone="tip">
         <p>
           Time ranges in the wheel modes, view and clear methods, a range change
           event, public time helpers, and many accessibility changes

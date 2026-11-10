@@ -226,6 +226,11 @@ const CHANGELOG_470 = {
       description:
         "The plugin UMD builds work from a <script> tag. The UMD core now exposes TimepickerUI.PluginRegistry, so TimepickerUI.PluginRegistry.register(TimepickerUIRange.RangePlugin) works. Before, enabling a plugin there emitted error",
     },
+    {
+      title: "No caret in read-only fields",
+      description:
+        "A focused read-only time field no longer shows a text caret, for example after the dial moves on to minutes. Editable fields keep it",
+    },
   ],
 };
 
@@ -1364,10 +1369,10 @@ export default function ChangelogPage() {
       <ChangelogSwitcher current="library" />
 
       <Callout title="Current Version">
-        <strong>v4.7.0</strong> - Released October 21, 2026
+        <strong>v4.7.0</strong> - Released November 10, 2026
       </Callout>
 
-      <Release title="Version 4.7.0 - October 21, 2026">
+      <Release title="Version 4.7.0 - November 10, 2026">
         <Callout title="Check before upgrading" tone="danger">
           <p>
             These changes can affect an existing setup. Each one is described
