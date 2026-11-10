@@ -1,0 +1,72 @@
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || !startsWith(github.event.release.tag_name, 'mcp-')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Check the version
+        id: version
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "$EVENT_NAME" = "release" ] && [ "${TAG_NAME#v}" != "$version" ]; then
+            echo "::error::Release tag $TAG_NAME does not match package.json version $version"
+            exit 1
+          fi
+          case "$version" in
+            *-*) dist_tag=next ;;
+            *) dist_tag=latest ;;
+          esac
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "dist-tag=$dist_tag" >> "$GITHUB_OUTPUT"
+          echo "Publishing $version with the dist-tag $dist_tag (npm $(npm --version))"
+
+      - name: Install build tools
+        working-directory: ./app
+        run: npm install --legacy-peer-deps --no-audit --no-fund
+
+      - name: Lint and build
+        working-directory: ./app
+        run: npm run build:prod
+
+      - name: Run tests
+        working-directory: ./app
+        run: npm test -- --ci
+
+      - name: Show the package contents
+        run: npm pack --dry-run
+
+      - name: Publish (dry run)
+        if: github.event_name == 'workflow_dispatch'
+        run: npm publish --dry-run --tag ${{ steps.version.outputs.dist-tag }}
+
+      - name: Publish
+        if: github.event_name == 'release'
+        run: npm publish --tag ${{ steps.version.outputs.dist-tag }}
