@@ -2,6 +2,19 @@
 
 Notable changes to `timepicker-ui-mcp`. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the package uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - Unreleased
+
+### Added
+
+- Reference data for timepicker-ui 4.7.0: `clear`, `setView`, `getView`, `getActivePart` and `setRangeCaptions` in the method list, and the named exports `parseTime`, `formatTime` and `createDisabledTimeCheck`.
+- `migration_guide` path `v4.6->v4.7` with the ARIA, event and theme changes to check before upgrading.
+- `list_plugins` gives each plugin's `umdFile` and `umdGlobal`, plus `registerWithoutBundler`: since 4.7.0, plugins load from a `<script>` tag and register with `TimepickerUI.PluginRegistry.register()`.
+
+### Changed
+
+- `setRange` accepts one end, and `setValue`, `setOptions` and `setActivePart` describe their 4.7.0 range behaviour. The range plugin is listed for clock, wheel and compact-wheel mode.
+- The `v4.5->v5` migration guide no longer says that 5.0 removes the plugin UMD builds.
+
 ## [2.1.0] - 2026-10-19
 
 ### Added

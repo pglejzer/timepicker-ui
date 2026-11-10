@@ -163,6 +163,9 @@
       "name": "tp-ui-range-from"
     },
     {
+      "name": "tp-ui-range-from-"
+    },
+    {
       "name": "tp-ui-range-from-time"
     },
     {
@@ -172,6 +175,12 @@
     {
       "name": "tp-ui-range-mode",
       "example": ".tp-ui-range-mode .tp-ui-wrapper.mobile"
+    },
+    {
+      "name": "tp-ui-range-panel"
+    },
+    {
+      "name": "tp-ui-range-panel-"
     },
     {
       "name": "tp-ui-range-tab",
@@ -187,6 +196,9 @@
     },
     {
       "name": "tp-ui-range-to"
+    },
+    {
+      "name": "tp-ui-range-to-"
     },
     {
       "name": "tp-ui-range-to-time"

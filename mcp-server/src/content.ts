@@ -319,6 +319,20 @@ export const MIGRATION_V44_TO_V45: string[] = [
   'Deprecated (removed in 5.0): OptionTypes (use TimepickerOptions), labels.timezoneSelectorLabel, labels.format24Label, labels.toggleLabel, clock.currentTime.locales, getValue().degreesHours / degreesMinutes, the hide event, update() (use setOptions()), select:am / select:pm with onSelectAM / onSelectPM (use select:period / onSelectPeriod) and the renamed option names.',
 ];
 
+export const MIGRATION_V46_TO_V47: string[] = [
+  'No option, method or export is removed. The changes below can still affect selectors, tests or event listeners.',
+  'AM/PM is a role="radiogroup" (labels.period) with role="radio" segments and aria-checked. Selectors or tests that read [aria-pressed] on .tp-ui-am / .tp-ui-pm need updating.',
+  'The timezone combobox role, aria-expanded and aria-activedescendant moved from .tp-ui-timezone-dropdown to .tp-ui-timezone-selected.',
+  'In range mode the header, timezone row and clock or wheel body sit in .tp-ui-range-panel (display: contents). Replace > child selectors under .tp-ui-wrapper with descendant selectors.',
+  'aria-valuetext reads "7 of 12" (labels.valueText, set "{value}" for the bare number). The minute announcement default is "Minute".',
+  'switch:view carries { view }. wheel and compact-wheel have no view-switch icon. setOptions() that changes ui.initialView on an open picker emits switch:view once.',
+  'Range mode: setValue() sets the active end and writes "from - to". setOptions() on an open picker keeps both ends and the active end. A typed time is saved to its end on blur, Enter or a switch of ends, so getRange() can report it before OK.',
+  'Clear emits select:hour, clear, update, without the extra 12:00 update. In range mode the Clear button emits range:change, then range:switch.',
+  'Activating the To tab keeps focus on the tab. Enter in a time field applies the typed value like blur.',
+  'The dark theme follows the Material Design 3 dark tokens, so its colors change.',
+  'New: range in wheel and compact-wheel, setView() / getView(), clear(), getActivePart(), setRange({ from }) / setRange({ to }), setRangeCaptions(), range:change with callbacks.onRangeChange, parseTime() / formatTime() / createDisabledTimeCheck(), getTimezoneList() and DEFAULT_TIMEZONES from timepicker-ui/plugins/timezone, ui.inline.showTitle and labels.valueText. The plugin UMD builds work from a <script> tag through TimepickerUI.PluginRegistry.register().',
+];
+
 export const MIGRATION_V45_TO_V5 = {
   status:
     '5.0 is not released and the guide is a draft: it lists what is decided so far. Every step under stepsNow works on 4.5.0 today.',
@@ -342,7 +356,7 @@ export const MIGRATION_V45_TO_V5 = {
     'ui.cssClass is applied to one element instead of two. Check CSS that uses your class.',
     'TimepickerEventMap loses the internal events range:minute:commit and animation:*, and its catch-all index signature, so on("typo") becomes a type error.',
     'Removed without a 4.5.0 deprecation warning: behavior.delayHandler, TimepickerUI.isAvailable() (use document.querySelector(...) !== null), the instance getters hour / minutes / okButton / cancelButton / clockHand, the callback arguments of open() and destroy(), and the RangeManager / TimezoneManager / WheelManager exports.',
-    'Plugins get a new registration API (not designed yet). Import paths timepicker-ui/plugins/range, /timezone and /wheel stay; the ./plugins/* wildcard export and the plugin UMD builds are removed.',
+    'Plugins get a new registration API (not designed yet). Import paths timepicker-ui/plugins/range, /timezone and /wheel stay, and so do the plugin UMD builds. The ./plugins/* wildcard export is removed.',
     'CSS classes keep the tp-ui- prefix but are renamed after Material Design component names. About 50 custom properties that no rule reads are removed.',
     "The dark theme is removed: use ui.colorScheme: 'dark'. crane-straight becomes a variant of crane. ui.keyboardIcon and ui.clockIcon take an element or a factory function instead of an HTML string.",
   ],

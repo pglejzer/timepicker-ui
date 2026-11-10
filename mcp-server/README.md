@@ -22,7 +22,7 @@ It runs over stdio and needs Node 20 or newer. It is built on the MCP TypeScript
 | `list_modes`             | UI modes (`clock`, `wheel`, `compact-wheel`) and the plugin each needs.                             |
 | `list_plugins`           | Optional plugins (range, timezone, wheel) with import paths and registration.                       |
 | `framework_recipe`       | Recipe and SSR notes for vanilla, react, react-wrapper (`timepicker-ui-react`), next, vue, angular, svelte. |
-| `migration_guide`        | `v3->v4`, `v4.3->v4.4`, `v4.4->v4.5` (with every renamed option) or `v4.5->v5` (draft).           |
+| `migration_guide`        | `v3->v4`, `v4.3->v4.4`, `v4.4->v4.5` (with every renamed option), `v4.6->v4.7` or `v4.5->v5` (draft). |
 | `generate_snippet`       | Vanilla JS or React setup with theme, mode, clock type, seconds and plugins.                        |
 | `generate_custom_theme`  | CSS for a theme applied with `ui.cssClass`, from `overrides` or as a scaffold.                     |
 | `validate_time`          | Checks `HH:MM`, `HH:MM:SS`, `h:MM AM/PM` or `h:MM:SS AM/PM` against a 12h or 24h clock.             |
