@@ -24,32 +24,6 @@
                 </p>
               </div>
             </div>
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-                <pre><code class="language-html">&lt;input id="timezone-picker" value="14:30" /&gt;</code></pre>
-              </div>
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-                <pre><code class="language-javascript">const timezonePicker = new TimepickerUI('#timezone-picker', {
-  clock: {
-    type: '24h'
-  },
-  timezone: {
-    enabled: true,
-    label: 'Timezone',
-    list: ['UTC', 'America/New_York', 'Europe/London', 'Europe/Warsaw', 'Asia/Tokyo']
-  },
-  callbacks: {
-    onTimezoneChange: (data) => {
-      console.log('Timezone changed:', data.timezone);
-      document.getElementById('tz-display').textContent = data.timezone;
-    }
-  }
-});
-timezonePicker.create();</code></pre>
-              </div>
-            </div>
             <div
               class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"
             >
@@ -130,63 +104,6 @@ timezonePicker.create();</code></pre>
                     <div>UTC</div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-                <pre><code class="language-html">&lt;input id="timezone-world-picker" value="09:00" /&gt;
-&lt;p id="tz-world-display"&gt;&lt;/p&gt;
-&lt;p id="tz-world-time"&gt;&lt;/p&gt;
-&lt;p id="tz-world-offset"&gt;&lt;/p&gt;</code></pre>
-              </div>
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-                <pre><code class="language-javascript">const worldTimezonePicker = new TimepickerUI('#timezone-world-picker', {
-  clock: { type: '24h' },
-  ui: { theme: 'm3-green', viewSwitch: true },
-  timezone: {
-    enabled: true,
-    label: 'Select City',
-    // No default - user must select a timezone
-    list: [
-      'UTC',
-      'America/New_York',
-      'America/Los_Angeles',
-      'America/Chicago',
-      'America/Sao_Paulo',
-      'Europe/London',
-      'Europe/Paris',
-      'Europe/Berlin',
-      'Europe/Moscow',
-      'Asia/Dubai',
-      'Asia/Tokyo',
-      'Asia/Shanghai',
-      'Asia/Singapore',
-      'Australia/Sydney',
-      'Pacific/Auckland'
-    ]
-  },
-  callbacks: {
-    onTimezoneChange: (data) => {
-      document.getElementById('tz-world-display').textContent = data.timezone;
-      
-      // Get UTC offset for the selected timezone
-      const formatter = new Intl.DateTimeFormat('en-US', {
-        timeZone: data.timezone,
-        timeZoneName: 'shortOffset'
-      });
-      const parts = formatter.formatToParts(new Date());
-      const offset = parts.find(p => p.type === 'timeZoneName')?.value || 'UTC';
-      document.getElementById('tz-world-offset').textContent = offset;
-    },
-    onConfirm: (data) => {
-      const time = data.hour + ':' + data.minutes + (data.type ? ' ' + data.type : '');
-      document.getElementById('tz-world-time').textContent = time;
-    }
-  }
-});
-worldTimezonePicker.create();</code></pre>
               </div>
             </div>
             <div
@@ -414,37 +331,6 @@ Click "Get Value" to see result</pre
                     <strong>After Fix:</strong> getValue() now checks if modal exists. If not, it reads
                     directly from the input value using getInputValue() utility.
                   </p>
-                </div>
-              </div>
-
-              <div class="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-                  <pre><code class="language-html">&lt;input id="getvalue-demo-picker" value="14:30" /&gt;
-&lt;button id="getvalue-button"&gt;Get Value&lt;/button&gt;
-&lt;button id="setvalue-button"&gt;Set to 18:45&lt;/button&gt;</code></pre>
-                </div>
-                <div>
-                  <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-                  <pre><code class="language-javascript">const picker = new TimepickerUI('#getvalue-demo-picker', {
-  clock: { type: '24h' }
-});
-picker.create();
-
-// Get value without opening modal - now works correctly!
-document.getElementById('getvalue-button')
-  .addEventListener('click', () => {
-    const value = picker.getValue();
-    console.log(value);
-    // Returns: { hour: '14', minutes: '30', time: '14:30', ... }
-  });
-
-// Set value programmatically
-document.getElementById('setvalue-button')
-  .addEventListener('click', () => {
-    picker.setValue('18:45');
-    console.log(picker.getValue()); // Works immediately!
-  });</code></pre>
                 </div>
               </div>
             </div>

@@ -26,34 +26,6 @@
           Duration: <span id="range-duration">0</span> minutes
         </div>
       </div>
-
-      <div class="space-y-3">
-        <pre><code class="language-html">&lt;input id="range-picker" value="09:00" /&gt;</code></pre>
-        <pre><code class="language-javascript">const rangePicker = new TimepickerUI('#range-picker', {
-  clock: { type: '12h' },
-  range: {
-    enabled: true,
-    minDuration: 30,
-    maxDuration: 480,
-  },
-  labels: { rangeFrom: 'Start', rangeTo: 'End' },
-  callbacks: {
-    onRangeConfirm: (data) => {
-      console.log('Range confirmed:', data.from, '–', data.to);
-      document.getElementById('range-display').textContent = 
-        data.from + ' – ' + data.to;
-      document.getElementById('range-duration').textContent = data.duration;
-    },
-    onRangeValidation: (data) => {
-      if (!data.valid) {
-        console.log('Invalid range: duration must be', 
-          data.minDuration, '-', data.maxDuration, 'min');
-      }
-    },
-  },
-});
-rangePicker.create();</code></pre>
-      </div>
     </div>
     <div
       class="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg"
@@ -94,28 +66,6 @@ rangePicker.create();</code></pre>
           Duration: <span id="range-duration-24h">0</span> minutes
         </div>
       </div>
-
-      <div class="space-y-3">
-        <pre><code class="language-html">&lt;input id="range-picker-24h" /&gt;</code></pre>
-        <pre><code class="language-javascript">const range24hPicker = new TimepickerUI('#range-picker-24h', {
-  clock: { type: '24h' },
-  range: {
-    enabled: true,
-    minDuration: 60,
-    maxDuration: 720,
-  },
-  labels: { rangeFrom: 'Start', rangeTo: 'End' },
-  callbacks: {
-    onRangeConfirm: (data) => {
-      console.log(data.from, '–', data.to);
-      document.getElementById('range-display-24h').textContent = 
-        data.from + ' – ' + data.to;
-      document.getElementById('range-duration-24h').textContent = data.duration;
-    },
-  },
-});
-range24hPicker.create();</code></pre>
-      </div>
     </div>
   </div>
 </section>
@@ -148,26 +98,6 @@ range24hPicker.create();</code></pre>
           <br />
           Duration: <span id="range-duration-12h-ampm">480</span> minutes
         </div>
-      </div>
-
-      <div class="space-y-3">
-        <pre><code class="language-html">&lt;input id="range-picker-12h-ampm" value="09:00 AM - 05:00 PM" /&gt;</code></pre>
-        <pre><code class="language-javascript">const range12hAmPmPicker = new TimepickerUI('#range-picker-12h-ampm', {
-  clock: { type: '12h' },
-  range: {
-    enabled: true,
-  },
-  labels: { rangeFrom: 'From', rangeTo: 'To' },
-  callbacks: {
-    onRangeConfirm: (data) => {
-      console.log(data.from, '–', data.to);
-      document.getElementById('range-display-12h-ampm').textContent = 
-        data.from + ' – ' + data.to;
-      document.getElementById('range-duration-12h-ampm').textContent = data.duration;
-    },
-  },
-});
-range12hAmPmPicker.create();</code></pre>
       </div>
     </div>
     <div
@@ -208,31 +138,6 @@ range12hAmPmPicker.create();</code></pre>
         >
           Selected range: <span id="range-clear-display">--:-- – --:--</span>
         </div>
-      </div>
-
-      <div class="space-y-3">
-        <pre><code class="language-html">&lt;input id="range-clear-picker" /&gt;</code></pre>
-        <pre><code class="language-javascript">const rangeClearPicker = new TimepickerUI('#range-clear-picker', {
-  clock: { type: '12h' },
-  ui: {
-    clearButton: true,
-    theme: 'm3-green',
-    viewSwitch: true,
-  },
-  range: {
-    enabled: true,
-  },
-  labels: { rangeFrom: 'From', rangeTo: 'To', clear: 'Clear' },
-  callbacks: {
-    onRangeConfirm: (data) => {
-      console.log('Range confirmed:', data.from, '–', data.to);
-    },
-    onClear: (data) => {
-      console.log('Cleared! Previous:', data.previousValue);
-    },
-  },
-});
-rangeClearPicker.create();</code></pre>
       </div>
     </div>
     <div

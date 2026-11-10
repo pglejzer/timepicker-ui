@@ -1,4 +1,4 @@
-import { TimepickerUI, highlightCodeBlocks } from './setup';
+import { TimepickerUI } from './setup';
 
 type Options = Record<string, any>;
 
@@ -503,30 +503,6 @@ const INPUT_CLASS =
 const OUTPUT_CLASS =
   'min-h-[2.5rem] p-2 bg-gray-100 dark:bg-gray-900 rounded-lg text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-all';
 
-const indent = (depth: number): string => '  '.repeat(depth);
-
-const toJs = (value: unknown, depth = 0): string => {
-  if (Array.isArray(value)) {
-    return `[${value.map((item) => toJs(item, depth)).join(', ')}]`;
-  }
-  if (value && typeof value === 'object') {
-    const lines = Object.entries(value).map(
-      ([key, item]) => `${indent(depth + 1)}${key}: ${toJs(item, depth + 1)},`,
-    );
-    return `{\n${lines.join('\n')}\n${indent(depth)}}`;
-  }
-  return typeof value === 'string' ? `'${value}'` : String(value);
-};
-
-const snippetFor = (inputId: string, value: string | undefined, options: Options): string => {
-  const valueAttr = value ? ` value="${value}"` : '';
-  return [
-    `// <input id="${inputId}"${valueAttr} />`,
-    `const picker = new TimepickerUI('#${inputId}', ${toJs(options)});`,
-    'picker.create();',
-  ].join('\n');
-};
-
 const el = <K extends keyof HTMLElementTagNameMap>(
   tag: K,
   className = '',
@@ -545,15 +521,6 @@ const createInput = (id: string, value?: string): HTMLInputElement => {
   input.value = value ?? '';
   input.placeholder = 'HH:MM:SS';
   return input;
-};
-
-const createCode = (code: string): HTMLDetailsElement => {
-  const details = el('details', 'text-sm');
-  details.appendChild(el('summary', 'cursor-pointer text-gray-600 dark:text-gray-400', 'Code'));
-  const pre = el('pre', 'mt-2');
-  pre.appendChild(el('code', 'language-javascript', code));
-  details.appendChild(pre);
-  return details;
 };
 
 const formatEvent = (event: string, data: unknown, picker: TimepickerUI): string => {
@@ -602,7 +569,6 @@ const renderExample = (example: SecondsExample): HTMLElement => {
   }
   const output = el('pre', OUTPUT_CLASS, '—');
   card.appendChild(output);
-  card.appendChild(createCode(snippetFor(inputId, example.value, example.options)));
   queueMicrotask(() => {
     const picker = createPicker(input, example.options);
     if (picker) watch(picker, output, OUTPUT_EVENTS);
@@ -739,5 +705,4 @@ if (examplesRoot && themesRoot && apiRoot && eventsRoot) {
   renderThemeMatrix(themesRoot);
   renderApiPlayground(apiRoot);
   renderEventLog(eventsRoot);
-  highlightCodeBlocks(examplesRoot);
 }

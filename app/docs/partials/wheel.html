@@ -71,51 +71,6 @@
         </div>
       </div>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="wheel-basic" value="10:30 PM" /&gt;
-&lt;input id="wheel-24h" value="14:45" /&gt;
-&lt;input id="wheel-dark" value="08:00 AM" /&gt;
-&lt;input id="wheel-m3" value="09:15 AM" /&gt;
-&lt;input id="wheel-cyberpunk" value="11:00 PM" /&gt;
-&lt;input id="wheel-step" value="07:30 AM" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// Basic 12h wheel
-new TimepickerUI('#wheel-basic', {
-  ui: { mode: 'wheel' }
-}).create();
-
-// 24h wheel
-new TimepickerUI('#wheel-24h', {
-  clock: { type: '24h' },
-  ui: { mode: 'wheel' }
-}).create();
-
-// Wheel with dark theme
-new TimepickerUI('#wheel-dark', {
-  ui: { mode: 'wheel', theme: 'dark' }
-}).create();
-
-// Wheel with M3 theme
-new TimepickerUI('#wheel-m3', {
-  ui: { mode: 'wheel', theme: 'm3-green' }
-}).create();
-
-// Wheel with Cyberpunk theme
-new TimepickerUI('#wheel-cyberpunk', {
-  ui: { mode: 'wheel', theme: 'cyberpunk' }
-}).create();
-
-// Wheel with 5-minute step
-new TimepickerUI('#wheel-step', {
-  clock: { incrementMinutes: 5 },
-  ui: { mode: 'wheel' }
-}).create();</code></pre>
-      </div>
-    </div>
     <div class="mt-6 p-4 bg-sky-50 dark:bg-sky-900/20 rounded-lg border border-sky-200 dark:border-sky-800">
       <h4 class="text-sm font-semibold text-sky-900 dark:text-sky-200 mb-2">Wheel Mode Notes</h4>
       <ul class="text-sm text-sky-800 dark:text-sky-300 space-y-1 list-disc list-inside">
@@ -233,35 +188,6 @@ new TimepickerUI('#wheel-step', {
         </div>
       </div>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="wheel-theme-basic" value="10:00 AM" /&gt;
-&lt;input id="wheel-theme-crane" value="10:00 AM" /&gt;
-&lt;input id="wheel-theme-crane-straight" value="10:00 AM" /&gt;
-&lt;input id="wheel-theme-m3-green" value="10:00 AM" /&gt;
-&lt;input id="wheel-theme-dark" value="10:00 AM" /&gt;
-&lt;input id="wheel-theme-m2" value="10:00 AM" /&gt;
-&lt;input id="wheel-theme-glassmorphic" value="10:00 AM" /&gt;
-&lt;input id="wheel-theme-pastel" value="10:00 AM" /&gt;
-&lt;input id="wheel-theme-ai" value="10:00 AM" /&gt;
-&lt;input id="wheel-theme-cyberpunk" value="10:00 AM" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const wheelThemeList = [
-  'basic', 'crane', 'crane-straight',
-  'm3-green', 'dark', 'm2',
-  'glassmorphic', 'pastel', 'ai', 'cyberpunk'
-];
-
-wheelThemeList.forEach((theme) => {
-  new TimepickerUI(`#wheel-theme-${theme}`, {
-    ui: { mode: 'wheel', theme, viewSwitch: true },
-  }).create();
-});</code></pre>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -307,33 +233,6 @@ wheelThemeList.forEach((theme) => {
             value="09:00 AM"
           />
         </div>
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="compact-wheel-12h" value="02:30 PM" /&gt;
-&lt;input id="compact-wheel-24h" value="17:15" /&gt;
-&lt;input id="compact-wheel-step" value="09:00 AM" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// 12h compact - AM/PM as third wheel column
-new TimepickerUI('#compact-wheel-12h', {
-  ui: { mode: 'compact-wheel' }
-}).create();
-
-// 24h compact - two columns only
-new TimepickerUI('#compact-wheel-24h', {
-  clock: { type: '24h' },
-  ui: { mode: 'compact-wheel' }
-}).create();
-
-// Compact with 5-minute step
-new TimepickerUI('#compact-wheel-step', {
-  clock: { incrementMinutes: 5 },
-  ui: { mode: 'compact-wheel' }
-}).create();</code></pre>
       </div>
     </div>
     <div
@@ -454,35 +353,6 @@ new TimepickerUI('#compact-wheel-step', {
         </div>
       </div>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="compact-theme-basic" value="03:00 PM" /&gt;
-&lt;input id="compact-theme-crane" value="03:00 PM" /&gt;
-&lt;input id="compact-theme-crane-straight" value="03:00 PM" /&gt;
-&lt;input id="compact-theme-m3-green" value="03:00 PM" /&gt;
-&lt;input id="compact-theme-dark" value="03:00 PM" /&gt;
-&lt;input id="compact-theme-m2" value="03:00 PM" /&gt;
-&lt;input id="compact-theme-glassmorphic" value="03:00 PM" /&gt;
-&lt;input id="compact-theme-pastel" value="03:00 PM" /&gt;
-&lt;input id="compact-theme-ai" value="03:00 PM" /&gt;
-&lt;input id="compact-theme-cyberpunk" value="03:00 PM" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const compactThemeList = [
-  'basic', 'crane', 'crane-straight',
-  'm3-green', 'dark', 'm2',
-  'glassmorphic', 'pastel', 'ai', 'cyberpunk'
-];
-
-compactThemeList.forEach((theme) => {
-  new TimepickerUI(`#compact-theme-${theme}`, {
-    ui: { mode: 'compact-wheel', theme, viewSwitch: true },
-  }).create();
-});</code></pre>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -531,35 +401,6 @@ compactThemeList.forEach((theme) => {
             value="14:30"
           />
         </div>
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="commit-on-scroll-wheel" value="10:30 AM" /&gt;
-&lt;input id="commit-on-scroll-popover" value="02:00 PM" /&gt;
-&lt;input id="commit-on-scroll-24h" value="14:30" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// Wheel with auto-commit
-new TimepickerUI('#commit-on-scroll-wheel', {
-  ui: { mode: 'wheel' },
-  wheel: { commitOnScroll: true },
-}).create();
-
-// Popover with auto-commit
-new TimepickerUI('#commit-on-scroll-popover', {
-  ui: { mode: 'compact-wheel' },
-  wheel: { placement: 'auto', commitOnScroll: true },
-}).create();
-
-// 24h popover with auto-commit
-new TimepickerUI('#commit-on-scroll-24h', {
-  clock: { type: '24h' },
-  ui: { mode: 'compact-wheel' },
-  wheel: { placement: 'auto', commitOnScroll: true },
-}).create();</code></pre>
       </div>
     </div>
     <div
@@ -630,35 +471,6 @@ new TimepickerUI('#commit-on-scroll-24h', {
             value="16:45"
           />
         </div>
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="ignore-outside-wheel" value="09:00 AM" /&gt;
-&lt;input id="ignore-outside-popover" value="02:30 PM" /&gt;
-&lt;input id="ignore-outside-24h" value="16:45" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// Wheel - stays open on outside click
-new TimepickerUI('#ignore-outside-wheel', {
-  ui: { mode: 'wheel' },
-  wheel: { ignoreOutsideClick: true },
-}).create();
-
-// Popover - stays open on outside click
-new TimepickerUI('#ignore-outside-popover', {
-  ui: { mode: 'compact-wheel' },
-  wheel: { placement: 'auto', ignoreOutsideClick: true },
-}).create();
-
-// 24h Popover - stays open on outside click
-new TimepickerUI('#ignore-outside-24h', {
-  clock: { type: '24h' },
-  ui: { mode: 'compact-wheel' },
-  wheel: { placement: 'auto', ignoreOutsideClick: true },
-}).create();</code></pre>
       </div>
     </div>
     <div
@@ -795,108 +607,6 @@ new TimepickerUI('#ignore-outside-24h', {
         </div>
       </div>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="wheel-disabled-hours-12h" value="09:00 AM" /&gt;
-&lt;input id="wheel-disabled-hours-24h" value="09:00" /&gt;
-&lt;input id="wheel-disabled-minutes" value="10:00 AM" /&gt;
-&lt;input id="wheel-disabled-interval-12h" value="08:00 AM" /&gt;
-&lt;input id="wheel-disabled-interval-24h" value="07:00" /&gt;
-&lt;input id="wheel-disabled-intervals-12h" value="07:30 AM" /&gt;
-&lt;input id="wheel-disabled-intervals-24h" value="06:00" /&gt;
-&lt;input id="wheel-hide-disabled-hours" value="09:00 AM" /&gt;
-&lt;input id="wheel-hide-disabled-interval" value="09:00" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// Disabled specific hours - 12h
-new TimepickerUI('#wheel-disabled-hours-12h', {
-  clock: {
-    type: '12h',
-    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8] }
-  },
-  ui: { mode: 'wheel' }
-}).create();
-
-// Disabled specific hours - 24h
-new TimepickerUI('#wheel-disabled-hours-24h', {
-  clock: {
-    type: '24h',
-    disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23] }
-  },
-  ui: { mode: 'wheel' }
-}).create();
-
-// Disabled specific minutes
-new TimepickerUI('#wheel-disabled-minutes', {
-  clock: {
-    disabledTime: { minutes: [15, 30, 45] }
-  },
-  ui: { mode: 'wheel' }
-}).create();
-
-// Single interval - 12h
-new TimepickerUI('#wheel-disabled-interval-12h', {
-  clock: {
-    type: '12h',
-    disabledTime: { ranges: '10:00 AM - 2:00 PM' }
-  },
-  ui: { mode: 'wheel' }
-}).create();
-
-// Single interval - 24h
-new TimepickerUI('#wheel-disabled-interval-24h', {
-  clock: {
-    type: '24h',
-    disabledTime: { ranges: '12:00 - 18:00' }
-  },
-  ui: { mode: 'wheel' }
-}).create();
-
-// Multiple intervals - 12h
-new TimepickerUI('#wheel-disabled-intervals-12h', {
-  clock: {
-    type: '12h',
-    disabledTime: {
-      ranges: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM']
-    }
-  },
-  ui: { mode: 'wheel' }
-}).create();
-
-// Multiple intervals - 24h
-new TimepickerUI('#wheel-disabled-intervals-24h', {
-  clock: {
-    type: '24h',
-    disabledTime: {
-      ranges: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59']
-    }
-  },
-  ui: { mode: 'wheel' }
-}).create();
-
-// hideDisabledOptions - hours
-new TimepickerUI('#wheel-hide-disabled-hours', {
-  clock: {
-    type: '12h',
-    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8] }
-  },
-  ui: { mode: 'wheel' },
-  wheel: { hideDisabled: true }
-}).create();
-
-// hideDisabledOptions - interval 24h
-new TimepickerUI('#wheel-hide-disabled-interval', {
-  clock: {
-    type: '24h',
-    disabledTime: { ranges: ['00:00 - 08:00', '18:00 - 23:59'] }
-  },
-  ui: { mode: 'wheel' },
-  wheel: { hideDisabled: true }
-}).create();</code></pre>
-      </div>
-    </div>
     <div class="mt-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
       <h4 class="text-sm font-semibold text-red-900 dark:text-red-200 mb-2">Wheel + disabledTime Notes</h4>
       <ul class="text-sm text-red-800 dark:text-red-300 space-y-1 list-disc list-inside">
@@ -1022,108 +732,6 @@ new TimepickerUI('#wheel-hide-disabled-interval', {
             value="09:00"
           />
         </div>
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="compact-disabled-hours-12h" value="09:00 AM" /&gt;
-&lt;input id="compact-disabled-hours-24h" value="09:00" /&gt;
-&lt;input id="compact-disabled-minutes" value="10:00 AM" /&gt;
-&lt;input id="compact-disabled-interval-12h" value="08:00 AM" /&gt;
-&lt;input id="compact-disabled-interval-24h" value="07:00" /&gt;
-&lt;input id="compact-disabled-intervals-12h" value="07:30 AM" /&gt;
-&lt;input id="compact-disabled-intervals-24h" value="06:00" /&gt;
-&lt;input id="compact-hide-disabled-hours" value="09:00 AM" /&gt;
-&lt;input id="compact-hide-disabled-interval" value="09:00" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// Disabled specific hours - 12h
-new TimepickerUI('#compact-disabled-hours-12h', {
-  clock: {
-    type: '12h',
-    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8] }
-  },
-  ui: { mode: 'compact-wheel' }
-}).create();
-
-// Disabled specific hours - 24h
-new TimepickerUI('#compact-disabled-hours-24h', {
-  clock: {
-    type: '24h',
-    disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23] }
-  },
-  ui: { mode: 'compact-wheel' }
-}).create();
-
-// Disabled specific minutes
-new TimepickerUI('#compact-disabled-minutes', {
-  clock: {
-    disabledTime: { minutes: [15, 30, 45] }
-  },
-  ui: { mode: 'compact-wheel' }
-}).create();
-
-// Single interval - 12h
-new TimepickerUI('#compact-disabled-interval-12h', {
-  clock: {
-    type: '12h',
-    disabledTime: { ranges: '10:00 AM - 2:00 PM' }
-  },
-  ui: { mode: 'compact-wheel' }
-}).create();
-
-// Single interval - 24h
-new TimepickerUI('#compact-disabled-interval-24h', {
-  clock: {
-    type: '24h',
-    disabledTime: { ranges: '12:00 - 18:00' }
-  },
-  ui: { mode: 'compact-wheel' }
-}).create();
-
-// Multiple intervals - 12h
-new TimepickerUI('#compact-disabled-intervals-12h', {
-  clock: {
-    type: '12h',
-    disabledTime: {
-      ranges: ['9:00 AM - 11:00 AM', '1:00 PM - 3:00 PM']
-    }
-  },
-  ui: { mode: 'compact-wheel' }
-}).create();
-
-// Multiple intervals - 24h
-new TimepickerUI('#compact-disabled-intervals-24h', {
-  clock: {
-    type: '24h',
-    disabledTime: {
-      ranges: ['00:00 - 06:00', '12:00 - 13:00', '18:00 - 23:59']
-    }
-  },
-  ui: { mode: 'compact-wheel' }
-}).create();
-
-// hideDisabledOptions - hours
-new TimepickerUI('#compact-hide-disabled-hours', {
-  clock: {
-    type: '12h',
-    disabledTime: { hours: [1, 2, 3, 4, 5, 6, 7, 8] }
-  },
-  ui: { mode: 'compact-wheel' },
-  wheel: { hideDisabled: true }
-}).create();
-
-// hideDisabledOptions - interval 24h
-new TimepickerUI('#compact-hide-disabled-interval', {
-  clock: {
-    type: '24h',
-    disabledTime: { ranges: ['00:00 - 08:00', '18:00 - 23:59'] }
-  },
-  ui: { mode: 'compact-wheel' },
-  wheel: { hideDisabled: true }
-}).create();</code></pre>
       </div>
     </div>
     <div
