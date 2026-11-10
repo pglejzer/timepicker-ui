@@ -2,14 +2,10 @@ import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitt
 import type { RangeSwitchEventData } from '../../../types/types';
 import type { ClockSystem } from '../ClockSystem';
 import type { ClockMode, DisabledTimeConfig } from '../types';
+import { toRangeFromLimit } from '../../../utils/time/rangeLimit';
 
 type SetToClock = (value: string | null) => void;
 type RangeDisabledData = RangeSwitchEventData['disabledTime'];
-
-const firstAfterBlocked = (blocked: string[] = []): number | undefined => {
-  const lastBlocked = blocked[blocked.length - 1];
-  return lastBlocked === undefined ? undefined : parseInt(lastBlocked, 10) + 1;
-};
 
 export class ClockEventHandler {
   private emitter: EventEmitter<TimepickerEventMap>;
@@ -85,18 +81,7 @@ export class ClockEventHandler {
     if (!clockSystem) return;
 
     const baseDisabled = this.convertDisabledTime();
-
-    if (!rangeDisabled) {
-      clockSystem.updateDisabledTime(baseDisabled);
-      return;
-    }
-
-    clockSystem.updateDisabledTime({
-      ...baseDisabled,
-      rangeFromType: rangeDisabled.fromType,
-      rangeFromHour: rangeDisabled.fromHour,
-      rangeFromMinute: rangeDisabled.fromMinute ?? firstAfterBlocked(rangeDisabled.minutes),
-      rangeFromSecond: firstAfterBlocked(rangeDisabled.seconds),
-    });
+    const limit = toRangeFromLimit(rangeDisabled);
+    clockSystem.updateDisabledTime(limit ? { ...baseDisabled, ...limit } : baseDisabled);
   }
 }

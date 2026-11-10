@@ -3,11 +3,14 @@ import type { EventEmitter, TimepickerEventMap } from '../../../utils/EventEmitt
 import { getLocalTimezone, getTimezoneList, type TimezoneInfo } from '../../../utils/timezone';
 import { escapeHtml } from '../../../utils/template/escape';
 
+const OPEN_CLASS = 'tp-ui-timezone-dropdown--open';
+
 export class TimezoneDropdown {
   private readonly core: CoreState;
   private readonly emitter: EventEmitter<TimepickerEventMap>;
   private selectedTimezone: string | null = null;
   private placeholder = '';
+  private reportedKey: string | null = null;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -16,6 +19,17 @@ export class TimezoneDropdown {
 
   getDropdown(): HTMLElement | null {
     return this.core.getModalElement()?.querySelector('.tp-ui-timezone-dropdown') ?? null;
+  }
+
+  getCombobox(): HTMLElement | null {
+    return this.getDropdown()?.querySelector<HTMLElement>('.tp-ui-timezone-selected') ?? null;
+  }
+
+  getSelectedIndex(): number {
+    if (!this.selectedTimezone) return -1;
+    return this.getOptions().findIndex(
+      (option) => option.getAttribute('data-value') === this.selectedTimezone,
+    );
   }
 
   getMenu(): HTMLElement | null {
@@ -64,24 +78,24 @@ export class TimezoneDropdown {
 
   setOpen(isOpen: boolean): void {
     const dropdown = this.getDropdown();
-    if (!dropdown) return;
+    const combobox = this.getCombobox();
+    if (!dropdown || !combobox) return;
 
-    dropdown.setAttribute('aria-expanded', String(isOpen));
+    combobox.setAttribute('aria-expanded', String(isOpen));
+    dropdown.classList.toggle(OPEN_CLASS, isOpen);
 
     if (isOpen) {
-      const menu = this.getMenu();
-      const selectedOption = menu?.querySelector('[data-selected="true"]');
+      const selectedOption = this.getMenu()?.querySelector('[data-selected="true"]');
       if (selectedOption instanceof HTMLElement) {
         selectedOption.scrollIntoView({ block: 'nearest' });
       }
     } else {
-      dropdown.removeAttribute('aria-activedescendant');
+      combobox.removeAttribute('aria-activedescendant');
     }
   }
 
   isOpen(): boolean {
-    const dropdown = this.getDropdown();
-    return dropdown?.getAttribute('aria-expanded') === 'true';
+    return this.getDropdown()?.classList.contains(OPEN_CLASS) === true;
   }
 
   selectTimezone(timezoneId: string, emitEvent: boolean = true): void {
@@ -103,7 +117,7 @@ export class TimezoneDropdown {
   }
 
   restorePreviousSelection(): void {
-    const selectedDisplay = this.getSelectedDisplay();
+    const selectedDisplay = this.getCombobox();
     if (!selectedDisplay) return;
 
     this.placeholder = selectedDisplay.getAttribute('data-placeholder') ?? this.placeholder;
@@ -119,12 +133,8 @@ export class TimezoneDropdown {
     }
   }
 
-  private getSelectedDisplay(): HTMLElement | null {
-    return this.getDropdown()?.querySelector<HTMLElement>('.tp-ui-timezone-selected') ?? null;
-  }
-
   private renderSelection(): void {
-    const selectedDisplay = this.getSelectedDisplay();
+    const selectedDisplay = this.getCombobox();
     if (!selectedDisplay) return;
 
     let selectedLabel = '';
@@ -151,13 +161,24 @@ export class TimezoneDropdown {
     if (listed.includes(preferred)) return preferred;
 
     const local = getLocalTimezone();
-    if (listed.includes(local)) return local;
+    const fallback = listed.includes(local) ? local : (listed[0] ?? preferred);
+    if (fallback !== preferred) {
+      this.reportUnlisted(preferred, fallback, listed);
+    }
+    return fallback;
+  }
 
-    return listed[0] ?? preferred;
+  private reportUnlisted(preferred: string, fallback: string, listed: Array<string | null>): void {
+    const key = `${preferred}|${listed.join(',')}`;
+    if (this.reportedKey === key) return;
+
+    this.reportedKey = key;
+    this.emitter.emit('error', {
+      error: `timezone.default "${preferred}" is not in the timezone list, using "${fallback}"`,
+    });
   }
 
   reset(): void {
     this.selectedTimezone = null;
   }
 }
-

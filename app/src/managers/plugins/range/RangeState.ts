@@ -10,7 +10,7 @@ export class RangeState {
   private fromValue: RangeValue | null = null;
   private toValue: RangeValue | null = null;
   private previewValue: RangeValue | null = null;
-  private readonly clockType: '12h' | '24h';
+  readonly clockType: '12h' | '24h';
   private readonly minDuration: number | undefined;
   private readonly maxDuration: number | undefined;
   private readonly emitter: EventEmitter<TimepickerEventMap>;

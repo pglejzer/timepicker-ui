@@ -48,7 +48,7 @@ export const isValidTimezone = (timezone: string): boolean => {
   }
 };
 
-const COMMON_TIMEZONES: readonly string[] = [
+export const DEFAULT_TIMEZONES: readonly string[] = [
   'Pacific/Pago_Pago',
   'Pacific/Honolulu',
   'America/Anchorage',
@@ -91,7 +91,7 @@ const buildTimezoneInfo = (id: string): TimezoneInfo => {
 };
 
 export const getTimezoneList = (whitelist?: readonly string[]): TimezoneInfo[] => {
-  const tzIds = whitelist ?? COMMON_TIMEZONES;
+  const tzIds = whitelist ?? DEFAULT_TIMEZONES;
 
   if (!whitelist && cachedTimezones) {
     return cachedTimezones;

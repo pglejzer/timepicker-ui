@@ -2,10 +2,7 @@ import type { CoreState } from './CoreState';
 import type { Managers } from './Managers';
 import type { ErrorEventData } from '../types/types';
 import {
-  parseTime,
-  formatTime,
-  convertTime,
-  hasSeconds,
+  resolveTime,
   DEGREES_PER_HOUR,
   DEGREES_PER_SIXTY,
   type ClockType,
@@ -26,24 +23,11 @@ const INVALID_FORMAT: Record<ClockType, string> = {
   '24h': 'Invalid 24h format. Expected HH:MM',
 };
 
-const OTHER_CLOCK_TYPE: Record<ClockType, ClockType> = { '12h': '24h', '24h': '12h' };
-
 const withPeriod = (value: TimeValue): ParsedTime => ({ ...value, type: value.type ?? 'AM' });
 
 export function resolveTimeFor(core: CoreState, trimmedTime: string): ResolvedTime | null {
-  const format = getTimeFormat(core.options);
-  const own = parseTime(trimmedTime, format);
-  if (own) {
-    const inputText = format.showSeconds || hasSeconds(trimmedTime) ? formatTime(own, format) : trimmedTime;
-    return { parsed: withPeriod(own), inputText };
-  }
-
-  const otherClockType = OTHER_CLOCK_TYPE[format.clockType];
-  const other = parseTime(trimmedTime, { ...format, clockType: otherClockType });
-  if (!other) return null;
-
-  const converted = convertTime(other, otherClockType, format);
-  return { parsed: withPeriod(converted), inputText: formatTime(converted, format) };
+  const resolved = resolveTime(trimmedTime, getTimeFormat(core.options));
+  return resolved && { parsed: withPeriod(resolved.value), inputText: resolved.text };
 }
 
 export function invalidTimeError(core: CoreState): ErrorEventData {

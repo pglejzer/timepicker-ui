@@ -141,7 +141,7 @@ export class WheelEventHandler {
       const time = selectionToTime(this.scrollHandler.getCurrentSelection());
 
       const input = this.core.getInput();
-      if (input) {
+      if (input && !options.range?.enabled) {
         input.value = formatTime(time, {
           clockType: getClockType(options),
           showSeconds: options.clock.showSeconds,

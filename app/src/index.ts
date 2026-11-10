@@ -20,6 +20,7 @@ import type {
   RangeConfirmEventData,
   RangeSwitchEventData,
   RangeValidationEventData,
+  RangeChangeEventData,
   ErrorEventData,
   WheelScrollStartEventData,
   WheelScrollEndEventData,
@@ -35,16 +36,22 @@ import type {
   RangeOptions,
   RangeTimeValue,
   RangeTimeState,
+  RangeTimeInput,
+  RangeCaptionInput,
   ClearBehaviorOptions,
   WheelOptions,
   TimeOfDay,
+  TimepickerView,
 } from './types/options';
 import { EventEmitter } from './utils/EventEmitter';
-import type { TimepickerEventMap } from './utils/EventEmitter';
+import type { TimepickerEventMap, TimepickerEventName } from './utils/EventEmitter';
+import { parseTime, formatTime, createDisabledTimeCheck } from './utils/time/public';
+import type { TimeValue, TimeFormatOptions, DisabledTimeCheckOptions } from './utils/time/public';
 import { PluginRegistry } from './core/PluginRegistry';
 import type {
   Plugin,
   PluginManager,
+  PluginTimeView,
   PluginFactory,
   TemplateProvider,
   ClearHandler,
@@ -67,9 +74,15 @@ export {
   RangeOptions,
   RangeTimeValue,
   RangeTimeState,
+  RangeTimeInput,
+  RangeCaptionInput,
   ClearBehaviorOptions,
   WheelOptions,
   TimeOfDay,
+  TimepickerView,
+  TimeValue,
+  TimeFormatOptions,
+  DisabledTimeCheckOptions,
   OpenEventData,
   CancelEventData,
   ConfirmEventData,
@@ -89,16 +102,22 @@ export {
   RangeConfirmEventData,
   RangeSwitchEventData,
   RangeValidationEventData,
+  RangeChangeEventData,
   ErrorEventData,
   WheelScrollStartEventData,
   WheelScrollEndEventData,
   EventEmitter,
+  parseTime,
+  formatTime,
+  createDisabledTimeCheck,
   PluginRegistry,
   Plugin,
   PluginManager,
+  PluginTimeView,
   PluginFactory,
   TemplateProvider,
   ClearHandler,
   TimepickerEventMap,
+  TimepickerEventName,
 };
 export default TimepickerUI;

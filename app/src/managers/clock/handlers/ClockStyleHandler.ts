@@ -22,9 +22,8 @@ export class ClockStyleHandler {
   }
 
   setClassActiveToHourOnOpen(): void {
-    if (this.core.options.ui.mobile || this.core.isMobileView) return;
+    if (this.core.isMobileView) return;
     const hour = this.core.getHour();
     hour?.classList.add(selectorActive);
   }
 }
-

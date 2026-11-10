@@ -1,8 +1,23 @@
 import { isOverlappingRangeArray } from '../config';
 import { handleValueAndCheck } from '../input';
-import { pad } from './parse';
-import { getClockType } from '../options/predicates';
-import type { TimepickerOptions } from '../../types/options';
+import { TimepickerError, ERROR_CODES } from '../errors';
+import { pad, type ClockType } from './parse';
+import { createTimePredicate, type TimePredicate } from './predicate';
+import type { DisabledRules } from './rules';
+import { toClockType } from '../options/predicates';
+import type { ClockOptions, TimepickerOptions } from '../../types/options';
+
+export interface DisabledTimeValue {
+  isInterval?: boolean;
+  intervals?: string[];
+  clockType?: string;
+  hours?: string[];
+  minutes?: string[];
+  seconds?: string[];
+  predicate?: TimePredicate;
+}
+
+export type DisabledTimeSource = Pick<ClockOptions, 'type' | 'disabledTime' | 'isTimeDisabled'>;
 
 const toSixtyList = (
   values: ReadonlyArray<string | number> | undefined,
@@ -16,9 +31,10 @@ const toSixtyList = (
   return values?.map((value) => pad(Number(value)));
 };
 
-export const createDisabledTime = (options: Required<TimepickerOptions>) => {
-  if (!options) return;
-  const { disabledTime, type: clockType } = options.clock;
+export const createDisabledTimeFromClock = (
+  clock: DisabledTimeSource,
+): { value: DisabledTimeValue } | undefined => {
+  const { disabledTime, type: clockType } = clock;
 
   if (!disabledTime || !Object.keys(disabledTime).length) return;
 
@@ -31,7 +47,7 @@ export const createDisabledTime = (options: Required<TimepickerOptions>) => {
       throw new Error('clockType required for interval');
     }
 
-    isOverlappingRangeArray(intervals, getClockType(options));
+    isOverlappingRangeArray(intervals, toClockType(clockType));
 
     return { value: { isInterval: true, clockType, intervals } };
   }
@@ -58,6 +74,22 @@ export const createDisabledTime = (options: Required<TimepickerOptions>) => {
     },
   };
 };
+
+export const createDisabledTime = (options: Required<TimepickerOptions>) =>
+  options ? createDisabledTimeFromClock(options.clock) : undefined;
+
+export function resolveDisabledTime(clock: DisabledTimeSource): { value: DisabledTimeValue } | null {
+  const disabledTime = createDisabledTimeFromClock(clock) || null;
+  const { isTimeDisabled } = clock;
+  if (typeof isTimeDisabled !== 'function') return disabledTime;
+
+  return { value: { ...disabledTime?.value, predicate: createTimePredicate(isTimeDisabled) } };
+}
+
+export const buildDisabledRules = (
+  value: DisabledTimeValue | undefined,
+  clockType: ClockType,
+): DisabledRules | null => (value ? { ...value, clockType } : null);
 
 export const checkDisabledHoursAndMinutes = (
   value: (string | number)[] | string | number | undefined,
@@ -87,3 +119,53 @@ export const checkDisabledHoursAndMinutes = (
     return false;
   }
 };
+
+export function validateDisabledTime(clock: DisabledTimeSource): void {
+  const { isTimeDisabled, disabledTime, type } = clock;
+  if (isTimeDisabled && typeof isTimeDisabled !== 'function') {
+    throw new TimepickerError('clock.isTimeDisabled must be a function', ERROR_CODES.INVALID_PARAMETER);
+  }
+
+  if (!disabledTime) return;
+
+  const clockType = toClockType(type);
+
+  if (disabledTime.interval) {
+    if (!type) {
+      throw new TimepickerError(
+        'clockType is required when using disabledTime.interval',
+        ERROR_CODES.INVALID_PARAMETER,
+      );
+    }
+
+    const intervals = Array.isArray(disabledTime.interval) ? disabledTime.interval : [disabledTime.interval];
+
+    try {
+      isOverlappingRangeArray(intervals, clockType);
+    } catch (error) {
+      throw new TimepickerError(
+        `Invalid disabledTime.interval: ${(error as Error).message}`,
+        ERROR_CODES.INVALID_PARAMETER,
+      );
+    }
+
+    return;
+  }
+
+  const { hours, minutes, seconds } = disabledTime;
+
+  const isValidHours = hours ? checkDisabledHoursAndMinutes(hours, 'hour', clockType) : true;
+  const isValidMinutes = minutes ? checkDisabledHoursAndMinutes(minutes, 'minutes', clockType) : true;
+  const isValidSeconds = seconds ? checkDisabledHoursAndMinutes(seconds, 'minutes', clockType) : true;
+
+  if (!isValidHours || !isValidMinutes) {
+    throw new TimepickerError(
+      'Invalid hours or minutes in disabledTime option',
+      ERROR_CODES.INVALID_PARAMETER,
+    );
+  }
+
+  if (!isValidSeconds) {
+    throw new TimepickerError('Invalid seconds in disabledTime option', ERROR_CODES.INVALID_PARAMETER);
+  }
+}

@@ -17,3 +17,13 @@ export declare class TimezoneManager implements PluginManager {
 }
 
 export declare const TimezonePlugin: PluginDefinition;
+
+export interface TimezoneInfo {
+  readonly id: string;
+  readonly label: string;
+  readonly offset: string;
+}
+
+export declare const DEFAULT_TIMEZONES: readonly string[];
+
+export declare function getTimezoneList(whitelist?: readonly string[]): TimezoneInfo[];

@@ -54,12 +54,8 @@ export class InputHandlers {
       this.emitter.emit('update', buildUpdatePayload(this.core));
     };
 
-    input.addEventListener('click', clickHandler);
-    this.cleanupHandlers.push(() => input.removeEventListener('click', clickHandler));
-
     let previousValue = input.value;
-    const blurHandler = (): void => {
-      if (this.core.isDestroyed) return;
+    const applyTypedValue = (): void => {
       if (input.hasAttribute('readonly')) return;
 
       const clamped = CLAMPS[field](input.value, this.core.options.clock.type === '12h');
@@ -73,8 +69,24 @@ export class InputHandlers {
       this.emitter.emit('update', buildUpdatePayload(this.core));
     };
 
-    input.addEventListener('blur', blurHandler);
-    this.cleanupHandlers.push(() => input.removeEventListener('blur', blurHandler));
+    const commitHandler = (): void => {
+      if (this.core.isDestroyed) return;
+      applyTypedValue();
+      this.emitter.emit('input:commit', { field });
+    };
+
+    const enterHandler = (event: KeyboardEvent): void => {
+      if (event.key === 'Enter') commitHandler();
+    };
+
+    input.addEventListener('click', clickHandler);
+    input.addEventListener('blur', commitHandler);
+    input.addEventListener('keydown', enterHandler);
+    this.cleanupHandlers.push(
+      () => input.removeEventListener('click', clickHandler),
+      () => input.removeEventListener('blur', commitHandler),
+      () => input.removeEventListener('keydown', enterHandler),
+    );
   }
 
   private nearestEnabled(field: TimeField, value: number): string {

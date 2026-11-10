@@ -1,6 +1,14 @@
 import { getInputValue } from '../../utils/input';
 import { getTimeFormat } from '../../utils/options/predicates';
-import { clockDegrees, convertTime, formatTime, parseTime, type TimeValue } from '../../utils/time/parse';
+import {
+  clockDegrees,
+  convertTime,
+  formatTime,
+  getTimePlaceholder,
+  isTimePlaceholder,
+  parseTime,
+  type TimeValue,
+} from '../../utils/time/parse';
 import { setActivePeriod, setSpinbuttonValue } from '../../utils/accessibility';
 import type { TimepickerOptions } from '../../types/options';
 import type { CoreState } from '../../timepicker/CoreState';
@@ -58,11 +66,17 @@ export class InputValueHandler {
     const input = this.core.getInput();
     if (!input) return;
 
-    const values = input.value.split(RANGE_SEPARATOR).map((part) => parseTime(part, previous));
-    if (values.length > MAX_TIME_PARTS || !values.every(isTimeValue)) return;
+    const parts = input.value.split(RANGE_SEPARATOR);
+    if (parts.length > MAX_TIME_PARTS) return;
 
+    const values = parts.map((part) => (isTimePlaceholder(part) ? null : parseTime(part, previous)));
+    const hasUnparsed = parts.some((part, index) => values[index] === null && !isTimePlaceholder(part));
+    if (hasUnparsed || !values.some(isTimeValue)) return;
+
+    const convert = (value: TimeValue): string =>
+      formatTime(convertTime(value, previous.clockType, next), next);
     input.value = values
-      .map((value) => formatTime(convertTime(value, previous.clockType, next), next))
+      .map((value) => (value ? convert(value) : getTimePlaceholder(next.showSeconds)))
       .join(RANGE_SEPARATOR);
   }
 

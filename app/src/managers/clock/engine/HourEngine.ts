@@ -1,7 +1,7 @@
 import type { ClockType, AmPmType, DisabledTimeConfig } from '../types';
 import { isHourDisabled, isHourOnIncrement } from '../../../utils/time/rules';
 import { toDisabledRules } from './disabledRules';
-import { isHourBeforeRangeFrom } from './rangeLimit';
+import { isHourBeforeRangeFrom } from '../../../utils/time/rangeLimit';
 
 export class HourEngine {
   static angleToIndex(angle: number, clockType: ClockType, isInnerCircle: boolean): number {

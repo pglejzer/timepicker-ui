@@ -1,14 +1,26 @@
 import { CoreState } from './CoreState';
 import { Managers } from './Managers';
 import { Lifecycle } from './Lifecycle';
-import { EventEmitter, type TimepickerEventMap } from '../utils/EventEmitter';
+import { EventEmitter, type TimepickerEventMap, type TimepickerEventName } from '../utils/EventEmitter';
 import { generateUUID } from '../utils/config';
 import { getInputValue } from '../utils/input';
 import { mergeOptions } from '../utils/options';
-import { getTimeFormat, isCompactWheelMode, isEmbeddedInlineMode } from '../utils/options/predicates';
+import {
+  getInitialView,
+  getTimeFormat,
+  isCompactWheelMode,
+  isEmbeddedInlineMode,
+  isWheelMode,
+} from '../utils/options/predicates';
 import { clockDegrees, formatTime, type ClockType, type TimeValue } from '../utils/time/parse';
 import { sanitizeTimeInput } from '../utils/validation';
-import type { TimepickerOptions, RangeTimeState } from '../types/options';
+import type {
+  TimepickerOptions,
+  RangeTimeState,
+  RangeTimeInput,
+  RangeCaptionInput,
+  TimepickerView,
+} from '../types/options';
 import type { RangeApi, UpdateEventData } from '../types/types';
 import { PluginRegistry } from '../core/PluginRegistry';
 import { missingPluginError } from './LifecycleCallbacks';
@@ -26,6 +38,7 @@ import {
 type Callback = () => void;
 
 const instanceRegistry = new Map<string, TimepickerUI>();
+const VIEWS: ReadonlyArray<TimepickerView> = ['clock', 'keyboard'];
 
 export default class TimepickerUI {
   private readonly core: CoreState;
@@ -123,7 +136,9 @@ export default class TimepickerUI {
       if (input) {
         input.value = `${data.from} - ${data.to}`;
       }
-      this.lifecycle.closeUnlessInline();
+      if (!data.autoCommit) {
+        this.lifecycle.closeUnlessInline();
+      }
     });
 
     this.emitter.on('select:am', () => this.emitter.emit('select:period', { type: 'AM' }));
@@ -191,7 +206,7 @@ export default class TimepickerUI {
   }
 
   /**
-   * Update the timepicker instance with new options. Options that fail validation (for example an invalid `clock.disabledTime`) are reported through the `error` event / `callbacks.onError`; the previous options stay in place and the callback is not run. When `clock.type` or `clock.showSeconds` changes, a valid time in the input, or both times of a range value (`from - to`), is rewritten in the new format (no `update` or `confirm` event); an empty or invalid input is left as it is. An open picker is re-rendered with the new options, and a selection that was not confirmed is reset to the input value.
+   * Update the timepicker instance with new options. Options that fail validation (for example an invalid `clock.disabledTime`) are reported through the `error` event / `callbacks.onError`; the previous options stay in place and the callback is not run. When `clock.type` or `clock.showSeconds` changes, a valid time in the input, or both times of a range value (`from - to`), is rewritten in the new format (no `update` or `confirm` event); an empty or invalid input is left as it is. An open picker is re-rendered with the new options, and a selection that was not confirmed is reset to the input value, except a range, which keeps both ends and the active end. The view (clock or keyboard) is kept unless `ui.initialView` changes. Then an open picker switches to the new initial view and emits `switch:view { view }` once, after the view is shown; a closed picker emits nothing and opens in it.
    * @param value - The new options and optional create flag.
    * @param callback - Optional callback to be executed after update.
    * @deprecated Use `setOptions(options)`. Removed in 5.0.
@@ -212,7 +227,7 @@ export default class TimepickerUI {
   }
 
   /**
-   * Set options at runtime. Options that fail validation (for example an invalid `clock.disabledTime`) are reported through the `error` event / `callbacks.onError` and the previous options stay in place. When `clock.type` or `clock.showSeconds` changes, a valid time in the input is rewritten in the new format. An open picker is re-rendered with the new options.
+   * Set options at runtime. Options that fail validation (for example an invalid `clock.disabledTime`) are reported through the `error` event / `callbacks.onError` and the previous options stay in place. When `clock.type` or `clock.showSeconds` changes, a valid time in the input is rewritten in the new format. An open picker is re-rendered with the new options. A range keeps both ends and the active end, and the view is kept unless `ui.initialView` changes. Then an open picker switches to the new initial view and emits `switch:view { view }` once, after the view is shown; a closed picker emits nothing and opens in it.
    * @param options - The options to change. Groups you leave out keep their values.
    */
   public setOptions(options: TimepickerOptions): void {
@@ -316,7 +331,7 @@ export default class TimepickerUI {
 
   /**
    * Set the timepicker value programmatically.
-   * @param time - The time string to set: "HH:MM" for 24h or "HH:MM AM/PM" for 12h. With `clock.showSeconds` also "HH:MM:SS" / "HH:MM:SS AM/PM"; a value without seconds means ":00". Without `clock.showSeconds` seconds in the string are accepted and dropped. A valid time in the other clock format is converted: "2:30 PM" sets 14:30 in a 24h picker, "00:15" sets 12:15 AM in a 12h picker. A string that is not a valid time in either format changes nothing and emits `error` (`callbacks.onError`); an empty string is ignored.
+   * @param time - The time string to set: "HH:MM" for 24h or "HH:MM AM/PM" for 12h. With `clock.showSeconds` also "HH:MM:SS" / "HH:MM:SS AM/PM"; a value without seconds means ":00". Without `clock.showSeconds` seconds in the string are accepted and dropped. A valid time in the other clock format is converted: "2:30 PM" sets 14:30 in a 24h picker, "00:15" sets 12:15 AM in a 12h picker. A string that is not a valid time in either format changes nothing and emits `error` (`callbacks.onError`); an empty string is ignored. In range mode (RangePlugin and `range.enabled`) it sets the end being edited (see `getActivePart()`) and, with `updateInput`, writes "from - to".
    * @param updateInput - If true, the input field will be updated with the new time value. Default is true.
    */
   public setValue(time: string, updateInput: boolean = true): void {
@@ -326,6 +341,12 @@ export default class TimepickerUI {
     if (!this.core.isInitialized) {
       this.create();
       if (this.core.isDestroyed) return;
+    }
+
+    const range = this.activeRangeApi();
+    if (range) {
+      this.setActiveRangeEnd(range, time, updateInput);
+      return;
     }
 
     const resolved = resolveTimeFor(this.core, sanitizeTimeInput(time.trim()));
@@ -345,6 +366,16 @@ export default class TimepickerUI {
     syncClockVisual(this.core, this.managers, parsed);
   }
 
+  private setActiveRangeEnd(range: RangeApi, time: string, updateInput: boolean): void {
+    const part = range.getActivePart();
+    const from = part === 'from' ? time : undefined;
+    const to = part === 'to' ? time : undefined;
+    const applied = this.asApiChange(() => range.setRange(from, to, updateInput));
+    if (!applied) {
+      this.emitter.emit('error', invalidTimeError(this.core));
+    }
+  }
+
   private resolveRangeApi(): RangeApi | null {
     if (!PluginRegistry.has('range')) {
       this.emitter.emit('error', missingPluginError('RangePlugin'));
@@ -362,15 +393,37 @@ export default class TimepickerUI {
     return api;
   }
 
+  private activeRangeApi(): RangeApi | null {
+    if (!this.core.options.range?.enabled || !PluginRegistry.has('range')) return null;
+    return this.managers.getPlugin<RangeApi>('range') ?? null;
+  }
+
+  private asApiChange<T>(change: () => T): T {
+    const previous = this.core.isApiChange;
+    this.core.setIsApiChange(true);
+    try {
+      return change();
+    } finally {
+      this.core.setIsApiChange(previous);
+    }
+  }
+
+  private hasWheelView(): boolean {
+    return isWheelMode(this.core.options) && PluginRegistry.has('wheel');
+  }
+
   /**
-   * Set both ends of the range. Each time uses the `setValue` format ("14:30" or "2:30 PM").
-   * Works open or closed. With `updateInput` the input shows "from - to".
+   * Set one or both ends of the range. Each time uses the `setValue` format ("14:30" or "2:30 PM").
+   * An end you leave out keeps its value; `null` or `''` clears it. Works open or closed.
+   * With `updateInput` the input shows "from - to", with `--:--` for an empty end, or nothing when both are empty.
+   * With `range.linked` (default), clearing From while To is active switches back to From.
    * Requires RangePlugin and `range.enabled`; otherwise emits `error` and does nothing.
-   * Invalid times emit `error` and leave the range unchanged.
-   * @param range - `{ from, to }` times.
+   * An invalid time, or an object with neither end, emits `error` and leaves the range unchanged.
+   * Does not emit `range:change`.
+   * @param range - `{ from?, to? }`.
    * @param updateInput - Write the range to the input. Default `true`.
    */
-  public setRange(range: { from: string; to: string }, updateInput: boolean = true): void {
+  public setRange(range: RangeTimeInput, updateInput: boolean = true): void {
     if (this.core.isDestroyed) return;
 
     const api = this.resolveRangeApi();
@@ -381,7 +434,7 @@ export default class TimepickerUI {
       if (this.core.isDestroyed) return;
     }
 
-    if (!api.setRange(range?.from, range?.to, updateInput)) {
+    if (!this.asApiChange(() => api.setRange(range?.from, range?.to, updateInput))) {
       this.emitter.emit('error', {
         error: `Invalid range time. Expected "from" and "to" in the setValue format, got "${range?.from}" and "${range?.to}"`,
       });
@@ -399,13 +452,93 @@ export default class TimepickerUI {
 
   /**
    * Switch the clock to the given end without moving focus.
-   * Updates the tabs and emits `range:switch`. With `range.linked` (default), switching to "to"
+   * Updates the tabs and emits `range:switch`. On an open picker it first commits a time the user typed
+   * into the current end (emitting `range:change` when that end's value changes), then switches. With `range.linked` (default), switching to "to"
    * is refused until From is complete.
    * @returns `true` when the active end changed or was already that end.
    */
   public setActivePart(part: 'from' | 'to'): boolean {
     if (this.core.isDestroyed) return false;
-    return this.resolveRangeApi()?.setActivePart(part, { focus: false }) ?? false;
+    const api = this.resolveRangeApi();
+    if (!api) return false;
+    return this.asApiChange(() => api.setActivePart(part, { focus: false }));
+  }
+
+  /**
+   * The range end being edited.
+   * @returns `'from'` or `'to'`; `null` without RangePlugin / `range.enabled` (emits `error`, like `getRange()`) or after `destroy()`.
+   */
+  public getActivePart(): 'from' | 'to' | null {
+    if (this.core.isDestroyed) return null;
+    return this.resolveRangeApi()?.getActivePart() ?? null;
+  }
+
+  /**
+   * Show a second line under a range tab label, for example the date of that end ("Wed Oct 21").
+   * The text is set as plain text (no HTML) and becomes part of the tab's accessible name.
+   * Works open or closed, survives `setOptions()`, and emits no event.
+   * Requires RangePlugin and `range.enabled`; otherwise emits `error`.
+   * @param captions - `{ from?, to? }`; `null` or `''` removes a caption.
+   */
+  public setRangeCaptions(captions: RangeCaptionInput): void {
+    if (this.core.isDestroyed) return;
+    this.resolveRangeApi()?.setCaptions(captions ?? {});
+  }
+
+  /**
+   * Clear the picker like the Clear button: empties the input (unless `ui.clearButton: { clearInput: false }`),
+   * returns the clock or wheel to its neutral time and empties both range ends. Works open or closed, and
+   * without `ui.clearButton`. Emits `clear` and `update` like the button, with no screen reader announcement
+   * (your code started it). Does not emit `range:change` and does not move focus.
+   */
+  public clear(): void {
+    if (this.core.isDestroyed) return;
+
+    if (!this.core.isInitialized) {
+      this.create();
+      if (this.core.isDestroyed) return;
+    }
+
+    this.asApiChange(() => {
+      if (!this.core.isOpen) this.activeRangeApi()?.reset();
+      this.managers.clearButton.clear({ announce: false });
+    });
+  }
+
+  /**
+   * Show the clock face or the keyboard view, for example from your own switch button.
+   * Open: switches at once and emits `switch:view`. Closed: the next open starts in that view;
+   * later opens start in `ui.initialView` again. The view also survives `setOptions()` on an open picker, unless `ui.initialView` changes there.
+   * Focus does not move, unless it was on the part that gets hidden: then it moves to the active time field.
+   * In `wheel` and `compact-wheel` modes there is no keyboard view: nothing happens and no `error` is emitted.
+   * @param view - `'clock'` or `'keyboard'`; any other value emits `error`.
+   * @returns `true` when that view is shown (or will be at the next open), `false` in wheel modes, for an invalid value or after `destroy()`.
+   */
+  public setView(view: TimepickerView): boolean {
+    if (this.core.isDestroyed || this.hasWheelView()) return false;
+
+    if (!VIEWS.includes(view)) {
+      this.emitter.emit('error', { error: `Invalid view "${String(view)}". Expected "clock" or "keyboard"` });
+      return false;
+    }
+
+    if (!this.core.isOpen) {
+      this.core.setPendingView(view);
+      return true;
+    }
+
+    this.managers.config.requestView(view);
+    return true;
+  }
+
+  /**
+   * The view shown now, or the view the next open starts in.
+   * @returns `'clock'` or `'keyboard'`; `null` in wheel modes or after `destroy()`.
+   */
+  public getView(): TimepickerView | null {
+    if (this.core.isDestroyed || this.hasWheelView()) return null;
+    if (this.core.isOpen) return this.core.view;
+    return this.core.pendingView ?? getInitialView(this.core.options);
   }
 
   /**
@@ -504,10 +637,12 @@ export default class TimepickerUI {
    * @param handler - The function to handle the event.
    * @returns A function that removes this handler. Calling it more than once is a no-op.
    */
-  public on<K extends keyof TimepickerEventMap>(
+  public on<K extends TimepickerEventName>(
     event: K,
     handler: (data: TimepickerEventMap[K]) => void,
-  ): () => void {
+  ): () => void;
+  public on(event: string, handler: (data: unknown) => void): () => void;
+  public on(event: string, handler: (data: unknown) => void): () => void {
     if (this.core.isDestroyed) return () => {};
     return this.emitter.on(event, handler);
   }
@@ -518,10 +653,12 @@ export default class TimepickerUI {
    * @param handler - The function to handle the event.
    * @returns A function that removes the handler before it runs. Calling it more than once is a no-op.
    */
-  public once<K extends keyof TimepickerEventMap>(
+  public once<K extends TimepickerEventName>(
     event: K,
     handler: (data: TimepickerEventMap[K]) => void,
-  ): () => void {
+  ): () => void;
+  public once(event: string, handler: (data: unknown) => void): () => void;
+  public once(event: string, handler: (data: unknown) => void): () => void {
     if (this.core.isDestroyed) return () => {};
     return this.emitter.once(event, handler);
   }
@@ -532,10 +669,9 @@ export default class TimepickerUI {
    * @param handler - The function to handle the event.
    * @returns - void
    */
-  public off<K extends keyof TimepickerEventMap>(
-    event: K,
-    handler?: (data: TimepickerEventMap[K]) => void,
-  ): void {
+  public off<K extends TimepickerEventName>(event: K, handler?: (data: TimepickerEventMap[K]) => void): void;
+  public off(event: string, handler?: (data: unknown) => void): void;
+  public off(event: string, handler?: (data: unknown) => void): void {
     if (this.core.isDestroyed) return;
     this.emitter.off(event, handler);
   }

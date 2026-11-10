@@ -10,6 +10,8 @@ import type { EventEmitter, TimepickerEventMap } from '../../utils/EventEmitter'
 import type { ConfirmEventData } from '../../types/types';
 import { buildUpdatePayload, isSelectedTimeDisabled } from './timeFields';
 
+const PERIOD_ARROW_KEYS: ReadonlyArray<string> = ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
+
 export class ButtonHandlers {
   private core: CoreState;
   private emitter: EventEmitter<TimepickerEventMap>;
@@ -124,6 +126,7 @@ export class ButtonHandlers {
     };
 
     this.cleanupHandlers.push(bindActivate(AM, handler));
+    this.bindPeriodArrows(AM, () => this.core.getPM());
   }
 
   handlePmClick(): void {
@@ -142,6 +145,22 @@ export class ButtonHandlers {
     };
 
     this.cleanupHandlers.push(bindActivate(PM, handler));
+    this.bindPeriodArrows(PM, () => this.core.getAM());
+  }
+
+  private bindPeriodArrows(segment: HTMLElement, getOther: () => HTMLElement | null): void {
+    const handler = (event: KeyboardEvent): void => {
+      if (this.core.isDestroyed || !PERIOD_ARROW_KEYS.includes(event.key)) return;
+      const other = getOther();
+      if (!other) return;
+
+      event.preventDefault();
+      other.focus();
+      other.click();
+    };
+
+    segment.addEventListener('keydown', handler);
+    this.cleanupHandlers.push(() => segment.removeEventListener('keydown', handler));
   }
 
   handleSwitchViewButton(): void {
@@ -150,7 +169,7 @@ export class ButtonHandlers {
 
     const handler = (): void => {
       if (this.core.isDestroyed) return;
-      this.emitter.emit('switch:view', {});
+      this.emitter.emit('switch:view', { view: this.core.view === 'keyboard' ? 'clock' : 'keyboard' });
     };
 
     this.cleanupHandlers.push(bindActivate(switchButton, handler));

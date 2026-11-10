@@ -2,6 +2,17 @@ import type { Point } from '../types';
 import type { ClockController } from '../controller/ClockController';
 import { isDocument, isNode } from '../../../utils/node';
 
+const hasPointerEvents = (): boolean => typeof PointerEvent !== 'undefined';
+
+const capturePointer = (element: HTMLElement, pointerId: number): void => {
+  if (typeof element.setPointerCapture !== 'function') return;
+  try {
+    element.setPointerCapture(pointerId);
+  } catch {
+    return;
+  }
+};
+
 export interface DragHandlersConfig {
   autoSwitchToMinutes?: boolean;
   autoSwitchToSeconds?: boolean;
@@ -24,6 +35,7 @@ export class DragHandlers {
   private cachedRadius: number | null = null;
   private rafId: number | null = null;
   private hadValidSelection: boolean = false;
+  private pointerId: number | null = null;
 
   constructor(controller: ClockController, clockFace: HTMLElement, config: DragHandlersConfig = {}) {
     this.controller = controller;
@@ -32,15 +44,22 @@ export class DragHandlers {
   }
 
   attach(): void {
+    if (hasPointerEvents()) {
+      this.clockFace.addEventListener('pointerdown', this.handlePointerStart);
+      return;
+    }
+
     this.clockFace.addEventListener('mousedown', this.handlePointerDown);
     this.clockFace.addEventListener('touchstart', this.handlePointerDown, { passive: false });
   }
 
   detach(): void {
+    this.clockFace.removeEventListener('pointerdown', this.handlePointerStart);
     this.clockFace.removeEventListener('mousedown', this.handlePointerDown);
     this.clockFace.removeEventListener('touchstart', this.handlePointerDown);
     this.removeGlobalListeners();
     this.cancelPendingFrame();
+    this.releasePointer();
     this.isActive = false;
   }
 
@@ -52,14 +71,8 @@ export class DragHandlers {
     this.isBlocked = false;
   }
 
-  private handlePointerDown = (event: MouseEvent | TouchEvent): void => {
-    if (isNode() || this.isBlocked) {
-      return;
-    }
-
-    if (this.isDisabledTarget(event.target as Element | null)) {
-      return;
-    }
+  private beginDrag(event: MouseEvent | TouchEvent, target: Element | null): boolean {
+    if (isNode() || this.isBlocked || this.isDisabledTarget(target)) return false;
 
     event.preventDefault();
     this.isActive = true;
@@ -70,12 +83,48 @@ export class DragHandlers {
     this.cachedRadius = this.getClockRadius();
 
     this.processPointerEvent(event);
+    return true;
+  }
+
+  private handlePointerDown = (event: MouseEvent | TouchEvent): void => {
+    if (!this.beginDrag(event, event.target as Element | null)) return;
 
     document.addEventListener('mousemove', this.handlePointerMove);
     document.addEventListener('touchmove', this.handlePointerMove, { passive: false });
     document.addEventListener('mouseup', this.handlePointerUp);
     document.addEventListener('touchend', this.handlePointerUp);
   };
+
+  private handlePointerStart = (event: PointerEvent): void => {
+    if (event.isPrimary === false || event.button !== 0) return;
+    if (!this.beginDrag(event, event.target as Element | null)) return;
+
+    this.pointerId = event.pointerId;
+    capturePointer(this.clockFace, event.pointerId);
+
+    document.addEventListener('pointermove', this.handlePointerTrack);
+    document.addEventListener('pointerup', this.handlePointerEnd);
+    document.addEventListener('pointercancel', this.handlePointerCancel);
+  };
+
+  private handlePointerTrack = (event: PointerEvent): void => {
+    if (event.pointerId === this.pointerId) this.handlePointerMove(event);
+  };
+
+  private handlePointerEnd = (event: PointerEvent): void => {
+    if (event.pointerId === this.pointerId) this.finishDrag(true);
+  };
+
+  private handlePointerCancel = (event: PointerEvent): void => {
+    if (event.pointerId === this.pointerId) this.finishDrag(false);
+  };
+
+  private releasePointer(): void {
+    const { pointerId } = this;
+    this.pointerId = null;
+    if (pointerId === null || !this.clockFace.hasPointerCapture?.(pointerId)) return;
+    this.clockFace.releasePointerCapture(pointerId);
+  }
 
   private handlePointerMove = (event: MouseEvent | TouchEvent): void => {
     if (!this.isActive || this.isBlocked) return;
@@ -97,6 +146,10 @@ export class DragHandlers {
   };
 
   private handlePointerUp = (): void => {
+    this.finishDrag(true);
+  };
+
+  private finishDrag(commit: boolean): void {
     if (!this.isActive) return;
 
     this.cancelPendingFrame();
@@ -104,6 +157,7 @@ export class DragHandlers {
     this.cachedRect = null;
     this.cachedCenter = null;
     this.cachedRadius = null;
+    this.releasePointer();
     this.controller.handlePointerUp();
 
     const {
@@ -122,7 +176,7 @@ export class DragHandlers {
 
     this.removeGlobalListeners();
 
-    if (!this.hadValidSelection) {
+    if (!commit || !this.hadValidSelection) {
       return;
     }
 
@@ -135,7 +189,7 @@ export class DragHandlers {
     } else if (this.isLastUnitActive() && this.config.onMinuteCommit) {
       this.config.onMinuteCommit();
     }
-  };
+  }
 
   private activate(from: HTMLElement, to: HTMLElement | null | undefined): void {
     to?.click();
@@ -185,6 +239,10 @@ export class DragHandlers {
       if (touch && !isNode()) {
         return document.elementFromPoint(touch.clientX, touch.clientY);
       }
+      return event.target as Element;
+    }
+    if (this.pointerId !== null && !isNode() && typeof document.elementFromPoint === 'function') {
+      return document.elementFromPoint(event.clientX, event.clientY);
     }
     return event.target as Element;
   }
@@ -218,5 +276,8 @@ export class DragHandlers {
     document.removeEventListener('touchmove', this.handlePointerMove);
     document.removeEventListener('mouseup', this.handlePointerUp);
     document.removeEventListener('touchend', this.handlePointerUp);
+    document.removeEventListener('pointermove', this.handlePointerTrack);
+    document.removeEventListener('pointerup', this.handlePointerEnd);
+    document.removeEventListener('pointercancel', this.handlePointerCancel);
   }
 }

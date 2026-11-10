@@ -1,6 +1,6 @@
 import { isDocument } from '../utils/node';
 import { mergeOptionGroups } from '../utils/options/defaults';
-import type { TimepickerOptions } from '../types/options';
+import type { TimepickerOptions, TimepickerView } from '../types/options';
 import type { TimePredicate } from '../utils/time/predicate';
 
 export interface CoreStateData {
@@ -26,6 +26,10 @@ export interface CoreStateData {
   readonly timePredicate: TimePredicate | null;
   readonly cloned: Node | null;
   readonly isModalRemove: boolean;
+  readonly isRerendering: boolean;
+  readonly view: TimepickerView;
+  readonly pendingView: TimepickerView | null;
+  readonly isApiChange: boolean;
   readonly isOpen: boolean;
   readonly isInitialized: boolean;
   readonly customId?: string;
@@ -45,6 +49,10 @@ export class CoreState {
   private _timePredicate: TimePredicate | null = null;
   private _cloned: Node | null = null;
   private _isModalRemove = true;
+  private _isRerendering = false;
+  private _view: TimepickerView = 'clock';
+  private _pendingView: TimepickerView | null = null;
+  private _isApiChange = false;
   private _isOpen = false;
   private _isInitialized = false;
   private _eventHandlersRegistered = false;
@@ -97,6 +105,18 @@ export class CoreState {
   get isModalRemove(): boolean {
     return this._isModalRemove;
   }
+  get isRerendering(): boolean {
+    return this._isRerendering;
+  }
+  get view(): TimepickerView {
+    return this._view;
+  }
+  get pendingView(): TimepickerView | null {
+    return this._pendingView;
+  }
+  get isApiChange(): boolean {
+    return this._isApiChange;
+  }
   get isOpen(): boolean {
     return this._isOpen;
   }
@@ -140,6 +160,18 @@ export class CoreState {
   setIsModalRemove(value: boolean): void {
     this._isModalRemove = value;
   }
+  setIsRerendering(value: boolean): void {
+    this._isRerendering = value;
+  }
+  setView(value: TimepickerView): void {
+    this._view = value;
+  }
+  setPendingView(value: TimepickerView | null): void {
+    this._pendingView = value;
+  }
+  setIsApiChange(value: boolean): void {
+    this._isApiChange = value;
+  }
   setIsOpen(value: boolean): void {
     this._isOpen = value;
   }
@@ -166,6 +198,10 @@ export class CoreState {
     this._timePredicate = null;
     this._cloned = null;
     this._isModalRemove = true;
+    this._isRerendering = false;
+    this._view = 'clock';
+    this._pendingView = null;
+    this._isApiChange = false;
     this._isOpen = false;
     this._isInitialized = false;
     this._isDestroyed = true;

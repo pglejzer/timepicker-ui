@@ -31,18 +31,17 @@ export const setOrRemoveAttribute = (
   }
 };
 
-export const updateAriaPressed = (button: MaybeElement, pressed: boolean): void => {
-  if (button) setOrRemoveAttribute(button, 'aria-pressed', String(pressed));
-};
-
-const setPeriodPressed = (button: MaybeElement, pressed: boolean): void => {
-  setClass(button, 'active', pressed);
-  updateAriaPressed(button, pressed);
+const setPeriodChecked = (segment: MaybeElement, checked: boolean, focusable: boolean): void => {
+  if (!segment) return;
+  setClass(segment, 'active', checked);
+  setOrRemoveAttribute(segment, 'aria-checked', String(checked));
+  setOrRemoveAttribute(segment, 'tabindex', focusable ? '0' : '-1');
 };
 
 export const setActivePeriod = (am: MaybeElement, pm: MaybeElement, type?: string): void => {
-  setPeriodPressed(am, type === 'AM');
-  setPeriodPressed(pm, type === 'PM');
+  const isPm = type === 'PM';
+  setPeriodChecked(am, type === 'AM', !isPm);
+  setPeriodChecked(pm, isPm, isPm);
 };
 
 const CLOCK_SLIDER_ATTRIBUTES: ReadonlyArray<string> = [
@@ -62,16 +61,36 @@ export const syncClockSlider = (modal: Element | null | undefined): void => {
   CLOCK_SLIDER_ATTRIBUTES.forEach((name) => setOrRemoveAttribute(dial, name, field?.getAttribute(name)));
 };
 
+export const VALUE_TEXT_ATTRIBUTE = 'data-value-text';
+
+export const formatValueText = (template: string, value: number, count: number): string =>
+  template.replaceAll('{value}', String(value)).replaceAll('{count}', String(count));
+
+const valueCount = (input: HTMLInputElement): number =>
+  Number(input.getAttribute('aria-valuemax')) - Number(input.getAttribute('aria-valuemin')) + 1;
+
+const valueTextOf = (
+  input: HTMLInputElement,
+  modal: Element | null,
+  value: string,
+  valueNow: number,
+): string => {
+  const template = modal?.getAttribute(VALUE_TEXT_ATTRIBUTE);
+  const count = valueCount(input);
+  return template && Number.isFinite(count) ? formatValueText(template, valueNow, count) : value;
+};
+
 export const setSpinbuttonValue = (input: HTMLInputElement | null, value: string): void => {
   if (!input) return;
   input.value = value;
 
   const valueNow = parseInt(value, 10);
   const hasValue = !Number.isNaN(valueNow);
+  const modal = input.closest('.tp-ui-modal');
   setOrRemoveAttribute(input, 'aria-valuenow', hasValue && String(valueNow));
-  setOrRemoveAttribute(input, 'aria-valuetext', hasValue && value);
+  setOrRemoveAttribute(input, 'aria-valuetext', hasValue && valueTextOf(input, modal, value, valueNow));
 
-  syncClockSlider(input.closest('.tp-ui-modal'));
+  syncClockSlider(modal);
 };
 
 export const isElementDisabled = (el: Element): boolean =>
@@ -92,10 +111,7 @@ const needsKeyActivation = (el: Element): boolean =>
 
 export const isActivationKey = (key: string): boolean => key === 'Enter' || key === ' ';
 
-export const bindActivate = (
-  el: HTMLElement | null,
-  handler: (e: Event) => void,
-): (() => void) => {
+export const bindActivate = (el: HTMLElement | null, handler: (e: Event) => void): (() => void) => {
   if (!el) return () => {};
 
   const clickHandler = (e: Event): void => {
