@@ -8,8 +8,8 @@ Lint uses flat config (`app/eslint.config.js`) spreading `tseslint.configs.recom
 ### No Nested Ternaries
 `no-nested-ternary: error`. Refactor nested ternaries into if/else or extracted variables. Sources: config, docs.
 
-### `any` Permitted But Prefer Types
-`@typescript-eslint/no-explicit-any` is `off` — `any` will not fail lint, but prefer explicit types/interfaces where practical. `ban-ts-comment` is also off (`@ts-ignore`/`@ts-expect-error` allowed). Sources: config, docs.
+### No `any` (Owner Rule)
+`@typescript-eslint/no-explicit-any` is `off` in the ESLint config, but the owner forbids `any` everywhere: use `unknown`, generics or real types. `ban-ts-comment` is also off (`@ts-ignore`/`@ts-expect-error` allowed). Sources: config, owner.
 
 ### Unused Variables Are Errors (Ignore Rest Siblings)
 `@typescript-eslint/no-unused-vars: ['error', { vars: 'all', args: 'after-used', ignoreRestSiblings: true }]`. Rest-sibling destructuring used to omit props is allowed (`const { omit, ...rest } = obj`). Sources: config, docs.

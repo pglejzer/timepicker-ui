@@ -42,8 +42,9 @@ added. A file matches at most one row per table — the first matching row wins.
 | `app/docs/examples/api-demo.ts` | `@api` |
 | `app/docs/examples/seconds.ts`, `app/docs/partials/seconds.html` | `@seconds` |
 | `app/docs/**` (other: `index.*`, `setup.ts`, `basic.ts`, `style.css`, `theme-custom.css`) | `@smoke` |
-| `app/webpack.config.js` | `@smoke` (lib target) |
-| `app/package.json`, `app/tsup.config.ts`, `app/rollup.config.js`, `package.json` | `@smoke` (lib + docs targets) |
+| `app/vite.config.ts`, `app/vite-plugin-*.ts`, `app/tsconfig.node.json` | `@smoke` (lib target) |
+| `app/package.json`, `app/tsdown.config.ts`, `package.json` | `@smoke` (lib + docs targets) |
+| `app/webpack.config.js`, `app/tsup.config.ts`, `app/rollup.config.js`, `app/.babelrc`, `app/tailwind.config.js` (deleted by the 4.7.0 migration) | `@smoke` (lib + docs targets) |
 | `app/tests/**`, `**/*.md`, `.claude/**`, `docs/**`, `bench/**`, `mcp-server/**`, `.verify/**`, `.gitignore` | none (no browser impact) |
 
 **Style rule:** a tag selected because of a `styles/partials` file also runs its theme variants

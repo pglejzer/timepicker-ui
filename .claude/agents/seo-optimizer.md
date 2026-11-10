@@ -100,7 +100,7 @@ SEO/OG surface; when writing, use one of those icons (or no icon), never an emoj
   up and flag it for `core-architect` / `docs-site` instead of patching it.
 - docs-app commands (`npm run build`, `npm run lint`) run from `docs-app/` - by the main
   agent only, never by you (HARD RULES in `CLAUDE.md`). Its toolchain (Next 16, its own
-  ESLint) is independent of the library's tsup/rollup pipeline — do not apply library build
+  ESLint) is independent of the library's tsdown/sass pipeline — do not apply library build
   rules here.
 - Match `docs-app`'s own conventions: TypeScript, App Router, the existing component and
   import style (`@/` alias), and each file's existing line endings. Do not reformat files

@@ -9,7 +9,7 @@ Applies in `docs-app/` - the **separate** Next.js 16 documentation site (App Rou
 Vercel). It is NOT the library. Pairs with `.claude/rules/architecture.md`.
 
 - **Different project, different rules.** It has its own toolchain (`npm run dev` / `build` from
-  `docs-app/`, run only by the main agent); do not apply the library's tsup/rollup/lint rules here. Match docs-app's own
+  `docs-app/`, run only by the main agent); do not apply the library's tsdown/sass/lint rules here. Match docs-app's own
   conventions: TypeScript, App Router, its component/import style (`@/`), and **CRLF line
   endings** (every source file in `docs-app/` is CRLF; files created with Write come out LF; list them in your report and the main agent converts them).
 - **Never edit the library from here.** `docs-app/` consumes `timepicker-ui` as a dependency. If a

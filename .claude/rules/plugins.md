@@ -13,7 +13,7 @@ Applies to the range / timezone / wheel plugins + the registry. Pairs with
 - **Tree-shaking is sacred.** Core code must NEVER statically import a plugin, and cross-plugin
   imports are forbidden. A user who doesn't import a plugin must not pay for its code. Each
   plugin has its own build entry (`plugins/range`, `plugins/timezone`, `plugins/wheel`); a new
-  public entry must be added to tsup entries, the `.d.ts` job, and `package.json` `exports` in
+  public entry must be added to the tsdown configs, the `.d.ts` copy, and `package.json` `exports` in
   sync, and `sideEffects` kept accurate.
 - **The `Plugin` contract:** a plain object with `name`, `factory(core, emitter)`, optional
   `optionsExtender` / `templateProvider` / `clearHandler`. Register once at startup; access via

@@ -59,7 +59,7 @@ CRLF Line Endings (Windows), Single Quotes / Semicolons / Trailing Commas, Print
 Git Is the User's Responsibility, Batch Execution, and Pull Request Process.
 
 #### Linting (`standards/global/linting.md`)
-ESLint Flat Config + typescript-eslint Recommended, No Nested Ternaries, `any` Permitted But Prefer Types, Unused Variables Are Errors (Ignore Rest Siblings), and Pre-Commit Linting.
+ESLint Flat Config + typescript-eslint Recommended, No Nested Ternaries, No `any` (Owner Rule), Unused Variables Are Errors (Ignore Rest Siblings), and Pre-Commit Linting.
 
 #### Minimal Implementation (`standards/global/minimal-implementation.md`)
 Build what you need, clear purpose, delete exploration artifacts, no future stubs, no speculative abstractions, review before commit, and treating unused code as debt.

@@ -14,7 +14,7 @@ Ports: 8105 lib before, 8106 lib after, 3105 docs before, 3106 docs after, 8199 
 | Check | Tool | Command | Pass | On failure |
 |---|---|---|---|---|
 | Node ≥ 22 | Bash | `node -p "process.versions.node.split('.')[0]"` | `>= 22` | stop: "Switch to Node 22+ (e.g. `nvm use 22.20.0`)." |
-| app deps | Bash | `test -f app/node_modules/.bin/webpack && echo ok` | `ok` | stop: ask the user to run `npm install --legacy-peer-deps` in `app/` (agents never install packages). |
+| app deps | Bash | `test -f app/node_modules/.bin/vite && test -f app/node_modules/.bin/tsdown && echo ok` | `ok` | stop: ask the user to install the dependencies in `app/` (agents never install packages). |
 | docs deps (docs target only) | Bash | `test -d docs-app/node_modules/next && echo ok` | `ok` | drop the docs target; ask the user to run `npm install` in `docs-app/`. |
 | base ref | Bash | `git rev-parse --verify "<base>^{commit}"` | a sha | stop: "Unknown --base `<base>`." |
 | ports free | PowerShell | `@(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue \| Where-Object { $_.LocalPort -in 8105,8106,3105,3106,8199 } \| Select-Object LocalPort,OwningProcess)` | empty | stop, show ports + PIDs (likely a leftover `/verify`); offer §5 step 2, re-run preflight after the user agrees |
@@ -30,19 +30,32 @@ Unlink the junction (`cmd /c rmdir`) BEFORE any recursive delete under `.verify/
    ```bash
    git archive --format=tar "<base>" app docs-app package.json | tar -x -C .verify/work/before
    ```
-2. Link dependencies (PowerShell):
-   ```powershell
-   New-Item -ItemType Junction -Path .verify\work\before\app\node_modules -Target (Resolve-Path app\node_modules) | Out-Null
-   ```
-3. Before server (Bash, background) — skip with `--no-baseline`:
+2. Toolchain overlay (Bash). A base from before the Vite / tsdown migration (4.7.0) still has the
+   webpack / rollup / tsup configs, whose packages are no longer installed. When the extracted base
+   has no `vite.config.ts`, copy the working tree's configs into it and add the two demo entry
+   edits the migration made; on a newer base this prints `overlay: not needed`:
    ```bash
-   ROOT=$(git rev-parse --show-toplevel); cd "$ROOT/.verify/work/before/app" && npx webpack serve --port 8105 --no-open --output-path "$ROOT/.verify/work/out-before" > "$ROOT/.verify/logs/lib-before.log" 2>&1
+   node -e "const fs=require('fs'),p=require('path');const b='.verify/work/before/app';if(fs.existsSync(b+'/vite.config.ts')){console.log('overlay: not needed');process.exit(0)}for(const f of fs.readdirSync('app').filter(f=>/^(tsdown\.config\.ts|vite\.config\.ts|vite-plugin-.*\.ts|tsconfig\.node\.json)$/.test(f)))fs.copyFileSync(p.join('app',f),p.join(b,f));const h=b+'/docs/index.html';let html=fs.readFileSync(h,'utf8');if(!html.includes('src=\"./index.ts\"'))fs.writeFileSync(h,html.replace('</body>','  <script type=\"module\" src=\"./index.ts\"></script>\n  </body>'));const t=b+'/docs/index.ts';let ts=fs.readFileSync(t,'utf8');if(!ts.includes('styles/index.scss'))fs.writeFileSync(t,\"import '../src/styles/index.scss';\nimport './theme-custom.css';\n\"+ts);console.log('overlay: applied')"
    ```
-4. After server (Bash, background):
+3. Link dependencies (Bash; the PowerShell `New-Item -ItemType Junction` is blocked by the sandbox):
    ```bash
-   ROOT=$(git rev-parse --show-toplevel); cd "$ROOT/app" && npx webpack serve --port 8106 --no-open --output-path "$ROOT/.verify/work/out-after" > "$ROOT/.verify/logs/lib-after.log" 2>&1
+   cmd //c "mklink /J .verify\\work\\before\\app\\node_modules app\\node_modules" && test -f .verify/work/before/app/node_modules/.bin/vite && echo linked
    ```
-5. §3 for `http://localhost:8105/` (if started) and `http://localhost:8106/`. First compile ~45 s.
+4. Before server (Bash, background) — skip with `--no-baseline`. Through the junction both servers
+   would share `app/node_modules/.vite`, and each would rewrite the other's pre-bundled deps (504
+   "Outdated Optimize Dep"), so the before server gets its own `cacheDir` (inside the sandbox, so
+   Vite's `server.fs` allow list covers it) from a wrapper config. A base from before the demo
+   code blocks were removed (4.7.0) still imports `shiki`, which is no longer installed; the
+   wrapper then aliases it to a stub that renders an empty `<pre>`:
+   ```bash
+   ROOT=$(git rev-parse --show-toplevel); node "$ROOT/.claude/skills/verify/before-vite-config.mjs" "$ROOT/.verify/work/before/app" && cd "$ROOT/.verify/work/before/app" && BROWSER=none npx vite --config vite.verify.config.ts --port 8105 --strictPort > "$ROOT/.verify/logs/lib-before.log" 2>&1
+   ```
+5. After server (Bash, background):
+   ```bash
+   ROOT=$(git rev-parse --show-toplevel); cd "$ROOT/app" && BROWSER=none npx vite --port 8106 --strictPort > "$ROOT/.verify/logs/lib-after.log" 2>&1
+   ```
+6. §3 for `http://localhost:8105/` (if started) and `http://localhost:8106/`. Vite answers in a few
+   seconds; the first page load pre-bundles the demo deps, so give the first navigation ~20 s.
 
 ## §1a Helpers server (always, before any browser work)
 
@@ -65,12 +78,13 @@ job): each sandbox gets a copy of the user-installed `docs-app/node_modules`, an
 
 1. **Build the library** (Bash). After:
    ```bash
-   cd app && npx tsup > ../.verify/logs/build-after.log 2>&1 && npx rollup -c >> ../.verify/logs/build-after.log 2>&1
+   cd app && npm run build:js > ../.verify/logs/build-after.log 2>&1 && npm run build:css >> ../.verify/logs/build-after.log 2>&1
    ```
-   Before — only if `git diff --name-only <base> -- app/src app/package.json app/tsup.config.ts app/rollup.config.js package.json`
-   prints something (otherwise the after build serves both phases); needs §1 steps 1-2 first:
+   Before — only if `git diff --name-only <base> -- app/src app/package.json app/tsdown.config.ts package.json`
+   prints something (otherwise the after build serves both phases); needs §1 steps 1-3 first (the
+   base's own `package.json` scripts may still name the old tools, so call tsdown and sass directly):
    ```bash
-   cd .verify/work/before/app && npx tsup > ../../../logs/build-before.log 2>&1 && npx rollup -c >> ../../../logs/build-before.log 2>&1
+   cd .verify/work/before/app && node -e "require('fs').rmSync('../dist',{recursive:true,force:true})" && npx tsdown > ../../../logs/build-before.log 2>&1 && npx sass --no-source-map --style=compressed src/styles/index.scss:../dist/css/index.css src/styles/main.scss:../dist/css/main.css src/styles/themes:../dist/css/themes >> ../../../logs/build-before.log 2>&1
    ```
    A failing after build is a finding: report it, skip the docs target.
 2. **Pack and unpack** (Bash). After:
@@ -115,11 +129,12 @@ job): each sandbox gets a copy of the user-installed `docs-app/node_modules`, an
    `next/font/google` trust the Windows certificate store — without it the Geist font download
    fails with a TLS error behind the corporate proxy and every page answers 500:
    ```bash
-   ROOT=$(git rev-parse --show-toplevel); cd "$ROOT/.verify/docs-sandbox-before" && NEXT_TURBOPACK_EXPERIMENTAL_USE_SYSTEM_TLS_CERTS=1 npx next dev -p 3105 > "$ROOT/.verify/logs/docs-before.log" 2>&1
+   ROOT=$(git rev-parse --show-toplevel); cd "$ROOT/.verify/docs-sandbox-before" && NEXT_TURBOPACK_EXPERIMENTAL_USE_SYSTEM_TLS_CERTS=1 ./node_modules/.bin/next dev --port 3105 > "$ROOT/.verify/logs/docs-before.log" 2>&1
    ```
    ```bash
-   ROOT=$(git rev-parse --show-toplevel); cd "$ROOT/.verify/docs-sandbox-after" && NEXT_TURBOPACK_EXPERIMENTAL_USE_SYSTEM_TLS_CERTS=1 npx next dev -p 3106 > "$ROOT/.verify/logs/docs-after.log" 2>&1
+   ROOT=$(git rev-parse --show-toplevel); cd "$ROOT/.verify/docs-sandbox-after" && NEXT_TURBOPACK_EXPERIMENTAL_USE_SYSTEM_TLS_CERTS=1 ./node_modules/.bin/next dev --port 3106 > "$ROOT/.verify/logs/docs-after.log" 2>&1
    ```
+   (`--port`, not `-p`: the guard hook blocks `npx … -p`.)
    Then §3 for `http://localhost:3105/` and `http://localhost:3106/` (the first request compiles
    `/`, ~20-30 s). A log full of "TLS-related" errors means the variable did not apply.
 
@@ -157,5 +172,5 @@ Bash: `date +%Y%m%d-%H%M%S` → `<RUN_ID>` (SUMMARY.md header).
 
 1. §5.
 2. PowerShell: `if (Test-Path .verify\work\before\app\node_modules) { cmd /c rmdir .verify\work\before\app\node_modules }`
-3. Bash: `test -f app/node_modules/.bin/webpack && rm -rf .verify && echo cleaned`
+3. Bash: `test -f app/node_modules/.bin/vite && rm -rf .verify && echo cleaned`
    (if `app/node_modules` is already missing, stop and tell the user instead of deleting).

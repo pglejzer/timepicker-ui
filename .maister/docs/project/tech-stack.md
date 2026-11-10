@@ -9,7 +9,7 @@ This document describes the technology choices and rationale for `timepicker-ui`
 ### TypeScript (5.8.3)
 - **Usage**: Primary language — ~101 source files in `app/src/`
 - **Rationale**: Strict static typing for a public library API, fully typed options groups and event map, generated `.d.ts` declarations for consumers.
-- **Key Features Used**: strict mode, `EventEmitter<TimepickerEventMap>` typed bus, grouped option interfaces, `@/` path alias to `app/src/`. `@typescript-eslint/no-explicit-any` is intentionally off — `any` is permitted but typed code is preferred.
+- **Key Features Used**: strict mode, `EventEmitter<TimepickerEventMap>` typed bus, grouped option interfaces, `@/` path alias to `app/src/`. `@typescript-eslint/no-explicit-any` is off in ESLint, but the owner forbids `any`: use `unknown`, generics or real types.
 
 ### SCSS
 - **Usage**: core stylesheets plus 11 theme files in `app/src/styles/` (12 themes; basic lives in the core tokens)
@@ -17,7 +17,7 @@ This document describes the technology choices and rationale for `timepicker-ui`
 - **Key Features Used**: `variables.scss` tokens, `partials/`; `tp-ui-` class prefix; standalone per-theme output.
 
 ### JavaScript
-- **Usage**: Build configuration (`rollup.config.js`, `webpack.config.js`) and emitted ESM/CJS bundles.
+- **Usage**: Build configuration (`tsdown.config.ts`, `vite.config.ts`) and emitted ESM/CJS bundles.
 
 ## Frameworks
 
@@ -39,14 +39,13 @@ Not applicable — `timepicker-ui` has no persistence layer.
 ## Build Tools & Package Management
 
 - **Package manager**: npm (`package-lock.json`).
-- **tsup** — compiles TypeScript to ESM (`.js`) + CJS (`.cjs`), minified, target ES2022. Four entry points: `index`, `plugins/range`, `plugins/timezone`, `plugins/wheel`. Output to `../dist/`. SVGs loaded as text.
-- **rollup** — two jobs: SCSS → CSS (`dist/css/`, core + theme files) via Sass/PostCSS, and TypeScript → `.d.ts` bundles via `rollup-plugin-dts`.
-- **webpack** — local dev server only (`npm run start`); not part of the production build.
-- **Sass 1.89.2**, **PostCSS 8.5.6**, **Autoprefixer 10.4.21** — CSS compilation pipeline.
-- **Babel** (`@babel/core`, `@babel/preset-env`) — supporting transpilation.
+- **tsdown** — compiles TypeScript to ESM (`.js`), CJS (`.cjs`) and UMD (`.umd.js`), minified, target ES2022, plus the core `index.d.ts`. One config per entry (`index`, `plugins/range`, `plugins/timezone`, `plugins/wheel`) so plugin bundles stay standalone. Plugin `.d.ts` files are copied from `src/plugins/`. Output to `../dist/`. SVGs loaded as text.
+- **sass CLI** — SCSS → CSS (`dist/css/`, core + theme files).
+- **Vite** — demo dev server (`npm run start`) and `build:demo`; not part of the production build.
+- **Sass 1.89.2** — CSS compiler.
 
 ### Production build flow
-`npm run build:prod` → eslint → tsup (JS) → rollup (CSS + `.d.ts`).
+`npm run build:prod` → eslint → `build:js` (tsdown) → `build:css` (sass).
 
 ## Infrastructure
 
@@ -67,12 +66,12 @@ None detected.
 - **Prettier 3.6.2** — `singleQuote`, `semi`, `trailingComma: all`, `printWidth: 110`, `endOfLine: crlf`.
 
 ### Type Checking
-- **TypeScript** — `tsconfig.json` (dev), `tsconfig.prod.json` (used by tsup), `tsconfig.test.json` (tests). Strict mode, declarations emitted for the published package.
+- **TypeScript** — `tsconfig.json` (dev), `tsconfig.prod.json` (used by tsdown), `tsconfig.test.json` (tests). Strict mode, declarations emitted for the published package.
 
 ## Key Dependencies
 
 - **Runtime dependencies**: none (zero-dependency by design — a core constraint, not an accident).
-- **Dev dependencies** (major): typescript, tsup, rollup + rollup-plugin-dts, webpack, sass, postcss/autoprefixer, jest + ts-jest, @testing-library/*, eslint + typescript-eslint, prettier, husky, lint-staged.
+- **Dev dependencies** (major): typescript, tsdown, vite, sass, jest + ts-jest, @testing-library/*, eslint + typescript-eslint, prettier, husky, lint-staged.
 
 ## Version Management
 
