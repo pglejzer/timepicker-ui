@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
+import styles from "@/components/companion-demos.module.css";
 
 export default function WheelPluginPage() {
   return (
@@ -165,6 +167,29 @@ picker.create();`}
         />
       </Section>
 
+      <Section title="Three Visible Rows">
+        <p>
+          <code>--tp-wheel-visible-items</code> sets how many rows each column
+          shows. Use an odd number: 3, 5 (the default) or 7. New in 4.7.0.
+        </p>
+        <div className={styles.threeRows}>
+          <TimepickerExample
+            code={`.tp-ui-wrapper.my-picker {
+  --tp-wheel-visible-items: 3;
+}
+
+const picker = new TimepickerUI(input, {
+  ui: { mode: 'wheel', cssClass: 'my-picker' }
+});
+picker.create();`}
+            options={{
+              ui: { mode: "wheel", cssClass: "docs-three-rows" },
+            }}
+            plugins={["wheel"]}
+          />
+        </div>
+      </Section>
+
       <Section title="Auto-Commit on Scroll">
         <p>
           Writes the time to the input and emits confirm when scrolling
@@ -221,6 +246,14 @@ picker.create();`}
           plugins={["wheel"]}
           inputPlaceholder="Click outside won't close"
         />
+      </Section>
+
+      <Section title="Range in Wheel Modes">
+        <p>
+          The range plugin works in <code>wheel</code> and{" "}
+          <code>compact-wheel</code> too. See the{" "}
+          <Link href="/examples/plugins/range">range examples</Link>.
+        </p>
       </Section>
     </div>
   );

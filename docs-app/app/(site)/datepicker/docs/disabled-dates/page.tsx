@@ -11,7 +11,7 @@ const FUTURE_WEEKDAYS: DatepickerOptions = {
   calendar: { minDate: "today", disabledWeekdays: [0, 6] },
 };
 
-const FUTURE_WEEKDAYS_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const FUTURE_WEEKDAYS_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

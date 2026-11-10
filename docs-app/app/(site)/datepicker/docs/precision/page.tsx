@@ -9,21 +9,21 @@ const MONTH: DatepickerOptions = { calendar: { precision: "month" } };
 const YEAR: DatepickerOptions = { calendar: { precision: "year" } };
 const START_VIEW: DatepickerOptions = { ui: { startView: "year" } };
 
-const MONTH_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const MONTH_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#month", {
   calendar: { precision: "month" },
 }).create();`;
 
-const YEAR_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const YEAR_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#year", {
   calendar: { precision: "year" },
 }).create();`;
 
-const START_VIEW_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const START_VIEW_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#birthday", {

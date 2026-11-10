@@ -147,7 +147,8 @@ export default async function HomePage() {
             <p className={styles.text}>
               Every feature has an option and a page in the docs. Options are grouped by what they change:{" "}
               <code>clock</code>, <code>ui</code>, <code>labels</code>, <code>behavior</code>,{" "}
-              <code>callbacks</code>.
+              <code>callbacks</code>. <Link href="/docs/api/options">All options</Link> are listed in the API
+              reference.
             </p>
           </div>
           <ApiTable
@@ -161,8 +162,7 @@ export default async function HomePage() {
             rowKey="no"
             caption={
               <>
-                <strong>Table 1</strong> Features and the options that control them.{" "}
-                <Link href="/docs/api/options">All options</Link>
+                <strong>Table 1</strong> Features and the options that control them.
               </>
             }
           />

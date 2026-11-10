@@ -5,6 +5,8 @@ import { PageHeader } from "@/components/page-header";
 import { CodeBlock } from "@/components/code-block";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
 import type { TimepickerEventData } from "@/components/examples/types";
+import { Figure } from "@/components/figure";
+import { RangeStartOnlyDemo } from "@/components/view-and-range-demos";
 
 export default function EventsPage() {
   return (
@@ -118,6 +120,23 @@ picker.create();`}
             },
           }}
         />
+      </Section>
+
+      <Section title="Range Change Log">
+        <p>
+          <code>range:change</code> fires when the user changes the time of a
+          range end. It carries the end that changed and both ends after the
+          change. Open the picker and pick a time to fill the log.{" "}
+          <code>setRange()</code> and the other API calls do not emit it. New
+          in 4.7.0.
+        </p>
+        <Figure
+          code={`picker.on('range:change', ({ part, from, to }) => {
+  console.log('changed:', part, 'from:', from, 'to:', to);
+});`}
+        >
+          <RangeStartOnlyDemo />
+        </Figure>
       </Section>
 
       <Section title="Legacy DOM Events (Removed in v4.0.0)">

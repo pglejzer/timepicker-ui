@@ -98,6 +98,67 @@ export default function CssVariablesPage() {
         </p>
       </Section>
 
+      <Section title="Sizes and Surfaces (4.7.0)">
+        <p>
+          These variables change sizes and the card surface. Set them on{" "}
+          <code>.tp-ui-wrapper</code> or <code>:root</code> like the others.
+        </p>
+        <ul>
+          <li>
+            <code>--tp-wheel-visible-items</code> sets how many rows the wheel
+            shows. Use an odd number: <code>3</code>, <code>5</code> (the
+            default) or <code>7</code>, so the selected row stays in the
+            middle.
+          </li>
+          <li>
+            <code>--tp-size-input</code>, <code>--tp-size-input-mobile</code>,{" "}
+            <code>--tp-size-input-height</code> and{" "}
+            <code>--tp-size-colon-height</code> set the width and height of the
+            time fields and the height of the colon between them.{" "}
+            <code>--tp-time-input-font-size</code> sets the number size in the
+            fields and <code>--tp-time-colon-gap</code> the gap around the
+            colon.
+          </li>
+          <li>
+            <code>--tp-embedded-bg</code>, <code>--tp-embedded-radius</code>{" "}
+            and <code>--tp-embedded-backdrop-filter</code> style the card of an
+            embedded inline picker (<code>ui.inline.embedded</code>). They fall
+            back to <code>--tp-bg</code>, <code>--tp-radius-md</code> and{" "}
+            <code>--tp-backdrop-filter</code>.
+          </li>
+          <li>
+            <code>--tp-size-hand-circle</code> sets the diameter of the circle
+            at the end of the clock hand. The hand length follows it, so the
+            circle stays centred on the hour numbers.
+          </li>
+        </ul>
+        <h3>Compact keyboard view</h3>
+        <CodeBlock
+          code={`.tp-ui-wrapper {
+  --tp-size-input: 72px;
+  --tp-size-input-mobile: 56px;
+  --tp-time-input-font-size: 36px;
+}`}
+          language="css"
+        />
+        <h3>48 px AM / PM buttons</h3>
+        <CodeBlock
+          code={`.tp-ui-wrapper {
+  --tp-size-input-height: 96px;
+  --tp-size-am-pm-height: 48px;
+  --tp-size-am-pm-height-landscape: 48px;
+}`}
+          language="css"
+        />
+        <h3>Material 3 hand circle</h3>
+        <CodeBlock
+          code={`.tp-ui-wrapper {
+  --tp-size-hand-circle: 48px;
+}`}
+          language="css"
+        />
+      </Section>
+
       <Section title="Reading the Table">
         <p>
           <strong>Default</strong> is the value in <code>main.css</code>, which the{" "}

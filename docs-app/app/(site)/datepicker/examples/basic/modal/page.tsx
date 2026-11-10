@@ -10,14 +10,25 @@ const MODAL_INPUT: DatepickerOptions = {
   ui: { displayMode: "modal", initialView: "input" },
 };
 
-const MODAL_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const MODAL_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   ui: { displayMode: "modal" },
 }).create();`;
 
-const INPUT_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const MODAL_DOCKED: DatepickerOptions = {
+  ui: { displayMode: "modal", layout: "docked" },
+};
+
+const DOCKED_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
+import "@pglejzer/datepicker-ui/index.css";
+
+new DatepickerUI("#date", {
+  ui: { displayMode: "modal", layout: "docked" },
+}).create();`;
+
+const INPUT_CODE =`import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -39,6 +50,14 @@ export default function DatepickerModalExamplePage() {
           one month.
         </p>
         <DatepickerExample label="Modal" options={MODAL} code={MODAL_CODE} />
+      </Section>
+
+      <Section title="Docked look in a dialog">
+        <p>
+          <code>ui.layout: &quot;docked&quot;</code> gives the dialog the docked header with the month and year
+          menus instead of the modal headline and grids. The dialog and its backdrop stay.
+        </p>
+        <DatepickerExample label="Docked look" options={MODAL_DOCKED} code={DOCKED_CODE} />
       </Section>
 
       <Section title="Start on the text input view">

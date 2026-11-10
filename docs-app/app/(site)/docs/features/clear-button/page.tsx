@@ -130,6 +130,27 @@ picker.create();`}
         />
       </Section>
 
+      <Section title="Clear from code">
+        <p>
+          <code>picker.clear()</code> does what the button does: it empties the
+          input (unless <code>clearInput</code> is <code>false</code>), returns
+          the clock or wheel to its neutral time and empties both range ends.
+          It works open or closed, and with the button hidden. It emits{" "}
+          <code>clear</code> and <code>update</code> like the button, makes no
+          screen reader announcement because your code started it, and never
+          moves focus. New in 4.7.0.
+        </p>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input);
+picker.create();
+
+resetButton.addEventListener('click', () => {
+  picker.clear();
+});`}
+          language="typescript"
+        />
+      </Section>
+
       <Section title="Behavior Details">
         <ul>
           <li>Clock hands reset to the 12:00 (neutral) position</li>
@@ -139,7 +160,8 @@ picker.create();`}
           <li>Clear button auto-disables when no time is selected</li>
           <li>
             Screen reader announces &quot;Time cleared&quot; (
-            <code>labels.announceCleared</code>) for accessibility
+            <code>labels.announceCleared</code>) after a click on the button,
+            but not after <code>clear()</code>
           </li>
         </ul>
       </Section>

@@ -14,7 +14,7 @@ const faqQuestions = [
   {
     question: "Can I use timepicker-ui from a CDN?",
     answer:
-      "Yes. Link dist/css/main.css and the UMD bundle from jsDelivr, then use the global TimepickerUI class for quick prototypes.",
+      "Yes. Link dist/css/main.css and the UMD bundle from jsDelivr, then use the global TimepickerUI class for quick prototypes. Plugins load as separate UMD files and register with TimepickerUI.PluginRegistry.register(...).",
   },
 ];
 

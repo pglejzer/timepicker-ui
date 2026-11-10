@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useId, useRef, useState } from "react";
-import type DatepickerUI from "@pglejzer/datepicker-ui";
+import type { DatepickerUI } from "@pglejzer/datepicker-ui";
 import type { DatepickerEventMap, DatepickerOptions } from "@pglejzer/datepicker-ui";
 import { Callout } from "@/components/callout";
 import { CodeBlock } from "@/components/code-block";
@@ -44,7 +44,7 @@ function summarize(data: unknown): string {
   return text.length > DATA_LIMIT ? `${text.slice(0, DATA_LIMIT)}...` : text;
 }
 
-const CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const picker = new DatepickerUI("#date", {
@@ -56,6 +56,7 @@ const events = [
   "open", "close", "cancel", "confirm", "update", "error",
   "select:day", "select:month", "select:year",
   "range:start", "range:end", "navigate",
+  "switch:view", "clear",
 ];
 
 const offs = events.map((name) =>
@@ -68,7 +69,8 @@ const CALLBACKS_CODE = `new DatepickerUI("#date", {
   callbacks: {
     onConfirm: ({ value }) => console.log(value),
     onSelectDay: ({ value, selected }) => console.log(value.value, selected),
-    onNavigate: ({ year, month }) => console.log(year, month),
+    onNavigate: ({ year, month, source }) => console.log(year, month, source),
+    onClear: ({ previousValue }) => console.log(previousValue),
   },
 }).create();`;
 
@@ -111,8 +113,15 @@ export default function EventsExamplePage() {
       <Section title="Event log">
         <p>
           <code>picker.on(event, handler)</code> subscribes and returns a function that unsubscribes. The demo
-          subscribes to all twelve events. Open the picker, pick a day, move between months and open the month and
-          year menus. The log keeps the last {LOG_LIMIT} events, newest first.
+          subscribes to every event. Open the picker, pick a day, move between months and open the month and year
+          menus. The log keeps the last {LOG_LIMIT} events, newest first.
+        </p>
+        <p>
+          <code>navigate</code> also fires when the picker opens, with <code>source: &quot;open&quot;</code>, and
+          after <code>setValue()</code>, <code>setOptions()</code> and <code>goTo()</code>, with{" "}
+          <code>source: &quot;api&quot;</code>. The Clear button emits <code>clear</code> when there is a value or a
+          picked day to clear. <code>switch:view</code> fires when the picker switches between the calendar and the
+          text fields, which a single picker can do in the modal.
         </p>
         <Figure
           label="Event log"
@@ -157,7 +166,7 @@ export default function EventsExamplePage() {
         <CodeBlock code={CALLBACKS_CODE} language="typescript" />
         <Callout>
           <code>setValue()</code> does not emit <code>confirm</code>. <code>setOptions()</code> emits{" "}
-          <code>update</code>.
+          <code>update</code>. <code>clear()</code> emits <code>clear</code>, not <code>confirm</code>.
         </Callout>
       </Section>
     </div>

@@ -69,11 +69,31 @@ pnpm add timepicker-ui`}
           For quick prototyping, use the CDN version:
         </p>
         <CodeBlock
-          code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker-ui@4.6.0/dist/css/main.css">
-<script src="https://cdn.jsdelivr.net/npm/timepicker-ui@4.6.0/dist/index.umd.js"></script>
+          code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker-ui@4.7.0/dist/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/timepicker-ui@4.7.0/dist/index.umd.js"></script>
 <script>
   // The UMD build exposes the class as the global TimepickerUI
   const picker = new TimepickerUI('#timepicker');
+  picker.create();
+</script>`}
+          language="html"
+        />
+        <p>
+          Plugins load as separate UMD files after the core script. Each one
+          sets its own global: <code>TimepickerUIRange</code> exposes{" "}
+          <code>RangePlugin</code>, <code>TimepickerUITimezone</code> exposes{" "}
+          <code>TimezonePlugin</code> and <code>TimepickerUIWheel</code> exposes{" "}
+          <code>WheelPlugin</code>. Register them once with{" "}
+          <code>TimepickerUI.PluginRegistry.register()</code> before creating a
+          picker, then turn the feature on in the options.
+        </p>
+        <CodeBlock
+          code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker-ui@4.7.0/dist/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/timepicker-ui@4.7.0/dist/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/timepicker-ui@4.7.0/dist/plugins/range.umd.js"></script>
+<script>
+  TimepickerUI.PluginRegistry.register(TimepickerUIRange.RangePlugin);
+  const picker = new TimepickerUI('#timepicker', { range: { enabled: true } });
   picker.create();
 </script>`}
           language="html"

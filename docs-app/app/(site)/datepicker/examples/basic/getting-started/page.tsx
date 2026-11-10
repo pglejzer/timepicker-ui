@@ -10,12 +10,21 @@ import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { useDatepicker } from "@/lib/use-datepicker";
 
-const DEFAULT_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const DEFAULT_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date").create();`;
 
-const CONFIRM_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const DEFAULT_VALUE: DatepickerOptions = { calendar: { defaultValue: "today" } };
+
+const DEFAULT_VALUE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
+import "@pglejzer/datepicker-ui/index.css";
+
+new DatepickerUI("#date", {
+  calendar: { defaultValue: "today" },
+}).create();`;
+
+const CONFIRM_CODE =`import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const output = document.querySelector("#confirmed");
@@ -74,7 +83,7 @@ export default function DatepickerGettingStartedExamplePage() {
     <div>
       <PageHeader
         title="Getting Started"
-        description="Two small date picker examples built with @pglejzer/datepicker-ui, the companion of timepicker-ui."
+        description="Small date picker examples built with @pglejzer/datepicker-ui, the companion of timepicker-ui."
       />
 
       <Section title="Default picker">
@@ -84,6 +93,15 @@ export default function DatepickerGettingStartedExamplePage() {
           popover, or as a modal on small windows.
         </p>
         <DatepickerExample label="Default" code={DEFAULT_CODE} />
+      </Section>
+
+      <Section title="Start with a value">
+        <p>
+          <code>calendar.defaultValue</code> sets the starting value of an empty input, in the same shape as{" "}
+          <code>setValue()</code>. Any date can be <code>&quot;today&quot;</code>, which the browser resolves when{" "}
+          <code>create()</code> runs. Text already in the input wins, and a form reset restores the value.
+        </p>
+        <DatepickerExample label="Default value" options={DEFAULT_VALUE} code={DEFAULT_VALUE_CODE} />
       </Section>
 
       <Section title="Read the confirmed value">

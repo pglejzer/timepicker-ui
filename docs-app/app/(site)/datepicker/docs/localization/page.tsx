@@ -9,7 +9,7 @@ import { Section } from "@/components/section";
 const GERMAN: DatepickerOptions = { calendar: { locale: "de-DE" }, labels: { title: "Datum wählen", confirm: "OK", cancel: "Abbrechen" } };
 const ARABIC: DatepickerOptions = { calendar: { locale: "ar-EG" } };
 
-const GERMAN_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const GERMAN_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -19,7 +19,7 @@ new DatepickerUI("#date", {
 
 const ARABIC_CODE = `<input id="date" dir="rtl" />
 
-import DatepickerUI from "@pglejzer/datepicker-ui";
+import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

@@ -26,14 +26,14 @@ const ENABLED: DatepickerOptions = {
   calendar: { enabledDates: [dayFromToday(2), dayFromToday(4), dayFromToday(6)] },
 };
 
-const WEEKDAYS_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const WEEKDAYS_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   calendar: { disabledWeekdays: [0, 6] },
 }).create();`;
 
-const LIST_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const LIST_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const dayFromToday = (offset) => {
@@ -48,7 +48,7 @@ new DatepickerUI("#date", {
   },
 }).create();`;
 
-const RULE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const RULE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -57,7 +57,7 @@ new DatepickerUI("#date", {
   },
 }).create();`;
 
-const ENABLED_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const ENABLED_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const dayFromToday = (offset) => {

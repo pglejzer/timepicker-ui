@@ -20,14 +20,14 @@ const VALIDATE: DatepickerOptions = {
   },
 };
 
-const FORMAT_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const FORMAT_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   ui: { format: "dd.MM.yyyy", mask: true },
 }).create();`;
 
-const VALIDATE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const VALIDATE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -119,7 +119,10 @@ export default function TypedInputPage() {
         <p>
           <code>ui.mask</code> formats digits as the user types, in single mode and in the two range fields, at day
           precision only. Typing <code>14032025</code> gives <code>14.03.2025</code> with the pattern below. A
-          separator typed after one digit pads the group with a zero.
+          separator typed after one digit pads the group with a zero. A separator after the last group is dropped
+          and pads nothing, so <code>21.10.26.</code> gives <code>21.10.26</code>, not <code>21.10.0026</code>. The
+          text fields of the picker&apos;s input view (the pencil button) are always masked, with or without{" "}
+          <code>ui.mask</code>.
         </p>
         <DatepickerExample label="Format and mask" options={FORMAT} code={FORMAT_CODE} />
       </Section>

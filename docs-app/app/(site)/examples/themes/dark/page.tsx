@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
@@ -11,6 +12,13 @@ export default function DarkThemePage() {
         title="Dark Theme"
         description="Dark mode theme for reduced eye strain"
       />
+
+      <p>
+        Since 4.7.0 the <code>dark</code> theme follows the Material 3 baseline
+        dark palette. See the{" "}
+        <Link href="/docs/features/themes">Themes page</Link> for the old
+        values.
+      </p>
 
       <Section title="Dark Theme">
         <p>

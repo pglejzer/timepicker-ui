@@ -270,8 +270,9 @@ export default function MigrationGuideV5Page() {
             new API is not designed yet. Details will be added here before
             5.0. These exports from <code>timepicker-ui</code> change:{" "}
             <code>PluginRegistry</code>, <code>Plugin</code>,{" "}
-            <code>PluginManager</code>, <code>PluginFactory</code>,{" "}
-            <code>TemplateProvider</code>, <code>ClearHandler</code>,{" "}
+            <code>PluginManager</code>, <code>PluginTimeView</code>,{" "}
+            <code>PluginFactory</code>, <code>TemplateProvider</code>,{" "}
+            <code>ClearHandler</code>,{" "}
             <code>CoreState</code> and <code>EventEmitter</code>. The
             built-in plugins stay: range, timezone and wheel.
           </li>
@@ -282,12 +283,6 @@ export default function MigrationGuideV5Page() {
             <code>./plugins/*</code> wildcard in the <code>exports</code>{" "}
             field of <code>package.json</code> is removed. These three
             entries stay.
-          </li>
-          <li>
-            The plugins no longer ship UMD builds. The UMD core never
-            exposed <code>PluginRegistry</code>, so a plugin loaded from a{" "}
-            <code>&lt;script&gt;</code> tag could not be registered. The
-            core UMD build stays.
           </li>
         </ul>
 

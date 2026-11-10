@@ -13,7 +13,7 @@ const HTML_CODE = `<label for="trip-start">Check-in</label>
 <label for="trip-end">Check-out</label>
 <input id="trip-end" />`;
 
-const CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#trip-start", {

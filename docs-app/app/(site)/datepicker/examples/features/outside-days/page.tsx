@@ -7,14 +7,14 @@ const SELECTABLE: DatepickerOptions = { ui: { outsideDays: true } };
 
 const INERT: DatepickerOptions = { ui: { outsideDays: { selectable: false }, fixedWeeks: true } };
 
-const SELECTABLE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const SELECTABLE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   ui: { outsideDays: true },
 }).create();`;
 
-const INERT_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const INERT_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

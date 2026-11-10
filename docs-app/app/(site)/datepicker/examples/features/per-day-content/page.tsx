@@ -14,7 +14,7 @@ function price(date: Date): string | null {
 
 const RANGE: DatepickerOptions = { calendar: { mode: "range", renderDate: price } };
 
-const SINGLE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const SINGLE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const price = (date) =>
@@ -35,7 +35,7 @@ new DatepickerUI("#date", {
   },
 }).create();`;
 
-const RANGE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const RANGE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const price = (date) =>

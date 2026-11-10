@@ -11,21 +11,21 @@ const DOCKED: DatepickerOptions = { ui: { displayMode: "docked" } };
 const MODAL: DatepickerOptions = { ui: { displayMode: "modal" } };
 const INLINE: DatepickerOptions = { ui: { inline: { enabled: true } }, behavior: { commitOnChange: true } };
 
-const DOCKED_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const DOCKED_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   ui: { displayMode: "docked" },
 }).create();`;
 
-const MODAL_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const MODAL_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   ui: { displayMode: "modal" },
 }).create();`;
 
-const INLINE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const INLINE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -52,13 +52,66 @@ const TOGGLE_JS = `new DatepickerUI("#date", {
   ui: { toggleButton: "#open" },
 }).create();`;
 
-const TOGGLE_FIELD_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const TOGGLE_FIELD_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 ${TOGGLE_JS}`;
 
+const INLINE_LAYOUT_CODE = `new DatepickerUI("#date", {
+  ui: {
+    layout: "modal",
+    inline: {
+      enabled: true,
+      container: "#calendar",
+      headline: false,
+      navigation: "caption",
+    },
+  },
+  behavior: { commitOnChange: true },
+}).create();`;
+
+const DOCKED_DIALOG: DatepickerOptions = { ui: { displayMode: "modal", layout: "docked" } };
+
+const DOCKED_DIALOG_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
+import "@pglejzer/datepicker-ui/index.css";
+
+new DatepickerUI("#date", {
+  ui: { displayMode: "modal", layout: "docked" },
+}).create();`;
+
+const LAYOUTS = [
+  {
+    value: "auto",
+    docked: "Docked.",
+    modal: "Modal. A range picker below ui.fullscreen opens full screen.",
+    inline: "Docked.",
+  },
+  {
+    value: "docked",
+    docked: "Docked.",
+    modal: "Docked, with the month and year menus in the dialog.",
+    inline: "Docked.",
+  },
+  {
+    value: "modal",
+    docked: "Modal.",
+    modal: "Modal. A range picker below ui.fullscreen opens full screen.",
+    inline: "Modal.",
+  },
+  {
+    value: "fullscreen",
+    docked: "Modal.",
+    modal: "A range picker opens full screen at every width. Other modes are modal.",
+    inline: "A range picker gets the full-screen layout sized to the container. Other modes are modal.",
+  },
+];
+
 const MODES = [
-  { value: "auto", surface: "Modal dialog when the viewport is below 600 px wide or 480 px tall, docked otherwise." },
+  {
+    value: "auto",
+    surface:
+      "Modal dialog when the viewport is below 600 px wide or 480 px tall, docked otherwise. A docked picker that fits neither below nor above the field, at its current position on the page, opens as a dialog instead.",
+  },
   { value: "docked", surface: "Popover next to the input." },
   { value: "modal", surface: "Dialog with a backdrop." },
 ];
@@ -127,6 +180,58 @@ export default function DisplayModesPage() {
         </Callout>
       </Section>
 
+      <Section title="Layouts">
+        <p>
+          <code>ui.layout</code> sets the look of the calendar on any surface. The default is{" "}
+          <code>&quot;auto&quot;</code>, which gives each surface its own look. The table shows the look per
+          surface.
+        </p>
+        <ApiTable
+          rowKey="value"
+          columns={[
+            { key: "value", label: "ui.layout", mono: true },
+            { key: "docked", label: "Docked" },
+            { key: "modal", label: "Modal" },
+            { key: "inline", label: "Inline" },
+          ]}
+          rows={LAYOUTS.map((layout) => ({
+            value: <code>&quot;{layout.value}&quot;</code>,
+            docked: layout.docked,
+            modal: layout.modal,
+            inline: layout.inline,
+          }))}
+        />
+        <p>
+          The docked look has the month and year menus and is the only one that shows several months or a presets
+          column. The modal look has the headline, a month row with arrows on every page, and month and year grids
+          instead of menus. An inline calendar with the modal look follows <code>ui.fixedWeeks</code>. A single
+          picker with the modal look has the input view at day precision.
+        </p>
+        <p>
+          To open a dialog with the docked month and year menus, set <code>layout</code> next to{" "}
+          <code>displayMode</code>:
+        </p>
+        <DatepickerExample label="Dialog with the docked look" options={DOCKED_DIALOG} code={DOCKED_DIALOG_CODE} />
+        <p>Three more options change what an inline calendar shows and announces:</p>
+        <ul>
+          <li>
+            <code>ui.inline.headline: false</code> leaves out the headline, for a page that shows its own: the modal
+            title, the selected value and the view switch, or the range header. The full-screen top bar keeps its
+            close and save buttons.
+          </li>
+          <li>
+            <code>ui.inline.navigation: &quot;caption&quot;</code> shows the month and year as text next to the
+            arrows, with no month or year menus. It works at day precision only. The calendar then opens on the day
+            grid, and Shift+M and Shift+Y do nothing.
+          </li>
+          <li>
+            <code>ui.inline.announceSelection: false</code> stops selection announcements, for a page that
+            announces them itself. Month changes and errors are still announced.
+          </li>
+        </ul>
+        <CodeBlock code={INLINE_LAYOUT_CODE} language="typescript" />
+      </Section>
+
       <Section title="Full screen range picker">
         <p>
           A range picker in a modal opens full screen below <code>ui.fullscreen</code>. <code>true</code> means
@@ -149,6 +254,8 @@ export default function DisplayModesPage() {
           <code>ui.toggleButton</code> adds an extra element that opens the picker, such as a calendar icon button.
           When it is not a <code>&lt;button&gt;</code>, Enter and Space open the picker. The picker sets{" "}
           <code>aria-expanded</code> on it and gives it an accessible name from <code>labels.openCalendar</code>.
+          Clicking it while a docked picker is open closes the picker without committing and emits{" "}
+          <code>cancel</code> with <code>reason: &quot;toggle&quot;</code>.
         </p>
         <CodeBlock code={TOGGLE_CODE} language="html" />
         <DatepickerExample

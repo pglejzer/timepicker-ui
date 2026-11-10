@@ -189,7 +189,6 @@ export const CONTROL_GROUPS: ControlGroup[] = [
         key: "range",
         label: "Range (from and to)",
         option: "range.enabled",
-        showIf: (s) => s.mode === "clock",
       },
       {
         kind: "number",

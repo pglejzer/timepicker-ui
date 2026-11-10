@@ -20,7 +20,7 @@ const CODE = `<form id="booking">
 </form>
 
 <script type="module">
-  import DatepickerUI from "@pglejzer/datepicker-ui";
+  import { DatepickerUI } from "@pglejzer/datepicker-ui";
   import "@pglejzer/datepicker-ui/index.css";
 
   new DatepickerUI("#checkin", { ui: { format: "dd.MM.yyyy" } }).create();
@@ -35,7 +35,7 @@ const RANGE_CODE = `<input id="start" name="checkin" />
 <input id="end" name="checkout" />
 
 <script type="module">
-  import DatepickerUI from "@pglejzer/datepicker-ui";
+  import { DatepickerUI } from "@pglejzer/datepicker-ui";
   import "@pglejzer/datepicker-ui/index.css";
 
   new DatepickerUI("#start", {

@@ -3,6 +3,8 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
+import { Figure } from "@/components/figure";
+import { ViewSwitchDemo } from "@/components/view-and-range-demos";
 
 export default function SwitchIconPage() {
   return (
@@ -52,6 +54,31 @@ picker.create();`}
             },
           }}
         />
+      </Section>
+
+      <Section title="Switch from Your Own Button">
+        <p>
+          <code>setView()</code> and <code>getView()</code> drive the view from
+          outside, and <code>switch:view</code> reports every change with the
+          view that is now shown. Both need the clock or keyboard views, so
+          they do nothing in the wheel modes. New in 4.7.0.
+        </p>
+        <Figure
+          code={`const picker = new TimepickerUI(input, {
+  clock: { type: '24h' }
+});
+picker.create();
+
+button.addEventListener('click', () => {
+  picker.setView(picker.getView() === 'clock' ? 'keyboard' : 'clock');
+});
+
+picker.on('switch:view', ({ view }) => {
+  button.textContent = view === 'clock' ? 'Keyboard' : 'Clock';
+});`}
+        >
+          <ViewSwitchDemo />
+        </Figure>
       </Section>
 
       <Section title="With Theme">

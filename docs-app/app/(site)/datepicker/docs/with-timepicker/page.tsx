@@ -2,7 +2,7 @@
 
 import { useId, useRef, useState } from "react";
 import Link from "next/link";
-import type DatepickerUI from "@pglejzer/datepicker-ui";
+import type { DatepickerUI } from "@pglejzer/datepicker-ui";
 import type { DatepickerOptions, PickerValue } from "@pglejzer/datepicker-ui";
 import { CodeBlock } from "@/components/code-block";
 import demo from "@/components/demo-controls.module.css";
@@ -33,7 +33,7 @@ function timeOf(text: string): string {
 
 const INSTALL_CODE = `npm install @pglejzer/datepicker-ui timepicker-ui`;
 
-const COMBINE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const COMBINE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import { TimepickerUI } from "timepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 import "timepicker-ui/index.css";
@@ -77,7 +77,7 @@ const THEME_CODE = `const theme = "crane";
 new DatepickerUI("#date", { ui: { theme } }).create();
 new TimepickerUI("#time", { ui: { theme } }).create();`;
 
-const DEMO_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const DEMO_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import { TimepickerUI } from "timepicker-ui";
 
 const timeInput = document.querySelector<HTMLInputElement>("#time")!;

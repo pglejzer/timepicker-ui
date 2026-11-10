@@ -11,7 +11,7 @@ import { useDatepicker } from "@/lib/use-datepicker";
 import { useTimepicker } from "@/lib/use-timepicker";
 import styles from "../advanced.module.css";
 
-const CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import { TimepickerUI } from "timepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 import "timepicker-ui/index.css";

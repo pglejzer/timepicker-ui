@@ -13,7 +13,7 @@ const ARABIC: DatepickerOptions = { calendar: { locale: "ar-EG" } };
 const MONDAY: DatepickerOptions = { calendar: { weekStart: "monday" } };
 
 function code(calendar: string): string {
-  return `import DatepickerUI from "@pglejzer/datepicker-ui";
+  return `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

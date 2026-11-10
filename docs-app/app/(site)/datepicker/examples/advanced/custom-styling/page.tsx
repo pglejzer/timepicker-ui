@@ -91,7 +91,7 @@ const NIGHT_CSS = `.night {
 }`;
 
 function code(cssClass: string, extra = ""): string {
-  return `import DatepickerUI from "@pglejzer/datepicker-ui";
+  return `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/main.css";
 import "./${cssClass}.css";
 

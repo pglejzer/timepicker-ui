@@ -16,7 +16,7 @@ const CSS_CODE = `.brand {
   --dp-ui-container-shape-docked: 8px;
 }`;
 
-const BRAND_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const BRAND_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

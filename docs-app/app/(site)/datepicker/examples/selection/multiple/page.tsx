@@ -16,14 +16,14 @@ const MULTIPLE_MAX: DatepickerOptions = {
   },
 };
 
-const MULTIPLE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const MULTIPLE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#dates", {
   calendar: { mode: "multiple" },
 }).create();`;
 
-const MAX_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const MAX_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#dates", {

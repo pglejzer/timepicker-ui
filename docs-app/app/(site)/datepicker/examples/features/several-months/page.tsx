@@ -10,21 +10,21 @@ const THREE: DatepickerOptions = { calendar: { months: 3, pageBy: "month" } };
 
 const RANGE: DatepickerOptions = { calendar: { mode: "range", months: 2 } };
 
-const TWO_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const TWO_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   calendar: { months: 2 },
 }).create();`;
 
-const THREE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const THREE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   calendar: { months: 3, pageBy: "month" },
 }).create();`;
 
-const RANGE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const RANGE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

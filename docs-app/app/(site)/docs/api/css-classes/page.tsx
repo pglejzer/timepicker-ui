@@ -48,6 +48,8 @@ const ELEMENT: Record<string, string> = {
   "tp-ui":
     "Root around your input: the element you passed, or a `div` the picker wraps around a bare `<input>`. Your `ui.cssClass` is added here too.",
   "tp-ui--inline": "On `.tp-ui-modal` when `ui.inline.enabled` is on.",
+  "tp-ui--title-hidden":
+    "On `.tp-ui-modal` when `ui.inline.showTitle` is `false`. The title is hidden visually and still names the picker for screen readers.",
   "tp-ui-am": "AM button (`labels.am`).",
   "tp-ui-body": "Holds the dial.",
   "tp-ui-cancel-btn": "Cancel button (`labels.cancel`).",
@@ -93,7 +95,10 @@ const ELEMENT: Record<string, string> = {
     "Added with `tp-ui-popover` when the script places the popover and it does not fit above or below the input. Its height is then limited.",
   "tp-ui-range-header": "Range plugin: the From and To tabs (`role=\"tablist\"`).",
   "tp-ui-range-mode": "On `.tp-ui-modal` when `range.enabled` is on and the range plugin is registered.",
+  "tp-ui-range-panel":
+    "Range plugin: the `role=\"tabpanel\"` around the time fields and the dial. It uses `display: contents`, so it adds no box. A child combinator from `.tp-ui-wrapper` no longer reaches the elements inside it.",
   "tp-ui-range-tab": "One range tab, From or To.",
+  "tp-ui-range-tab-caption": "Second line of a range tab, set with `setRangeCaptions()`.",
   "tp-ui-range-tab-label": "Label of a range tab (`range.fromLabel`, `range.toLabel`).",
   "tp-ui-range-tab-value": "Time shown in a range tab.",
   "tp-ui-second-text": "Caption under the seconds field (`labels.second`), shown in the keyboard view.",
@@ -101,11 +106,14 @@ const ELEMENT: Record<string, string> = {
   "tp-ui-select-time": "Heading above the time fields: `labels.time`, or `labels.mobileTime` in the keyboard view.",
   "tp-ui-timezone": "Timezone plugin: row with the label and the dropdown.",
   "tp-ui-timezone-arrow": "Arrow icon of the timezone dropdown.",
-  "tp-ui-timezone-dropdown": "Timezone dropdown (`role=\"combobox\"`).",
+  "tp-ui-timezone-dropdown":
+    "Timezone dropdown. It draws the border and the focus ring. The combobox is the `.tp-ui-timezone-selected` inside it.",
+  "tp-ui-timezone-dropdown--open": "On `.tp-ui-timezone-dropdown` while the list is open.",
   "tp-ui-timezone-label": "Label of the timezone dropdown (`timezone.label`).",
   "tp-ui-timezone-menu": "List of timezones (`role=\"listbox\"`).",
   "tp-ui-timezone-option": "One timezone in the list.",
-  "tp-ui-timezone-selected": "Selected timezone, shown in the dropdown.",
+  "tp-ui-timezone-selected":
+    "Selected timezone, shown in the dropdown. It is the select-only combobox (`role=\"combobox\"`, focusable, with type-ahead).",
   "tp-ui-tips-animation": "On `.tp-ui-clock-hand` while the hand animates to a new value.",
   "tp-ui-tips-disabled": "On a dial number, and the element that holds it, when `clock.disabledTime` excludes it.",
   "tp-ui-tips-wrapper": "Holds the numbers of the outer ring.",

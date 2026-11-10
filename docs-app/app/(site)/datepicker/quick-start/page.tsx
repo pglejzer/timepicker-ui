@@ -9,7 +9,7 @@ import { Tabs, type TabItem } from "@/components/tabs";
 
 const HTML_CODE = `<input id="date" />`;
 
-const JS_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const JS_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const picker = new DatepickerUI("#date", {
@@ -28,7 +28,7 @@ const GROUPS_DEMO: DatepickerOptions = {
   behavior: { closeOnSelect: true },
 };
 
-const GROUPS_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const GROUPS_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -41,7 +41,7 @@ new DatepickerUI("#date", {
 const REACT_CODE = `"use client";
 
 import { useEffect, useRef } from "react";
-import DatepickerUI from "@pglejzer/datepicker-ui";
+import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 export function DateField() {
@@ -59,7 +59,7 @@ export function DateField() {
 
 const VUE_CODE = `<script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue";
-import DatepickerUI from "@pglejzer/datepicker-ui";
+import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const input = ref<HTMLInputElement | null>(null);
@@ -80,7 +80,7 @@ onBeforeUnmount(() => picker?.destroy());
 
 const SVELTE_CODE = `<script lang="ts">
   import { onMount } from "svelte";
-  import DatepickerUI from "@pglejzer/datepicker-ui";
+  import { DatepickerUI } from "@pglejzer/datepicker-ui";
   import "@pglejzer/datepicker-ui/index.css";
 
   let input: HTMLInputElement;
@@ -95,7 +95,7 @@ const SVELTE_CODE = `<script lang="ts">
 <input bind:this={input} />`;
 
 const ANGULAR_CODE = `import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from "@angular/core";
-import DatepickerUI from "@pglejzer/datepicker-ui";
+import { DatepickerUI } from "@pglejzer/datepicker-ui";
 
 @Component({
   selector: "app-date-field",

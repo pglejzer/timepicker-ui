@@ -13,7 +13,7 @@ import {
   UI_OPTIONS,
 } from "./options-data";
 
-const OVERVIEW_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const OVERVIEW_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -26,7 +26,7 @@ new DatepickerUI("#date", {
   },
 }).create();`;
 
-const FALLBACK_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const FALLBACK_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 
 const picker = new DatepickerUI("#date", {
   ui: { theme: "neon" },
@@ -119,8 +119,9 @@ export default function DatepickerOptionsPage() {
         <p>Presentation and display behaviour:</p>
         <OptionTable rows={UI_OPTIONS} />
         <p>
-          The input view exists for single pickers in a modal and for every range picker. Multiple pickers have
-          no input view. The theme names are <code>basic</code>, <code>m3-green</code>, <code>crane</code>,{" "}
+          The input view exists for every range picker, and for single pickers with the modal
+          or full-screen look (<code>ui.layout</code> <code>&quot;modal&quot;</code> or{" "}
+          <code>&quot;fullscreen&quot;</code>, or a dialog with <code>&quot;auto&quot;</code>), at day precision. Multiple pickers have no input view. The theme names are <code>basic</code>, <code>m3-green</code>, <code>crane</code>,{" "}
           <code>crane-straight</code>, <code>m2</code>, <code>glassmorphic</code>, <code>pastel</code>,{" "}
           <code>ai</code>, <code>cyberpunk</code> and <code>blueprint</code>.
         </p>

@@ -136,7 +136,15 @@ const availableEvents: DocEntry[] = [
   },
   {
     name: "select:hour",
-    description: "Triggered when hour is selected.",
+    description: (
+      <>
+        Triggered when hour is selected. In a time field, Enter applies the
+        typed value like blur does: the value is clamped, then{" "}
+        <code>select:hour</code>, <code>select:minute</code> or{" "}
+        <code>select:second</code> and <code>update</code> are emitted. This
+        holds in every mode. New in 4.7.0.
+      </>
+    ),
     code: `picker.on('select:hour', (data) => {
   console.log('Hour selected:', data.hour);
 });`,
@@ -210,12 +218,18 @@ picker.on('select:period', (data) => {
     name: "switch:view",
     description: (
       <>
-        Triggered when the switch icon toggles between the clock and keyboard
-        view. Needs <code>ui.viewSwitch</code>. Empty payload.
+        Triggered when the view changes between the clock and the keyboard:
+        the switch icon (needs <code>ui.viewSwitch</code>) or{" "}
+        <code>setView()</code> on an open picker, or <code>setOptions()</code>{" "}
+        on an open picker when the call changes <code>ui.initialView</code>.
+        In that last case the event fires once, after the new view is shown. A
+        closed picker emits nothing and opens in the new view. The payload is{" "}
+        <code>{"{ view: 'clock' | 'keyboard' }"}</code> and holds the view the
+        picker switches to. Not emitted in wheel modes.
       </>
     ),
-    code: `picker.on('switch:view', () => {
-  console.log('View switched');
+    code: `picker.on('switch:view', (data) => {
+  console.log('View shown:', data.view); // 'clock' | 'keyboard'
 });`,
   },
   {
@@ -225,7 +239,11 @@ picker.on('select:period', (data) => {
         Triggered on an invalid input value, on a <code>setValue()</code>{" "}
         string that is not a time, on invalid options (for example a
         malformed <code>clock.disabledTime.ranges</code>) and when a needed
-        plugin is not registered. <code>rejectedHour</code> and{" "}
+        plugin is not registered. With the timezone plugin it also fires once
+        when <code>timezone.default</code> is not in the timezone list, for
+        example <code>timezone.default &quot;Europe/Warsaw&quot; is not in
+        the timezone list, using &quot;Europe/Paris&quot;</code>. New in 4.7.0.{" "}
+        <code>rejectedHour</code> and{" "}
         <code>rejectedMinute</code> are deprecated and always{" "}
         <code>undefined</code>.
       </>
@@ -239,7 +257,12 @@ picker.on('select:period', (data) => {
   },
   {
     name: "clear",
-    description: "Triggered when user clicks the clear button.",
+    description: (
+      <>
+        Triggered when the user clicks the clear button, and by{" "}
+        <code>clear()</code>.
+      </>
+    ),
     code: `picker.on('clear', (data) => {
   console.log('Time cleared. Previous value:', data.previousValue);
 });`,
@@ -254,17 +277,69 @@ picker.on('select:period', (data) => {
   },
   {
     name: "range:confirm",
-    description: "Triggered when a time range is confirmed (range mode only).",
+    description: (
+      <>
+        Triggered when a time range is confirmed (range mode only).{" "}
+        <code>autoCommit</code> is <code>true</code> when{" "}
+        <code>wheel.commitOnScroll</code> committed the range instead of the
+        OK button. That happens only while the range is valid, and the picker
+        stays open, also with <code>wheel.hideFooter</code>. New in 4.7.0.
+      </>
+    ),
     code: `picker.on('range:confirm', (data) => {
   console.log('From:', data.from, 'To:', data.to);
   console.log('Duration (whole minutes):', data.duration);
   console.log('Duration (seconds):', data.durationSeconds); // only with clock.showSeconds
+  console.log('Auto commit:', data.autoCommit); // true with wheel.commitOnScroll
+});`,
+  },
+  {
+    name: "range:change",
+    description: (
+      <>
+        Triggered when the time of a range end changes by the user (range mode
+        only). The payload has the end that changed (<code>part</code>) and both
+        ends after the change, in the shape of <code>getRange()</code>. A 12h
+        end without AM or PM counts as <code>null</code>, so the event fires
+        once the end is complete, not for each partial step. It is emitted
+        right after the end is written and before <code>range:switch</code>,{" "}
+        <code>range:validation</code> and <code>range:confirm</code>, so{" "}
+        <code>getRange()</code> inside the handler is final. It is not emitted
+        for <code>setRange()</code>, <code>setValue()</code> or{" "}
+        <code>clear()</code>. A time typed in a field is committed on blur, on
+        Enter, or when the ends switch, and that commit emits it. So{" "}
+        <code>setActivePart()</code> and <code>setOptions()</code> on an open
+        picker emit it when they first commit a time typed into the active
+        end. The Clear button emits it with <code>part: &apos;from&apos;</code>{" "}
+        and both ends <code>null</code>, before the{" "}
+        <code>range:switch</code> back to From. In <code>wheel</code> and{" "}
+        <code>compact-wheel</code>, an empty end that becomes active on open or
+        on a tab switch takes the other end&apos;s time without this event.
+        Read it with <code>getRange()</code>. New in 4.7.0.
+      </>
+    ),
+    code: `picker.on('range:change', (data) => {
+  console.log('Changed end:', data.part); // 'from' | 'to'
+  console.log('From:', data.from); // { hour, minutes, seconds?, type? } | null
+  console.log('To:', data.to);
 });`,
   },
   {
     name: "range:switch",
-    description:
-      "Triggered when switching between the from/to segments (range mode only).",
+    description: (
+      <>
+        Triggered when the active end changes (range mode only): a tab click,{" "}
+        <code>setActivePart()</code>, Clear, or the fallback below. A wheel
+        snap never triggers it. After a re-render, for example{" "}
+        <code>setOptions()</code> on an open picker, it also fires when the
+        picker keeps To: <code>active</code> is <code>&apos;to&apos;</code>{" "}
+        and <code>disabledTime</code> carries the limit before From. With{" "}
+        <code>range.linked</code> and From empty, the picker falls back to
+        From and the payload is <code>active: &apos;from&apos;</code> with{" "}
+        <code>disabledTime: null</code>. Keeping the active end over a
+        re-render is new in 4.7.0.
+      </>
+    ),
     code: `picker.on('range:switch', (data) => {
   console.log('Active segment:', data.active); // 'from' | 'to'
   console.log('Disabled time:', data.disabledTime);
@@ -463,15 +538,18 @@ new TimepickerUI(input, {
     name: "onSwitchView",
     description: (
       <>
-        Triggered when the switch icon toggles the view. Needs{" "}
-        <code>ui.viewSwitch</code>. New in 4.5.0.
+        Triggered when the view changes: the switch icon (needs{" "}
+        <code>ui.viewSwitch</code>), <code>setView()</code> on an open picker,
+        or <code>setOptions()</code> on an open picker when the call changes{" "}
+        <code>ui.initialView</code>. The payload is{" "}
+        <code>{"{ view }"}</code>. New in 4.5.0.
       </>
     ),
     code: `new TimepickerUI(input, {
   ui: { viewSwitch: true },
   callbacks: {
-    onSwitchView: () => {
-      console.log('View switched');
+    onSwitchView: (data) => {
+      console.log('View:', data.view);
     }
   }
 });`,
@@ -506,6 +584,18 @@ new TimepickerUI(input, {
   callbacks: {
     onRangeConfirm: (data) => {
       console.log('Range:', data.from, '-', data.to, data.duration);
+    }
+  }
+});`,
+  },
+  {
+    name: "onRangeChange",
+    description:
+      "Triggered by range:change when the time of a range end changes (range mode only). New in 4.7.0.",
+    code: `new TimepickerUI(input, {
+  callbacks: {
+    onRangeChange: (data) => {
+      console.log(data.part, data.from, data.to);
     }
   }
 });`,
@@ -551,7 +641,8 @@ new TimepickerUI(input, {
   },
   {
     name: "onClear",
-    description: "Triggered when user clicks the clear button.",
+    description:
+      "Triggered when the user clicks the clear button, and by clear().",
     code: `new TimepickerUI(input, {
   callbacks: {
     onClear: (data) => {
@@ -718,14 +809,45 @@ type RangeConfirmEventData = {
   to: string;
   duration: number;              // whole minutes
   durationSeconds?: number;      // showSeconds, exact
+  autoCommit?: boolean;          // true when triggered by wheel.commitOnScroll
+};
+
+type SwitchViewEventData = {
+  view: 'clock' | 'keyboard';
+};
+
+type RangeChangeEventData = {
+  part: 'from' | 'to';
+  from: RangeTimeValue | null;   // { hour, minutes, seconds?, type? }
+  to: RangeTimeValue | null;
 };
 
 // Also exported: SelectHourEventData, SelectMinuteEventData,
 // SelectAMEventData and SelectPMEventData (deprecated), ShowEventData,
-// HideEventData (deprecated), SwitchViewEventData,
+// HideEventData (deprecated),
 // TimezoneChangeEventData, RangeSwitchEventData,
 // RangeValidationEventData, WheelScrollStartEventData,
 // WheelScrollEndEventData`}
+          language="typescript"
+        />
+      </Section>
+
+      <Section title="Typed event names">
+        <p>
+          <code>on()</code>, <code>once()</code> and <code>off()</code> accept
+          a <code>TimepickerEventName</code>, and the handler gets the payload
+          type of that event. A name that is not in the list still compiles,
+          with an <code>unknown</code> payload. Internal events are not part of
+          the type.
+        </p>
+        <CodeBlock
+          code={`import { TimepickerUI, type TimepickerEventName } from 'timepicker-ui';
+
+picker.on('range:change', (data) => {
+  data.part; // 'from' | 'to'
+});
+
+const name: TimepickerEventName = 'switch:view';`}
           language="typescript"
         />
       </Section>

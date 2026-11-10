@@ -317,6 +317,48 @@ picker.refreshDisabledTime();`}
         </p>
       </Section>
 
+      <Section title="Check a time without a picker">
+        <p>
+          <code>createDisabledTimeCheck()</code> builds a function that tells
+          whether a time is disabled, with the same rules as a mounted picker.
+          It reads <code>type</code>, <code>disabledTime</code>,{" "}
+          <code>isTimeDisabled</code> and <code>showSeconds</code> from the
+          clock options. It needs no picker and no DOM, so it also runs on the
+          server, for example to validate a submitted time. New in 4.7.0.
+        </p>
+        <CodeBlock
+          code={`import { createDisabledTimeCheck } from 'timepicker-ui';
+
+const isDisabled = createDisabledTimeCheck({
+  type: '24h',
+  disabledTime: { ranges: ['12:00 - 13:00'] }
+});
+
+isDisabled('12:30');                              // true
+isDisabled({ hour: 9, minutes: 0, seconds: 0 });  // false`}
+          language="typescript"
+        />
+        <ul>
+          <li>
+            The edges of <code>ranges</code> use the clock format of{" "}
+            <code>type</code>.
+          </li>
+          <li>
+            The check takes a time string in the <code>setValue()</code> format
+            or a <code>TimeOfDay</code> with <code>hour</code> from 0 to 23. It
+            returns <code>true</code> for text that is not a time.
+          </li>
+          <li>
+            It throws when <code>disabledTime</code> is invalid, with the
+            message a picker reports through <code>error</code>.
+          </li>
+          <li>
+            Results of <code>isTimeDisabled</code> are cached. Build a new
+            check after the data behind it changes.
+          </li>
+        </ul>
+      </Section>
+
       <Section title="Visual Styling">
         <p>
           Disabled values are dimmed and cannot be clicked. On the clock face

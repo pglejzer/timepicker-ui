@@ -10,13 +10,13 @@ import { DATEPICKER_THEMES } from "@/lib/datepicker";
 
 const THEME_DEMO: DatepickerOptions = { ui: { theme: "basic" } };
 
-const THEME_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const THEME_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/main.css";
 import "@pglejzer/datepicker-ui/theme-m2.css";
 
 new DatepickerUI("#date", { ui: { theme: "m2" } }).create();`;
 
-const ALL_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const ALL_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", { ui: { theme: "crane" } }).create();`;

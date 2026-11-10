@@ -9,7 +9,8 @@ import { withCode } from "../api-helpers";
 
 type TypeEntry = { name: string; description: string; code: string };
 
-const INSTALL_CODE = `import DatepickerUI, {
+const INSTALL_CODE = `import {
+  DatepickerUI,
   DEFAULT_DATEPICKER_OPTIONS,
   EventEmitter,
   type DatepickerOptions,
@@ -25,19 +26,19 @@ const EXPORT_ROWS = [
   {
     entry: "@pglejzer/datepicker-ui/kit",
     exports:
-      "Named exports only: `PopoverHost`, `DialogHost`, `InlineHost`, `waitForExit`, `resolveSurfaceMode`, `isFullscreenRange`, `detectColorScheme`, `watchColorScheme`, `resolvePattern`, `formatDate`, `parseDate`, `maskDateText`, `formatHint` and the types `SurfaceHost`, `SurfaceMode`, `Scheme`, `FormatPattern`, `FormatOption`, `DatePart` and `PlainDate`.",
+      "Named exports only: `PopoverHost`, `DialogHost`, `InlineHost`, `waitForExit`, `createTextButton`, `Pager`, `resolveSurfaceMode`, `isFullscreenRange`, `fitsViewport`, `detectColorScheme`, `watchColorScheme`, `applyTheme`, `resolvePattern`, `formatDate`, `formatHint`, `parseDate`, `maskDateText`, `leadingDateLength`, `normalizeDigits`, `RANGE_SEPARATOR`, `splitRangeText`, `resolveWeekStart`, `weekdayNames`, `formatMonthYear`, `formatFullDate` and the types `SurfaceHost`, `SurfaceMode`, `PagerOptions`, `Scheme`, `SurfaceTheme`, `FormatPattern`, `FormatOption`, `HintLetters`, `DatePart`, `WeekStartOption`, `PlainDate`, `YearMonth`, `Weekday` and `ThemeName`.",
   },
 ];
 
 const TYPE_LIST = [
   { group: "Options", names: "DatepickerOptions, CalendarOptions, UIOptions, LabelsOptions, BehaviorOptions, CallbacksOptions" },
   { group: "Option helpers", names: "ThemeName, PluralLabel, DateDecoration, RangePreset, RangePresetValue" },
-  { group: "Option unions", names: "CalendarMode, Precision, PageBy, RangeEnd" },
-  { group: "Values", names: "DateValue, RangeValue, PickerValue, PickerValueInput, PlainDate" },
+  { group: "Option unions", names: "CalendarMode, Precision, PageBy, RangeEnd, PickerView" },
+  { group: "Values", names: "DateValue, RangeValue, PickerValue, PickerValueInput, PlainDate, VisibleRange" },
   {
     group: "Events",
     names:
-      "DatepickerEventMap, OpenEventData, CloseEventData, CancelEventData, ConfirmEventData, UpdateEventData, ErrorEventData, SelectDayEventData, SelectMonthEventData, SelectYearEventData, NavigateEventData, RangeStartEventData, RangeEndEventData, UnavailableReason",
+      "DatepickerEventMap, OpenEventData, CloseEventData, CancelEventData, ConfirmEventData, UpdateEventData, ErrorEventData, SelectDayEventData, SelectMonthEventData, SelectYearEventData, NavigateEventData, RangeStartEventData, RangeEndEventData, SwitchViewEventData, ClearEventData, CancelReason, NavigateSource, UnavailableReason",
   },
 ];
 
@@ -47,8 +48,8 @@ const INTERFACES: TypeEntry[] = [
     description:
       "The grouped options object. Each group has its own exported interface. See the Options page for every field.",
     code: `interface DatepickerOptions {
-  calendar?: CalendarOptions;    // mode, precision, months, limits, disabled days, locale
-  ui?: UIOptions;                // theme, displayMode, inline, format, footer, buttons, ...
+  calendar?: CalendarOptions;    // mode, defaultValue, precision, months, limits, disabled days, locale
+  ui?: UIOptions;                // theme, displayMode, layout, inline, format, footer, buttons, ...
   labels?: LabelsOptions;        // every visible and assistive text
   behavior?: BehaviorOptions;    // closeOnSelect, commitOnChange, returnFocus, id, ...
   callbacks?: CallbacksOptions;  // onConfirm, onCancel, onOpen, ...
@@ -91,7 +92,7 @@ type PickerValue = DateValue | RangeValue | readonly DateValue[];`,
 type CloseEventData = Record<string, never>;
 
 interface CancelEventData {
-  reason: "button" | "escape" | "outside";
+  reason: CancelReason;
 }
 
 interface ConfirmEventData {
@@ -130,7 +131,17 @@ interface NavigateEventData {
   year: number;
   month: number;       // first month shown, 1-12
   direction: -1 | 0 | 1;
-  source: "drag" | "wheel" | "button" | "keyboard" | "menu";
+  source: NavigateSource;
+  from: DateValue;     // first day shown
+  to: DateValue;       // last day shown
+}
+
+interface SwitchViewEventData {
+  view: PickerView;
+}
+
+interface ClearEventData {
+  previousValue: PickerValue | null;
 }
 
 interface ErrorEventData {
@@ -158,6 +169,8 @@ interface ErrorEventData {
   "range:start": RangeStartEventData;
   "range:end": RangeEndEventData;
   navigate: NavigateEventData;
+  "switch:view": SwitchViewEventData;
+  clear: ClearEventData;
 }`,
   },
 ];
@@ -185,6 +198,33 @@ const UNIONS: TypeEntry[] = [
 type Precision = "day" | "month" | "year";
 type PageBy = "month" | "view";
 type RangeEnd = "start" | "end";`,
+  },
+  {
+    name: "PickerView and VisibleRange",
+    description:
+      "The view that setView() takes and getView() returns, and what getVisibleRange() returns while the picker is shown.",
+    code: `type PickerView = "calendar" | "input";
+
+interface VisibleRange {
+  readonly from: DateValue;    // first day shown, value is YYYY-MM-DD
+  readonly to: DateValue;      // last day shown
+}`,
+  },
+  {
+    name: "CancelReason and NavigateSource",
+    description: "What dismissed the picker in cancel, and what moved the shown days in navigate.",
+    code: `type CancelReason = "button" | "escape" | "outside" | "toggle";
+
+type NavigateSource =
+  | "drag"
+  | "wheel"
+  | "button"
+  | "keyboard"
+  | "menu"
+  | "open"
+  | "api"
+  | "resize"
+  | "scroll";`,
   },
   {
     name: "UnavailableReason",
@@ -224,7 +264,7 @@ interface RangePreset {
   },
 ];
 
-const OPTIONS_CODE = `import DatepickerUI, { type DatepickerOptions } from "@pglejzer/datepicker-ui";
+const OPTIONS_CODE = `import { DatepickerUI, type DatepickerOptions } from "@pglejzer/datepicker-ui";
 
 const options: DatepickerOptions = {
   calendar: {
@@ -246,7 +286,8 @@ if (input) {
   new DatepickerUI(input, options).create();
 }`;
 
-const HANDLERS_CODE = `import DatepickerUI, {
+const HANDLERS_CODE = `import {
+  DatepickerUI,
   type ConfirmEventData,
   type DatepickerEventMap,
 } from "@pglejzer/datepicker-ui";
@@ -298,7 +339,8 @@ function describe(value: PickerValue | null): string {
   return value.map((entry) => entry.value).join(", ");
 }`;
 
-const MODE_CODE = `import DatepickerUI, {
+const MODE_CODE = `import {
+  DatepickerUI,
   type DateValue,
   type RangeValue,
 } from "@pglejzer/datepicker-ui";
@@ -318,7 +360,7 @@ single.create();
 const day = single.getValue() as DateValue | null;`;
 
 const REACT_CODE = `import { useEffect, useRef } from "react";
-import DatepickerUI, { type DatepickerOptions } from "@pglejzer/datepicker-ui";
+import { DatepickerUI, type DatepickerOptions } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 type DateFieldProps = {
@@ -352,6 +394,31 @@ const KIT_CODE = `import {
 const pattern: FormatPattern = resolvePattern("dd.MM.yyyy", "en-GB");
 const date: PlainDate | null = parseDate("14.03.2025", pattern);`;
 
+const KIT_TYPES: TypeEntry[] = [
+  {
+    name: "SurfaceTheme and PagerOptions",
+    description: "The second argument of applyTheme() and of the Pager constructor.",
+    code: `interface SurfaceTheme {
+  readonly theme: ThemeName;      // written to data-theme
+  readonly colorScheme: Scheme;   // written to data-color-scheme
+  readonly className?: string;    // extra classes, like ui.cssClass
+  readonly rtl?: boolean;         // toggles dp-ui__container--rtl
+}
+
+interface PagerOptions<K> {
+  readonly rtl: boolean;
+  readonly swipe: boolean;        // drag and wheel paging
+  readonly animate: boolean;      // slide, or a fade with reduced motion
+  readonly fitHeight?: boolean;   // size the pager to the shown page
+  renderPage(key: K): HTMLElement;
+  pageHeight?(key: K): number;
+  step(key: K, direction: -1 | 1): K;
+  isSame(a: K, b: K): boolean;
+  onCommit(direction: -1 | 1, source: "drag" | "wheel"): void;
+}`,
+  },
+];
+
 function TypeList({ items }: { items: TypeEntry[] }) {
   return (
     <>
@@ -384,7 +451,8 @@ export default function DatepickerTypeScriptPage() {
       <Section title="Installation">
         <p>
           The type definitions ship in the package, so there is nothing else to install. <code>DatepickerUI</code>{" "}
-          is the default export and also a named export.
+          is a named export, and also the default export, so{" "}
+          <code>import DatepickerUI from &quot;@pglejzer/datepicker-ui&quot;</code> works too.
         </p>
         <CodeBlock code={INSTALL_CODE} language="typescript" />
         <ApiTable
@@ -471,6 +539,7 @@ export default function DatepickerTypeScriptPage() {
           exported from the package root.
         </p>
         <CodeBlock code={KIT_CODE} language="typescript" />
+        <TypeList items={KIT_TYPES} />
       </Section>
 
       <Callout title="Related">

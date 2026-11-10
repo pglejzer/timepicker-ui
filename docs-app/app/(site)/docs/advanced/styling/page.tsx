@@ -218,6 +218,42 @@ export default function StylingPage() {
         </p>
       </Section>
 
+      <Section title="Embedded card surface">
+        <p>
+          An embedded inline picker (<code>ui.inline.embedded</code>) takes
+          its card background, corner radius and backdrop filter from three
+          variables. They fall back to <code>--tp-bg</code>,{" "}
+          <code>--tp-radius-md</code> and <code>--tp-backdrop-filter</code>.
+          New in 4.7.0.
+        </p>
+        <CodeBlock
+          code={`.my-dialog .tp-ui--embedded {
+  --tp-embedded-bg: transparent;
+  --tp-embedded-radius: 0;
+  --tp-embedded-backdrop-filter: none;
+}`}
+          language="css"
+        />
+      </Section>
+
+      <Section title="Compact keyboard view">
+        <p>
+          Shrink the time fields of the keyboard view with three variables.{" "}
+          <code>--tp-size-input</code> is the field width,{" "}
+          <code>--tp-size-input-mobile</code> the height on narrow screens and{" "}
+          <code>--tp-time-input-font-size</code> the size of the numbers. New
+          in 4.7.0.
+        </p>
+        <CodeBlock
+          code={`.tp-ui-wrapper {
+  --tp-size-input: 72px;
+  --tp-size-input-mobile: 56px;
+  --tp-time-input-font-size: 36px;
+}`}
+          language="css"
+        />
+      </Section>
+
       <Section title="Focus Ring">
         <p>
           Keyboard focus shows one 3px ring in <code>--tp-focus-ring</code>, 2px
