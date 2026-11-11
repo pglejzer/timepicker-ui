@@ -161,6 +161,8 @@ export type RangeMinuteCommitEventData = {
   minutes: string;
   seconds?: string;
   type?: string;
+  /** True when the commit came from a touch or pen drag on the dial. */
+  isTouch?: boolean;
 };
 
 export type RangeGetDisabledTimeEventData = Record<string, never>;

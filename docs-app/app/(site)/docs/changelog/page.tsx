@@ -231,6 +231,11 @@ const CHANGELOG_470 = {
       description:
         "A focused read-only time field no longer shows a text caret, for example after the dial moves on to minutes. Editable fields keep it",
     },
+    {
+      title: "No on-screen keyboard after a touch on the dial",
+      description:
+        "With `ui.editable`, picking a time on the dial by touch no longer opens the on-screen keyboard when the dial moves on to the next field",
+    },
   ],
 };
 

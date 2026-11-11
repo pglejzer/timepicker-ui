@@ -141,6 +141,18 @@ export const bindActivate = (el: HTMLElement | null, handler: (e: Event) => void
 const POINTER_MODALITY_CLASS = 'tp-ui-pointer';
 const MODIFIER_KEYS: ReadonlyArray<string> = ['Shift', 'Control', 'Alt', 'Meta'];
 
+export const focusTimeField = (
+  field: HTMLInputElement | null | undefined,
+  dial: HTMLElement | null | undefined,
+  isTouch: boolean,
+): void => {
+  if (isTouch && field && !field.readOnly) {
+    dial?.focus();
+    return;
+  }
+  field?.focus();
+};
+
 export const trackPointerModality = (modal: HTMLElement): (() => void) => {
   const root = modal.ownerDocument;
 

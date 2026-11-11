@@ -1,6 +1,7 @@
 import type { Point } from '../types';
 import type { ClockController } from '../controller/ClockController';
 import { isDocument, isNode } from '../../../utils/node';
+import { focusTimeField } from '../../../utils/accessibility';
 
 const hasPointerEvents = (): boolean => typeof PointerEvent !== 'undefined';
 
@@ -21,7 +22,7 @@ export interface DragHandlersConfig {
   hourElement?: HTMLInputElement | null;
   minutesElement?: HTMLInputElement | null;
   secondsElement?: HTMLInputElement | null;
-  onMinuteCommit?: () => void;
+  onMinuteCommit?: (isTouch: boolean) => void;
 }
 
 export class DragHandlers {
@@ -36,6 +37,7 @@ export class DragHandlers {
   private rafId: number | null = null;
   private hadValidSelection: boolean = false;
   private pointerId: number | null = null;
+  private isTouchDrag: boolean = false;
 
   constructor(controller: ClockController, clockFace: HTMLElement, config: DragHandlersConfig = {}) {
     this.controller = controller;
@@ -77,6 +79,7 @@ export class DragHandlers {
     event.preventDefault();
     this.isActive = true;
     this.hadValidSelection = false;
+    this.isTouchDrag = this.detectTouch(event);
 
     this.cachedRect = this.clockFace.getBoundingClientRect();
     this.cachedCenter = this.getClockCenter();
@@ -84,6 +87,12 @@ export class DragHandlers {
 
     this.processPointerEvent(event);
     return true;
+  }
+
+  private detectTouch(event: MouseEvent | TouchEvent): boolean {
+    if ('touches' in event) return true;
+    const { pointerType } = event as PointerEvent;
+    return pointerType === 'touch' || pointerType === 'pen';
   }
 
   private handlePointerDown = (event: MouseEvent | TouchEvent): void => {
@@ -187,13 +196,13 @@ export class DragHandlers {
         this.activate(minutesElement, secondsElement);
       }
     } else if (this.isLastUnitActive() && this.config.onMinuteCommit) {
-      this.config.onMinuteCommit();
+      this.config.onMinuteCommit(this.isTouchDrag);
     }
   }
 
-  private activate(from: HTMLElement, to: HTMLElement | null | undefined): void {
+  private activate(from: HTMLElement, to: HTMLInputElement | null | undefined): void {
     to?.click();
-    to?.focus();
+    focusTimeField(to, this.clockFace, this.isTouchDrag);
     from.blur();
   }
 

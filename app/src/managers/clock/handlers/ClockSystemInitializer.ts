@@ -70,12 +70,13 @@ export class ClockSystemInitializer {
         hourElement: hour,
         minutesElement: minutes,
         secondsElement: seconds,
-        onMinuteCommit: () => {
+        onMinuteCommit: (isTouch: boolean) => {
           const time = buildUpdatePayload(this.core);
           this.emitter.emit('range:minute:commit', {
             ...time,
             hour: time.hour ?? '12',
             minutes: time.minutes ?? '00',
+            isTouch,
           });
         },
       },

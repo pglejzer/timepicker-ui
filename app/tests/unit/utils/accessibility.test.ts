@@ -1,6 +1,7 @@
 import {
   announceToScreenReader,
   bindActivate,
+  focusTimeField,
   formatValueText,
   isActivationKey,
   prefersReducedMotion,
@@ -917,6 +918,60 @@ describe('accessibility', () => {
       setElementDisabled(button, true);
 
       expect(stateOf(button)).toEqual({ className: 'disabled', ariaDisabled: 'true' });
+    });
+  });
+
+  describe('focusTimeField', () => {
+    const mountFocusable = (readOnly: boolean): { field: HTMLInputElement; dial: HTMLDivElement } => {
+      const field = document.createElement('input');
+      field.readOnly = readOnly;
+      const dial = document.createElement('div');
+      dial.tabIndex = 0;
+      document.body.append(field, dial);
+      return { field, dial };
+    };
+
+    afterEach(() => {
+      document.body.innerHTML = '';
+    });
+
+    it('should focus the dial for a touch interaction with an editable field', () => {
+      const { field, dial } = mountFocusable(false);
+
+      focusTimeField(field, dial, true);
+
+      expect(document.activeElement).toBe(dial);
+    });
+
+    it('should focus the field for a touch interaction with a readonly field', () => {
+      const { field, dial } = mountFocusable(true);
+
+      focusTimeField(field, dial, true);
+
+      expect(document.activeElement).toBe(field);
+    });
+
+    it('should focus the field for a mouse interaction with an editable field', () => {
+      const { field, dial } = mountFocusable(false);
+
+      focusTimeField(field, dial, false);
+
+      expect(document.activeElement).toBe(field);
+    });
+
+    it('should not throw and not focus the field when touch + editable and the dial is missing', () => {
+      const { field } = mountFocusable(false);
+
+      expect(() => focusTimeField(field, null, true)).not.toThrow();
+      expect(document.activeElement).not.toBe(field);
+    });
+
+    it('should not throw when the field is missing', () => {
+      const { dial } = mountFocusable(false);
+
+      expect(() => focusTimeField(null, dial, true)).not.toThrow();
+      expect(() => focusTimeField(undefined, dial, false)).not.toThrow();
+      expect(document.activeElement).not.toBe(dial);
     });
   });
 });

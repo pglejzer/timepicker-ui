@@ -142,6 +142,7 @@ const mountRangeManager = (config: RangeHarnessConfig = {}): RangeHarness => {
     getHour: () => (isOpen ? hour : null),
     getMinutes: () => (isOpen ? minutes : null),
     getSeconds: () => null,
+    getClockFace: () => null,
     getAM: () => null,
     getPM: () => null,
     getActiveType: () => undefined,

@@ -29,6 +29,7 @@ import {
 } from './utils';
 import { bindEmitter } from '../../../utils/managerHelpers';
 import { sanitizeTimeInput } from '../../../utils/validation';
+import { focusTimeField } from '../../../utils/accessibility';
 import { resolveTimeFor } from '../../../timepicker/SetValue';
 import { buildUpdatePayload, emitSelect } from '../../events/timeFields';
 
@@ -515,8 +516,8 @@ export default class RangeManager {
     this.core.getModalElement()?.querySelector<HTMLElement>('.tp-ui-range-tab.tp-ui-range-from')?.focus();
   }
 
-  private focusHour(): void {
-    this.core.getHour()?.focus();
+  private focusHour(isTouch = false): void {
+    focusTimeField(this.core.getHour(), this.core.getClockFace(), isTouch);
   }
 
   private handleViewUpdate(data: UpdateEventData | undefined): void {
@@ -576,7 +577,7 @@ export default class RangeManager {
       });
       this.ui.syncClockToActivePart();
       this.emitAmPmSyncEvent();
-      if (focusHourAfterSwitch) this.focusHour();
+      if (focusHourAfterSwitch) this.focusHour(data.isTouch === true);
     }
 
     this.state.validate();
