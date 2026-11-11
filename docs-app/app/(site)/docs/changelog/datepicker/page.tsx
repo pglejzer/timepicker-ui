@@ -34,11 +34,14 @@ const RELEASES: ReleaseNotes[] = [
         "Kit hosts accept `labelledBy` to take their accessible name from a visible title",
         "Kit hosts have `setLabel(label, labelledBy?)`, which renames a shown surface by the same rule as the constructor",
         "The kit exports `fitsViewport(root, anchor)`, which tells whether a docked surface fits the window entirely below or entirely above its anchor",
+        "`formatFullDate()` in `./kit` takes `{ year: false }` to leave the year out",
+        "`isDateTextComplete()` in `./kit` tells whether a typed date has every group in full",
         "`dp-ui__presets--column` gives a presets group outside the picker the same column look",
       ],
       Changed: [
         "`navigate` now also fires when opening, `setValue()`, `setOptions()`, `goTo()` or a resize changes the shown days. Check `source` to tell them apart",
         "The input view's text fields always format typed digits to `ui.format`, adding its separators. `ui.mask` still controls only the page inputs",
+        "A date typed in the text fields emits `select:day`, `range:start` or `range:end` like a picked day, and `behavior.commitOnChange` commits it",
       ],
       Fixed: [
         "The picker no longer sets `color-scheme` on the element around the input, so page inputs, `ui.endInput` included, keep the page's color scheme",
@@ -53,6 +56,8 @@ const RELEASES: ReleaseNotes[] = [
         "With `ui.displayMode: \"auto\"`, a docked picker that fits neither below nor above the field, at its current position on the page, opens as a dialog",
         "`setOptions()` with a new `labels.title` now also renames the open popover, dialog or inline group, which kept the old accessible name",
         "An inline calendar is laid out as soon as it is mounted instead of one frame later, and a calendar mounted in a hidden container lays itself out before it is first shown",
+        "Enter saves the value only where an OK button is shown. Elsewhere it picks the day or the typed date like a click",
+        "A docked popover wider than the room right of its field now shifts left into the window, so several months no longer overlap or squeeze",
       ],
     },
   },
