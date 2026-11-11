@@ -166,6 +166,12 @@ function readPopoverTokens(modal: HTMLElement): PopoverTokens & { wheelItemHeigh
 const measureWheelItemHeight = (modal: HTMLElement, fallback: number): number =>
   modal.querySelector<HTMLElement>('.tp-ui-wheel-item')?.offsetHeight || fallback;
 
+const measureHiddenWheelHeight = (wrapper: HTMLElement): number => {
+  const area = wrapper.querySelector<HTMLElement>('.tp-ui-mobile-clock-wrapper');
+  const wheel = area?.querySelector<HTMLElement>('.tp-ui-wheel-container');
+  return area && wheel ? Math.max(wheel.offsetHeight - area.clientHeight, 0) : 0;
+};
+
 function createFallbackPositioner(
   modal: HTMLElement,
   input: HTMLElement,
@@ -187,7 +193,7 @@ function createFallbackPositioner(
         wrapper.clientWidth,
       pickerHeight: Math.max(
         modal.offsetHeight,
-        wrapper.scrollHeight + wrapper.offsetHeight - wrapper.clientHeight,
+        wrapper.scrollHeight + wrapper.offsetHeight - wrapper.clientHeight + measureHiddenWheelHeight(wrapper),
       ),
       minHeight: 3 * measureWheelItemHeight(modal, wheelItemHeight),
       layoutWidth: root.clientWidth,

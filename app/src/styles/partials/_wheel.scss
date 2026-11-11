@@ -152,6 +152,26 @@
   padding-top: var(--tp-spacing-md);
 }
 
+@media not screen and (orientation: landscape) and (max-height: 480px) {
+  .tp-ui-modal.tp-ui-wheel-mode:not(.tp-ui--inline, .tp-ui-popover),
+  .tp-ui-modal.tp-ui-compact-wheel-mode:not(.tp-ui--inline, .tp-ui-popover) {
+    .tp-ui-wrapper {
+      max-height: calc(100vh - 2 * var(--tp-spacing-lg));
+      max-height: calc(100dvh - 2 * var(--tp-spacing-lg));
+
+      > *,
+      .tp-ui-range-panel > * {
+        flex-shrink: 0;
+      }
+
+      .tp-ui-mobile-clock-wrapper.expanded {
+        flex-shrink: 1;
+        min-height: var(--tp-wheel-item-height);
+      }
+    }
+  }
+}
+
 @media screen and (orientation: landscape) and (max-height: 480px) {
   .tp-ui-wheel-mode .tp-ui-wheel-container {
     padding: var(--tp-spacing-sm) 0;
@@ -214,10 +234,17 @@
   margin-right: var(--tp-popover-edge-margin);
 }
 
-@mixin tp-popover-try-fit {
-  @include tp-popover-try-shift;
+@mixin tp-popover-try-cap {
   max-height: calc(100% - 2 * var(--tp-popover-gap));
 }
+
+@mixin tp-popover-try-fit {
+  @include tp-popover-try-shift;
+  @include tp-popover-try-cap;
+}
+
+$tp-popover-capped-min-height: max(0px, 50dvh - anchor-size(height) / 2 - 2 * var(--tp-popover-gap));
+$tp-popover-usable-min-height: calc(3 * var(--tp-wheel-item-height));
 
 .tp-ui-modal.tp-ui-popover {
   inset: auto;
@@ -237,12 +264,17 @@
 
 .tp-ui-modal.tp-ui-popover.tp-ui-popover-anchored {
   --tp-popover-span: span-right;
+  --tp-popover-try-capped: --tp-ui-popover-capped-right;
+  --tp-popover-try-usable: --tp-ui-popover-usable-right;
+  --tp-popover-try-fit: --tp-ui-popover-fit-right;
   position-anchor: var(--tp-popover-anchor);
   position-area: bottom var(--tp-popover-span);
   position-try-fallbacks:
     flip-block,
     --tp-ui-popover-shift,
     --tp-ui-popover-shift flip-block,
+    var(--tp-popover-try-capped),
+    var(--tp-popover-try-capped) flip-block,
     --tp-ui-popover-capped,
     --tp-ui-popover-capped flip-block;
   min-width: min(
@@ -261,6 +293,9 @@
 
   &[data-popover-dir='rtl'] {
     --tp-popover-span: span-left;
+    --tp-popover-try-capped: --tp-ui-popover-capped-left;
+    --tp-popover-try-usable: --tp-ui-popover-usable-left;
+    --tp-popover-try-fit: --tp-ui-popover-fit-left;
     margin-left: var(--tp-popover-edge-margin);
     margin-right: 0;
   }
@@ -269,18 +304,22 @@
     position-area: top var(--tp-popover-span);
     position-try-fallbacks:
       --tp-ui-popover-shift flip-block,
+      var(--tp-popover-try-usable) flip-block,
       --tp-ui-popover-usable flip-block,
       flip-block,
       --tp-ui-popover-shift,
+      var(--tp-popover-try-fit),
       --tp-ui-popover-fit;
   }
 
   &[data-popover-request='bottom'] {
     position-try-fallbacks:
       --tp-ui-popover-shift,
+      var(--tp-popover-try-usable),
       --tp-ui-popover-usable,
       flip-block,
       --tp-ui-popover-shift flip-block,
+      var(--tp-popover-try-fit) flip-block,
       --tp-ui-popover-fit flip-block;
   }
 }
@@ -291,7 +330,7 @@
 
 @position-try --tp-ui-popover-capped {
   @include tp-popover-try-fit;
-  min-height: max(0px, 50dvh - anchor-size(height) / 2 - 2 * var(--tp-popover-gap));
+  min-height: $tp-popover-capped-min-height;
 }
 
 @position-try --tp-ui-popover-fit {
@@ -300,7 +339,26 @@
 
 @position-try --tp-ui-popover-usable {
   @include tp-popover-try-fit;
-  min-height: calc(3 * var(--tp-wheel-item-height));
+  min-height: $tp-popover-usable-min-height;
+}
+
+@each $side in right, left {
+  @position-try --tp-ui-popover-capped-#{$side} {
+    position-area: bottom span-#{$side};
+    @include tp-popover-try-cap;
+    min-height: $tp-popover-capped-min-height;
+  }
+
+  @position-try --tp-ui-popover-fit-#{$side} {
+    position-area: bottom span-#{$side};
+    @include tp-popover-try-cap;
+  }
+
+  @position-try --tp-ui-popover-usable-#{$side} {
+    position-area: bottom span-#{$side};
+    @include tp-popover-try-cap;
+    min-height: $tp-popover-usable-min-height;
+  }
 }
 
 .tp-ui-modal.tp-ui-popover .tp-ui-wrapper {
@@ -321,10 +379,20 @@
 .tp-ui-modal.tp-ui-popover-anchored .tp-ui-wrapper,
 .tp-ui-modal.tp-ui-popover-constrained .tp-ui-wrapper {
   overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   > *,
   .tp-ui-range-panel > * {
     flex-shrink: 0;
+  }
+
+  .tp-ui-mobile-clock-wrapper.expanded {
+    flex-shrink: 1;
+    min-height: var(--tp-wheel-item-height);
   }
 }
 

@@ -269,6 +269,52 @@ describe('PopoverManager - JS fallback positioning', () => {
       expect(fixture.modal).toHaveClass('tp-ui-popover-constrained');
       expect(fixture.modal.style.getPropertyValue('--tp-popover-available-height')).toBe('122px');
     });
+
+    describe('wheel area shrunk inside the constrained wrapper', () => {
+      const mountWithClockWrapper = (wheelHeight: number, clockWrapperHeight: number) => {
+        stubLayoutViewport(stubs, 1024, 300);
+        const fixture = mount({}, { top: 130, left: 50, width: 200, height: 40 });
+        const clockWrapper = document.createElement('div');
+        clockWrapper.className = 'tp-ui-mobile-clock-wrapper expanded';
+        fixture.wrapper.appendChild(clockWrapper);
+        clockWrapper.appendChild(fixture.wheel);
+        sizePicker(fixture, { height: 102 });
+        setMetrics(fixture.wrapper, { scrollHeight: 100, offsetHeight: 102, clientHeight: 100 });
+        setMetrics(clockWrapper, { clientHeight: clockWrapperHeight });
+        setMetrics(fixture.wheel, { offsetHeight: wheelHeight });
+        return fixture;
+      };
+
+      it('adds the part of the wheel container the clock wrapper hides to the natural height and keeps the constraint across a resize', () => {
+        const fixture = mountWithClockWrapper(220, 60);
+
+        fixture.manager.attach();
+
+        expect(fixture.modal).toHaveClass('tp-ui-popover-constrained');
+        expect(fixture.modal.style.getPropertyValue('--tp-popover-available-height')).toBe('122px');
+
+        window.dispatchEvent(new Event('resize'));
+        frames.flush();
+
+        expect(fixture.modal).toHaveClass('tp-ui-popover-constrained');
+        expect(fixture.modal.style.getPropertyValue('--tp-popover-available-height')).toBe('122px');
+        expect(fixture.modal.style.top).toBe('174px');
+      });
+
+      it('adds nothing when the wheel container is not taller than the clock wrapper', () => {
+        const fixture = mountWithClockWrapper(50, 60);
+
+        fixture.manager.attach();
+
+        expect(fixture.modal).not.toHaveClass('tp-ui-popover-constrained');
+        expect(fixture.modal.style.getPropertyValue('--tp-popover-available-height')).toBe('');
+
+        window.dispatchEvent(new Event('resize'));
+        frames.flush();
+
+        expect(fixture.modal).not.toHaveClass('tp-ui-popover-constrained');
+      });
+    });
   });
 
   describe('forced placement with too little room', () => {
