@@ -56,6 +56,7 @@ jobs:
             *-*) dist_tag=next ;;
             *) dist_tag=latest ;;
           esac
+          echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "dist-tag=$dist_tag" >> "$GITHUB_OUTPUT"
           echo "Publishing timepicker-ui-mcp $version with the dist-tag $dist_tag (npm $(npm --version))"
 
@@ -77,7 +78,31 @@ jobs:
 
       - name: Publish to npm
         if: github.event_name == 'release'
-        run: npm publish --tag ${{ steps.version.outputs.dist-tag }}
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          DIST_TAG: ${{ steps.version.outputs.dist-tag }}
+        run: |
+          if npm view "timepicker-ui-mcp@$VERSION" version > /dev/null 2>&1; then
+            echo "timepicker-ui-mcp@$VERSION is already on npm, skipping the npm publish"
+          else
+            npm publish --tag "$DIST_TAG"
+          fi
+
+      - name: Wait for the version on npm
+        if: github.event_name == 'release'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent --output /dev/null "https://registry.npmjs.org/timepicker-ui-mcp/$VERSION"; then
+              echo "timepicker-ui-mcp@$VERSION is on npm"
+              exit 0
+            fi
+            echo "timepicker-ui-mcp@$VERSION is not on npm yet (attempt $attempt of 60), waiting 30 s"
+            sleep 30
+          done
+          echo "::error::timepicker-ui-mcp@$VERSION did not appear on npm within 30 minutes. Re-run the job once it does."
+          exit 1
 
       - name: Install cosign
         if: github.event_name == 'release'

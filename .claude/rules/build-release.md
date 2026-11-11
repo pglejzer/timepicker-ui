@@ -44,5 +44,7 @@ Applies to build configs and the package manifests. Pairs with `.claude/rules/ar
   the `next` dist-tag. A manual run of the workflow is only a dry run. The MCP server has its own
   `.github/workflows/publish-mcp.yml`: a release tagged `mcp-<version>` (e.g. `mcp-2.2.0`) checks
   that `mcp-server/package.json` and `server.json` agree, builds, runs the smoke test, publishes
-  `timepicker-ui-mcp` to npm, then to the MCP Registry; `publish.yml` skips `mcp-` tags. Full release flow (README + CHANGELOG + docs-app) is the `/release`
+  `timepicker-ui-mcp` to npm, waits up to 30 minutes until npm serves the version (npm's automated
+  review delays it), then publishes to the MCP Registry. A re-run skips the npm publish when the
+  version is already on npm. `publish.yml` skips `mcp-` tags. Full release flow (README + CHANGELOG + docs-app) is the `/release`
   skill / `build-release` agent.
