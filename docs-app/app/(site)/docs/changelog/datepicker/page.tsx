@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
 
 const RELEASES: ReleaseNotes[] = [
   {
-    title: "Version 1.1.0 - 2026-11-10",
+    title: "Version 1.1.0 - 2026-11-11",
     changes: {
       Added: [
         "`ui.layout` gives any surface the docked, modal or full-screen look, so a dialog can use the docked month and year menus",
@@ -58,6 +58,9 @@ const RELEASES: ReleaseNotes[] = [
         "An inline calendar is laid out as soon as it is mounted instead of one frame later, and a calendar mounted in a hidden container lays itself out before it is first shown",
         "Enter saves the value only where an OK button is shown. Elsewhere it picks the day or the typed date like a click",
         "A docked popover wider than the room right of its field now shifts left into the window, so several months no longer overlap or squeeze",
+        "Clicking the input of a picker that opens on the month or year grid now moves focus into the grid, so Escape closes the popover again",
+        "A docked picker with `calendar.renderDate` content no longer grows after opening, so `ui.displayMode: \"auto\"` opens a dialog when it does not fit",
+        "A docked popover wider than the window now keeps its edge margin on both sides instead of sticking out on one side",
       ],
     },
   },
