@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 
 const RELEASES: ReleaseNotes[] = [
   {
-    title: "Version 2.2.0 - 2026-11-10",
+    title: "Version 2.2.0 - 2026-11-11",
     changes: {
       Added: [
         "Reference data for timepicker-ui 4.7.0: `clear`, `setView`, `getView`, `getActivePart` and `setRangeCaptions` in the method list, and the named exports `parseTime`, `formatTime` and `createDisabledTimeCheck`.",

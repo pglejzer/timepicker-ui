@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [4.7.0] - 2026-11-10
+## [4.7.0] - 2026-11-11
 
 ### Check before upgrading
 
@@ -62,6 +62,7 @@ These changes can affect an existing setup. Each one is described under Changed 
 - In `wheel` and `compact-wheel`, an empty range end is seeded with the other end's time, else `clock.currentTime`, else 12:00
 - The `dark` theme follows the Material Design 3 baseline dark tokens
 - The clock dial uses Pointer Events when available, and `.tp-ui-clock-face` has `touch-action: none`
+- `clock.disabledTime` errors name `ranges` instead of the deprecated `interval`, for example `Invalid disabledTime.ranges: Invalid 12h format: "00:00 - 04:59"`
 
 ### Fixed
 
@@ -75,6 +76,7 @@ These changes can affect an existing setup. Each one is described under Changed 
 - The plugin UMD builds work from a `<script>` tag. The UMD core now exposes `TimepickerUI.PluginRegistry`, so `TimepickerUI.PluginRegistry.register(TimepickerUIRange.RangePlugin)` works. Before, enabling a plugin there emitted `error`
 - A focused read-only time field no longer shows a text caret, for example after the dial moves on to minutes. Editable fields keep it
 - With `ui.editable`, picking a time on the dial by touch no longer opens the on-screen keyboard when the dial moves on to the next field
+- A compact-wheel popover with too little room shrinks the wheel area instead of scrolling, so Cancel and OK stay in view. It stays aligned to the input
 
 ## [4.6.0] - 2026-10-19
 

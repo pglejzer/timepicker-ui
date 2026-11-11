@@ -32,7 +32,7 @@ function coreUpdate(from: string, to: string, coreReleaseDate: string): ChangeEn
 
 const RELEASES: ReleaseNotes[] = [
   {
-    title: "Version 1.7.0 - 2026-11-10",
+    title: "Version 1.7.0 - 2026-11-11",
     changes: {
       Added: [
         {
@@ -63,7 +63,7 @@ const RELEASES: ReleaseNotes[] = [
         },
       ],
       Changed: [
-        coreUpdate("4.6.0", "4.7.0", "November 10, 2026"),
+        coreUpdate("4.6.0", "4.7.0", "November 11, 2026"),
         "Check these if you style or test the picker (from core):",
         "AM/PM is a `role=\"radiogroup\"` with `aria-checked`. Selectors that use `aria-pressed` on `.tp-ui-am` and `.tp-ui-pm` need updating",
         "The timezone `combobox` role and its `aria-expanded` and `aria-activedescendant` moved to `.tp-ui-timezone-selected`",

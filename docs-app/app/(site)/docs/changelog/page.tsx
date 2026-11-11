@@ -184,6 +184,11 @@ const CHANGELOG_470 = {
       description:
         "The clock dial uses Pointer Events when available, and .tp-ui-clock-face has touch-action: none",
     },
+    {
+      title: "disabledTime errors name ranges",
+      description:
+        'clock.disabledTime errors name ranges instead of the deprecated interval, for example Invalid disabledTime.ranges: Invalid 12h format: "00:00 - 04:59"',
+    },
   ],
   fixed: [
     {
@@ -235,6 +240,11 @@ const CHANGELOG_470 = {
       title: "No on-screen keyboard after a touch on the dial",
       description:
         "With `ui.editable`, picking a time on the dial by touch no longer opens the on-screen keyboard when the dial moves on to the next field",
+    },
+    {
+      title: "Popover without a scrollbar",
+      description:
+        "A compact-wheel popover with too little room shrinks the wheel area instead of scrolling, so Cancel and OK stay in view. It stays aligned to the input",
     },
   ],
 };
@@ -1374,10 +1384,10 @@ export default function ChangelogPage() {
       <ChangelogSwitcher current="library" />
 
       <Callout title="Current Version">
-        <strong>v4.7.0</strong> - Released November 10, 2026
+        <strong>v4.7.0</strong> - Released November 11, 2026
       </Callout>
 
-      <Release title="Version 4.7.0 - November 10, 2026">
+      <Release title="Version 4.7.0 - November 11, 2026">
         <Callout title="Check before upgrading" tone="danger">
           <p>
             These changes can affect an existing setup. Each one is described
