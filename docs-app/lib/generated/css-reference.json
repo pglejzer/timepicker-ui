@@ -1,6 +1,6 @@
 {
   "package": "timepicker-ui",
-  "version": "4.5.0",
+  "version": "4.7.0",
   "groups": [
     "Color",
     "Typography",
@@ -25,6 +25,8 @@
       "default": "#ece6ee",
       "declared": true,
       "usedBy": [
+        "tp-ui--embedded",
+        "tp-ui--inline",
         "tp-ui-wheel-column-wrapper",
         "tp-ui-wrapper"
       ],
@@ -109,6 +111,7 @@
       "usedBy": [
         "tp-ui-hour-text",
         "tp-ui-minute-text",
+        "tp-ui-range-tab-caption",
         "tp-ui-range-tab-label",
         "tp-ui-second-text",
         "tp-ui-select-time",
@@ -125,7 +128,7 @@
     {
       "name": "--tp-text-disabled",
       "group": "Color",
-      "default": "hsla(0,1%,61%,.6)",
+      "default": "rgba(156, 155, 155, 0.6)",
       "declared": true,
       "usedBy": [
         "tp-ui-tips-disabled"
@@ -226,6 +229,7 @@
         "tp-ui-range-tab-value",
         "tp-ui-seconds",
         "tp-ui-timezone-dropdown",
+        "tp-ui-timezone-dropdown--open",
         "tp-ui-timezone-option",
         "tp-ui-wheel-column"
       ],
@@ -239,7 +243,7 @@
     {
       "name": "--tp-on-primary",
       "group": "Color",
-      "default": "#fff",
+      "default": "#ffffff",
       "declared": true,
       "usedBy": [
         "tp-ui-value-tips",
@@ -288,7 +292,7 @@
     {
       "name": "--tp-primary-rgb",
       "group": "Color",
-      "default": "103,80,164",
+      "default": "103, 80, 164",
       "declared": true,
       "usedBy": [],
       "usedByAttributes": [],
@@ -325,7 +329,7 @@
     {
       "name": "--tp-on-surface-rgb",
       "group": "Color",
-      "default": "29,27,32",
+      "default": "29, 27, 32",
       "declared": true,
       "usedBy": [],
       "usedByAttributes": [],
@@ -424,7 +428,7 @@
     {
       "name": "--tp-backdrop",
       "group": "Backdrop",
-      "default": "rgba(0,0,0,.5)",
+      "default": "rgba(0, 0, 0, 0.5)",
       "declared": true,
       "usedBy": [],
       "usedByAttributes": [],
@@ -438,6 +442,8 @@
       "default": "unset",
       "declared": true,
       "usedBy": [
+        "tp-ui--embedded",
+        "tp-ui--inline",
         "tp-ui-modal"
       ],
       "usedByAttributes": [],
@@ -448,7 +454,7 @@
     {
       "name": "--tp-dropdown-option-bg",
       "group": "Timezone",
-      "default": "#fff",
+      "default": "#ffffff",
       "declared": true,
       "usedBy": [
         "tp-ui-timezone-menu"
@@ -461,7 +467,7 @@
     {
       "name": "--tp-dropdown-option-text",
       "group": "Timezone",
-      "default": "#000",
+      "default": "#000000",
       "declared": true,
       "usedBy": [
         "tp-ui-timezone-option"
@@ -522,6 +528,7 @@
       "usedBy": [
         "tp-ui-cancel-btn",
         "tp-ui-compact-wheel-mode",
+        "tp-ui-range-tab",
         "tp-ui-wheel-column-wrapper",
         "tp-ui-wheel-container"
       ],
@@ -536,6 +543,7 @@
       "default": "8px",
       "declared": true,
       "usedBy": [
+        "tp-ui-compact-wheel-mode",
         "tp-ui-keyboard-icon",
         "tp-ui-keyboard-icon-wrapper",
         "tp-ui-range-header",
@@ -573,9 +581,13 @@
       "default": "16px",
       "declared": true,
       "usedBy": [
+        "tp-ui-compact-wheel-mode",
+        "tp-ui-modal",
         "tp-ui-range-header",
         "tp-ui-wheel-container",
         "tp-ui-wheel-highlight",
+        "tp-ui-wheel-mode",
+        "tp-ui-wrapper",
         "tp-ui-wrapper-time"
       ],
       "usedByAttributes": [],
@@ -589,6 +601,7 @@
       "default": "24px",
       "declared": true,
       "usedBy": [
+        "tp-ui--title-hidden",
         "tp-ui-cancel-btn",
         "tp-ui-clear-btn",
         "tp-ui-footer",
@@ -664,7 +677,7 @@
     {
       "name": "--tp-border-width-half",
       "group": "Shape",
-      "default": "0.3752px",
+      "default": "calc(0.7504px / 2)",
       "declared": true,
       "usedBy": [
         "tp-ui-am",
@@ -911,6 +924,7 @@
         "tp-ui-am",
         "tp-ui-pm",
         "tp-ui-timezone-dropdown",
+        "tp-ui-timezone-dropdown--open",
         "tp-ui-wheel-column"
       ],
       "usedByAttributes": [],
@@ -924,6 +938,7 @@
       "default": "8px",
       "declared": true,
       "usedBy": [
+        "tp-ui--embedded",
         "tp-ui--inline",
         "tp-ui-hour",
         "tp-ui-input-ripple-wrapper",
@@ -1137,8 +1152,11 @@
       "default": "72px",
       "declared": true,
       "usedBy": [
+        "tp-ui-hour",
         "tp-ui-input-ripple-wrapper",
-        "tp-ui-input-wrapper"
+        "tp-ui-input-wrapper",
+        "tp-ui-minutes",
+        "tp-ui-seconds"
       ],
       "usedByAttributes": [],
       "referencedBy": [],
@@ -1150,11 +1168,14 @@
       "group": "Size",
       "default": "46px",
       "declared": true,
-      "usedBy": [],
+      "usedBy": [
+        "tp-ui-circle-hand",
+        "tp-ui-clock-hand"
+      ],
       "usedByAttributes": [],
       "referencedBy": [],
       "setByScript": false,
-      "read": false
+      "read": true
     },
     {
       "name": "--tp-size-hand-circle-small",
@@ -1316,11 +1337,26 @@
       "group": "Size",
       "default": "48px",
       "declared": true,
-      "usedBy": [],
+      "usedBy": [
+        "tp-ui-dots"
+      ],
       "usedByAttributes": [],
       "referencedBy": [],
       "setByScript": false,
-      "read": false
+      "read": true
+    },
+    {
+      "name": "--tp-time-colon-gap",
+      "group": "Spacing",
+      "default": "12px",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-dots"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
     },
     {
       "name": "--tp-size-input-seconds-12h",
@@ -1514,6 +1550,7 @@
       "usedBy": [
         "tp-ui-hour",
         "tp-ui-minutes",
+        "tp-ui-range-panel",
         "tp-ui-seconds",
         "tp-ui-view-switching",
         "tp-ui-wrapper"
@@ -1598,7 +1635,7 @@
     {
       "name": "--tp-easing-standard",
       "group": "Motion",
-      "default": "cubic-bezier(0.4,0,0.2,1)",
+      "default": "cubic-bezier(0.4, 0, 0.2, 1)",
       "declared": true,
       "usedBy": [
         "tp-ui-range-tab-value",
@@ -1615,10 +1652,11 @@
     {
       "name": "--tp-easing-decelerate",
       "group": "Motion",
-      "default": "cubic-bezier(0,0,0.2,1)",
+      "default": "cubic-bezier(0, 0, 0.2, 1)",
       "declared": true,
       "usedBy": [
         "tp-ui-modal",
+        "tp-ui-range-panel",
         "tp-ui-view-switching",
         "tp-ui-wrapper"
       ],
@@ -1630,7 +1668,7 @@
     {
       "name": "--tp-easing-accelerate",
       "group": "Motion",
-      "default": "cubic-bezier(0.4,0,1,1)",
+      "default": "cubic-bezier(0.4, 0, 1, 1)",
       "declared": true,
       "usedBy": [
         "tp-ui-modal"
@@ -1830,7 +1868,7 @@
     {
       "name": "--tp-shadow-inline",
       "group": "Elevation",
-      "default": "0 2px 8px rgba(0,0,0,.15)",
+      "default": "0 2px 8px rgba(0, 0, 0, 0.15)",
       "declared": true,
       "usedBy": [],
       "usedByAttributes": [],
@@ -1841,7 +1879,7 @@
     {
       "name": "--tp-shadow-focus",
       "group": "Focus",
-      "default": "0 0 0 4px rgba(98,0,238,.2)",
+      "default": "0 0 0 4px rgba(98, 0, 238, 0.2)",
       "declared": true,
       "usedBy": [],
       "usedByAttributes": [],
@@ -1889,11 +1927,17 @@
       "declared": true,
       "usedBy": [
         "tp-ui-compact-wheel-mode",
+        "tp-ui-mobile-clock-wrapper",
+        "tp-ui-modal",
+        "tp-ui-popover-anchored",
+        "tp-ui-popover-constrained",
         "tp-ui-wheel-column-wrapper",
         "tp-ui-wheel-container",
         "tp-ui-wheel-highlight",
         "tp-ui-wheel-item",
-        "tp-ui-wheel-padding"
+        "tp-ui-wheel-mode",
+        "tp-ui-wheel-padding",
+        "tp-ui-wrapper"
       ],
       "usedByAttributes": [],
       "referencedBy": [],
@@ -1907,7 +1951,8 @@
       "declared": true,
       "usedBy": [
         "tp-ui-wheel-column-wrapper",
-        "tp-ui-wheel-container"
+        "tp-ui-wheel-container",
+        "tp-ui-wheel-padding"
       ],
       "usedByAttributes": [],
       "referencedBy": [],
@@ -2011,14 +2056,16 @@
         "tp-ui-wheel-container"
       ],
       "usedByAttributes": [],
-      "referencedBy": [],
+      "referencedBy": [
+        "--tp-wheel-visible-items"
+      ],
       "setByScript": false,
       "read": true
     },
     {
       "name": "--tp-wheel-highlight-bg",
       "group": "Wheel",
-      "default": "var(--tp-primary-container,rgba(103,80,164,.08))",
+      "default": "var(--tp-primary-container, rgba(103, 80, 164, 0.08))",
       "declared": true,
       "usedBy": [
         "tp-ui-wheel-highlight"
@@ -2031,7 +2078,7 @@
     {
       "name": "--tp-wheel-highlight-border",
       "group": "Wheel",
-      "default": "var(--tp-outline-variant,rgba(0,0,0,.12))",
+      "default": "var(--tp-outline-variant, rgba(0, 0, 0, 0.12))",
       "declared": true,
       "usedBy": [
         "tp-ui-wheel-highlight"
@@ -2044,7 +2091,7 @@
     {
       "name": "--tp-wheel-text-color",
       "group": "Wheel",
-      "default": "var(--tp-on-surface,#1d1b20)",
+      "default": "var(--tp-on-surface, #1d1b20)",
       "declared": true,
       "usedBy": [
         "tp-ui-wheel-item",
@@ -2058,7 +2105,7 @@
     {
       "name": "--tp-wheel-selected-color",
       "group": "Wheel",
-      "default": "var(--tp-primary,#6750a4)",
+      "default": "var(--tp-primary, #6750a4)",
       "declared": true,
       "usedBy": [
         "tp-ui-wheel-item"
@@ -2071,7 +2118,7 @@
     {
       "name": "--tp-wheel-disabled-opacity",
       "group": "Wheel",
-      "default": "var(--tp-opacity-disabled,0.38)",
+      "default": "var(--tp-opacity-disabled, 0.38)",
       "declared": true,
       "usedBy": [
         "tp-ui-wheel-item"
@@ -2084,7 +2131,7 @@
     {
       "name": "--tp-wheel-font-size",
       "group": "Wheel",
-      "default": "var(--tp-font-size-lg,16px)",
+      "default": "var(--tp-font-size-lg, 16px)",
       "declared": true,
       "usedBy": [
         "tp-ui-wheel-item"
@@ -2170,7 +2217,7 @@
     {
       "name": "--tp-popover-shadow",
       "group": "Popover",
-      "default": "0 4px 24px rgba(0,0,0,.15)",
+      "default": "0 4px 24px rgba(0, 0, 0, 0.15)",
       "declared": true,
       "usedBy": [
         "tp-ui-modal",
@@ -2185,7 +2232,7 @@
     {
       "name": "--tp-font-family",
       "group": "Typography",
-      "default": "\"Roboto\",sans-serif",
+      "default": "\"Roboto\", sans-serif",
       "declared": false,
       "usedBy": [
         "tp-ui-wrapper"
@@ -2196,14 +2243,14 @@
       "read": true
     },
     {
-      "name": "--tp-btn-radius",
-      "group": "Shape",
-      "default": "var(--tp-radius-lg)",
+      "name": "--tp-time-input-font-size",
+      "group": "Typography",
+      "default": "var(--tp-font-size-xl)",
       "declared": false,
       "usedBy": [
-        "tp-ui-cancel-btn",
-        "tp-ui-clear-btn",
-        "tp-ui-ok-btn"
+        "tp-ui-hour",
+        "tp-ui-minutes",
+        "tp-ui-seconds"
       ],
       "usedByAttributes": [],
       "referencedBy": [],
@@ -2228,24 +2275,59 @@
       "read": true
     },
     {
-      "name": "--tp-shadow-focus-ring",
-      "group": "Focus",
-      "default": "none",
+      "name": "--tp-btn-radius",
+      "group": "Shape",
+      "default": "var(--tp-radius-lg)",
       "declared": false,
       "usedBy": [
-        "tp-ui-am",
         "tp-ui-cancel-btn",
         "tp-ui-clear-btn",
-        "tp-ui-clock-face",
-        "tp-ui-hour",
-        "tp-ui-keyboard-icon",
-        "tp-ui-minutes",
-        "tp-ui-ok-btn",
-        "tp-ui-pm",
-        "tp-ui-range-tab",
-        "tp-ui-seconds",
-        "tp-ui-timezone-dropdown",
-        "tp-ui-wheel-column"
+        "tp-ui-ok-btn"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-embedded-backdrop-filter",
+      "group": "Backdrop",
+      "default": "var(--tp-backdrop-filter)",
+      "declared": false,
+      "usedBy": [
+        "tp-ui--embedded",
+        "tp-ui--inline"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-embedded-bg",
+      "group": "Color",
+      "default": "var(--tp-bg)",
+      "declared": false,
+      "usedBy": [
+        "tp-ui--embedded",
+        "tp-ui--inline",
+        "tp-ui-wheel-column-wrapper",
+        "tp-ui-wrapper"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-embedded-radius",
+      "group": "Shape",
+      "default": "var(--tp-radius-md)",
+      "declared": false,
+      "usedBy": [
+        "tp-ui--embedded",
+        "tp-ui--inline",
+        "tp-ui-wrapper"
       ],
       "usedByAttributes": [],
       "referencedBy": [],
@@ -2270,7 +2352,33 @@
         "tp-ui-range-tab",
         "tp-ui-seconds",
         "tp-ui-timezone-dropdown",
+        "tp-ui-timezone-dropdown--open",
         "tp-ui-timezone-option",
+        "tp-ui-wheel-column"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-shadow-focus-ring",
+      "group": "Focus",
+      "default": "none",
+      "declared": false,
+      "usedBy": [
+        "tp-ui-am",
+        "tp-ui-cancel-btn",
+        "tp-ui-clear-btn",
+        "tp-ui-clock-face",
+        "tp-ui-hour",
+        "tp-ui-keyboard-icon",
+        "tp-ui-minutes",
+        "tp-ui-ok-btn",
+        "tp-ui-pm",
+        "tp-ui-range-tab",
+        "tp-ui-seconds",
+        "tp-ui-timezone-dropdown",
         "tp-ui-wheel-column"
       ],
       "usedByAttributes": [],
@@ -2307,7 +2415,7 @@
     {
       "name": "--tp-wheel-fade-opacity",
       "group": "Wheel",
-      "default": ".6",
+      "default": "0.6",
       "declared": false,
       "usedBy": [
         "tp-ui-wheel-column-wrapper"
@@ -2335,6 +2443,51 @@
       "name": "--tp-popover-span",
       "group": "Popover",
       "default": "span-right",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-popover-anchored"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-try-capped",
+      "group": "Popover",
+      "default": "--tp-ui-popover-capped-right",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-popover-anchored"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-try-usable",
+      "group": "Popover",
+      "default": "--tp-ui-popover-usable-right",
+      "declared": true,
+      "usedBy": [
+        "tp-ui-modal",
+        "tp-ui-popover",
+        "tp-ui-popover-anchored"
+      ],
+      "usedByAttributes": [],
+      "referencedBy": [],
+      "setByScript": false,
+      "read": true
+    },
+    {
+      "name": "--tp-popover-try-fit",
+      "group": "Popover",
+      "default": "--tp-ui-popover-fit-right",
       "declared": true,
       "usedBy": [
         "tp-ui-modal",
@@ -2409,8 +2562,16 @@
       "example": ".tp-ui .sr-only"
     },
     {
+      "name": "tp-ui--embedded",
+      "example": ".tp-ui--inline.tp-ui--embedded"
+    },
+    {
       "name": "tp-ui--inline",
       "example": ".tp-ui--inline"
+    },
+    {
+      "name": "tp-ui--title-hidden",
+      "example": ".tp-ui--title-hidden .tp-ui-select-time"
     },
     {
       "name": "tp-ui-am",
@@ -2443,6 +2604,10 @@
     {
       "name": "tp-ui-clock-hand",
       "example": ".tp-ui-clock-hand"
+    },
+    {
+      "name": "tp-ui-clock-hand-24h",
+      "example": ".tp-ui-clock-hand.tp-ui-clock-hand-24h"
     },
     {
       "name": "tp-ui-compact-wheel-mode",
@@ -2546,11 +2711,11 @@
     },
     {
       "name": "tp-ui-pointer",
-      "example": ".tp-ui-keyboard-icon-wrapper:has(>.tp-ui-keyboard-icon:focus-visible):not(:where(.tp-ui-modal.tp-ui-pointer *)):before"
+      "example": ".tp-ui-keyboard-icon-wrapper:has(>.tp-ui-keyboard-icon:focus-visible):not(:where(.tp-ui-modal.tp-ui-pointer *))::before"
     },
     {
       "name": "tp-ui-popover",
-      "example": ".tp-ui-modal.tp-ui-popover"
+      "example": ".tp-ui-modal.tp-ui-wheel-mode:not(.tp-ui--inline,.tp-ui-popover) .tp-ui-wrapper"
     },
     {
       "name": "tp-ui-popover-anchored",
@@ -2569,8 +2734,16 @@
       "example": ".tp-ui-range-mode .tp-ui-wrapper.mobile"
     },
     {
+      "name": "tp-ui-range-panel",
+      "example": ".tp-ui-view-switching .tp-ui-range-panel>*"
+    },
+    {
       "name": "tp-ui-range-tab",
       "example": ".tp-ui-range-tab:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *))"
+    },
+    {
+      "name": "tp-ui-range-tab-caption",
+      "example": ".tp-ui-range-tab-caption"
     },
     {
       "name": "tp-ui-range-tab-label",
@@ -2578,7 +2751,7 @@
     },
     {
       "name": "tp-ui-range-tab-value",
-      "example": ".tp-ui-range-tab.active .tp-ui-range-tab-value:after"
+      "example": ".tp-ui-range-tab.active .tp-ui-range-tab-value::after"
     },
     {
       "name": "tp-ui-second-text",
@@ -2598,11 +2771,15 @@
     },
     {
       "name": "tp-ui-timezone-arrow",
-      "example": ".tp-ui-timezone-dropdown[aria-expanded=true] .tp-ui-timezone-arrow"
+      "example": ".tp-ui-timezone-dropdown.tp-ui-timezone-dropdown--open .tp-ui-timezone-arrow"
     },
     {
       "name": "tp-ui-timezone-dropdown",
-      "example": ".tp-ui-timezone-dropdown:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *))"
+      "example": ".tp-ui-timezone-dropdown:has(>.tp-ui-timezone-selected:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *)))"
+    },
+    {
+      "name": "tp-ui-timezone-dropdown--open",
+      "example": ".tp-ui-timezone-dropdown.tp-ui-timezone-dropdown--open"
     },
     {
       "name": "tp-ui-timezone-label",
@@ -2610,7 +2787,7 @@
     },
     {
       "name": "tp-ui-timezone-menu",
-      "example": ".tp-ui-timezone-dropdown[aria-expanded=true] .tp-ui-timezone-menu"
+      "example": ".tp-ui-timezone-dropdown.tp-ui-timezone-dropdown--open .tp-ui-timezone-menu"
     },
     {
       "name": "tp-ui-timezone-option",
@@ -2618,7 +2795,7 @@
     },
     {
       "name": "tp-ui-timezone-selected",
-      "example": ".tp-ui-timezone-dropdown:focus .tp-ui-timezone-selected"
+      "example": ".tp-ui-timezone-dropdown:has(>.tp-ui-timezone-selected:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *)))"
     },
     {
       "name": "tp-ui-tips-animation",
@@ -2716,15 +2893,15 @@
   "modifiers": [
     {
       "name": "active",
-      "example": ".tp-ui-value-tips-24h.active"
+      "example": ".tp-ui-value-tips.active"
     },
     {
       "name": "at-end",
-      "example": ".tp-ui-wheel-column-wrapper.at-end:after"
+      "example": ".tp-ui-wheel-column-wrapper.at-end::after"
     },
     {
       "name": "at-start",
-      "example": ".tp-ui-wheel-column-wrapper.at-start:before"
+      "example": ".tp-ui-wheel-column-wrapper.at-start::before"
     },
     {
       "name": "disabled",
@@ -2810,7 +2987,7 @@
         "--tp-bg": "#5d1049",
         "--tp-primary": "#e30425",
         "--tp-surface": "#71135c",
-        "--tp-text": "#fff"
+        "--tp-text": "#ffffff"
       }
     },
     {
@@ -2819,7 +2996,7 @@
         "--tp-bg": "#5d1049",
         "--tp-primary": "#e30425",
         "--tp-surface": "#71135c",
-        "--tp-text": "#fff"
+        "--tp-text": "#ffffff"
       }
     },
     {
@@ -2834,28 +3011,28 @@
     {
       "name": "dark",
       "tokens": {
-        "--tp-bg": "#1c1b1f",
-        "--tp-primary": "#bb86fc",
-        "--tp-surface": "#2c2b30",
-        "--tp-text": "#e5e5e5"
+        "--tp-bg": "#2b2930",
+        "--tp-primary": "#d0bcff",
+        "--tp-surface": "#36343b",
+        "--tp-text": "#e6e0e9"
       }
     },
     {
       "name": "glassmorphic",
       "tokens": {
-        "--tp-bg": "hsla(0,0%,100%,.12)",
-        "--tp-primary": "hsla(0,0%,100%,.75)",
-        "--tp-surface": "hsla(0,0%,100%,.18)",
-        "--tp-text": "hsla(0,0%,100%,.95)"
+        "--tp-bg": "rgba(255, 255, 255, 0.12)",
+        "--tp-primary": "rgba(255, 255, 255, 0.75)",
+        "--tp-surface": "rgba(255, 255, 255, 0.18)",
+        "--tp-text": "rgba(255, 255, 255, 0.95)"
       }
     },
     {
       "name": "m2",
       "tokens": {
-        "--tp-bg": "#fff",
+        "--tp-bg": "#ffffff",
         "--tp-primary": "#6200ee",
         "--tp-surface": "#e0e0e0",
-        "--tp-text": "#000"
+        "--tp-text": "#000000"
       }
     },
     {

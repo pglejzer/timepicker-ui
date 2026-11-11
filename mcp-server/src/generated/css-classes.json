@@ -5,8 +5,16 @@
       "example": ".tp-ui .sr-only"
     },
     {
+      "name": "tp-ui--embedded",
+      "example": ".tp-ui--inline.tp-ui--embedded"
+    },
+    {
       "name": "tp-ui--inline",
       "example": ".tp-ui--inline"
+    },
+    {
+      "name": "tp-ui--title-hidden",
+      "example": ".tp-ui--title-hidden .tp-ui-select-time"
     },
     {
       "name": "tp-ui-am",
@@ -39,6 +47,10 @@
     {
       "name": "tp-ui-clock-hand",
       "example": ".tp-ui-clock-hand"
+    },
+    {
+      "name": "tp-ui-clock-hand-24h",
+      "example": ".tp-ui-clock-hand.tp-ui-clock-hand-24h"
     },
     {
       "name": "tp-ui-compact-wheel-mode",
@@ -145,11 +157,11 @@
     },
     {
       "name": "tp-ui-pointer",
-      "example": ".tp-ui-keyboard-icon-wrapper:has(>.tp-ui-keyboard-icon:focus-visible):not(:where(.tp-ui-modal.tp-ui-pointer *)):before"
+      "example": ".tp-ui-keyboard-icon-wrapper:has(>.tp-ui-keyboard-icon:focus-visible):not(:where(.tp-ui-modal.tp-ui-pointer *))::before"
     },
     {
       "name": "tp-ui-popover",
-      "example": ".tp-ui-modal.tp-ui-popover"
+      "example": ".tp-ui-modal.tp-ui-wheel-mode:not(.tp-ui--inline,.tp-ui-popover) .tp-ui-wrapper"
     },
     {
       "name": "tp-ui-popover-anchored",
@@ -177,7 +189,8 @@
       "example": ".tp-ui-range-mode .tp-ui-wrapper.mobile"
     },
     {
-      "name": "tp-ui-range-panel"
+      "name": "tp-ui-range-panel",
+      "example": ".tp-ui-view-switching .tp-ui-range-panel>*"
     },
     {
       "name": "tp-ui-range-panel-"
@@ -187,12 +200,16 @@
       "example": ".tp-ui-range-tab:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *))"
     },
     {
+      "name": "tp-ui-range-tab-caption",
+      "example": ".tp-ui-range-tab-caption"
+    },
+    {
       "name": "tp-ui-range-tab-label",
       "example": ".tp-ui-range-tab-label"
     },
     {
       "name": "tp-ui-range-tab-value",
-      "example": ".tp-ui-range-tab.active .tp-ui-range-tab-value:after"
+      "example": ".tp-ui-range-tab.active .tp-ui-range-tab-value::after"
     },
     {
       "name": "tp-ui-range-to"
@@ -221,11 +238,15 @@
     },
     {
       "name": "tp-ui-timezone-arrow",
-      "example": ".tp-ui-timezone-dropdown[aria-expanded=true] .tp-ui-timezone-arrow"
+      "example": ".tp-ui-timezone-dropdown.tp-ui-timezone-dropdown--open .tp-ui-timezone-arrow"
     },
     {
       "name": "tp-ui-timezone-dropdown",
-      "example": ".tp-ui-timezone-dropdown:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *))"
+      "example": ".tp-ui-timezone-dropdown:has(>.tp-ui-timezone-selected:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *)))"
+    },
+    {
+      "name": "tp-ui-timezone-dropdown--open",
+      "example": ".tp-ui-timezone-dropdown.tp-ui-timezone-dropdown--open"
     },
     {
       "name": "tp-ui-timezone-label",
@@ -233,7 +254,7 @@
     },
     {
       "name": "tp-ui-timezone-menu",
-      "example": ".tp-ui-timezone-dropdown[aria-expanded=true] .tp-ui-timezone-menu"
+      "example": ".tp-ui-timezone-dropdown.tp-ui-timezone-dropdown--open .tp-ui-timezone-menu"
     },
     {
       "name": "tp-ui-timezone-option",
@@ -241,7 +262,7 @@
     },
     {
       "name": "tp-ui-timezone-selected",
-      "example": ".tp-ui-timezone-dropdown:focus .tp-ui-timezone-selected"
+      "example": ".tp-ui-timezone-dropdown:has(>.tp-ui-timezone-selected:focus-visible:not(:where(.tp-ui-modal.tp-ui-pointer *)))"
     },
     {
       "name": "tp-ui-tips-animation",
@@ -351,15 +372,15 @@
   "modifiers": [
     {
       "name": "active",
-      "example": ".tp-ui-value-tips-24h.active"
+      "example": ".tp-ui-value-tips.active"
     },
     {
       "name": "at-end",
-      "example": ".tp-ui-wheel-column-wrapper.at-end:after"
+      "example": ".tp-ui-wheel-column-wrapper.at-end::after"
     },
     {
       "name": "at-start",
-      "example": ".tp-ui-wheel-column-wrapper.at-start:before"
+      "example": ".tp-ui-wheel-column-wrapper.at-start::before"
     },
     {
       "name": "disabled",

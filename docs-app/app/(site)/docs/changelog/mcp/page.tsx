@@ -23,6 +23,7 @@ const RELEASES: ReleaseNotes[] = [
       Changed: [
         "`setRange` accepts one end, and `setValue`, `setOptions` and `setActivePart` describe their 4.7.0 range behaviour. The range plugin is listed for clock, wheel and compact-wheel mode.",
         "The `v4.5->v5` migration guide no longer says that 5.0 removes the plugin UMD builds.",
+        "`list_css_variables`, `list_css_classes` and the `css-variables` resource use the 4.7.0 stylesheets instead of 4.5.0, adding variables such as `--tp-embedded-bg` and classes such as `tp-ui--embedded`.",
       ],
     },
   },

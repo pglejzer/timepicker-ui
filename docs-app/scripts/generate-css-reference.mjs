@@ -17,14 +17,14 @@ const GROUP_RULES = [
   ["Mobile", /^--tp-mobile-/],
   ["Focus", /^--tp-(outline-width|outline-offset|focus-ring|shadow-focus)/],
   ["Elevation", /^--tp-(shadow|z-)/],
-  ["Backdrop", /^--tp-(backdrop|opacity-backdrop)/],
+  ["Backdrop", /^--tp-(backdrop|opacity-backdrop|embedded-backdrop)/],
   ["State", /^--tp-(state-|opacity-|ripple)/],
   ["Motion", /^--tp-(duration|easing)-/],
-  ["Typography", /^--tp-font-/],
+  ["Typography", /^--tp-(font-|time-input-font-)/],
   ["Size", /^--tp-size-/],
-  ["Spacing", /^--tp-(spacing|gap|position|scrollbar)-/],
-  ["Shape", /^--tp-(border-radius|border-width|radius-|btn-radius)/],
-  ["Color", /^--tp-(bg|surface|input-bg|text|am-pm|primary|on-|outline$|outline-variant|tertiary|border$|hover-bg|error|btn-text)/],
+  ["Spacing", /^--tp-((spacing|gap|position|scrollbar)-|time-colon-gap$)/],
+  ["Shape", /^--tp-(border-radius|border-width|radius-|btn-radius|embedded-radius)/],
+  ["Color", /^--tp-(bg|surface|input-bg|embedded-bg|text|am-pm|primary|on-|outline$|outline-variant|tertiary|border$|hover-bg|error|btn-text)/],
 ];
 
 const GROUP_ORDER = [

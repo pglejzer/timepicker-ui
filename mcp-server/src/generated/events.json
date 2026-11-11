@@ -350,6 +350,11 @@
         "name": "type",
         "optional": true,
         "type": "string"
+      },
+      {
+        "name": "isTouch",
+        "optional": true,
+        "type": "boolean"
       }
     ],
     "internal": true

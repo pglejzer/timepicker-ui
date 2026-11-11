@@ -44,7 +44,7 @@
   {
     "name": "--tp-text-disabled",
     "group": "Color",
-    "default": "hsla(0,1%,61%,.6)",
+    "default": "rgba(156, 155, 155, 0.6)",
     "read": true,
     "commonlyThemed": true
   },
@@ -93,7 +93,7 @@
   {
     "name": "--tp-on-primary",
     "group": "Color",
-    "default": "#fff",
+    "default": "#ffffff",
     "read": true,
     "commonlyThemed": true
   },
@@ -114,7 +114,7 @@
   {
     "name": "--tp-primary-rgb",
     "group": "Color",
-    "default": "103,80,164",
+    "default": "103, 80, 164",
     "read": false,
     "commonlyThemed": true
   },
@@ -135,7 +135,7 @@
   {
     "name": "--tp-on-surface-rgb",
     "group": "Color",
-    "default": "29,27,32",
+    "default": "29, 27, 32",
     "read": false,
     "commonlyThemed": true
   },
@@ -191,7 +191,7 @@
   {
     "name": "--tp-backdrop",
     "group": "Backdrop",
-    "default": "rgba(0,0,0,.5)",
+    "default": "rgba(0, 0, 0, 0.5)",
     "read": false,
     "commonlyThemed": false
   },
@@ -200,22 +200,19 @@
     "group": "Backdrop",
     "default": "unset",
     "read": true,
-    "commonlyThemed": true,
-    "readOutsideWrapper": [
-      "tp-ui-modal"
-    ]
+    "commonlyThemed": true
   },
   {
     "name": "--tp-dropdown-option-bg",
     "group": "Timezone",
-    "default": "#fff",
+    "default": "#ffffff",
     "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-dropdown-option-text",
     "group": "Timezone",
-    "default": "#000",
+    "default": "#000000",
     "read": true,
     "commonlyThemed": true
   },
@@ -306,7 +303,7 @@
   {
     "name": "--tp-border-width-half",
     "group": "Shape",
-    "default": "0.3752px",
+    "default": "calc(0.7504px / 2)",
     "read": true,
     "commonlyThemed": false
   },
@@ -538,7 +535,7 @@
     "name": "--tp-size-hand-circle",
     "group": "Size",
     "default": "46px",
-    "read": false,
+    "read": true,
     "commonlyThemed": false
   },
   {
@@ -636,7 +633,14 @@
     "name": "--tp-size-colon-height",
     "group": "Size",
     "default": "48px",
-    "read": false,
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-time-colon-gap",
+    "group": "Spacing",
+    "default": "12px",
+    "read": true,
     "commonlyThemed": false
   },
   {
@@ -778,21 +782,21 @@
   {
     "name": "--tp-easing-standard",
     "group": "Motion",
-    "default": "cubic-bezier(0.4,0,0.2,1)",
+    "default": "cubic-bezier(0.4, 0, 0.2, 1)",
     "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-easing-decelerate",
     "group": "Motion",
-    "default": "cubic-bezier(0,0,0.2,1)",
+    "default": "cubic-bezier(0, 0, 0.2, 1)",
     "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-easing-accelerate",
     "group": "Motion",
-    "default": "cubic-bezier(0.4,0,1,1)",
+    "default": "cubic-bezier(0.4, 0, 1, 1)",
     "read": true,
     "commonlyThemed": false,
     "readOutsideWrapper": [
@@ -907,14 +911,14 @@
   {
     "name": "--tp-shadow-inline",
     "group": "Elevation",
-    "default": "0 2px 8px rgba(0,0,0,.15)",
+    "default": "0 2px 8px rgba(0, 0, 0, 0.15)",
     "read": false,
     "commonlyThemed": false
   },
   {
     "name": "--tp-shadow-focus",
     "group": "Focus",
-    "default": "0 0 0 4px rgba(98,0,238,.2)",
+    "default": "0 0 0 4px rgba(98, 0, 238, 0.2)",
     "read": false,
     "commonlyThemed": false
   },
@@ -1005,42 +1009,42 @@
   {
     "name": "--tp-wheel-highlight-bg",
     "group": "Wheel",
-    "default": "var(--tp-primary-container,rgba(103,80,164,.08))",
+    "default": "var(--tp-primary-container, rgba(103, 80, 164, 0.08))",
     "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-wheel-highlight-border",
     "group": "Wheel",
-    "default": "var(--tp-outline-variant,rgba(0,0,0,.12))",
+    "default": "var(--tp-outline-variant, rgba(0, 0, 0, 0.12))",
     "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-wheel-text-color",
     "group": "Wheel",
-    "default": "var(--tp-on-surface,#1d1b20)",
+    "default": "var(--tp-on-surface, #1d1b20)",
     "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-wheel-selected-color",
     "group": "Wheel",
-    "default": "var(--tp-primary,#6750a4)",
+    "default": "var(--tp-primary, #6750a4)",
     "read": true,
     "commonlyThemed": true
   },
   {
     "name": "--tp-wheel-disabled-opacity",
     "group": "Wheel",
-    "default": "var(--tp-opacity-disabled,0.38)",
+    "default": "var(--tp-opacity-disabled, 0.38)",
     "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-wheel-font-size",
     "group": "Wheel",
-    "default": "var(--tp-font-size-lg,16px)",
+    "default": "var(--tp-font-size-lg, 16px)",
     "read": true,
     "commonlyThemed": false
   },
@@ -1082,16 +1086,30 @@
   {
     "name": "--tp-popover-shadow",
     "group": "Popover",
-    "default": "0 4px 24px rgba(0,0,0,.15)",
+    "default": "0 4px 24px rgba(0, 0, 0, 0.15)",
     "read": true,
     "commonlyThemed": false
   },
   {
     "name": "--tp-font-family",
     "group": "Typography",
-    "default": "\"Roboto\",sans-serif",
+    "default": "\"Roboto\", sans-serif",
     "read": true,
     "commonlyThemed": false
+  },
+  {
+    "name": "--tp-time-input-font-size",
+    "group": "Typography",
+    "default": "var(--tp-font-size-xl)",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-btn-text",
+    "group": "Color",
+    "default": "var(--tp-primary)",
+    "read": true,
+    "commonlyThemed": true
   },
   {
     "name": "--tp-btn-radius",
@@ -1101,8 +1119,29 @@
     "commonlyThemed": true
   },
   {
-    "name": "--tp-btn-text",
+    "name": "--tp-embedded-backdrop-filter",
+    "group": "Backdrop",
+    "default": "var(--tp-backdrop-filter)",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-embedded-bg",
     "group": "Color",
+    "default": "var(--tp-bg)",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-embedded-radius",
+    "group": "Shape",
+    "default": "var(--tp-radius-md)",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-focus-ring",
+    "group": "Focus",
     "default": "var(--tp-primary)",
     "read": true,
     "commonlyThemed": true
@@ -1113,13 +1152,6 @@
     "default": "none",
     "read": true,
     "commonlyThemed": false
-  },
-  {
-    "name": "--tp-focus-ring",
-    "group": "Focus",
-    "default": "var(--tp-primary)",
-    "read": true,
-    "commonlyThemed": true
   },
   {
     "name": "--tp-dropdown-option-hover-text",
@@ -1138,7 +1170,7 @@
   {
     "name": "--tp-wheel-fade-opacity",
     "group": "Wheel",
-    "default": ".6",
+    "default": "0.6",
     "read": true,
     "commonlyThemed": true
   },
@@ -1153,6 +1185,27 @@
     "name": "--tp-popover-span",
     "group": "Popover",
     "default": "span-right",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-try-capped",
+    "group": "Popover",
+    "default": "--tp-ui-popover-capped-right",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-try-usable",
+    "group": "Popover",
+    "default": "--tp-ui-popover-usable-right",
+    "read": true,
+    "commonlyThemed": false
+  },
+  {
+    "name": "--tp-popover-try-fit",
+    "group": "Popover",
+    "default": "--tp-ui-popover-fit-right",
     "read": true,
     "commonlyThemed": false
   },
