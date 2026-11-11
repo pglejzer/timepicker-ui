@@ -59,7 +59,8 @@ const JSDELIVR_CODE = `<link
 />
 <script src="https://cdn.jsdelivr.net/npm/@pglejzer/datepicker-ui/dist/umd/index.js"></script>`;
 
-const TYPES_CODE = `import DatepickerUI, {
+const TYPES_CODE = `import {
+  DatepickerUI,
   type DatepickerOptions,
   type PickerValue,
 } from "@pglejzer/datepicker-ui";
@@ -151,8 +152,9 @@ import "@pglejzer/datepicker-ui/theme-m2.css";`}
 
       <Section title="TypeScript">
         <p>
-          Types ship in the package, so there is nothing else to install. <code>DatepickerUI</code> is the default
-          export and also a named export, and every option, value and event payload has an exported type.
+          Types ship in the package, so there is nothing else to install. <code>DatepickerUI</code> is a named
+          export, and also the default export, so <code>import DatepickerUI from &quot;@pglejzer/datepicker-ui&quot;</code>{" "}
+          works too. Every option, value and event payload has an exported type.
         </p>
         <CodeBlock code={TYPES_CODE} language="typescript" />
         <p>

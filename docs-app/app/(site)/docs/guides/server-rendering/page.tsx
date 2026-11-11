@@ -222,6 +222,36 @@ onBeforeUnmount(() => picker?.destroy());
         </p>
       </Section>
 
+      <Section title="Helpers that run on the server">
+        <p>
+          <code>parseTime()</code>, <code>formatTime()</code> and{" "}
+          <code>createDisabledTimeCheck()</code> need no picker and no DOM, so
+          you can call them in a Server Component, a route handler or a
+          server action. Use them to read a submitted time or to check it
+          against the same disabled-time rules the picker uses. New in 4.7.0.
+        </p>
+        <CodeBlock
+          filename="app/api/book/route.ts"
+          code={`import { createDisabledTimeCheck, parseTime } from 'timepicker-ui';
+
+const isDisabled = createDisabledTimeCheck({
+  type: '24h',
+  disabledTime: { ranges: ['00:00 - 08:59', '18:00 - 23:59'] }
+});
+
+export async function POST(request: Request) {
+  const { time } = await request.json();
+
+  if (!parseTime(time, { clockType: '24h' }) || isDisabled(time)) {
+    return Response.json({ error: 'Pick a time between 09:00 and 17:59' }, { status: 400 });
+  }
+
+  return Response.json({ ok: true });
+}`}
+          language="typescript"
+        />
+      </Section>
+
       <Section title="Plugins and Themes">
         <p>
           Register plugins in the same client code, before the first{" "}

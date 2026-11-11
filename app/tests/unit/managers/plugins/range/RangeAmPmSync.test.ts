@@ -1,5 +1,6 @@
 import RangeManager from '../../../../../src/managers/plugins/range/RangeManager';
 import { EventEmitter, type TimepickerEventMap } from '../../../../../src/utils/EventEmitter';
+import { mountRangeManager, type RangeHarness } from './range-test-helpers';
 
 const createMockCoreState = (enabled = true, clockType: '12h' | '24h' = '12h', inputValue = '') => {
   const createMockInput = () => {
@@ -27,6 +28,7 @@ const createMockCoreState = (enabled = true, clockType: '12h' | '24h' = '12h', i
     getInput: jest.fn().mockReturnValue(mockInput),
     getHour: jest.fn().mockReturnValue(createMockInput()),
     getMinutes: jest.fn().mockReturnValue(createMockInput()),
+    getClockFace: jest.fn().mockReturnValue(null),
     getActiveType: jest.fn().mockReturnValue('AM'),
     getAM: jest.fn().mockReturnValue(mockAm),
     getPM: jest.fn().mockReturnValue(mockPm),
@@ -320,3 +322,73 @@ describe('RangeManager AM/PM Sync - Regression Tests', () => {
   });
 });
 
+describe('RangeManager AM/PM on a complete end stays on that end (P31)', () => {
+  let harness: RangeHarness | null = null;
+
+  const switches = (h: RangeHarness): unknown[] =>
+    h.events.filter((entry) => entry.event === 'range:switch').map((entry) => entry.payload);
+
+  const clickPeriod = (h: RangeHarness, type: 'AM' | 'PM'): void => {
+    h.core.getActiveType = () => type;
+    h.emitter.emit(type === 'AM' ? 'select:am' : 'select:pm', {});
+  };
+
+  afterEach(() => {
+    harness?.manager.destroy();
+    harness = null;
+    document.body.innerHTML = '';
+  });
+
+  it.each([true, false])(
+    'should change only the From period and stay on From for AM -> PM on a complete From (linked: %s)',
+    (linked) => {
+      harness = mountRangeManager({ clockType: '12h', linked });
+      harness.manager.setRange('09:00 AM', '05:00 PM', false);
+      harness.events.length = 0;
+
+      clickPeriod(harness, 'PM');
+
+      expect(harness.manager.getRange()).toEqual({
+        from: { hour: '09', minutes: '00', type: 'PM' },
+        to: { hour: '05', minutes: '00', type: 'PM' },
+      });
+      expect(harness.manager.getActivePart()).toBe('from');
+      expect(switches(harness)).toEqual([]);
+      expect(harness.fromTime.textContent).toBe('09:00 PM');
+    },
+  );
+
+  it('should change only the To period and emit no range:switch while To is active', () => {
+    harness = mountRangeManager({ clockType: '12h' });
+    harness.manager.setRange('09:00 AM', '05:00 PM', false);
+    harness.manager.setActivePart('to', { focus: false });
+    harness.events.length = 0;
+
+    clickPeriod(harness, 'AM');
+    clickPeriod(harness, 'PM');
+
+    expect(harness.manager.getRange()).toEqual({
+      from: { hour: '09', minutes: '00', type: 'AM' },
+      to: { hour: '05', minutes: '00', type: 'PM' },
+    });
+    expect(harness.manager.getActivePart()).toBe('to');
+    expect(switches(harness)).toEqual([]);
+  });
+
+  it('should keep a dial hour preview and give it the new period', () => {
+    harness = mountRangeManager({ clockType: '12h' });
+    harness.emitter.emit('update', { hour: '11', minutes: '00' });
+    expect(harness.fromTime.textContent).toBe('11:--');
+
+    clickPeriod(harness, 'PM');
+
+    expect(harness.fromTime.textContent).toBe('11:-- PM');
+    expect(harness.manager.getRange().from).toBeNull();
+    expect(harness.manager.getActivePart()).toBe('from');
+
+    harness.commit('11', '30', 'PM');
+
+    expect(harness.manager.getRange().from).toEqual({ hour: '11', minutes: '30', type: 'PM' });
+    expect(harness.manager.getActivePart()).toBe('to');
+  });
+});

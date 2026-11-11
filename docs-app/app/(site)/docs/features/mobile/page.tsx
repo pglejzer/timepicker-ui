@@ -108,6 +108,38 @@ picker.create();`}
           .
         </p>
 
+        <h3>Switch Views from Outside</h3>
+        <p>
+          <code>setView(&apos;clock&apos; | &apos;keyboard&apos;)</code> shows
+          a view from your own button, and <code>getView()</code> reads it.
+          While the picker is open the view changes at once and{" "}
+          <code>switch:view</code> fires. While it is closed, the next open
+          starts in that view, and later opens use <code>ui.initialView</code>{" "}
+          again. Both do nothing in the wheel modes. New in 4.7.0.
+        </p>
+        <CodeBlock
+          code={`picker.setView('keyboard');
+
+picker.on('switch:view', ({ view }) => {
+  console.log('Now showing', view);
+});`}
+          language="typescript"
+        />
+
+        <h3>Compact Keyboard View</h3>
+        <p>
+          For a smaller keyboard view, shrink the time fields and their
+          numbers with CSS variables. New in 4.7.0.
+        </p>
+        <CodeBlock
+          code={`.tp-ui-wrapper {
+  --tp-size-input: 72px;
+  --tp-size-input-mobile: 56px;
+  --tp-time-input-font-size: 36px;
+}`}
+          language="css"
+        />
+
         <h3>Touch-Friendly Input</h3>
         <CodeBlock
           code={`<input

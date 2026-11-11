@@ -4,6 +4,7 @@ import {
   isValidTimezone,
   getTimezoneList,
   clearTimezoneCache,
+  DEFAULT_TIMEZONES,
 } from '../../../src/utils/timezone';
 
 describe('timezone utils', () => {
@@ -118,6 +119,35 @@ describe('timezone utils', () => {
     });
   });
 
+  describe('DEFAULT_TIMEZONES', () => {
+    it('should be the list getTimezoneList falls back to without a whitelist', () => {
+      const ids = getTimezoneList().map((tz) => tz.id);
+
+      expect(DEFAULT_TIMEZONES).toContain('UTC');
+      expect(ids).toEqual(DEFAULT_TIMEZONES.filter(isValidTimezone));
+    });
+
+    it('should leave a zone out of the default list until the caller adds it to a whitelist', () => {
+      expect(DEFAULT_TIMEZONES).not.toContain('Europe/Warsaw');
+      expect(getTimezoneList().map((tz) => tz.id)).not.toContain('Europe/Warsaw');
+
+      const extended = getTimezoneList([...DEFAULT_TIMEZONES, 'Europe/Warsaw']);
+
+      expect(extended.map((tz) => tz.id)).toEqual(
+        [...DEFAULT_TIMEZONES, 'Europe/Warsaw'].filter(isValidTimezone),
+      );
+      expect(extended.map((tz) => tz.id)).toContain('Europe/Warsaw');
+    });
+
+    it('should not be cached when it is extended', () => {
+      const plain = getTimezoneList();
+
+      getTimezoneList([...DEFAULT_TIMEZONES, 'Europe/Warsaw']);
+
+      expect(getTimezoneList()).toBe(plain);
+    });
+  });
+
   describe('clearTimezoneCache', () => {
     it('should clear cached timezone list', () => {
       const list1 = getTimezoneList();
@@ -129,4 +159,3 @@ describe('timezone utils', () => {
     });
   });
 });
-

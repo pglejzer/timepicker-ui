@@ -1,0 +1,107 @@
+name: Publish MCP server
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: mcp-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'mcp-')
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mcp-server
+    env:
+      MCP_PUBLISHER_VERSION: v1.8.1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Check the version
+        id: version
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          server_version=$(node -p "require('./server.json').version")
+          server_package_version=$(node -p "require('./server.json').packages[0].version")
+          if [ "$server_version" != "$version" ] || [ "$server_package_version" != "$version" ]; then
+            echo "::error::server.json ($server_version, package $server_package_version) does not match package.json $version"
+            exit 1
+          fi
+          tag="${TAG_NAME#mcp-}"
+          if [ "$EVENT_NAME" = "release" ] && [ "${tag#v}" != "$version" ]; then
+            echo "::error::Release tag $TAG_NAME does not match the mcp-server version $version"
+            exit 1
+          fi
+          case "$version" in
+            *-*) dist_tag=next ;;
+            *) dist_tag=latest ;;
+          esac
+          echo "dist-tag=$dist_tag" >> "$GITHUB_OUTPUT"
+          echo "Publishing timepicker-ui-mcp $version with the dist-tag $dist_tag (npm $(npm --version))"
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build
+        run: npm run build
+
+      - name: Smoke test
+        run: npm test
+
+      - name: Show the package contents
+        run: npm pack --dry-run
+
+      - name: Publish to npm (dry run)
+        if: github.event_name == 'workflow_dispatch'
+        run: npm publish --dry-run --tag ${{ steps.version.outputs.dist-tag }}
+
+      - name: Publish to npm
+        if: github.event_name == 'release'
+        run: npm publish --tag ${{ steps.version.outputs.dist-tag }}
+
+      - name: Install cosign
+        if: github.event_name == 'release'
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+
+      - name: Download and verify mcp-publisher
+        if: github.event_name == 'release'
+        run: |
+          os="$(uname -s | tr '[:upper:]' '[:lower:]')"
+          arch="$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')"
+          archive="mcp-publisher_${os}_${arch}.tar.gz"
+          base_url="https://github.com/modelcontextprotocol/registry/releases/download/${MCP_PUBLISHER_VERSION}"
+          curl --fail --location --silent --show-error --output "$archive" "$base_url/$archive"
+          curl --fail --location --silent --show-error --output "$archive.sigstore.json" "$base_url/$archive.sigstore.json"
+          cosign verify-blob \
+            --bundle "$archive.sigstore.json" \
+            --certificate-identity "https://github.com/modelcontextprotocol/registry/.github/workflows/release.yml@refs/tags/${MCP_PUBLISHER_VERSION}" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            "$archive"
+          tar xzf "$archive" mcp-publisher
+          rm -f "$archive" "$archive.sigstore.json"
+
+      - name: Publish to the MCP Registry
+        if: github.event_name == 'release'
+        run: |
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish

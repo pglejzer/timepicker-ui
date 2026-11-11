@@ -21,6 +21,7 @@ import type {
   RangeConfirmEventData,
   RangeSwitchEventData,
   RangeValidationEventData,
+  RangeChangeEventData,
   ClearEventData,
   ShowEventData,
   SwitchViewEventData,
@@ -36,6 +37,9 @@ export interface TimeOfDay {
   minutes: number;
   seconds: number;
 }
+
+/** The clock face or the keyboard (typed) view of a clock-mode picker. */
+export type TimepickerView = 'clock' | 'keyboard';
 
 /**
  * Clock behavior configuration
@@ -121,13 +125,13 @@ export interface ClockOptions {
      */
     seconds?: Array<string | number>;
     /**
-     * @description Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h).
+     * @description Inclusive ranges. Edges in the format of `type`: 'HH:MM' or 'HH:MM:SS' with 24h, 'H:MM[:SS] AM|PM' with 12h.
      * An edge without seconds covers its whole minute.
      * When set, the `hours`, `minutes` and `seconds` lists are ignored.
      */
     ranges?: string | string[];
     /**
-     * @description Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h).
+     * @description Inclusive ranges. Edges in the format of `type`: 'HH:MM' or 'HH:MM:SS' with 24h, 'H:MM[:SS] AM|PM' with 12h.
      * An edge without seconds covers its whole minute.
      * When set, the `hours`, `minutes` and `seconds` lists are ignored.
      * @deprecated Use `ranges`. Removed in 5.0.
@@ -225,7 +229,7 @@ export interface UIOptions {
    * @description View shown when the picker opens: the clock face or the keyboard fields.
    * @default "clock"
    */
-  initialView?: 'clock' | 'keyboard';
+  initialView?: TimepickerView;
 
   /**
    * @description Force mobile mode
@@ -359,6 +363,14 @@ export interface UIOptions {
      * @default false
      */
     embedded?: boolean;
+    /**
+     * @description Show the title ("Select time" / "Enter Time") at the top of the inline card. With `false`
+     * the title is visually hidden but still names the picker for screen readers, and the header keeps its
+     * top spacing. Use it when your page or host component already shows a heading.
+     * Ignored unless `enabled` is true.
+     * @default true
+     */
+    showTitle?: boolean;
   };
 }
 
@@ -424,7 +436,6 @@ export interface LabelsOptions {
 
   /**
    * @description Minute field caption, its accessible name, the dial name on the minutes face, and the prefix of the minute announcement.
-   * Until 5.0 the minute announcement keeps its own default, `Minutes`, when neither `minute` nor `announceMinute` is set.
    * @default "Minute"
    */
   minute?: string;
@@ -434,6 +445,15 @@ export interface LabelsOptions {
    * @default "Second"
    */
   second?: string;
+
+  /**
+   * @description Screen reader value of the hour, minute and second fields and of the clock dial.
+   * `{value}` is the number without a leading zero, `{count}` the number of values on that face
+   * (12 or 24 hours, 60 minutes or seconds). With the field name this reads "Hour, 7 of 12".
+   * Set `'{value}'` for the bare number.
+   * @default "{value} of {count}"
+   */
+  valueText?: string;
 
   /**
    * @description Hour label on mobile
@@ -595,7 +615,7 @@ export interface LabelsOptions {
 
   /**
    * @description Screen-reader announcement prefix for the selected minutes
-   * @default "Minutes"
+   * @default "Minute"
    * @deprecated Use `minute`. Removed in 5.0.
    */
   announceMinute?: string;
@@ -772,6 +792,18 @@ export interface RangeTimeState {
   to: RangeTimeValue | null;
 }
 
+/** Times for `setRange()`. Leave an end out to keep it; `null` or `''` clears it. */
+export interface RangeTimeInput {
+  from?: string | null;
+  to?: string | null;
+}
+
+/** Captions for `setRangeCaptions()`. Leave a tab out to keep its caption; `null` or `''` removes it. */
+export interface RangeCaptionInput {
+  from?: string | null;
+  to?: string | null;
+}
+
 /**
  * Range mode configuration (opt-in)
  */
@@ -878,7 +910,7 @@ export interface CallbacksOptions {
   onSelectPM?: TimepickerEventCallback<SelectPMEventData>;
 
   /**
-   * @description Triggered when the switch icon toggles between the clock face and keyboard input (requires `ui.viewSwitch`)
+   * @description Triggered when the view switches between the clock face and keyboard input, with `{ view }`: from the switch icon (`ui.viewSwitch`), `setView()`, or `setOptions()` on an open picker when `ui.initialView` changes
    */
   onSwitchView?: TimepickerEventCallback<SwitchViewEventData>;
 
@@ -913,6 +945,16 @@ export interface CallbacksOptions {
   onRangeValidation?: TimepickerEventCallback<RangeValidationEventData>;
 
   /**
+   * @description Called after the user changes a range end in the picker: dial or wheel, AM/PM, a typed
+   * time that is committed, OK or the Clear button. Both ends are already saved, so `getRange()` returns the
+   * same values. Not called for `setRange()`, `setValue()`, `clear()` or `setActivePart()` without a typed
+   * time. `setActivePart()` and `setOptions()` on an open picker first commit a time the user typed into the
+   * active end, and that commit calls it as the user's change (range mode only). Not called when a wheel mode
+   * fills an empty end with the other end's time on open or on a tab switch.
+   */
+  onRangeChange?: TimepickerEventCallback<RangeChangeEventData>;
+
+  /**
    * @description Triggered when a wheel column starts scrolling (wheel and compact-wheel modes)
    */
   onWheelScrollStart?: TimepickerEventCallback<WheelScrollStartEventData>;
@@ -923,7 +965,7 @@ export interface CallbacksOptions {
   onWheelScrollEnd?: TimepickerEventCallback<WheelScrollEndEventData>;
 
   /**
-   * @description Triggered when clear button is clicked
+   * @description Called when the picker is cleared by the Clear button or `clear()`
    */
   onClear?: TimepickerEventCallback<ClearEventData>;
 }

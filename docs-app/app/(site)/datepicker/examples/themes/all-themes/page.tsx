@@ -7,14 +7,14 @@ import { Section } from "@/components/section";
 
 const THEME: DatepickerOptions = { ui: { theme: "m3-green" } };
 
-const THEME_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const THEME_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   ui: { theme: "m3-green" },
 }).create();`;
 
-const SINGLE_FILE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const SINGLE_FILE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/main.css";
 import "@pglejzer/datepicker-ui/theme-m3-green.css";
 

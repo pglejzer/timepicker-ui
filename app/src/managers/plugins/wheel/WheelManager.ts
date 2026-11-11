@@ -11,6 +11,8 @@ import type { WheelTimeColumn } from './WheelTypes';
 import { bindEmitter } from '../../../utils/managerHelpers';
 import { setSpinbuttonValue } from '../../../utils/accessibility';
 import { getClockType, isCompactWheelMode } from '../../../utils/options/predicates';
+import { toRangeFromLimit } from '../../../utils/time/rangeLimit';
+import { whenSized } from '../../../utils/dom';
 
 const HEADER_FIELDS = { hours: 'getHour', minutes: 'getMinutes', seconds: 'getSeconds' } as const;
 
@@ -23,6 +25,7 @@ export default class WheelManager {
   private readonly emitter: EventEmitter<TimepickerEventMap>;
   private readonly popover: PopoverManager;
   private cleanupHandlers: Array<() => void> = [];
+  private requestedTime: PluginSelection | null = null;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -37,6 +40,7 @@ export default class WheelManager {
 
   init(): void {
     this.releaseHandlers();
+    this.requestedTime = null;
     this.renderer.init();
     this.dragHandler.init();
     this.scrollHandler.init();
@@ -49,11 +53,20 @@ export default class WheelManager {
     this.listenForAmPmChanges();
     this.listenForTimeSelection();
     this.listenForClear();
+    this.listenForRangeSwitch();
     this.snapHeaderToColumns();
     this.deferInitialSync();
+    this.cleanupHandlers.push(
+      whenSized(this.renderer.getColumnElement('hours'), () => this.syncInitialValues()),
+    );
   }
 
   scrollToValue(hour: string, minute: string, type?: string, second?: string): void {
+    this.requestedTime = { hour, minutes: minute, type, seconds: second };
+    this.applyTime(hour, minute, type, second);
+  }
+
+  private applyTime(hour: string, minute: string, type?: string, second?: string): void {
     const time: TimeValue = {
       hour: this.snapToColumn('hours', hour),
       minutes: this.snapToColumn('minutes', minute),
@@ -130,9 +143,20 @@ export default class WheelManager {
   private syncInitialValues(
     parsed = isCompactWheelMode(this.core.options) ? this.parseMainInputValue() : null,
   ): void {
+    const requested = this.requestedTime;
+    if (requested) {
+      this.applyTime(
+        requested.hour,
+        requested.minutes,
+        requested.type || this.renderer.getHeaderPeriod(),
+        requested.seconds,
+      );
+      return;
+    }
+
     const emptyHour = this.core.options.clock.type === '24h' ? NEUTRAL_ZERO : NEUTRAL_HOUR;
 
-    this.scrollToValue(
+    this.applyTime(
       this.core.getHour()?.value || parsed?.hour || emptyHour,
       this.core.getMinutes()?.value || parsed?.minutes || NEUTRAL_ZERO,
       parsed?.type ?? this.renderer.getHeaderPeriod(),
@@ -158,7 +182,15 @@ export default class WheelManager {
 
   private listenForClear(): void {
     bindEmitter(this.emitter, this.cleanupHandlers, 'clear', () => {
+      this.requestedTime = null;
       this.syncInitialValues(null);
+    });
+  }
+
+  private listenForRangeSwitch(): void {
+    bindEmitter(this.emitter, this.cleanupHandlers, 'range:switch', ({ disabledTime }) => {
+      this.renderer.setRangeLimit(toRangeFromLimit(disabledTime));
+      this.renderer.updateDisabledItems(this.getSelection());
     });
   }
 
@@ -179,7 +211,7 @@ export default class WheelManager {
 
   private hasTimeDependentMarks(): boolean {
     const value = this.core.disabledTime?.value;
-    return Boolean(value?.isInterval || value?.predicate);
+    return Boolean(value?.isInterval || value?.predicate) || this.renderer.hasRangeLimit();
   }
 
   private refreshDisabledItems(): void {

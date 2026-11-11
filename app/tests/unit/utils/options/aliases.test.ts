@@ -211,7 +211,7 @@ describe('resolveAliases', () => {
   it('keeps the current label defaults when no new name is used', () => {
     const { labels } = mergeOptions({});
 
-    expect(labels.announceMinute).toBe('Minutes');
+    expect(labels.announceMinute).toBe('Minute');
     expect(labels.second).toBe('Second');
   });
 });

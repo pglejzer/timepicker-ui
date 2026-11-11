@@ -93,13 +93,13 @@
             "name": "ranges",
             "optional": true,
             "type": "string | string[]",
-            "description": "Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h).\nAn edge without seconds covers its whole minute.\nWhen set, the `hours`, `minutes` and `seconds` lists are ignored."
+            "description": "Inclusive ranges. Edges in the format of `type`: 'HH:MM' or 'HH:MM:SS' with 24h, 'H:MM[:SS] AM|PM' with 12h.\nAn edge without seconds covers its whole minute.\nWhen set, the `hours`, `minutes` and `seconds` lists are ignored."
           },
           {
             "name": "interval",
             "optional": true,
             "type": "string | string[]",
-            "description": "Inclusive ranges. Edges: 'HH:MM' or 'HH:MM:SS' (24h), 'H:MM[:SS] AM|PM' (12h).\nAn edge without seconds covers its whole minute.\nWhen set, the `hours`, `minutes` and `seconds` lists are ignored.",
+            "description": "Inclusive ranges. Edges in the format of `type`: 'HH:MM' or 'HH:MM:SS' with 24h, 'H:MM[:SS] AM|PM' with 12h.\nAn edge without seconds covers its whole minute.\nWhen set, the `hours`, `minutes` and `seconds` lists are ignored.",
             "deprecated": "Use `ranges`. Removed in 5.0."
           }
         ]
@@ -198,7 +198,7 @@
       {
         "name": "initialView",
         "optional": true,
-        "type": "'clock' | 'keyboard'",
+        "type": "TimepickerView",
         "description": "View shown when the picker opens: the clock face or the keyboard fields.",
         "default": "\"clock\""
       },
@@ -357,6 +357,13 @@
             "type": "boolean",
             "description": "Render the inline picker as part of a host component instead of a standalone card:\nthe root gets `role=\"group\"` with an accessible name (no `role=\"dialog\"`, no `aria-modal`), the card\nhas no shadow and no minimum height, focus is not trapped and the wrapper does not take focus on\nmount. Use it when the picker sits inside your own dialog, popover or form.\nIgnored unless `enabled` is true.",
             "default": "false"
+          },
+          {
+            "name": "showTitle",
+            "optional": true,
+            "type": "boolean",
+            "description": "Show the title (\"Select time\" / \"Enter Time\") at the top of the inline card. With `false`\nthe title is visually hidden but still names the picker for screen readers, and the header keeps its\ntop spacing. Use it when your page or host component already shows a heading.\nIgnored unless `enabled` is true.",
+            "default": "true"
           }
         ]
       }
@@ -434,7 +441,7 @@
         "name": "minute",
         "optional": true,
         "type": "string",
-        "description": "Minute field caption, its accessible name, the dial name on the minutes face, and the prefix of the minute announcement.\nUntil 5.0 the minute announcement keeps its own default, `Minutes`, when neither `minute` nor `announceMinute` is set.",
+        "description": "Minute field caption, its accessible name, the dial name on the minutes face, and the prefix of the minute announcement.",
         "default": "\"Minute\""
       },
       {
@@ -443,6 +450,13 @@
         "type": "string",
         "description": "Second field caption, its accessible name, the dial name on the seconds face, and the prefix of the second announcement (requires `clock.showSeconds`)",
         "default": "\"Second\""
+      },
+      {
+        "name": "valueText",
+        "optional": true,
+        "type": "string",
+        "description": "Screen reader value of the hour, minute and second fields and of the clock dial.\n`{value}` is the number without a leading zero, `{count}` the number of values on that face\n(12 or 24 hours, 60 minutes or seconds). With the field name this reads \"Hour, 7 of 12\".\nSet `'{value}'` for the bare number.",
+        "default": "\"{value} of {count}\""
       },
       {
         "name": "mobileHour",
@@ -631,7 +645,7 @@
         "optional": true,
         "type": "string",
         "description": "Screen-reader announcement prefix for the selected minutes",
-        "default": "\"Minutes\"",
+        "default": "\"Minute\"",
         "deprecated": "Use `minute`. Removed in 5.0."
       },
       {
@@ -909,7 +923,7 @@
         "name": "onSwitchView",
         "optional": true,
         "type": "TimepickerEventCallback<SwitchViewEventData>",
-        "description": "Triggered when the switch icon toggles between the clock face and keyboard input (requires `ui.viewSwitch`)"
+        "description": "Triggered when the view switches between the clock face and keyboard input, with `{ view }`: from the switch icon (`ui.viewSwitch`), `setView()`, or `setOptions()` on an open picker when `ui.initialView` changes"
       },
       {
         "name": "onSwitchFace",
@@ -948,6 +962,12 @@
         "description": "Triggered on range validation (range mode only)"
       },
       {
+        "name": "onRangeChange",
+        "optional": true,
+        "type": "TimepickerEventCallback<RangeChangeEventData>",
+        "description": "Called after the user changes a range end in the picker: dial or wheel, AM/PM, a typed\ntime that is committed, OK or the Clear button. Both ends are already saved, so `getRange()` returns the\nsame values. Not called for `setRange()`, `setValue()`, `clear()` or `setActivePart()` without a typed\ntime. `setActivePart()` and `setOptions()` on an open picker first commit a time the user typed into the\nactive end, and that commit calls it as the user's change (range mode only). Not called when a wheel mode\nfills an empty end with the other end's time on open or on a tab switch."
+      },
+      {
         "name": "onWheelScrollStart",
         "optional": true,
         "type": "TimepickerEventCallback<WheelScrollStartEventData>",
@@ -963,7 +983,7 @@
         "name": "onClear",
         "optional": true,
         "type": "TimepickerEventCallback<ClearEventData>",
-        "description": "Triggered when clear button is clicked"
+        "description": "Called when the picker is cleared by the Clear button or `clear()`"
       }
     ]
   },

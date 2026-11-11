@@ -32,6 +32,89 @@ function coreUpdate(from: string, to: string, coreReleaseDate: string): ChangeEn
 
 const RELEASES: ReleaseNotes[] = [
   {
+    title: "Version 1.7.0 - 2026-11-11",
+    changes: {
+      Added: [
+        {
+          title: "`onRangeChange` prop",
+          description:
+            "For the core's `range:change` event. It also works in `options.callbacks`. The payload is `{ part, from, to }`.",
+        },
+        {
+          title: "`parseTime()`, `formatTime()` and `createDisabledTimeCheck()` (from core)",
+          description: "Re-exported. They work without a picker.",
+        },
+        {
+          title: "`RangeChangeEventData`, `RangeTimeInput`, `RangeCaptionInput`, `TimepickerView`, `TimeValue`, `TimeFormatOptions`, `DisabledTimeCheckOptions`, `TimepickerEventName` and `PluginTimeView` types",
+          description: "Re-exported.",
+        },
+        {
+          title: "`SelectPeriodEventData` and `SwitchFaceEventData` types",
+          description: "Re-exported. They are the payloads of `onSelectPeriod` and `onSwitchFace`.",
+        },
+        { title: "The range plugin works in `wheel` and `compact-wheel` (from core)" },
+        {
+          title: "`setView()`, `getView()`, `clear()`, `getActivePart()` and `setRangeCaptions()` (from core)",
+          description: "On the core instance, reachable with `TimepickerUI.getById(id)`.",
+        },
+        {
+          title: "`setRange({ from })` or `setRange({ to })` (from core)",
+          description: "Changes one end and keeps the other.",
+        },
+      ],
+      Changed: [
+        coreUpdate("4.6.0", "4.7.0", "November 11, 2026"),
+        "Check these if you style or test the picker (from core):",
+        "AM/PM is a `role=\"radiogroup\"` with `aria-checked`. Selectors that use `aria-pressed` on `.tp-ui-am` and `.tp-ui-pm` need updating",
+        "The timezone `combobox` role and its `aria-expanded` and `aria-activedescendant` moved to `.tp-ui-timezone-selected`",
+        "In range mode, the header, timezone row and clock or wheel body sit in `.tp-ui-range-panel`",
+        "`aria-valuetext` reads \"7 of 12\" instead of \"07\"",
+        "`onSwitchView` receives `{ view }`, and `wheel` and `compact-wheel` no longer show the view-switch icon",
+        "Clear fires `select:hour`, `clear` and `update`, without the extra 12:00 `update`",
+        "The `dark` theme uses Material Design 3 colors",
+      ],
+    },
+  },
+  {
+    title: "Version 1.6.1 - 2026-10-19",
+    changes: {
+      Fixed: [
+        {
+          title: "Wrong core version",
+          description:
+            "The package depended on timepicker-ui 4.5.0, so the 4.6.0 options, methods and types listed under 1.6.0 were missing. It now depends on 4.6.0.",
+        },
+      ],
+    },
+  },
+  {
+    title: "Version 1.6.0 - 2026-10-19",
+    changes: {
+      Added: [
+        {
+          title: "`ui.inline.embedded`, `range.linked` and `clock.isTimeDisabled` options (from core)",
+          description:
+            "Keep the `isTimeDisabled` function stable, or the picker re-renders on every render.",
+        },
+        {
+          title: "`setRange()`, `getRange()`, `setActivePart()` and `refreshDisabledTime()` (from core)",
+          description: "On the core instance, reachable with `TimepickerUI.getById(id)`.",
+        },
+        {
+          title: "`TimeOfDay`, `RangeTimeValue` and `RangeTimeState` types",
+          description: "Re-exported.",
+        },
+      ],
+      Changed: [
+        coreUpdate("4.5.0", "4.6.0", "October 19, 2026"),
+        {
+          title: "`on()` and `once()` return an unsubscribe function (from core)",
+          description: "On the core instance, they return a function that removes the handler.",
+        },
+      ],
+    },
+  },
+  {
     title: "Version 1.5.0 - 2026-10-14",
     changes: {
       Added: [

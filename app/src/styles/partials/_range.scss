@@ -1,5 +1,9 @@
 @use '../variables.scss' as *;
 
+.tp-ui-range-panel {
+  display: contents;
+}
+
 .tp-ui-range-header {
   display: flex;
   align-items: stretch;
@@ -54,6 +58,18 @@
   color: var(--tp-text-secondary);
 }
 
+.tp-ui-range-tab-caption {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  color: var(--tp-text-secondary);
+}
+
 .tp-ui-range-tab-value {
   font-size: 16px;
   font-weight: 400;
@@ -88,8 +104,26 @@
   pointer-events: none;
 }
 
+.tp-ui-compact-wheel-mode .tp-ui-range-header {
+  padding: var(--tp-spacing-md) var(--tp-spacing-md) 0;
+  gap: var(--tp-spacing-sm);
+  margin-bottom: var(--tp-spacing-sm);
+}
+
+.tp-ui-compact-wheel-mode .tp-ui-range-tab {
+  padding: var(--tp-spacing-xs) var(--tp-spacing-sm);
+}
+
+.tp-ui-compact-wheel-mode .tp-ui-range-tab-value {
+  min-height: 24px;
+}
+
+.tp-ui-compact-wheel-mode .tp-ui-range-tab-caption {
+  line-height: 14px;
+}
+
 @media screen and (orientation: landscape) and (max-height: 480px) {
-  .tp-ui-range-mode .tp-ui-range-header.expanded {
+  .tp-ui-range-mode:not(.tp-ui-compact-wheel-mode) .tp-ui-range-header.expanded {
     position: absolute;
     top: 0;
     left: 0;
@@ -100,5 +134,9 @@
     z-index: 1;
     box-sizing: border-box;
     justify-content: flex-start;
+  }
+
+  .tp-ui-range-mode:not(.tp-ui-compact-wheel-mode) .tp-ui-range-header.expanded .tp-ui-range-tab-caption {
+    line-height: 14px;
   }
 }

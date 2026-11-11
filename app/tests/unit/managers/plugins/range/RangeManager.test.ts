@@ -23,6 +23,7 @@ const createMockCoreState = (enabled = true, clockType: '12h' | '24h' = '12h') =
     getInput: jest.fn().mockReturnValue({ value: '' }),
     getHour: jest.fn().mockReturnValue(createMockInput()),
     getMinutes: jest.fn().mockReturnValue(createMockInput()),
+    getClockFace: jest.fn().mockReturnValue(null),
     getActiveType: jest.fn().mockReturnValue('AM'),
     getAM: jest.fn().mockReturnValue(createMockDiv()),
     getPM: jest.fn().mockReturnValue(createMockDiv()),

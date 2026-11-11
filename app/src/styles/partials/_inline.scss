@@ -48,9 +48,13 @@
 }
 
 .tp-ui--inline.tp-ui--embedded {
+  backdrop-filter: var(--tp-embedded-backdrop-filter, var(--tp-backdrop-filter));
+
   .tp-ui-wrapper,
   .tp-ui-wrapper.mobile {
     box-shadow: none !important;
+    background-color: var(--tp-embedded-bg, var(--tp-bg));
+    border-radius: var(--tp-embedded-radius, var(--tp-radius-md));
   }
 }
 

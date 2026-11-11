@@ -107,7 +107,7 @@ export class KeyboardHandlers {
     }
 
     this.onKeydown(document, (e) => {
-      if (this.core.isOpen && e.key === 'Escape') {
+      if (this.core.isOpen && e.key === 'Escape' && !e.defaultPrevented) {
         this.emitter.emit('cancel', {});
       }
     });

@@ -529,6 +529,53 @@ describe('ClockRenderer', () => {
       expect(customWrapper.children.length).toBe(4);
     });
 
+    describe('layout of tips in a wrapper that is not sized yet', () => {
+      const HOURS = ['12', '1', '2', '3'];
+
+      const sizeWrapper = (wrapper: HTMLElement, size: number): void => {
+        Object.defineProperty(wrapper, 'offsetWidth', { configurable: true, value: size });
+        Object.defineProperty(wrapper, 'offsetHeight', { configurable: true, value: size });
+      };
+
+      const render = (renderer: ClockRenderer, wrapper: HTMLElement): void => {
+        renderer.renderTips(HOURS, 'tp-ui-hour-time-12', 'hours', null, '12h', true, wrapper, 'AM');
+      };
+
+      const positions = (wrapper: HTMLElement): string[][] =>
+        [...wrapper.children].map((span) => {
+          const { left, bottom } = (span as HTMLElement).style;
+          return [left, bottom];
+        });
+
+      it('should not cache a zero size, so a later render lays the tips out at the real size', () => {
+        const renderer = new ClockRenderer(config);
+        const wrapper = document.createElement('div');
+        sizeWrapper(wrapper, 0);
+        render(renderer, wrapper);
+        const hidden = positions(wrapper);
+
+        sizeWrapper(wrapper, 300);
+        render(renderer, wrapper);
+
+        expect(positions(wrapper)).not.toEqual(hidden);
+        expect(positions(wrapper)[0]).toEqual(['134px', '259px']);
+        expect(positions(wrapper)[1][0]).toBe('259px');
+      });
+
+      it('should keep using a size once it was cached', () => {
+        const renderer = new ClockRenderer(config);
+        const wrapper = document.createElement('div');
+        sizeWrapper(wrapper, 300);
+        render(renderer, wrapper);
+        const sized = positions(wrapper);
+
+        sizeWrapper(wrapper, 200);
+        render(renderer, wrapper);
+
+        expect(positions(wrapper)).toEqual(sized);
+      });
+    });
+
     describe('on the cached path (clearBefore = false)', () => {
       const HOURS = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
       const THREE_DISABLED = { hours: ['3'] };

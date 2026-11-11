@@ -4,6 +4,7 @@ import type { UpdateEventData } from '../../types/types';
 import { announceToScreenReader, setClass, syncClockSlider } from '../../utils/accessibility';
 import { getClockType } from '../../utils/options/predicates';
 import { pad, type TimeValue } from '../../utils/time/parse';
+import { buildDisabledRules } from '../../utils/time/disable';
 import { isUnitDisabled } from '../../utils/time/rules';
 
 export type TimeField = 'hour' | 'minutes' | 'seconds';
@@ -68,8 +69,7 @@ export const fieldBounds = (core: CoreState, field: TimeField): readonly [number
 };
 
 const isFieldDisabled = (core: CoreState, field: TimeField, time: UpdateEventData): boolean => {
-  const source = core.disabledTime?.value;
-  const rules = source ? { ...source, clockType: getClockType(core.options) } : null;
+  const rules = buildDisabledRules(core.disabledTime?.value, getClockType(core.options));
   return isUnitDisabled(rules, field, time as TimeValue, !!core.options.clock.showSeconds);
 };
 

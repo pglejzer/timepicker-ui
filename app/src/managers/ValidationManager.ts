@@ -1,8 +1,5 @@
 import { getInputValue } from '../utils/input';
-import { checkDisabledHoursAndMinutes } from '../utils/time/disable';
-import { TimepickerError, ERROR_CODES } from '../utils/errors';
-import { isOverlappingRangeArray } from '../utils/config';
-import { getClockType } from '../utils/options/predicates';
+import { validateDisabledTime } from '../utils/time/disable';
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
 import type { ErrorEventData } from '../types/types';
@@ -130,60 +127,10 @@ export default class ValidationManager {
   }
 
   checkDisabledValuesOnStart(): void {
-    const { isTimeDisabled } = this.core.options.clock;
-    if (isTimeDisabled && typeof isTimeDisabled !== 'function') {
-      throw new TimepickerError('clock.isTimeDisabled must be a function', ERROR_CODES.INVALID_PARAMETER);
-    }
-
-    if (!this.core.options.clock.disabledTime) return;
-
-    const { disabledTime, type } = this.core.options.clock;
-    const clockType = getClockType(this.core.options);
-
-    if (disabledTime.interval) {
-      if (!type) {
-        throw new TimepickerError(
-          'clockType is required when using disabledTime.interval',
-          ERROR_CODES.INVALID_PARAMETER,
-        );
-      }
-
-      const intervals = Array.isArray(disabledTime.interval)
-        ? disabledTime.interval
-        : [disabledTime.interval];
-
-      try {
-        isOverlappingRangeArray(intervals, clockType);
-      } catch (error) {
-        throw new TimepickerError(
-          `Invalid disabledTime.interval: ${(error as Error).message}`,
-          ERROR_CODES.INVALID_PARAMETER,
-        );
-      }
-
-      return;
-    }
-
-    const { hours, minutes, seconds } = disabledTime;
-
-    const isValidHours = hours ? checkDisabledHoursAndMinutes(hours, 'hour', clockType) : true;
-    const isValidMinutes = minutes ? checkDisabledHoursAndMinutes(minutes, 'minutes', clockType) : true;
-    const isValidSeconds = seconds ? checkDisabledHoursAndMinutes(seconds, 'minutes', clockType) : true;
-
-    if (!isValidHours || !isValidMinutes) {
-      throw new TimepickerError(
-        'Invalid hours or minutes in disabledTime option',
-        ERROR_CODES.INVALID_PARAMETER,
-      );
-    }
-
-    if (!isValidSeconds) {
-      throw new TimepickerError('Invalid seconds in disabledTime option', ERROR_CODES.INVALID_PARAMETER);
-    }
+    validateDisabledTime(this.core.options.clock);
   }
 
   destroy(): void {
     this.removeErrorHandler();
   }
 }
-

@@ -49,6 +49,11 @@ const GROUPS: ClassGroup[] = [
       { classes: ["dp-ui__navigation", "dp-ui__navigation-group"], element: "Month and year controls." },
       { classes: ["dp-ui__navigation--year-grid"], element: "Navigation while the year grid is shown." },
       {
+        classes: ["dp-ui__navigation--caption", "dp-ui__caption"],
+        element:
+          "Navigation with `ui.inline.navigation: \"caption\"`, and the month and year text next to its arrows. The text is hidden when several months are shown.",
+      },
+      {
         classes: ["dp-ui__icon-button", "dp-ui__menu-button", "dp-ui__text-button"],
         element:
           "Buttons, with a modifier for each one such as `--prev-month`, `--next-month`, `--switch-view`, `--close`, `--today`, `--clear`, `--cancel`, `--confirm` and `--save`.",
@@ -59,6 +64,10 @@ const GROUPS: ClassGroup[] = [
     title: "Calendar and days",
     rows: [
       { classes: ["dp-ui__calendar", "dp-ui__content"], element: "Calendar body." },
+      {
+        classes: ["dp-ui__calendar--modal"],
+        element: "Calendar with the modal or full-screen layout, on any surface, set by `ui.layout`.",
+      },
       {
         classes: ["dp-ui__pager", "dp-ui__pager--swipe", "dp-ui__pager--dragging", "dp-ui__pager-track", "dp-ui__page"],
         element: "Month paging.",
@@ -106,6 +115,11 @@ const GROUPS: ClassGroup[] = [
       {
         classes: ["dp-ui__presets", "dp-ui__preset", "dp-ui__container--presets"],
         element: "Range presets, and the container when they show as a column.",
+      },
+      {
+        classes: ["dp-ui__presets--column"],
+        element:
+          "Presets group shown as a column. A presets group of your own, such as one in a kit host, gets the same column look with `dp-ui__presets dp-ui__presets--column`.",
       },
       {
         classes: ["dp-ui__range", "dp-ui__weekdays-bar", "dp-ui__month-list", "dp-ui__month-subhead"],

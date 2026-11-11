@@ -16,7 +16,7 @@ function weekdayError(value: PickerValue | null): string {
   return day === 0 || day === 6 ? WEEKDAYS_ONLY : "";
 }
 
-const CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const message = document.querySelector("#date-message");

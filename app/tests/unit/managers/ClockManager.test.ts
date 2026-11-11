@@ -383,6 +383,7 @@ describe('ClockManager', () => {
       };
 
       const mobileCore = new CoreState(mockElement, mobileOptions, 'test-mobile-id');
+      mobileCore.setIsMobileView(true);
       const mobileManager = new ClockManager(mobileCore, emitter);
 
       const hour = document.createElement('input') as HTMLInputElement;
@@ -391,6 +392,22 @@ describe('ClockManager', () => {
       mobileManager.setClassActiveToHourOnOpen();
 
       expect(hour.classList.contains('active')).toBe(false);
+
+      mobileManager.destroy();
+    });
+
+    it('should add active class when ui.mobile is true but the clock view was rendered', () => {
+      const mobileOptions = { ...DEFAULT_OPTIONS, ui: { ...DEFAULT_OPTIONS.ui, mobile: true } };
+      const mobileCore = new CoreState(mockElement, mobileOptions, 'test-mobile-clock-id');
+      mobileCore.setIsMobileView(false);
+      const mobileManager = new ClockManager(mobileCore, emitter);
+
+      const hour = document.createElement('input') as HTMLInputElement;
+      jest.spyOn(mobileCore, 'getHour').mockReturnValue(hour);
+
+      mobileManager.setClassActiveToHourOnOpen();
+
+      expect(hour.classList.contains('active')).toBe(true);
 
       mobileManager.destroy();
     });

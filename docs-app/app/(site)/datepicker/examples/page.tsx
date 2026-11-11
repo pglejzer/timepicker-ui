@@ -19,7 +19,7 @@ const RANGE: DatepickerOptions = {
   calendar: { mode: "range" },
 };
 
-const RANGE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const RANGE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -32,7 +32,7 @@ const INLINE: DatepickerOptions = {
   behavior: { commitOnChange: true },
 };
 
-const INLINE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const INLINE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

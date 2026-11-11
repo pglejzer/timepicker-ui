@@ -44,9 +44,7 @@ describe('ripple hosts in the modal template', () => {
   });
 
   it('should keep the timezone dropdown, which holds the option menu, out of the ripple hosts', () => {
-    const dropdown = render({ timezone: { enabled: true } }).querySelector(
-      '.tp-ui-timezone-dropdown[role="combobox"]',
-    );
+    const dropdown = render({ timezone: { enabled: true } }).querySelector('.tp-ui-timezone-dropdown');
 
     expect(dropdown).not.toBeNull();
     expect(isRippleHost(dropdown)).toBe(false);

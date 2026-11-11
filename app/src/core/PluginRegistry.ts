@@ -10,6 +10,11 @@ export interface PluginSelection {
 }
 
 /** @remarks This API changes in 5.0.0; see the roadmap. */
+export interface PluginTimeView {
+  show(value: PluginSelection): void;
+}
+
+/** @remarks This API changes in 5.0.0; see the roadmap. */
 export interface PluginManager {
   init(): void;
   destroy(): void;
@@ -17,6 +22,7 @@ export interface PluginManager {
   detachPopover?(): void;
   scrollToValue?(hour: string, minute: string, type?: string, second?: string): void;
   getSelection?(): PluginSelection | null;
+  setTimeView?(view: PluginTimeView): void;
 }
 
 /** @remarks This API changes in 5.0.0; see the roadmap. */

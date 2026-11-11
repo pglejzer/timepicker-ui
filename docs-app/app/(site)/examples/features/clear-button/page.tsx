@@ -3,6 +3,8 @@
 import { Section } from "@/components/section";
 import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
+import { Figure } from "@/components/figure";
+import { ClearFromCodeDemo } from "@/components/view-and-range-demos";
 
 export default function ClearButtonPage() {
   return (
@@ -75,6 +77,28 @@ picker.create();`}
             labels: { clear: "Reset" },
           }}
         />
+      </Section>
+
+      <Section title="Clear from Code">
+        <p>
+          <code>picker.clear()</code> works with the button hidden, open or
+          closed. It emits <code>clear</code>, makes no screen reader
+          announcement and does not move focus. New in 4.7.0.
+        </p>
+        <Figure
+          code={`const picker = new TimepickerUI(input, {
+  clock: { type: '24h' }
+});
+picker.create();
+
+picker.on('clear', ({ previousValue }) => {
+  console.log('Cleared, previous:', previousValue);
+});
+
+resetButton.addEventListener('click', () => picker.clear());`}
+        >
+          <ClearFromCodeDemo />
+        </Figure>
       </Section>
 
       <Section title="With Clear Callback">

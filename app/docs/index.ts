@@ -1,3 +1,5 @@
+import '../src/styles/index.scss';
+import './theme-custom.css';
 import './examples/setup';
 import './examples/basic';
 import './examples/themes';

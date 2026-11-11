@@ -14,10 +14,15 @@ const INLINE_FOOTER: DatepickerOptions = {
   ui: { inline: { enabled: true }, footer: true },
 };
 
-const HTML_CODE = `<input id="date" />
+const INLINE_MODAL: DatepickerOptions = {
+  ui: { layout: "modal", inline: { enabled: true } },
+  behavior: { commitOnChange: true },
+};
+
+const HTML_CODE =`<input id="date" />
 <div id="calendar"></div>`;
 
-const INLINE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const INLINE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -25,11 +30,19 @@ new DatepickerUI("#date", {
   behavior: { commitOnChange: true },
 }).create();`;
 
-const FOOTER_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const FOOTER_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   ui: { inline: { enabled: true, container: "#calendar" }, footer: true },
+}).create();`;
+
+const MODAL_LAYOUT_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
+import "@pglejzer/datepicker-ui/index.css";
+
+new DatepickerUI("#date", {
+  ui: { layout: "modal", inline: { enabled: true, container: "#calendar" } },
+  behavior: { commitOnChange: true },
 }).create();`;
 
 export default function DatepickerInlineExamplePage() {
@@ -49,6 +62,15 @@ export default function DatepickerInlineExamplePage() {
         </p>
         <CodeBlock code={HTML_CODE} language="html" />
         <DatepickerExample label="Inline" options={INLINE} code={INLINE_CODE} />
+      </Section>
+
+      <Section title="Modal look">
+        <p>
+          An inline calendar has the docked look by default. <code>ui.layout: &quot;modal&quot;</code> gives it the
+          headline, a month row with arrows and month and year grids. <code>&quot;fullscreen&quot;</code> does the
+          same for a single picker and gives a range picker the full-screen layout.
+        </p>
+        <DatepickerExample label="Inline modal look" options={INLINE_MODAL} code={MODAL_LAYOUT_CODE} />
       </Section>
 
       <Section title="With a footer">

@@ -3,7 +3,8 @@ import { WheelScrollHandler } from '../../../../../src/managers/plugins/wheel/Wh
 import { WheelRenderer } from '../../../../../src/managers/plugins/wheel/WheelRenderer';
 import { WheelDragHandler } from '../../../../../src/managers/plugins/wheel/WheelDragHandler';
 import { EventEmitter, type TimepickerEventMap } from '../../../../../src/utils/EventEmitter';
-import { setupWheelTestContext, type WheelTestContext } from './wheel-test-helpers';
+import { TIMINGS } from '../../../../../src/constants/timings';
+import { mockWheelItemHeight, setupWheelTestContext, type WheelTestContext } from './wheel-test-helpers';
 
 describe('WheelEventHandler', () => {
   let ctx: WheelTestContext;
@@ -270,3 +271,81 @@ describe('WheelEventHandler', () => {
   });
 });
 
+describe('WheelEventHandler commitOnScroll timer with a range', () => {
+  let destroyHandlers: (() => void) | null = null;
+
+  const mountCommitOnScroll = (rangeEnabled: boolean): WheelTestContext => {
+    const context = setupWheelTestContext('24h');
+    context.core.updateOptions({ range: { enabled: rangeEnabled }, wheel: { commitOnScroll: true } });
+
+    const wheelRenderer = new WheelRenderer(context.core);
+    const wheelDrag = new WheelDragHandler(wheelRenderer);
+    const wheelScroll = new WheelScrollHandler(wheelRenderer, context.core);
+    wheelScroll.setDragHandler(wheelDrag);
+    const wheelEvents = new WheelEventHandler(context.emitter, wheelScroll, context.core);
+
+    wheelRenderer.init();
+    wheelDrag.init();
+    wheelScroll.init();
+    wheelScroll.scrollToValue('hours', '12');
+    wheelScroll.scrollToValue('minutes', '00');
+    wheelEvents.init();
+
+    destroyHandlers = (): void => {
+      wheelEvents.destroy();
+      wheelScroll.destroy();
+      wheelDrag.destroy();
+      wheelRenderer.destroy();
+    };
+    return context;
+  };
+
+  const stepHours = (context: WheelTestContext): void => {
+    context.modal
+      .querySelector('.tp-ui-wheel-hours')
+      ?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+  };
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+    mockWheelItemHeight();
+  });
+
+  afterEach(() => {
+    destroyHandlers?.();
+    destroyHandlers = null;
+    document.body.innerHTML = '';
+    jest.restoreAllMocks();
+    jest.useRealTimers();
+  });
+
+  it('21: skips the input write with range.enabled and still confirms with autoCommit', () => {
+    const context = mountCommitOnScroll(true);
+    const onConfirm = jest.fn();
+    context.emitter.on('confirm', onConfirm);
+
+    stepHours(context);
+    expect(onConfirm).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(TIMINGS.COMMIT_ON_SCROLL_DELAY);
+
+    expect(context.core.getInput()?.value).toBe('');
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+    expect(onConfirm).toHaveBeenCalledWith(
+      expect.objectContaining({ hour: '13', minutes: '00', autoCommit: true }),
+    );
+  });
+
+  it('21: still writes the input without a range', () => {
+    const context = mountCommitOnScroll(false);
+    const onConfirm = jest.fn();
+    context.emitter.on('confirm', onConfirm);
+
+    stepHours(context);
+    jest.advanceTimersByTime(TIMINGS.COMMIT_ON_SCROLL_DELAY);
+
+    expect(context.core.getInput()?.value).toBe('13:00');
+    expect(onConfirm).toHaveBeenCalledWith(
+      expect.objectContaining({ hour: '13', minutes: '00', autoCommit: true }),
+    );
+  });
+});

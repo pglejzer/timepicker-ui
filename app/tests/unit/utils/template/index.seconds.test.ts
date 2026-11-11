@@ -31,7 +31,7 @@ describe('modal header with seconds', () => {
     expect(seconds?.getAttribute('aria-valuemin')).toBe('0');
     expect(seconds?.getAttribute('aria-valuemax')).toBe('59');
     expect(seconds?.getAttribute('aria-valuenow')).toBe('0');
-    expect(seconds?.getAttribute('aria-valuetext')).toBe('00');
+    expect(seconds?.getAttribute('aria-valuetext')).toBe('0 of 60');
     expect(modal.querySelectorAll('.tp-ui-wrapper-time .tp-ui-dots')).toHaveLength(2);
     const fields = modal.querySelectorAll<HTMLInputElement>('.tp-ui-wrapper-time input');
     expect([...fields].map((field) => field.name)).toEqual(['hour', 'minutes', 'seconds']);

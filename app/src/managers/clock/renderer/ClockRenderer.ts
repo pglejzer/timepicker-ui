@@ -19,15 +19,16 @@ export class ClockRenderer {
   }
 
   private getCachedDimensions(wrapper: HTMLElement): { width: number; height: number; radius: number } {
-    let cached = this.cachedDimensions.get(wrapper);
-    if (!cached) {
-      const wrapperWidth = (wrapper.offsetWidth - 32) / 2;
-      const wrapperHeight = (wrapper.offsetHeight - 32) / 2;
-      const radius = wrapperWidth - 9;
-      cached = { width: wrapperWidth, height: wrapperHeight, radius };
-      this.cachedDimensions.set(wrapper, cached);
+    const cached = this.cachedDimensions.get(wrapper);
+    if (cached) return cached;
+
+    const width = (wrapper.offsetWidth - 32) / 2;
+    const height = (wrapper.offsetHeight - 32) / 2;
+    const dimensions = { width, height, radius: width - 9 };
+    if (wrapper.offsetWidth > 0) {
+      this.cachedDimensions.set(wrapper, dimensions);
     }
-    return cached;
+    return dimensions;
   }
 
   setHandAngle(angle: number): void {

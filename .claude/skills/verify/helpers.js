@@ -57,21 +57,19 @@
   };
   const PROBE_EVENTS = ['show', 'open', 'confirm', 'cancel', 'update', 'select:am', 'select:pm', 'error'];
   const probes = {};
-  const findTimepicker = () => {
+  const findTimepicker = async () => {
     if (window.__tpClass) return window.__tpClass;
-    const chunk = window.webpackChunktimepicker_ui_build;
-    if (!chunk) return null;
-    let req;
-    chunk.push([[Symbol('verify-probe')], {}, (r) => (req = r)]);
-    if (!req || !req.c) return null;
-    for (const id of Object.keys(req.c)) {
-      const exp = req.c[id].exports;
-      if (!exp || typeof exp !== 'object') continue;
-      for (const key of Object.keys(exp)) {
-        try {
+    const urls = performance
+      .getEntriesByType('resource')
+      .map((entry) => entry.name)
+      .filter((name) => /\/src\/(timepicker\/TimepickerUI|index)\.ts(\?|$)/.test(name));
+    for (const url of urls) {
+      try {
+        const exp = await import(url);
+        for (const key of Object.keys(exp)) {
           if (exp[key] && typeof exp[key].getById === 'function') return (window.__tpClass = exp[key]);
-        } catch (e) {}
-      }
+        }
+      } catch (e) {}
     }
     return null;
   };
@@ -98,7 +96,7 @@
     const ok = q('.tp-ui-ok-btn');
     const clear = q('.tp-ui-clear-btn');
     const activeTab = q('.tp-ui-range-tab.active');
-    const tz = q('.tp-ui-timezone-dropdown');
+    const tz = q('.tp-ui-timezone-dropdown[role="combobox"], .tp-ui-timezone-dropdown [role="combobox"]');
     const input = inputSelector ? document.querySelector(resolve(inputSelector)) : null;
     let rangeActive = null;
     if (activeTab) rangeActive = activeTab.classList.contains('tp-ui-range-from') ? 'from' : 'to';
@@ -253,7 +251,10 @@
       const top = document.elementFromPoint(p.x, p.y);
       if (!top || !face.contains(top)) return { ok: false, error: 'tip covered by ' + describe(top) };
       const init = { bubbles: true, cancelable: true, view: window, clientX: p.x, clientY: p.y, button: 0 };
+      const pointer = { ...init, pointerId: 1, pointerType: 'mouse', isPrimary: true };
+      face.dispatchEvent(new PointerEvent('pointerdown', { ...pointer, buttons: 1 }));
       face.dispatchEvent(new MouseEvent('mousedown', { ...init, buttons: 1 }));
+      document.dispatchEvent(new PointerEvent('pointerup', { ...pointer, buttons: 0 }));
       document.dispatchEvent(new MouseEvent('mouseup', { ...init, buttons: 0 }));
       await settle();
       return { ok: true, disabledTip: span.classList.contains('tp-ui-tips-disabled'), ...readState() };
@@ -337,9 +338,9 @@
     errors() {
       return { errors: errors.slice() };
     },
-    probe(id, value, options = {}) {
-      const TP = findTimepicker();
-      if (!TP) return { ok: false, error: 'TimepickerUI not found in the webpack module cache (lib demo only)' };
+    async probe(id, value, options = {}) {
+      const TP = await findTimepicker();
+      if (!TP) return { ok: false, error: 'TimepickerUI not found among the Vite dev modules (lib demo only)' };
       if (probes[id]) return { ok: false, error: 'probe exists: ' + id };
       const host = document.createElement('div');
       const index = Object.keys(probes).length;
@@ -389,6 +390,30 @@
     },
     modalCount() {
       return { count: document.querySelectorAll('body > .tp-ui-modal').length };
+    },
+    sameHeight(first, second) {
+      const a = document.querySelector(resolve(first));
+      const b = document.querySelector(resolve(second));
+      if (!a || !b) return { ok: false, error: 'not found: ' + (a ? second : first) };
+      const ha = Math.round(a.getBoundingClientRect().height);
+      const hb = Math.round(b.getBoundingClientRect().height);
+      return { ok: true, equal: ha === hb, first: ha, second: hb };
+    },
+    scrollFit(selector) {
+      const el = document.querySelector(resolve(selector));
+      if (!el) return { ok: false, error: 'not found: ' + selector };
+      if (!el.dataset.tpScrollFit) {
+        el.style.boxSizing = 'border-box';
+        el.style.height = el.getBoundingClientRect().height + 'px';
+        el.style.overflow = 'auto';
+        el.dataset.tpScrollFit = '1';
+      }
+      return {
+        ok: true,
+        fits: el.scrollHeight === el.clientHeight,
+        scrollHeight: el.scrollHeight,
+        clientHeight: el.clientHeight,
+      };
     },
     fingerprint,
   };

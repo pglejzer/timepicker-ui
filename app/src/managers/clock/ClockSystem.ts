@@ -12,6 +12,7 @@ import { ClockController, type ClockControllerCallbacks } from './controller/Clo
 import { ClockEngine } from './engine/ClockEngine';
 import { DragHandlers, type DragHandlersConfig } from './handlers/DragHandlers';
 import { HOURS_12, HOURS_24, MINUTES_STEP_5 } from '../../utils/template';
+import { whenSized } from '../../utils/dom';
 
 export interface ClockSystemConfig {
   clockFace: HTMLElement;
@@ -46,8 +47,11 @@ export class ClockSystem {
   private disabledTime: DisabledTimeConfig | null;
   private tipsWrapper: HTMLElement;
   private tipsWrapperFor24h?: HTMLElement;
+  private readonly clockFace: HTMLElement;
+  private releaseSizeWatch: () => void = () => {};
 
   constructor(config: ClockSystemConfig) {
+    this.clockFace = config.clockFace;
     this.clockType = config.clockType;
     this.disabledTime = config.disabledTime;
     this.tipsWrapper = config.tipsWrapper;
@@ -102,6 +106,9 @@ export class ClockSystem {
   initialize(): void {
     this.dragHandlers.attach();
     this.switchToHours();
+    this.releaseSizeWatch = whenSized(this.clockFace, () =>
+      this.controller.followHand(this.renderCurrentTips()),
+    );
   }
 
   switchToHours(): void {
@@ -278,6 +285,7 @@ export class ClockSystem {
   }
 
   destroy(): void {
+    this.releaseSizeWatch();
     this.dragHandlers.detach();
     this.controller.destroy();
   }

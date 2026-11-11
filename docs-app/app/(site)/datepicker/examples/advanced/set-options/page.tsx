@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useId, useRef, useState } from "react";
-import type DatepickerUI from "@pglejzer/datepicker-ui";
+import type { DatepickerUI } from "@pglejzer/datepicker-ui";
 import { Callout } from "@/components/callout";
 import demo from "@/components/demo-controls.module.css";
 import { Figure } from "@/components/figure";
@@ -17,7 +17,7 @@ const THEMES: readonly Theme[] = ["basic", "crane", "cyberpunk"];
 const MODES: readonly Mode[] = ["single", "range", "multiple"];
 const MONTHS: readonly number[] = [1, 2];
 
-const CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const picker = new DatepickerUI("#date");

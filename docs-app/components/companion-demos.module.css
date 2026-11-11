@@ -30,6 +30,10 @@
   padding: 0 var(--space-3);
 }
 
+:root:has(.threeRows) :global(.tp-ui-wrapper.docs-three-rows) {
+  --tp-wheel-visible-items: 3;
+}
+
 .log {
   min-height: 4.5rem;
   margin: 0;

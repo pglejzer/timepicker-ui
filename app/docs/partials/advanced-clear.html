@@ -20,55 +20,6 @@
         />
       </div>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="new-events-and-callbacks-picker"  value="10:00 PM" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const newEventsAndCallbacksPicker = new TimepickerUI('#new-events-and-callbacks-picker', {
-  callbacks: {
-    onOpen: (data) => {
-      console.log('Picker opened!', data);
-    },
-    onCancel: (data) => {
-      console.log('Picker cancelled', data);
-    },
-    onConfirm: (data) => {
-      console.log('Time confirmed', data);
-    },
-    onUpdate: (data) => {
-      console.log('Time updated', data);
-    },
-    onSelectHour: (data) => {
-      console.log('Hour mode selected', data);
-    },
-    onSelectMinute: (data) => {
-      console.log('Minute mode selected', data);
-    },
-    onSelectPeriod: (data) => {
-      console.log(`${data.type} selected`);
-    },
-    onError: (data) => {
-      console.log('Error occurred', data.error);
-    }
-  }
-});
-newEventsAndCallbacksPicker.create();
-
-const pickerElement = newEventsAndCallbacksPicker.getElement();
-if (pickerElement) {
-  pickerElement.addEventListener('timepicker:open', (data) => {
-    console.log('Picker opened!', data);
-  });
-  pickerElement.addEventListener('timepicker:cancel', (data) => {
-    console.log('Picker cancelled', data);
-  });
-}
-</code></pre>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -92,41 +43,6 @@ if (pickerElement) {
         />
       </div>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="advanced-picker"  value="10:00" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const advancedPicker = new TimepickerUI('#advanced-picker', {
-  clock: {
-    type: 'auto',
-    incrementHours: 1,
-    incrementMinutes: 15,
-    defaultTime: {
-      time: new Date(),
-      updateInput: false
-    },
-    disabledTime: {
-      ranges: '22:00 - 06:00'
-    }
-  },
-  ui: {
-    theme: 'm3-green',
-    viewSwitch: true,
-    editable: true,
-    cssClass: 'my-custom-picker'
-  },
-  behavior: {
-    focusTrap: true,
-    returnFocus: true,
-    delayHandler: 500
-  }
-});
-advancedPicker.create();</code></pre>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -148,30 +64,6 @@ advancedPicker.create();</code></pre>
           class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
           value="10:00"
         />
-      </div>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div>
-          <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-          <pre><code class="language-html">&lt;input id="version3-example"  value="10:00" /&gt;</code></pre>
-        </div>
-        <div>
-          <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-          <pre><code class="language-javascript">const version3Example = new TimepickerUI('#version3-example', {
-  clock: { type: '24h' },
-  ui: { theme: 'm3-green' },
-  behavior: { focusTrap: false, delayHandler: 200 },
-  callbacks: {
-    onOpen: (data) => {
-      console.log('Picker opened!', data);
-    }
-  }
-});
-version3Example.create();
-
-version3Example.on('open', (data) => {
-  console.log('Picker opened (on API)!', data);
-});</code></pre>
-        </div>
       </div>
     </div>
   </div>
@@ -203,25 +95,6 @@ version3Example.on('open', (data) => {
         </button>
       </div>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="destroy-example-input" value="14:30" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const destroyExample = new TimepickerUI('#destroy-example-input', {
-  clock: { type: '24h' },
-  ui: { theme: 'm3-green' },
-  behavior: { focusTrap: false, delayHandler: 200 }
-});
-destroyExample.create();
-
-document.querySelector('#destroy-button').addEventListener('click', () => {
-  destroyExample.destroy();
-});</code></pre>
-      </div>
-    </div>
   </div>
 </section>
 <section
@@ -250,30 +123,6 @@ document.querySelector('#destroy-button').addEventListener('click', () => {
           <strong>Try it:</strong> Open the timepicker and click the "Clear" button on the left side to reset
           the time.
         </p>
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="clear-button-picker" value="2:30 PM" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const clearButtonPicker = new TimepickerUI('#clear-button-picker', {
-  ui: { 
-    clearButton: true,
-    theme: 'basic'
-  },
-  labels: {
-    clear: 'Clear'
-  },
-  callbacks: {
-    onClear: (data) => {
-      console.log('Time cleared! Previous value:', data.previousValue);
-    }
-  }
-});
-clearButtonPicker.create();</code></pre>
       </div>
     </div>
     <div
@@ -311,18 +160,6 @@ clearButtonPicker.create();</code></pre>
             <strong>Try it:</strong> Click "Clear" - the clock resets but the input keeps its value.
           </p>
         </div>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const picker = new TimepickerUI('#clear-no-input-picker', {
-  ui: { clearButton: { clearInput: false } },
-  callbacks: {
-    onClear: (data) => {
-      console.log('Clear clicked (input kept)!', data.previousValue);
-    }
-  }
-});
-picker.create();</code></pre>
       </div>
     </div>
   </div>
@@ -423,41 +260,6 @@ picker.create();</code></pre>
             value="10:30 PM"
           />
         </div>
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="clear-theme-basic" value="10:30 PM" /&gt;
-&lt;input id="clear-theme-crane" value="10:30 PM" /&gt;
-&lt;input id="clear-theme-crane-straight" value="10:30 PM" /&gt;
-&lt;input id="clear-theme-m3-green" value="10:30 PM" /&gt;
-&lt;input id="clear-theme-dark" value="10:30 PM" /&gt;
-&lt;input id="clear-theme-m2" value="10:30 PM" /&gt;
-&lt;input id="clear-theme-glassmorphic" value="10:30 PM" /&gt;
-&lt;input id="clear-theme-pastel" value="10:30 PM" /&gt;
-&lt;input id="clear-theme-ai" value="10:30 PM" /&gt;
-&lt;input id="clear-theme-cyberpunk" value="10:30 PM" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const clearThemeList = [
-  'basic', 'crane', 'crane-straight',
-  'm3-green', 'dark', 'm2',
-  'glassmorphic', 'pastel', 'ai', 'cyberpunk'
-];
-
-clearThemeList.forEach((theme) => {
-  new TimepickerUI(`#clear-theme-${theme}`, {
-    ui: { clearButton: true, theme, viewSwitch: true },
-    labels: { clear: 'Clear' },
-    callbacks: {
-      onClear: (data) => {
-        console.log(`Clear (${theme}):`, data.previousValue);
-      },
-    },
-  }).create();
-});</code></pre>
       </div>
     </div>
   </div>

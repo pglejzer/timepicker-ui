@@ -1,9 +1,12 @@
 export type ClockType = '12h' | '24h';
 
+/** A time as text parts, the shape `getValue()` and `getRange()` use. */
 export interface TimeValue {
   hour: string;
   minutes: string;
+  /** Present only with `showSeconds`. */
   seconds?: string;
+  /** `AM` / `PM` in 12h. */
   type?: string;
 }
 
@@ -22,6 +25,12 @@ const RE_TIME_24H = /^([01]?\d|2[0-3]):([0-5]?\d)(?::([0-5]?\d))?$/;
 const RE_HAS_SECONDS = /^\s*\d{1,2}:\d{1,2}:\d{1,2}/;
 
 export const pad = (value: string | number): string => String(value).padStart(2, '0');
+
+export const TIME_PLACEHOLDER_PREFIX = '--';
+
+export const isTimePlaceholder = (part: string): boolean => part.startsWith(TIME_PLACEHOLDER_PREFIX);
+
+export const getTimePlaceholder = (showSeconds = false): string => (showSeconds ? '--:--:--' : '--:--');
 
 export function parseTime(text: string, options: TimeFormatOptions): TimeValue | null {
   const match = text.trim().match(options.clockType === '12h' ? RE_TIME_12H : RE_TIME_24H);
@@ -63,6 +72,28 @@ export function convertTime(value: TimeValue, from: ClockType, to: TimeFormatOpt
   const hours24 = to24Hour(parseInt(value.hour, 10), value.type, from);
   const seconds = to.showSeconds ? pad(value.seconds ?? '0') : undefined;
   return fromHours24(hours24, { minutes: value.minutes, seconds }, to.clockType);
+}
+
+const OTHER_CLOCK_TYPE: Record<ClockType, ClockType> = { '12h': '24h', '24h': '12h' };
+
+export interface ResolvedTimeText {
+  value: TimeValue;
+  text: string;
+}
+
+export function resolveTime(text: string, format: Required<TimeFormatOptions>): ResolvedTimeText | null {
+  const own = parseTime(text, format);
+  if (own) {
+    const ownText = format.showSeconds || hasSeconds(text) ? formatTime(own, format) : text;
+    return { value: own, text: ownText };
+  }
+
+  const otherClockType = OTHER_CLOCK_TYPE[format.clockType];
+  const other = parseTime(text, { ...format, clockType: otherClockType });
+  if (!other) return null;
+
+  const converted = convertTime(other, otherClockType, format);
+  return { value: converted, text: formatTime(converted, format) };
 }
 
 export function hourToSeconds(value: Pick<TimeValue, 'hour' | 'type'>, clockType: ClockType): number {

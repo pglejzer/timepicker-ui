@@ -20,7 +20,7 @@ const CODE = `<form id="booking">
 </form>
 
 <script type="module">
-  import DatepickerUI from "@pglejzer/datepicker-ui";
+  import { DatepickerUI } from "@pglejzer/datepicker-ui";
   import "@pglejzer/datepicker-ui/index.css";
 
   new DatepickerUI("#checkin", { ui: { format: "dd.MM.yyyy" } }).create();
@@ -35,7 +35,7 @@ const RANGE_CODE = `<input id="start" name="checkin" />
 <input id="end" name="checkout" />
 
 <script type="module">
-  import DatepickerUI from "@pglejzer/datepicker-ui";
+  import { DatepickerUI } from "@pglejzer/datepicker-ui";
   import "@pglejzer/datepicker-ui/index.css";
 
   new DatepickerUI("#start", {
@@ -120,8 +120,8 @@ export default function FormsExamplePage() {
         </Figure>
         <Callout>
           The visible input gets <code>input</code> and <code>change</code> events when a value is committed, and a
-          form reset restores the initial value. In <code>range</code> mode an incomplete range gives an empty
-          string.
+          form reset restores the initial value: the input text, or <code>calendar.defaultValue</code> when the
+          input is empty. In <code>range</code> mode an incomplete range gives an empty string.
         </Callout>
       </Section>
 

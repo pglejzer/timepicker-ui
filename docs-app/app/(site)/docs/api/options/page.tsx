@@ -100,7 +100,12 @@ const clockOptions: OptionRow[] = [
       <>
         Disable specific hours, minutes, seconds or time ranges. When{" "}
         <code>ranges</code> is set, the <code>hours</code>,{" "}
-        <code>minutes</code> and <code>seconds</code> lists are ignored.
+        <code>minutes</code> and <code>seconds</code> lists are ignored. The
+        edges of <code>ranges</code> use the clock format of <code>type</code>:
+        12h edges such as <code>&apos;10:00 AM - 12:00 PM&apos;</code> in a 12h
+        picker, 24h edges such as <code>&apos;10:00 - 12:00&apos;</code> in a
+        24h picker. To check a time without a picker, see{" "}
+        <Link href="/docs/features/disabled-time">Disabled Time</Link>.
       </>
     ),
   },
@@ -245,7 +250,10 @@ const uiOptions: OptionRow[] = [
         <code>false</code>) renders the picker as part of a host component:
         the root is a <code>group</code> instead of a dialog, with no shadow
         and no minimum height, no focus trap and no focus on mount. Ignored
-        unless <code>enabled</code> is <code>true</code>. See{" "}
+        unless <code>enabled</code> is <code>true</code>.{" "}
+        <code>showTitle</code> (default <code>true</code>) shows the title at
+        the top of the card. With <code>false</code> the title is visually
+        hidden but still names the picker for screen readers. New in 4.7.0. See{" "}
         <Link href="/docs/features/inline-mode">Inline Mode</Link>.
       </>
     ),
@@ -293,7 +301,9 @@ const wheelOptions: OptionRow[] = [
     description: (
       <>
         Do not render the footer (OK, Cancel, Clear and the switch icon).{" "}
-        <code>compact-wheel</code> only.
+        <code>compact-wheel</code> only. With a range, pair it with{" "}
+        <code>commitOnScroll</code>, which still commits the range without a
+        footer.
       </>
     ),
   },
@@ -305,6 +315,11 @@ const wheelOptions: OptionRow[] = [
       <>
         Commit the time when wheel scrolling ends, without pressing OK. The{" "}
         <code>confirm</code> payload then has <code>autoCommit: true</code>.
+        With <code>range.enabled</code> it writes <code>from - to</code> to
+        the input and emits <code>range:confirm</code> with{" "}
+        <code>autoCommit: true</code>, but only while the range is valid. The
+        picker stays open, also with <code>hideFooter</code>. The range
+        behavior is new in 4.7.0.
       </>
     ),
   },
@@ -380,9 +395,24 @@ const labelsOptions: OptionRow[] = [
     default: '"Minute"',
     description: (
       <>
-        Same as <code>hour</code>, for minutes. Until 5.0, the minute
-        announcement says <code>Minutes</code> when <code>minute</code> is not
-        set.
+        Same as <code>hour</code>, for minutes. The minute announcement says{" "}
+        <code>Minute</code> by default, as in 4.7.0 (it said{" "}
+        <code>Minutes</code> before).
+      </>
+    ),
+  },
+  {
+    name: "valueText",
+    type: "string",
+    default: '"{value} of {count}"',
+    description: (
+      <>
+        Screen reader value of the hour, minute and second fields and of the
+        clock dial. <code>{"{value}"}</code> is the number without a leading
+        zero and <code>{"{count}"}</code> the number of values on that face (12
+        or 24 hours, 60 minutes or seconds). With the field name it reads
+        &quot;Hour, 7 of 12&quot;. Set <code>{"'{value}'"}</code> for the bare
+        number. New in 4.7.0.
       </>
     ),
   },
@@ -520,15 +550,27 @@ const timezoneOptions: OptionRow[] = [
     name: "default",
     type: "string",
     default: "undefined",
-    description:
-      'Default timezone ID (e.g. "America/New_York"). Uses the browser timezone if not set',
+    description: (
+      <>
+        Default timezone ID (e.g. <code>&quot;America/New_York&quot;</code>).
+        Uses the browser timezone if not set. An ID that is not in the list
+        falls back to the browser timezone, or the first entry, and emits{" "}
+        <code>error</code> once. The error is new in 4.7.0.
+      </>
+    ),
   },
   {
     name: "list",
     type: "readonly string[]",
     default: "undefined",
-    description:
-      "Timezone IDs shown in the selector, instead of the built-in list of common timezones",
+    description: (
+      <>
+        Timezone IDs shown in the selector, instead of the built-in list of
+        common timezones. To extend the built-in list, spread{" "}
+        <code>DEFAULT_TIMEZONES</code> from{" "}
+        <code>timepicker-ui/plugins/timezone</code>.
+      </>
+    ),
   },
 ];
 
@@ -537,7 +579,14 @@ const rangeOptions: OptionRow[] = [
     name: "enabled",
     type: "boolean",
     default: "false",
-    description: "Enable range mode (from-to selection)",
+    description: (
+      <>
+        Enable range mode (from-to selection). It works in every{" "}
+        <code>ui.mode</code>. In the wheel modes it needs{" "}
+        <code>WheelPlugin</code> too. In <code>wheel</code> and{" "}
+        <code>compact-wheel</code> it is new in 4.7.0.
+      </>
+    ),
   },
   {
     name: "minDuration",
@@ -719,8 +768,11 @@ const callbacksOptions: OptionRow[] = [
     default: "undefined",
     description: (
       <>
-        Triggered when the switch icon toggles between the clock face and
-        keyboard input. Needs <code>ui.viewSwitch</code>. New in 4.5.0.
+        Triggered when the view changes between the clock face and keyboard
+        input: the switch icon (needs <code>ui.viewSwitch</code>),{" "}
+        <code>setView()</code> on an open picker, or <code>setOptions()</code>{" "}
+        on an open picker when the call changes <code>ui.initialView</code>.
+        New in 4.5.0.
       </>
     ),
   },
@@ -742,6 +794,13 @@ const callbacksOptions: OptionRow[] = [
     type: "(data: RangeConfirmEventData) => void",
     default: "undefined",
     description: "Triggered when a range is confirmed (range mode only)",
+  },
+  {
+    name: "onRangeChange",
+    type: "(data: RangeChangeEventData) => void",
+    default: "undefined",
+    description:
+      "Triggered when the time of a range end changes by the user (range mode only). Not called for API calls or when a wheel mode fills an empty end with the other end's time. New in 4.7.0.",
   },
   {
     name: "onRangeSwitch",
@@ -774,7 +833,8 @@ const callbacksOptions: OptionRow[] = [
     name: "onClear",
     type: "(data: ClearEventData) => void",
     default: "undefined",
-    description: "Triggered when user clicks the clear button",
+    description:
+      "Triggered when the user clicks the clear button, and by picker.clear()",
   },
 ];
 
@@ -993,6 +1053,12 @@ const picker = new TimepickerUI(input, {
 picker.create();`}
           language="typescript"
         />
+        <p>
+          With the range plugin and <code>range.enabled</code>, both wheel
+          modes show the From and To tabs. See{" "}
+          <Link href="/docs/features/plugins">Plugins</Link> for how the
+          wheel fills each end and the events it emits.
+        </p>
       </Section>
 
       <Section title="Disabled Time Configuration">

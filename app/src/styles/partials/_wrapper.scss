@@ -98,7 +98,8 @@
   }
 }
 
-.tp-ui-view-switching .tp-ui-wrapper > * {
+.tp-ui-view-switching .tp-ui-wrapper > *,
+.tp-ui-view-switching .tp-ui-range-panel > * {
   @media screen and (orientation: landscape) and (max-height: 480px) {
     animation: tp-view-fade var(--tp-duration-slow) var(--tp-easing-decelerate) both;
   }

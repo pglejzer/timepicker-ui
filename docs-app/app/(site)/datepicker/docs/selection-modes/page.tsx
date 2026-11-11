@@ -10,7 +10,7 @@ const SINGLE: DatepickerOptions = { calendar: { mode: "single" } };
 const RANGE: DatepickerOptions = { calendar: { mode: "range", range: { minLength: 2, maxLength: 14 } } };
 const MULTIPLE: DatepickerOptions = { calendar: { mode: "multiple", multiple: { max: 5 } } };
 
-const SINGLE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const SINGLE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const picker = new DatepickerUI("#date", { calendar: { mode: "single" } });
@@ -20,7 +20,7 @@ picker.setValue("2025-03-14");
 picker.getValue();
 // { value: "2025-03-14", date: Date, formatted: "14/03/2025" }`;
 
-const RANGE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const RANGE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const picker = new DatepickerUI("#range", {
@@ -32,7 +32,7 @@ picker.setValue({ start: "2025-03-14", end: "2025-03-20" });
 picker.getValue();
 // { start: DateValue, end: DateValue }`;
 
-const MULTIPLE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const MULTIPLE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const picker = new DatepickerUI("#dates", {
@@ -176,7 +176,8 @@ export default function SelectionModesPage() {
         />
         <p>
           An incomplete range gives an empty string. The visible input gets <code>input</code> and{" "}
-          <code>change</code> events when a value is committed, and a form reset restores the initial value. With{" "}
+          <code>change</code> events when a value is committed, and a form reset restores the initial value: the input
+          text, or <code>calendar.defaultValue</code> when the input is empty. With{" "}
           <code>ui.endInput</code>, each field with a <code>name</code> gets its own hidden ISO input.
         </p>
       </Section>
@@ -184,7 +185,9 @@ export default function SelectionModesPage() {
       <Section title="Initial value">
         <p>
           On <code>create()</code>, the picker reads the existing input text, either in the serialized form above
-          or in the display format.
+          or in the display format. When the input is empty, <code>calendar.defaultValue</code> sets the starting
+          value in the shape of <code>setValue()</code>, and any date can be <code>&quot;today&quot;</code>. Text in
+          the input that is a date wins.
         </p>
       </Section>
 

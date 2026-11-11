@@ -19,7 +19,7 @@ It is a **separate project** that consumes `timepicker-ui` as a library.
 ## How you work
 - docs-app has its own toolchain (`npm run dev` / `npm run build` from `docs-app/`),
   independent of `app/` - run only by the main agent, never by you (HARD RULES in
-  `CLAUDE.md`). Don't apply library build rules (tsup/rollup) here.
+  `CLAUDE.md`). Don't apply library build rules (tsdown/sass) here.
 - **Document the real API.** Examples must use the actual public methods and v4 option
   groups (`clock` / `ui` / `labels` / `behavior` / `callbacks` / `range` / `timezone`
   / `wheel` / `clearBehavior`). When you're unsure an option exists, check

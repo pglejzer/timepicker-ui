@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.7.0] - 2026-11-11
+
+### Check before upgrading
+
+These changes can affect an existing setup. Each one is described under Changed or Fixed.
+
+- AM/PM is a `role="radiogroup"` with `aria-checked`. Selectors or tests that use `[aria-pressed]` on `.tp-ui-am` / `.tp-ui-pm` need updating
+- The timezone `combobox` role, `aria-expanded` and `aria-activedescendant` moved from `.tp-ui-timezone-dropdown` to `.tp-ui-timezone-selected`
+- In range mode, the header, timezone row and clock or wheel body sit in `.tp-ui-range-panel`. CSS or JS that uses `>` child selectors under `.tp-ui-wrapper` needs a descendant selector
+- `aria-valuetext` reads "7 of 12" instead of "07", and the minute announcement reads "Minute" instead of "Minutes"
+- `switch:view` now carries `{ view }`, and `wheel` / `compact-wheel` no longer show the view-switch icon
+- In range mode, `setValue()` writes `from - to`, `setOptions()` keeps both ends, and a typed time is saved to its end before OK
+- Clear emits `select:hour`, `clear`, `update`, without the extra 12:00 `update`
+- Activating the To tab keeps focus on the tab, and Enter in a time field now applies the typed value
+- The `dark` theme uses Material Design 3 tokens, so its colors change
+
+### Added
+
+- The range plugin works in `wheel` and `compact-wheel`. Tabs, `setActivePart()`, `setRange()`, OK and Clear all work there
+- `setView('clock' | 'keyboard')` and `getView()`. They work without `ui.viewSwitch`. In `wheel` and `compact-wheel`, `setView()` returns `false` and `getView()` returns `null`
+- `clear()` empties a closed or open picker without needing `ui.clearButton`, and emits `clear` and `update`
+- `getActivePart()` returns `'from'`, `'to'` or `null`
+- `setRange({ from })` or `setRange({ to })` changes one end and keeps the other. `null` or `""` clears an end
+- `setRangeCaptions({ from, to })` shows a caption on each range tab. A missing key keeps the caption, and `null` removes it
+- `range:change` event with `{ part, from, to }` and `callbacks.onRangeChange`, with the `RangeChangeEventData` type. It fires when the user changes an end, not for API calls or when a wheel fills an empty end
+- With a range, `wheel.commitOnScroll` writes `from - to` and emits `range:confirm` with `autoCommit: true`. The picker stays open
+- `parseTime()`, `formatTime()` and `createDisabledTimeCheck()` from the main entry work without a picker. They are SSR-safe, with the types `TimeValue`, `TimeFormatOptions` and `DisabledTimeCheckOptions`
+- `timepicker-ui/plugins/timezone` exports `getTimezoneList()`, `DEFAULT_TIMEZONES` and the `TimezoneInfo` type
+- A `timezone.default` that is not in the list still falls back to a listed zone, and now emits `error` with the zone it used
+- `TimepickerEventName` type. `on()`, `once()` and `off()` now type the handler payload for each event name
+- `ui.inline.showTitle: false` hides the inline title visually and keeps it as the card's accessible name. Default `true`
+- `labels.valueText` (default `"{value} of {count}"`) sets the `aria-valuetext` of the time fields and the dial
+- CSS tokens `--tp-embedded-bg`, `--tp-embedded-radius` and `--tp-embedded-backdrop-filter` style the embedded inline card
+- CSS tokens `--tp-size-input-mobile`, `--tp-size-input-height`, `--tp-time-input-font-size`, `--tp-size-colon-height` and `--tp-time-colon-gap` size the keyboard view, and `--tp-size-hand-circle` sizes the clock hand circle
+- The types `TimepickerView`, `PluginTimeView`, `RangeTimeInput` and `RangeCaptionInput` are exported
+
+### Changed
+
+- AM/PM is a `role="radiogroup"` named by `labels.period`, with `role="radio"` segments, `aria-checked` and arrow-key selection. `aria-pressed` is gone
+- The timezone `combobox` role, `aria-expanded` and `aria-activedescendant` are on `.tp-ui-timezone-selected`. Type-ahead and Tab selection follow the APG select-only combobox
+- Range tabs control one `.tp-ui-range-panel` (`role="tabpanel"`) that wraps the header, timezone row and clock or wheel body
+- Time fields and the dial read "7 of 12" in `aria-valuetext`. Set `labels.valueText: '{value}'` for the bare number
+- The minute announcement default is "Minute" instead of "Minutes"
+- `switch:view` carries `{ view }` (`SwitchViewEventData`), and `callbacks.onSwitchView` receives it. `wheel` and `compact-wheel` have no view-switch icon
+- `setOptions()` or `update()` that changes `ui.initialView` on an open picker switches the view and emits `switch:view` once
+- In range mode, `setValue()` sets the active end and writes `from - to`
+- `setOptions()` on an open range picker keeps both ends and the active end. Use `clear()` or `setRange()` to drop an unconfirmed range
+- A typed range time is saved on blur, Enter or before the ends switch, so `getRange()` can report it before OK
+- Enter in a time field applies the typed value, the same as blur
+- Activating the To tab keeps focus on the tab. Tab then moves into the panel
+- Clear emits `select:hour`, `clear`, `update`, with no extra 12:00 `update`. In range mode the Clear button emits `range:change`, then `range:switch`
+- In 12h range mode, AM/PM on a complete From changes only the period. It moves to To only when it completes From
+- In `wheel` and `compact-wheel`, an empty range end is seeded with the other end's time, else `clock.currentTime`, else 12:00
+- The `dark` theme follows the Material Design 3 baseline dark tokens
+- The clock dial uses Pointer Events when available, and `.tp-ui-clock-face` has `touch-action: none`
+- `clock.disabledTime` errors name `ranges` instead of the deprecated `interval`, for example `Invalid disabledTime.ranges: Invalid 12h format: "00:00 - 04:59"`
+
+### Fixed
+
+- The compact-wheel dialog had no accessible name. It now uses `labels.time` as its `aria-label`
+- The clock face and wheel lay out correctly when the picker is shown after its container was hidden. The wheel also applies a time set while hidden
+- Pressing Escape with the timezone menu open closes only the menu, not the picker
+- The closed timezone menu no longer takes up layout, so a scroll container around the picker gets no extra scroll height
+- In `wheel` and `compact-wheel`, the wheel area fits the wheel instead of the clock's 256 px. With `--tp-wheel-visible-items`, 3 rows make the picker shorter and 7 rows are no longer cut off
+- Embedded inline fields no longer have a `name`, so they do not submit stray fields inside a `<form>`. The embedded wrapper has `tabindex="-1"` and is no longer a tab stop
+- Changing `clock.type` or `clock.showSeconds` now converts a half range such as `09:00 - --:--`
+- The plugin UMD builds work from a `<script>` tag. The UMD core now exposes `TimepickerUI.PluginRegistry`, so `TimepickerUI.PluginRegistry.register(TimepickerUIRange.RangePlugin)` works. Before, enabling a plugin there emitted `error`
+- A focused read-only time field no longer shows a text caret, for example after the dial moves on to minutes. Editable fields keep it
+- With `ui.editable`, picking a time on the dial by touch no longer opens the on-screen keyboard when the dial moves on to the next field
+- A compact-wheel popover with too little room shrinks the wheel area instead of scrolling, so Cancel and OK stay in view. It stays aligned to the input
+
 ## [4.6.0] - 2026-10-19
 
 ### Added

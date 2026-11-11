@@ -269,7 +269,7 @@ describe('TimepickerUI EventEmitter public API (v4.1.7 compat)', () => {
       emitter.emit('hide');
       emitter.emit('select:am');
       emitter.emit('select:pm');
-      emitter.emit('switch:view');
+      emitter.emit('switch:view', { view: 'keyboard' });
 
       expect(cancelHandler).toHaveBeenCalledTimes(1);
       expect(showHandler).toHaveBeenCalledTimes(1);

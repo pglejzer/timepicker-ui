@@ -8,6 +8,13 @@ export const CALENDAR_OPTIONS: OptionRow[] = [
     description: "What the user selects.",
   },
   {
+    name: "defaultValue",
+    type: "PickerValueInput",
+    default: "undefined",
+    description:
+      "Starting value for an empty input, in the shape of `setValue()`: a date, `{ start, end }` or an array of dates, matching `calendar.mode`. Any date can be `\"today\"`. Text already in the input wins when it is a date (with `ui.endInput`, the two fields). The value is written to the input and the form field, and a form reset restores it. Read when `create()` runs.",
+  },
+  {
     name: "range.minLength",
     type: "number",
     default: "undefined",
@@ -35,7 +42,8 @@ export const CALENDAR_OPTIONS: OptionRow[] = [
     name: "months",
     type: "number",
     default: "1",
-    description: "Months side by side, a positive integer. Docked and inline only.",
+    description:
+      "Months side by side, a positive integer. Applies to the docked look (`ui.layout`) at day precision. The modal and full-screen looks show one month.",
   },
   {
     name: "pageBy",
@@ -126,7 +134,14 @@ export const UI_OPTIONS: OptionRow[] = [
     type: '"auto" | "docked" | "modal"',
     default: '"auto"',
     description:
-      "Which surface opens. `\"auto\"` uses the modal below 600 px wide or 480 px tall and the docked popover otherwise.",
+      "Which surface opens. `\"auto\"` uses the modal below 600 px wide or 480 px tall and the docked popover otherwise. With `\"auto\"`, a docked picker that fits neither below nor above the field, at its current position on the page, opens as the modal.",
+  },
+  {
+    name: "layout",
+    type: '"auto" | "docked" | "modal" | "fullscreen"',
+    default: '"auto"',
+    description:
+      "Look of the calendar on any surface. `\"auto\"` gives each surface its own look: docked for the popover and inline, modal for the dialog (full screen for a range below `ui.fullscreen`). `\"docked\"` uses the docked header with month and year menus everywhere. `\"modal\"` uses the headline, a month row with arrows on every page, and month and year grids everywhere. `\"fullscreen\"` gives a range picker the full-screen layout: in a dialog at every window width, inline sized to the container. Other modes, and the popover, treat it as `\"modal\"`. An inline calendar with the modal look fits its rows to the month unless `ui.fixedWeeks` is set.",
   },
   {
     name: "inline.enabled",
@@ -139,6 +154,27 @@ export const UI_OPTIONS: OptionRow[] = [
     type: "string | HTMLElement",
     default: "undefined",
     description: "Selector or element for the inline picker.",
+  },
+  {
+    name: "inline.headline",
+    type: "boolean",
+    default: "true",
+    description:
+      "`false` leaves out the headline (the modal title, selected value and view switch, or the range header), for a host that shows its own. The full-screen top bar keeps its close and save buttons.",
+  },
+  {
+    name: "inline.navigation",
+    type: '"menus" | "caption"',
+    default: '"menus"',
+    description:
+      "`\"caption\"` shows the month and year as text next to the arrows, with no month or year menus. Day precision only.",
+  },
+  {
+    name: "inline.announceSelection",
+    type: "boolean",
+    default: "true",
+    description:
+      "`false` stops the inline calendar from announcing selection changes, for a host that announces them itself. Month changes and errors are still announced.",
   },
   {
     name: "format",
@@ -164,7 +200,7 @@ export const UI_OPTIONS: OptionRow[] = [
     type: "boolean | number",
     default: "true",
     description:
-      "Width below which a modal range picker goes full screen. `true` means 600 px, a number is a width in pixels, `false` means never.",
+      "Width below which a modal range picker goes full screen. `true` means 600 px, a number is a width in pixels, `false` means never. Used with `ui.layout` `\"auto\"` and `\"modal\"`. `\"fullscreen\"` opens full screen at every width and `\"docked\"` never does.",
   },
   {
     name: "toggleButton",
@@ -195,7 +231,8 @@ export const UI_OPTIONS: OptionRow[] = [
     name: "startView",
     type: '"day" | "month" | "year"',
     default: '"day"',
-    description: "Panel shown first. Ignored in range mode and for month or year precision.",
+    description:
+      "Panel shown first: the day grid, the month list (docked look) or grid (modal look), or the year list or grid. `initialView: \"input\"` wins. Ignored in range mode, with `ui.inline.navigation: \"caption\"` and for month or year precision.",
   },
   {
     name: "endInput",
@@ -281,14 +318,15 @@ export const UI_OPTIONS: OptionRow[] = [
     name: "initialView",
     type: '"calendar" | "input"',
     default: '"calendar"',
-    description: "View shown on open, where the input view is supported.",
+    description:
+      "View shown on open, where the input view exists: every range picker, and a single picker with the modal or full-screen look (`ui.layout`), at day precision.",
   },
   {
     name: "mask",
     type: "boolean",
     default: "false",
     description:
-      "Format typed digits to the date format while typing. Single mode and the two range fields, day precision only.",
+      "Format typed digits to the date format while typing. Single mode and the two range fields, day precision only. The text fields of the input view are always masked.",
   },
 ];
 
@@ -312,8 +350,21 @@ export const LABEL_OPTIONS: LabelRow[] = [
   { name: "invalidDate", default: '"Enter a valid date"', usedFor: "Message for typed text that is not a date" },
   { name: "unavailableDate", default: '"This date is not available"', usedFor: "Message for a typed date that is disabled" },
   { name: "rangeTitle", default: '"Select dates"', usedFor: "Header supporting text in range mode" },
-  { name: "rangeStart", default: '"Start"', usedFor: "Headline placeholder for a missing range start" },
-  { name: "rangeEnd", default: '"End"', usedFor: "Headline placeholder for a missing range end" },
+  {
+    name: "rangeStart",
+    default: '"Start"',
+    usedFor: "Headline placeholder for a missing range start, and part of the accessible name of the start day",
+  },
+  {
+    name: "rangeEnd",
+    default: '"End"',
+    usedFor: "Headline placeholder for a missing range end, and part of the accessible name of the end day",
+  },
+  {
+    name: "inRange",
+    default: '"In range"',
+    usedFor: "Added to the accessible name of the days between the start and the end of a range",
+  },
   { name: "multipleSelected", default: '"{count} selected"', usedFor: "Headline in multiple mode. A `PluralLabel`." },
   { name: "save", default: '"Save"', usedFor: "Save button of the full-screen range picker" },
   { name: "close", default: '"Close"', usedFor: "Close button of the full-screen range picker" },
@@ -337,6 +388,13 @@ export const LABEL_OPTIONS: LabelRow[] = [
     name: "afterMaxDate",
     default: '"Enter a date on or before {date}"',
     usedFor: "Message for a typed date after `maxDate`. `{date}` is the limit in the display format.",
+  },
+  { name: "hintDay", default: '"dd"', usedFor: "Day letters in the format hint of a text field, such as `dd/mm/yyyy`" },
+  { name: "hintMonth", default: '"mm"', usedFor: "Month letters in the format hint" },
+  {
+    name: "hintYear",
+    default: '"yyyy"',
+    usedFor: "Year letters in the format hint. A two-digit year format uses the first two characters.",
   },
 ];
 
@@ -392,6 +450,8 @@ export const CALLBACK_OPTIONS: OptionRow[] = [
   { name: "onNavigate", type: "(data: NavigateEventData) => void", default: "undefined", description: "Called on the `navigate` event." },
   { name: "onRangeStart", type: "(data: RangeStartEventData) => void", default: "undefined", description: "Called on the `range:start` event." },
   { name: "onRangeEnd", type: "(data: RangeEndEventData) => void", default: "undefined", description: "Called on the `range:end` event." },
+  { name: "onSwitchView", type: "(data: SwitchViewEventData) => void", default: "undefined", description: "Called on the `switch:view` event." },
+  { name: "onClear", type: "(data: ClearEventData) => void", default: "undefined", description: "Called on the `clear` event." },
 ];
 
 export const SHAPE_ROWS: OptionRow[] = [

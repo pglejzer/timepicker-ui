@@ -6,7 +6,7 @@ import { Section } from "@/components/section";
 const HTML_CODE = `<input id="date" />
 <button id="open-date" type="button" aria-label="Choose date">...</button>`;
 
-const TOGGLE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const TOGGLE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

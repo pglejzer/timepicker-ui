@@ -47,6 +47,10 @@ describe('TIMINGS constants', () => {
     expect(TIMINGS.COMMIT_ON_SCROLL_DELAY).toBe(400);
   });
 
+  it('should have TYPEAHEAD_RESET constant', () => {
+    expect(TIMINGS.TYPEAHEAD_RESET).toBe(500);
+  });
+
   it('should have exactly the expected numeric keys', () => {
     const expectedKeys: Array<keyof typeof TIMINGS> = [
       'MODAL_EXIT',
@@ -57,6 +61,7 @@ describe('TIMINGS constants', () => {
       'DROPDOWN_CLICK_DELAY',
       'ANNOUNCE_DELAY',
       'COMMIT_ON_SCROLL_DELAY',
+      'TYPEAHEAD_RESET',
     ];
 
     expect(Object.keys(TIMINGS).sort()).toEqual([...expectedKeys].sort());

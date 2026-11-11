@@ -27,6 +27,28 @@ const fromDate = (date: Date, clockType: string | undefined, showSeconds: boolea
   return toResult(fromHours24(date.getHours(), { minutes, seconds }, clockType === '24h' ? '24h' : '12h'));
 };
 
+export const neutralTime = (clockType?: string, showSeconds = false): InputValueResult =>
+  toResult({
+    hour: '12',
+    minutes: '00',
+    seconds: showSeconds ? '00' : undefined,
+    type: clockType === '24h' ? undefined : 'PM',
+  });
+
+export const resolveCurrentTime = (
+  currentTime: ClockOptions['currentTime'],
+  clockType?: string,
+  updateOptions?: boolean,
+  showSeconds = false,
+): InputValueResult | null => {
+  if (currentTime === true) return fromDate(new Date(), clockType, showSeconds);
+  if (!currentTime || typeof currentTime !== 'object') return null;
+
+  const { time, preventClockType } = currentTime;
+  const resolvedClockType = preventClockType && updateOptions ? localeClockType() : clockType;
+  return fromDate(new Date(time ?? new Date()), resolvedClockType, showSeconds);
+};
+
 export const getInputValue = (
   el: HTMLInputElement,
   clockType?: string,
@@ -34,30 +56,13 @@ export const getInputValue = (
   updateOptions?: boolean,
   showSeconds = false,
 ): InputValueResult => {
-  const defaultReturn = toResult({
-    hour: '12',
-    minutes: '00',
-    seconds: showSeconds ? '00' : undefined,
-    type: clockType === '24h' ? undefined : 'PM',
-  });
+  const defaultReturn = neutralTime(clockType, showSeconds);
   if (!el) return defaultReturn;
   const value = el.value.trim();
   if (!currentTime && !value) return defaultReturn;
 
-  if (typeof currentTime === 'boolean' && currentTime) {
-    return fromDate(new Date(), clockType, showSeconds);
-  }
-
-  if (typeof currentTime === 'object') {
-    const { time, preventClockType } = currentTime;
-    const date = new Date(time ?? new Date());
-
-    if (preventClockType && updateOptions) {
-      return fromDate(date, localeClockType(), showSeconds);
-    }
-
-    return fromDate(date, clockType, showSeconds);
-  }
+  const current = resolveCurrentTime(currentTime, clockType, updateOptions, showSeconds);
+  if (current) return current;
 
   const parsed = parseTime(value, { clockType: clockType === '24h' ? '24h' : '12h', showSeconds });
   if (parsed) return toResult(parsed);

@@ -3,6 +3,11 @@ import { PluginRegistry } from '@/core/PluginRegistry';
 import { RangePlugin } from '@/plugins/range';
 import type RangeManager from '@/managers/plugins/range/RangeManager';
 import type { TimepickerOptions } from '@/types/options';
+import {
+  mountRangeManager,
+  type RangeHarness as ManagerHarness,
+  type RangeHarnessConfig,
+} from './range-test-helpers';
 
 type Part = 'from' | 'to';
 type TimeField = 'hour' | 'minutes' | 'seconds';
@@ -95,7 +100,7 @@ describe('range From and To can be chosen with the keyboard only', () => {
   });
 
   describe('From', () => {
-    it('should commit From from hour and minute keydowns and move to To through the tab keyboard', () => {
+    it('should commit From from hour and minute keydowns and move to To through the tab keyboard, keeping focus on the To tab', () => {
       const { picker, range } = openRange();
       const onSwitch = jest.fn();
       picker.on('range:switch', onSwitch);
@@ -112,6 +117,41 @@ describe('range From and To can be chosen with the keyboard only', () => {
       expect(tab('to')).toHaveAttribute('aria-selected', 'true');
       expect(onSwitch).toHaveBeenLastCalledWith(expect.objectContaining({ active: 'to' }));
       expect(timeOf('from').textContent).toBe('09:15');
+      expect(document.activeElement).toBe(tab('to'));
+    });
+
+    describe.each<[string, (to: HTMLElement) => void]>([
+      ['a click', (to) => to.click()],
+      ['Enter', (to) => press(to, 'Enter')],
+      ['Space', (to) => press(to, ' ')],
+    ])('activating the To tab with %s on a From that is only a complete preview', (_label, activate) => {
+      it('should commit From once, switch to To and keep focus on the To tab', () => {
+        const { picker, range } = openRange();
+        const onChange = jest.fn();
+        picker.on('range:change', onChange);
+        chooseByKeyboard('hour', '09');
+        chooseByKeyboard('minutes', '15');
+        expect(range.getRange().from).toBeNull();
+        tab('to').focus();
+
+        activate(tab('to'));
+
+        expect(range.getActivePart()).toBe('to');
+        expect(range.getRange().from).toEqual({ hour: '09', minutes: '15' });
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ part: 'from' }));
+        expect(document.activeElement).toBe(tab('to'));
+      });
+    });
+
+    it('should still focus the hour field when the From minute is committed on the dial', () => {
+      const { range, emit } = openRange();
+      tab('from').focus();
+
+      emit('range:minute:commit', { hour: '09', minutes: '15' });
+
+      expect(range.getActivePart()).toBe('to');
+      expect(range.getRange().from).toEqual({ hour: '09', minutes: '15' });
       expect(document.activeElement).toBe(field('hour'));
     });
 
@@ -249,5 +289,97 @@ describe('range From and To can be chosen with the keyboard only', () => {
       chooseByKeyboard('hour', '10');
       expect(okButton()).toHaveAttribute('aria-disabled', 'false');
     });
+  });
+});
+
+describe('range typed times are committed on input:commit (blur or Enter)', () => {
+  const NINE = { hour: '09', minutes: '00' };
+  const SEVENTEEN_FORTY_FIVE = { hour: '17', minutes: '45' };
+  let harness: ManagerHarness | null = null;
+
+  const mountWithToActive = (config: RangeHarnessConfig = {}): ManagerHarness => {
+    const mounted = mountRangeManager(config);
+    mounted.manager.setRange(config.clockType === '12h' ? '09:00 AM' : '09:00', undefined, false);
+    expect(mounted.manager.setActivePart('to', { focus: false })).toBe(true);
+    mounted.events.length = 0;
+    return mounted;
+  };
+
+  afterEach(() => {
+    harness?.manager.destroy();
+    harness = null;
+    document.body.innerHTML = '';
+  });
+
+  it('should commit a typed To once both fields are committed and stay on To', () => {
+    harness = mountWithToActive();
+
+    harness.typeInto(harness.hour, '17', 'hour');
+    expect(harness.manager.getRange().to).toBeNull();
+    harness.typeInto(harness.minutes, '45', 'minutes');
+
+    expect(harness.manager.getRange().to).toEqual(SEVENTEEN_FORTY_FIVE);
+    expect(harness.changes()).toEqual([{ part: 'to', from: NINE, to: SEVENTEEN_FORTY_FIVE }]);
+    expect(harness.manager.getActivePart()).toBe('to');
+    expect(harness.toTime.textContent).toBe('17:45');
+  });
+
+  it('should commit once per input:commit and not for a field that was not typed in', () => {
+    harness = mountWithToActive();
+    harness.hour.value = '17';
+    harness.minutes.value = '45';
+    harness.emitter.emit('update', { hour: '17', minutes: '45' });
+
+    harness.emitter.emit('input:commit', { field: 'minutes' });
+
+    expect(harness.manager.getRange().to).toBeNull();
+    expect(harness.changes()).toEqual([]);
+
+    harness.typeInto(harness.minutes, '45', 'minutes');
+    harness.emitter.emit('input:commit', { field: 'minutes' });
+
+    expect(harness.manager.getRange().to).toEqual(SEVENTEEN_FORTY_FIVE);
+    expect(harness.changes()).toHaveLength(1);
+  });
+
+  it('should keep a From typed into the fields when the To tab is clicked, then switch to To', () => {
+    harness = mountRangeManager({ inputValue: '09:00 - 17:00' });
+    harness.typePreview('10', '15');
+
+    harness.toTab.click();
+
+    const order = harness.events.map((entry) => entry.event);
+    expect(harness.manager.getRange().from).toEqual({ hour: '10', minutes: '15' });
+    expect(harness.manager.getActivePart()).toBe('to');
+    expect(harness.changes()).toEqual([
+      { part: 'from', from: { hour: '10', minutes: '15' }, to: { hour: '17', minutes: '00' } },
+    ]);
+    expect(order.indexOf('range:change')).toBeLessThan(order.indexOf('range:switch'));
+  });
+
+  it('should keep a To typed into the fields when setActivePart moves back to From', () => {
+    harness = mountWithToActive();
+    harness.typePreview('17', '45');
+
+    expect(harness.manager.setActivePart('from')).toBe(true);
+
+    expect(harness.manager.getRange()).toEqual({ from: NINE, to: SEVENTEEN_FORTY_FIVE });
+    expect(harness.manager.getActivePart()).toBe('from');
+    expect(harness.toTime.textContent).toBe('17:45');
+  });
+
+  it('should commit nothing in 12h for an untyped minutes field or a To without AM/PM', () => {
+    harness = mountWithToActive({ clockType: '12h' });
+
+    harness.typeInto(harness.hour, '05', 'hour');
+    harness.emitter.emit('input:commit', { field: 'minutes' });
+
+    expect(harness.manager.getToValue()).toBeNull();
+
+    harness.typeInto(harness.minutes, '30', 'minutes');
+
+    expect(harness.manager.getToValue()).toBeNull();
+    expect(harness.manager.getRange().to).toBeNull();
+    expect(harness.changes()).toEqual([]);
   });
 });

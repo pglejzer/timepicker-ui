@@ -116,7 +116,7 @@
     "group": "Color",
     "default": "103,80,164",
     "read": false,
-    "commonlyThemed": false
+    "commonlyThemed": true
   },
   {
     "name": "--tp-on-surface",
@@ -130,7 +130,7 @@
     "group": "Color",
     "default": "#49454f",
     "read": false,
-    "commonlyThemed": false
+    "commonlyThemed": true
   },
   {
     "name": "--tp-on-surface-rgb",
@@ -144,14 +144,14 @@
     "group": "Color",
     "default": "#f3edf7",
     "read": false,
-    "commonlyThemed": false
+    "commonlyThemed": true
   },
   {
     "name": "--tp-outline-variant",
     "group": "Color",
     "default": "#cac4d0",
     "read": true,
-    "commonlyThemed": false
+    "commonlyThemed": true
   },
   {
     "name": "--tp-tertiary-container",

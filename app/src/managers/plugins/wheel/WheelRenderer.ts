@@ -8,10 +8,23 @@ import {
   isSecondDisabled,
   type DisabledRules,
 } from '../../../utils/time/rules';
+import {
+  isHourBeforeRangeFrom,
+  isMinuteBeforeRangeFrom,
+  isSecondBeforeRangeFrom,
+  type RangeFromLimit,
+} from '../../../utils/time/rangeLimit';
 import type { WheelColumnType, WheelTimeColumn } from './WheelTypes';
 
 type DisabledValue = NonNullable<NonNullable<CoreState['disabledTime']>['value']>;
 type WheelTime = Partial<TimeValue>;
+type ColumnCheck = (column: WheelTimeColumn, item: string) => boolean;
+
+interface MarkContext {
+  hour: string;
+  minutes: string;
+  type: string;
+}
 
 export const NEUTRAL_HOUR = '12';
 export const NEUTRAL_ZERO = '00';
@@ -41,6 +54,8 @@ export class WheelRenderer {
   private cachedItemHeight: number | null = null;
   private cachedItems: Map<WheelColumnType, NodeListOf<HTMLDivElement>> = new Map();
   private removedItems: Map<WheelColumnType, HTMLDivElement[]> = new Map();
+  private rangeLimit: RangeFromLimit | null = null;
+  private hasRangeMarks = false;
 
   constructor(core: CoreState) {
     this.core = core;
@@ -49,6 +64,8 @@ export class WheelRenderer {
   init(): void {
     this.cachedItems.clear();
     this.cachedItemHeight = null;
+    this.rangeLimit = null;
+    this.hasRangeMarks = false;
     this.restoreRemovedItems();
 
     if (!isDocument()) return;
@@ -66,9 +83,22 @@ export class WheelRenderer {
     this.updateDisabledItems();
   }
 
+  setRangeLimit(limit: RangeFromLimit | null): void {
+    this.rangeLimit = limit;
+  }
+
+  hasRangeLimit(): boolean {
+    return this.rangeLimit !== null;
+  }
+
   updateDisabledItems(wheelTime: WheelTime | null = null): void {
-    const disabled = this.core.disabledTime;
-    if (!disabled?.value) return;
+    const value = this.core.disabledTime?.value;
+    const beforeFrom = this.buildRangeCheck(this.resolveContext(wheelTime));
+
+    if (!beforeFrom) {
+      this.clearRangeMarks();
+    }
+    if (!value && !beforeFrom) return;
 
     const shouldHide = this.core.options.wheel.hideDisabled === true;
 
@@ -77,26 +107,36 @@ export class WheelRenderer {
       this.invalidateItemCache();
     }
 
-    if (disabled.value.predicate) {
-      this.updateDisabledByRules(this.buildPredicateRules(disabled.value), disabled.value, shouldHide, wheelTime);
-    } else if (disabled.value.isInterval && disabled.value.intervals) {
-      this.updateDisabledByRules(this.buildIntervalRules(disabled.value), null, shouldHide, wheelTime);
+    if (value?.predicate) {
+      this.updateDisabledByRules(this.buildPredicateRules(value), value, shouldHide, wheelTime, beforeFrom);
+    } else if (value?.isInterval && value.intervals) {
+      this.updateDisabledByRules(this.buildIntervalRules(value), null, shouldHide, wheelTime, beforeFrom);
     } else {
-      this.updateDisabledByFlatLists(disabled.value, shouldHide);
+      this.updateDisabledByFlatLists(value ?? null, shouldHide, beforeFrom);
     }
+
+    this.hasRangeMarks = beforeFrom !== null;
 
     if (shouldHide) {
       this.invalidateItemCache();
     }
   }
 
-  private updateDisabledByFlatLists(value: DisabledValue, shouldHide: boolean): void {
+  private updateDisabledByFlatLists(
+    value: DisabledValue | null,
+    shouldHide: boolean,
+    beforeFrom: ColumnCheck | null,
+  ): void {
     TIME_COLUMNS.forEach((type) => {
-      const list = value[type];
-      if (!list) return;
+      const list = value?.[type];
+      if (!list && !beforeFrom) return;
 
-      const disabledSet = new Set(list.map(String));
-      this.markDisabled(type, shouldHide, (item) => isListed(disabledSet, item));
+      const disabledSet = new Set((list ?? []).map(String));
+      this.markDisabled(
+        type,
+        shouldHide,
+        (item) => isListed(disabledSet, item) || (beforeFrom?.(type, item) ?? false),
+      );
     });
   }
 
@@ -120,31 +160,62 @@ export class WheelRenderer {
     lists: DisabledValue | null,
     shouldHide: boolean,
     wheelTime: WheelTime | null,
+    beforeFrom: ColumnCheck | null,
   ): void {
     const listed = (type: WheelTimeColumn, item: string): boolean => {
       const list = lists && !lists.isInterval ? lists[type] : undefined;
       return list ? isListed(new Set(list.map(String)), item) : false;
     };
+    const blocked = (type: WheelTimeColumn, item: string): boolean =>
+      listed(type, item) || (beforeFrom?.(type, item) ?? false);
     const showSeconds = this.core.options.clock.showSeconds === true;
-    const type = wheelTime?.type ?? this.getHeaderPeriod();
-    const hour = this.getHeaderValue(this.core.getHour()) ?? wheelTime?.hour ?? NEUTRAL_HOUR;
-    const minutes = this.getHeaderValue(this.core.getMinutes()) ?? wheelTime?.minutes ?? NEUTRAL_ZERO;
+    const { hour, minutes, type } = this.resolveContext(wheelTime);
 
     this.markDisabled(
       'hours',
       shouldHide,
-      (item) => listed('hours', item) || isHourDisabled(rules, { hour: item, type }, showSeconds),
+      (item) => blocked('hours', item) || isHourDisabled(rules, { hour: item, type }, showSeconds),
     );
     this.markDisabled(
       'minutes',
       shouldHide,
-      (item) => listed('minutes', item) || isMinuteDisabled(rules, { hour, minutes: item, type }, showSeconds),
+      (item) =>
+        blocked('minutes', item) || isMinuteDisabled(rules, { hour, minutes: item, type }, showSeconds),
     );
     this.markDisabled(
       'seconds',
       shouldHide,
-      (item) => listed('seconds', item) || isSecondDisabled(rules, { hour, minutes, seconds: item, type }),
+      (item) => blocked('seconds', item) || isSecondDisabled(rules, { hour, minutes, seconds: item, type }),
     );
+  }
+
+  private resolveContext(wheelTime: WheelTime | null): MarkContext {
+    return {
+      type: wheelTime?.type || this.getHeaderPeriod(),
+      hour: this.getHeaderValue(this.core.getHour()) ?? wheelTime?.hour ?? NEUTRAL_HOUR,
+      minutes: this.getHeaderValue(this.core.getMinutes()) ?? wheelTime?.minutes ?? NEUTRAL_ZERO,
+    };
+  }
+
+  private buildRangeCheck({ hour, minutes, type }: MarkContext): ColumnCheck | null {
+    const limit = this.rangeLimit;
+    if (!limit) return null;
+
+    const clockType = getClockType(this.core.options);
+    return (column, item) => {
+      if (column === 'hours') return isHourBeforeRangeFrom(item, type, limit, clockType);
+      if (column === 'minutes') return isMinuteBeforeRangeFrom(item, hour, type, limit, clockType);
+      return isSecondBeforeRangeFrom(item, minutes, hour, type, limit, clockType);
+    };
+  }
+
+  private clearRangeMarks(): void {
+    if (!this.hasRangeMarks) return;
+
+    this.hasRangeMarks = false;
+    this.restoreRemovedItems();
+    this.invalidateItemCache();
+    TIME_COLUMNS.forEach((type) => this.markDisabled(type, false, () => false));
   }
 
   private markDisabled(
@@ -266,6 +337,8 @@ export class WheelRenderer {
   }
 
   destroy(): void {
+    this.rangeLimit = null;
+    this.hasRangeMarks = false;
     this.restoreRemovedItems();
     this.columns.clear();
     this.cachedItems.clear();

@@ -125,6 +125,23 @@ describe('getWheelTemplate', () => {
       const paddings = hoursCol?.querySelectorAll('.tp-ui-wheel-padding');
       expect(paddings?.length).toBe(4);
     });
+
+    it('should put two spacers at each end of every column', () => {
+      const html = getWheelTemplate('12h', 5, true, 'tp', {}, { show: true, increment: 15 });
+      const container = document.createElement('div');
+      container.innerHTML = html;
+
+      const columns = container.querySelectorAll('.tp-ui-wheel-column');
+      expect(columns).toHaveLength(4);
+      columns.forEach((column) => {
+        const children = Array.from(column.children);
+        const isSpacer = (el: Element): boolean => el.classList.contains('tp-ui-wheel-padding');
+
+        expect(children.slice(0, 2).every(isSpacer)).toBe(true);
+        expect(children.slice(-2).every(isSpacer)).toBe(true);
+        expect(children.filter(isSpacer)).toHaveLength(4);
+      });
+    });
   });
 
   describe('accessibility attributes', () => {
@@ -187,4 +204,3 @@ describe('getWheelTemplate', () => {
     });
   });
 });
-

@@ -1,6 +1,6 @@
 import type { CoreState } from '../../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../../utils/EventEmitter';
-import type { LabelsOptions } from '../../types/options';
+import type { LabelsOptions, TimepickerView } from '../../types/options';
 import { TIMINGS } from '../../constants/timings';
 import { isEmbeddedInlineMode } from '../../utils/options/predicates';
 import { prefersReducedMotion, setOrRemoveAttribute, syncClockSlider } from '../../utils/accessibility';
@@ -67,6 +67,7 @@ export class MobileViewHandler {
   private core: CoreState;
   private emitter: EventEmitter<TimepickerEventMap>;
   private animatingModal: HTMLElement | null = null;
+  private queuedView: TimepickerView | null = null;
 
   constructor(core: CoreState, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -75,8 +76,8 @@ export class MobileViewHandler {
   }
 
   private setupEventListeners(): void {
-    this.emitter.on('switch:view', () => {
-      this.toggleMobileClockFace();
+    this.emitter.on('switch:view', (data) => {
+      this.toggleMobileClockFace(data?.view);
     });
   }
 
@@ -84,12 +85,29 @@ export class MobileViewHandler {
     this.core.setIsMobileView(!!this.core.options.ui.mobile);
   }
 
-  toggleMobileClockFace(): void {
+  requestView(view: TimepickerView): void {
+    const modal = this.core.getModalElement();
+    if (modal && this.animatingModal === modal) {
+      this.queuedView = view;
+      return;
+    }
+    if (view !== this.core.view) {
+      this.emitter.emit('switch:view', { view });
+    }
+  }
+
+  toggleMobileClockFace(target?: TimepickerView): void {
     const modal = this.core.getModalElement();
     if (!modal || this.animatingModal === modal) return;
 
     const wrapper = modal.querySelector<HTMLElement>('.tp-ui-wrapper');
     if (!wrapper) return;
+
+    const isExpanded = wrapper.classList.contains('expanded');
+    const next: TimepickerView = isExpanded ? 'keyboard' : 'clock';
+    if (target && target !== next) return;
+
+    this.core.setView(next);
 
     const parts: SwitchParts = {
       modal,
@@ -103,7 +121,6 @@ export class MobileViewHandler {
     };
 
     this.animatingModal = modal;
-    const isExpanded = wrapper.classList.contains('expanded');
 
     if (this.isLandscape()) {
       this.switchLandscape(parts, isExpanded);
@@ -216,7 +233,9 @@ export class MobileViewHandler {
     const { labels, ui } = this.core.options;
     const isReadonly = !isKeyboardView && !ui.editable;
 
-    modal.querySelectorAll(KEYBOARD_VIEW_PARTS).forEach((el) => el.classList.toggle('mobile', isKeyboardView));
+    modal
+      .querySelectorAll(KEYBOARD_VIEW_PARTS)
+      .forEach((el) => el.classList.toggle('mobile', isKeyboardView));
     TIME_INPUTS.forEach(([selector, clockLabel, keyboardLabel]) => {
       const input = modal.querySelector(selector);
       if (!input) return;
@@ -234,7 +253,17 @@ export class MobileViewHandler {
     }
 
     this.setClockFaceHidden(parts.clockFace, isKeyboardView);
+    if (isKeyboardView) {
+      this.moveFocusOffClockFace(parts.clockFace);
+    }
     this.renderSwitchButton(parts.switchButton, isKeyboardView);
+  }
+
+  private moveFocusOffClockFace(clockFace: HTMLElement | null): void {
+    const active = clockFace?.ownerDocument.activeElement;
+    if (!clockFace || !active || !clockFace.contains(active)) return;
+
+    getTimeInput(this.core, getActiveField(this.core))?.focus();
   }
 
   private renderSwitchButton(button: HTMLElement | null, isKeyboardView: boolean): void {
@@ -272,12 +301,18 @@ export class MobileViewHandler {
   }
 
   private release(parts: SwitchParts): void {
-    if (this.animatingModal === parts.modal) {
-      this.animatingModal = null;
+    if (this.animatingModal !== parts.modal) return;
+
+    this.animatingModal = null;
+    const queued = this.queuedView;
+    this.queuedView = null;
+    if (queued && queued !== this.core.view && parts.modal.isConnected) {
+      this.emitter.emit('switch:view', { view: queued });
     }
   }
 
   destroy(): void {
     this.animatingModal = null;
+    this.queuedView = null;
   }
 }

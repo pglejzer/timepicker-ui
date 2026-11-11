@@ -89,7 +89,7 @@ export default class ModalManager {
 
     this.clearExistingModal();
 
-    const modalTemplate = getModalTemplate(this.core.options, this.core.instanceId);
+    const modalTemplate = getModalTemplate(this.core.options, this.core.instanceId, this.core.isMobileView);
 
     if (this.core.options.ui.inline?.enabled) {
       const containerElement = getInlineContainer(this.core.options.ui.inline);
@@ -102,6 +102,9 @@ export default class ModalManager {
       if (modalElement) {
         modalElement.classList.add('tp-ui--inline');
         if (isEmbeddedInlineMode(this.core.options)) modalElement.classList.add('tp-ui--embedded');
+        if (this.core.options.ui.inline.showTitle === false) {
+          modalElement.classList.add('tp-ui--title-hidden');
+        }
 
         const { showButtons } = this.core.options.ui.inline;
         if (showButtons === false || showButtons === undefined) {
@@ -201,7 +204,7 @@ export default class ModalManager {
 
   setFlexEndToFooterIfNoKeyboardIcon(): void {
     const footer = this.core.getFooter();
-    if (!this.core.options.ui.enableSwitchIcon && footer) {
+    if (footer && !footer.querySelector('.tp-ui-keyboard-icon-wrapper')) {
       footer.style.justifyContent = 'flex-end';
     }
   }

@@ -10,14 +10,14 @@ const INPUT_VIEW: DatepickerOptions = {
   ui: { displayMode: "modal", initialView: "input", viewSwitch: true },
 };
 
-const MASK_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const MASK_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   ui: { format: "dd.MM.yyyy", mask: true },
 }).create();`;
 
-const INPUT_VIEW_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const INPUT_VIEW_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

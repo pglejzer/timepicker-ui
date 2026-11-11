@@ -20,7 +20,10 @@ const KEYS = [
   },
   { where: "Year grid", keys: "Arrow keys move through the three columns, Home and End jump, Enter and Space pick." },
   { where: "Input", keys: "Alt+Down Arrow opens the picker. Enter commits the typed text." },
-  { where: "Toggle element", keys: "Enter and Space open the picker when ui.toggleButton is not a <button>." },
+  {
+    where: "Toggle element",
+    keys: "Enter and Space open the picker, or close an open docked picker, when ui.toggleButton is not a <button>.",
+  },
 ];
 
 const FOCUS_CODE = `new DatepickerUI("#date", {
@@ -35,6 +38,7 @@ const RELATED = [
   { href: "/datepicker/docs/localization", title: "Translate the screen-reader labels" },
   { href: "/datepicker/docs/typed-input", title: "Typed input and aria-invalid" },
   { href: "/datepicker/docs/display-modes", title: "Display modes" },
+  { href: "/datepicker/docs/kit", title: "Kit for companion packages" },
 ];
 
 export default function DatepickerAccessibilityPage() {
@@ -61,7 +65,12 @@ export default function DatepickerAccessibilityPage() {
           <li>
             The inline picker is a <code>role=&quot;group&quot;</code>.
           </li>
-          <li>Each surface has an <code>aria-label</code>.</li>
+          <li>
+            Each surface has an <code>aria-label</code> from <code>labels.title</code>, or from{" "}
+            <code>labels.rangeTitle</code>, <code>labels.monthTitle</code> or <code>labels.yearTitle</code> in range
+            mode and at month or year precision. <code>setOptions()</code> with a new title renames a surface that
+            is already shown.
+          </li>
           <li>
             The month and year menus are <code>role=&quot;listbox&quot;</code> lists of{" "}
             <code>role=&quot;option&quot;</code> items.
@@ -72,6 +81,11 @@ export default function DatepickerAccessibilityPage() {
           mode, and each pick in a range. The toggle button gets <code>aria-expanded</code> and an accessible name
           that includes the current value. The input gets <code>aria-invalid</code> when the typed text is
           rejected.
+        </p>
+        <p>
+          In a range picker, the accessible name of a day adds <code>labels.rangeStart</code> for the start,{" "}
+          <code>labels.rangeEnd</code> for the end and <code>labels.inRange</code> for the days between. A start
+          picked without an end is already named as the start.
         </p>
       </Section>
 
@@ -111,6 +125,18 @@ export default function DatepickerAccessibilityPage() {
         <p>
           All texts, the screen-reader ones included, can be translated through the <code>labels</code> group. See{" "}
           <Link href="/datepicker/docs/localization">Localization</Link>.
+        </p>
+      </Section>
+
+      <Section title="Inline calendars and companion packages">
+        <p>
+          <code>ui.inline.announceSelection: false</code> stops an inline calendar from announcing selection
+          changes, for a page that announces them itself. Month changes and errors are still announced.
+        </p>
+        <p>
+          The <Link href="/datepicker/docs/kit">kit</Link> hosts take a <code>labelledBy</code> option: the id of a
+          visible title. The surface then gets <code>aria-labelledby</code> instead of an <code>aria-label</code>.{" "}
+          <code>setLabel(label, labelledBy?)</code> renames a shown surface by the same rule.
         </p>
       </Section>
 

@@ -9,14 +9,14 @@ const KEEP_TEXT: DatepickerOptions = {
   ui: { todayButton: true, clearButton: { clearInput: false } },
 };
 
-const BUTTONS_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const BUTTONS_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   ui: { todayButton: true, clearButton: true },
 }).create();`;
 
-const KEEP_TEXT_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const KEEP_TEXT_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

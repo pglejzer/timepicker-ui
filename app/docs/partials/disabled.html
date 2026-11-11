@@ -43,28 +43,6 @@
         </div>
       </div>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="disabled-hours"  /&gt;
-&lt;input id="disabled-minutes"  /&gt;
-&lt;input id="disabled-interval"  /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">new TimepickerUI('#disabled-hours', {
-  clock: { type: '24h', disabledTime: { hours: [1, 2, 3, 22, 23] } }
-}).create();
-
-new TimepickerUI('#disabled-minutes', {
-  clock: { type: '12h', disabledTime: { minutes: [15, 30, 45] } }
-}).create();
-
-new TimepickerUI('#disabled-interval', {
-  clock: { type: '24h', disabledTime: { ranges: '12:00 - 18:00' } }
-}).create();</code></pre>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -101,29 +79,6 @@ new TimepickerUI('#disabled-interval', {
             value="11:00"
           />
         </div>
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="disabled-intervals-12h"  value="11:00 PM" /&gt;
-&lt;input id="disabled-intervals-24h"  value="11:00" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">new TimepickerUI('#disabled-intervals-12h', {
-  clock: {
-    type: '12h',
-    disabledTime: { ranges: ['12:00 AM - 4:00 AM', '5:30 PM - 8:00 PM'] }
-  }
-}).create();
-
-new TimepickerUI('#disabled-intervals-24h', {
-  clock: {
-    type: '24h',
-    disabledTime: { ranges: ['04:33 - 12:12', '16:34 - 20:22', '21:37 - 23:23'] }
-  }
-}).create();</code></pre>
       </div>
     </div>
   </div>
@@ -167,44 +122,6 @@ new TimepickerUI('#disabled-intervals-24h', {
             Clear All
           </button>
         </div>
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="dynamic-update-picker" value="10:00 AM" /&gt;
-&lt;button id="update-morning-shift"&gt;Morning Shift&lt;/button&gt;
-&lt;button id="update-evening-shift"&gt;Evening Shift&lt;/button&gt;
-&lt;button id="clear-restrictions"&gt;Clear All&lt;/button&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const picker = new TimepickerUI('#dynamic-update-picker', {
-  clock: { disabledTime: { hours: [9, 10, 11, 12] } }
-});
-picker.create();
-
-// Update to morning shift (disable 0-8)
-document.getElementById('update-morning-shift')
-  .addEventListener('click', () => {
-    picker.setOptions({
-      clock: { disabledTime: { hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] } }
-    });
-  });
-
-// Update to evening shift (disable 18-23)
-document.getElementById('update-evening-shift')
-  .addEventListener('click', () => {
-    picker.setOptions({
-      clock: { disabledTime: { hours: [18, 19, 20, 21, 22, 23] } }
-    });
-  });
-
-// Clear all restrictions
-document.getElementById('clear-restrictions')
-  .addEventListener('click', () => {
-    picker.setOptions({ clock: { disabledTime: { hours: [] } } });
-  });</code></pre>
       </div>
     </div>
   </div>
@@ -252,48 +169,6 @@ document.getElementById('clear-restrictions')
         </div>
       </div>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="dynamic-interval-picker" value="10:00" /&gt;
-&lt;button id="update-single-interval"&gt;Single Interval&lt;/button&gt;
-&lt;button id="update-multiple-intervals"&gt;Multiple Intervals&lt;/button&gt;
-&lt;button id="clear-intervals"&gt;Clear&lt;/button&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const intervalPicker = new TimepickerUI('#dynamic-interval-picker', {
-  clock: { type: '24h', disabledTime: { ranges: '09:00 - 12:00' } }
-});
-intervalPicker.create();
-
-// Update to single interval (lunch break)
-document.getElementById('update-single-interval')
-  .addEventListener('click', () => {
-    intervalPicker.setOptions({
-      clock: { disabledTime: { ranges: '12:00 - 13:00' } }
-    });
-  });
-
-// Update to multiple intervals (shift schedule)
-document.getElementById('update-multiple-intervals')
-  .addEventListener('click', () => {
-    intervalPicker.setOptions({
-      clock: { 
-        disabledTime: { 
-          ranges: ['00:00 - 08:00', '12:00 - 13:00', '18:00 - 23:59']
-        } 
-      }
-    });
-  });
-
-// Clear all intervals
-document.getElementById('clear-intervals')
-  .addEventListener('click', () => {
-    intervalPicker.setOptions({ clock: { disabledTime: {} } });
-  });</code></pre>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -315,20 +190,6 @@ document.getElementById('clear-intervals')
           class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
           value="09:15 PM"
         />
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="editable-picker"  value="09:15 PM" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const editablePicker = new TimepickerUI('#editable-picker', {
-  ui: { editable: true, viewSwitch: true },
-  behavior: { returnFocus: true }
-});
-editablePicker.create();</code></pre>
       </div>
     </div>
   </div>
@@ -372,36 +233,6 @@ editablePicker.create();</code></pre>
         </div>
       </div>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="hide-disabled-wheel" value="08:00 AM" /&gt;
-&lt;input id="hide-disabled-popover" value="10:00" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">// Wheel - hide specific hours & minutes
-new TimepickerUI('#hide-disabled-wheel', {
-  clock: {
-    type: '12h',
-    disabledTime: { hours: [1,2,3,4,5,6], minutes: [0,15,30,45] },
-  },
-  ui: { mode: 'wheel' },
-  wheel: { hideDisabled: true },
-}).create();
-
-// Popover - hidden + 5min step
-new TimepickerUI('#hide-disabled-popover', {
-  clock: {
-    type: '24h',
-    incrementMinutes: 5,
-    disabledTime: { hours: [0,1,2,3,4,5,22,23] },
-  },
-  ui: { mode: 'compact-wheel' },
-  wheel: { placement: 'auto', hideDisabled: true },
-}).create();</code></pre>
-      </div>
-    </div>
     <div
       class="mt-6 p-4 bg-rose-50 dark:bg-rose-900/20 rounded-lg border border-rose-200 dark:border-rose-800"
     >
@@ -441,21 +272,6 @@ new TimepickerUI('#hide-disabled-popover', {
           class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
           value="10:30 PM"
         />
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-        <pre><code class="language-html">&lt;input id="smooth-hour-snap-picker"  value="10:30 PM" /&gt;</code></pre>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-        <pre><code class="language-javascript">const smoothHourPicker = new TimepickerUI('#smooth-hour-snap-picker', {
-  clock: {
-    discreteHourJump: false
-  }
-});
-smoothHourPicker.create();</code></pre>
       </div>
     </div>
   </div>

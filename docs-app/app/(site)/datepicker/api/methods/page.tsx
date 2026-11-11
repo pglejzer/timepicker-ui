@@ -8,7 +8,7 @@ import { withCode } from "../api-helpers";
 
 type MethodEntry = { name: string; description: string; code: string };
 
-const SETUP_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const SETUP_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const picker = new DatepickerUI("#date");
@@ -59,10 +59,11 @@ picker.getValue();
   {
     name: "setValue(value)",
     description:
-      "Sets the committed value and the input text. Pass `null` to clear. It does not emit `confirm`. A value that does not fit `calendar.mode` emits an `error` event with code `invalid-date`.",
+      "Sets the committed value and the input text. Pass `null` to clear. Any date can be `\"today\"`. It does not emit `confirm`. A value that does not fit `calendar.mode` emits an `error` event with code `invalid-date`. While the picker is shown, it moves to the new value and emits `navigate` with `source: \"api\"` when the shown days change.",
     code: `// single: a Date or an ISO string
 picker.setValue("2025-03-14");
 picker.setValue(new Date(2025, 2, 14));
+picker.setValue("today");
 
 // range: { start, end }
 picker.setValue({ start: "2025-03-14", end: "2025-03-20" });
@@ -74,9 +75,32 @@ picker.setValue(["2025-03-14", "2025-03-16"]);
 picker.setValue(null);`,
   },
   {
+    name: "clear()",
+    description:
+      "Empties the value and the input text, and the draft too while the picker is shown. Emits `clear` with the value it removed. After `create()` it also fires `input` and `change` on the input. It does not emit `confirm`. It does nothing when there is neither a value nor a shown draft, and after `destroy()`.",
+    code: `picker.on("clear", ({ previousValue }) => {
+  console.log(previousValue);
+});
+
+picker.clear();`,
+  },
+  {
+    name: "isSelectable(value)",
+    description:
+      "Returns `true` when a value passes every selection rule: `minDate`, `maxDate`, disabled dates and weekdays, `enabledDates`, `isDateDisabled`, and the range length or `multiple.max` limits. A `Date` or a string, including `\"today\"`, is checked as one day in any mode. In range mode a `{ start, end }` object is checked as a range, and in multiple mode an array as a set of days. An invalid or empty value, or a shape that does not fit the mode, returns `false`. The value is not changed.",
+    code: `picker.isSelectable("2025-03-14");
+picker.isSelectable("today");
+
+// calendar.mode: "range"
+picker.isSelectable({ start: "2025-03-14", end: "2025-03-20" });
+
+// calendar.mode: "multiple"
+picker.isSelectable(["2025-03-14", "2025-03-16"]);`,
+  },
+  {
     name: "setOptions(options)",
     description:
-      "Merges a partial options object into the current options and applies it. Emits `update`. Changing `calendar.mode` empties the selection.",
+      "Merges a partial options object into the current options and applies it. Emits `update`, and `navigate` with `source: \"api\"` when a shown picker changes the days it shows. Changing `calendar.mode` empties the selection.",
     code: `picker.setOptions({ ui: { theme: "crane" } });
 
 picker.setOptions({ calendar: { mode: "range" } });`,
@@ -87,6 +111,36 @@ picker.setOptions({ calendar: { mode: "range" } });`,
       "Range mode only. Sets which end the next pick fills, `\"start\"` or `\"end\"`. It is ignored in other modes and after `destroy()`, emits no event and does not open the picker.",
     code: `picker.open();
 picker.setActiveEnd("end");`,
+  },
+  {
+    name: "setView(view)",
+    description:
+      "Switches to the calendar with `\"calendar\"` or to the text fields with `\"input\"`. It works while the picker is shown and has the input view: every range picker, and a single picker with the modal or full-screen look (`ui.layout`), at day precision. Otherwise it does nothing. Emits `switch:view` when the view changes.",
+    code: `picker.open();
+picker.setView("input");`,
+  },
+  {
+    name: "getView()",
+    description: "Returns the view shown, `\"calendar\"` or `\"input\"`. A closed picker returns `\"calendar\"`.",
+    code: `picker.getView();
+// "calendar" | "input"`,
+  },
+  {
+    name: "goTo(date)",
+    description:
+      "Shows the month of a date without selecting it. Takes a `Date`, an ISO string or `\"today\"`. A date outside `minDate` and `maxDate` shows the month of the nearest day allowed. Emits `navigate` with `source: \"api\"` when the shown days change. It does nothing while the picker is closed. An invalid date emits `error` with code `invalid-date`.",
+    code: `picker.open();
+picker.goTo("2025-06-01");
+picker.goTo("today");`,
+  },
+  {
+    name: "getVisibleRange()",
+    description:
+      "Returns `{ from, to }`, the first and last day the picker shows, or `null` while it is closed. Both are `DateValue` objects whose `value` is always `YYYY-MM-DD`. Shown outside days count. With month precision the range is the shown year, and with year precision it spans every year offered.",
+    code: `picker.open();
+
+const range = picker.getVisibleRange();
+// { from: DateValue, to: DateValue }`,
   },
   {
     name: "getElement()",

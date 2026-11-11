@@ -34,7 +34,58 @@ export default function WhatsNewPage() {
         description="Stay up to date with the latest features and improvements"
       />
 
-      <Callout title="Version 4.6.0 - October 19, 2026" tone="tip">
+      <Callout title="Version 4.7.0 - November 11, 2026" tone="tip">
+        <p>
+          Time ranges in the wheel modes, view and clear methods, a range change
+          event, public time helpers, and many accessibility changes
+        </p>
+        <p>What&apos;s new:</p>
+        <ul>
+          <li>
+            <strong>Range in wheel and compact-wheel</strong> - The range plugin
+            now works in both wheel modes, with tabs, <code>setRange()</code>,
+            OK and Clear
+          </li>
+          <li>
+            <strong>range:change and partial setRange()</strong> -{" "}
+            <code>range:change</code> reports each user change, and{" "}
+            <code>{"setRange({ from })"}</code> keeps the other end.{" "}
+            <code>getActivePart()</code> and <code>setRangeCaptions()</code>{" "}
+            complete the range API
+          </li>
+          <li>
+            <strong>setView(), getView() and clear()</strong> - Switch or read
+            the clock and keyboard views, and empty the picker from code
+          </li>
+          <li>
+            <strong>Time helpers</strong> - <code>parseTime()</code>,{" "}
+            <code>formatTime()</code> and <code>createDisabledTimeCheck()</code>{" "}
+            work without a picker
+          </li>
+          <li>
+            <strong>Timezone helpers</strong> - <code>getTimezoneList()</code>{" "}
+            and <code>DEFAULT_TIMEZONES</code> come from{" "}
+            <code>timepicker-ui/plugins/timezone</code>
+          </li>
+          <li>
+            <strong>Accessibility</strong> - AM/PM is a radio group, the
+            timezone field is an APG combobox, values read &quot;7 of
+            12&quot;, and the compact-wheel dialog has a name
+          </li>
+          <li>
+            <strong>Check before upgrading</strong> - Some markup, ARIA, events
+            and the <code>dark</code> look changed. The changelog lists them
+          </li>
+        </ul>
+        <div className={styles.links}>
+          <Link href="/docs/features/plugins">Plugins</Link>
+          <Link href="/docs/api/methods">Methods</Link>
+          <Link href="/docs/api/events">Events</Link>
+          <Link href="/docs/changelog">Full 4.7.0 changelog</Link>
+        </div>
+      </Callout>
+
+      <Callout title="Version 4.6.0 - October 19, 2026">
         <p>
           Opt-in hooks for embedding the picker in your own dialog, linking or
           splitting a time range, disabling times with a function, and removing

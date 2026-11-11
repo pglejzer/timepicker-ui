@@ -13,3 +13,20 @@ export const getInlineContainer = (inline: UIOptions['inline']): HTMLElement | n
   if (!inline.containerId || !isDocument()) return null;
   return document.getElementById(inline.containerId);
 };
+
+const hasSize = (element: Element): boolean => {
+  const { width, height } = element.getBoundingClientRect();
+  return width > 0 && height > 0;
+};
+
+export const whenSized = (element: Element | null | undefined, callback: () => void): (() => void) => {
+  if (!element || typeof ResizeObserver === 'undefined' || hasSize(element)) return () => {};
+
+  const observer = new ResizeObserver(() => {
+    if (!hasSize(element)) return;
+    observer.disconnect();
+    callback();
+  });
+  observer.observe(element);
+  return () => observer.disconnect();
+};

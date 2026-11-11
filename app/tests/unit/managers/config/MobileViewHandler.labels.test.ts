@@ -124,7 +124,7 @@ describe('time fields are named with the labels of the view that shows them', ()
       'aria-valuemin': '0',
       'aria-valuemax': '23',
       'aria-valuenow': '10',
-      'aria-valuetext': '10',
+      'aria-valuetext': '10 of 24',
     });
     expect(sliderState(field('.tp-ui-clock-face'))).toEqual(sliderState(hour));
   };

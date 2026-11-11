@@ -40,6 +40,10 @@ const picker = new TimepickerUI(input);
 picker.create();`}
           language="typescript"
         />
+        <p>
+          <code>TimepickerUI</code> is a named export, and also the default export, so{" "}
+          <code>import TimepickerUI from &apos;timepicker-ui&apos;</code> works too.
+        </p>
       </Section>
 
       <Section title="With Options">

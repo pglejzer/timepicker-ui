@@ -79,17 +79,31 @@ describe('inline picker footer visibility', () => {
       },
     );
 
-    it('should keep a footer holding the switch icon visible while the action buttons hide', () => {
-      const { container } = mountInline({
-        mode,
-        inline: { showButtons: false },
-        ui: { enableSwitchIcon: true },
-      });
+    if (mode === 'clock') {
+      it('should keep a footer holding the switch icon visible while the action buttons hide', () => {
+        const { container } = mountInline({
+          mode,
+          inline: { showButtons: false },
+          ui: { enableSwitchIcon: true },
+        });
 
-      expect(footer(container).querySelector('.tp-ui-keyboard-icon-wrapper')).not.toBeNull();
-      expect(actionButtons(container).style.display).toBe('none');
-      expect(footer(container).style.display).not.toBe('none');
-    });
+        expect(footer(container).querySelector('.tp-ui-keyboard-icon-wrapper')).not.toBeNull();
+        expect(actionButtons(container).style.display).toBe('none');
+        expect(footer(container).style.display).not.toBe('none');
+      });
+    } else {
+      it('should render no switch icon and hide the whole footer even with enableSwitchIcon on', () => {
+        const { container } = mountInline({
+          mode,
+          inline: { showButtons: false },
+          ui: { enableSwitchIcon: true },
+        });
+
+        expect(inlineModal(container).querySelector('.tp-ui-keyboard-icon-wrapper')).toBeNull();
+        expect(actionButtons(container).style.display).toBe('none');
+        expect(footer(container).style.display).toBe('none');
+      });
+    }
 
     it('should keep the footer and the action buttons visible when showButtons is true', () => {
       const { container } = mountInline({ mode, inline: { showButtons: true } });

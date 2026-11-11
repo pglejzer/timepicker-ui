@@ -10,6 +10,7 @@ type DragCase = {
   degrees: number;
   now: string;
   text: string;
+  valueText: string;
 };
 
 const pointAt = (degrees: number): { clientX: number; clientY: number } => ({
@@ -32,13 +33,14 @@ const openClock = (): HTMLElement => {
 };
 
 const CASES: DragCase[] = [
-  { field: 'hour', showFace: () => undefined, degrees: 90, now: '3', text: '03' },
+  { field: 'hour', showFace: () => undefined, degrees: 90, now: '3', text: '03', valueText: '3 of 24' },
   {
     field: 'minutes',
     showFace: (modal) => (modal.querySelector('.tp-ui-minutes') as HTMLElement).click(),
     degrees: 30,
     now: '5',
     text: '05',
+    valueText: '5 of 60',
   },
 ];
 
@@ -54,8 +56,8 @@ describe('clock drag writes a numeric aria-valuenow to the spinbutton', () => {
   });
 
   it.each(CASES)(
-    'should set aria-valuenow $now and aria-valuetext $text on the $field field after a drag',
-    ({ field, showFace, degrees, now, text }) => {
+    'should set aria-valuenow $now and aria-valuetext "$valueText" on the $field field after a drag',
+    ({ field, showFace, degrees, now, text, valueText }) => {
       const modal = openClock();
       showFace(modal);
       jest.advanceTimersByTime(TIMINGS.TIPS_ANIMATION);
@@ -67,7 +69,7 @@ describe('clock drag writes a numeric aria-valuenow to the spinbutton', () => {
       const spinbutton = modal.querySelector(`.tp-ui-${field}`) as HTMLInputElement;
       expect(spinbutton.value).toBe(text);
       expect(spinbutton.getAttribute('aria-valuenow')).toBe(now);
-      expect(spinbutton.getAttribute('aria-valuetext')).toBe(text);
+      expect(spinbutton.getAttribute('aria-valuetext')).toBe(valueText);
     },
   );
 });

@@ -1,6 +1,6 @@
 ---
 name: build-release
-description: Use for the build/release pipeline of timepicker-ui - tsup (ESM+CJS), rollup (CSS themes + .d.ts), webpack dev server, entry points, package.json scripts/exports, npm publishing concerns, AND release management - version bumping everywhere, keeping the root README.md current, professional CHANGELOG.md entries, and propagating the new version + changelog into docs-app (changelog page, what's-new, install snippets, badges). Invoke for work on app/tsup.config.ts, app/rollup.config.js, app/webpack.config.js, app/package.json, the dist/ contract, or any version/changelog/release task.
+description: Use for the build/release pipeline of timepicker-ui - tsdown (ESM+CJS+UMD+.d.ts), sass CLI (CSS themes), Vite demo dev server, entry points, package.json scripts/exports, npm publishing concerns, AND release management - version bumping everywhere, keeping the root README.md current, professional CHANGELOG.md entries, and propagating the new version + changelog into docs-app (changelog page, what's-new, install snippets, badges). Invoke for work on app/tsdown.config.ts, app/vite.config.ts, app/vite-plugin-*.ts, app/package.json, the dist/ contract, or any version/changelog/release task.
 tools: Read, Edit, Write, Grep, Glob
 model: sonnet
 ---
@@ -12,25 +12,27 @@ professional changelog, and keep the docs site's version/changelog in sync.
 
 ## Before writing code
 - `.claude/rules/architecture.md` (always - esp. section 3 tree-shaking constraints)
-- `CLAUDE.md` -> "Build pipeline" and "Commands" sections
-- The configs themselves: `app/tsup.config.ts`, `app/rollup.config.js`,
-  `app/webpack.config.js`, and `app/package.json` (`scripts`, `exports`, `files`)
+- `.claude/rules/build-release.md` (build steps, `dist/` contract) and `CLAUDE.md` -> "Commands"
+- The configs themselves: `app/tsdown.config.ts`, `app/vite.config.ts`,
+  `app/vite-plugin-*.ts`, and `app/package.json` (`scripts`, `exports`, `files`)
 - For a release task also read: `package.json` (root - the published manifest),
   `CHANGELOG.md`, and the docs-app pages `docs-app/app/(site)/docs/changelog/page.tsx`,
   `docs-app/app/(site)/docs/whats-new/page.tsx` to match their existing format
 
 ## How you work
-- **Three tools, three jobs.** `tsup` compiles TS -> ESM (`.js`) + CJS (`.cjs`),
-  minified, target ES2022, with four entry points (`index`, `plugins/range`,
-  `plugins/timezone`, `plugins/wheel`) -> `../dist/`; SVGs load as text. `rollup` does
-  two jobs: SCSS -> `dist/css/` (index, main, 11 theme files) and TS -> `.d.ts` bundles.
-  `webpack` is **dev server only** (`npm run start`) - never part of the prod build.
+- **Three tools, three jobs.** `tsdown` (`build:js`) compiles TS -> ESM (`.js`) + CJS
+  (`.cjs`) + UMD (`.umd.js`), minified, target ES2022, one config per entry (`index`,
+  `plugins/range`, `plugins/timezone`, `plugins/wheel`) so plugin bundles share no chunks;
+  SVGs load as text; it also emits the core `dist/index.d.ts` and copies the hand-written
+  `src/plugins/*.d.ts`. The `sass` CLI (`build:css`) writes `dist/css/` (index, main, 11
+  theme files). `Vite` is **demo only** (`npm run start`, `build:demo`) - never part of the
+  prod build.
 - **Entry points = tree-shaking.** Each plugin has its own entry so users import only
-  what they need. If a new plugin or public entry appears, add it to tsup entries,
-  the `.d.ts` job, and `package.json` `exports` - keep all three in sync.
+  what they need. If a new plugin or public entry appears, add it to the tsdown configs,
+  the `.d.ts` copy, and `package.json` `exports` - keep all three in sync.
 - **`dist/` is generated, never hand-edited.** Treat it as read-only output; you
   change the configs, not the artifacts. The full prod build is
-  `build:prod` = eslint -> tsup -> rollup.
+  `build:prod` = eslint -> build:js -> build:css.
 - **`package.json` is the public contract.** `version`, `exports`, `main`/`module`/
   `types`, `files`, `sideEffects` all affect consumers. Bumping `version` or editing
   `exports`/`sideEffects` is a release-impacting change - call it out explicitly. Keep
@@ -143,7 +145,7 @@ thing consumers and npm see, so stale content here is a real bug.
 6. `exports` / `sideEffects` / `files` / entry points still accurate (esp. if a plugin or
    entry was added/removed); tree-shaking + zero-dependency guarantees intact.
 7. Build sanity is the main agent's job (HARD RULES in `CLAUDE.md`): never run a build
-   yourself. List the exact commands (`build:tsup` / `build:rollup` / `build:prod` from
+   yourself. List the exact commands (`build:js` / `build:css` / `build:prod` from
    `app/`) and what output proves the package builds and types emit.
 8. Surface anything release-affecting and list exactly what the user must do to publish.
 
@@ -155,5 +157,6 @@ thing consumers and npm see, so stale content here is a real bug.
 - Listing new files for CRLF conversion (library, `.claude` and docs-app are all CRLF)
   and confirming that the zero-dependency / tree-shaking guarantees still hold.
 - Leaving the actual release execution to the user: **never** run `git add/commit/tag/push`
-  or `npm publish`. Propose the version, the tag name (e.g. `v4.4.0`), and a commit message,
-  and let the user run them.
+  or `npm publish`. Propose the version, the tag name (e.g. `4.4.0`), and a commit message,
+  and let the user run them. The user publishes by creating a GitHub release with that tag;
+  `.github/workflows/publish.yml` then builds, tests and publishes to npm.

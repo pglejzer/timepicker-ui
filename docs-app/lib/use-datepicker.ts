@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type RefObject } from "react";
-import type DatepickerUI from "@pglejzer/datepicker-ui";
+import type { DatepickerUI } from "@pglejzer/datepicker-ui";
 import type { BehaviorOptions, DatepickerOptions, UIOptions } from "@pglejzer/datepicker-ui";
 import { isDatepickerTheme } from "@/lib/datepicker";
 import { useDarkMode } from "@/lib/use-dark-mode";

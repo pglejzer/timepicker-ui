@@ -1,16 +1,22 @@
 import type { RangeValue } from './types';
-import { parseTime, pad, timeToSeconds, SECONDS_PER_MINUTE, type ClockType } from '../../../utils/time/parse';
+import {
+  parseTime,
+  pad,
+  timeToSeconds,
+  isTimePlaceholder,
+  getTimePlaceholder,
+  SECONDS_PER_MINUTE,
+  type ClockType,
+} from '../../../utils/time/parse';
 
-export const PART_PLACEHOLDER = '--';
-
-export const isPlaceholder = (part: string): boolean => part.startsWith(PART_PLACEHOLDER);
-
-export function getTimePlaceholder(showSeconds = false): string {
-  return showSeconds ? '--:--:--' : '--:--';
-}
+export {
+  TIME_PLACEHOLDER_PREFIX as PART_PLACEHOLDER,
+  isTimePlaceholder as isPlaceholder,
+  getTimePlaceholder,
+} from '../../../utils/time/parse';
 
 export function parseTimeString(str: string, showSeconds = false): RangeValue | null {
-  if (!str || isPlaceholder(str)) return null;
+  if (!str || isTimePlaceholder(str)) return null;
   const parseAs = (clockType: ClockType): RangeValue | null => parseTime(str, { clockType, showSeconds });
   return parseAs('12h') ?? parseAs('24h');
 }
@@ -53,6 +59,19 @@ export function isValueComplete(value: RangeValue | null, clockType: '12h' | '24
   return !!(value.hour && value.minutes);
 }
 
+const sameNumber = (a: string | undefined, b: string | undefined): boolean =>
+  a === b || Number(a ?? 0) === Number(b ?? 0);
+
+export function isSameValue(a: RangeValue | null, b: RangeValue | null): boolean {
+  if (!a || !b) return a === b;
+  return (
+    sameNumber(a.hour, b.hour) &&
+    sameNumber(a.minutes, b.minutes) &&
+    sameNumber(a.seconds, b.seconds) &&
+    (a.type ?? '') === (b.type ?? '')
+  );
+}
+
 export function parseRangeInput(
   inputValue: string,
   showSeconds = false,
@@ -62,7 +81,7 @@ export function parseRangeInput(
   }
 
   const parts = inputValue.split(' - ').map((p) => p.trim());
-  if (parts.length !== 2 || parts.some(isPlaceholder)) {
+  if (parts.length !== 2) {
     return { from: null, to: null };
   }
 

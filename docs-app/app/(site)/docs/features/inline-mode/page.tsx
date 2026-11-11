@@ -187,6 +187,16 @@ picker.create();`}
             says, and the picker does not take focus when it mounts.
           </li>
           <li>
+            The picker&apos;s wrapper is not a tab stop, so Tab does not stop
+            on it before the controls inside. New in 4.7.0.
+          </li>
+          <li>
+            The hour, minute and second fields have no <code>name</code>
+            attribute, so they are not sent when the picker sits inside a{" "}
+            <code>&lt;form&gt;</code>. Your own input holds the value. New in
+            4.7.0.
+          </li>
+          <li>
             <code>embedded</code> is ignored unless <code>enabled</code> is{" "}
             <code>true</code>. The default is <code>false</code>.
           </li>
@@ -215,11 +225,78 @@ openButton.addEventListener('click', () => {
           language="typescript"
         />
         <p>
-          Create the picker once the container is visible, as above. The clock
-          face measures itself on creation and gets a size of 0 inside a
-          hidden container, such as a closed <code>&lt;dialog&gt;</code>. See{" "}
+          A picker created in a hidden container, such as a closed{" "}
+          <code>&lt;dialog&gt;</code>, lays out its clock face or wheel the
+          first time it is shown. Before 4.7.0 the clock face measured itself
+          on creation and got a size of 0 there, so create the picker once
+          the container is visible, as above. See{" "}
           <Link href="/examples/features/inline-mode">the live example</Link>.
         </p>
+      </Section>
+
+      <Section title="Hide the title">
+        <p>
+          Set <code>ui.inline.showTitle</code> to <code>false</code> when your
+          page or host component already shows a heading. The title (
+          &quot;Select time&quot; or &quot;Enter Time&quot;) is hidden
+          visually but still names the picker for screen readers, and the
+          header keeps its top spacing. The root gets the class{" "}
+          <code>tp-ui--title-hidden</code>. The default is <code>true</code>,
+          and the option is ignored unless <code>enabled</code> is{" "}
+          <code>true</code>. New in 4.7.0.
+        </p>
+        <CodeBlock
+          code={`const picker = new TimepickerUI(input, {
+  ui: {
+    inline: {
+      enabled: true,
+      container: '#timepicker-container',
+      embedded: true,
+      showTitle: false
+    }
+  }
+});
+picker.create();`}
+          language="typescript"
+        />
+      </Section>
+
+      <Section title="Embedded card surface">
+        <p>
+          An embedded card takes its background, corners and backdrop filter
+          from three variables. Set them on the root or on a parent element.
+          They fall back to <code>--tp-bg</code>, <code>--tp-radius-md</code>{" "}
+          and <code>--tp-backdrop-filter</code>. New in 4.7.0.
+        </p>
+        <CodeBlock
+          code={`.my-dialog .tp-ui--embedded {
+  --tp-embedded-bg: transparent;
+  --tp-embedded-radius: 0;
+  --tp-embedded-backdrop-filter: none;
+}`}
+          language="css"
+        />
+      </Section>
+
+      <Section title="Switch views from your own footer">
+        <p>
+          A host component can drive the view itself with{" "}
+          <code>setView()</code> and <code>getView()</code>, for example with
+          a button in its own footer. The picker emits{" "}
+          <code>switch:view</code> with the new view.
+        </p>
+        <CodeBlock
+          code={`const toggle = document.querySelector('#view-toggle');
+
+toggle.addEventListener('click', () => {
+  picker.setView(picker.getView() === 'clock' ? 'keyboard' : 'clock');
+});
+
+picker.on('switch:view', ({ view }) => {
+  toggle.textContent = view === 'clock' ? 'Keyboard' : 'Clock';
+});`}
+          language="typescript"
+        />
       </Section>
 
       <Section title="React Example">

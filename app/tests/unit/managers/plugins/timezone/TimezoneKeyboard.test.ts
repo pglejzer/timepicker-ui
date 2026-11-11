@@ -1,4 +1,5 @@
 import { TimezoneKeyboard } from '../../../../../src/managers/plugins/timezone/TimezoneKeyboard';
+import { TIMINGS } from '../../../../../src/constants/timings';
 
 const OPTIONS_COUNT = 10;
 
@@ -158,7 +159,7 @@ describe('TimezoneKeyboard', () => {
       expect(options[0].scrollIntoView).not.toHaveBeenCalled();
     });
 
-    it('should set aria-activedescendant on the dropdown to the focused option id', () => {
+    it('should set aria-activedescendant on the combobox to the focused option id', () => {
       const options = [document.createElement('div'), document.createElement('div')];
       const keyboard = keyboardFocusedAt(1, options.length);
       options[0].id = 'tp-tz-opt-0';
@@ -167,22 +168,128 @@ describe('TimezoneKeyboard', () => {
         opt.scrollIntoView = jest.fn();
       });
 
-      const dropdown = document.createElement('div');
+      const combobox = document.createElement('div');
 
-      keyboard.updateVisualFocus(options, dropdown);
+      keyboard.updateVisualFocus(options, combobox);
 
-      expect(dropdown.getAttribute('aria-activedescendant')).toBe('tp-tz-opt-1');
+      expect(combobox.getAttribute('aria-activedescendant')).toBe('tp-tz-opt-1');
     });
 
     it('should remove aria-activedescendant when no option is focused', () => {
       const keyboard = new TimezoneKeyboard();
 
-      const dropdown = document.createElement('div');
-      dropdown.setAttribute('aria-activedescendant', 'tp-tz-opt-0');
+      const combobox = document.createElement('div');
+      combobox.setAttribute('aria-activedescendant', 'tp-tz-opt-0');
 
-      keyboard.updateVisualFocus([], dropdown);
+      keyboard.updateVisualFocus([], combobox);
 
-      expect(dropdown.hasAttribute('aria-activedescendant')).toBe(false);
+      expect(combobox.hasAttribute('aria-activedescendant')).toBe(false);
+    });
+  });
+
+  describe('setFocusedIndex', () => {
+    it('should set and return the index', () => {
+      const keyboard = new TimezoneKeyboard();
+
+      expect(keyboard.setFocusedIndex(4)).toBe(4);
+      expect(keyboard.getFocusedIndex()).toBe(4);
+    });
+  });
+
+  describe('type-ahead', () => {
+    const LABELS = ['Athens', 'Belgrade', 'Berlin', 'Brussels', 'Cairo'];
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('moves to the first label starting with the typed character', () => {
+      const keyboard = new TimezoneKeyboard();
+
+      expect(keyboard.matchTypedCharacter('b', LABELS)).toBe(1);
+      expect(keyboard.getFocusedIndex()).toBe(1);
+      expect(keyboard.isTyping()).toBe(true);
+    });
+
+    it('matches case-insensitively', () => {
+      const keyboard = new TimezoneKeyboard();
+
+      expect(keyboard.matchTypedCharacter('C', LABELS)).toBe(4);
+    });
+
+    it('cycles to the next label with the same first letter when the character repeats within the window', () => {
+      const keyboard = new TimezoneKeyboard();
+
+      keyboard.matchTypedCharacter('b', LABELS);
+      jest.advanceTimersByTime(TIMINGS.TYPEAHEAD_RESET - 1);
+      expect(keyboard.matchTypedCharacter('b', LABELS)).toBe(2);
+      jest.advanceTimersByTime(TIMINGS.TYPEAHEAD_RESET - 1);
+      expect(keyboard.matchTypedCharacter('b', LABELS)).toBe(3);
+    });
+
+    it('builds a prefix: "b", "e", "r" lands on Berlin when Belgrade is active', () => {
+      const keyboard = new TimezoneKeyboard();
+      keyboard.setFocusedIndex(1);
+
+      keyboard.matchTypedCharacter('b', LABELS);
+      expect(keyboard.getFocusedIndex()).toBe(2);
+      keyboard.matchTypedCharacter('e', LABELS);
+      expect(keyboard.getFocusedIndex()).toBe(2);
+      keyboard.matchTypedCharacter('r', LABELS);
+      expect(keyboard.getFocusedIndex()).toBe(2);
+    });
+
+    it('keeps Berlin for "b", "e", "r" when Berlin is already active', () => {
+      const keyboard = new TimezoneKeyboard();
+      keyboard.setFocusedIndex(2);
+
+      keyboard.matchTypedCharacter('b', LABELS);
+      keyboard.matchTypedCharacter('e', LABELS);
+      expect(keyboard.matchTypedCharacter('r', LABELS)).toBe(2);
+      expect(keyboard.getFocusedIndex()).toBe(2);
+    });
+
+    it('returns -1 and keeps the index when nothing matches', () => {
+      const keyboard = new TimezoneKeyboard();
+      keyboard.setFocusedIndex(3);
+
+      expect(keyboard.matchTypedCharacter('z', LABELS)).toBe(-1);
+      expect(keyboard.getFocusedIndex()).toBe(3);
+    });
+
+    it('empties the buffer after TIMINGS.TYPEAHEAD_RESET', () => {
+      const keyboard = new TimezoneKeyboard();
+      keyboard.matchTypedCharacter('b', LABELS);
+      expect(keyboard.isTyping()).toBe(true);
+
+      jest.advanceTimersByTime(TIMINGS.TYPEAHEAD_RESET);
+
+      expect(keyboard.isTyping()).toBe(false);
+    });
+
+    it('restarts the window on every character', () => {
+      const keyboard = new TimezoneKeyboard();
+      keyboard.matchTypedCharacter('b', LABELS);
+      jest.advanceTimersByTime(TIMINGS.TYPEAHEAD_RESET - 100);
+      keyboard.matchTypedCharacter('e', LABELS);
+      jest.advanceTimersByTime(TIMINGS.TYPEAHEAD_RESET - 100);
+
+      expect(keyboard.isTyping()).toBe(true);
+    });
+
+    it('reset() clears the buffer and its timer', () => {
+      const keyboard = new TimezoneKeyboard();
+      keyboard.matchTypedCharacter('b', LABELS);
+
+      keyboard.reset();
+
+      expect(keyboard.isTyping()).toBe(false);
+      expect(keyboard.getFocusedIndex()).toBe(-1);
+      expect(jest.getTimerCount()).toBe(0);
     });
   });
 });

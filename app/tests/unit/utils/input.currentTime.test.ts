@@ -1,4 +1,62 @@
-import { getInputValue } from '../../../src/utils/input';
+import { getInputValue, neutralTime, resolveCurrentTime } from '../../../src/utils/input';
+
+describe('neutralTime', () => {
+  it('is 12:00 PM in 12h and 12:00 in 24h', () => {
+    expect(neutralTime('12h')).toEqual({ hour: '12', minutes: '00', type: 'PM' });
+    expect(neutralTime('24h', true)).toEqual({ hour: '12', minutes: '00', seconds: '00', type: undefined });
+  });
+
+  it('adds the seconds only when asked and falls back to PM without a clock type', () => {
+    expect(neutralTime('12h', true)).toEqual({ hour: '12', minutes: '00', seconds: '00', type: 'PM' });
+    expect(neutralTime('24h')).not.toHaveProperty('seconds');
+    expect(neutralTime(undefined)).toEqual({ hour: '12', minutes: '00', type: 'PM' });
+  });
+
+  it('is what getInputValue returns for an empty input without a current time', () => {
+    const input = document.createElement('input');
+
+    expect(getInputValue(input, '12h')).toEqual(neutralTime('12h'));
+    expect(getInputValue(input, '24h', undefined, undefined, true)).toEqual(neutralTime('24h', true));
+  });
+});
+
+describe('resolveCurrentTime', () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('returns null without a current time', () => {
+    expect(resolveCurrentTime(undefined, '24h')).toBeNull();
+    expect(resolveCurrentTime(false, '24h')).toBeNull();
+  });
+
+  it('uses the given date', () => {
+    const result = resolveCurrentTime({ time: new Date(2026, 0, 1, 14, 5) }, '24h');
+    expect(result).toEqual(expect.objectContaining({ minutes: '05' }));
+    expect(Number(result?.hour)).toBe(14);
+  });
+
+  it('formats the given date for a 12h clock', () => {
+    expect(resolveCurrentTime({ time: new Date(2026, 0, 1, 14, 5) }, '12h')).toEqual({
+      hour: '02',
+      minutes: '05',
+      type: 'PM',
+    });
+  });
+
+  it('reads the system clock for true and for an object without a time, with seconds on request', () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date(2026, 9, 11, 7, 8, 9));
+
+    expect(resolveCurrentTime(true, '24h', undefined, true)).toEqual({
+      hour: '07',
+      minutes: '08',
+      seconds: '09',
+      type: undefined,
+    });
+    expect(resolveCurrentTime({}, '12h')).toEqual({ hour: '07', minutes: '08', type: 'AM' });
+  });
+});
 
 describe('getInputValue with currentTime: true (S9/S18)', () => {
   beforeEach(() => {

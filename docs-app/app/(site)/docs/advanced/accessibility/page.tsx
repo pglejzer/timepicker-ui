@@ -45,7 +45,10 @@ export default function AccessibilityPage() {
             <code>aria-valuenow</code>{" "}
             for the hour and minute inputs, and the seconds input when{" "}
             <code>clock.showSeconds</code>{" "}
-            is on (dynamically updated)
+            is on (dynamically updated). With{" "}
+            <code>aria-valuetext</code>{" "}
+            from <code>labels.valueText</code>, a screen reader reads
+            &quot;Hour, 7 of 12&quot; instead of a bare number
           </li>
           <li>
             <code>role=&quot;group&quot;</code>{" "}
@@ -72,7 +75,7 @@ export default function AccessibilityPage() {
           <li>
             <code>role=&quot;listbox&quot;</code>{" "}
             for the wheel columns (wheel and compact-wheel modes) and the
-            timezone dropdown
+            timezone list
           </li>
           <li>
             <code>role=&quot;option&quot;</code>{" "}
@@ -96,8 +99,37 @@ export default function AccessibilityPage() {
             <code>aria-hidden</code>
           </li>
           <li>
-            <code>aria-pressed</code>{" "}
-            for AM/PM toggle buttons (dynamically updated)
+            <code>role=&quot;radiogroup&quot;</code>{" "}
+            around the AM and PM buttons, named by{" "}
+            <code>labels.period</code>. Each button is a{" "}
+            <code>role=&quot;radio&quot;</code>{" "}
+            with{" "}
+            <code>aria-checked</code>{" "}
+            (dynamically updated). Before 4.7.0 they used{" "}
+            <code>aria-pressed</code>
+          </li>
+          <li>
+            <code>role=&quot;tablist&quot;</code>{" "}
+            with two{" "}
+            <code>role=&quot;tab&quot;</code>{" "}
+            buttons for the range From and To ends, and a{" "}
+            <code>role=&quot;tabpanel&quot;</code>{" "}
+            (<code>tp-ui-range-panel</code>) around the time fields and the
+            dial. Each tab has{" "}
+            <code>aria-controls</code>{" "}
+            pointing to the panel, and the panel is named by the active tab
+          </li>
+          <li>
+            The selected timezone is a select-only{" "}
+            <code>role=&quot;combobox&quot;</code>{" "}
+            with{" "}
+            <code>aria-expanded</code>
+            ,{" "}
+            <code>aria-haspopup=&quot;listbox&quot;</code>{" "}
+            and{" "}
+            <code>aria-activedescendant</code>
+            . It is the element with the class{" "}
+            <code>tp-ui-timezone-selected</code>
           </li>
           <li>
             <code>role=&quot;status&quot;</code>{" "}
@@ -211,6 +243,40 @@ export default function AccessibilityPage() {
             </dt>
             <dd>Select AM or PM (Tab to the button first)</dd>
           </div>
+          <div>
+            <dt>
+              <kbd>Arrow keys</kbd>
+            </dt>
+            <dd>
+              AM / PM group: move to the other button and select it. The
+              group is one Tab stop, like an APG radio group
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <kbd>Arrow keys</kbd>
+            </dt>
+            <dd>
+              Range tabs: move focus between From and To. Enter or Space on
+              the To tab activates it and focus stays on the tab, as in an
+              APG tab list. Tab then moves into the panel
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <kbd>Enter</kbd>
+            </dt>
+            <dd>
+              Time field: apply the typed value, like leaving the field
+            </dd>
+          </div>
+          <div>
+            <dt>Letters</dt>
+            <dd>
+              Timezone combobox: jump to the next timezone that starts with
+              the typed letters (type-ahead)
+            </dd>
+          </div>
         </dl>
         <p>
           <strong>Note:</strong> The clock
@@ -313,7 +379,7 @@ picker.create();
   aria-atomic="true"
 >
   <!-- Dynamically updated by the timepicker -->
-  <!-- Announces: "Hour: 14", "Minutes: 30", etc. -->
+  <!-- Announces: "Hour: 14", "Minute: 30", etc. -->
 </div>
 
 <script>
@@ -322,7 +388,7 @@ picker.create();
 
 // Example announcements with the default labels:
 // - "Hour: 14"
-// - "Minutes: 30"
+// - "Minute: 30"   (said "Minutes: 30" before 4.7.0)
 // - "Second: 15"
 // - "AM selected"
 // - "PM selected"
@@ -363,6 +429,34 @@ picker.create();
         />
       </Section>
 
+      <Section title="Value text and sizes">
+        <p>
+          The hour, minute and second fields and the clock dial expose their
+          value through <code>aria-valuetext</code>. The text comes from{" "}
+          <code>labels.valueText</code>, <code>&quot;{"{value} of {count}"}&quot;</code>{" "}
+          by default, where <code>{"{value}"}</code> has no leading zero and{" "}
+          <code>{"{count}"}</code> is 12 or 24 hours, or 60 minutes or seconds.
+          With the field name a screen reader reads &quot;Hour, 7 of
+          12&quot;. Set <code>{"'{value}'"}</code> for the bare number. New in
+          4.7.0.
+        </p>
+        <p>
+          For Material 3 target sizes, set these variables. The hand circle
+          grows to 48 px, and the AM / PM buttons get 48 px with a taller
+          time field next to them.
+        </p>
+        <CodeBlock
+          code={`.tp-ui-wrapper {
+  --tp-size-hand-circle: 48px;
+
+  --tp-size-input-height: 96px;
+  --tp-size-am-pm-height: 48px;
+  --tp-size-am-pm-height-landscape: 48px;
+}`}
+          language="css"
+        />
+      </Section>
+
       <Section title="Focus Management">
         <p>
           Proper focus handling for keyboard and screen reader users:
@@ -388,7 +482,7 @@ picker.create();
 //    - Hour input
 //    - Minute input
 //    - Second input (when clock.showSeconds is true)
-//    - AM/PM buttons (in 12h mode)
+//    - AM/PM radio group, one stop on the checked one (in 12h mode)
 //    - Clock face (one Tab stop for the whole dial)
 //    - Cancel button
 //    - OK button

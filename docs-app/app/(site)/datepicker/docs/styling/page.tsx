@@ -16,7 +16,7 @@ const GUIDE_CSS = `.guide {
   --dp-ui-container-shape-docked: 8px;
 }`;
 
-const GUIDE_JS = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const GUIDE_JS = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/main.css";
 import "./guide.css";
 
@@ -70,7 +70,7 @@ const THEME_CSS = `:is(.dp-ui__container, .dp-ui__dialog).brand[data-theme] {
   --dp-ui-container-shape-docked: 8px;
 }`;
 
-const THEME_JS = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const THEME_JS = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/theme-crane.css";
 import "@pglejzer/datepicker-ui/main.css";
 import "./brand.css";
@@ -79,7 +79,17 @@ new DatepickerUI("#date", {
   ui: { theme: "crane", cssClass: "brand" },
 }).create();`;
 
-const CORE_JS = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const WIDTH_CSS = `/* The element passed as ui.inline.container, in a flex or grid layout */
+.calendar {
+  min-width: 0;
+}
+
+/* A centered grid item or an inline-block also needs a width */
+.centered > .calendar {
+  width: 100%;
+}`;
+
+const CORE_JS = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/main.css";
 import "./brand.css";
 
@@ -212,11 +222,40 @@ export default function DatepickerStylingPage() {
         </p>
       </Section>
 
+      <Section title="Width and narrow containers">
+        <p>
+          A picker does not grow wider than the window or a parent with a set width. Day cells follow the width of
+          the surface and shrink from 48 px down to 36 px, the values of{" "}
+          <code>--dp-ui-date-container-max-size</code> and <code>--dp-ui-date-container-min-size</code>. With
+          several months side by side the cells stay at 48 px, and the picker shows fewer months when there is less
+          room. When an inline calendar has less room than its cells need at 36 px, it scrolls sideways.
+        </p>
+        <p>
+          To change the cell size, set the min and max variables rather than{" "}
+          <code>--dp-ui-date-container-size</code>. That one is computed again on every container, so a value set on
+          the modal <code>&lt;dialog&gt;</code> does not reach the cells.
+        </p>
+        <p>
+          An inline calendar asks for 360 px, the value of <code>--dp-ui-container-width</code>, so its container
+          needs a width that does not come from the picker. When the container is a flex or grid item, give it{" "}
+          <code>min-width: 0</code>. A centered grid item or an <code>inline-block</code> also needs{" "}
+          <code>width: 100%</code>.
+        </p>
+        <CodeBlock code={WIDTH_CSS} language="css" />
+        <p>
+          A calendar placed inside another picker&apos;s dialog or popover keeps its own pager height, grid height
+          and button size.
+        </p>
+      </Section>
+
       <Section title="Dark mode and colorScheme">
         <p>
           The system colors use <code>light-dark()</code>, which reads the <code>color-scheme</code> of the element.
           The picker sets it from <code>ui.colorScheme</code>, and <code>&quot;auto&quot;</code> detects it when the
-          picker opens. Write each color as a pair and your style follows the scheme:
+          picker opens. It sets <code>color-scheme</code> only on its own surfaces: the popover, the dialog and the
+          inline container. It never sets it on the element around the input, so page inputs, including{" "}
+          <code>ui.endInput</code>, keep the page&apos;s color scheme. Write each color as a pair and your style
+          follows the scheme:
         </p>
         <CodeBlock code={SCHEME_CSS} language="css" />
         <p>

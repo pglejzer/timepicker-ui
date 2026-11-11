@@ -1,5 +1,4 @@
-import { createDisabledTime } from '../../utils/time/disable';
-import { createTimePredicate, type TimePredicate } from '../../utils/time/predicate';
+import { resolveDisabledTime } from '../../utils/time/disable';
 import type { CoreState } from '../../timepicker/CoreState';
 
 export class DisabledTimeHandler {
@@ -10,26 +9,13 @@ export class DisabledTimeHandler {
   }
 
   getDisableTime(): void {
-    const disabledTimeResult = createDisabledTime(this.core.options) || null;
-    const predicate = this.buildPredicate();
-
-    this.core.setTimePredicate(predicate);
-
-    if (!predicate) {
-      this.core.setDisabledTime(disabledTimeResult);
-      return;
-    }
-
-    this.core.setDisabledTime({ value: { ...disabledTimeResult?.value, predicate } });
+    const disabledTime = resolveDisabledTime(this.core.options.clock);
+    this.core.setTimePredicate(disabledTime?.value.predicate ?? null);
+    this.core.setDisabledTime(disabledTime);
   }
 
   clearPredicateCache(): void {
     this.core.timePredicate?.clear();
-  }
-
-  private buildPredicate(): TimePredicate | null {
-    const { isTimeDisabled } = this.core.options.clock;
-    return typeof isTimeDisabled === 'function' ? createTimePredicate(isTimeDisabled) : null;
   }
 
   destroy(): void {}

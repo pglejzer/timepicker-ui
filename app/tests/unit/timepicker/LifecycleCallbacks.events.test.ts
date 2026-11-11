@@ -1,7 +1,10 @@
 import TimepickerUI from '@/timepicker/TimepickerUI';
 import { PluginRegistry } from '@/core/PluginRegistry';
 import { WheelPlugin } from '@/plugins/wheel';
-import { CALLBACK_BRIDGE } from '@/timepicker/LifecycleCallbacks';
+import { CALLBACK_BRIDGE, setupCallbackBridge } from '@/timepicker/LifecycleCallbacks';
+import { CoreState } from '@/timepicker/CoreState';
+import { EventEmitter, type TimepickerEventMap } from '@/utils/EventEmitter';
+import { mergeOptions } from '@/utils/options/defaults';
 import type { TimepickerOptions } from '@/types/options';
 import { mockWheelItemHeight } from '../managers/plugins/wheel/wheel-test-helpers';
 
@@ -130,8 +133,29 @@ describe('callbacks exist for every public event', () => {
     expect(callbackNames).toEqual(expect.arrayContaining(SCENARIOS.map(({ callback }) => callback)));
     expect(new Set(bridgedEvents).size).toBe(bridgedEvents.length);
     expect(new Set(callbackNames).size).toBe(callbackNames.length);
-    ['hide', 'open:request', 'animation:clock', 'animation:start', 'animation:end'].forEach((eventName) => {
-      expect(bridgedEvents).not.toContain(eventName);
-    });
+    ['hide', 'open:request', 'input:commit', 'animation:clock', 'animation:start', 'animation:end'].forEach(
+      (eventName) => {
+        expect(bridgedEvents).not.toContain(eventName);
+      },
+    );
+  });
+
+  it('should bridge range:change to callbacks.onRangeChange with the emitted payload', () => {
+    const onRangeChange = jest.fn();
+    const input = document.createElement('input');
+    document.body.appendChild(input);
+    const core = new CoreState(input, mergeOptions({ callbacks: { onRangeChange } }), 'range-change-bridge');
+    const emitter = new EventEmitter<TimepickerEventMap>();
+    setupCallbackBridge(core, emitter);
+    const payload = {
+      part: 'from' as const,
+      from: { hour: '09', minutes: '00' },
+      to: null,
+    };
+
+    emitter.emit('range:change', payload);
+
+    expect(onRangeChange).toHaveBeenCalledTimes(1);
+    expect(onRangeChange).toHaveBeenCalledWith(payload);
   });
 });

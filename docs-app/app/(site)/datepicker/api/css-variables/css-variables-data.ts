@@ -119,6 +119,7 @@ export const VARIABLE_GROUPS: VariableGroup[] = [
   {
     title: "Buttons",
     rows: [
+      { name: "--dp-ui-touch-target-size", value: "48px" },
       { name: "--dp-ui-menu-button-height", value: "40px" },
       { name: "--dp-ui-menu-button-label-text-color", value: color("on-surface-variant") },
       { name: "--dp-ui-menu-button-icon-size", value: "18px" },
@@ -139,9 +140,18 @@ export const VARIABLE_GROUPS: VariableGroup[] = [
   },
   {
     title: "Day cell",
+    intro:
+      "Day cells follow the width of the surface, between `--dp-ui-date-container-min-size` and `--dp-ui-date-container-max-size`. `--dp-ui-date-columns` is `8` when week numbers are shown. With several months side by side the cells keep the largest size. Change the size through the min and max variables: `--dp-ui-date-container-size` is computed again on every container, so a value set on the modal `<dialog>` does not reach the cells.",
     rows: [
-      { name: "--dp-ui-date-container-size", value: "48px" },
-      { name: "--dp-ui-date-state-layer-size", value: "40px" },
+      { name: "--dp-ui-date-container-min-size", value: "36px" },
+      { name: "--dp-ui-date-container-max-size", value: "48px" },
+      { name: "--dp-ui-date-columns", value: "7" },
+      {
+        name: "--dp-ui-date-container-size",
+        value:
+          "clamp(var(--dp-ui-date-container-min-size), (100cqi - 2 * var(--dp-ui-container-side-padding)) / var(--dp-ui-date-columns), var(--dp-ui-date-container-max-size))",
+      },
+      { name: "--dp-ui-date-state-layer-size", value: "min(40px, var(--dp-ui-date-container-size) - 8px)" },
       { name: "--dp-ui-date-label-text-color", value: color("on-surface") },
       { name: "--dp-ui-date-state-layer-color", value: color("on-surface") },
       { name: "--dp-ui-date-outside-month-opacity", value: "0.38" },
@@ -243,7 +253,7 @@ export const BRAND_CSS = `.brand {
   --dp-ui-container-shape-docked: 8px;
 }`;
 
-export const BRAND_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+export const BRAND_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", { ui: { cssClass: "brand" } }).create();`;

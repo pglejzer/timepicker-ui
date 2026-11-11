@@ -39,6 +39,7 @@ import {
   MIGRATION_V43_TO_V44,
   MIGRATION_V44_TO_V45,
   MIGRATION_V45_TO_V5,
+  MIGRATION_V46_TO_V47,
 } from './content.js';
 import { searchReference } from './search.js';
 import { buildSnippet, modeRequiresWheel } from './snippet.js';
@@ -169,6 +170,8 @@ export function createServer(): McpServer {
         plugins: PLUGINS,
         register:
           "Import the plugin and call PluginRegistry.register(Plugin) once, before creating pickers: import { TimepickerUI, PluginRegistry } from 'timepicker-ui'.",
+        registerWithoutBundler:
+          'Since 4.7.0: load dist/index.umd.js, then each plugin umdFile, and call TimepickerUI.PluginRegistry.register(<umdGlobal>.<export>) once, before creating pickers, e.g. TimepickerUI.PluginRegistry.register(TimepickerUIRange.RangePlugin). In 4.6.0 and earlier the UMD core does not expose PluginRegistry. Load the ESM files from a CDN in a <script type="module"> instead.',
         docs: DOCS.plugins,
       }),
   );
@@ -348,10 +351,10 @@ export function createServer(): McpServer {
     {
       title: 'Migration guide',
       description:
-        'Returns migration guidance. "v3->v4": flat to grouped option mapping. "v4.3->v4.4" and "v4.4->v4.5": non-breaking changes, with every renamed option. "v4.5->v5": draft list of what 5.0 removes and changes, and the steps that work on 4.5.0 today.',
+        'Returns migration guidance. "v3->v4": flat to grouped option mapping. "v4.3->v4.4" and "v4.4->v4.5": non-breaking changes, with every renamed option. "v4.6->v4.7": new API and the ARIA, event and theme changes to check. "v4.5->v5": draft list of what 5.0 removes and changes, and the steps that work on 4.5.0 today.',
       inputSchema: z.object({
         path: z
-          .enum(['v3->v4', 'v4.3->v4.4', 'v4.4->v4.5', 'v4.5->v5'])
+          .enum(['v3->v4', 'v4.3->v4.4', 'v4.4->v4.5', 'v4.6->v4.7', 'v4.5->v5'])
           .default('v3->v4')
           .describe('Which migration to return.'),
       }),
@@ -362,6 +365,7 @@ export function createServer(): McpServer {
       if (args.path === 'v4.4->v4.5') {
         return text({ path: args.path, changes: MIGRATION_V44_TO_V45, renamed: MIGRATION_V5.renamed, docs: DOCS.renamed });
       }
+      if (args.path === 'v4.6->v4.7') return text({ path: args.path, changes: MIGRATION_V46_TO_V47, docs: DOCS.changelog });
       if (args.path === 'v4.5->v5') {
         return text({
           path: args.path,

@@ -10,7 +10,7 @@ import { Section } from "@/components/section";
 import { useDatepicker } from "@/lib/use-datepicker";
 import styles from "../advanced.module.css";
 
-const CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const picker = new DatepickerUI("#date");

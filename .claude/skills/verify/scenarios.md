@@ -101,6 +101,16 @@ How to run: SKILL.md → "Running a scenario". Notation:
 2. SHOT `open` root=`M`
 3. DO `click('M .tp-ui-cancel-btn')`; DO `waitClosed()`
 
+### lib/wheel-fit
+Known library issue before 4.7.0: the wheel area kept the clock's fixed 256 px height, so fewer visible
+rows (`--tp-wheel-visible-items`) left empty space. Desktop (portrait) only: landscape keeps `height: 100%`.
+1. DO `open('#wheel-basic')` → EXPECT `ok: true`
+2. CHECK `sameHeight('M .tp-ui-mobile-clock-wrapper', 'M .tp-ui-wheel-container')` → EXPECT `equal: true`
+3. DO `click('M .tp-ui-cancel-btn')`; DO `waitClosed()` → EXPECT `closed: true`
+4. DO `open('#compact-wheel-12h')` → EXPECT `ok: true`
+5. CHECK `sameHeight('M .tp-ui-mobile-clock-wrapper', 'M .tp-ui-wheel-container')` → EXPECT `equal: true`
+6. DO `click('M .tp-ui-cancel-btn')`; DO `waitClosed()` → EXPECT `closed: true`
+
 ## @range
 
 ### lib/range-24h
@@ -118,7 +128,8 @@ How to run: SKILL.md → "Running a scenario". Notation:
 
 ### lib/tz-mouse
 1. DO `open('#timezone-world-picker')` → EXPECT `ok: true`, `tzExpanded: 'false'`
-2. DO `click('M .tp-ui-timezone-dropdown')` → EXPECT `ok: true`; CHECK `state()` → EXPECT `tzExpanded: 'true'`
+2. DO `click('M [role="combobox"]')` → EXPECT `ok: true`; CHECK `state()` → EXPECT `tzExpanded: 'true'`
+   (the combobox is `.tp-ui-timezone-selected` since 4.7.0, the `.tp-ui-timezone-dropdown` wrapper before)
 3. SHOT `dropdown` root=`M`
 4. CHECK `text('M .tp-ui-timezone-menu .tp-ui-timezone-option:nth-child(3)')` → remember it as `<opt>`
 5. DO `click('M .tp-ui-timezone-menu .tp-ui-timezone-option:nth-child(3)')` → EXPECT `ok: true`
@@ -128,10 +139,20 @@ How to run: SKILL.md → "Running a scenario". Notation:
 
 ### lib/tz-keys
 1. DO `open('#timezone-picker')` → EXPECT `ok: true`, `tzSelected: 'Timezone...'`
-2. DO `focus('M .tp-ui-timezone-dropdown')`; KEY `ArrowDown`
+2. DO `focus('M [role="combobox"]')`; KEY `ArrowDown`
 3. CHECK `state()` → EXPECT `tzExpanded: 'true'`
 4. KEY `ArrowDown`; KEY `Enter`
 5. CHECK `state()` → EXPECT `tzExpanded: 'false'`, `tzSelected` not `'Timezone...'` and not empty
+6. DO `click('M .tp-ui-cancel-btn')`; DO `waitClosed()` → EXPECT `closed: true`
+
+### lib/tz-closed-menu-no-overflow
+Known library issue before 4.7.0: the closed menu kept `display: block` and added scroll height to every
+`overflow: auto` ancestor. `scrollFit()` freezes the row's height and makes it `overflow: auto` on the first call.
+1. DO `open('#timezone-world-picker')` → EXPECT `ok: true`
+2. DO `scrollFit('M .tp-ui-timezone')` → EXPECT `fits: true`
+3. DO `click('M [role="combobox"]')`; DO `wait(300)`; DO `scrollFit('M .tp-ui-timezone')` → EXPECT `fits: false` (the open menu overflows the row)
+4. DO `click('M [role="combobox"]')`; DO `wait(300)`; DO `scrollFit('M .tp-ui-timezone')` → EXPECT `fits: true`
+5. CHECK `state()` → EXPECT `tzExpanded: 'false'`
 6. DO `click('M .tp-ui-cancel-btn')`; DO `waitClosed()` → EXPECT `closed: true`
 
 ## @keyboard

@@ -106,7 +106,7 @@ export const PLUGIN_EXPORT: Record<PlaygroundPlugin, string> = {
 };
 
 export function rangeEnabled(state: PlaygroundState): boolean {
-  return state.range && state.mode === "clock";
+  return state.range;
 }
 
 export function isPopover(state: PlaygroundState): boolean {

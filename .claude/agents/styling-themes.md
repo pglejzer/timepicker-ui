@@ -1,6 +1,6 @@
 ---
 name: styling-themes
-description: Use for SCSS, layout, and the 12 built-in CSS themes of timepicker-ui - tokens, partials, the tp-ui- class prefix, and the rollup SCSS->CSS pipeline. Invoke for work under app/src/styles/ or the CSS half of app/rollup.config.js.
+description: Use for SCSS, layout, and the 12 built-in CSS themes of timepicker-ui - tokens, partials, the tp-ui- class prefix, and the sass CLI SCSS->CSS build (`build:css`). Invoke for work under app/src/styles/ or the `build:css` script.
 tools: Read, Edit, Write, Grep, Glob
 model: sonnet
 ---
@@ -38,8 +38,9 @@ themes - without breaking the class contract the TypeScript relies on.
   layer, tonal container, indicator, opacity) and never exceed weight 500. Flag any real
   WCAG-vs-design tradeoff with the exact theme + state instead of forcing the look.
 - Available themes: basic, crane, crane-straight, m2, m3-green, dark, glassmorphic,
-  pastel, ai, cyberpunk, blueprint, blueprint-dark. A new theme must be registered in the rollup CSS job so it
-  emits a `theme-*.css` to `dist/css/`.
+  pastel, ai, cyberpunk, blueprint, blueprint-dark. A new theme goes in `src/styles/themes/`
+  (the `build:css` sass run compiles that folder to `dist/css/themes/`) and gets an `@use` in
+  `src/styles/index.scss` so it is part of `index.css`.
 - CSS is consumed by Jest as a mock (`styleMock.ts`) - your changes don't break unit
   tests, but visual regressions are invisible to them. The main agent catches them with
   `/verify` at the end - name the themes / modes / viewports it must cover.
@@ -47,7 +48,7 @@ themes - without breaking the class contract the TypeScript relies on.
 ## Always finish by
 - Reporting changed partials + which theme/mode is affected, and which themes / modes /
   viewports (mobile vs desktop) `/verify` must cover. Never run a build, server or
-  browser (HARD RULES in `CLAUDE.md`) - `build:rollup` and `/verify` are the main agent's.
+  browser (HARD RULES in `CLAUDE.md`) - `build:css` and `/verify` are the main agent's.
 - Confirming the `tp-ui-` class contract is intact and listing new files for CRLF conversion.
-- Staying inside `app/src/styles/` (+ the CSS job in `rollup.config.js`). Template
+- Staying inside `app/src/styles/` (+ the `build:css` script in `app/package.json`). Template
   HTML or TS class references -> flag for `core-architect` / `plugin-dev`.

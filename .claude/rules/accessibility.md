@@ -16,11 +16,14 @@ Pairs with `.claude/rules/architecture.md`.
   closes only when open. Follow the APG dialog / listbox / combobox / spinbutton / slider / tablist
   patterns.
 - **ARIA:** modal is `role="dialog"` + `aria-modal` with an accessible name. Every control has an
-  accessible name (icon-only buttons too). Keep state in sync: `aria-pressed` only on real toggles
-  (AM/PM - NOT OK/Cancel/Clear, NOT the view switch: it is one native button whose label names the action, APG button pattern), `aria-selected`, `aria-disabled`,
+  accessible name (icon-only buttons too). Keep state in sync: AM / PM is a `role="radiogroup"`
+  (`labels.periodLabel`) with two `role="radio"` segments, `aria-checked`, a roving `tabindex` (checked = 0,
+  other = -1, none checked → AM = 0) and arrow keys that move and select (`setActivePeriod` in
+  `utils/accessibility`); nothing uses `aria-pressed` (not OK/Cancel/Clear, not the view switch: it is one
+  native button whose label names the action, APG button pattern); `aria-selected`, `aria-disabled`,
   `aria-valuenow/min/max/text` on spinbuttons and the dial (`syncClockSlider` mirrors the active
   field; arrow steps on the focused slider are not also announced through the live region; the Enter/Space
-  face switch is, through `announceField`), `aria-activedescendant` for the timezone listbox.
+  face switch is, through `announceField`), `aria-activedescendant` on the timezone combobox (`.tp-ui-timezone-selected`, APG select-only).
 - **Screen reader:** announce meaningful transitions via `announceToScreenReader` (the
   `.timepicker-announcer` live region); validation errors use `role="alert"`.
 - **Text is localizable:** all visible/AT strings come from the `labels` group (with English

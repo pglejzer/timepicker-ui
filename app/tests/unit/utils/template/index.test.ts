@@ -2,6 +2,7 @@ import { getModalTemplate } from '../../../../src/utils/template';
 import { mergeOptions } from '../../../../src/utils/options/defaults';
 import { PluginRegistry } from '../../../../src/core/PluginRegistry';
 import { RangePlugin } from '../../../../src/plugins/range';
+import { WheelPlugin } from '../../../../src/plugins/wheel';
 import type { TimepickerOptions } from '../../../../src/types/options';
 
 function render(options: TimepickerOptions): HTMLDivElement {
@@ -47,7 +48,7 @@ describe('getModalTemplate accessibility semantics', () => {
     });
   });
 
-  describe('aria-pressed presence', () => {
+  describe('aria-pressed absence and the AM/PM radio group', () => {
     it('does NOT set aria-pressed on OK, Cancel, or Clear buttons', () => {
       const dom = render({ clock: { type: '12h' }, ui: { clearButton: true } });
 
@@ -61,14 +62,33 @@ describe('getModalTemplate accessibility semantics', () => {
       expect(clear.hasAttribute('aria-pressed')).toBe(false);
     });
 
-    it('keeps aria-pressed on AM and PM buttons', () => {
+    it('renders AM and PM as radios in a labelled radiogroup, without aria-pressed', () => {
       const dom = render({ clock: { type: '12h' } });
 
+      const group = dom.querySelector('.tp-ui-wrapper-type-time') as HTMLElement;
       const am = dom.querySelector('.tp-ui-am') as HTMLElement;
       const pm = dom.querySelector('.tp-ui-pm') as HTMLElement;
 
-      expect(am.getAttribute('aria-pressed')).toBe('false');
-      expect(pm.getAttribute('aria-pressed')).toBe('false');
+      expect(group.getAttribute('role')).toBe('radiogroup');
+      expect(group.getAttribute('aria-label')).toBe('Period');
+      [am, pm].forEach((radio) => {
+        expect(radio.getAttribute('role')).toBe('radio');
+        expect(radio.getAttribute('aria-checked')).toBe('false');
+        expect(radio.hasAttribute('aria-pressed')).toBe(false);
+      });
+    });
+
+    it('seeds a roving tabindex: AM focusable, PM not', () => {
+      const dom = render({ clock: { type: '12h' } });
+
+      expect((dom.querySelector('.tp-ui-am') as HTMLElement).getAttribute('tabindex')).toBe('0');
+      expect((dom.querySelector('.tp-ui-pm') as HTMLElement).getAttribute('tabindex')).toBe('-1');
+    });
+
+    it('renders no AM/PM group in 24h', () => {
+      const dom = render({ clock: { type: '24h' } });
+
+      expect(dom.querySelector('.tp-ui-wrapper-type-time')).toBeNull();
     });
 
     it('does NOT set aria-pressed anywhere in the view-switch control (its label names the action)', () => {
@@ -184,9 +204,62 @@ describe('getModalTemplate accessibility semantics', () => {
       const minutes = dom.querySelector('input[name="minutes"]') as HTMLInputElement;
 
       expect(hour.hasAttribute('aria-valuetext')).toBe(true);
-      expect(hour.getAttribute('aria-valuetext')).toBe('0');
+      expect(hour.getAttribute('aria-valuetext')).toBe('0 of 24');
       expect(minutes.hasAttribute('aria-valuetext')).toBe(true);
-      expect(minutes.getAttribute('aria-valuetext')).toBe('00');
+      expect(minutes.getAttribute('aria-valuetext')).toBe('0 of 60');
+    });
+
+    it('seeds the 12h hour value text as "12 of 12"', () => {
+      const dom = render({ clock: { type: '12h' } });
+
+      const hour = dom.querySelector('input[name="hour"]') as HTMLInputElement;
+
+      expect(hour.getAttribute('aria-valuetext')).toBe('12 of 12');
+    });
+
+    it('uses a custom labels.valueText for the seeds and the modal attribute', () => {
+      const dom = render({ clock: { type: '24h' }, labels: { valueText: '{value}/{count}' } });
+
+      const hour = dom.querySelector('input[name="hour"]') as HTMLInputElement;
+      const modal = dom.querySelector('.tp-ui-modal') as HTMLElement;
+
+      expect(hour.getAttribute('aria-valuetext')).toBe('0/24');
+      expect(modal.getAttribute('data-value-text')).toBe('{value}/{count}');
+    });
+
+    it('carries the value text template on the modal root', () => {
+      const modal = render({}).querySelector('.tp-ui-modal') as HTMLElement;
+
+      expect(modal.getAttribute('data-value-text')).toBe('{value} of {count}');
+    });
+  });
+
+  describe('view argument', () => {
+    it('renders the keyboard layout when isKeyboardView is true, whatever ui.mobile says', () => {
+      const merged = mergeOptions({ ui: { mobile: false } });
+      const container = document.createElement('div');
+      container.innerHTML = getModalTemplate(merged, 'tmpl-instance', true);
+
+      expect(container.querySelector('.tp-ui-modal')!.classList.contains('mobile')).toBe(true);
+      expect(container.querySelector('.tp-ui-wrapper')!.classList.contains('mobile')).toBe(true);
+    });
+
+    it('renders the clock layout when isKeyboardView is false, whatever ui.mobile says', () => {
+      const merged = mergeOptions({ ui: { mobile: true } });
+      const container = document.createElement('div');
+      container.innerHTML = getModalTemplate(merged, 'tmpl-instance', false);
+
+      expect(container.querySelector('.tp-ui-modal')!.classList.contains('mobile')).toBe(false);
+      expect(container.querySelector('.tp-ui-wrapper')!.classList.contains('mobile')).toBe(false);
+    });
+
+    it('defaults to ui.mobile when the argument is omitted', () => {
+      expect(
+        render({ ui: { mobile: true } })
+          .querySelector('.tp-ui-modal')!
+          .classList.contains('mobile'),
+      ).toBe(true);
+      expect(render({}).querySelector('.tp-ui-modal')!.classList.contains('mobile')).toBe(false);
     });
   });
 
@@ -209,9 +282,11 @@ describe('getModalTemplate accessibility semantics', () => {
 
         expect(clockFace.getAttribute('role')).toBe('slider');
         expect(clockFace.getAttribute('tabindex')).toBe('0');
-        ['aria-label', 'aria-valuemin', 'aria-valuemax', 'aria-valuenow', 'aria-valuetext'].forEach((name) => {
-          expect(clockFace.hasAttribute(name)).toBe(false);
-        });
+        ['aria-label', 'aria-valuemin', 'aria-valuemax', 'aria-valuenow', 'aria-valuetext'].forEach(
+          (name) => {
+            expect(clockFace.hasAttribute(name)).toBe(false);
+          },
+        );
       },
     );
 
@@ -229,6 +304,28 @@ describe('getModalTemplate accessibility semantics', () => {
         expect(wrapper.getAttribute('role')).toBeNull();
       });
     });
+  });
+});
+
+describe('getModalTemplate view switch in wheel modes', () => {
+  beforeAll(() => {
+    PluginRegistry.register(WheelPlugin);
+  });
+
+  it.each(['wheel', 'compact-wheel'] as const)(
+    'renders no keyboard icon wrapper with ui.mode %s even with enableSwitchIcon',
+    (mode) => {
+      const dom = render({ ui: { mode, enableSwitchIcon: true } });
+
+      expect(dom.querySelector('.tp-ui-keyboard-icon-wrapper')).toBeNull();
+      expect(dom.querySelector('.tp-ui-keyboard-icon')).toBeNull();
+    },
+  );
+
+  it('still renders the keyboard icon wrapper in the default clock mode', () => {
+    const dom = render({ ui: { enableSwitchIcon: true } });
+
+    expect(dom.querySelector('.tp-ui-keyboard-icon-wrapper')).not.toBeNull();
   });
 });
 

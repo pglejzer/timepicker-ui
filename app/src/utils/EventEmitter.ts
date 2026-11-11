@@ -17,6 +17,8 @@ import type {
   RangeConfirmEventData,
   RangeSwitchEventData,
   RangeValidationEventData,
+  RangeChangeEventData,
+  InputCommitEventData,
   RangeMinuteCommitEventData,
   RangeGetDisabledTimeEventData,
   RangeUpdateDisabledEventData,
@@ -56,6 +58,11 @@ export interface TimepickerEventMap {
   'range:switch': RangeSwitchEventData;
   'range:validation': RangeValidationEventData;
   'range:minute:commit': RangeMinuteCommitEventData;
+  'range:change': RangeChangeEventData;
+  /**
+   * @internal Emitted by a time field after the core applied a typed value (blur or Enter), once it is clamped. Not bridged to a callback.
+   */
+  'input:commit': InputCommitEventData;
   /**
    * @deprecated Never emitted or read. Removed in 5.0.
    */
@@ -72,6 +79,15 @@ export interface TimepickerEventMap {
   error: ErrorEventData;
   [key: string]: unknown;
 }
+
+type KnownKeys<T> = keyof {
+  [K in keyof T as string extends K ? never : number extends K ? never : K]: T[K];
+};
+
+type InternalEventName = 'open:request' | 'input:commit';
+
+/** Names of the events the picker emits. */
+export type TimepickerEventName = Exclude<KnownKeys<TimepickerEventMap>, InternalEventName>;
 
 type TaggedHandler = EventHandler<unknown> & { __originalHandler?: EventHandler<unknown> };
 

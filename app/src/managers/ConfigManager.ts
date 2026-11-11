@@ -1,6 +1,6 @@
 import type { CoreState } from '../timepicker/CoreState';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
-import type { TimepickerOptions } from '../types/options';
+import type { TimepickerOptions, TimepickerView } from '../types/options';
 import { InputValueHandler } from './config/InputValueHandler';
 import { MobileViewHandler } from './config/MobileViewHandler';
 import { DisabledTimeHandler } from './config/DisabledTimeHandler';
@@ -38,6 +38,10 @@ export default class ConfigManager {
 
   updateClockFaceAccessibility(isHidden: boolean): void {
     this.mobileViewHandler.updateClockFaceAccessibility(isHidden);
+  }
+
+  requestView(view: TimepickerView): void {
+    this.mobileViewHandler.requestView(view);
   }
 
   getDisableTime(): void {

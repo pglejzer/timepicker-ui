@@ -14,7 +14,7 @@ You are a **public API stability analyst** for the **timepicker-ui** library. Yo
 | `timepicker-ui`                  | `app/src/index.ts`     | `TimepickerUI`, `EventEmitter`, `PluginRegistry`, types |
 | `timepicker-ui/plugins/range`    | `app/src/range.ts`     | `RangePlugin`, `RangeManager`                           |
 | `timepicker-ui/plugins/timezone` | `app/src/timezone.ts`  | `TimezonePlugin`, `TimezoneManager`                     |
-| UMD                              | `app/src/index.umd.ts` | `TimepickerUI` (default only)                           |
+| UMD                              | `app/src/index.umd.ts` | `TimepickerUI` (default only, static `PluginRegistry`)  |
 
 ### Public Classes
 

@@ -14,7 +14,8 @@ Applies when working in `app/src/styles/`. Pairs with `.claude/rules/architectur
 - **Layering:** core rules in `main.scss`; theme-specific looks in the matching theme partial.
   Never leak theme color into `main`. Drive look from the `variables.scss` tokens and the `partials/`; reuse
   existing variables/mixins instead of hardcoding. 12 themes: basic, crane, crane-straight, m2,
-  m3-green, dark, glassmorphic, pastel, ai, cyberpunk, blueprint, blueprint-dark; a new theme registers in the rollup CSS job.
+  m3-green, dark, glassmorphic, pastel, ai, cyberpunk, blueprint, blueprint-dark; a new theme goes in
+  `src/styles/themes/` (compiled by `build:css`) and gets an `@use` in `src/styles/index.scss`.
 - **Never break a theme's visual identity / Material Design 3.** Do NOT use `font-weight: 700`
   or `text-decoration: line-through` as state cues - that breaks the look and is not MD3. MD3
   conveys selected/active with **state layers / tonal containers** (fill) and disabled with
@@ -25,4 +26,4 @@ Applies when working in `app/src/styles/`. Pairs with `.claude/rules/architectur
   themes; never `outline:none` without a replacement.
 - CSS is mocked in Jest, so visual regressions are invisible to tests - `/verify` (run by the main
   agent at the end) checks them in the browser; name the modes / themes / viewports it must cover.
-  `build:rollup` (main agent) verifies SCSS compiles.
+  `build:css` (main agent) verifies SCSS compiles.

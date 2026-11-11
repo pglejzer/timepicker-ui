@@ -50,8 +50,9 @@ export default class TimezoneManager {
   private bindEvents(): void {
     const dropdownEl = this.dropdown.getDropdown();
     const menu = this.dropdown.getMenu();
+    const combobox = this.dropdown.getCombobox();
 
-    if (!dropdownEl || !menu) return;
+    if (!dropdownEl || !menu || !combobox) return;
 
     const clickOutsideHandler = (e: MouseEvent): void => {
       if (!dropdownEl.contains(e.target as Node)) {
@@ -72,7 +73,8 @@ export default class TimezoneManager {
       const isOpen = this.dropdown.isOpen();
 
       if (!isOpen) {
-        this.dropdown.setOpen(true);
+        this.openMenu(this.dropdown.getOptions(), combobox);
+        combobox.focus({ preventScroll: true });
         this.clickOutsideTimerId = window.setTimeout(() => {
           if (isDocument()) {
             document.addEventListener('click', clickOutsideHandler);
@@ -98,18 +100,18 @@ export default class TimezoneManager {
         const value = option.getAttribute('data-value');
         if (value) {
           this.selectFromMenu(value, closeMenu);
-          dropdownEl.focus();
+          combobox.focus();
         }
       }
     };
 
     dropdownEl.addEventListener('click', toggleHandler);
-    dropdownEl.addEventListener('keydown', keydownHandler);
+    combobox.addEventListener('keydown', keydownHandler);
     menu.addEventListener('click', optionClickHandler);
 
     this.cleanupHandlers.push(
       () => dropdownEl.removeEventListener('click', toggleHandler),
-      () => dropdownEl.removeEventListener('keydown', keydownHandler),
+      () => combobox.removeEventListener('keydown', keydownHandler),
       () => menu.removeEventListener('click', optionClickHandler),
       closeMenu,
     );
@@ -128,30 +130,38 @@ export default class TimezoneManager {
   }
 
   private handleKeydown(e: KeyboardEvent, closeMenu: () => void): void {
-    const dropdownEl = this.dropdown.getDropdown();
-    if (!dropdownEl) return;
+    const combobox = this.dropdown.getCombobox();
+    if (!combobox) return;
 
     const isOpen = this.dropdown.isOpen();
     const options = this.dropdown.getOptions();
+
+    if (this.isTypeAheadKey(e)) {
+      e.preventDefault();
+      this.typeAhead(e.key, options, combobox);
+      return;
+    }
 
     switch (e.key) {
       case 'Enter':
       case ' ':
         e.preventDefault();
         if (!isOpen) {
-          this.dropdown.setOpen(true);
+          this.openMenu(options, combobox);
         } else {
-          const focusedIndex = this.keyboard.getFocusedIndex();
-          if (focusedIndex >= 0) {
-            const value = options[focusedIndex]?.getAttribute('data-value');
-            if (value) {
-              this.selectFromMenu(value, closeMenu);
-            }
-          }
+          this.selectFocused(options, closeMenu);
+        }
+        break;
+
+      case 'Tab':
+        if (isOpen) {
+          this.selectFocused(options, closeMenu);
+          closeMenu();
         }
         break;
 
       case 'Escape':
+        if (!isOpen) break;
         e.preventDefault();
         closeMenu();
         break;
@@ -159,10 +169,10 @@ export default class TimezoneManager {
       case 'ArrowDown':
         e.preventDefault();
         if (!isOpen) {
-          this.dropdown.setOpen(true);
+          this.openMenu(options, combobox);
         } else {
           this.keyboard.moveDown(options.length);
-          this.keyboard.updateVisualFocus(options, dropdownEl);
+          this.keyboard.updateVisualFocus(options, combobox);
         }
         break;
 
@@ -170,7 +180,7 @@ export default class TimezoneManager {
         e.preventDefault();
         if (isOpen) {
           this.keyboard.moveUp();
-          this.keyboard.updateVisualFocus(options, dropdownEl);
+          this.keyboard.updateVisualFocus(options, combobox);
         }
         break;
 
@@ -178,7 +188,7 @@ export default class TimezoneManager {
         if (isOpen) {
           e.preventDefault();
           this.keyboard.moveToFirst();
-          this.keyboard.updateVisualFocus(options, dropdownEl);
+          this.keyboard.updateVisualFocus(options, combobox);
         }
         break;
 
@@ -186,9 +196,39 @@ export default class TimezoneManager {
         if (isOpen) {
           e.preventDefault();
           this.keyboard.moveToLast(options.length);
-          this.keyboard.updateVisualFocus(options, dropdownEl);
+          this.keyboard.updateVisualFocus(options, combobox);
         }
         break;
+    }
+  }
+
+  private isTypeAheadKey(e: KeyboardEvent): boolean {
+    if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return false;
+    return e.key !== ' ' || this.keyboard.isTyping();
+  }
+
+  private openMenu(options: HTMLElement[], combobox: HTMLElement): void {
+    this.dropdown.setOpen(true);
+    const selected = this.dropdown.getSelectedIndex();
+    this.keyboard.setFocusedIndex(selected >= 0 ? selected : 0);
+    this.keyboard.updateVisualFocus(options, combobox);
+  }
+
+  private typeAhead(character: string, options: HTMLElement[], combobox: HTMLElement): void {
+    if (!this.dropdown.isOpen()) {
+      this.openMenu(options, combobox);
+    }
+
+    const labels = options.map((option) => option.textContent ?? '');
+    if (this.keyboard.matchTypedCharacter(character, labels) >= 0) {
+      this.keyboard.updateVisualFocus(options, combobox);
+    }
+  }
+
+  private selectFocused(options: HTMLElement[], closeMenu: () => void): void {
+    const value = options[this.keyboard.getFocusedIndex()]?.getAttribute('data-value');
+    if (value) {
+      this.selectFromMenu(value, closeMenu);
     }
   }
 

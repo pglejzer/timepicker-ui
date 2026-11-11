@@ -9,7 +9,7 @@ const faqQuestions = [
   {
     question: "How do I operate the time picker with a keyboard?",
     answer:
-      "Open with Enter and move with Tab. The arrow keys change the focused hour, minute or second field, or the clock face, one step at a time. Home and End jump to the first or last value, and PageUp and PageDown take bigger steps. AM and PM are buttons you press with Enter or Space. Esc closes the picker unless it is inline.",
+      "Open with Enter and move with Tab. The arrow keys change the focused hour, minute or second field, or the clock face, one step at a time. Home and End jump to the first or last value, and PageUp and PageDown take bigger steps. AM and PM are a radio group: Tab reaches the checked one and the arrow keys switch between them. Esc closes the picker unless it is inline.",
   },
   {
     question: "Does timepicker-ui work with screen readers?",

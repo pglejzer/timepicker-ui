@@ -5,7 +5,7 @@ import { Section } from "@/components/section";
 
 const WEEKS: DatepickerOptions = { ui: { weekNumbers: true } };
 
-const WEEKS_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const WEEKS_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -14,7 +14,7 @@ new DatepickerUI("#date", {
 
 const LABEL: DatepickerOptions = { ui: { weekNumbers: true }, labels: { weekNumber: "Wk" } };
 
-const LABEL_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const LABEL_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

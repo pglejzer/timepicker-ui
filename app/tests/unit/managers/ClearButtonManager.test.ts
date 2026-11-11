@@ -225,11 +225,11 @@ describe('ClearButtonManager', () => {
 
       expect(getPMButton()!.classList.contains('active')).toBe(true);
       expect(getAMButton()!.classList.contains('active')).toBe(false);
-      expect(getPMButton()!.getAttribute('aria-pressed')).toBe('true');
-      expect(getAMButton()!.getAttribute('aria-pressed')).toBe('false');
+      expect(getPMButton()!.getAttribute('aria-checked')).toBe('true');
+      expect(getAMButton()!.getAttribute('aria-checked')).toBe('false');
     });
 
-    it('should reset the hour spinbutton to aria-valuenow 12 / aria-valuetext 12 and the minutes to 0 / 00', () => {
+    it('should reset the hour spinbutton to aria-valuenow 12 / aria-valuetext "12 of 12" and the minutes to 0 / "0 of 60"', () => {
       setup();
       simulateOpenWithValue(input, core, emitter, '03:30 PM', '03', '30', 'PM');
       getHourInput().setAttribute('aria-valuenow', '3');
@@ -237,11 +237,11 @@ describe('ClearButtonManager', () => {
 
       getClearBtn().click();
 
-      expect(ariaValues(getHourInput())).toEqual({ now: '12', text: '12' });
-      expect(ariaValues(getMinuteInput())).toEqual({ now: '0', text: '00' });
+      expect(ariaValues(getHourInput())).toEqual({ now: '12', text: '12 of 12' });
+      expect(ariaValues(getMinuteInput())).toEqual({ now: '0', text: '0 of 60' });
     });
 
-    it('should reset the seconds spinbutton to aria-valuenow 0 / aria-valuetext 00 when seconds are shown', () => {
+    it('should reset the seconds spinbutton to aria-valuenow 0 / aria-valuetext "0 of 60" when seconds are shown', () => {
       setup({ clock: { type: '24h', showSeconds: true } });
       simulateOpenWithValue(input, core, emitter, '15:30:45', '15', '30');
       const seconds = getSecondsInput();
@@ -252,7 +252,7 @@ describe('ClearButtonManager', () => {
       getClearBtn().click();
 
       expect(seconds.value).toBe('00');
-      expect(ariaValues(seconds)).toEqual({ now: '0', text: '00' });
+      expect(ariaValues(seconds)).toEqual({ now: '0', text: '0 of 60' });
     });
 
     it('should set degrees to null in core state', () => {
@@ -366,6 +366,25 @@ describe('ClearButtonManager', () => {
     });
   });
 
+  describe('events emitted by a Clear click', () => {
+    it('should emit select:hour, then clear, then exactly one empty update and no update before clear', () => {
+      setup();
+      simulateOpenWithValue(input, core, emitter, '10:00 PM', '10', '00', 'PM');
+      const heard: Array<[string, unknown]> = [];
+      emitter.on('select:hour', (payload) => heard.push(['select:hour', payload]));
+      emitter.on('clear', (payload) => heard.push(['clear', payload]));
+      emitter.on('update', (payload) => heard.push(['update', payload]));
+
+      getClearBtn().click();
+
+      expect(heard).toEqual([
+        ['select:hour', { hour: '12' }],
+        ['clear', { previousValue: '10:00 PM' }],
+        ['update', { hour: undefined, minutes: undefined, type: undefined }],
+      ]);
+    });
+  });
+
   describe('clear button disabled state', () => {
     it('should start disabled when no time is selected', () => {
       setup();
@@ -374,7 +393,7 @@ describe('ClearButtonManager', () => {
       expect(getClearBtn().getAttribute('aria-disabled')).toBe('true');
     });
 
-    it('should not fire handleClearClick when user clicks a disabled clear button', () => {
+    it('should not clear when user clicks a disabled clear button', () => {
       const onClear = jest.fn();
       setup({ callbacks: { onClear } });
 
@@ -496,6 +515,71 @@ describe('ClearButtonManager', () => {
       manager.init();
 
       expect(getModal().querySelector('.tp-ui-clear-btn')).toBeNull();
+    });
+
+    describe('without ui.clearButton', () => {
+      const setupWithoutButton = (): void => {
+        const options = createOptions({ ui: { clearButton: false } });
+        element = document.createElement('div');
+        input = document.createElement('input');
+        input.type = 'text';
+        element.appendChild(input);
+        document.body.appendChild(element);
+
+        core = new CoreState(element, options, INSTANCE_ID);
+        emitter = new EventEmitter();
+        mountModal(options);
+        manager = new ClearButtonManager(core, emitter);
+        manager.init();
+      };
+
+      it('init() still binds the internal listeners: select:hour re-enables OK after clear()', () => {
+        setupWithoutButton();
+        input.value = '03:30 PM';
+
+        manager.clear({ announce: false });
+        expect(getOkBtn().classList.contains('disabled')).toBe(true);
+
+        getHourInput().value = '07';
+        emitter.emit('select:hour', { hour: '07' });
+
+        expect(getOkBtn().classList.contains('disabled')).toBe(false);
+      });
+
+      it('clear() empties the input and emits clear then update', () => {
+        setupWithoutButton();
+        input.value = '03:30 PM';
+        const events: string[] = [];
+        const onClear = jest.fn();
+        emitter.on('clear', (data) => {
+          events.push('clear');
+          onClear(data);
+        });
+        emitter.on('update', () => events.push('update'));
+
+        manager.clear({ announce: false });
+
+        expect(input.value).toBe('');
+        expect(onClear).toHaveBeenCalledWith({ previousValue: '03:30 PM' });
+        expect(events).toEqual(['clear', 'update']);
+      });
+    });
+  });
+
+  describe('clear() announce option', () => {
+    it('announces only when announce is true', () => {
+      jest.useFakeTimers();
+      setup();
+      const announcer = getModal().querySelector('.timepicker-announcer') as HTMLElement;
+      input.value = '03:30 PM';
+
+      manager.clear({ announce: false });
+      jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY);
+      expect(announcer.textContent).toBe('');
+
+      manager.clear({ announce: true });
+      jest.advanceTimersByTime(TIMINGS.ANNOUNCE_DELAY);
+      expect(announcer.textContent).toBe('Time cleared');
     });
   });
 
@@ -799,4 +883,3 @@ describe('callbacks.onClear through the public TimepickerUI API', () => {
     tips.forEach((tip) => expect(tip).not.toHaveAttribute('aria-selected'));
   });
 });
-

@@ -11,7 +11,7 @@ const LIGHT: DatepickerOptions = { ui: { colorScheme: "light" } };
 const AUTO: DatepickerOptions = { ui: { colorScheme: "auto" } };
 
 function code(scheme: string): string {
-  return `import DatepickerUI from "@pglejzer/datepicker-ui";
+  return `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

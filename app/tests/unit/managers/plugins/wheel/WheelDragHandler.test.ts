@@ -1,6 +1,7 @@
 import { WheelDragHandler } from '../../../../../src/managers/plugins/wheel/WheelDragHandler';
 import { WheelRenderer } from '../../../../../src/managers/plugins/wheel/WheelRenderer';
 import { setupWheelTestContext, WHEEL_ITEM_HEIGHT_PX, type WheelTestContext } from './wheel-test-helpers';
+import { dispatchPointer, installPointerEvents } from '../../../utils/pointer-helpers';
 
 describe('WheelDragHandler', () => {
   let ctx: WheelTestContext;
@@ -104,19 +105,14 @@ describe('WheelDragHandler', () => {
   });
 
   describe('pointer drag interaction', () => {
-    beforeEach(() => {
-      HTMLElement.prototype.setPointerCapture = jest.fn();
-      HTMLElement.prototype.releasePointerCapture = jest.fn();
+    let restorePointerEvents: () => void;
 
-      if (typeof globalThis.PointerEvent === 'undefined') {
-        (globalThis as Record<string, unknown>).PointerEvent = class PointerEvent extends MouseEvent {
-          readonly pointerId: number;
-          constructor(type: string, init: PointerEventInit & { pointerId?: number } = {}) {
-            super(type, init);
-            this.pointerId = init.pointerId ?? 0;
-          }
-        };
-      }
+    beforeEach(() => {
+      restorePointerEvents = installPointerEvents();
+    });
+
+    afterEach(() => {
+      restorePointerEvents();
     });
 
     it('should add is-dragging class on pointerdown', () => {
@@ -125,13 +121,7 @@ describe('WheelDragHandler', () => {
       const hoursCol = renderer.getColumnElement('hours');
       if (!hoursCol) throw new Error('hours column not found');
 
-      hoursCol.dispatchEvent(
-        new PointerEvent('pointerdown', {
-          clientY: 100,
-          pointerId: 1,
-          bubbles: true,
-        }),
-      );
+      dispatchPointer(hoursCol, 'pointerdown', { clientY: 100, pointerId: 1 });
 
       expect(hoursCol.classList.contains('is-dragging')).toBe(true);
     });
@@ -142,21 +132,8 @@ describe('WheelDragHandler', () => {
       const hoursCol = renderer.getColumnElement('hours');
       if (!hoursCol) throw new Error('hours column not found');
 
-      hoursCol.dispatchEvent(
-        new PointerEvent('pointerdown', {
-          clientY: 100,
-          pointerId: 1,
-          bubbles: true,
-        }),
-      );
-
-      document.dispatchEvent(
-        new PointerEvent('pointerup', {
-          clientY: 100,
-          pointerId: 1,
-          bubbles: true,
-        }),
-      );
+      dispatchPointer(hoursCol, 'pointerdown', { clientY: 100, pointerId: 1 });
+      dispatchPointer(document, 'pointerup', { clientY: 100, pointerId: 1 });
 
       expect(hoursCol.classList.contains('is-dragging')).toBe(false);
     });
@@ -204,4 +181,3 @@ describe('WheelDragHandler', () => {
     });
   });
 });
-

@@ -9,7 +9,14 @@ import {
   setSpinbuttonValue,
 } from '../utils/accessibility';
 import { bindEmitter, runCleanups } from '../utils/managerHelpers';
-import { TIME_FIELDS, TIME_FIELD_NAMES, getTimeInput, type TimeField } from './events/timeFields';
+import {
+  TIME_FIELDS,
+  TIME_FIELD_NAMES,
+  activateField,
+  emitSelect,
+  getTimeInput,
+  type TimeField,
+} from './events/timeFields';
 
 const NEUTRAL_VALUES: Readonly<Record<TimeField, string>> = { hour: '12', minutes: '00', seconds: '00' };
 
@@ -25,19 +32,17 @@ export default class ClearButtonManager {
   }
 
   init(): void {
-    if (!this.core.options.ui.clearButton) return;
+    this.setupInternalEventListeners();
 
-    const clearButton = this.getClearButton();
+    const clearButton = this.core.options.ui.clearButton ? this.getClearButton() : null;
     if (!clearButton) return;
 
     const handler = (): void => {
       if (this.core.isDestroyed) return;
-      this.handleClearClick();
+      this.clear({ announce: true });
     };
 
     this.cleanupHandlers.push(bindActivate(clearButton, handler));
-
-    this.setupInternalEventListeners();
     this.updateClearButtonState();
   }
 
@@ -53,17 +58,20 @@ export default class ClearButtonManager {
     });
   }
 
-  private handleClearClick(): void {
+  clear({ announce }: { announce: boolean }): void {
     const input = this.core.getInput();
     const previousValue = input?.value || null;
 
     this.clearTimeValue();
     this.resetClockToNeutral();
-    setElementDisabled(this.core.getOkButton(), true);
-    this.wasCleared = true;
 
-    const modal = this.core.getModalElement();
-    announceToScreenReader(modal, this.core.options.labels.announceCleared!);
+    const okButton = this.core.getOkButton();
+    setElementDisabled(okButton, true);
+    this.wasCleared = okButton !== null;
+
+    if (announce) {
+      announceToScreenReader(this.core.getModalElement(), this.core.options.labels.announceCleared!);
+    }
 
     this.emitter.emit('clear', { previousValue });
     this.emitter.emit('update', {
@@ -107,7 +115,10 @@ export default class ClearButtonManager {
     }
 
     this.removeActiveStates();
-    this.core.getHour()?.click();
+    if (this.core.getHour()) {
+      activateField(this.core, 'hour');
+      emitSelect(this.emitter, 'hour', NEUTRAL_VALUES.hour);
+    }
 
     if (neutralType) {
       setActivePeriod(this.core.getAM(), this.core.getPM(), neutralType);

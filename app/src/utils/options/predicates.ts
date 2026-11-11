@@ -1,10 +1,18 @@
-import type { TimepickerOptions } from '../../types/options';
+import type { TimepickerOptions, TimepickerView } from '../../types/options';
 import type { ClockType, TimeFormatOptions } from '../time/parse';
 
 type Opts = Required<TimepickerOptions>;
 
+export function toClockType(type: string | undefined): ClockType {
+  return type === '24h' ? '24h' : '12h';
+}
+
 export function getClockType(options: Opts): ClockType {
-  return options.clock.type === '24h' ? '24h' : '12h';
+  return toClockType(options.clock.type);
+}
+
+export function getInitialView(options: Opts): TimepickerView {
+  return options.ui.mobile ? 'keyboard' : 'clock';
 }
 
 export function getTimeFormat(options: Opts): Required<TimeFormatOptions> {

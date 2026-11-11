@@ -24,8 +24,9 @@ const EVENTS: EventRow[] = [
   {
     event: "cancel",
     callback: "onCancel",
-    payload: '{ reason: "button" | "escape" | "outside" }',
-    fires: "The picker is dismissed without committing.",
+    payload: '{ reason: "button" | "escape" | "outside" | "toggle" }',
+    fires:
+      "The picker is dismissed without committing. `reason` says how: the Cancel or close button, Escape, a click outside, or `\"toggle\"` when `ui.toggleButton` is clicked on an open picker.",
   },
   {
     event: "confirm",
@@ -68,8 +69,8 @@ const EVENTS: EventRow[] = [
   {
     event: "navigate",
     callback: "onNavigate",
-    payload: "{ year, month, direction: -1 | 0 | 1, source }",
-    fires: "The displayed month changes.",
+    payload: "{ year, month, direction: -1 | 0 | 1, source, from, to }",
+    fires: "The days shown change, and once when the picker opens or an inline picker is mounted.",
   },
   {
     event: "range:start",
@@ -83,13 +84,26 @@ const EVENTS: EventRow[] = [
     payload: "{ start: DateValue, end: DateValue }",
     fires: "A range is completed.",
   },
+  {
+    event: "switch:view",
+    callback: "onSwitchView",
+    payload: '{ view: "calendar" | "input" }',
+    fires: "The picker switches between the calendar and the text fields, for example by the switch button or `setView()`.",
+  },
+  {
+    event: "clear",
+    callback: "onClear",
+    payload: "{ previousValue: PickerValue | null }",
+    fires:
+      "`clear()` or the Clear button empties the value or the draft. `previousValue` is the value before clearing, or the draft when only the draft was cleared.",
+  },
 ];
 
 const ERROR_CODES = [
   {
     code: "invalid-date",
     meaning:
-      "Typed text is not a date, or `setValue()` got a value that does not fit `calendar.mode`. `input` holds the text.",
+      "Typed text is not a date, `setValue()` got a value that does not fit `calendar.mode`, or `goTo()` got a value that is not a date. `input` holds the text.",
   },
   {
     code: "unavailable-date",
@@ -120,9 +134,17 @@ const NAVIGATE_SOURCES = [
   { source: "button", meaning: "The user pressed a previous or next button." },
   { source: "keyboard", meaning: "The user navigated with the keyboard." },
   { source: "menu", meaning: "The user chose a month or year in a menu." },
+  { source: "open", meaning: "The picker opened, or an inline picker was mounted." },
+  {
+    source: "api",
+    meaning:
+      "`setValue()`, `setOptions()`, `goTo()`, or a value the picker sets itself, such as a range preset or a typed date.",
+  },
+  { source: "resize", meaning: "A window resize changed the months shown." },
+  { source: "scroll", meaning: "The month list of a range picker rendered more months." },
 ];
 
-const SUBSCRIBE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const SUBSCRIBE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 
 const picker = new DatepickerUI("#date", { calendar: { mode: "range" } });
 
@@ -199,9 +221,12 @@ export default function DatepickerEventsPage() {
 
       <Section title="Navigate sources">
         <p>
-          <code>navigate</code> reports <code>source</code> as one of these values. It does not fire for changes
-          made through the API, so <code>setValue()</code> and <code>open()</code> move the view silently. With
-          several months, <code>year</code> and <code>month</code> are the first month shown.
+          <code>navigate</code> fires when the days shown change, and once when the picker opens or an inline
+          picker is mounted. <code>source</code> tells these apart and is one of the values below.{" "}
+          <code>year</code> and <code>month</code> are the first month shown. <code>from</code> and{" "}
+          <code>to</code> are the first and last day shown, the same as <code>getVisibleRange()</code> returns.{" "}
+          <code>direction</code> is <code>-1</code> or <code>1</code> when the first month moves back or forward,
+          and <code>0</code> when it stays, as on opening.
         </p>
         <ApiTable
           columns={[
@@ -211,7 +236,7 @@ export default function DatepickerEventsPage() {
           rows={NAVIGATE_SOURCES.map((row) => ({
             id: row.source,
             source: <code>{row.source}</code>,
-            meaning: row.meaning,
+            meaning: withCode(row.meaning),
           }))}
           rowKey="id"
         />

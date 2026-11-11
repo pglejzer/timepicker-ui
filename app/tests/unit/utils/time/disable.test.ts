@@ -105,7 +105,7 @@ describe('disable utils', () => {
         const options = createOptions({
           clock: { type: undefined as never, disabledTime: { interval: '09:00 AM - 10:00 AM' } },
         });
-        expect(() => createDisabledTime(options)).toThrow('clockType required for interval');
+        expect(() => createDisabledTime(options)).toThrow('clockType required for disabledTime.ranges');
       });
 
       it.each([

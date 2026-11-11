@@ -14,6 +14,241 @@ export const metadata = buildMetadata({
   path: "/docs/changelog",
 });
 
+const CHANGELOG_470 = {
+  added: [
+    {
+      title: "Range plugin in wheel and compact-wheel",
+      description:
+        "Tabs, setActivePart(), setRange(), OK and Clear all work there",
+    },
+    {
+      title: "setView() and getView()",
+      description:
+        "setView('clock' | 'keyboard') and getView(). They work without ui.viewSwitch. In wheel and compact-wheel, setView() returns false and getView() returns null",
+    },
+    {
+      title: "clear()",
+      description:
+        "Empties a closed or open picker without needing ui.clearButton, and emits clear and update",
+    },
+    {
+      title: "getActivePart()",
+      description: "Returns 'from', 'to' or null",
+    },
+    {
+      title: "Partial setRange()",
+      description:
+        'setRange({ from }) or setRange({ to }) changes one end and keeps the other. null or "" clears an end',
+    },
+    {
+      title: "setRangeCaptions()",
+      description:
+        "setRangeCaptions({ from, to }) shows a caption on each range tab. A missing key keeps the caption, and null removes it",
+    },
+    {
+      title: "range:change and onRangeChange",
+      description:
+        "Event with { part, from, to } and callbacks.onRangeChange, with the RangeChangeEventData type. It fires when the user changes an end, not for API calls or when a wheel fills an empty end",
+    },
+    {
+      title: "Range with wheel.commitOnScroll",
+      description:
+        "With a range, wheel.commitOnScroll writes from - to and emits range:confirm with autoCommit: true. The picker stays open",
+    },
+    {
+      title: "parseTime(), formatTime() and createDisabledTimeCheck()",
+      description:
+        "Exported from the main entry and work without a picker. They are SSR-safe, with the types TimeValue, TimeFormatOptions and DisabledTimeCheckOptions",
+    },
+    {
+      title: "Timezone helpers",
+      description:
+        "timepicker-ui/plugins/timezone exports getTimezoneList(), DEFAULT_TIMEZONES and the TimezoneInfo type",
+    },
+    {
+      title: "Error for an unlisted timezone.default",
+      description:
+        "A timezone.default that is not in the list still falls back to a listed zone, and now emits error with the zone it used",
+    },
+    {
+      title: "TimepickerEventName",
+      description:
+        "New type. on(), once() and off() now type the handler payload for each event name",
+    },
+    {
+      title: "ui.inline.showTitle",
+      description:
+        "Set false to hide the inline title visually and keep it as the card's accessible name. Default true",
+    },
+    {
+      title: "labels.valueText",
+      description:
+        'Default "{value} of {count}". Sets the aria-valuetext of the time fields and the dial',
+    },
+    {
+      title: "Embedded card tokens",
+      description:
+        "--tp-embedded-bg, --tp-embedded-radius and --tp-embedded-backdrop-filter style the embedded inline card",
+    },
+    {
+      title: "Keyboard view and hand tokens",
+      description:
+        "--tp-size-input-mobile, --tp-size-input-height, --tp-time-input-font-size, --tp-size-colon-height and --tp-time-colon-gap size the keyboard view, and --tp-size-hand-circle sizes the clock hand circle",
+    },
+    {
+      title: "New exported types",
+      description:
+        "TimepickerView, PluginTimeView, RangeTimeInput and RangeCaptionInput",
+    },
+  ],
+  changed: [
+    {
+      title: "AM/PM is a radiogroup",
+      description:
+        'Named by labels.period, with role="radio" segments, aria-checked and arrow-key selection. aria-pressed is gone',
+    },
+    {
+      title: "Timezone combobox",
+      description:
+        "The combobox role, aria-expanded and aria-activedescendant are on .tp-ui-timezone-selected. Type-ahead and Tab selection follow the APG select-only combobox",
+    },
+    {
+      title: "Range panel",
+      description:
+        'Range tabs control one .tp-ui-range-panel (role="tabpanel") that wraps the header, timezone row and clock or wheel body',
+    },
+    {
+      title: "aria-valuetext",
+      description:
+        "Time fields and the dial read \"7 of 12\" in aria-valuetext. Set labels.valueText: '{value}' for the bare number",
+    },
+    {
+      title: "Minute announcement",
+      description: 'The default is "Minute" instead of "Minutes"',
+    },
+    {
+      title: "switch:view payload and view-switch icon",
+      description:
+        "switch:view carries { view } (SwitchViewEventData), and callbacks.onSwitchView receives it. wheel and compact-wheel have no view-switch icon",
+    },
+    {
+      title: "ui.initialView on an open picker",
+      description:
+        "setOptions() or update() that changes ui.initialView on an open picker switches the view and emits switch:view once",
+    },
+    {
+      title: "setValue() in range mode",
+      description: "Sets the active end and writes from - to",
+    },
+    {
+      title: "setOptions() on an open range picker",
+      description:
+        "Keeps both ends and the active end. Use clear() or setRange() to drop an unconfirmed range",
+    },
+    {
+      title: "Typed range times",
+      description:
+        "A typed range time is saved on blur, Enter or before the ends switch, so getRange() can report it before OK",
+    },
+    {
+      title: "Enter in a time field",
+      description: "Applies the typed value, the same as blur",
+    },
+    {
+      title: "To tab focus",
+      description:
+        "Activating the To tab keeps focus on the tab. Tab then moves into the panel",
+    },
+    {
+      title: "Clear order",
+      description:
+        "Clear emits select:hour, clear, update, with no extra 12:00 update. In range mode the Clear button emits range:change, then range:switch",
+    },
+    {
+      title: "12h range AM/PM",
+      description:
+        "AM/PM on a complete From changes only the period. It moves to To only when it completes From",
+    },
+    {
+      title: "Wheel range seeding",
+      description:
+        "In wheel and compact-wheel, an empty range end is seeded with the other end's time, else clock.currentTime, else 12:00",
+    },
+    {
+      title: "dark theme",
+      description:
+        "The dark theme follows the Material Design 3 baseline dark tokens",
+    },
+    {
+      title: "Dial Pointer Events",
+      description:
+        "The clock dial uses Pointer Events when available, and .tp-ui-clock-face has touch-action: none",
+    },
+    {
+      title: "disabledTime errors name ranges",
+      description:
+        'clock.disabledTime errors name ranges instead of the deprecated interval, for example Invalid disabledTime.ranges: Invalid 12h format: "00:00 - 04:59"',
+    },
+  ],
+  fixed: [
+    {
+      title: "Compact-wheel dialog name",
+      description:
+        "The compact-wheel dialog had no accessible name. It now uses labels.time as its aria-label",
+    },
+    {
+      title: "Layout in hidden containers",
+      description:
+        "The clock face and wheel lay out correctly when the picker is shown after its container was hidden. The wheel also applies a time set while hidden",
+    },
+    {
+      title: "Escape in the timezone menu",
+      description:
+        "Pressing Escape with the timezone menu open closes only the menu, not the picker",
+    },
+    {
+      title: "Closed timezone menu",
+      description:
+        "The closed timezone menu no longer takes up layout, so a scroll container around the picker gets no extra scroll height",
+    },
+    {
+      title: "Wheel area height",
+      description:
+        "In wheel and compact-wheel, the wheel area fits the wheel instead of the clock's 256 px. With --tp-wheel-visible-items, 3 rows make the picker shorter and 7 rows are no longer cut off",
+    },
+    {
+      title: "Embedded fields",
+      description:
+        'Embedded inline fields no longer have a name, so they do not submit stray fields inside a <form>. The embedded wrapper has tabindex="-1" and is no longer a tab stop',
+    },
+    {
+      title: "Half range conversion",
+      description:
+        "Changing clock.type or clock.showSeconds now converts a half range such as 09:00 - --:--",
+    },
+    {
+      title: "Plugin UMD builds",
+      description:
+        "The plugin UMD builds work from a <script> tag. The UMD core now exposes TimepickerUI.PluginRegistry, so TimepickerUI.PluginRegistry.register(TimepickerUIRange.RangePlugin) works. Before, enabling a plugin there emitted error",
+    },
+    {
+      title: "No caret in read-only fields",
+      description:
+        "A focused read-only time field no longer shows a text caret, for example after the dial moves on to minutes. Editable fields keep it",
+    },
+    {
+      title: "No on-screen keyboard after a touch on the dial",
+      description:
+        "With `ui.editable`, picking a time on the dial by touch no longer opens the on-screen keyboard when the dial moves on to the next field",
+    },
+    {
+      title: "Popover without a scrollbar",
+      description:
+        "A compact-wheel popover with too little room shrinks the wheel area instead of scrolling, so Cancel and OK stay in view. It stays aligned to the input",
+    },
+  ],
+};
+
 const CHANGELOG_460 = {
   added: [
     {
@@ -1149,8 +1384,71 @@ export default function ChangelogPage() {
       <ChangelogSwitcher current="library" />
 
       <Callout title="Current Version">
-        <strong>v4.6.0</strong> - Released October 19, 2026
+        <strong>v4.7.0</strong> - Released November 11, 2026
       </Callout>
+
+      <Release title="Version 4.7.0 - November 11, 2026">
+        <Callout title="Check before upgrading" tone="danger">
+          <p>
+            These changes can affect an existing setup. Each one is described
+            under Changed or Fixed.
+          </p>
+          <ul>
+            <li>
+              AM/PM is a <code>role=&quot;radiogroup&quot;</code> with{" "}
+              <code>aria-checked</code>. Selectors or tests that use{" "}
+              <code>[aria-pressed]</code> on <code>.tp-ui-am</code> /{" "}
+              <code>.tp-ui-pm</code> need updating
+            </li>
+            <li>
+              The timezone <code>combobox</code> role,{" "}
+              <code>aria-expanded</code> and{" "}
+              <code>aria-activedescendant</code> moved from{" "}
+              <code>.tp-ui-timezone-dropdown</code> to{" "}
+              <code>.tp-ui-timezone-selected</code>
+            </li>
+            <li>
+              In range mode, the header, timezone row and clock or wheel body
+              sit in <code>.tp-ui-range-panel</code>. CSS or JS that uses{" "}
+              <code>&gt;</code> child selectors under{" "}
+              <code>.tp-ui-wrapper</code> needs a descendant selector
+            </li>
+            <li>
+              <code>aria-valuetext</code> reads &quot;7 of 12&quot; instead of
+              &quot;07&quot;, and the minute announcement reads
+              &quot;Minute&quot; instead of &quot;Minutes&quot;
+            </li>
+            <li>
+              <code>switch:view</code> now carries <code>{"{ view }"}</code>,
+              and <code>wheel</code> / <code>compact-wheel</code> no longer show
+              the view-switch icon
+            </li>
+            <li>
+              In range mode, <code>setValue()</code> writes{" "}
+              <code>from - to</code>, <code>setOptions()</code> keeps both
+              ends, and a typed time is saved to its end before OK
+            </li>
+            <li>
+              Clear emits <code>select:hour</code>, <code>clear</code>,{" "}
+              <code>update</code>, without the extra 12:00 <code>update</code>
+            </li>
+            <li>
+              Activating the To tab keeps focus on the tab, and Enter in a time
+              field now applies the typed value
+            </li>
+            <li>
+              The <code>dark</code> theme uses Material Design 3 tokens, so its
+              colors change
+            </li>
+          </ul>
+        </Callout>
+
+        <ChangeSection label="Added" items={CHANGELOG_470.added} />
+
+        <ChangeSection label="Changed" items={CHANGELOG_470.changed} />
+
+        <ChangeSection label="Fixed" items={CHANGELOG_470.fixed} />
+      </Release>
 
       <Release title="Version 4.6.0 - October 19, 2026">
         <ChangeSection label="Added" items={CHANGELOG_460.added} />

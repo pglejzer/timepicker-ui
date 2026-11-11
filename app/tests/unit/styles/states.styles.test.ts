@@ -35,7 +35,8 @@ type Style = (longhand: string) => string | undefined;
 type Measured = { label: string; width: number; inFlow: boolean; parts: Measured[] };
 type HeaderView = 'clock' | 'keyboard';
 
-const SIMPLE_SELECTOR = /#[\w-]+|\.[\w-]+|\[[^\]]*\]|::?[\w-]+(?:\((?:[^()]|\([^()]*\))*\))?|\*|[a-z][\w-]*/gi;
+const SIMPLE_SELECTOR =
+  /#[\w-]+|\.[\w-]+|\[[^\]]*\]|::?[\w-]+(?:\((?:[^()]|\([^()]*\))*\))?|\*|[a-z][\w-]*/gi;
 const ATTRIBUTE = /^\[\s*([\w-]+)\s*(?:=\s*['"]?([^'"\]]*)['"]?\s*)?\]$/;
 const NESTED_GROUP = /:(?:not|has)\((?:[^()]|\([^()]*\))*\)/g;
 const COMBINATOR = /[\s>+~]/;
@@ -204,7 +205,8 @@ const matchesSimple = (simple: string, target: Target): boolean => {
   return simple === '*' || simple.toLowerCase() === target.tag;
 };
 
-const compareSpecificity = (a: Specificity, b: Specificity): number => a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
+const compareSpecificity = (a: Specificity, b: Specificity): number =>
+  a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
 
 const highest = (list: Specificity[]): Specificity => [...list].sort(compareSpecificity).pop() ?? ZERO;
 
@@ -333,12 +335,15 @@ const footerButton = (className: string, mobile: boolean): Target => ({
   states: FOCUSED,
 });
 
-const TIMEZONE_DROPDOWN: Target = {
-  tag: 'div',
-  classes: ['tp-ui-timezone-dropdown'],
-  attributes: { role: 'combobox', tabindex: '0', 'aria-expanded': 'false', 'aria-haspopup': 'listbox' },
-  states: FOCUSED,
-};
+const TIMEZONE_DROPDOWN_CLASS = 'tp-ui-timezone-dropdown';
+const TIMEZONE_RING_SELECTOR = new RegExp(
+  `^\\.${TIMEZONE_DROPDOWN_CLASS}:has\\(>\\s*\\.tp-ui-timezone-selected:focus-visible`,
+);
+
+const timezoneDropdownRingRules = (all: CssRule[]): CssRule[] =>
+  topLevel(all).filter(({ selectors }) =>
+    selectors.some((selector) => TIMEZONE_RING_SELECTOR.test(selector)),
+  );
 
 const SWITCH_BUTTON: Target = {
   tag: 'button',
@@ -852,7 +857,9 @@ describe('compiled main.scss states', () => {
     it('the switch icon keeps --tp-text-icon on :hover: no hover rule repaints it or its wrapper (drop the --tp-primary fill from _keyboard-icon.scss)', () => {
       const switchIconHover = (selector: string): boolean =>
         hasPseudoClass(selector, 'hover') &&
-        compounds(selector).some((compound) => classesOf(compound).some((name) => SWITCH_ICON.includes(name)));
+        compounds(selector).some((compound) =>
+          classesOf(compound).some((name) => SWITCH_ICON.includes(name)),
+        );
 
       expect(offenders(rules, switchIconHover, paints)).toEqual([]);
     });
@@ -889,20 +896,46 @@ describe('compiled main.scss states', () => {
       );
     });
 
-    it.each<[string, Target]>([...footerButtons, ['timezone dropdown', TIMEZONE_DROPDOWN]])(
+    it.each<[string, Target]>(footerButtons)(
       '%s resolves its :focus-visible outline to the shared --tp-focus-ring',
       (_name, target) => {
         expect(computedValue(rules, target, 'outline') ?? '').toMatch(FOCUS_RING);
       },
     );
 
+    it('timezone dropdown draws the shared --tp-focus-ring on itself when its combobox is keyboard-focused (:has(> .tp-ui-timezone-selected:focus-visible))', () => {
+      const ringRules = timezoneDropdownRingRules(rules);
+
+      expect(ringRules.length).toBeGreaterThan(0);
+      expect(
+        ringRules.some(({ declarations }) =>
+          declarations.some(({ prop, value }) => prop === 'outline' && FOCUS_RING.test(value)),
+        ),
+      ).toBe(true);
+    });
+
+    it('timezone dropdown: the combobox drops its own :focus-visible outline only under @supports selector(:has(*))', () => {
+      const selected = ['tp-ui-timezone-selected'];
+      const removals = rules.filter(
+        ({ selectors, declarations }) =>
+          selectors.some(
+            (selector) =>
+              subjectHasClass(selector, selected) && hasPseudoClass(subjectOf(selector), 'focus-visible'),
+          ) && declarations.some(removesOutline),
+      );
+
+      expect(removals.length).toBeGreaterThan(0);
+      removals.forEach(({ atRules }) => {
+        expect(atRules.some((atRule) => atRule.includes('selector(:has(*))'))).toBe(true);
+      });
+    });
+
     it('timezone dropdown: no plain :focus rule after the focus ring sets outline none (scope the reset to :focus:not(:focus-visible))', () => {
       const dropdown = ['tp-ui-timezone-dropdown'];
       const ringIndex = rules.findIndex(
         ({ selectors, declarations }) =>
           selectors.some(
-            (selector) =>
-              subjectHasClass(selector, dropdown) && hasPseudoClass(subjectOf(selector), 'focus-visible'),
+            (selector) => subjectHasClass(selector, dropdown) && /:focus-visible(?![\w-])/.test(selector),
           ) && declarations.some(({ prop, value }) => prop === 'outline' && FOCUS_RING.test(value)),
       );
       const plainFocus = (selector: string): boolean => {
@@ -939,7 +972,8 @@ describe('compiled main.scss states', () => {
         .filter((selector) =>
           compounds(selector).some(
             (compound) =>
-              classesOf(compound).includes('tp-ui-keyboard-icon-wrapper') && hasPseudoClass(compound, 'focus-visible'),
+              classesOf(compound).includes('tp-ui-keyboard-icon-wrapper') &&
+              hasPseudoClass(compound, 'focus-visible'),
           ),
         );
 
@@ -1099,6 +1133,26 @@ describe('compiled main.scss states', () => {
     );
   });
 
+  describe('a read-only time field draws no text caret', () => {
+    const TIME_FIELDS = ['tp-ui-hour', 'tp-ui-minutes', SECONDS_INPUT];
+    const readOnly = (target: Target): Target => ({
+      ...target,
+      attributes: { ...target.attributes, readonly: '' },
+    });
+
+    it.each(TIME_FIELDS)('a focused read-only %s resolves caret-color: transparent', (className) => {
+      expect(computedValue(rules, readOnly(timeInput(className, false)), 'caret-color')).toBe('transparent');
+      expect(computedValue(rules, readOnly(activeTimeInput(className, false)), 'caret-color')).toBe(
+        'transparent',
+      );
+    });
+
+    it.each(TIME_FIELDS)('an editable %s keeps the caret: no rule hides it without [readonly]', (className) => {
+      expect(computedValue(rules, timeInput(className, false), 'caret-color')).toBeUndefined();
+      expect(computedValue(rules, activeTimeInput(className, true), 'caret-color')).toBeUndefined();
+    });
+  });
+
   describe('the header with seconds fits the wrapper content box', () => {
     const DESKTOP: Viewport = { name: 'desktop 1280x800', width: 1280, height: 800, hover: true };
     const PHONE: Viewport = { name: 'phone 390x844', width: 390, height: 844, hover: false };
@@ -1147,7 +1201,8 @@ describe('compiled main.scss states', () => {
 
   describe('a single focus ring on the shared controls', () => {
     const sharedFocusVisible = (selector: string): boolean =>
-      subjectHasClass(selector, SHARED_FOCUS_CONTROLS) && hasPseudoClass(subjectOf(selector), 'focus-visible');
+      subjectHasClass(selector, SHARED_FOCUS_CONTROLS) &&
+      hasPseudoClass(subjectOf(selector), 'focus-visible');
 
     it('no :focus-visible box-shadow on the shared controls adds a --tp-focus-ring-halo layer or a --tp-bg gap', () => {
       const secondRing = offenders(
@@ -1159,12 +1214,21 @@ describe('compiled main.scss states', () => {
       expect(secondRing).toEqual([]);
     });
 
-    it.each(SHARED_FOCUS_CONTROLS)(
+    it.each(SHARED_FOCUS_CONTROLS.filter((className) => className !== TIMEZONE_DROPDOWN_CLASS))(
       'a keyboard-focused .%s resolves its box-shadow to var(--tp-shadow-focus-ring, none)',
       (className) => {
         expect(computedValue(rules, focusedControl(className), 'box-shadow')).toBe(SINGLE_RING_SHADOW);
       },
     );
+
+    it('a keyboard-focused .tp-ui-timezone-dropdown resolves its box-shadow to var(--tp-shadow-focus-ring, none)', () => {
+      const shadows = timezoneDropdownRingRules(rules).flatMap(({ declarations }) =>
+        declarations.filter(({ prop }) => prop === 'box-shadow').map(({ value }) => value),
+      );
+
+      expect(shadows.length).toBeGreaterThan(0);
+      expect(shadows.every((value) => value === SINGLE_RING_SHADOW)).toBe(true);
+    });
 
     it('no built-in theme sets --tp-shadow-focus-ring, so the shared focus box-shadow stays none', () => {
       const themed = [...themes]
@@ -1366,7 +1430,11 @@ describe('compiled main.scss states', () => {
     const DESKTOP: Viewport = { name: 'desktop 1280x800', width: 1280, height: 800, hover: true };
 
     const modalParts = (): Array<[string, Box]> => {
-      const hour = makeBox('input', ['tp-ui-hour'], [], { type: 'number', tabindex: '0', role: 'spinbutton' });
+      const hour = makeBox('input', ['tp-ui-hour'], [], {
+        type: 'number',
+        tabindex: '0',
+        role: 'spinbutton',
+      });
       const unclassed = makeBox('span', []);
       const header = makeBox('div', ['tp-ui-header'], [makeBox('div', ['tp-ui-input-wrapper'], [hour])]);
       const wrapper = makeBox('div', ['tp-ui-wrapper'], [header, unclassed], { tabindex: '0' });

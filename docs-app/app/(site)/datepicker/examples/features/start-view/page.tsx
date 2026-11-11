@@ -14,7 +14,7 @@ const MODAL: DatepickerOptions = {
   ui: { startView: "year", displayMode: "modal" },
 };
 
-const DOCKED_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const DOCKED_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#birthday", {
@@ -22,7 +22,7 @@ new DatepickerUI("#birthday", {
   ui: { startView: "year", displayMode: "docked" },
 }).create();`;
 
-const MODAL_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const MODAL_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#birthday", {

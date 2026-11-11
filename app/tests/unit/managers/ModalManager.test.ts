@@ -309,6 +309,39 @@ describe('ModalManager', () => {
       noIconModalManager.destroy();
     });
 
+    it('should set flex-end when the footer has no switch icon although enableSwitchIcon is true', () => {
+      const iconOptions = {
+        ...DEFAULT_OPTIONS,
+        ui: {
+          ...DEFAULT_OPTIONS.ui,
+          enableSwitchIcon: true,
+        },
+      };
+      const iconCore = new CoreState(mockElement, iconOptions, 'test-icon-id');
+      const iconModalManager = new ModalManager(iconCore, emitter);
+      const footer = document.createElement('div');
+      footer.className = 'tp-ui-footer';
+      footer.innerHTML = '<div class="tp-ui-wrapper-btn"></div>';
+      jest.spyOn(iconCore, 'getFooter').mockReturnValue(footer);
+
+      iconModalManager.setFlexEndToFooterIfNoKeyboardIcon();
+
+      expect(footer.style.justifyContent).toBe('flex-end');
+
+      iconModalManager.destroy();
+    });
+
+    it('should leave the footer alone when it shows the switch icon', () => {
+      const footer = document.createElement('div');
+      footer.className = 'tp-ui-footer';
+      footer.innerHTML = '<div class="tp-ui-keyboard-icon-wrapper"></div><div class="tp-ui-wrapper-btn"></div>';
+      jest.spyOn(coreState, 'getFooter').mockReturnValue(footer);
+
+      modalManager.setFlexEndToFooterIfNoKeyboardIcon();
+
+      expect(footer.style.justifyContent).toBe('');
+    });
+
     it('should do nothing when footer is null', () => {
       jest.spyOn(coreState, 'getFooter').mockReturnValue(null);
 

@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/page-header";
 import { TimepickerExample } from "@/components/examples/timepicker-example";
 import { Figure } from "@/components/figure";
 import { EmbeddedDialogDemo } from "@/components/embedded-dialog-demo";
+import { EmbeddedTitleDemo } from "@/components/view-and-range-demos";
 
 export default function InlineModePage() {
   return (
@@ -45,13 +46,38 @@ picker.create();`}
         />
       </Section>
 
+      <Section title="Embedded Card Without a Title">
+        <p>
+          <code>ui.inline.showTitle: false</code> hides the title when your
+          page already has a heading. It stays available to screen readers.
+          New in 4.7.0.
+        </p>
+        <Figure
+          code={`const picker = new TimepickerUI(input, {
+  ui: {
+    inline: {
+      enabled: true,
+      container: '#timepicker-container',
+      embedded: true,
+      showTitle: false,
+      autoUpdate: true
+    }
+  }
+});
+picker.create();`}
+        >
+          <EmbeddedTitleDemo />
+        </Figure>
+      </Section>
+
       <Section title="Embedded in a Dialog">
         <p>
           With <code>ui.inline.embedded</code> the picker drops its own card
           chrome and dialog semantics, so it can live inside your own{" "}
           <code>&lt;dialog&gt;</code>. The picker is created when the dialog
-          first opens, because the clock face cannot measure itself inside a
-          hidden container.
+          first opens. Before 4.7.0 the clock face could not measure itself
+          inside a hidden container, and from 4.7.0 it lays itself out when
+          it is first shown.
         </p>
         <Figure
           code={`const dialog = document.querySelector('dialog');

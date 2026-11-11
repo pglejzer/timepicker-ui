@@ -33,10 +33,9 @@ const required = (root: ParentNode, selector: string): HTMLElement => {
 const inModal = (root: ParentNode, selector: string): HTMLElement =>
   required(root, `.tp-ui-modal ${selector}`);
 
-const pickFirstOptionByKeyboard = (dropdown: HTMLElement): void => {
-  press(dropdown, 'Enter');
-  press(dropdown, 'ArrowDown');
-  press(dropdown, 'Enter');
+const pickFirstOptionByKeyboard = (combobox: HTMLElement): void => {
+  press(combobox, 'Enter');
+  press(combobox, 'Enter');
 };
 
 const selectedOptions = (root: ParentNode): Element[] =>
@@ -87,7 +86,7 @@ describe('timezone plugin while a modal picker is closing', () => {
 
     pressEscape();
     inModal(document, '.tp-ui-timezone-option').click();
-    pickFirstOptionByKeyboard(inModal(document, '.tp-ui-timezone-dropdown'));
+    pickFirstOptionByKeyboard(inModal(document, '.tp-ui-timezone-selected'));
 
     expect(onChange).not.toHaveBeenCalled();
 
@@ -102,6 +101,25 @@ describe('timezone plugin while a modal picker is closing', () => {
     expect(trigger.textContent).toBe(trigger.getAttribute('data-placeholder'));
     expect(selectedOptions(document)).toEqual([]);
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('should close only the open menu on the first Escape and cancel the picker on the second', () => {
+    const { picker } = openTimezone();
+    const onCancel = jest.fn();
+    picker.on('cancel', onCancel);
+    const combobox = inModal(document, '.tp-ui-timezone-selected');
+    press(combobox, 'Enter');
+    expect(combobox).toHaveAttribute('aria-expanded', 'true');
+
+    press(combobox, 'Escape');
+
+    expect(combobox).toHaveAttribute('aria-expanded', 'false');
+    expect(onCancel).not.toHaveBeenCalled();
+    expect(document.querySelector('.tp-ui-modal')).not.toBeNull();
+
+    press(combobox, 'Escape');
+
+    expect(onCancel).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -150,7 +168,7 @@ interface ClosedTimezoneHarness {
   readonly core: { isOpen: boolean };
   readonly manager: TimezoneManager;
   readonly onChange: jest.Mock;
-  readonly dropdown: HTMLElement;
+  readonly combobox: HTMLElement;
   readonly firstOption: HTMLElement;
 }
 
@@ -160,9 +178,9 @@ describe('TimezoneManager on a core that is not open', () => {
   const mount = (): ClosedTimezoneHarness => {
     const modal = document.createElement('div');
     modal.innerHTML =
-      '<div class="tp-ui-timezone-dropdown" role="combobox" aria-expanded="false" tabindex="0" ' +
-      'data-tz-id="closed">' +
-      '<div class="tp-ui-timezone-selected" data-placeholder="Timezone...">Timezone...</div>' +
+      '<div class="tp-ui-timezone-dropdown" data-tz-id="closed">' +
+      '<div class="tp-ui-timezone-selected" role="combobox" aria-expanded="false" tabindex="0" ' +
+      'data-placeholder="Timezone...">Timezone...</div>' +
       '<div class="tp-ui-timezone-menu" role="listbox"></div>' +
       '</div>';
     document.body.appendChild(modal);
@@ -183,7 +201,7 @@ describe('TimezoneManager on a core that is not open', () => {
       core,
       manager,
       onChange,
-      dropdown: required(modal, '.tp-ui-timezone-dropdown'),
+      combobox: required(modal, '.tp-ui-timezone-selected'),
       firstOption: required(modal, '.tp-ui-timezone-option'),
     };
   };
@@ -196,11 +214,11 @@ describe('TimezoneManager on a core that is not open', () => {
 
   it('should ignore an option click and a keyboard pick, and select once the core is open', () => {
     harness = mount();
-    const { core, manager, onChange, dropdown, firstOption } = harness;
+    const { core, manager, onChange, combobox, firstOption } = harness;
     expect(firstOption).toHaveAttribute('data-value', WHITELIST[0]);
 
     firstOption.click();
-    pickFirstOptionByKeyboard(dropdown);
+    pickFirstOptionByKeyboard(combobox);
 
     expect(onChange).not.toHaveBeenCalled();
     expect(manager.getSelectedTimezone()).toBeNull();

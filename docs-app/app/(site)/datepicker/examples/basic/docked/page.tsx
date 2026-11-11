@@ -10,14 +10,14 @@ const DOCKED_TODAY: DatepickerOptions = {
   ui: { displayMode: "docked", todayButton: true },
 };
 
-const DOCKED_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const DOCKED_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   ui: { displayMode: "docked" },
 }).create();`;
 
-const TODAY_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const TODAY_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

@@ -81,9 +81,10 @@ agent runs `node docs-app/scripts/generate-css-reference.mjs` and reviews the di
 - Summarize: new version, every file changed (grouped: package.json / README / CHANGELOG /
   docs-app), and confirmation that `exports` / `sideEffects` / entry points / zero-dependency /
   tree-shaking are intact.
-- **Propose the release commands for the user to run** — git is theirs:
-  a commit message, the tag (`vX.Y.Z`), and the publish step (`npm publish`). Do NOT run
-  `git add/commit/tag/push` or `npm publish` yourself.
+- **Propose the release steps for the user to run** — git is theirs:
+  a commit message, then a GitHub release whose tag is the new version (`X.Y.Z` or `vX.Y.Z`).
+  Publishing that release runs `.github/workflows/publish.yml`, which builds, tests and
+  publishes to npm. Do NOT run `git add/commit/tag/push`, `gh release` or `npm publish` yourself.
 
 ## Guardrails
 - One source of truth for the version (root `package.json`). NEVER touch the `version` field of

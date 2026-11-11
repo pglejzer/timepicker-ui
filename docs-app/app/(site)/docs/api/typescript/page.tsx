@@ -106,6 +106,7 @@ type RangeConfirmEventData = {
   to: string;
   duration: number;              // whole minutes
   durationSeconds?: number;      // showSeconds, exact length in seconds
+  autoCommit?: boolean;          // true when triggered by wheel.commitOnScroll
 };
 
 type RangeValidationEventData = {
@@ -124,9 +125,19 @@ type WheelScrollEndEventData = {
 
 // Also exported: SelectHourEventData, SelectMinuteEventData,
 // SelectAMEventData and SelectPMEventData (deprecated), ShowEventData,
-// HideEventData (deprecated), SwitchViewEventData,
+// HideEventData (deprecated),
 // TimezoneChangeEventData, RangeSwitchEventData,
-// WheelScrollStartEventData`,
+// WheelScrollStartEventData
+
+type SwitchViewEventData = {     // payload of 'switch:view'
+  view: TimepickerView;
+};
+
+type RangeChangeEventData = {    // payload of 'range:change'
+  part: 'from' | 'to';
+  from: RangeTimeValue | null;
+  to: RangeTimeValue | null;
+};`,
   },
   {
     name: "TimepickerEventMap",
@@ -154,6 +165,7 @@ interface TimepickerEventMap {
   'range:confirm': RangeConfirmEventData;
   'range:switch': RangeSwitchEventData;
   'range:validation': RangeValidationEventData;
+  'range:change': RangeChangeEventData;   // new in 4.7.0
   'wheel:scroll:start': WheelScrollStartEventData;
   'wheel:scroll:end': WheelScrollEndEventData;
   error: ErrorEventData;
@@ -186,6 +198,7 @@ interface TimepickerEventMap {
     showButtons?: boolean;
     autoUpdate?: boolean;
     embedded?: boolean;               // part of a host component, default false
+    showTitle?: boolean;              // default true, new in 4.7.0
   };
 }`,
   },
@@ -222,6 +235,130 @@ interface RangeTimeState {
 }
 
 const range: RangeTimeState | null = picker.getRange();`,
+  },
+  {
+    name: "TimepickerView",
+    description:
+      "The two views of the picker. ui.initialView, setView(), getView() and the switch:view payload use it. New in 4.7.0.",
+    code: `import type { TimepickerView } from 'timepicker-ui';
+
+type TimepickerView = 'clock' | 'keyboard';`,
+  },
+  {
+    name: "RangeTimeInput and RangeCaptionInput",
+    description:
+      "The arguments of setRange() and setRangeCaptions(). Leave an end out to keep it. null or '' clears a time or removes a caption. New in 4.7.0.",
+    code: `import type { RangeTimeInput, RangeCaptionInput } from 'timepicker-ui';
+
+interface RangeTimeInput {
+  from?: string | null;   // setValue() format: '09:00', '9:00 AM'
+  to?: string | null;
+}
+
+interface RangeCaptionInput {
+  from?: string | null;   // plain text under the tab label
+  to?: string | null;
+}
+
+picker.setRange({ from: '09:00' });
+picker.setRangeCaptions({ from: 'Wed Oct 21', to: null });`,
+  },
+  {
+    name: "RangeChangeEventData",
+    description:
+      "The payload of range:change and callbacks.onRangeChange. New in 4.7.0.",
+    code: `import type { RangeChangeEventData } from 'timepicker-ui';
+
+interface RangeChangeEventData {
+  part: 'from' | 'to';          // the end that changed
+  from: RangeTimeValue | null;  // both ends after the change
+  to: RangeTimeValue | null;
+}`,
+  },
+  {
+    name: "TimeValue, TimeFormatOptions and DisabledTimeCheckOptions",
+    description:
+      "Types of the parseTime(), formatTime() and createDisabledTimeCheck() helpers. TimeValue is the shape of a time that getValue() and getRange() use. New in 4.7.0.",
+    code: `import type {
+  TimeValue,
+  TimeFormatOptions,
+  DisabledTimeCheckOptions
+} from 'timepicker-ui';
+
+interface TimeValue {
+  hour: string;
+  minutes: string;
+  seconds?: string;              // showSeconds
+  type?: string;                 // 'AM' or 'PM' (12h mode)
+}
+
+interface TimeFormatOptions {
+  clockType?: '12h' | '24h';     // default '12h'
+  showSeconds?: boolean;         // default false
+}
+
+type DisabledTimeCheckOptions = Pick<
+  ClockOptions,
+  'type' | 'disabledTime' | 'isTimeDisabled' | 'showSeconds'
+>;`,
+  },
+  {
+    name: "TimepickerEventName",
+    description:
+      "The names of the events the picker emits, as a union. on(), once() and off() are typed with it, and the handler gets the payload type from TimepickerEventMap. Internal events are not in the union. New in 4.7.0.",
+    code: `import type { TimepickerEventName, TimepickerEventMap } from 'timepicker-ui';
+
+function listen<K extends TimepickerEventName>(
+  picker: TimepickerUI,
+  name: K,
+  handler: (data: TimepickerEventMap[K]) => void
+) {
+  return picker.on(name, handler);
+}
+
+listen(picker, 'range:change', (data) => console.log(data.part));`,
+  },
+  {
+    name: "PluginManager and PluginTimeView",
+    description:
+      "Types for code that builds on the plugin system. PluginManager.setTimeView is optional and new in 4.7.0. The core calls it on the range plugin before init() and hands it a PluginTimeView, a port to the clock or wheel. In the wheel modes, view.show(value) moves the wheel to that time without emitting update, select:* or wheel:scroll:* events. Both types are exported from 'timepicker-ui' and change in 5.0.0, with the rest of the plugin API.",
+    code: `import type { PluginManager, PluginTimeView } from 'timepicker-ui';
+
+interface PluginTimeView {
+  show(value: { hour: string; minutes: string; seconds?: string; type?: string }): void;
+}
+
+interface PluginManager {
+  init(): void;
+  destroy(): void;
+  attachPopover?(): void;
+  detachPopover?(): void;
+  scrollToValue?(hour: string, minute: string, type?: string, second?: string): void;
+  getSelection?(): { hour: string; minutes: string; seconds?: string; type?: string } | null;
+  setTimeView?(view: PluginTimeView): void;   // new in 4.7.0
+}`,
+  },
+  {
+    name: "Timezone plugin exports",
+    description:
+      "Exported from 'timepicker-ui/plugins/timezone', not from 'timepicker-ui'. DEFAULT_TIMEZONES is the built-in list of IDs. getTimezoneList(list?) returns one TimezoneInfo for each ID the browser knows, and the built-in list when you pass none. New in 4.7.0.",
+    code: `import {
+  getTimezoneList,
+  DEFAULT_TIMEZONES,
+  type TimezoneInfo
+} from 'timepicker-ui/plugins/timezone';
+
+interface TimezoneInfo {
+  readonly id: string;       // 'Asia/Tokyo'
+  readonly label: string;    // 'Tokyo (+09:00)'
+  readonly offset: string;   // '+09:00'
+}
+
+const DEFAULT_TIMEZONES: readonly string[];
+
+function getTimezoneList(list?: readonly string[]): TimezoneInfo[];
+
+const zones = getTimezoneList([...DEFAULT_TIMEZONES, 'Europe/Warsaw']);`,
   },
   {
     name: "Disabled time shape (clock.disabledTime)",
@@ -483,6 +620,28 @@ picker.once('open', (data) => {
   // data: OpenEventData
   console.log(data.hour, data.minutes, data.seconds);
 });`}
+          language="typescript"
+        />
+
+        <h3>Typed on() overloads</h3>
+        <CodeBlock
+          code={`import { TimepickerUI } from 'timepicker-ui';
+
+const picker = new TimepickerUI('#timepicker', { range: { enabled: true } });
+picker.create();
+
+picker.on('range:change', (data) => {
+  // data: RangeChangeEventData
+  console.log(data.part, data.from, data.to);
+});
+
+picker.on('switch:view', (data) => {
+  // data: SwitchViewEventData
+  console.log(data.view); // 'clock' | 'keyboard'
+});
+
+// A name outside TimepickerEventName still compiles; data is unknown
+picker.on('my:custom', (data) => console.log(data));`}
           language="typescript"
         />
 

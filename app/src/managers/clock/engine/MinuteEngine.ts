@@ -1,7 +1,7 @@
 import type { ClockType, AmPmType, DisabledTimeConfig, FaceContext, SixtyMode } from '../types';
 import { isMinuteDisabled, isSecondDisabled } from '../../../utils/time/rules';
 import { toDisabledRules } from './disabledRules';
-import { isMinuteBeforeRangeFrom, isSecondBeforeRangeFrom } from './rangeLimit';
+import { isMinuteBeforeRangeFrom, isSecondBeforeRangeFrom } from '../../../utils/time/rangeLimit';
 
 export class MinuteEngine {
   static angleToIndex(angle: number): number {

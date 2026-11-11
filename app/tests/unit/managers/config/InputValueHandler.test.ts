@@ -167,8 +167,8 @@ describe('InputValueHandler', () => {
       expect(coreState.getMinutes()?.value).toBe('00');
       expect(getPeriod(modal, 'PM').classList.contains('active')).toBe(true);
       expect(getPeriod(modal, 'AM').classList.contains('active')).toBe(false);
-      expect(getPeriod(modal, 'PM').getAttribute('aria-pressed')).toBe('true');
-      expect(getPeriod(modal, 'AM').getAttribute('aria-pressed')).toBe('false');
+      expect(getPeriod(modal, 'PM').getAttribute('aria-checked')).toBe('true');
+      expect(getPeriod(modal, 'AM').getAttribute('aria-checked')).toBe('false');
       expect(emitSpy).toHaveBeenCalledWith(
         'open',
         expect.objectContaining({ hour: '12', minutes: '00', type: 'PM' }),
@@ -186,8 +186,8 @@ describe('InputValueHandler', () => {
       expect(coreState.getMinutes()?.value).toBe('55');
       expect(getPeriod(modal, 'AM').classList.contains('active')).toBe(true);
       expect(getPeriod(modal, 'PM').classList.contains('active')).toBe(false);
-      expect(getPeriod(modal, 'AM').getAttribute('aria-pressed')).toBe('true');
-      expect(getPeriod(modal, 'PM').getAttribute('aria-pressed')).toBe('false');
+      expect(getPeriod(modal, 'AM').getAttribute('aria-checked')).toBe('true');
+      expect(getPeriod(modal, 'PM').getAttribute('aria-checked')).toBe('false');
       expect(emitSpy).toHaveBeenCalledWith(
         'open',
         expect.objectContaining({ hour: '10', minutes: '55', type: 'AM' }),
@@ -205,8 +205,8 @@ describe('InputValueHandler', () => {
       expect(coreState.getMinutes()?.value).toBe('20');
       expect(getPeriod(modal, 'PM').classList.contains('active')).toBe(true);
       expect(getPeriod(modal, 'AM').classList.contains('active')).toBe(false);
-      expect(getPeriod(modal, 'PM').getAttribute('aria-pressed')).toBe('true');
-      expect(getPeriod(modal, 'AM').getAttribute('aria-pressed')).toBe('false');
+      expect(getPeriod(modal, 'PM').getAttribute('aria-checked')).toBe('true');
+      expect(getPeriod(modal, 'AM').getAttribute('aria-checked')).toBe('false');
       expect(emitSpy).toHaveBeenCalledWith(
         'open',
         expect.objectContaining({ hour: '03', minutes: '20', type: 'PM' }),
@@ -223,7 +223,7 @@ describe('InputValueHandler', () => {
       expect(coreState.getHour()?.value).toBe('03');
       expect(coreState.getMinutes()?.value).toBe('20');
       expect(getPeriod(modal, 'PM').classList.contains('active')).toBe(true);
-      expect(getPeriod(modal, 'PM').getAttribute('aria-pressed')).toBe('true');
+      expect(getPeriod(modal, 'PM').getAttribute('aria-checked')).toBe('true');
       expect(emitSpy).not.toHaveBeenCalled();
     });
 
@@ -310,6 +310,10 @@ describe('InputValueHandler', () => {
       ['2:00 PM - 4:00 PM', { type: '12h' }, { type: '24h' }, '14:00 - 16:00'],
       ['14:00:30 - 15:00:45', { type: '24h', showSeconds: true }, { showSeconds: false }, '14:00 - 15:00'],
       ['10:00 - 14:00', { type: '24h' }, { showSeconds: true }, '10:00:00 - 14:00:00'],
+      ['10:00 - --:--', { type: '24h' }, { type: '12h' }, '10:00 AM - --:--'],
+      ['02:00 PM - --:--', { type: '12h' }, { type: '24h' }, '14:00 - --:--'],
+      ['--:-- - 02:00 PM', { type: '12h' }, { type: '24h' }, '--:-- - 14:00'],
+      ['10:00 - --:--', { type: '24h' }, { showSeconds: true }, '10:00:00 - --:--:--'],
     ])(
       'should rewrite both times of the range %p from %o after the clock changes to %o as %p',
       (value, previous, next, expected) => {
@@ -319,20 +323,14 @@ describe('InputValueHandler', () => {
       },
     );
 
-    it.each([
-      '',
-      'abc',
-      '99:99',
-      '10:00 - --:--',
-      '--:-- - --:--',
-      '10:00 - abc',
-      '10:00 - 14:00 - 16:00',
-      '10:00 - ',
-    ])('should leave %p untouched when the clock type changes', (value) => {
-      syncInput(value, { type: '24h' }, { clock: { type: '12h' } });
+    it.each(['', 'abc', '99:99', '--:-- - --:--', '10:00 - abc', '10:00 - 14:00 - 16:00', '10:00 - '])(
+      'should leave %p untouched when the clock type changes',
+      (value) => {
+        syncInput(value, { type: '24h' }, { clock: { type: '12h' } });
 
-      expect(mockInput.value).toBe(value);
-    });
+        expect(mockInput.value).toBe(value);
+      },
+    );
 
     it.each<[string, TimepickerOptions]>([
       ['labels', { labels: { ok: 'X' } }],

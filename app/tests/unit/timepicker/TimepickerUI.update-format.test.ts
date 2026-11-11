@@ -42,7 +42,13 @@ describe('update() and the time format of the input', () => {
 
       expect(input.value).toBe('02:30:45 PM');
       expect(picker.getValue()).toEqual(
-        expect.objectContaining({ hour: '02', minutes: '30', seconds: '45', type: 'PM', time: '02:30:45 PM' }),
+        expect.objectContaining({
+          hour: '02',
+          minutes: '30',
+          seconds: '45',
+          type: 'PM',
+          time: '02:30:45 PM',
+        }),
       );
     });
 
@@ -187,7 +193,7 @@ describe('update() and the time format of the input', () => {
       expect(input.value).toBe('02:30:45 PM');
       expect(container.querySelector<HTMLInputElement>('.tp-ui-hour')?.value).toBe('02');
       expect(pm?.classList.contains('active')).toBe(true);
-      expect(pm?.getAttribute('aria-pressed')).toBe('true');
+      expect(pm?.getAttribute('aria-checked')).toBe('true');
     });
   });
 

@@ -18,17 +18,6 @@
                 />
               </div>
             </div>
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-                <pre><code class="language-html">&lt;input id="basic-picker" value="10:30 PM" /&gt;</code></pre>
-              </div>
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-                <pre><code class="language-javascript">const basicTimePicker = new TimepickerUI('#basic-picker');
-basicTimePicker.create();</code></pre>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -52,20 +41,6 @@ basicTimePicker.create();</code></pre>
                 />
               </div>
             </div>
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-                <pre><code class="language-html">&lt;input id="format-24h-picker"  value="15:45" /&gt;</code></pre>
-              </div>
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-                <pre><code class="language-javascript">const format24hPicker = new TimepickerUI('#format-24h-picker', {
-  clock: { type: '24h' },
-  ui: { viewSwitch: true }
-});
-format24hPicker.create();</code></pre>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -87,20 +62,6 @@ format24hPicker.create();</code></pre>
                   class="w-full max-w-xs px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   value="14:30"
                 />
-              </div>
-            </div>
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-                <pre><code class="language-html">&lt;input id="mobile-picker"  value="14:30" /&gt;</code></pre>
-              </div>
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-                <pre><code class="language-javascript">const mobilePicker = new TimepickerUI('#mobile-picker', {
-  clock: { type: '24h' },
-  ui: { initialView: 'keyboard', viewSwitch: true }
-});
-mobilePicker.create();</code></pre>
               </div>
             </div>
           </div>
@@ -220,32 +181,6 @@ mobilePicker.create();</code></pre>
                     value="11:00 PM"
                   />
                 </div>
-              </div>
-            </div>
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">HTML</h4>
-                <pre><code class="language-html">&lt;input id="theme-basic"  /&gt;
-&lt;input id="theme-crane-straight"  /&gt;
-&lt;input id="theme-crane-radius"  /&gt;
-&lt;input id="theme-m3"  /&gt;
-&lt;input id="theme-dark"  /&gt;
-&lt;input id="theme-glassmorphic"  /&gt;
-&lt;input id="theme-pastel"  /&gt;
-&lt;input id="theme-ai"  /&gt;
-&lt;input id="theme-cyberpunk"  /&gt;</code></pre>
-              </div>
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">JavaScript</h4>
-                <pre><code class="language-javascript">new TimepickerUI('#theme-basic', { theme: 'basic' }).create();
-new TimepickerUI('#theme-crane-straight', { theme: 'crane-straight' }).create();
-new TimepickerUI('#theme-crane-radius', { theme: 'crane-radius' }).create();
-new TimepickerUI('#theme-m3', { theme: 'm3' }).create();
-new TimepickerUI('#theme-dark', { theme: 'dark' }).create();
-new TimepickerUI('#theme-glassmorphic', { theme: 'glassmorphic' }).create();
-new TimepickerUI('#theme-pastel', { theme: 'pastel' }).create();
-new TimepickerUI('#theme-ai', { theme: 'ai' }).create();
-new TimepickerUI('#theme-cyberpunk', { theme: 'cyberpunk' }).create();</code></pre>
               </div>
             </div>
           </div>

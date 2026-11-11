@@ -125,10 +125,21 @@ async function runSuite(label, clientOptions) {
   );
   check('snippet registers WheelPlugin and shows seconds', snippet.includes('PluginRegistry.register(WheelPlugin)') && snippet.includes('showSeconds: true'));
 
+  const plugins = (await callJson('list_plugins')).data;
+  check(
+    'list_plugins gives UMD files and globals',
+    plugins.plugins.every((p) => p.umdFile.endsWith('.umd.js') && p.umdGlobal.startsWith('TimepickerUI')) &&
+      plugins.registerWithoutBundler.includes('TimepickerUI.PluginRegistry.register(TimepickerUIRange.RangePlugin)'),
+  );
+
   const mig = (await callJson('migration_guide', { path: 'v3->v4' })).data;
   check('migration v3->v4 has mappings', mig.mappings?.length === 5);
   const v5 = (await callJson('migration_guide', { path: 'v4.5->v5' })).data;
   check('migration v4.5->v5 has renamed and removed', v5.renamed?.length > 0 && v5.removed?.length > 0);
+  const api = (await callJson('list_api', {})).data;
+  check('list_api has the 4.7.0 methods', ['clear()', 'setView(view)', 'getView()', 'getActivePart()'].every((s) => api.methods.some((m) => m.signature === s)));
+  const v47 = (await callJson('migration_guide', { path: 'v4.6->v4.7' })).data;
+  check('migration v4.6->v4.7 lists the ARIA change', v47.changes?.some((c) => c.includes('aria-checked')));
 
   const search = (await callJson('search_reference', { query: 'focus ring' })).data;
   check('search finds --tp-focus-ring', search.results.some((r) => r.name === '--tp-focus-ring'));

@@ -18,7 +18,6 @@
   &-clear-btn#{$tp-focus-visible},
   &-keyboard-icon#{$tp-focus-visible},
   &-range-tab#{$tp-focus-visible},
-  &-timezone-dropdown#{$tp-focus-visible},
   &-wheel-column#{$tp-focus-visible} {
     @include tp-focus-ring;
   }
@@ -43,7 +42,8 @@
     outline-color: var(--tp-am-pm-text-selected);
   }
 
-  &-timezone-dropdown#{$tp-focus-visible} {
+  &-timezone-dropdown:has(> .tp-ui-timezone-selected#{$tp-focus-visible}) {
+    @include tp-focus-ring;
     border-bottom: var(--tp-border-width-thick) solid var(--tp-focus-ring, var(--tp-primary));
   }
 
@@ -64,8 +64,11 @@
     &-clear-btn#{$tp-focus-visible},
     &-keyboard-icon#{$tp-focus-visible},
     &-range-tab#{$tp-focus-visible},
-    &-timezone-dropdown#{$tp-focus-visible},
     &-wheel-column#{$tp-focus-visible} {
+      outline-width: var(--tp-outline-width-contrast);
+    }
+
+    &-timezone-dropdown:has(> .tp-ui-timezone-selected#{$tp-focus-visible}) {
       outline-width: var(--tp-outline-width-contrast);
     }
 
@@ -116,9 +119,13 @@
   .tp-ui-clear-btn#{$tp-focus-visible},
   .tp-ui-keyboard-icon#{$tp-focus-visible},
   .tp-ui-range-tab#{$tp-focus-visible},
-  .tp-ui-timezone-dropdown#{$tp-focus-visible},
   .tp-ui-timezone-option[data-focused='true']#{$tp-keyboard-modality},
   .tp-ui-wheel-column#{$tp-focus-visible} {
+    outline: var(--tp-outline-width-thick) solid Highlight;
+    outline-offset: var(--tp-outline-offset);
+  }
+
+  .tp-ui-timezone-dropdown:has(> .tp-ui-timezone-selected#{$tp-focus-visible}) {
     outline: var(--tp-outline-width-thick) solid Highlight;
     outline-offset: var(--tp-outline-offset);
   }
@@ -172,3 +179,8 @@
   }
 }
 
+@supports selector(:has(*)) {
+  .tp-ui-timezone-selected:focus-visible {
+    outline: none;
+  }
+}

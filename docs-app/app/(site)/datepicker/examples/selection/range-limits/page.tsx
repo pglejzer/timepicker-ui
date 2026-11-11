@@ -12,7 +12,7 @@ const LIMITS_FUTURE: DatepickerOptions = {
   calendar: { mode: "range", minDate: "today", range: { minLength: 3, maxLength: 14 } },
 };
 
-const LIMITS_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const LIMITS_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#dates", {
@@ -22,7 +22,7 @@ new DatepickerUI("#dates", {
   },
 }).create();`;
 
-const FUTURE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const FUTURE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#dates", {

@@ -1,8 +1,13 @@
 import type { CoreState } from './CoreState';
 import type { Managers } from './Managers';
 import type { EventEmitter, TimepickerEventMap } from '../utils/EventEmitter';
-import type { TimepickerOptions } from '../types/options';
-import { PluginRegistry, type PluginManager } from '../core/PluginRegistry';
+import type { TimepickerOptions, TimepickerView } from '../types/options';
+import {
+  PluginRegistry,
+  type PluginManager,
+  type PluginSelection,
+  type PluginTimeView,
+} from '../core/PluginRegistry';
 import { initMd3Ripple } from '../utils/ripple';
 import {
   isWheelMode,
@@ -10,8 +15,10 @@ import {
   isPopoverMode,
   isInlineMode,
   isEmbeddedInlineMode,
+  getInitialView,
 } from '../utils/options/predicates';
 import { setupCallbackBridge, emitMissingPluginErrors } from './LifecycleCallbacks';
+import { syncClockVisual } from './SetValue';
 
 type TypeFunction = () => void;
 type DisabledMarksRefresher = PluginManager & { updateDisabledItems?(): void };
@@ -25,6 +32,8 @@ export class Lifecycle {
   private isCommitting = false;
   private isRendering = false;
   private isRerenderPending = false;
+  private viewBeforeOptions: TimepickerView | null = null;
+  private readonly timeView: PluginTimeView = { show: (value) => this.showTime(value) };
 
   constructor(core: CoreState, managers: Managers, emitter: EventEmitter<TimepickerEventMap>) {
     this.core = core;
@@ -74,6 +83,14 @@ export class Lifecycle {
       return false;
     }
 
+    const initialView = getInitialView(this.core.options);
+    if (getInitialView(previousOptions) !== initialView) {
+      if (this.core.isOpen && this.viewBeforeOptions === null && !this.hasWheelView(previousOptions)) {
+        this.viewBeforeOptions = this.core.view;
+      }
+      this.core.setView(initialView);
+    }
+
     this.managers.config.checkMobileOption();
     this.managers.config.syncInputFormat(previousOptions);
     return true;
@@ -107,7 +124,7 @@ export class Lifecycle {
     this.eventsBundle();
   }
 
-  rerender(): void {
+  rerender(keepView = true): void {
     if (this.isRendering) {
       this.isRerenderPending = true;
       return;
@@ -117,16 +134,39 @@ export class Lifecycle {
     this.core.setIsOpen(false);
     this.releaseOpenView();
     this.core.setIsModalRemove(true);
-    this.eventsBundle(true);
+    this.core.setIsRerendering(keepView);
+    try {
+      this.eventsBundle(true);
+    } finally {
+      this.core.setIsRerendering(false);
+    }
 
     if (focusedControlSelector !== null) {
       this.managers.modal.restoreFocus(focusedControlSelector);
+    }
+
+    this.emitViewChangeFromOptions();
+  }
+
+  private hasWheelView(options: Required<TimepickerOptions>): boolean {
+    return isWheelMode(options) && PluginRegistry.has('wheel');
+  }
+
+  private emitViewChangeFromOptions(): void {
+    const before = this.viewBeforeOptions;
+    this.viewBeforeOptions = null;
+
+    if (before === null || !this.core.isOpen || this.hasWheelView(this.core.options)) return;
+
+    const view = this.core.view;
+    if (view !== before) {
+      this.emitter.emit('switch:view', { view });
     }
   }
 
   discardSelection(): void {
     if (isInlineMode(this.core.options)) {
-      this.rerender();
+      this.rerender(false);
       this.core.getCancelButton()?.focus();
       return;
     }
@@ -162,6 +202,7 @@ export class Lifecycle {
   }
 
   private deactivate(): void {
+    this.viewBeforeOptions = null;
     this.core.setIsOpen(false);
     this.releaseOpenView();
   }
@@ -267,6 +308,7 @@ export class Lifecycle {
     this.core.setIsModalRemove(false);
 
     this.disableOpenElements();
+    this.prepareView(isRerender && this.core.isRerendering);
     this.setupModal();
     this.setupValidation();
     this.applyExpandedState();
@@ -284,7 +326,7 @@ export class Lifecycle {
     emitMissingPluginErrors(this.core, this.emitter);
     this.revealClockFace(wheelModeActive, isRerender);
     this.initClockOrWheel(wheelModeActive);
-    this.initOptionalPlugins(wheelModeActive);
+    this.initOptionalPlugins();
     this.bindEventHandlers(wheelModeActive);
     this.initRipple();
 
@@ -309,6 +351,17 @@ export class Lifecycle {
     if (isPending && !isRerender && this.core.isOpen) {
       this.rerender();
     }
+  }
+
+  private prepareView(keepView: boolean): void {
+    const { core } = this;
+    const freshView = core.pendingView ?? getInitialView(core.options);
+    const isWheelView = isWheelMode(core.options) && PluginRegistry.has('wheel');
+    const view = keepView && !isWheelView ? core.view : freshView;
+
+    core.setPendingView(null);
+    core.setView(view);
+    core.setIsMobileView(view === 'keyboard');
   }
 
   private setupValidation(): void {
@@ -372,16 +425,21 @@ export class Lifecycle {
     }
   }
 
-  private initOptionalPlugins(isWheelMode: boolean): void {
+  private initOptionalPlugins(): void {
     const timezone = this.managers.getPlugin('timezone');
     if (timezone) {
       timezone.init();
     }
 
     const range = this.managers.getPlugin('range');
-    if (range && !isWheelMode) {
+    if (range) {
+      range.setTimeView?.(this.timeView);
       range.init();
     }
+  }
+
+  private showTime({ hour, minutes, seconds, type }: PluginSelection): void {
+    syncClockVisual(this.core, this.managers, { hour, minutes, seconds, type: type ?? '' });
   }
 
   private bindEventHandlers(isWheelMode: boolean): void {

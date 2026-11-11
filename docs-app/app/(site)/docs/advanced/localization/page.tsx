@@ -47,6 +47,7 @@ export default function LocalizationPage() {
     hour: 'Hour',
     minute: 'Minute',
     second: 'Second',
+    valueText: '{value} of {count}',
     clock: 'Clock',
     period: 'Period',
     timeFields: 'Time',
@@ -67,9 +68,9 @@ export default function LocalizationPage() {
         <p>
           <code>hour</code>, <code>minute</code> and <code>second</code>{" "}
           each set the field caption, the field&apos;s accessible name, the
-          dial name and the prefix of the screen-reader announcement. Until
-          5.0, the minute announcement says <code>Minutes</code> when{" "}
-          <code>minute</code> is not set. <code>second</code> is used only
+          dial name and the prefix of the screen-reader announcement. The
+          minute announcement says <code>Minute</code> by default, and said{" "}
+          <code>Minutes</code> before 4.7.0. <code>second</code> is used only
           with <code>clock.showSeconds: true</code>. <code>range</code>,{" "}
           <code>rangeFrom</code> and <code>rangeTo</code> are used by the
           range plugin, and <code>timezone</code> by the timezone plugin.
@@ -78,6 +79,15 @@ export default function LocalizationPage() {
             Options
           </Link>{" "}
           page.
+        </p>
+        <p>
+          <code>valueText</code> is the screen reader value of the hour,
+          minute and second fields and of the dial. <code>{"{value}"}</code>{" "}
+          is the number without a leading zero and <code>{"{count}"}</code>{" "}
+          the number of values on that face. With the field name it reads
+          &quot;Hour, 7 of 12&quot;. Translate the words around the
+          placeholders, for example <code>{"'{value} z {count}'"}</code>, or
+          use <code>{"'{value}'"}</code> for the bare number. New in 4.7.0.
         </p>
         <p>
           <code>labels.am</code> and <code>labels.pm</code> change only the
@@ -192,7 +202,7 @@ export const zhLocale = {
 
         <h3>Using Language Configs</h3>
         <CodeBlock
-          code={`import TimepickerUI from 'timepicker-ui';
+          code={`import { TimepickerUI } from 'timepicker-ui';
 import { esLocale } from './locales/es';
 
 const picker = new TimepickerUI(input, {
@@ -372,7 +382,7 @@ picker.create();`}
         <CodeBlock
           code={`import { useTranslation } from 'react-i18next';
 import { useEffect, useRef } from 'react';
-import TimepickerUI from 'timepicker-ui';
+import { TimepickerUI } from 'timepicker-ui';
 
 function LocalizedTimePicker() {
   const { t, i18n } = useTranslation();

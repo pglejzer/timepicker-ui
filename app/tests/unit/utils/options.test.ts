@@ -45,7 +45,7 @@ describe('options defaults', () => {
       expect(labels.toggleLabel).toBe('Toggle');
       expect(labels.timezoneSelectorLabel).toBe('Timezone');
       expect(labels.announceHour).toBe('Hour');
-      expect(labels.announceMinute).toBe('Minutes');
+      expect(labels.announceMinute).toBe('Minute');
       expect(labels.announceAmSelected).toBe('AM selected');
       expect(labels.announcePmSelected).toBe('PM selected');
       expect(labels.invalidTimeFormat).toBe('Invalid time format');
@@ -135,7 +135,7 @@ describe('options defaults', () => {
       expect(result.labels.toggleLabel).toBe('Toggle');
       expect(result.labels.timezoneSelectorLabel).toBe('Timezone');
       expect(result.labels.announceHour).toBe('Hour');
-      expect(result.labels.announceMinute).toBe('Minutes');
+      expect(result.labels.announceMinute).toBe('Minute');
       expect(result.labels.announceAmSelected).toBe('AM selected');
       expect(result.labels.announcePmSelected).toBe('PM selected');
       expect(result.labels.invalidTimeFormat).toBe('Invalid time format');
@@ -222,4 +222,3 @@ describe('options defaults', () => {
     });
   });
 });
-

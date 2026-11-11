@@ -10,14 +10,14 @@ const WINDOW: DatepickerOptions = {
   calendar: { minDate: "2030-06-05", maxDate: "2030-06-25" },
 };
 
-const TODAY_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const TODAY_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   calendar: { minDate: "today" },
 }).create();`;
 
-const WINDOW_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const WINDOW_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {

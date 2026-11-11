@@ -29,6 +29,8 @@ const EVENT_NAMES = [
   'range:confirm',
   'range:switch',
   'range:validation',
+  'range:change',
+  'input:commit',
   'range:minute:commit',
   'range:get-disabled-time',
   'range:update-disabled',
@@ -286,7 +288,9 @@ describe('companion baseline - wheel plugin', () => {
         `.tp-ui-modal .tp-ui-wheel-${column} .tp-ui-wheel-item`,
       );
       marks[column] = Array.from(items)
-        .filter((item) => item.getAttribute('aria-disabled') === 'true' || item.classList.contains('disabled'))
+        .filter(
+          (item) => item.getAttribute('aria-disabled') === 'true' || item.classList.contains('disabled'),
+        )
         .map((item) => `${item.getAttribute('data-value')} [${item.className}]`);
     });
     return marks;

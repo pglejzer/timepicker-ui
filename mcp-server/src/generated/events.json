@@ -187,7 +187,13 @@
   {
     "name": "switch:view",
     "data": "SwitchViewEventData",
-    "fields": []
+    "fields": [
+      {
+        "name": "view",
+        "optional": false,
+        "type": "TimepickerView"
+      }
+    ]
   },
   {
     "name": "switch:face",
@@ -234,6 +240,11 @@
         "name": "durationSeconds",
         "optional": true,
         "type": "number"
+      },
+      {
+        "name": "autoCommit",
+        "optional": true,
+        "type": "boolean"
       }
     ]
   },
@@ -341,6 +352,40 @@
         "type": "string"
       }
     ],
+    "internal": true
+  },
+  {
+    "name": "range:change",
+    "data": "RangeChangeEventData",
+    "fields": [
+      {
+        "name": "part",
+        "optional": false,
+        "type": "'from' | 'to'"
+      },
+      {
+        "name": "from",
+        "optional": false,
+        "type": "RangeTimeValue | null"
+      },
+      {
+        "name": "to",
+        "optional": false,
+        "type": "RangeTimeValue | null"
+      }
+    ]
+  },
+  {
+    "name": "input:commit",
+    "data": "InputCommitEventData",
+    "fields": [
+      {
+        "name": "field",
+        "optional": false,
+        "type": "'hour' | 'minutes' | 'seconds'"
+      }
+    ],
+    "description": "Emitted by a time field after the core applied a typed value (blur or Enter), once it is clamped. Not bridged to a callback.",
     "internal": true
   },
   {

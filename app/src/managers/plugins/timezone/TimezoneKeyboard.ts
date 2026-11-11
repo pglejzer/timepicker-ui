@@ -1,10 +1,45 @@
 import { prefersReducedMotion } from '../../../utils/accessibility';
+import { TIMINGS } from '../../../constants/timings';
+
+const findLabel = (labels: ReadonlyArray<string>, search: string, start: number): number => {
+  for (let offset = 0; offset < labels.length; offset++) {
+    const index = (start + offset) % labels.length;
+    if (labels[index].toLowerCase().startsWith(search)) return index;
+  }
+  return -1;
+};
 
 export class TimezoneKeyboard {
   private focusedIndex: number = -1;
+  private buffer = '';
+  private bufferTimer: ReturnType<typeof setTimeout> | null = null;
 
   getFocusedIndex(): number {
     return this.focusedIndex;
+  }
+
+  setFocusedIndex(index: number): number {
+    this.focusedIndex = index;
+    return this.focusedIndex;
+  }
+
+  isTyping(): boolean {
+    return this.buffer !== '';
+  }
+
+  matchTypedCharacter(character: string, labels: ReadonlyArray<string>): number {
+    this.buffer += character.toLowerCase();
+    this.restartBufferTimer();
+
+    const isRepeated = [...this.buffer].every((char) => char === this.buffer[0]);
+    const search = isRepeated ? this.buffer[0] : this.buffer;
+    const start = isRepeated ? this.focusedIndex + 1 : Math.max(this.focusedIndex, 0);
+    const match = findLabel(labels, search, start);
+
+    if (match >= 0) {
+      this.focusedIndex = match;
+    }
+    return match;
   }
 
   moveDown(optionsCount: number): number {
@@ -29,20 +64,21 @@ export class TimezoneKeyboard {
 
   reset(): void {
     this.focusedIndex = -1;
+    this.clearBuffer();
   }
 
-  updateVisualFocus(options: HTMLElement[], dropdown?: HTMLElement | null): void {
+  updateVisualFocus(options: HTMLElement[], combobox?: HTMLElement | null): void {
     options.forEach((option, index) => {
       option.setAttribute('data-focused', String(index === this.focusedIndex));
     });
 
     const focused = this.focusedIndex >= 0 ? options[this.focusedIndex] : null;
 
-    if (dropdown) {
+    if (combobox) {
       if (focused?.id) {
-        dropdown.setAttribute('aria-activedescendant', focused.id);
+        combobox.setAttribute('aria-activedescendant', focused.id);
       } else {
-        dropdown.removeAttribute('aria-activedescendant');
+        combobox.removeAttribute('aria-activedescendant');
       }
     }
 
@@ -52,5 +88,19 @@ export class TimezoneKeyboard {
         behavior: prefersReducedMotion() ? 'auto' : 'smooth',
       });
     }
+  }
+
+  private restartBufferTimer(): void {
+    if (this.bufferTimer !== null) clearTimeout(this.bufferTimer);
+    this.bufferTimer = setTimeout(() => {
+      this.bufferTimer = null;
+      this.buffer = '';
+    }, TIMINGS.TYPEAHEAD_RESET);
+  }
+
+  private clearBuffer(): void {
+    if (this.bufferTimer !== null) clearTimeout(this.bufferTimer);
+    this.bufferTimer = null;
+    this.buffer = '';
   }
 }

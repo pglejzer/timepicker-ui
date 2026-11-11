@@ -111,8 +111,9 @@ export default function RoadmapPage() {
           <p>
             These exports from <code>timepicker-ui</code> will change:{" "}
             <code>PluginRegistry</code>, <code>Plugin</code>,{" "}
-            <code>PluginManager</code>, <code>PluginFactory</code>,{" "}
-            <code>TemplateProvider</code>, <code>ClearHandler</code>,{" "}
+            <code>PluginManager</code>, <code>PluginTimeView</code>,{" "}
+            <code>PluginFactory</code>, <code>TemplateProvider</code>,{" "}
+            <code>ClearHandler</code>,{" "}
             <code>CoreState</code> and <code>EventEmitter</code>.
           </p>
           <p>
@@ -333,12 +334,6 @@ export default function RoadmapPage() {
 
         <PlanBlock title="Package and CSS">
           <ul>
-            <li>
-              The plugins no longer ship UMD builds. The UMD core never
-              exposed <code>PluginRegistry</code>, so a plugin loaded from a{" "}
-              <code>&lt;script&gt;</code> tag could not be registered. The
-              core UMD build stays.
-            </li>
             <li>
               About 50 CSS custom properties that no rule reads are removed,
               for example <code>--tp-tertiary-container</code>,{" "}

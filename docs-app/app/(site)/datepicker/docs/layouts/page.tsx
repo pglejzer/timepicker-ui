@@ -40,14 +40,14 @@ const PRICES: DatepickerOptions = {
 
 const FIXED: DatepickerOptions = { ui: { fixedWeeks: true, outsideDays: { selectable: false } } };
 
-const MONTHS_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const MONTHS_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   calendar: { months: 2, pageBy: "view" },
 }).create();`;
 
-const PRESETS_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const PRESETS_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 const day = 24 * 60 * 60 * 1000;
@@ -76,7 +76,7 @@ new DatepickerUI("#range", {
 const END_HTML = `<input id="start" name="checkin" />
 <input id="end" name="checkout" />`;
 
-const END_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const END_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#start", {
@@ -88,14 +88,14 @@ const END_CSS = `.dp-ui__input--active {
   outline: 2px solid #6750a4;
 }`;
 
-const FIXED_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const FIXED_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
   ui: { fixedWeeks: true, outsideDays: { selectable: false } },
 }).create();`;
 
-const PRICES_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const PRICES_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -105,7 +105,7 @@ new DatepickerUI("#date", {
   },
 }).create();`;
 
-const DECORATE_CODE = `import DatepickerUI from "@pglejzer/datepicker-ui";
+const DECORATE_CODE = `import { DatepickerUI } from "@pglejzer/datepicker-ui";
 import "@pglejzer/datepicker-ui/index.css";
 
 new DatepickerUI("#date", {
@@ -130,6 +130,7 @@ const RELATED = [
   { href: "/datepicker/examples/features/outside-days", title: "Outside days example" },
   { href: "/datepicker/examples/features/decorate-dates", title: "Decorated dates example" },
   { href: "/datepicker/examples/features/per-day-content", title: "Per-day content example" },
+  { href: "/datepicker/docs/display-modes", title: "Display modes and layouts" },
   { href: "/datepicker/api/options", title: "Options reference" },
 ];
 
@@ -143,16 +144,21 @@ export default function LayoutsPage() {
 
       <Section title="Several months">
         <p>
-          <code>calendar.months</code> shows months side by side in a docked or inline picker. The picker shows as
-          many months as fit the width, up to the number you set. The width is read when the picker opens and on{" "}
-          <code>setOptions()</code>, not on resize. A modal picker always shows one month, and a range picker in a
-          modal or full screen keeps its vertical month list.
+          <code>calendar.months</code> shows months side by side with the docked look (<code>ui.layout</code>{" "}
+          <code>&quot;docked&quot;</code>, which is also the <code>&quot;auto&quot;</code> look of a popover and of
+          an inline calendar). The picker shows as many months as fit the width, up to the number you set. The
+          width is read when the picker opens, on <code>setOptions()</code> and when the window is resized. The
+          modal and full-screen looks always show one month, and a range picker in a modal or full screen keeps
+          its vertical month list.
         </p>
         <DatepickerExample label="Two months" options={MONTHS} code={MONTHS_CODE} />
         <p>
           <code>calendar.pageBy</code> sets how far the arrows and swipes move: <code>&quot;view&quot;</code> (the
           default) pages by the number of months shown, <code>&quot;month&quot;</code> by one. Outside days are not
-          shown with several months. The <code>navigate</code> event reports the first month shown.
+          shown with several months. The <code>navigate</code> event reports the first month shown as{" "}
+          <code>year</code> and <code>month</code>, and the first and last day shown as <code>from</code> and{" "}
+          <code>to</code>. When a resize changes the number of months, it fires with{" "}
+          <code>source: &quot;resize&quot;</code>.
         </p>
       </Section>
 
@@ -164,9 +170,10 @@ export default function LayoutsPage() {
         </p>
         <DatepickerExample label="Presets" options={PRESETS} code={PRESETS_CODE} />
         <p>
-          Presets show as a column beside the calendar in a docked or inline picker when there is room, and as a
-          row of chips under the header otherwise. A modal and a full-screen picker always use the chip row. They
-          are hidden in the input view. <code>labels.presets</code> names the group.
+          Presets show as a column beside the calendar with the docked look (<code>ui.layout</code>), when there is
+          room, and as a row of chips under the header otherwise. A resize can switch between the two. The modal
+          and full-screen looks always use the chip row. Presets are hidden in
+          the input view. <code>labels.presets</code> names the group.
         </p>
         <p>
           A click completes the range as if the user had picked both ends. It emits <code>range:end</code>, not{" "}

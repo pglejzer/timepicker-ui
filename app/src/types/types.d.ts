@@ -1,11 +1,14 @@
 import type { PluginManager } from '../core/PluginRegistry';
-import type { RangeTimeState } from './options';
+import type { RangeCaptionInput, RangeTimeState, RangeTimeValue, TimepickerView } from './options';
 
 /** Structural contract core uses to reach the range plugin without importing it. */
 export interface RangeApi extends PluginManager {
-  setRange(from: string, to: string, updateInput: boolean): boolean;
+  setRange(from: string | null | undefined, to: string | null | undefined, updateInput: boolean): boolean;
   getRange(): RangeTimeState;
+  getActivePart(): 'from' | 'to';
   setActivePart(part: 'from' | 'to', options?: { focus?: boolean }): boolean;
+  reset(): void;
+  setCaptions(captions: RangeCaptionInput): void;
 }
 
 /** Payload when timepicker opens */
@@ -89,8 +92,11 @@ export type SelectAMEventData = Record<string, never>;
  */
 export type SelectPMEventData = Record<string, never>;
 
-/** Payload when switching view */
-export type SwitchViewEventData = Record<string, never>;
+/** Payload of `switch:view` and `callbacks.onSwitchView`. */
+export type SwitchViewEventData = {
+  /** The view the picker switches to. */
+  view: TimepickerView;
+};
 
 /** Payload when AM or PM is selected */
 export type SelectPeriodEventData = {
@@ -113,6 +119,8 @@ export type RangeConfirmEventData = {
   duration: number;
   /** Exact duration in seconds; present only with `clock.showSeconds` */
   durationSeconds?: number;
+  /** `true` when `wheel.commitOnScroll` committed the range; the picker stays open */
+  autoCommit?: boolean;
 };
 
 export type RangeSwitchEventData = {
@@ -136,11 +144,25 @@ export type RangeValidationEventData = {
   maxDuration?: number;
 };
 
+/** Payload of `range:change`: the end that changed and both ends after the change. */
+export type RangeChangeEventData = {
+  part: 'from' | 'to';
+  from: RangeTimeValue | null;
+  to: RangeTimeValue | null;
+};
+
+/** @internal Payload of `input:commit`: the time field whose typed value was applied. */
+export type InputCommitEventData = {
+  field: 'hour' | 'minutes' | 'seconds';
+};
+
 export type RangeMinuteCommitEventData = {
   hour: string;
   minutes: string;
   seconds?: string;
   type?: string;
+  /** True when the commit came from a touch or pen drag on the dial. */
+  isTouch?: boolean;
 };
 
 export type RangeGetDisabledTimeEventData = Record<string, never>;
@@ -300,6 +322,8 @@ export type OptionTypes = {
     autoUpdate?: boolean;
     /** @default false */
     embedded?: boolean;
+    /** @default true */
+    showTitle?: boolean;
   };
   /** Additional CSS class */
   cssClass?: string;

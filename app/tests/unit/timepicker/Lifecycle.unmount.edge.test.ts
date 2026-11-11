@@ -218,7 +218,7 @@ describe('a close is final from its first moment', () => {
 
       expect(lateCalls()).toEqual({ 'select:pm': 0, update: 0 });
       expect(callbacks.onUpdate).not.toHaveBeenCalled();
-      expect(pm).toHaveAttribute('aria-pressed', 'false');
+      expect(pm).toHaveAttribute('aria-checked', 'false');
 
       jest.advanceTimersByTime(EXIT_MS);
 
