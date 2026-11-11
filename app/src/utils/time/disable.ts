@@ -44,7 +44,7 @@ export const createDisabledTimeFromClock = (
     const intervals = Array.isArray(interval) ? interval : [interval];
 
     if (!clockType) {
-      throw new Error('clockType required for interval');
+      throw new Error('clockType required for disabledTime.ranges');
     }
 
     isOverlappingRangeArray(intervals, toClockType(clockType));
@@ -133,7 +133,7 @@ export function validateDisabledTime(clock: DisabledTimeSource): void {
   if (disabledTime.interval) {
     if (!type) {
       throw new TimepickerError(
-        'clockType is required when using disabledTime.interval',
+        'clockType is required when using disabledTime.ranges',
         ERROR_CODES.INVALID_PARAMETER,
       );
     }
@@ -144,7 +144,7 @@ export function validateDisabledTime(clock: DisabledTimeSource): void {
       isOverlappingRangeArray(intervals, clockType);
     } catch (error) {
       throw new TimepickerError(
-        `Invalid disabledTime.interval: ${(error as Error).message}`,
+        `Invalid disabledTime.ranges: ${(error as Error).message}`,
         ERROR_CODES.INVALID_PARAMETER,
       );
     }

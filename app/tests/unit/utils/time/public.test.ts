@@ -104,7 +104,7 @@ describe('createDisabledTimeCheck', () => {
   });
 
   it.each([
-    [{ type: '24h', disabledTime: { ranges: ['bad'] } }, /Invalid disabledTime\.interval/],
+    [{ type: '24h', disabledTime: { ranges: ['bad'] } }, /Invalid disabledTime\.ranges/],
     [{ type: '24h', disabledTime: { ranges: ['10:00 - 11:00', '10:30 - 12:00'] } }, /Overlapping intervals/],
     [{ type: '12h', disabledTime: { hours: [13] } }, /Invalid hours or minutes in disabledTime option/],
     [{ isTimeDisabled: 'nope' }, /clock\.isTimeDisabled must be a function/],
