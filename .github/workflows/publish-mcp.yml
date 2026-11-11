@@ -93,15 +93,15 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          for attempt in $(seq 1 60); do
+          for attempt in $(seq 1 20); do
             if curl --fail --silent --output /dev/null "https://registry.npmjs.org/timepicker-ui-mcp/$VERSION"; then
               echo "timepicker-ui-mcp@$VERSION is on npm"
               exit 0
             fi
-            echo "timepicker-ui-mcp@$VERSION is not on npm yet (attempt $attempt of 60), waiting 30 s"
+            echo "timepicker-ui-mcp@$VERSION is not on npm yet (attempt $attempt of 20), waiting 30 s"
             sleep 30
           done
-          echo "::error::timepicker-ui-mcp@$VERSION did not appear on npm within 30 minutes. Re-run the job once it does."
+          echo "::error::timepicker-ui-mcp@$VERSION did not appear on npm within 10 minutes. Re-run the job once it does."
           exit 1
 
       - name: Install cosign
